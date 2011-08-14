@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
-	groovy "org.codehaus.groovy:groovy:1.8.0"
+	groovy "org.codehaus.groovy:groovy-all:1.8.0"
 	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
+	testCompile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
+		exclude module: "groovy"
+	}
 }

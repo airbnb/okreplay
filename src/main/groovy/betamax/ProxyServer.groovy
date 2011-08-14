@@ -1,38 +1,52 @@
 package betamax
 
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
 class ProxyServer implements Runnable {
 
 	static final int portNumber = 5555
 
-	private boolean running
-
-	static void main(String... args) {
-		def server = new ProxyServer()
-		new Thread(server).start()
-	}
+	private AtomicBoolean running = new AtomicBoolean(false)
+	private CountDownLatch latch = new CountDownLatch(1)
 
 	void run() {
-		println "Starting the MyProxyServer ..."
+		println "Starting the ProxyServer ..."
+		def listenSocket
 		try {
-			def serverSocket = new ServerSocket(portNumber, 1)
+			listenSocket = new ServerSocket(portNumber, 1)
 
-			running = true
+			running.set(true)
+			latch.countDown()
 			while (running) {
 				println "Waiting for connection"
-				serverSocket.accept() { socket ->
-					println "Connection to ProxyServer is connected"
+				listenSocket.accept() { socket ->
+					println "Connection to ProxyServer established"
 					socket.withStreams { input, output ->
-						println "Client has asked to...\n$input.text"
+						println "Got request..."
+						def command = new BufferedReader(new InputStreamReader(input)).readLine()
+						println "Client has asked to...\n$command "
 						output.withWriter { writer ->
+							println "Sending dummy response..."
 							writer << "HTTP/1.1 200 OK\n"
-							writer << "Content-Type: text/html\n\n"
-							writer << "<html><body>Hello World! It's ${new Date()}</body></html>\n"
+							writer << "Content-Type: text/plain\n\n"
+							writer << "Hello from the proxy! It's ${new Date()}\n"
 						}
 					}
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace()
+		} finally {
+			println "Killing server"
+			listenSocket?.close()
 		}
+	}
+
+	void stop() {
+		running.set(false)
+	}
+
+	boolean waitUntilRunning(long l, TimeUnit timeUnit) {
+		latch.await(l, timeUnit)
 	}
 }
