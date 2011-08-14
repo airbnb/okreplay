@@ -1,9 +1,9 @@
 package betamax
 
-import groovyx.net.http.RESTClient
 import java.util.concurrent.TimeUnit
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import groovyx.net.http.*
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
 
@@ -55,6 +55,18 @@ class ProxySpec extends Specification {
 
 		when:
 		def response = http.get(path: "/")
+
+		then:
+		response.data.text =~ /^Hello from the proxy!/
+	}
+
+	@Timeout(10)
+	def "proxy intercepts HttpURLClient connections"() {
+		given:
+		def http = new HttpURLClient(url: "http://google.com/")
+
+		when:
+		def response = http.request(path: "/")
 
 		then:
 		response.data.text =~ /^Hello from the proxy!/
