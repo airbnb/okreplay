@@ -26,11 +26,8 @@ class ProxySpec extends Specification {
 
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
-		when:
-		def response = new URL("http://google.com/").text
-
-		then:
-		response =~ /^Hello from the proxy!/
+		expect:
+		new URL("http://google.com/").text =~ /^Hello from the proxy!/
 	}
 
 	@Timeout(10)
