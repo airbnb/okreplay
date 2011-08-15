@@ -2,37 +2,33 @@ package betamax
 
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import org.apache.log4j.Logger
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
-import static org.apache.log4j.Level.DEBUG
 import spock.lang.*
-import org.apache.http.nio.reactor.IOReactor
+import betamax.server.HttpProxyServer
 
 class ProxySpec extends Specification {
 
-//	@Shared HttpProxyServer server = new HttpProxyServer()
-	@Shared IOReactor reactor
+	@Shared HttpProxyServer server = new HttpProxyServer()
+	final url = "http://grails.org/"
 
 	def setupSpec() {
-		Logger.getLogger("betamax").level = DEBUG
-
 		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = "5555"
+		System.properties."http.proxyPort" = server.port.toString()
 		System.properties."http.nonProxyHosts" = "localhost"
 
-        reactor = HttpProxyServer.start()
+        server.start()
 	}
 
 	def cleanupSpec() {
-		reactor.shutdown()
+		server.stop()
 	}
 
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
         given:
-        HttpURLConnection connection = new URL("http://grails.org/").openConnection()
+        def connection = new URL(url).openConnection()
 
 		expect:
 		connection.responseCode == HTTP_OK
@@ -45,7 +41,7 @@ class ProxySpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
 		given:
-		def http = new RESTClient("http://grails.org/")
+		def http = new RESTClient(url)
 		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 		http.client.routePlanner = routePlanner
 
@@ -60,8 +56,8 @@ class ProxySpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HTTPClient connections when explicitly told to"() {
 		given:
-		def http = new RESTClient("http://grails.org/")
-		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", 5555, "http"))
+		def http = new RESTClient(url)
+		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", server.port, "http"))
 
 		when:
 		def response = http.get(path: "/")
@@ -74,7 +70,7 @@ class ProxySpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HttpURLClient connections"() {
 		given:
-		def http = new HttpURLClient(url: "http://grails.org/")
+		def http = new HttpURLClient(url: url)
 
 		when:
 		def response = http.request(path: "/")

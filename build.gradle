@@ -18,5 +18,6 @@ dependencies {
 	}
 	compile "org.apache.httpcomponents:httpclient:4.1.2"
 	compile "org.apache.httpcomponents:httpcore-nio:4.1.2"
+	compile "log4j:log4j:1.2.16"
 	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
 }
