@@ -6,28 +6,34 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
+import org.apache.http.nio.reactor.IOReactor
 
 class ProxySpec extends Specification {
 
-	@Shared def server = new ProxyServer()
+	@Shared IOReactor server
 
 	def setupSpec() {
 		System.properties."http.proxyHost" = "localhost"
 		System.properties."http.proxyPort" = "5555"
 		System.properties."http.nonProxyHosts" = "localhost"
 
-		new Thread(server).start()
-		server.waitUntilRunning(10, TimeUnit.SECONDS)
+        server = HttpProxyServer.start()
 	}
 
 	def cleanupSpec() {
-		server.stop()
+		server.shutdown()
 	}
 
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
+        given:
+        def connection = new URL("http://google.com/").openConnection()
+
 		expect:
-		new URL("http://google.com/").text =~ /^Hello from the proxy!/
+        connection.getHeaderField("X-Betamax-Proxy") == "true"
+
+        cleanup:
+        connection.disconnect()
 	}
 
 	@Timeout(10)
@@ -41,7 +47,7 @@ class ProxySpec extends Specification {
 		def response = http.get(path: "/")
 
 		then:
-		response.data.text =~ /^Hello from the proxy!/
+		response.getFirstHeader("X-Betamax-Proxy")?.value == "true"
 	}
 
 	@Timeout(10)
@@ -54,7 +60,7 @@ class ProxySpec extends Specification {
 		def response = http.get(path: "/")
 
 		then:
-		response.data.text =~ /^Hello from the proxy!/
+        response.getFirstHeader("X-Betamax-Proxy")?.value == "true"
 	}
 
 	@Timeout(10)
@@ -66,7 +72,7 @@ class ProxySpec extends Specification {
 		def response = http.request(path: "/")
 
 		then:
-		response.data.text =~ /^Hello from the proxy!/
+        response.getFirstHeader("X-Betamax-Proxy")?.value == "true"
 	}
 
 }
