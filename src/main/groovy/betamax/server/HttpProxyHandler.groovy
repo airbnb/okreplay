@@ -24,7 +24,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 		response.entity = proxyResponse.entity
 	}
 
-	private HttpRequestBase createProxyRequest(HttpRequest request) {
+	private HttpRequest createProxyRequest(HttpRequest request) {
 		def method = request.requestLine.method.toUpperCase(Locale.ENGLISH)
 		switch (method) {
 			case "DELETE":
@@ -35,10 +35,22 @@ class HttpProxyHandler implements HttpRequestHandler {
 				return new HttpHead(request.requestLine.uri)
 			case "OPTIONS":
 				return new HttpOptions(request.requestLine.uri)
+			default:
+				throw new MethodNotSupportedException("$method method not supported")
+		}
+	}
+
+	private HttpRequest createProxyRequest(HttpEntityEnclosingRequest request) {
+		def method = request.requestLine.method.toUpperCase(Locale.ENGLISH)
+		switch (method) {
 			case "POST":
-				return new HttpPost(request.requestLine.uri)
+				def post = new HttpPost(request.requestLine.uri)
+				post.entity = request.entity
+				return post
 			case "PUT":
-				return new HttpPut(request.requestLine.uri)
+				def put = new HttpPut(request.requestLine.uri)
+				put.entity = request.entity
+				return put
 			default:
 				throw new MethodNotSupportedException("$method method not supported")
 		}
