@@ -7,35 +7,36 @@ import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
+import static groovyx.net.http.ContentType.URLENC
+import groovy.util.slurpersupport.NodeChild
 
 class ProxySpec extends Specification {
 
-	@Shared HttpProxyServer server = new HttpProxyServer()
-	final url = "http://grails.org/"
+	@Shared HttpProxyServer proxy = new HttpProxyServer()
+	final url = "http://www.htttools.com:8080/"
 
 	def setupSpec() {
 		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = server.port.toString()
-		System.properties."http.nonProxyHosts" = "localhost"
+		System.properties."http.proxyPort" = proxy.port.toString()
 
-        server.start()
+		proxy.start()
 	}
 
 	def cleanupSpec() {
-		server.stop()
+		proxy.stop()
 	}
 
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
-        given:
-        def connection = new URL(url).openConnection()
+		given:
+		def connection = new URL(url).openConnection()
 
 		expect:
 		connection.responseCode == HTTP_OK
-        connection.getHeaderField("X-Betamax") == "REC"
+		connection.getHeaderField("X-Betamax") == "REC"
 
-        cleanup:
-        connection.disconnect()
+		cleanup:
+		connection.disconnect()
 	}
 
 	@Timeout(10)
@@ -57,14 +58,14 @@ class ProxySpec extends Specification {
 	def "proxy intercepts HTTPClient connections when explicitly told to"() {
 		given:
 		def http = new RESTClient(url)
-		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", server.port, "http"))
+		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", proxy.port, "http"))
 
 		when:
 		def response = http.get(path: "/")
 
 		then:
 		response.status == HTTP_OK
-        response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader("X-Betamax")?.value == "REC"
 	}
 
 	@Timeout(10)
@@ -80,6 +81,7 @@ class ProxySpec extends Specification {
 		response.getFirstHeader("X-Betamax")?.value == "REC"
 	}
 
+	@Timeout(10)
 	@Unroll({"proxy handles $method requests"})
 	def "proxy handles all request methods"() {
 		given:
@@ -92,13 +94,49 @@ class ProxySpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-        response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader("X-Betamax")?.value == "REC"
 
 		cleanup:
 		http.shutdown()
 
 		where:
 		method << ["get", "post", "put", "head", "delete", "options"]
+	}
+
+	@Timeout(10)
+	def "proxy forwards query string"() {
+		given:
+		def http = new RESTClient(url)
+		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		http.client.routePlanner = routePlanner
+
+		when:
+		def response = http.get(path: "/", query: [q: "1"])
+
+		then:
+		response.status == HTTP_OK
+		response.data.toString().contains("GET /?q=1 HTTP/1.1")
+
+		cleanup:
+		http.shutdown()
+	}
+
+	@Timeout(10)
+	def "proxy forwards post data"() {
+		given:
+		def http = new RESTClient(url)
+		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		http.client.routePlanner = routePlanner
+
+		when:
+		def response = http.post(path: "/", body: [q: "1"], requestContentType: URLENC)
+
+		then:
+		response.status == HTTP_OK
+		response.data.toString().contains("\n\nq=1")
+
+		cleanup:
+		http.shutdown()
 	}
 
 }

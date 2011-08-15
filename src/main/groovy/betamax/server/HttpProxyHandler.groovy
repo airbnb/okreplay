@@ -15,6 +15,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 		println "${Thread.currentThread().name}:: request for $request.requestLine.uri"
 
 		def proxyRequest = createProxyRequest(request)
+
 		def proxyResponse = httpClient.execute(proxyRequest)
 
 		println "${Thread.currentThread().name}:: serving response with status $proxyResponse.statusLine.statusCode"
