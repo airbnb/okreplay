@@ -11,4 +11,4 @@ This project is currently in the prototype stage.
 * `Betamax.withTape(name, Closure)` as a way of scoping proxy usage
 * `@Betamax(tape=name)` for tests/specs
 
-[1](https://github.com/myronmarston/vcr)
+[1]:https://github.com/myronmarston/vcr
