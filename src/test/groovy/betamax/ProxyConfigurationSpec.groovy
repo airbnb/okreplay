@@ -8,7 +8,7 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
 import betamax.server.HttpProxyServer
 
-class ProxySpec extends Specification {
+class ProxyConfigurationSpec extends Specification {
 
 	@Shared HttpProxyServer server = new HttpProxyServer()
 	final url = "http://grails.org/"
