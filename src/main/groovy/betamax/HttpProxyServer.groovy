@@ -109,7 +109,7 @@ class HttpProxyHandler implements HttpRequestHandler {
         println "${Thread.currentThread().name}:: serving response with status $proxyResponse.statusLine.statusCode"
 
         response.statusCode = proxyResponse.statusLine.statusCode
-        response.addHeader("X-Betamax-Proxy", "true")
+        response.addHeader("X-Betamax", "REC")
         response.entity = proxyResponse.entity
     }
 
