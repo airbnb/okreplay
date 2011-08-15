@@ -4,11 +4,10 @@ import betamax.server.HttpProxyServer
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
+import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import static groovyx.net.http.ContentType.URLENC
-import groovy.util.slurpersupport.NodeChild
 
 class ProxySpec extends Specification {
 
@@ -29,7 +28,8 @@ class ProxySpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
 		given:
-		def connection = new URL(url).openConnection()
+		HttpURLConnection connection = new URL(url).openConnection()
+		connection.connect()
 
 		expect:
 		connection.responseCode == HTTP_OK

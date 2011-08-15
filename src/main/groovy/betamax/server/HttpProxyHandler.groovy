@@ -4,6 +4,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.*
+import static org.apache.http.HttpHeaders.VIA
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
 
@@ -12,9 +13,15 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
-		println "${Thread.currentThread().name}:: request for $request.requestLine.uri"
+		println "${Thread.currentThread().name}:: $request.requestLine.method request for $request.requestLine.uri"
 
 		def proxyRequest = createProxyRequest(request)
+		for (header in request.allHeaders) {
+			if (proxyRequest.getHeaders(header.name).length == 0 && !(header.name in ["Proxy-Connection", "Host", "Content-Length"])) {
+				proxyRequest.addHeader(header)
+			}
+		}
+		proxyRequest.addHeader(VIA, "Betamax")
 
 		def proxyResponse = httpClient.execute(proxyRequest)
 
