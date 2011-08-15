@@ -1,14 +1,14 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import betamax.server.HttpProxyServer
 
-class ProxyConfigurationSpec extends Specification {
+class ProxySpec extends Specification {
 
 	@Shared HttpProxyServer server = new HttpProxyServer()
 	final url = "http://grails.org/"
@@ -78,6 +78,27 @@ class ProxyConfigurationSpec extends Specification {
 		then:
 		response.status == HTTP_OK
 		response.getFirstHeader("X-Betamax")?.value == "REC"
+	}
+
+	@Unroll({"proxy handles $method requests"})
+	def "proxy handles all request methods"() {
+		given:
+		def http = new RESTClient(url)
+		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		http.client.routePlanner = routePlanner
+
+		when:
+		def response = http."$method"(path: "/")
+
+		then:
+		response.status == HTTP_OK
+        response.getFirstHeader("X-Betamax")?.value == "REC"
+
+		cleanup:
+		http.shutdown()
+
+		where:
+		method << ["get", "post", "put", "head", "delete", "options"]
 	}
 
 }
