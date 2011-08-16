@@ -22,7 +22,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 			TRAILER,
 			TRANSFER_ENCODING,
 			UPGRADE
-	].asImmutable()
+	].toSet().asImmutable()
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 
