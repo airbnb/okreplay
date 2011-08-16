@@ -7,7 +7,9 @@ import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
+import groovy.util.logging.Log4j
 
+@Log4j
 class HttpProxyHandler implements HttpRequestHandler {
 
 	private static final NO_PASS_HEADERS = [
@@ -27,7 +29,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
-		println "${Thread.currentThread().name}:: $request.requestLine.method request for $request.requestLine.uri"
+		log.debug "$request.requestLine.method request for $request.requestLine.uri"
 
 		def proxyRequest = createProxyRequest(request)
 		copyRequestData(request, proxyRequest)
@@ -35,7 +37,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 		def proxyResponse = httpClient.execute(proxyRequest)
 
-		println "${Thread.currentThread().name}:: serving response with status $proxyResponse.statusLine.statusCode"
+		log.debug "serving response with status $proxyResponse.statusLine.statusCode"
 
 		copyResponseData(proxyResponse, response)
 		response.addHeader("X-Betamax", "REC")
@@ -44,7 +46,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private void copyRequestData(HttpRequest from, HttpRequest to) {
 		for (header in from.allHeaders) {
 			if (!(header.name in NO_PASS_HEADERS)) {
-				println "copying request header $header"
 				to.addHeader(header)
 			}
 		}
@@ -58,7 +59,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 		to.statusCode = from.statusLine.statusCode
 		for (header in from.allHeaders) {
 			if (!(header.name in NO_PASS_HEADERS)) {
-				println "copying response header: $header"
 				to.addHeader(header)
 			}
 		}

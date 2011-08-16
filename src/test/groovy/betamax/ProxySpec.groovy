@@ -24,9 +24,7 @@ class ProxySpec extends Specification {
 	}
 
     def setup() {
-        println "starting endpoint"
         url = endpoint.start()
-        println "ok $url"
     }
 
 	def cleanupSpec() {

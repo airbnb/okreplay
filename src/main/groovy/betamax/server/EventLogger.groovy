@@ -2,27 +2,29 @@ package betamax.server
 
 import org.apache.http.nio.NHttpConnection
 import org.apache.http.HttpException
+import groovy.util.logging.Log4j
 
+@Log4j
 class EventLogger implements org.apache.http.nio.protocol.EventListener {
 
     void connectionOpen(final NHttpConnection conn) {
-        println "Connection open: $conn"
+        log.info "Connection open: $conn"
     }
 
     void connectionTimeout(final NHttpConnection conn) {
-        println "Connection timed out: $conn"
+        log.info "Connection timed out: $conn"
     }
 
     void connectionClosed(final NHttpConnection conn) {
-        println "Connection closed: $conn"
+        log.info "Connection closed: $conn"
     }
 
     void fatalIOException(final IOException ex, final NHttpConnection conn) {
-        System.err.println("I/O error: $ex.message")
+        log.error "I/O error: $ex.message"
     }
 
     void fatalProtocolException(final HttpException ex, final NHttpConnection conn) {
-        System.err.println("HTTP error: $ex.message")
+        log.error "HTTP error: $ex.message"
     }
 
 }
