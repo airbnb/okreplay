@@ -3,6 +3,10 @@ package betamax.util
 import groovy.util.logging.Log4j
 import java.util.concurrent.CountDownLatch
 
+/**
+ * A very simple socket server that listens for _one_ request and responds by just echoing back the request content. The
+ * server shuts down after serving a single request but can be restarted by calling `start()` again.
+ */
 @Log4j
 class EchoServer {
 
@@ -14,7 +18,7 @@ class EchoServer {
 
 		def readyLatch = new CountDownLatch(1)
 
-        def serverProcess =  {
+        t = Thread.start {
             def server = new ServerSocket(port)
             try {
 				readyLatch.countDown()
@@ -37,9 +41,6 @@ class EchoServer {
             }
         }
 		
-        t = new Thread(serverProcess)
-        t.setPriority(Thread.MIN_PRIORITY)
-        t.start()
 		readyLatch.await()
 
         "http://$host:$port/"
