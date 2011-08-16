@@ -8,11 +8,13 @@ import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
+import betamax.util.EchoServer
 
 class ProxySpec extends Specification {
 
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
-	final url = "http://www.htttools.com:8080/"
+    EchoServer endpoint = new EchoServer()
+	String url
 
 	def setupSpec() {
 		System.properties."http.proxyHost" = "localhost"
@@ -20,6 +22,12 @@ class ProxySpec extends Specification {
 
 		proxy.start()
 	}
+
+    def setup() {
+        println "starting endpoint"
+        url = endpoint.start()
+        println "ok $url"
+    }
 
 	def cleanupSpec() {
 		proxy.stop()
@@ -115,7 +123,7 @@ class ProxySpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.data.toString().contains("GET /?q=1 HTTP/1.1")
+		response.data.text.contains("GET /?q=1 HTTP/1.1")
 
 		cleanup:
 		http.shutdown()
@@ -133,7 +141,7 @@ class ProxySpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.data.toString().contains("\n\nq=1")
+		response.data.text.endsWith("\nq=1")
 
 		cleanup:
 		http.shutdown()
