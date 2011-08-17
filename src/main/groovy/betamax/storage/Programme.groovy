@@ -18,7 +18,8 @@ class Request {
 }
 
 class Response {
-    int status
-    String body
-    Map<String, String> headers = [:]
+	String protocol
+	int status
+	String body
+	Map<String, String> headers = [:]
 }

@@ -8,11 +8,12 @@ import spock.lang.Specification
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import spock.lang.Stepwise
+import spock.lang.Shared
 
 @Stepwise
 class StorageSpec extends Specification {
 
-    Tape tape = new Tape()
+    @Shared Tape tape = new Tape()
     HttpRequest getRequest
     HttpResponse plainTextResponse
 
@@ -27,9 +28,17 @@ class StorageSpec extends Specification {
         plainTextResponse.entity.contentLength = 6L
     }
 
-    def "can record an HTTP interaction to a tape"() {
+	def "reading from an empty tape does nothing"() {
+		given:
+		def response = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
+
+		expect:
+		!tape.read(getRequest, response)
+	}
+
+    def "can write an HTTP interaction to a tape"() {
         when:
-        tape.record(getRequest, plainTextResponse)
+        tape.write(getRequest, plainTextResponse)
 
         then:
         tape.programmes.size() == 1
@@ -38,6 +47,7 @@ class StorageSpec extends Specification {
         def programme = tape.programmes.iterator().next()
         programme.request.method == "GET"
         programme.request.uri == "http://icanhascheezburger.com/"
+		programme.response.protocol == "HTTP/1.1"
         programme.response.status == 200
         programme.response.body == "O HAI!"
         programme.response.headers[CONTENT_TYPE] == "text/plain"
@@ -45,15 +55,20 @@ class StorageSpec extends Specification {
         programme.response.headers[CONTENT_ENCODING] == "gzip"
     }
 
-    def "can retrieve a stored HTTP interaction"() {
+    def "can read a stored HTTP interaction"() {
         given:
         def response = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
 
-        when:
-        tape.play(getRequest, response)
+        expect:
+        tape.read(getRequest, response)
 
-        then:
+        and:
+		response.statusLine.protocolVersion.toString() == "HTTP/1.1"
         response.statusLine.statusCode == 200
+		response.entity.content.text == "O HAI!"
+		response.getHeaders(CONTENT_TYPE).value == ["text/plain"]
+		response.getHeaders(CONTENT_LANGUAGE).value == ["en-GB"]
+		response.getHeaders(CONTENT_ENCODING).value == ["gzip"]
     }
 
 }
