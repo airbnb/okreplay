@@ -1,9 +1,8 @@
 package betamax.storage
 
-import org.apache.http.*
-import org.apache.http.message.BasicHttpResponse
 import org.apache.http.entity.ByteArrayEntity
-import org.apache.http.message.BasicHttpRequest
+import org.apache.http.*
+import org.apache.http.message.*
 
 class Tape {
 
@@ -38,12 +37,29 @@ class HttpInteraction {
 	final HttpResponse response
 
 	HttpInteraction(HttpRequest request, HttpResponse response) {
+		println "basic $request"
 		this.request = new BasicHttpRequest(request.requestLine)
-
-		this.response = new BasicHttpResponse(response.statusLine)
-		this.response.headers = response.allHeaders
-		def bytes = new ByteArrayOutputStream()
-		response.entity.writeTo(bytes)
-		this.response.entity = new ByteArrayEntity(bytes.toByteArray())
+		this.response = cloneResponse(response)
 	}
+
+	HttpInteraction(HttpEntityEnclosingRequest request, HttpResponse response) {
+		println "entity $request"
+		this.request = new BasicHttpEntityEnclosingRequest(request.requestLine)
+		this.request.entity = cloneEntity(request.entity)
+		this.response = cloneResponse(response)
+	}
+
+	private static HttpResponse cloneResponse(HttpResponse response) {
+		def clone = new BasicHttpResponse(response.statusLine)
+		clone.headers = response.allHeaders
+		clone.entity = cloneEntity(response.entity)
+		clone
+	}
+
+	private static HttpEntity cloneEntity(HttpEntity entity) {
+		def bytes = new ByteArrayOutputStream()
+		entity.writeTo(bytes)
+		new ByteArrayEntity(bytes.toByteArray())
+	}
+
 }

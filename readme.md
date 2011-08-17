@@ -8,7 +8,6 @@ This project is currently in the prototype stage.
 
 * `Betamax.withTape(name, Closure)` as a way of scoping proxy usage
 * `@Betamax(tape=name)` for tests/specs
-* Post requests
 * Non-text responses
 * Multipart requests
 * Calculate content length header rather than specifying in tape

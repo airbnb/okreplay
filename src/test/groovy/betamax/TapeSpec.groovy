@@ -9,6 +9,10 @@ import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import spock.lang.Stepwise
 import spock.lang.Shared
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.entity.StringEntity
+import groovyx.net.http.ContentType
+import static groovyx.net.http.ContentType.URLENC
 
 @Stepwise
 class TapeSpec extends Specification {
@@ -42,7 +46,7 @@ class TapeSpec extends Specification {
 
         then:
         tape.interactions.size() == 1
-		def interaction = tape.interactions.iterator().next()
+		def interaction = tape.interactions[-1]
 
 		and:
 		interaction.request.requestLine.method == getRequest.requestLine.method
@@ -85,6 +89,19 @@ class TapeSpec extends Specification {
 
 		expect:
 		!tape.play(request, response)
+	}
+
+	def "can record post requests with a body"() {
+		given:
+		def request = new HttpPost("http://github.com/")
+		request.entity = new StringEntity("q=1", URLENC.toString(), "UTF-8")
+
+		when:
+		tape.record(request, plainTextResponse)
+
+		then:
+		def interaction = tape.interactions[-1]
+		interaction.request.entity.content.text == request.entity.content.text
 	}
 
 }
