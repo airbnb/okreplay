@@ -12,77 +12,84 @@ import groovy.util.logging.Log4j
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
 
-	private static final NO_PASS_HEADERS = [
-			CONTENT_LENGTH,
-			HOST,
-			"Proxy-Connection",
-			CONNECTION,
-			"Keep-Alive",
-			PROXY_AUTHENTICATE,
-			PROXY_AUTHORIZATION,
-			TE,
-			TRAILER,
-			TRANSFER_ENCODING,
-			UPGRADE
-	].toSet().asImmutable()
+    private static final PROXY_CONNECTION = "Proxy-Connection"
+    private static final KEEP_ALIVE = "Keep-Alive"
+    private static final NO_PASS_HEADERS = [
+            CONTENT_LENGTH,
+            HOST,
+            PROXY_CONNECTION,
+            CONNECTION,
+            KEEP_ALIVE,
+            PROXY_AUTHENTICATE,
+            PROXY_AUTHORIZATION,
+            TE,
+            TRAILER,
+            TRANSFER_ENCODING,
+            UPGRADE
+    ].toSet().asImmutable()
 
-	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
+    private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 
-	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
-		log.debug "$request.requestLine.method request for $request.requestLine.uri"
+    void handle(HttpRequest request, HttpResponse response, HttpContext context) {
+        log.debug "$request.requestLine.method request for $request.requestLine.uri"
+        recordInteraction(request, response)
+    }
 
-		def proxyRequest = createProxyRequest(request)
-		copyRequestData(request, proxyRequest)
-		proxyRequest.addHeader(VIA, "Betamax")
+    private void recordInteraction(HttpRequest request, HttpResponse response) {
+        log.debug "recording..."
 
-		def proxyResponse = httpClient.execute(proxyRequest)
+        def proxyRequest = createProxyRequest(request)
+        copyRequestData(request, proxyRequest)
+        proxyRequest.addHeader(VIA, "Betamax")
 
-		log.debug "serving response with status $proxyResponse.statusLine.statusCode"
+        def proxyResponse = httpClient.execute(proxyRequest)
 
-		copyResponseData(proxyResponse, response)
-		response.addHeader("X-Betamax", "REC")
-	}
+        log.debug "serving response with status $proxyResponse.statusLine.statusCode"
 
-	private void copyRequestData(HttpRequest from, HttpRequest to) {
-		for (header in from.allHeaders) {
-			if (!(header.name in NO_PASS_HEADERS)) {
-				to.addHeader(header)
-			}
-		}
+        copyResponseData(proxyResponse, response)
+        response.addHeader("X-Betamax", "REC")
+    }
 
-		if (from instanceof HttpEntityEnclosingRequest) {
-			to.entity = from.entity
-		}
-	}
+    private void copyRequestData(HttpRequest from, HttpRequest to) {
+        for (header in from.allHeaders) {
+            if (!(header.name in NO_PASS_HEADERS)) {
+                to.addHeader(header)
+            }
+        }
 
-	private void copyResponseData(HttpResponse from, HttpResponse to) {
-		to.statusCode = from.statusLine.statusCode
-		for (header in from.allHeaders) {
-			if (!(header.name in NO_PASS_HEADERS)) {
-				to.addHeader(header)
-			}
-		}
-		to.entity = from.entity
-	}
+        if (from instanceof HttpEntityEnclosingRequest) {
+            to.entity = from.entity
+        }
+    }
 
-	private HttpRequest createProxyRequest(HttpRequest request) {
-		def method = request.requestLine.method.toUpperCase(Locale.ENGLISH)
-		switch (method) {
-			case "DELETE":
-				return new HttpDelete(request.requestLine.uri)
-			case "GET":
-				return new HttpGet(request.requestLine.uri)
-			case "HEAD":
-				return new HttpHead(request.requestLine.uri)
-			case "OPTIONS":
-				return new HttpOptions(request.requestLine.uri)
-			case "POST":
-				return new HttpPost(request.requestLine.uri)
-			case "PUT":
-				return new HttpPut(request.requestLine.uri)
-			default:
-				throw new MethodNotSupportedException("$method method not supported")
-		}
-	}
+    private void copyResponseData(HttpResponse from, HttpResponse to) {
+        to.statusCode = from.statusLine.statusCode
+        for (header in from.allHeaders) {
+            if (!(header.name in NO_PASS_HEADERS)) {
+                to.addHeader(header)
+            }
+        }
+        to.entity = from.entity
+    }
+
+    private HttpRequest createProxyRequest(HttpRequest request) {
+        def method = request.requestLine.method.toUpperCase(Locale.ENGLISH)
+        switch (method) {
+            case "DELETE":
+                return new HttpDelete(request.requestLine.uri)
+            case "GET":
+                return new HttpGet(request.requestLine.uri)
+            case "HEAD":
+                return new HttpHead(request.requestLine.uri)
+            case "OPTIONS":
+                return new HttpOptions(request.requestLine.uri)
+            case "POST":
+                return new HttpPost(request.requestLine.uri)
+            case "PUT":
+                return new HttpPut(request.requestLine.uri)
+            default:
+                throw new MethodNotSupportedException("$method method not supported")
+        }
+    }
 
 }

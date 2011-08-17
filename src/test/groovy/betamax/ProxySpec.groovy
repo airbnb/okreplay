@@ -27,6 +27,10 @@ class ProxySpec extends Specification {
         url = endpoint.start()
     }
 
+    def cleanup() {
+        endpoint.stop()
+    }
+
 	def cleanupSpec() {
 		proxy.stop()
 	}
