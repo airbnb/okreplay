@@ -37,13 +37,11 @@ class HttpInteraction {
 	final HttpResponse response
 
 	HttpInteraction(HttpRequest request, HttpResponse response) {
-		println "basic $request"
 		this.request = new BasicHttpRequest(request.requestLine)
 		this.response = cloneResponse(response)
 	}
 
 	HttpInteraction(HttpEntityEnclosingRequest request, HttpResponse response) {
-		println "entity $request"
 		this.request = new BasicHttpEntityEnclosingRequest(request.requestLine)
 		this.request.entity = cloneEntity(request.entity)
 		this.response = cloneResponse(response)
