@@ -1,28 +1,49 @@
 package betamax.storage
 
 import org.apache.http.*
+import org.apache.http.message.BasicHttpResponse
+import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.message.BasicHttpRequest
 
 class Tape {
 
-    String name
-    Collection<Programme> programmes = new HashSet<Programme>()
+	String name
+	Collection<HttpInteraction> interactions = []
 
-    boolean read(HttpRequest request, HttpResponse response) {
-		def programme = programmes.find { it.request.uri == request.requestLine.uri }
-		if (programme) {
-			programme.readTo(response)
+	boolean play(HttpRequest request, HttpResponse response) {
+		def interaction = interactions.find { it.request.requestLine.uri == request.requestLine.uri }
+		if (interaction) {
+			response.statusLine = interaction.response.statusLine
+			response.headers = interaction.response.allHeaders
+			response.entity = interaction.response.entity
 			true
 		} else {
 			false
 		}
-    }
+	}
 
-	void write(HttpRequest request, HttpResponse response) {
-        programmes << Programme.write(request, response)
-    }
+	void record(HttpRequest request, HttpResponse response) {
+		interactions << new HttpInteraction(request, response)
+	}
 
-    void eject() {
+	void eject() {
 
-    }
+	}
 
+}
+
+class HttpInteraction {
+
+	final HttpRequest request
+	final HttpResponse response
+
+	HttpInteraction(HttpRequest request, HttpResponse response) {
+		this.request = new BasicHttpRequest(request.requestLine)
+
+		this.response = new BasicHttpResponse(response.statusLine)
+		this.response.headers = response.allHeaders
+		def bytes = new ByteArrayOutputStream()
+		response.entity.writeTo(bytes)
+		this.response.entity = new ByteArrayEntity(bytes.toByteArray())
+	}
 }

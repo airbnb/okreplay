@@ -8,6 +8,7 @@ import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
 import groovy.util.logging.Log4j
+import betamax.Betamax
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
@@ -32,10 +33,19 @@ class HttpProxyHandler implements HttpRequestHandler {
 
     void handle(HttpRequest request, HttpResponse response, HttpContext context) {
         log.debug "$request.requestLine.method request for $request.requestLine.uri"
-        recordInteraction(request, response)
+
+		def tape = Betamax.instance.tape
+
+		if (tape?.play(request, response)) {
+			response.addHeader("X-Betamax", "PLAY")
+		} else {
+        	execute(request, response)
+			tape?.record(request, response)
+			response.addHeader("X-Betamax", "REC")
+		}
     }
 
-    private void recordInteraction(HttpRequest request, HttpResponse response) {
+    private void execute(HttpRequest request, HttpResponse response) {
         log.debug "recording..."
 
         def proxyRequest = createProxyRequest(request)
@@ -47,7 +57,6 @@ class HttpProxyHandler implements HttpRequestHandler {
         log.debug "serving response with status $proxyResponse.statusLine.statusCode"
 
         copyResponseData(proxyResponse, response)
-        response.addHeader("X-Betamax", "REC")
     }
 
     private void copyRequestData(HttpRequest from, HttpRequest to) {

@@ -10,7 +10,7 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
 import betamax.util.EchoServer
 
-class ProxySpec extends Specification {
+class ProxyNetworkCommsSpec extends Specification {
 
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
     EchoServer endpoint = new EchoServer()

@@ -15,7 +15,6 @@ class Betamax {
 	}
 
 	Tape getTape() {
-		if (!tape) throw new IllegalStateException("No tape loaded")
 		tape
 	}
 
