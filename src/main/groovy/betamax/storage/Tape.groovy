@@ -1,11 +1,7 @@
 package betamax.storage
 
-import org.apache.http.HttpResponse
-import org.apache.http.HttpRequest
-import org.apache.http.Header
-import org.apache.http.ProtocolVersion
-import org.apache.commons.lang.StringUtils
 import org.apache.http.entity.BasicHttpEntity
+import org.apache.http.*
 
 class Tape {
 
@@ -13,9 +9,8 @@ class Tape {
     Collection<Programme> programmes = new HashSet<Programme>()
 
     boolean read(HttpRequest request, HttpResponse response) {
-		def iterator = programmes.iterator()
-		if (iterator.hasNext()) {
-			def programme = iterator.next()
+		def programme = programmes.find { it.request.uri == request.requestLine.uri }
+		if (programme) {
 			response.setStatusLine(parseProtocol(programme.response.protocol), programme.response.status)
 			response.entity = new BasicHttpEntity()
 			response.entity.content = new ByteArrayInputStream(programme.response.body.bytes)

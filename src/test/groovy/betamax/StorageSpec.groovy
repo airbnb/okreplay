@@ -14,12 +14,11 @@ import spock.lang.Shared
 class StorageSpec extends Specification {
 
     @Shared Tape tape = new Tape()
-    HttpRequest getRequest
-    HttpResponse plainTextResponse
+    HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
+	HttpResponse emptyResponse = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
+    HttpResponse plainTextResponse = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
 
     def setup() {
-        getRequest = new HttpGet("http://icanhascheezburger.com/")
-        plainTextResponse = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
         plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
         plainTextResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
         plainTextResponse.addHeader(CONTENT_ENCODING, "gzip")
@@ -29,11 +28,8 @@ class StorageSpec extends Specification {
     }
 
 	def "reading from an empty tape does nothing"() {
-		given:
-		def response = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
-
 		expect:
-		!tape.read(getRequest, response)
+		!tape.read(getRequest, emptyResponse)
 	}
 
     def "can write an HTTP interaction to a tape"() {
@@ -56,19 +52,24 @@ class StorageSpec extends Specification {
     }
 
     def "can read a stored HTTP interaction"() {
-        given:
-        def response = new BasicHttpResponse(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
-
         expect:
-        tape.read(getRequest, response)
+        tape.read(getRequest, emptyResponse)
 
         and:
-		response.statusLine.protocolVersion.toString() == "HTTP/1.1"
-        response.statusLine.statusCode == 200
-		response.entity.content.text == "O HAI!"
-		response.getHeaders(CONTENT_TYPE).value == ["text/plain"]
-		response.getHeaders(CONTENT_LANGUAGE).value == ["en-GB"]
-		response.getHeaders(CONTENT_ENCODING).value == ["gzip"]
+		emptyResponse.statusLine.protocolVersion.toString() == "HTTP/1.1"
+        emptyResponse.statusLine.statusCode == 200
+		emptyResponse.entity.content.text == "O HAI!"
+		emptyResponse.getHeaders(CONTENT_TYPE).value == ["text/plain"]
+		emptyResponse.getHeaders(CONTENT_LANGUAGE).value == ["en-GB"]
+		emptyResponse.getHeaders(CONTENT_ENCODING).value == ["gzip"]
     }
+
+	def "read does not match a request for a different URI"() {
+		given:
+		def request = new HttpGet("http://qwantz.com/")
+
+		expect:
+		!tape.read(request, emptyResponse)
+	}
 
 }
