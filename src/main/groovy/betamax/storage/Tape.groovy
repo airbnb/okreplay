@@ -37,14 +37,18 @@ class HttpInteraction {
 	final HttpResponse response
 
 	HttpInteraction(HttpRequest request, HttpResponse response) {
-		this.request = new BasicHttpRequest(request.requestLine)
+		this.request = cloneRequest(request)
 		this.response = cloneResponse(response)
 	}
 
-	HttpInteraction(HttpEntityEnclosingRequest request, HttpResponse response) {
-		this.request = new BasicHttpEntityEnclosingRequest(request.requestLine)
-		this.request.entity = cloneEntity(request.entity)
-		this.response = cloneResponse(response)
+	private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
+		def clone = new BasicHttpEntityEnclosingRequest(request.requestLine)
+		clone.entity = cloneEntity(request.entity)
+		clone
+	}
+
+	private static HttpRequest cloneRequest(HttpRequest request) {
+		new BasicHttpRequest(request.requestLine)
 	}
 
 	private static HttpResponse cloneResponse(HttpResponse response) {
