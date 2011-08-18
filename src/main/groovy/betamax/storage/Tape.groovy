@@ -33,6 +33,7 @@ class Tape {
 			name(name)
 			interactions(interactions*.toMap())
 		}
+		file.parentFile.mkdirs()
 		file.withWriter {writer ->
 			writer << json.toPrettyString()
 		}

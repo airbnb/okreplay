@@ -16,7 +16,8 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		System.properties."http.proxyHost" = "localhost"
 		System.properties."http.proxyPort" = proxy.port.toString()
 
-		Betamax.instance.insertTape("test")
+		Betamax.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+		Betamax.instance.insertTape("proxy_record_and_playback_spec")
 
 		proxy.start()
 	}
@@ -33,6 +34,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		proxy.stop()
 	}
 
+	@Timeout(10)
 	def "proxy makes processes a real HTTP request the first time it gets a request for a URI"() {
 		given:
 		def http = new HttpURLClient(url: url)
@@ -44,6 +46,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		Betamax.instance.tape.interactions.size() == 1
 	}
 
+	@Timeout(10)
 	def "subsequent requests for the same URI are played back from tape"() {
 		given:
 		def http = new HttpURLClient(url: url)
@@ -53,6 +56,14 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		then:
 		Betamax.instance.tape.interactions.size() == 1
+	}
+
+	def "when the proxy is stopped the tape is written to a file"() {
+		when:
+		proxy.stop()
+
+		then:
+		Betamax.instance.tape.file.isFile()
 	}
 
 }

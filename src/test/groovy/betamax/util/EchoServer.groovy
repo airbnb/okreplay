@@ -11,15 +11,20 @@ import java.util.concurrent.CountDownLatch
 class EchoServer {
 
     private Thread t
+	private CountDownLatch readyLatch
+	private CountDownLatch doneLatch
 
-    String start() {
+	String start() {
         def host = InetAddress.localHost.hostAddress
-        def port = 5000
+        int port = 5000
+		int timeout = 500
 
-		def readyLatch = new CountDownLatch(1)
+		readyLatch = new CountDownLatch(1)
+		doneLatch = new CountDownLatch(1)
 
         t = Thread.start {
             def server = new ServerSocket(port)
+			server.soTimeout = timeout
             try {
 				readyLatch.countDown()
                 server.accept { socket ->
@@ -34,10 +39,11 @@ class EchoServer {
                         }
                     }
                 }
-            } catch(InterruptedException e) {
-                log.info "interrupted"
+			} catch(SocketTimeoutException e) {
+				log.warn "no connection within $timeout milliseconds, giving up"
             } finally {
                 server.close()
+				doneLatch.countDown()
             }
         }
 		
@@ -47,7 +53,7 @@ class EchoServer {
     }
 
     void stop() {
-        t.interrupt()
+		doneLatch.await()
     }
 
 }

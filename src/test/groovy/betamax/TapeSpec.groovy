@@ -26,7 +26,6 @@ class TapeSpec extends Specification {
 
     def setupSpec() {
         Betamax.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-        Betamax.instance.tapeRoot.mkdirs()
     }
 
 	def setup() {
