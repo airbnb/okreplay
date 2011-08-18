@@ -13,15 +13,21 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import groovyx.net.http.ContentType
 import static groovyx.net.http.ContentType.URLENC
+import groovy.json.JsonSlurper
 
 @Stepwise
 class TapeSpec extends Specification {
 
 	private static final ProtocolVersion HTTP_1_1 = new ProtocolVersion("HTTP", 1, 1)
 
-	@Shared Tape tape = new Tape()
+	@Shared Tape tape = new Tape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+
+    def setupSpec() {
+        Betamax.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+        Betamax.instance.tapeRoot.mkdirs()
+    }
 
 	def setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
@@ -31,6 +37,10 @@ class TapeSpec extends Specification {
 		plainTextResponse.entity.content = new ByteArrayInputStream("O HAI!".bytes)
 		plainTextResponse.entity.contentLength = 6L
 	}
+
+    def cleanupSpec() {
+        assert Betamax.instance.tapeRoot.deleteDir()
+    }
 
 	def "reading from an empty tape does nothing"() {
 		given:
@@ -102,6 +112,33 @@ class TapeSpec extends Specification {
 		then:
 		def interaction = tape.interactions[-1]
 		interaction.request.entity.content.text == request.entity.content.text
+	}
+    
+    def "can write the tape to disk"() {
+        when:
+        tape.eject()
+
+        then:
+        tape.file.isFile()
+
+        and:
+		println tape.file.text
+        def json = tape.file.withReader { reader ->
+			new JsonSlurper().parse(reader)
+		}
+		json.tape.name == tape.name
+
+		json.tape.interactions.size() == 2
+		json.tape.interactions[0].request.protocol == "HTTP/1.1"
+		json.tape.interactions[0].request.method == "GET"
+		json.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
+		json.tape.interactions[0].response.protocol == "HTTP/1.1"
+		json.tape.interactions[0].response.status == 200
+		json.tape.interactions[0].response.body == "O HAI!"
+             
+		json.tape.interactions[1].request.method == "POST"
+		json.tape.interactions[1].request.uri == "http://github.com/"
+		json.tape.interactions[1].request.body == "q=1"
 	}
 
 }
