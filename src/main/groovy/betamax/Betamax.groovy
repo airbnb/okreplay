@@ -13,7 +13,9 @@ class Betamax {
 	void insertTape(String name) {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
-			tape = new Tape(file)
+			file.withReader { reader ->
+				tape = new Tape(reader)
+			}
 		} else {
 			tape = new Tape(name)
 		}

@@ -6,14 +6,13 @@ import org.apache.http.message.BasicHttpResponse
 import static groovyx.net.http.ContentType.URLENC
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
+import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import spock.lang.*
 
 @Stepwise
 class TapeSpec extends Specification {
-
-	private static final ProtocolVersion HTTP_1_1 = new ProtocolVersion("HTTP", 1, 1)
 
 	@Shared Tape tape = new Tape("tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")

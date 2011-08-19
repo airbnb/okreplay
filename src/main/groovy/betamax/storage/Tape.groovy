@@ -6,6 +6,8 @@ import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
 import org.apache.http.message.*
 import groovy.json.JsonSlurper
+import org.apache.http.entity.BasicHttpEntity
+import org.apache.http.entity.StringEntity
 
 class Tape implements Writable {
 
@@ -17,10 +19,8 @@ class Tape implements Writable {
 		this.name = name
 	}
 
-	Tape(File file) {
-		def json = file.withReader { reader ->
-			new JsonSlurper().parse(reader)
-		}
+	Tape(Reader reader) {
+		def json = new JsonSlurper().parse(reader)
 
 		name = json.tape.name
 		json.tape.interactions.each {
@@ -75,6 +75,7 @@ class HttpInteraction {
 		def responseProtocol = parseProtocol(json.response.protocol)
 		request = new BasicHttpRequest(json.request.method, json.request.uri, requestProtocol)
 		response = new BasicHttpResponse(responseProtocol, json.response.status, null)
+		response.entity = new StringEntity(json.response.body)
 		recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(json.recorded)
 	}
 
