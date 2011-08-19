@@ -10,28 +10,47 @@ import betamax.storage.*
 import groovy.json.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
+import org.apache.http.client.methods.HttpUriRequest
+import spock.lang.Shared
+import org.apache.http.HttpResponse
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.entity.ByteArrayEntity
 
 class TapeLoadingSpec extends Specification {
 
 	TapeLoader loader = new JsonTapeLoader()
 
+	@Shared HttpGet getRequest
+	@Shared HttpPost postRequest
+	@Shared HttpResponse successResponse
+	@Shared HttpResponse failureResponse
+
+	def setupSpec() {
+		getRequest = new HttpGet("http://icanhascheezburger.com/")
+
+		postRequest = new HttpPost("http://github.com/")
+		postRequest.entity = new ByteArrayEntity("q=1".bytes)
+
+		successResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+		successResponse.addHeader(CONTENT_TYPE, "text/plain")
+		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
+		successResponse.addHeader(CONTENT_ENCODING, "gzip")
+		successResponse.entity = new ByteArrayEntity("O HAI!".bytes)
+
+		failureResponse = new BasicHttpResponse(HTTP_1_1, 405, "BAD REQUEST")
+		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
+		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
+		failureResponse.addHeader(CONTENT_ENCODING, "gzip")
+		failureResponse.entity = new ByteArrayEntity("KTHXBYE!".bytes)
+	}
+
 	def "can write a tape to storage"() {
 		given:
-		def request = new HttpGet("http://icanhascheezburger.com/")
-		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
-		response.addHeader(CONTENT_TYPE, "text/plain")
-		response.addHeader(CONTENT_LANGUAGE, "en-GB")
-		response.addHeader(CONTENT_ENCODING, "gzip")
-		response.entity = new BasicHttpEntity()
-		response.entity.content = new ByteArrayInputStream("O HAI!".bytes)
-		response.entity.contentLength = 6L
-
-		and:
 		def tape = new Tape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
-		tape.record(request, response)
+		tape.record(getRequest, successResponse)
 		loader.writeTape(tape, writer)
 
 		then:
@@ -47,6 +66,40 @@ class TapeLoadingSpec extends Specification {
 		json.tape.interactions[0].response.protocol == "HTTP/1.1"
 		json.tape.interactions[0].response.status == 200
 		json.tape.interactions[0].response.body == "O HAI!"
+	}
+
+	def "can write requests with a body"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(postRequest, successResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		def json = new JsonSlurper().parseText(writer.toString())
+		json.tape.interactions[0].request.method == "POST"
+		json.tape.interactions[0].request.body == "q=1"
+	}
+
+	def "can write multiple interactions"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, successResponse)
+		tape.record(postRequest, failureResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		def json = new JsonSlurper().parseText(writer.toString())
+		json.tape.interactions.size() == 2
+		json.tape.interactions[0].request.method == "GET"
+		json.tape.interactions[1].request.method == "POST"
+		json.tape.interactions[0].response.status == 200
+		json.tape.interactions[1].response.status == 405
 	}
 
 	def "can load a valid tape with a single interaction"() {
