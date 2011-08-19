@@ -11,6 +11,7 @@ import org.apache.http.impl.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
+import groovy.util.logging.Log4j
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 
@@ -19,6 +20,7 @@ import org.apache.http.protocol.*
  * Please note the purpose of this application is demonstrate the usage of HttpCore APIs.
  * It is NOT intended to demonstrate the most efficient way of building an HTTP server. 
  */
+@Log4j
 class HttpProxyServer {
 
 	private IOReactor reactor
@@ -60,6 +62,7 @@ class HttpProxyServer {
         def ioReactor = new DefaultListeningIOReactor(2, params)
         ioReactor.listen(new InetSocketAddress(port))
         Thread.start {
+			log.debug "starting server..."
             ioReactor.execute(ioEventDispatch)
         }
 
@@ -67,6 +70,7 @@ class HttpProxyServer {
     }
 
 	void stop() {
+		log.debug "stopping server..."
 		reactor.shutdown()
 		Betamax.instance.ejectTape()
 	}

@@ -51,10 +51,12 @@ class EchoServer {
 							}
 						}
 					}
+					log.debug "response sent..."
 				}
 			} catch (SocketTimeoutException e) {
-				log.warn "no connection within $timeout  milliseconds, giving up"
+				log.warn "no connection within $timeout  milliseconds, giving up..."
 			} finally {
+				log.debug "shutting down..."
 				server.close()
 				doneLatch.countDown()
 			}
