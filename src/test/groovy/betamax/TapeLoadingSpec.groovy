@@ -137,6 +137,55 @@ class TapeLoadingSpec extends Specification {
 		tape.interactions[0].response.entity.content.text == "O HAI!"
 	}
 
+	def "can load a valid tape with multiple interactions"() {
+		given:
+		def json = """\
+{
+	"tape": {
+		"name": "single_interaction_tape",
+		"interactions": [
+			{
+				"recorded": "2011-08-19 12:45:33 +0100",
+				"request": {
+					"protocol": "HTTP/1.1",
+					"method": "GET",
+					"uri": "http://icanhascheezburger.com/"
+				},
+				"response": {
+					"protocol": "HTTP/1.1",
+					"status": 200,
+					"body": "O HAI!"
+				}
+			},
+			{
+				"recorded": "2011-08-19 21:19:14 +0100",
+				"request": {
+					"protocol": "HTTP/1.1",
+					"method": "GET",
+					"uri": "http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol"
+				},
+				"response": {
+					"protocol": "HTTP/1.1",
+					"status": 418,
+					"body": "I'm a teapot"
+				}
+			}
+		]
+	}
+}"""
+		when:
+		def tape = loader.readTape(new StringReader(json))
+
+		then:
+		tape.interactions.size() == 2
+		tape.interactions[0].request.requestLine.uri == "http://icanhascheezburger.com/"
+		tape.interactions[1].request.requestLine.uri == "http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol"
+		tape.interactions[0].response.statusLine.statusCode == HTTP_OK
+		tape.interactions[1].response.statusLine.statusCode == 418
+		tape.interactions[0].response.entity.content.text == "O HAI!"
+		tape.interactions[1].response.entity.content.text == "I'm a teapot"
+	}
+
 	def "barfs on non-json data"() {
 		given:
 		def json = "THIS IS NOT JSON"
