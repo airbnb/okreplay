@@ -1,8 +1,8 @@
 package betamax.server
 
-import org.apache.http.nio.NHttpConnection
-import org.apache.http.HttpException
 import groovy.util.logging.Log4j
+import org.apache.http.HttpException
+import org.apache.http.nio.NHttpConnection
 
 @Log4j
 class EventLogger implements org.apache.http.nio.protocol.EventListener {

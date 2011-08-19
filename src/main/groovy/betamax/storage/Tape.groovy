@@ -1,10 +1,10 @@
 package betamax.storage
 
+import betamax.Betamax
+import groovy.json.JsonBuilder
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
 import org.apache.http.message.*
-import betamax.Betamax
-import groovy.json.JsonBuilder
 
 class Tape {
 

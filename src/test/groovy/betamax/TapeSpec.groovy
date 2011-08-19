@@ -1,19 +1,14 @@
 package betamax
 
 import betamax.storage.Tape
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.entity.BasicHttpEntity
+import groovy.json.JsonSlurper
 import org.apache.http.message.BasicHttpResponse
-import spock.lang.Specification
+import static groovyx.net.http.ContentType.URLENC
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
-import spock.lang.Stepwise
-import spock.lang.Shared
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.StringEntity
-import groovyx.net.http.ContentType
-import static groovyx.net.http.ContentType.URLENC
-import groovy.json.JsonSlurper
+import org.apache.http.client.methods.*
+import org.apache.http.entity.*
+import spock.lang.*
 
 @Stepwise
 class TapeSpec extends Specification {

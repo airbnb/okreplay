@@ -1,6 +1,7 @@
 package betamax
 
 import betamax.server.HttpProxyServer
+import betamax.util.EchoServer
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
@@ -8,13 +9,11 @@ import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import betamax.util.EchoServer
 
 class ProxyNetworkCommsSpec extends Specification {
 
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
     EchoServer endpoint = new EchoServer()
-	String url
 
 	def setupSpec() {
 		System.properties."http.proxyHost" = "localhost"
@@ -24,11 +23,11 @@ class ProxyNetworkCommsSpec extends Specification {
 	}
 
     def setup() {
-        url = endpoint.start()
+		endpoint.start()
     }
 
     def cleanup() {
-        endpoint.stop()
+        endpoint.awaitStop()
     }
 
 	def cleanupSpec() {
@@ -38,7 +37,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts URL connections"() {
 		given:
-		HttpURLConnection connection = new URL(url).openConnection()
+		HttpURLConnection connection = new URL(endpoint.url).openConnection()
 		connection.connect()
 
 		expect:
@@ -52,7 +51,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
 		given:
-		def http = new RESTClient(url)
+		def http = new RESTClient(endpoint.url)
 		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 		http.client.routePlanner = routePlanner
 
@@ -67,7 +66,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HTTPClient connections when explicitly told to"() {
 		given:
-		def http = new RESTClient(url)
+		def http = new RESTClient(endpoint.url)
 		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", proxy.port, "http"))
 
 		when:
@@ -81,7 +80,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy intercepts HttpURLClient connections"() {
 		given:
-		def http = new HttpURLClient(url: url)
+		def http = new HttpURLClient(url: endpoint.url)
 
 		when:
 		def response = http.request(path: "/")
@@ -95,7 +94,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Unroll({"proxy handles $method requests"})
 	def "proxy handles all request methods"() {
 		given:
-		def http = new RESTClient(url)
+		def http = new RESTClient(endpoint.url)
 		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 		http.client.routePlanner = routePlanner
 
@@ -116,7 +115,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy forwards query string"() {
 		given:
-		def http = new RESTClient(url)
+		def http = new RESTClient(endpoint.url)
 		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 		http.client.routePlanner = routePlanner
 
@@ -134,7 +133,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Timeout(10)
 	def "proxy forwards post data"() {
 		given:
-		def http = new RESTClient(url)
+		def http = new RESTClient(endpoint.url)
 		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 		http.client.routePlanner = routePlanner
 
