@@ -10,6 +10,7 @@ import org.apache.http.impl.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
+import betamax.Betamax
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 
@@ -67,6 +68,7 @@ class HttpProxyServer {
 
 	void stop() {
 		reactor.shutdown()
+		Betamax.instance.ejectTape()
 	}
 
 }

@@ -18,4 +18,7 @@ class Betamax {
 		tape
 	}
 
+	void ejectTape() {
+		tape?.eject()
+	}
 }
