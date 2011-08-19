@@ -5,12 +5,28 @@ import java.text.SimpleDateFormat
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
 import org.apache.http.message.*
+import groovy.json.JsonSlurper
 
 class Tape implements Writable {
 
 	String name
 	String description
 	Collection<HttpInteraction> interactions = []
+
+	Tape(String name) {
+		this.name = name
+	}
+
+	Tape(File file) {
+		def json = file.withReader { reader ->
+			new JsonSlurper().parse(reader)
+		}
+
+		name = json.tape.name
+		json.tape.interactions.each {
+			interactions << new HttpInteraction(it)
+		}
+	}
 
 	boolean play(HttpRequest request, HttpResponse response) {
 		def interaction = interactions.find { it.request.requestLine.uri == request.requestLine.uri }
@@ -41,6 +57,8 @@ class Tape implements Writable {
 
 class HttpInteraction {
 
+	static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
+
 	final HttpRequest request
 	final HttpResponse response
 	final String description
@@ -52,8 +70,21 @@ class HttpInteraction {
 		this.recorded = new Date()
 	}
 
+	HttpInteraction(json) {
+		def requestProtocol = parseProtocol(json.request.protocol)
+		def responseProtocol = parseProtocol(json.response.protocol)
+		request = new BasicHttpRequest(json.request.method, json.request.uri, requestProtocol)
+		response = new BasicHttpResponse(responseProtocol, json.response.status, null)
+		recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(json.recorded)
+	}
+
+	private ProtocolVersion parseProtocol(String protocolString) {
+		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
+		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
+	}
+
 	Map toMap() {
-		[recorded: new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(recorded), request: requestToMap(), response: responseToMap()]
+		[recorded: new SimpleDateFormat(TIMESTAMP_FORMAT).format(recorded), request: requestToMap(), response: responseToMap()]
 	}
 
 	private Map requestToMap() {
@@ -69,11 +100,14 @@ class HttpInteraction {
 	}
 
 	private Map responseToMap() {
-		[
+		def map = [
 				protocol: response.statusLine.protocolVersion,
-				status: response.statusLine.statusCode,
-				body: response.entity.content.text
+				status: response.statusLine.statusCode
 		]
+		if (response.entity) {
+			map.body = response.entity.content.text
+		}
+		map
 	}
 
 	private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {

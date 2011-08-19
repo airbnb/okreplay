@@ -6,12 +6,17 @@ import betamax.storage.Tape
 class Betamax {
 
 	int proxyPort = 5555
-    File tapeRoot = new File("src/test/resources/betamax/tapes")
+	File tapeRoot = new File("src/test/resources/betamax/tapes")
 
 	private Tape tape
 
 	void insertTape(String name) {
-		tape = new Tape(name: name)
+		def file = getTapeFile(name)
+		if (file.isFile()) {
+			tape = new Tape(file)
+		} else {
+			tape = new Tape(name)
+		}
 	}
 
 	Tape getTape() {
@@ -20,11 +25,15 @@ class Betamax {
 
 	void ejectTape() {
 		if (tape) {
-			def file = new File(tapeRoot, "${tape.name}.json")
+			def file = getTapeFile(tape.name)
 			file.parentFile.mkdirs()
 			file.withWriter { writer ->
 				writer << tape
 			}
 		}
+	}
+
+	private File getTapeFile(String name) {
+		new File(tapeRoot, "${name}.json")
 	}
 }

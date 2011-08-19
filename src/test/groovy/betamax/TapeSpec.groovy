@@ -15,7 +15,7 @@ class TapeSpec extends Specification {
 
 	private static final ProtocolVersion HTTP_1_1 = new ProtocolVersion("HTTP", 1, 1)
 
-	@Shared Tape tape = new Tape(name: "tape_spec")
+	@Shared Tape tape = new Tape("tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 

@@ -24,6 +24,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def cleanupSpec() {
 		proxy.stop()
+		assert betamax.tapeRoot.deleteDir()
 	}
 
 	@Timeout(10)
@@ -62,6 +63,42 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		then:
 		new File(betamax.tapeRoot, "${betamax.tape.name}.json").isFile()
+	}
+
+	def "can load an existing tape from a file and play it back"() {
+		given:
+		def file = new File(betamax.tapeRoot, "existing_tape.json")
+		file.parentFile.mkdirs()
+		file.withWriter { writer ->
+			writer << """\
+{
+	"tape": {
+		"name": "existing_tape",
+		"interactions": [
+			{
+				"recorded": "2011-08-19 12:45:33 +0100",
+				"request": {
+					"protocol": "HTTP/1.1",
+					"method": "GET",
+					"uri": "http://icanhascheezburger.com/"
+				},
+				"response": {
+					"protocol": "HTTP/1.1",
+					"status": 200,
+					"body": "O HAI!"
+				}
+			}
+		]
+	}
+}"""
+		}
+
+		when:
+		betamax.insertTape("existing_tape")
+
+		then:
+		betamax.tape.name == "existing_tape"
+		betamax.tape.interactions.size() == 1
 	}
 
 }
