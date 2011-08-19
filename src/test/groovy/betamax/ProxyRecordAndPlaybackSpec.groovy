@@ -8,6 +8,7 @@ import spock.lang.*
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
+	@Shared Betamax betamax = Betamax.instance
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
 	EchoServer endpoint = new EchoServer()
 
@@ -60,7 +61,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		proxy.stop()
 
 		then:
-		Betamax.instance.tape.file.isFile()
+		new File(betamax.tapeRoot, "${betamax.tape.name}.json").isFile()
 	}
 
 }

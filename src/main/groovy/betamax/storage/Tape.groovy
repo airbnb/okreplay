@@ -1,13 +1,12 @@
 package betamax.storage
 
-import betamax.Betamax
 import groovy.json.JsonBuilder
 import java.text.SimpleDateFormat
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
 import org.apache.http.message.*
 
-class Tape {
+class Tape implements Writable {
 
 	String name
 	String description
@@ -29,20 +28,13 @@ class Tape {
 		interactions << new HttpInteraction(request, response)
 	}
 
-	void eject() {
+	Writer writeTo(Writer out) {
 		def json = new JsonBuilder()
 		json.tape {
 			name(name)
 			interactions(interactions*.toMap())
 		}
-		file.parentFile.mkdirs()
-		file.withWriter {writer ->
-			writer << json.toPrettyString()
-		}
-	}
-
-	File getFile() {
-		new File(Betamax.instance.tapeRoot, "${name}.json")
+		out << json.toPrettyString()
 	}
 
 }

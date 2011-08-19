@@ -19,6 +19,12 @@ class Betamax {
 	}
 
 	void ejectTape() {
-		tape?.eject()
+		if (tape) {
+			def file = new File(tapeRoot, "${tape.name}.json")
+			file.parentFile.mkdirs()
+			file.withWriter { writer ->
+				writer << tape
+			}
+		}
 	}
 }

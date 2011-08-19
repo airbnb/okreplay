@@ -108,18 +108,15 @@ class TapeSpec extends Specification {
 		interaction.request.entity.content.text == request.entity.content.text
 	}
     
-    def "can write the tape to disk"() {
+    def "can write the tape to storage"() {
+		given:
+		def writer = new StringWriter()
+
         when:
-        tape.eject()
+        writer << tape
 
         then:
-        tape.file.isFile()
-
-        and:
-		println tape.file.text
-        def json = tape.file.withReader { reader ->
-			new JsonSlurper().parse(reader)
-		}
+        def json = new JsonSlurper().parseText(writer.toString())
 		json.tape.name == tape.name
 
 		json.tape.interactions.size() == 2
