@@ -1,0 +1,82 @@
+package betamax.storage.json
+
+import org.apache.http.entity.StringEntity
+import betamax.storage.*
+import groovy.json.*
+import java.text.*
+import org.apache.http.*
+import org.apache.http.message.*
+
+class JsonTapeLoader implements TapeLoader {
+
+	static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
+
+	Tape readTape(Reader reader) {
+		try {
+			def json = new JsonSlurper().parse(reader)
+
+			def tape = new Tape()
+			tape.name = json.tape.name
+			json.tape.interactions.each {
+				def requestProtocol = parseProtocol(it.request.protocol)
+				def request = new BasicHttpRequest(it.request.method, it.request.uri, requestProtocol)
+				def responseProtocol = parseProtocol(it.response.protocol)
+				def response = new BasicHttpResponse(responseProtocol, it.response.status, null)
+				response.entity = new StringEntity(it.response.body)
+				def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(it.recorded)
+
+				def interaction = new HttpInteraction(request: request, response: response, recorded: recorded)
+				tape.interactions << interaction
+			}
+
+			tape
+		} catch (ParseException e) {
+			throw new TapeLoadException("Invalid tape", e)
+		} catch (JsonException e) {
+			throw new TapeLoadException("Invalid tape", e)
+		}
+	}
+
+	void writeTape(Tape tape, Writer writer) {
+		def json = new JsonBuilder()
+		json.tape {
+			name tape.name
+			interactions data(tape.interactions)
+		}
+		writer << json.toPrettyString()
+	}
+
+	private List<Map> data(Collection<HttpInteraction> interactions) {
+		interactions.collect {
+			[recorded: new SimpleDateFormat(TIMESTAMP_FORMAT).format(it.recorded), request: data(it.request), response: data(it.response)]
+		}
+	}
+
+	private Map data(HttpRequest request) {
+		def map = [
+				protocol: request.requestLine.protocolVersion,
+				method: request.requestLine.method,
+				uri: request.requestLine.uri
+		]
+		if (request instanceof HttpEntityEnclosingRequest) {
+			map.body = request.entity.content.text
+		}
+		map
+	}
+
+	private Map data(HttpResponse response) {
+		def map = [
+				protocol: response.statusLine.protocolVersion,
+				status: response.statusLine.statusCode
+		]
+		if (response.entity) {
+			map.body = response.entity.content.text
+		}
+		map
+	}
+
+	private ProtocolVersion parseProtocol(String protocolString) {
+		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
+		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
+	}
+}

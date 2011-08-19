@@ -4,6 +4,7 @@ import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovyx.net.http.HttpURLClient
 import spock.lang.*
+import groovy.json.JsonSlurper
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -62,7 +63,15 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		proxy.stop()
 
 		then:
-		new File(betamax.tapeRoot, "${betamax.tape.name}.json").isFile()
+		def file = new File(betamax.tapeRoot, "${betamax.tape.name}.json")
+		file.isFile()
+
+		and:
+		def json = file.withReader {
+			reader -> new JsonSlurper().parse(reader)
+		}
+		json.tape.name == "proxy_record_and_playback_spec"
+		json.tape.interactions.size() == 1
 	}
 
 	def "can load an existing tape from a file and play it back"() {

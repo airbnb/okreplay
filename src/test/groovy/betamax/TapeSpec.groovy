@@ -1,7 +1,6 @@
 package betamax
 
 import betamax.storage.Tape
-import groovy.json.JsonSlurper
 import org.apache.http.message.BasicHttpResponse
 import static groovyx.net.http.ContentType.URLENC
 import org.apache.http.*
@@ -14,7 +13,7 @@ import spock.lang.*
 @Stepwise
 class TapeSpec extends Specification {
 
-	@Shared Tape tape = new Tape("tape_spec")
+	@Shared Tape tape = new Tape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
@@ -107,30 +106,4 @@ class TapeSpec extends Specification {
 		interaction.request.entity.content.text == request.entity.content.text
 	}
     
-    def "can write the tape to storage"() {
-		given:
-		def writer = new StringWriter()
-
-        when:
-        writer << tape
-
-        then:
-        def json = new JsonSlurper().parseText(writer.toString())
-		json.tape.name == tape.name
-
-		json.tape.interactions.size() == 2
-		json.tape.interactions[0].recorded ==~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\+-]\d{4}/
-
-		json.tape.interactions[0].request.protocol == "HTTP/1.1"
-		json.tape.interactions[0].request.method == "GET"
-		json.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
-		json.tape.interactions[0].response.protocol == "HTTP/1.1"
-		json.tape.interactions[0].response.status == 200
-		json.tape.interactions[0].response.body == "O HAI!"
-             
-		json.tape.interactions[1].request.method == "POST"
-		json.tape.interactions[1].request.uri == "http://github.com/"
-		json.tape.interactions[1].request.body == "q=1"
-	}
-
 }

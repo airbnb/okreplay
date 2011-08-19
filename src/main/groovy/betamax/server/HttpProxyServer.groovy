@@ -1,5 +1,6 @@
 package betamax.server
 
+import betamax.Betamax
 import org.apache.http.HttpResponseInterceptor
 import org.apache.http.impl.nio.DefaultServerIOEventDispatch
 import org.apache.http.impl.nio.reactor.DefaultListeningIOReactor
@@ -10,7 +11,6 @@ import org.apache.http.impl.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
-import betamax.Betamax
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 

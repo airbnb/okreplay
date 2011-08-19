@@ -8,7 +8,6 @@ This project is currently in the prototype stage.
 
 * `Betamax.withTape(name, Closure)` as a way of scoping proxy usage
 * `@Betamax(tape=name)` for tests/specs
-* Separate JSON IO from Tape class (potentially swap in other storage mechanisms)
 * Description in interactions
 * Non-text responses
 * Multipart requests

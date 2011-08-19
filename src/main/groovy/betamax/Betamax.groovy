@@ -1,12 +1,14 @@
 package betamax
 
-import betamax.storage.Tape
+import betamax.storage.json.JsonTapeLoader
+import betamax.storage.*
 
 @Singleton
 class Betamax {
 
 	int proxyPort = 5555
 	File tapeRoot = new File("src/test/resources/betamax/tapes")
+	TapeLoader loader = new JsonTapeLoader()
 
 	private Tape tape
 
@@ -14,10 +16,10 @@ class Betamax {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
 			file.withReader { reader ->
-				tape = new Tape(reader)
+				tape = loader.readTape(reader)
 			}
 		} else {
-			tape = new Tape(name)
+			tape = new Tape(name: name)
 		}
 	}
 
@@ -30,7 +32,7 @@ class Betamax {
 			def file = getTapeFile(tape.name)
 			file.parentFile.mkdirs()
 			file.withWriter { writer ->
-				writer << tape
+				loader.writeTape(tape, writer)
 			}
 		}
 	}
