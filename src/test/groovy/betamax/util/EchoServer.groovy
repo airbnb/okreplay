@@ -2,6 +2,7 @@ package betamax.util
 
 import groovy.util.logging.Log4j
 import java.util.concurrent.CountDownLatch
+import static java.util.concurrent.TimeUnit.SECONDS
 
 /**
  * A very simple socket server that listens for _one_ request and responds by just echoing back the request content. The
@@ -14,7 +15,7 @@ class EchoServer {
 	/**
 	 * The maximum time in milliseconds the server will wait for a request before giving up and shutting down.
 	 */
-	int timeout = 1000
+	int timeout = SECONDS.toMillis(1)
 
 	private final String host
 	private final int port

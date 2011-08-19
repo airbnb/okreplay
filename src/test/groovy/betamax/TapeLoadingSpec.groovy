@@ -2,19 +2,16 @@ package betamax
 
 import betamax.storage.json.JsonTapeLoader
 import java.text.ParseException
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.entity.BasicHttpEntity
+import org.apache.http.HttpResponse
+import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.message.BasicHttpResponse
-import spock.lang.Specification
 import betamax.storage.*
 import groovy.json.*
+import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
-import org.apache.http.client.methods.HttpUriRequest
-import spock.lang.Shared
-import org.apache.http.HttpResponse
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.client.methods.*
+import spock.lang.*
 
 class TapeLoadingSpec extends Specification {
 
@@ -31,13 +28,13 @@ class TapeLoadingSpec extends Specification {
 		postRequest = new HttpPost("http://github.com/")
 		postRequest.entity = new ByteArrayEntity("q=1".bytes)
 
-		successResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+		successResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		successResponse.addHeader(CONTENT_ENCODING, "gzip")
 		successResponse.entity = new ByteArrayEntity("O HAI!".bytes)
 
-		failureResponse = new BasicHttpResponse(HTTP_1_1, 405, "BAD REQUEST")
+		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		failureResponse.addHeader(CONTENT_ENCODING, "gzip")
@@ -64,7 +61,7 @@ class TapeLoadingSpec extends Specification {
 		json.tape.interactions[0].request.method == "GET"
 		json.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
 		json.tape.interactions[0].response.protocol == "HTTP/1.1"
-		json.tape.interactions[0].response.status == 200
+		json.tape.interactions[0].response.status == HTTP_OK
 		json.tape.interactions[0].response.body == "O HAI!"
 	}
 
@@ -98,8 +95,8 @@ class TapeLoadingSpec extends Specification {
 		json.tape.interactions.size() == 2
 		json.tape.interactions[0].request.method == "GET"
 		json.tape.interactions[1].request.method == "POST"
-		json.tape.interactions[0].response.status == 200
-		json.tape.interactions[1].response.status == 405
+		json.tape.interactions[0].response.status == HTTP_OK
+		json.tape.interactions[1].response.status == HTTP_BAD_REQUEST
 	}
 
 	def "can load a valid tape with a single interaction"() {
@@ -136,7 +133,7 @@ class TapeLoadingSpec extends Specification {
 		tape.interactions[0].request.requestLine.method == "GET"
 		tape.interactions[0].request.requestLine.uri == "http://icanhascheezburger.com/"
 		tape.interactions[0].response.statusLine.protocolVersion == HTTP_1_1
-		tape.interactions[0].response.statusLine.statusCode == 200
+		tape.interactions[0].response.statusLine.statusCode == HTTP_OK
 		tape.interactions[0].response.entity.content.text == "O HAI!"
 	}
 

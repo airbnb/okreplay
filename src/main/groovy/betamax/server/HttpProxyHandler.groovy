@@ -33,18 +33,23 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
-		log.debug "$request.requestLine.method request for $request.requestLine.uri"
+		log.debug "proxying request $request.requestLine..."
 
 		def tape = Betamax.instance.tape
 
 		if (tape?.play(request, response)) {
-			log.debug "playing..."
+			log.debug "playing back from tape '$tape.name'..."
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
-			log.debug "recording..."
 			execute(request, response)
-			tape?.record(request, response)
-			response.addHeader(X_BETAMAX, "REC")
+			response.addHeader(VIA, "Betamax")
+			if (tape) {
+				log.debug "recording response with status $response.statusLine to tape '$tape.name'..."
+				tape.record(request, response)
+				response.addHeader(X_BETAMAX, "REC")
+			} else {
+				log.debug "no tape inserted..."
+			}
 		}
 	}
 
@@ -54,8 +59,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 		proxyRequest.addHeader(VIA, "Betamax")
 
 		def proxyResponse = httpClient.execute(proxyRequest)
-
-		log.debug "received response with status $proxyResponse.statusLine.statusCode"
 
 		copyResponseData(proxyResponse, response)
 	}

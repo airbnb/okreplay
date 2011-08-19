@@ -62,7 +62,7 @@ class HttpProxyServer {
         def ioReactor = new DefaultListeningIOReactor(2, params)
         ioReactor.listen(new InetSocketAddress(port))
         Thread.start {
-			log.debug "starting server..."
+			log.debug "starting proxy server..."
             ioReactor.execute(ioEventDispatch)
         }
 
@@ -70,7 +70,7 @@ class HttpProxyServer {
     }
 
 	void stop() {
-		log.debug "stopping server..."
+		log.debug "stopping proxy server..."
 		reactor.shutdown()
 		Betamax.instance.ejectTape()
 	}

@@ -7,6 +7,7 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
+import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
 
@@ -42,7 +43,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
 		expect:
 		connection.responseCode == HTTP_OK
-		connection.getHeaderField("X-Betamax") == "REC"
+		connection.getHeaderField(VIA) == "Betamax"
 
 		cleanup:
 		connection.disconnect()
@@ -60,7 +61,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader(VIA)?.value == "Betamax"
 	}
 
 	@Timeout(10)
@@ -74,7 +75,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader(VIA)?.value == "Betamax"
 	}
 
 	@Timeout(10)
@@ -87,7 +88,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader(VIA)?.value == "Betamax"
 	}
 
 	@Timeout(10)
@@ -103,7 +104,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader("X-Betamax")?.value == "REC"
+		response.getFirstHeader(VIA)?.value == "Betamax"
 
 		cleanup:
 		http.shutdown()
