@@ -2,6 +2,7 @@ package betamax.storage
 
 import betamax.Betamax
 import groovy.json.JsonBuilder
+import java.text.SimpleDateFormat
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
 import org.apache.http.message.*
@@ -9,6 +10,7 @@ import org.apache.http.message.*
 class Tape {
 
 	String name
+	String description
 	Collection<HttpInteraction> interactions = []
 
 	boolean play(HttpRequest request, HttpResponse response) {
@@ -49,14 +51,17 @@ class HttpInteraction {
 
 	final HttpRequest request
 	final HttpResponse response
+	final String description
+	final Date recorded
 
 	HttpInteraction(HttpRequest request, HttpResponse response) {
 		this.request = cloneRequest(request)
 		this.response = cloneResponse(response)
+		this.recorded = new Date()
 	}
 
 	Map toMap() {
-		[request: requestToMap(), response: responseToMap()]
+		[recorded: new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(recorded), request: requestToMap(), response: responseToMap()]
 	}
 
 	private Map requestToMap() {

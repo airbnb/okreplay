@@ -123,6 +123,8 @@ class TapeSpec extends Specification {
 		json.tape.name == tape.name
 
 		json.tape.interactions.size() == 2
+		json.tape.interactions[0].recorded ==~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\+-]\d{4}/
+
 		json.tape.interactions[0].request.protocol == "HTTP/1.1"
 		json.tape.interactions[0].request.method == "GET"
 		json.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
