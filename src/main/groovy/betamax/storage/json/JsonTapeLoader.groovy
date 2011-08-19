@@ -23,6 +23,9 @@ class JsonTapeLoader implements TapeLoader {
 				def responseProtocol = parseProtocol(it.response.protocol)
 				def response = new BasicHttpResponse(responseProtocol, it.response.status, null)
 				response.entity = new StringEntity(it.response.body)
+				it.response.headers.each { header ->
+					response.addHeader(header.key, header.value)
+				}
 				def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(it.recorded)
 
 				def interaction = new HttpInteraction(request: request, response: response, recorded: recorded)

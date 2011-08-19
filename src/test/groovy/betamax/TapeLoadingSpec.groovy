@@ -116,6 +116,11 @@ class TapeLoadingSpec extends Specification {
 				"response": {
 					"protocol": "HTTP/1.1",
 					"status": 200,
+					"headers": {
+						"Content-Type": "text/plain",
+						"Content-Language": "en-GB",
+						"Content-Encoding": "gzip"
+					},
 					"body": "O HAI!"
 				}
 			}
@@ -134,6 +139,9 @@ class TapeLoadingSpec extends Specification {
 		tape.interactions[0].request.requestLine.uri == "http://icanhascheezburger.com/"
 		tape.interactions[0].response.statusLine.protocolVersion == HTTP_1_1
 		tape.interactions[0].response.statusLine.statusCode == HTTP_OK
+		tape.interactions[0].response.getFirstHeader(CONTENT_TYPE).value == "text/plain"
+		tape.interactions[0].response.getFirstHeader(CONTENT_LANGUAGE).value == "en-GB"
+		tape.interactions[0].response.getFirstHeader(CONTENT_ENCODING).value == "gzip"
 		tape.interactions[0].response.entity.content.text == "O HAI!"
 	}
 
