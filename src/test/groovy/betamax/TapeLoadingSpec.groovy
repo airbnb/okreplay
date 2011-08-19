@@ -3,6 +3,9 @@ package betamax
 import betamax.storage.Tape
 import spock.lang.Specification
 import static org.apache.http.HttpVersion.HTTP_1_1
+import betamax.storage.TapeLoadException
+import java.text.ParseException
+import groovy.json.JsonException
 
 class TapeLoadingSpec extends Specification {
 
@@ -42,6 +45,49 @@ class TapeLoadingSpec extends Specification {
 		tape.interactions[0].response.statusLine.protocolVersion == HTTP_1_1
 		tape.interactions[0].response.statusLine.statusCode == 200
 		tape.interactions[0].response.entity.content.text == "O HAI!"
+	}
+
+	def "barfs on non-json data"() {
+		given:
+		def json = "THIS IS NOT JSON"
+
+		when:
+		new Tape(new StringReader(json))
+
+		then:
+		def e = thrown(TapeLoadException)
+		e.cause instanceof JsonException
+	}
+
+	def "barfs on an invalid record date"() {
+		given:
+		def json = """\
+{
+	"tape": {
+		"name": "invalid_timestamp_tape",
+		"interactions": [
+			{
+				"recorded": "THIS IS NOT A DATE",
+				"request": {
+					"protocol": "HTTP/1.1",
+					"method": "GET",
+					"uri": "http://icanhascheezburger.com/"
+				},
+				"response": {
+					"protocol": "HTTP/1.1",
+					"status": 200,
+					"body": "O HAI!"
+				}
+			}
+		]
+	}
+}"""
+		when:
+		new Tape(new StringReader(json))
+
+		then:
+		def e = thrown(TapeLoadException)
+		e.cause instanceof ParseException
 	}
 
 }

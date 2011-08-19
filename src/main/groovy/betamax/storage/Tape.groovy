@@ -1,13 +1,10 @@
 package betamax.storage
 
-import groovy.json.JsonBuilder
-import java.text.SimpleDateFormat
-import org.apache.http.entity.ByteArrayEntity
+import groovy.json.*
+import java.text.*
 import org.apache.http.*
+import org.apache.http.entity.*
 import org.apache.http.message.*
-import groovy.json.JsonSlurper
-import org.apache.http.entity.BasicHttpEntity
-import org.apache.http.entity.StringEntity
 
 class Tape implements Writable {
 
@@ -20,11 +17,17 @@ class Tape implements Writable {
 	}
 
 	Tape(Reader reader) {
-		def json = new JsonSlurper().parse(reader)
+		try {
+			def json = new JsonSlurper().parse(reader)
 
-		name = json.tape.name
-		json.tape.interactions.each {
-			interactions << new HttpInteraction(it)
+			name = json.tape.name
+			json.tape.interactions.each {
+				interactions << new HttpInteraction(it)
+			}
+		} catch (ParseException e) {
+			throw new TapeLoadException("Invalid tape", e)
+		} catch (JsonException e) {
+			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
