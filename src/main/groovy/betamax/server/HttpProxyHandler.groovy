@@ -3,12 +3,14 @@ package betamax.server
 import betamax.Betamax
 import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
+import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
+import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
@@ -41,14 +43,19 @@ class HttpProxyHandler implements HttpRequestHandler {
 			log.debug "playing back from tape '$tape.name'..."
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
-			execute(request, response)
-			response.addHeader(VIA, "Betamax")
-			if (tape) {
-				log.debug "recording response with status $response.statusLine to tape '$tape.name'..."
-				tape.record(request, response)
-				response.addHeader(X_BETAMAX, "REC")
-			} else {
-				log.debug "no tape inserted..."
+			try {
+				execute(request, response)
+				response.addHeader(VIA, "Betamax")
+				if (tape) {
+					log.debug "recording response with status $response.statusLine to tape '$tape.name'..."
+					tape.record(request, response)
+					response.addHeader(X_BETAMAX, "REC")
+				} else {
+					log.debug "no tape inserted..."
+				}
+			} catch (IOException e) {
+				log.error "problem connecting to $request.requestLine.uri: $e.message"
+				response.statusCode = HTTP_BAD_GATEWAY
 			}
 		}
 	}
@@ -71,7 +78,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 		}
 
 		if (from instanceof HttpEntityEnclosingRequest) {
-			to.entity = from.entity
+			to.entity = copyEntity(from.entity)
 		}
 	}
 
@@ -82,7 +89,26 @@ class HttpProxyHandler implements HttpRequestHandler {
 				to.addHeader(header)
 			}
 		}
-		to.entity = from.entity
+		if (from.entity) {
+			to.entity = copyEntity(from.entity)
+		}
+	}
+
+	private HttpEntity copyEntity(HttpEntity entity) {
+		if (entity.isRepeatable()) {
+			log.debug "re-using repeatable entity with content type ${entity.contentType?.value}..."
+			entity
+		} else {
+			log.debug "copying non-repeatable entity ${entity.getClass().name} with content type ${entity.contentType?.value}..."
+			def bytes = new ByteArrayOutputStream()
+			entity.writeTo(bytes)
+			def copy = new ByteArrayEntity(bytes.toByteArray())
+			copy.chunked = entity.chunked
+			copy.contentEncoding = entity.contentEncoding
+			copy.contentType = entity.contentType
+			log.debug "copied entity..."
+			copy
+		}
 	}
 
 	private HttpRequest createProxyRequest(HttpRequest request) {
