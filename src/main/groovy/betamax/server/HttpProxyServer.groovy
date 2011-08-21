@@ -13,6 +13,7 @@ import org.apache.http.nio.protocol.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
+import org.apache.http.nio.reactor.IOReactorStatus
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 
@@ -32,42 +33,45 @@ class HttpProxyServer implements EventListener {
 	}
 
 	void start(Recorder recorder) {
-        def params = new SyncBasicHttpParams()
-        params.setIntParameter(SO_TIMEOUT, 5000)
+		def params = new SyncBasicHttpParams()
+		params.setIntParameter(SO_TIMEOUT, 5000)
 		params.setIntParameter(SOCKET_BUFFER_SIZE, 8 * 1024)
 		params.setBooleanParameter(STALE_CONNECTION_CHECK, false)
 		params.setBooleanParameter(TCP_NODELAY, true)
 		params.setParameter(ORIGIN_SERVER, "HttpComponents/1.1")
 
-        def httpproc = new ImmutableHttpProcessor([
-                new ResponseDate(),
-                new ResponseServer(),
-                new ResponseContent(),
-                new ResponseConnControl()
-        ] as HttpResponseInterceptor[])
+		def httpproc = new ImmutableHttpProcessor([
+				new ResponseDate(),
+				new ResponseServer(),
+				new ResponseContent(),
+				new ResponseConnControl()
+		] as HttpResponseInterceptor[])
 
-        def handler = new BufferingHttpServiceHandler(
-                httpproc,
-                new DefaultHttpResponseFactory(),
-                new DefaultConnectionReuseStrategy(),
-                params)
+		def handler = new BufferingHttpServiceHandler(
+				httpproc,
+				new DefaultHttpResponseFactory(),
+				new DefaultConnectionReuseStrategy(),
+				params)
 
-        def reqistry = new HttpRequestHandlerRegistry()
-        reqistry.register "*", new HttpProxyHandler(recorder)
+		def reqistry = new HttpRequestHandlerRegistry()
+		reqistry.register "*", new HttpProxyHandler(recorder)
 
-        handler.handlerResolver = reqistry
-        handler.eventListener = this
+		handler.handlerResolver = reqistry
+		handler.eventListener = this
 
-        def ioEventDispatch = new DefaultServerIOEventDispatch(handler, params)
-        def ioReactor = new DefaultListeningIOReactor(2, params)
-        ioReactor.listen(new InetSocketAddress(port))
-        Thread.start {
+		def ioEventDispatch = new DefaultServerIOEventDispatch(handler, params)
+		reactor = new DefaultListeningIOReactor(2, params)
+		reactor.listen(new InetSocketAddress(port))
+		Thread.start {
 			log.debug "starting proxy server..."
-            ioReactor.execute(ioEventDispatch)
-        }
+			reactor.execute(ioEventDispatch)
+		}
 
-        reactor = ioReactor
-    }
+		while (reactor.status != IOReactorStatus.ACTIVE) {
+			log.debug "waiting..."
+			sleep 100
+		}
+	}
 
 	void stop() {
 		log.debug "stopping proxy server..."

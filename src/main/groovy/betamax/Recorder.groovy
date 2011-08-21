@@ -1,16 +1,22 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import betamax.storage.json.JsonTapeLoader
+import groovy.util.logging.Log4j
+import org.junit.rules.MethodRule
 import betamax.storage.*
+import org.junit.runners.model.*
 
 @Singleton
-class Recorder {
+@Log4j
+class Recorder implements MethodRule {
 
 	int proxyPort = 5555
 	File tapeRoot = new File("src/test/resources/betamax/tapes")
 	TapeLoader loader = new JsonTapeLoader()
 
 	private Tape tape
+	private HttpProxyServer proxy = new HttpProxyServer()
 
 	Tape insertTape(String name) {
 		def file = getTapeFile(name)
@@ -49,5 +55,50 @@ class Recorder {
 		insertTape(name)
 		closure.call(tape)
 		ejectTape()
+	}
+
+	Statement apply(Statement statement, FrameworkMethod method, Object target) {
+		def annotation = method.getAnnotation(Betamax)
+		if (annotation) {
+			log.debug "found Betamax annotation on $method.name"
+			new Statement() {
+				void evaluate() {
+					withProxy {
+						try {
+							insertTape(annotation.tape())
+							statement.evaluate()
+						} finally {
+							ejectTape()
+						}
+					}
+				}
+			}
+		} else {
+			log.debug "no Betamax annotation on $method.name"
+			statement
+		}
+	}
+
+	private def withProxy(Closure closure) {
+		def originalProxyHost = System.properties."http.proxyHost"
+		def originalProxyPort = System.properties."http.proxyPort"
+		System.properties."http.proxyHost" = "localhost"
+		System.properties."http.proxyPort" = proxy.port.toString()
+		try {
+			proxy.start(this)
+			closure()
+		} finally {
+			if (originalProxyHost) {
+				System.properties."http.proxyHost" = originalProxyHost
+			} else {
+				System.clearProperty("http.proxyHost")
+			}
+			if (originalProxyPort) {
+				System.properties."http.proxyPort" = originalProxyPort
+			} else {
+				System.clearProperty("http.proxyPort")
+			}
+			proxy.stop()
+		}
 	}
 }

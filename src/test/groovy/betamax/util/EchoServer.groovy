@@ -40,8 +40,10 @@ class EchoServer extends AbstractLifeCycleListener {
 	}
 
 	void stop() {
-		server.stop()
-		stoppedLatch.await()
+		if (server) {
+			server.stop()
+			stoppedLatch.await()
+		}
 	}
 
 	@Override

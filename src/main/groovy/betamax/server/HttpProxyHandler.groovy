@@ -6,19 +6,18 @@ import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
-import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
-import betamax.storage.Tape
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
 
-	private static final X_BETAMAX = "X-Betamax"
-	private static final PROXY_CONNECTION = "Proxy-Connection"
-	private static final KEEP_ALIVE = "Keep-Alive"
+	static final String X_BETAMAX = "X-Betamax"
+	static final String PROXY_CONNECTION = "Proxy-Connection"
+	static final String KEEP_ALIVE = "Keep-Alive"
 	private static final NO_PASS_HEADERS = [
 			CONTENT_LENGTH,
 			HOST,
@@ -43,6 +42,8 @@ class HttpProxyHandler implements HttpRequestHandler {
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
 
+		request.addHeader(VIA, "Betamax")
+
 		def tape = recorder.tape
 
 		if (tape?.play(request, response)) {
@@ -51,7 +52,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 		} else {
 			try {
 				execute(request, response)
-				response.addHeader(VIA, "Betamax")
 				if (tape) {
 					log.debug "recording response with status $response.statusLine to tape '$tape.name'..."
 					tape.record(request, response)
@@ -64,12 +64,13 @@ class HttpProxyHandler implements HttpRequestHandler {
 				response.statusCode = HTTP_BAD_GATEWAY
 			}
 		}
+
+		response.addHeader(VIA, "Betamax")
 	}
 
 	private void execute(HttpRequest request, HttpResponse response) {
 		def proxyRequest = createProxyRequest(request)
 		copyRequestData(request, proxyRequest)
-		proxyRequest.addHeader(VIA, "Betamax")
 
 		def proxyResponse = httpClient.execute(proxyRequest)
 
