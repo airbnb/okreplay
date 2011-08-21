@@ -5,6 +5,7 @@ import betamax.util.EchoServer
 import groovy.json.JsonSlurper
 import groovyx.net.http.HttpURLClient
 import spock.lang.*
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -17,10 +18,10 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		System.properties."http.proxyHost" = "localhost"
 		System.properties."http.proxyPort" = proxy.port.toString()
 
-		Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-		Recorder.instance.insertTape("proxy_record_and_playback_spec")
+		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+		recorder.insertTape("proxy_record_and_playback_spec")
 
-		proxy.start()
+		proxy.start(recorder.tape)
 	}
 
 	def cleanupSpec() {
@@ -40,10 +41,10 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.request(path: "/")
 
 		then:
-		Recorder.instance.tape.interactions.size() == 1
+		recorder.tape.interactions.size() == 1
 
 		cleanup:
-		endpoint.awaitStop()
+		endpoint.stop()
 	}
 
 	@Timeout(10)
@@ -55,15 +56,18 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.request(path: "/")
 
 		then:
-		Recorder.instance.tape.interactions.size() == 1
+		recorder.tape.interactions.size() == 1
 	}
 
-	def "when the proxy is stopped the tape is written to a file"() {
-		when:
+	def "when the tape is ejected the data is written to a file"() {
+		given:
 		proxy.stop()
 
+		when:
+		def tape = recorder.ejectTape()
+
 		then:
-		def file = new File(recorder.tapeRoot, "${recorder.tape.name}.json")
+		def file = new File(recorder.tapeRoot, "${tape.name}.json")
 		file.isFile()
 
 		and:
@@ -74,7 +78,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		json.tape.interactions.size() == 1
 	}
 
-	def "can load an existing tape from a file and play it back"() {
+	def "can load an existing tape from a file"() {
 		given:
 		def file = new File(recorder.tapeRoot, "existing_tape.json")
 		file.parentFile.mkdirs()
@@ -103,11 +107,25 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		}
 
 		when:
-		recorder.insertTape("existing_tape")
+		def tape = recorder.insertTape("existing_tape")
+		proxy.start(tape)
 
 		then:
 		recorder.tape.name == "existing_tape"
 		recorder.tape.interactions.size() == 1
+	}
+
+	@Timeout(10)
+	def "can play back a loaded tape"() {
+		given:
+		def http = new HttpURLClient(url: "http://icanhascheezburger.com/")
+
+		when:
+		def response = http.request(path: "/")
+
+		then:
+		response.statusLine.statusCode	 == HTTP_OK
+		response.data.text == "O HAI!"
 	}
 
 }

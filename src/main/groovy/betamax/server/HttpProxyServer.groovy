@@ -12,6 +12,7 @@ import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
 import groovy.util.logging.Log4j
+import betamax.storage.Tape
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 
@@ -30,7 +31,7 @@ class HttpProxyServer {
 		port = 5555
 	}
 
-	void start() {
+	void start(Tape tape) {
         def params = new SyncBasicHttpParams()
         params.setIntParameter(SO_TIMEOUT, 5000)
 		params.setIntParameter(SOCKET_BUFFER_SIZE, 8 * 1024)
@@ -52,7 +53,7 @@ class HttpProxyServer {
                 params)
 
         def reqistry = new HttpRequestHandlerRegistry()
-        reqistry.register "*", new HttpProxyHandler()
+        reqistry.register "*", new HttpProxyHandler(tape)
 
         handler.handlerResolver = reqistry
 
@@ -72,7 +73,6 @@ class HttpProxyServer {
 	void stop() {
 		log.debug "stopping proxy server..."
 		reactor.shutdown()
-		Recorder.instance.ejectTape()
 	}
 
 }

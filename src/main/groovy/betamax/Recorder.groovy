@@ -12,7 +12,7 @@ class Recorder {
 
 	private Tape tape
 
-	void insertTape(String name) {
+	Tape insertTape(String name) {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
 			file.withReader { reader ->
@@ -21,13 +21,14 @@ class Recorder {
 		} else {
 			tape = new Tape(name: name)
 		}
+		tape
 	}
 
 	Tape getTape() {
 		tape
 	}
 
-	void ejectTape() {
+	Tape ejectTape() {
 		if (tape) {
 			def file = getTapeFile(tape.name)
 			file.parentFile.mkdirs()
@@ -35,9 +36,18 @@ class Recorder {
 				loader.writeTape(tape, writer)
 			}
 		}
+		def tapeToReturn = tape
+		tape = null
+		tapeToReturn
 	}
 
 	private File getTapeFile(String name) {
 		new File(tapeRoot, "${name}.json")
+	}
+
+	Tape withTape(String name, Closure closure) {
+		insertTape(name)
+		closure.call(tape)
+		ejectTape()
 	}
 }

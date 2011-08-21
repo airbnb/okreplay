@@ -28,7 +28,7 @@ class ProxyNetworkCommsSpec extends Specification {
     }
 
     def cleanup() {
-        endpoint.awaitStop()
+        endpoint.stop()
     }
 
 	def cleanupSpec() {

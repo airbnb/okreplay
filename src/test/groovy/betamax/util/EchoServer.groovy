@@ -1,27 +1,17 @@
 package betamax.util
 
 import groovy.util.logging.Log4j
-import java.util.concurrent.CountDownLatch
-import static java.util.concurrent.TimeUnit.SECONDS
+import org.eclipse.jetty.server.handler.AbstractHandler
+import static java.net.HttpURLConnection.HTTP_OK
+import javax.servlet.http.*
+import org.eclipse.jetty.server.*
 
-/**
- * A very simple socket server that listens for _one_ request and responds by just echoing back the request content. The
- * server shuts down after serving a single request or after a short timeout but can be restarted by calling `start()`
- * again.
- */
 @Log4j
 class EchoServer {
 
-	/**
-	 * The maximum time in milliseconds the server will wait for a request before giving up and shutting down.
-	 */
-	int timeout = SECONDS.toMillis(1)
-
 	private final String host
 	private final int port
-	private Thread t
-	private CountDownLatch readyLatch
-	private CountDownLatch doneLatch
+	private Server server
 
 	EchoServer() {
 		host = InetAddress.localHost.hostAddress
@@ -33,41 +23,41 @@ class EchoServer {
 	}
 
 	void start() {
-		readyLatch = new CountDownLatch(1)
-		doneLatch = new CountDownLatch(1)
-
-		t = Thread.start {
-			def server = new ServerSocket(port)
-			server.soTimeout = timeout
-			try {
-				readyLatch.countDown()
-				server.accept { socket ->
-					log.debug "got request..."
-					socket.withStreams { input, output ->
-						output.withWriter { writer ->
-							writer << "HTTP/1.1 200 OK\n"
-							writer << "Content-Type: text/plain\n\n"
-							while (input.available()) {
-								writer << (char) input.read()
-							}
-						}
-					}
-					log.debug "response sent..."
-				}
-			} catch (SocketTimeoutException e) {
-				log.warn "no connection within $timeout  milliseconds, giving up..."
-			} finally {
-				log.debug "shutting down..."
-				server.close()
-				doneLatch.countDown()
-			}
-		}
-
-		readyLatch.await()
+		server = new Server(port)
+		server.handler = new EchoHandler()
+		server.start()
 	}
 
-	void awaitStop() {
-		doneLatch.await()
+	void stop() {
+		server.stop()
+	}
+
+}
+
+@Log4j
+class EchoHandler extends AbstractHandler {
+
+	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
+		log.debug "received $request.method request for $target"
+		response.status = HTTP_OK
+		response.contentType = "text/plain"
+		response.writer.withWriter { writer ->
+			writer << request.method << " " << request.requestURI
+			if (request.queryString) {
+				writer << "?" << request.queryString
+			}
+			writer << " " << request.protocol << "\n"
+			for (headerName in request.headerNames) {
+				for (header in request.getHeaders(headerName)) {
+					writer << headerName << ": " << header << "\n"
+				}
+			}
+			request.reader.withReader { reader ->
+				while (reader.ready()) {
+					writer << (char) reader.read()
+				}
+			}
+		}
 	}
 
 }

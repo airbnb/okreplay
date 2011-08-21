@@ -11,6 +11,7 @@ import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
 import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
+import betamax.storage.Tape
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
@@ -33,11 +34,14 @@ class HttpProxyHandler implements HttpRequestHandler {
 	].toSet().asImmutable()
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
+	private final Tape tape
+
+	HttpProxyHandler(Tape tape) {
+		this.tape = tape
+	}
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
-
-		def tape = Recorder.instance.tape
 
 		if (tape?.play(request, response)) {
 			log.debug "playing back from tape '$tape.name'..."
