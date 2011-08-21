@@ -12,6 +12,10 @@ import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import spock.lang.*
+import org.apache.http.entity.StringEntity
+import org.apache.commons.codec.binary.Base64
+import org.apache.http.Header
+import org.apache.http.message.BasicHeader
 
 class TapeLoadingSpec extends Specification {
 
@@ -21,6 +25,8 @@ class TapeLoadingSpec extends Specification {
 	@Shared HttpPost postRequest
 	@Shared HttpResponse successResponse
 	@Shared HttpResponse failureResponse
+	@Shared HttpResponse imageResponse
+	@Shared File image
 
 	def setupSpec() {
 		getRequest = new HttpGet("http://icanhascheezburger.com/")
@@ -32,13 +38,19 @@ class TapeLoadingSpec extends Specification {
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		successResponse.addHeader(CONTENT_ENCODING, "gzip")
-		successResponse.entity = new ByteArrayEntity("O HAI!".bytes)
+		successResponse.entity = new StringEntity("O HAI!", "text/plain", "UTF-8")
 
 		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		failureResponse.addHeader(CONTENT_ENCODING, "gzip")
-		failureResponse.entity = new ByteArrayEntity("KTHXBYE!".bytes)
+		failureResponse.entity = new StringEntity("KTHXBYE!", "text/plain", "UTF-8")
+
+		image = new File("src/test/resources/image.png")
+		imageResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		imageResponse.addHeader(CONTENT_TYPE, "image/png")
+		imageResponse.entity = new ByteArrayEntity(image.bytes)
+		imageResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "image/png")
 	}
 
 	def "can write a tape to storage"() {
@@ -97,6 +109,22 @@ class TapeLoadingSpec extends Specification {
 		json.tape.interactions[1].request.method == "POST"
 		json.tape.interactions[0].response.status == HTTP_OK
 		json.tape.interactions[1].response.status == HTTP_BAD_REQUEST
+	}
+
+	@Ignore
+	def "can write a binary response body"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, imageResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		def json = new JsonSlurper().parseText(writer.toString())
+		json.tape.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
+		json.tape.interactions[0].response.body == Base64.encodeBase64String(image.bytes)
 	}
 
 	def "can load a valid tape with a single interaction"() {

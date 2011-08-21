@@ -1,12 +1,15 @@
 package betamax.storage.json
 
+import java.text.*
 import org.apache.http.entity.StringEntity
 import betamax.storage.*
 import groovy.json.*
-import java.text.*
+import static org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.http.*
 import org.apache.http.message.*
+import groovy.util.logging.Log4j
 
+@Log4j
 class JsonTapeLoader implements TapeLoader {
 
 	static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
@@ -73,6 +76,7 @@ class JsonTapeLoader implements TapeLoader {
 				status: response.statusLine.statusCode
 		]
 		if (response.entity) {
+			log.debug "got entity with content type '${response.entity.contentType?.value}'"
 			map.body = response.entity.content.text
 		}
 		map
