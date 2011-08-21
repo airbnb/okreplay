@@ -1,17 +1,22 @@
 package betamax.util
 
 import groovy.util.logging.Log4j
+import java.util.concurrent.CountDownLatch
 import org.eclipse.jetty.server.handler.AbstractHandler
+import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
+import org.eclipse.jetty.util.component.LifeCycle
 import static java.net.HttpURLConnection.HTTP_OK
 import javax.servlet.http.*
 import org.eclipse.jetty.server.*
 
 @Log4j
-class EchoServer {
+class EchoServer extends AbstractLifeCycleListener {
 
 	private final String host
 	private final int port
 	private Server server
+	private CountDownLatch startedLatch
+	private CountDownLatch stoppedLatch
 
 	EchoServer() {
 		host = InetAddress.localHost.hostAddress
@@ -23,13 +28,30 @@ class EchoServer {
 	}
 
 	void start() {
+		startedLatch = new CountDownLatch(1)
+		stoppedLatch = new CountDownLatch(1)
+
 		server = new Server(port)
 		server.handler = new EchoHandler()
+		server.addLifeCycleListener(this)
 		server.start()
+
+		startedLatch.await()
 	}
 
 	void stop() {
 		server.stop()
+		stoppedLatch.await()
+	}
+
+	@Override
+	void lifeCycleStarted(LifeCycle event) {
+		startedLatch.countDown()
+	}
+
+	@Override
+	void lifeCycleStopped(LifeCycle event) {
+		stoppedLatch.countDown()
 	}
 
 }
