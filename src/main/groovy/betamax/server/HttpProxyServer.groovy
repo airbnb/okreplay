@@ -1,18 +1,18 @@
 package betamax.server
 
 import betamax.Recorder
-import org.apache.http.HttpResponseInterceptor
+import groovy.util.logging.Log4j
 import org.apache.http.impl.nio.DefaultServerIOEventDispatch
 import org.apache.http.impl.nio.reactor.DefaultListeningIOReactor
-import org.apache.http.nio.protocol.BufferingHttpServiceHandler
+import org.apache.http.nio.NHttpConnection
 import org.apache.http.nio.reactor.IOReactor
 import org.apache.http.params.SyncBasicHttpParams
+import org.apache.http.*
 import org.apache.http.impl.*
+import org.apache.http.nio.protocol.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
-import groovy.util.logging.Log4j
-import betamax.storage.Tape
 
 /**
  * Basic, yet fully functional and spec compliant, HTTP/1.1 server based on the non-blocking 
@@ -22,7 +22,7 @@ import betamax.storage.Tape
  * It is NOT intended to demonstrate the most efficient way of building an HTTP server. 
  */
 @Log4j
-class HttpProxyServer {
+class HttpProxyServer implements EventListener {
 
 	private IOReactor reactor
 	final int port
@@ -56,8 +56,7 @@ class HttpProxyServer {
         reqistry.register "*", new HttpProxyHandler(recorder)
 
         handler.handlerResolver = reqistry
-
-        handler.eventListener = new EventLogger()
+        handler.eventListener = this
 
         def ioEventDispatch = new DefaultServerIOEventDispatch(handler, params)
         def ioReactor = new DefaultListeningIOReactor(2, params)
@@ -73,6 +72,26 @@ class HttpProxyServer {
 	void stop() {
 		log.debug "stopping proxy server..."
 		reactor.shutdown()
+	}
+
+	void connectionOpen(final NHttpConnection conn) {
+		log.info "Connection open: $conn"
+	}
+
+	void connectionTimeout(final NHttpConnection conn) {
+		log.info "Connection timed out: $conn"
+	}
+
+	void connectionClosed(final NHttpConnection conn) {
+		log.info "Connection closed: $conn"
+	}
+
+	void fatalIOException(final IOException ex, final NHttpConnection conn) {
+		log.error "I/O error: $ex.message"
+	}
+
+	void fatalProtocolException(final HttpException ex, final NHttpConnection conn) {
+		log.error "HTTP error: $ex.message"
 	}
 
 }
