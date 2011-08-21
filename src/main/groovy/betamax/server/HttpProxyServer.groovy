@@ -1,6 +1,6 @@
 package betamax.server
 
-import betamax.Betamax
+import betamax.Recorder
 import org.apache.http.HttpResponseInterceptor
 import org.apache.http.impl.nio.DefaultServerIOEventDispatch
 import org.apache.http.impl.nio.reactor.DefaultListeningIOReactor
@@ -72,7 +72,7 @@ class HttpProxyServer {
 	void stop() {
 		log.debug "stopping proxy server..."
 		reactor.shutdown()
-		Betamax.instance.ejectTape()
+		Recorder.instance.ejectTape()
 	}
 
 }

@@ -1,6 +1,6 @@
 package betamax.server
 
-import betamax.Betamax
+import betamax.Recorder
 import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
@@ -37,7 +37,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
 
-		def tape = Betamax.instance.tape
+		def tape = Recorder.instance.tape
 
 		if (tape?.play(request, response)) {
 			log.debug "playing back from tape '$tape.name'..."

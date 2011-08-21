@@ -2,14 +2,14 @@ package betamax
 
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
+import groovy.json.JsonSlurper
 import groovyx.net.http.HttpURLClient
 import spock.lang.*
-import groovy.json.JsonSlurper
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-	@Shared Betamax betamax = Betamax.instance
+	@Shared Recorder recorder = Recorder.instance
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
 	EchoServer endpoint = new EchoServer()
 
@@ -17,15 +17,15 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		System.properties."http.proxyHost" = "localhost"
 		System.properties."http.proxyPort" = proxy.port.toString()
 
-		Betamax.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-		Betamax.instance.insertTape("proxy_record_and_playback_spec")
+		Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+		Recorder.instance.insertTape("proxy_record_and_playback_spec")
 
 		proxy.start()
 	}
 
 	def cleanupSpec() {
 		proxy.stop()
-		assert betamax.tapeRoot.deleteDir()
+		assert recorder.tapeRoot.deleteDir()
 	}
 
 	@Timeout(10)
@@ -40,7 +40,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.request(path: "/")
 
 		then:
-		Betamax.instance.tape.interactions.size() == 1
+		Recorder.instance.tape.interactions.size() == 1
 
 		cleanup:
 		endpoint.awaitStop()
@@ -55,7 +55,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.request(path: "/")
 
 		then:
-		Betamax.instance.tape.interactions.size() == 1
+		Recorder.instance.tape.interactions.size() == 1
 	}
 
 	def "when the proxy is stopped the tape is written to a file"() {
@@ -63,7 +63,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		proxy.stop()
 
 		then:
-		def file = new File(betamax.tapeRoot, "${betamax.tape.name}.json")
+		def file = new File(recorder.tapeRoot, "${recorder.tape.name}.json")
 		file.isFile()
 
 		and:
@@ -76,7 +76,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def "can load an existing tape from a file and play it back"() {
 		given:
-		def file = new File(betamax.tapeRoot, "existing_tape.json")
+		def file = new File(recorder.tapeRoot, "existing_tape.json")
 		file.parentFile.mkdirs()
 		file.withWriter { writer ->
 			writer << """\
@@ -103,11 +103,11 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		}
 
 		when:
-		betamax.insertTape("existing_tape")
+		recorder.insertTape("existing_tape")
 
 		then:
-		betamax.tape.name == "existing_tape"
-		betamax.tape.interactions.size() == 1
+		recorder.tape.name == "existing_tape"
+		recorder.tape.interactions.size() == 1
 	}
 
 }

@@ -4,7 +4,7 @@ import betamax.storage.json.JsonTapeLoader
 import betamax.storage.*
 
 @Singleton
-class Betamax {
+class Recorder {
 
 	int proxyPort = 5555
 	File tapeRoot = new File("src/test/resources/betamax/tapes")

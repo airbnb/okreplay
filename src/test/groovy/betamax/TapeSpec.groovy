@@ -13,12 +13,14 @@ import spock.lang.*
 @Stepwise
 class TapeSpec extends Specification {
 
+	@Shared Recorder recorder
 	@Shared Tape tape = new Tape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
-    def setupSpec() {
-        Betamax.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	def setupSpec() {
+		recorder = Recorder.instance
+		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
     }
 
 	def setup() {
@@ -31,7 +33,7 @@ class TapeSpec extends Specification {
 	}
 
     def cleanupSpec() {
-        assert Betamax.instance.tapeRoot.deleteDir()
+        assert recorder.tapeRoot.deleteDir()
     }
 
 	def "reading from an empty tape does nothing"() {
