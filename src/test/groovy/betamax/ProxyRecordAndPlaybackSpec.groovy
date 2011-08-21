@@ -21,7 +21,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 		recorder.insertTape("proxy_record_and_playback_spec")
 
-		proxy.start(recorder.tape)
+		proxy.start(recorder)
 	}
 
 	def cleanupSpec() {
@@ -107,8 +107,8 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		}
 
 		when:
-		def tape = recorder.insertTape("existing_tape")
-		proxy.start(tape)
+		recorder.insertTape("existing_tape")
+		proxy.start(recorder)
 
 		then:
 		recorder.tape.name == "existing_tape"
@@ -124,7 +124,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		def response = http.request(path: "/")
 
 		then:
-		response.statusLine.statusCode	 == HTTP_OK
+		response.statusLine.statusCode == HTTP_OK
 		response.data.text == "O HAI!"
 	}
 

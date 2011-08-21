@@ -20,7 +20,7 @@ class ProxyNetworkCommsSpec extends Specification {
 		System.properties."http.proxyHost" = "localhost"
 		System.properties."http.proxyPort" = proxy.port.toString()
 
-		proxy.start()
+		proxy.start(Recorder.instance)
 	}
 
     def setup() {

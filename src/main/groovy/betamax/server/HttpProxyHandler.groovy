@@ -34,14 +34,16 @@ class HttpProxyHandler implements HttpRequestHandler {
 	].toSet().asImmutable()
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
-	private final Tape tape
+	private final Recorder recorder
 
-	HttpProxyHandler(Tape tape) {
-		this.tape = tape
+	HttpProxyHandler(Recorder recorder) {
+		this.recorder = recorder
 	}
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
+
+		def tape = recorder.tape
 
 		if (tape?.play(request, response)) {
 			log.debug "playing back from tape '$tape.name'..."

@@ -31,7 +31,7 @@ class HttpProxyServer {
 		port = 5555
 	}
 
-	void start(Tape tape) {
+	void start(Recorder recorder) {
         def params = new SyncBasicHttpParams()
         params.setIntParameter(SO_TIMEOUT, 5000)
 		params.setIntParameter(SOCKET_BUFFER_SIZE, 8 * 1024)
@@ -53,7 +53,7 @@ class HttpProxyServer {
                 params)
 
         def reqistry = new HttpRequestHandlerRegistry()
-        reqistry.register "*", new HttpProxyHandler(tape)
+        reqistry.register "*", new HttpProxyHandler(recorder)
 
         handler.handlerResolver = reqistry
 
