@@ -5,8 +5,10 @@ so that your tests can run without any real HTTP traffic going to external URLs.
 traffic is recorded to a _tape_ and subsequent runs will play back the HTTP response without really connecting to the
 external endpoint.
 
-Tapes are stored to disk as JSON and can be modified (or even created) by hand. Different tests can use different tapes
-to simulate varying responses from external endpoints.
+Tapes are stored to disk as JSON files and can be modified (or even created) by hand and committed to your project's
+source control repository so that other members of the team can use them when running tests. Different tests can use
+different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
+interactions but each must (currently) have a unique request URI
 
 ## Usage
 
@@ -21,13 +23,13 @@ and include a `betamax.Recorder` Rule.
 
     class MyTest {
 
-	        @Rule public Recorder recorder = Recorder.instance
+        @Rule public Recorder recorder = Recorder.instance
 
-            @Betamax(tape="my_tape")
-            @Test
-            void testMethodThatAccessesExternalWebService() {
+        @Betamax(tape="my_tape")
+        @Test
+        void testMethodThatAccessesExternalWebService() {
 
-            }
+        }
 
     }
 
@@ -40,23 +42,40 @@ and include a `betamax.Recorder` Rule.
 
     class MySpec extends Specification {
 
-	        @Rule Recorder recorder = Recorder.instance
+	    @Rule Recorder recorder = Recorder.instance
 
-            @Betamax(tape="my_tape")
-            def "test method that accesses external web service"() {
+        @Betamax(tape="my_tape")
+        def "test method that accesses external web service"() {
 
-            }
+        }
 
     }
-    
+
+## Recoding and playback
+
+Betamax will record to the current tape when it intercepts any HTTP request to a URI that does not match anything that
+is already on the tape. If a recorded interaction with a matching URI _is_ found then the proxy does not forward the
+request to the target URI but instead returns the previously recorded response to the requestor.
+
+In future it will be possible to match recorded interactions based on criteria other than just the full URI.
+
+## Security
+
+Betamax is a testing tool and not a spec-compliant HTTP proxy. It ignores _any_ and _all_ headers that would normally be
+used to prevent a proxy caching or storing HTTP traffic. You should ensure that sensitive information such as
+authentication credentials is removed from recorded tapes before committing them to your app's source control
+repository.
+
 ## Configuration
 
-Betamax stores tapes in `src/test/resources/betamax/tapes`. You can change this by assigning a `File` object to `Recorder.instance.tapeRoot`. Likewise you can override the default port (`5555`) by setting `Recorder.instance.port`.
+Betamax stores tapes in `src/test/resources/betamax/tapes`. You can change this by assigning a `File` object to
+`Recorder.instance.tapeRoot`. Likewise you can override the default port (`5555`) by setting `Recorder.instance.port`.
 
 ## Caveats
 
-By default [Apache _HTTPClient_][3] takes no notice of Java's HTTP proxy settings. If you are using HTTPClient then the
-Betamax proxy can only intercept HTTP traffic if the client is set up to use a [`ProxySelectorRoutePlanner`][5].
+By default [Apache _HTTPClient_][3] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept
+traffic from HTTPClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][5]. When Betamax is not
+active this will mean HTTPClient traffic will be routed via the default proxy configured in Java (if any).
 
 ### Configuring HTTPClient
 
@@ -77,12 +96,12 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 
 ## Roadmap
 
-* Configure Recorder via annotation
+* Configure Recorder via annotation and config file
 * Test with HTTPClient 3.x
 * Description in interactions
 * Non-text responses
 * Multipart requests
-* Rotate multiple responses for same URL on same tape
+* Rotate multiple responses for same URI on same tape
 * Throw exceptions if tape not inserted & proxy gets hit
 * Allow groovy evaluation in tape files
 * Match requests based on URI, host, path, method, body, headers
