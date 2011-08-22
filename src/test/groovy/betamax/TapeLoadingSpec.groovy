@@ -74,6 +74,22 @@ class TapeLoadingSpec extends Specification {
 		json.tape.interactions[0].response.body == "O HAI!"
 	}
 
+	def "writes response headers"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, successResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		def json = new JsonSlurper().parseText(writer.toString())
+		json.tape.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
+		json.tape.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
+		json.tape.interactions[0].response.headers[CONTENT_ENCODING] == "gzip"
+	}
+
 	def "can write requests with a body"() {
 		given:
 		def tape = new Tape(name: "tape_loading_spec")

@@ -89,7 +89,8 @@ class JsonTapeLoader implements TapeLoader {
 	private Map data(HttpResponse response) {
 		def map = [
 				protocol: response.statusLine.protocolVersion.toString(),
-				status: response.statusLine.statusCode
+				status: response.statusLine.statusCode,
+				headers: response.allHeaders.collectEntries { [it.name, it.value] }
 		]
 		if (response.entity) {
 			log.debug "got entity with content type '${response.entity.contentType?.value}'"
