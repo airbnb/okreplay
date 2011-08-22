@@ -76,7 +76,7 @@ class JsonTapeLoader implements TapeLoader {
 
 	private Map data(HttpRequest request) {
 		def map = [
-				protocol: request.requestLine.protocolVersion,
+				protocol: request.requestLine.protocolVersion.toString(),
 				method: request.requestLine.method,
 				uri: request.requestLine.uri
 		]
@@ -88,7 +88,7 @@ class JsonTapeLoader implements TapeLoader {
 
 	private Map data(HttpResponse response) {
 		def map = [
-				protocol: response.statusLine.protocolVersion,
+				protocol: response.statusLine.protocolVersion.toString(),
 				status: response.statusLine.statusCode
 		]
 		if (response.entity) {
