@@ -14,7 +14,7 @@ import spock.lang.*
 class ProxyNetworkCommsSpec extends Specification {
 
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
-    EchoServer endpoint = new EchoServer()
+    @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 
 	def setupSpec() {
 		System.properties."http.proxyHost" = "localhost"
@@ -25,10 +25,6 @@ class ProxyNetworkCommsSpec extends Specification {
 
     def setup() {
 		endpoint.start()
-    }
-
-    def cleanup() {
-        endpoint.stop()
     }
 
 	def cleanupSpec() {
