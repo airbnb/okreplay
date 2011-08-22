@@ -10,7 +10,7 @@ import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
 
 @Stepwise
-class UsingRuleWithSpockSpec extends Specification {
+class AnnotationSpec extends Specification {
 
     @Rule Recorder recorder = Recorder.instance
     @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
@@ -29,24 +29,24 @@ class UsingRuleWithSpockSpec extends Specification {
         assert Recorder.instance.tapeRoot.deleteDir()
     }
 
-    def "no tape is inserted if there is no annotation on the test"() {
+    def "no tape is inserted if there is no annotation on the feature"() {
         expect:
         recorder.tape == null
     }
 
-    @Betamax(tape = "annotation_test")
-    def "annotation on test causes tape to be inserted"() {
+    @Betamax(tape = "annotation_spec")
+    def "annotation on feature causes tape to be inserted"() {
         expect:
-        recorder.tape.name == "annotation_test"
+        recorder.tape.name == "annotation_spec"
     }
 
-    def "tape is ejected after annotated test completes"() {
+    def "tape is ejected after annotated feature completes"() {
         expect:
         recorder.tape == null
     }
 
-    @Betamax(tape = "annotation_test")
-    def "annotated test can record"() {
+    @Betamax(tape = "annotation_spec")
+    def "annotated feature can record"() {
         given:
         endpoint.start()
 
@@ -59,8 +59,8 @@ class UsingRuleWithSpockSpec extends Specification {
         response.getFirstHeader(X_BETAMAX)?.value == "REC"
     }
 
-    @Betamax(tape = "annotation_test")
-    def "annotated test can play back"() {
+    @Betamax(tape = "annotation_spec")
+    def "annotated feature can play back"() {
         when:
         def response = http.get(path: "/")
 
