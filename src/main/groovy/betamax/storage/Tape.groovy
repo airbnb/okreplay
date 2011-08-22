@@ -26,7 +26,12 @@ class Tape {
 		interactions << new HttpInteraction(request: cloneRequest(request), response: cloneResponse(response), recorded: new Date())
 	}
 
-	private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
+    @Override
+    String toString() {
+        "Tape[$name]"
+    }
+
+    private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
 		def clone = new BasicHttpEntityEnclosingRequest(request.requestLine)
 		clone.entity = cloneEntity(request.entity)
 		clone

@@ -4,8 +4,8 @@ import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovy.json.JsonSlurper
 import groovyx.net.http.HttpURLClient
-import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
+import spock.lang.*
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -15,9 +15,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	EchoServer endpoint = new EchoServer()
 
 	def setupSpec() {
-		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = proxy.port.toString()
-
 		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 		recorder.insertTape("proxy_record_and_playback_spec")
 
@@ -26,6 +23,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def cleanupSpec() {
 		proxy.stop()
+        recorder.ejectTape()
 		assert recorder.tapeRoot.deleteDir()
 	}
 

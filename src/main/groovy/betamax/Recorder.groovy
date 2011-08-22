@@ -80,24 +80,10 @@ class Recorder implements MethodRule {
 	}
 
 	private def withProxy(Closure closure) {
-		def originalProxyHost = System.properties."http.proxyHost"
-		def originalProxyPort = System.properties."http.proxyPort"
-		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = proxy.port.toString()
 		try {
 			proxy.start(this)
 			closure()
 		} finally {
-			if (originalProxyHost) {
-				System.properties."http.proxyHost" = originalProxyHost
-			} else {
-				System.clearProperty("http.proxyHost")
-			}
-			if (originalProxyPort) {
-				System.properties."http.proxyPort" = originalProxyPort
-			} else {
-				System.clearProperty("http.proxyPort")
-			}
 			proxy.stop()
 		}
 	}

@@ -1,7 +1,8 @@
 package betamax
 
 import betamax.util.EchoServer
-import groovyx.net.http.HttpURLClient
+import groovyx.net.http.RESTClient
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.server.HttpProxyHandler.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -11,11 +12,18 @@ class AnnotationTest {
 
 	@Rule public Recorder recorder = Recorder.instance
 	EchoServer endpoint = new EchoServer()
+    RESTClient http
 
 	@BeforeClass
 	static void createTapeDir() {
 		Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	}
+
+    @Before
+    void initRestClient() {
+        http = new RESTClient(endpoint.url)
+        http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+    }
 
 	@After
 	void ensureEndpointIsStopped() {
@@ -48,8 +56,7 @@ class AnnotationTest {
 	void annotatedTestCanRecord() {
 		endpoint.start()
 
-		def http = new HttpURLClient(url: endpoint.url)
-		def response = http.request(path: "/")
+		def response = http.get(path: "/")
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == "Betamax"
@@ -59,8 +66,7 @@ class AnnotationTest {
 	@Test
 	@Betamax(tape = "annotation_test")
 	void annotatedTestCanPlayBack() {
-		def http = new HttpURLClient(url: endpoint.url)
-		def response = http.request(path: "/")
+		def response = http.get(path: "/")
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == "Betamax"
@@ -71,8 +77,7 @@ class AnnotationTest {
 	void canMakeUnproxiedRequestAfterUsingAnnotation() {
 		endpoint.start()
 
-		def http = new HttpURLClient(url: endpoint.url)
-		def response = http.request(path: "/")
+		def response = http.get(path: "/")
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA) == null

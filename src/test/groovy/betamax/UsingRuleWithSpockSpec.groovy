@@ -1,7 +1,8 @@
 package betamax
 
 import betamax.util.EchoServer
-import groovyx.net.http.HttpURLClient
+import groovyx.net.http.RESTClient
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import static betamax.server.HttpProxyHandler.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
@@ -13,9 +14,15 @@ class UsingRuleWithSpockSpec extends Specification {
 
     @Rule Recorder recorder = Recorder.instance
     @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+    RESTClient http
 
     def setupSpec() {
         Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+    }
+
+    def setup() {
+        http = new RESTClient(endpoint.url)
+        http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
     }
 
     def cleanupSpec() {
@@ -43,11 +50,8 @@ class UsingRuleWithSpockSpec extends Specification {
         given:
         endpoint.start()
 
-        and:
-        def http = new HttpURLClient(url: endpoint.url)
-
         when:
-        def response = http.request(path: "/")
+        def response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK
@@ -57,11 +61,8 @@ class UsingRuleWithSpockSpec extends Specification {
 
     @Betamax(tape = "annotation_test")
     def "annotated test can play back"() {
-        given:
-        def http = new HttpURLClient(url: endpoint.url)
-
         when:
-        def response = http.request(path: "/")
+        def response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK
@@ -73,11 +74,8 @@ class UsingRuleWithSpockSpec extends Specification {
         given:
         endpoint.start()
 
-        and:
-        def http = new HttpURLClient(url: endpoint.url)
-
         when:
-        def response = http.request(path: "/")
+        def response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK

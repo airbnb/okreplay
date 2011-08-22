@@ -17,9 +17,6 @@ class ProxyNetworkCommsSpec extends Specification {
     @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 
 	def setupSpec() {
-		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = proxy.port.toString()
-
 		proxy.start(Recorder.instance)
 	}
 

@@ -48,11 +48,13 @@ class EchoServer extends AbstractLifeCycleListener {
 
 	@Override
 	void lifeCycleStarted(LifeCycle event) {
+        log.debug "started..."
 		startedLatch.countDown()
 	}
 
 	@Override
 	void lifeCycleStopped(LifeCycle event) {
+        log.debug "stopped..."
 		stoppedLatch.countDown()
 	}
 

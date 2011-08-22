@@ -2,20 +2,17 @@ package betamax
 
 import betamax.storage.json.JsonTapeLoader
 import java.text.ParseException
+import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpResponse
-import org.apache.http.entity.ByteArrayEntity
-import org.apache.http.message.BasicHttpResponse
 import betamax.storage.*
 import groovy.json.*
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
+import org.apache.http.entity.*
+import org.apache.http.message.*
 import spock.lang.*
-import org.apache.http.entity.StringEntity
-import org.apache.commons.codec.binary.Base64
-import org.apache.http.Header
-import org.apache.http.message.BasicHeader
 
 class TapeLoadingSpec extends Specification {
 

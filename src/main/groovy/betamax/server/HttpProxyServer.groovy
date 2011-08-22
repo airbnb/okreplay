@@ -28,7 +28,10 @@ class HttpProxyServer implements EventListener {
 	private IOReactor reactor
 	final int port
 
-	HttpProxyServer() {
+    private String originalProxyHost
+    private String originalProxyPort
+
+    HttpProxyServer() {
 		port = 5555
 	}
 
@@ -62,6 +65,9 @@ class HttpProxyServer implements EventListener {
 		def ioEventDispatch = new DefaultServerIOEventDispatch(handler, params)
 		reactor = new DefaultListeningIOReactor(2, params)
 		reactor.listen(new InetSocketAddress(port))
+
+        overrideProxySettings()
+
 		Thread.start {
 			log.debug "starting proxy server..."
 			reactor.execute(ioEventDispatch)
@@ -75,8 +81,29 @@ class HttpProxyServer implements EventListener {
 
 	void stop() {
 		log.debug "stopping proxy server..."
+        restoreOriginalProxySettings()
 		reactor.shutdown()
 	}
+
+    private void overrideProxySettings() {
+        originalProxyHost = System.properties."http.proxyHost"
+        originalProxyPort = System.properties."http.proxyPort"
+        System.properties."http.proxyHost" = "localhost"
+        System.properties."http.proxyPort" = port.toString()
+    }
+
+    private void restoreOriginalProxySettings() {
+        if (originalProxyHost) {
+            System.properties."http.proxyHost" = originalProxyHost
+        } else {
+            System.clearProperty("http.proxyHost")
+        }
+        if (originalProxyPort) {
+            System.properties."http.proxyPort" = originalProxyPort
+        } else {
+            System.clearProperty("http.proxyPort")
+        }
+    }
 
 	void connectionOpen(final NHttpConnection conn) {
 		log.info "Connection open: $conn"
