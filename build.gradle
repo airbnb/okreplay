@@ -12,15 +12,15 @@ repositories {
 
 dependencies {
 	groovy "org.codehaus.groovy:groovy-all:1.8.0"
-	compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
-		exclude module: "groovy"
-		exclude module: "httpclient"
-	}
-	compile "org.apache.httpcomponents:httpclient:4.1.2"
-	compile "org.apache.httpcomponents:httpcore-nio:4.1.2"
-	compile "log4j:log4j:1.2.16"
     compile "junit:junit:4.8.2"
-	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
+    compile "log4j:log4j:1.2.16"
+    compile "org.apache.httpcomponents:httpclient:4.1.2"
+    compile "org.apache.httpcomponents:httpcore-nio:4.1.2"
+    testCompile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
+        exclude module: "groovy"
+        exclude module: "httpclient"
+    }
 	testCompile "org.eclipse.jetty:jetty-server:8.0.0.RC0"
+    testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
 	testRuntime "cglib:cglib-nodep:2.2.2"
 }
