@@ -24,9 +24,6 @@ class AnnotationTest {
 
 	@AfterClass
 	static void cleanUpTapeFiles() {
-		Recorder.instance.tapeRoot.eachFile { file ->
-			println file.text
-		}
 		assert Recorder.instance.tapeRoot.deleteDir()
 	}
 
@@ -66,9 +63,6 @@ class AnnotationTest {
 		def response = http.request(path: "/")
 
 		assert response.status == HTTP_OK
-		for (header in response.allHeaders) {
-			println header
-		}
 		assert response.getFirstHeader(VIA)?.value == "Betamax"
 		assert response.getFirstHeader(X_BETAMAX)?.value == "PLAY"
 	}
