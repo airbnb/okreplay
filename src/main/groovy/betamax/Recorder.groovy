@@ -23,17 +23,38 @@ import org.junit.rules.MethodRule
 import betamax.storage.*
 import org.junit.runners.model.*
 
+/**
+ * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
+ * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
+ * run with the Betamax HTTP proxy in the background.
+ */
 @Singleton
 @Log4j
 class Recorder implements MethodRule {
 
+	/**
+	 * The port the Betamax proxy will listen on.
+	 */
 	int proxyPort = 5555
+
+	/**
+	 * The base directory where tape files are stored.
+	 */
 	File tapeRoot = new File("src/test/resources/betamax/tapes")
+
+	/**
+	 * The strategy for reading and writing tape files.
+	 */
 	TapeLoader loader = new JsonTapeLoader()
 
 	private Tape tape
 	private HttpProxyServer proxy = new HttpProxyServer()
 
+	/**
+	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
+	 * @param name the name of the _tape_.
+	 * @return the tape either loaded from file or newly created.
+	 */
 	Tape insertTape(String name) {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
@@ -46,10 +67,19 @@ class Recorder implements MethodRule {
 		tape
 	}
 
+	/**
+	 * Gets the current active _tape_.
+	 * @return the active _tape_.
+	 */
 	Tape getTape() {
 		tape
 	}
 
+	/**
+	 * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
+	 * will no longer record or play back any HTTP traffic until another tape is inserted.
+	 * @return the ejected _tape_.
+	 */
 	Tape ejectTape() {
 		if (tape) {
 			def file = getTapeFile(tape.name)
@@ -63,44 +93,42 @@ class Recorder implements MethodRule {
 		tapeToReturn
 	}
 
-	private File getTapeFile(String name) {
-		new File(tapeRoot, "${name}.json")
-	}
-
+	/**
+	 * Runs the supplied closure after starting the Betamax proxy and inserting a _tape_. After the closure completes
+	 * the _tape_ is ejected and the proxy stopped.
+	 * @param name the name of the _tape_.
+	 * @param closure the closure to execute.
+	 * @return the _tape_ used when executing the closure.
+	 */
 	Tape withTape(String name, Closure closure) {
-		insertTape(name)
-		closure.call(tape)
-		ejectTape()
+		try {
+			proxy.start(this)
+			insertTape(name)
+			closure()
+		} finally {
+			proxy.stop()
+			ejectTape()
+		}
 	}
 
 	Statement apply(Statement statement, FrameworkMethod method, Object target) {
 		def annotation = method.getAnnotation(Betamax)
 		if (annotation) {
-			log.debug "found Betamax annotation on $method.name"
+			log.debug "found @Betamax annotation on '$method.name'"
 			new Statement() {
 				void evaluate() {
-					withProxy {
-						try {
-							insertTape(annotation.tape())
-							statement.evaluate()
-						} finally {
-							ejectTape()
-						}
+					withTape(annotation.tape()) {
+						statement.evaluate()
 					}
 				}
 			}
 		} else {
-			log.debug "no Betamax annotation on $method.name"
+			log.debug "no @Betamax annotation on '$method.name'"
 			statement
 		}
 	}
 
-	private def withProxy(Closure closure) {
-		try {
-			proxy.start(this)
-			closure()
-		} finally {
-			proxy.stop()
-		}
+	private File getTapeFile(String name) {
+		new File(tapeRoot, "${name}.json")
 	}
 }
