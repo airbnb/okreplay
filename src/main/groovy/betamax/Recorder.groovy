@@ -22,6 +22,7 @@ import groovy.util.logging.Log4j
 import java.text.Normalizer
 import org.junit.rules.MethodRule
 import betamax.storage.*
+import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
 
 /**
@@ -82,6 +83,7 @@ class Recorder implements MethodRule {
 	Tape insertTape(String name) {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
+			log.debug "reading tape from file $file.name"
 			file.withReader { reader ->
 				tape = loader.readTape(reader)
 			}
@@ -123,9 +125,21 @@ class Recorder implements MethodRule {
 	 * the _tape_ is ejected and the proxy stopped.
 	 * @param name the name of the _tape_.
 	 * @param closure the closure to execute.
-	 * @return the _tape_ used when executing the closure.
+	 * @return the return value of the closure.
 	 */
-	Tape withTape(String name, Closure closure) {
+	def withTape(String name, Closure closure) {
+		withTape(name, EMPTY_MAP, closure)
+	}
+
+	/**
+	 * Runs the supplied closure after starting the Betamax proxy and inserting a _tape_. After the closure completes
+	 * the _tape_ is ejected and the proxy stopped.
+	 * @param name the name of the _tape_.
+	 * @param arguments arguments that affect the operation of the proxy.
+	 * @param closure the closure to execute.
+	 * @return the return value of the closure.
+	 */
+	def withTape(String name, Map arguments, Closure closure) {
 		try {
 			proxy.start(this)
 			insertTape(name)
