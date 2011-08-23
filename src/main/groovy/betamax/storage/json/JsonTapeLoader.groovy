@@ -92,7 +92,8 @@ class JsonTapeLoader implements TapeLoader {
 		def map = [
 				protocol: request.requestLine.protocolVersion.toString(),
 				method: request.requestLine.method,
-				uri: request.requestLine.uri
+				uri: request.requestLine.uri,
+				headers: request.allHeaders.collectEntries { [it.name, it.value] }
 		]
 		if (request instanceof HttpEntityEnclosingRequest) {
 			map.body = request.entity.content.text

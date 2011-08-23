@@ -56,7 +56,9 @@ class Tape {
 	}
 
 	private static HttpRequest cloneRequest(HttpRequest request) {
-		new BasicHttpRequest(request.requestLine)
+		def clone = new BasicHttpRequest(request.requestLine)
+		clone.headers = request.allHeaders
+		clone
 	}
 
 	private static HttpResponse cloneResponse(HttpResponse response) {

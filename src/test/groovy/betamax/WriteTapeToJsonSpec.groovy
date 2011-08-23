@@ -27,6 +27,8 @@ class WriteTapeToJsonSpec extends Specification {
 
 	def setupSpec() {
 		getRequest = new HttpGet("http://icanhascheezburger.com/")
+		getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
+		getRequest.addHeader(IF_NONE_MATCH, "b00b135")
 
 		postRequest = new HttpPost("http://github.com/")
 		postRequest.entity = new ByteArrayEntity("q=1".bytes)
@@ -72,6 +74,21 @@ class WriteTapeToJsonSpec extends Specification {
 		json.tape.interactions[0].response.protocol == "HTTP/1.1"
 		json.tape.interactions[0].response.status == HTTP_OK
 		json.tape.interactions[0].response.body == "O HAI!"
+	}
+
+	def "writes request headers"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, successResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		def json = new JsonSlurper().parseText(writer.toString())
+		json.tape.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
+		json.tape.interactions[0].request.headers[IF_NONE_MATCH] == "b00b135"
 	}
 
 	def "writes response headers"() {
