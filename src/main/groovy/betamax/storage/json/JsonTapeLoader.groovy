@@ -36,8 +36,13 @@ class JsonTapeLoader implements TapeLoader {
 			def tape = new Tape()
 			tape.name = json.tape.name
 			json.tape.interactions.each {
+				require it, "request", "response", "recorded"
+
+				require it.request, "protocol", "method", "uri"
 				def requestProtocol = parseProtocol(it.request.protocol)
 				def request = new BasicHttpRequest(it.request.method, it.request.uri, requestProtocol)
+
+				require it.response, "protocol", "status"
 				def responseProtocol = parseProtocol(it.response.protocol)
 				def response = new BasicHttpResponse(responseProtocol, it.response.status, null)
 				response.entity = new StringEntity(it.response.body)
@@ -102,4 +107,13 @@ class JsonTapeLoader implements TapeLoader {
 		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
 		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
 	}
+
+	private void require(Map map, String... keys) {
+		for (key in keys) {
+			if (!map.containsKey(key)) {
+				throw new TapeLoadException("Missing element '$key'")
+			}
+		}
+	}
+
 }

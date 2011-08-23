@@ -278,4 +278,34 @@ class TapeLoadingSpec extends Specification {
 		e.cause instanceof ParseException
 	}
 
+	def "barfs on missing fields"() {
+		given:
+		def json = """\
+{
+	"tape": {
+		"name": "invalid_timestamp_tape",
+		"interactions": [
+			{
+				"recorded": "2011-08-23 17:35:26 +0100",
+				"request": {
+					"protocol": "HTTP/1.1",
+					"method": "GET",
+					"uri": "http://icanhascheezburger.com/"
+				},
+				"response": {
+					"protocol": "HTTP/1.1",
+					"body": "O HAI!"
+				}
+			}
+		]
+	}
+}"""
+		when:
+		loader.readTape(new StringReader(json))
+
+		then:
+		def e = thrown(TapeLoadException)
+		e.message == "Missing element 'status'"
+	}
+
 }
