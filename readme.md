@@ -62,7 +62,7 @@ and include a `betamax.Recorder` Rule.
 
     }
 
-## Recoding and playback
+## Recording and playback
 
 Betamax will record to the current tape when it intercepts any HTTP request with a combination of method and URI that
 does not match anything that is already on the tape. If a recorded interaction with the same method and URI _is_ found
