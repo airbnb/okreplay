@@ -308,4 +308,18 @@ class TapeLoadingSpec extends Specification {
 		e.message == "Missing element 'status'"
 	}
 
+	def "barfs if no tape at root"() {
+		given:
+		def json = """\
+{
+	"name": "invalid_structure_tape"
+}"""
+		when:
+		loader.readTape(new StringReader(json))
+
+		then:
+		def e = thrown(TapeLoadException)
+		e.message == "Missing element 'tape'"
+	}
+
 }

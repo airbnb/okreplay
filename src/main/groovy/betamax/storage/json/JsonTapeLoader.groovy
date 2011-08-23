@@ -32,29 +32,14 @@ class JsonTapeLoader implements TapeLoader {
 	Tape readTape(Reader reader) {
 		try {
 			def json = new JsonSlurper().parse(reader)
+			require json, "tape"
 
 			def tape = new Tape()
+			require json.tape, "name", "interactions"
 			tape.name = json.tape.name
 			json.tape.interactions.each {
-				require it, "request", "response", "recorded"
-
-				require it.request, "protocol", "method", "uri"
-				def requestProtocol = parseProtocol(it.request.protocol)
-				def request = new BasicHttpRequest(it.request.method, it.request.uri, requestProtocol)
-
-				require it.response, "protocol", "status"
-				def responseProtocol = parseProtocol(it.response.protocol)
-				def response = new BasicHttpResponse(responseProtocol, it.response.status, null)
-				response.entity = new StringEntity(it.response.body)
-				it.response.headers.each { header ->
-					response.addHeader(header.key, header.value)
-				}
-				def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(it.recorded)
-
-				def interaction = new HttpInteraction(request: request, response: response, recorded: recorded)
-				tape.interactions << interaction
+				tape.interactions << loadInteraction(it)
 			}
-
 			tape
 		} catch (java.text.ParseException e) {
 			throw new TapeLoadException("Invalid tape", e)
@@ -70,6 +55,31 @@ class JsonTapeLoader implements TapeLoader {
 			interactions data(tape.interactions)
 		}
 		writer << json.toPrettyString()
+	}
+
+	private HttpInteraction loadInteraction(Map json) {
+		require json, "request", "response", "recorded"
+		def request = loadRequest(json.request)
+		def response = loadResponse(json.response)
+		def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(json.recorded)
+		new HttpInteraction(request: request, response: response, recorded: recorded)
+	}
+
+	private HttpRequest loadRequest(Map json) {
+		require json, "protocol", "method", "uri"
+		def requestProtocol = parseProtocol(json.protocol)
+		new BasicHttpRequest(json.method, json.uri, requestProtocol)
+	}
+
+	private HttpResponse loadResponse(Map json) {
+		require json, "protocol", "status"
+		def responseProtocol = parseProtocol(json.protocol)
+		def response = new BasicHttpResponse(responseProtocol, json.status, null)
+		response.entity = new StringEntity(json.body)
+		json.headers.each { header ->
+			response.addHeader(header.key, header.value)
+		}
+		response
 	}
 
 	private List<Map> data(Collection<HttpInteraction> interactions) {
