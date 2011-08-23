@@ -32,15 +32,38 @@ import org.junit.runners.model.*
 @Log4j
 class Recorder implements MethodRule {
 
+	static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
+	static final int DEFAULT_PROXY_PORT = 5555
+
+	Recorder() {
+		def props = getClass().classLoader.getResource("betamax.properties")
+		if (props) {
+			def properties = new Properties()
+			props.withReader { reader ->
+				properties.load(reader)
+			}
+			configureFromProperties(properties)
+		}
+	}
+
+	Recorder(Properties properties) {
+		configureFromProperties(properties)
+	}
+
+	private void configureFromProperties(Properties properties) {
+		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
+		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
+	}
+
 	/**
 	 * The port the Betamax proxy will listen on.
 	 */
-	int proxyPort = 5555
+	int proxyPort = DEFAULT_PROXY_PORT
 
 	/**
 	 * The base directory where tape files are stored.
 	 */
-	File tapeRoot = new File("src/test/resources/betamax/tapes")
+	File tapeRoot = new File(DEFAULT_TAPE_ROOT)
 
 	/**
 	 * The strategy for reading and writing tape files.
