@@ -61,12 +61,12 @@ class JsonTapeLoader implements TapeLoader {
 		writer << json.toPrettyString()
 	}
 
-	private HttpInteraction loadInteraction(Map json) {
+	private TapeInteraction loadInteraction(Map json) {
 		require json, "request", "response", "recorded"
 		def request = loadRequest(json.request)
 		def response = loadResponse(json.response)
 		def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(json.recorded)
-		new HttpInteraction(request: request, response: response, recorded: recorded)
+		new TapeInteraction(request: request, response: response, recorded: recorded)
 	}
 
 	private HttpRequest loadRequest(Map json) {
@@ -86,7 +86,7 @@ class JsonTapeLoader implements TapeLoader {
 		response
 	}
 
-	private List<Map> data(Collection<HttpInteraction> interactions) {
+	private List<Map> data(Collection<TapeInteraction> interactions) {
 		interactions.collect {
 			[recorded: new SimpleDateFormat(TIMESTAMP_FORMAT).format(it.recorded), request: data(it.request), response: data(it.response)]
 		}

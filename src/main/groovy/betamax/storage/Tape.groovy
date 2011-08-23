@@ -16,15 +16,13 @@
 
 package betamax.storage
 
-import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.*
-import org.apache.http.message.*
 
 class Tape {
 
 	String name
 	String description
-	Collection<HttpInteraction> interactions = []
+	Collection<TapeInteraction> interactions = []
 
 	boolean play(HttpRequest request, HttpResponse response) {
 		def interaction = interactions.find {
@@ -41,7 +39,7 @@ class Tape {
 	}
 
 	void record(HttpRequest request, HttpResponse response) {
-		interactions << new HttpInteraction(request: cloneRequest(request), response: cloneResponse(response), recorded: new Date())
+		interactions << new TapeInteraction(request: cloneRequest(request), response: cloneResponse(response), recorded: new Date())
 	}
 
 	@Override
@@ -49,30 +47,40 @@ class Tape {
 		"Tape[$name]"
 	}
 
-	private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
-		def clone = new BasicHttpEntityEnclosingRequest(request.requestLine)
-		clone.entity = cloneEntity(request.entity)
+	private static TapeRequest cloneRequest(HttpEntityEnclosingRequest request) {
+		def clone = new TapeRequest()
+		clone.protocol = request.requestLine.protocolVersion.toString()
+		clone.method = request.requestLine.method
+		clone.uri = request.requestLine.uri
+		clone.headers = request.allHeaders.collectEntries { [it.name, it.value] }
+		clone.body = cloneEntity(request.entity)
 		clone
 	}
 
-	private static HttpRequest cloneRequest(HttpRequest request) {
-		def clone = new BasicHttpRequest(request.requestLine)
-		clone.headers = request.allHeaders
+	private static TapeRequest cloneRequest(HttpRequest request) {
+		def clone = new TapeRequest()
+		clone.protocol = request.requestLine.protocolVersion.toString()
+		clone.method = request.requestLine.method
+		clone.uri = request.requestLine.uri
+		clone.headers = request.allHeaders.collectEntries { [it.name, it.value] }
+		clone.body = null
 		clone
 	}
 
-	private static HttpResponse cloneResponse(HttpResponse response) {
-		def clone = new BasicHttpResponse(response.statusLine)
-		clone.headers = response.allHeaders
-		clone.entity = cloneEntity(response.entity)
+	private static TapeResponse cloneResponse(HttpResponse response) {
+		def clone = new TapeResponse()
+		clone.protocol = response.statusLine.protocolVersion.toString()
+		clone.status = response.statusLine.statusCode
+		clone.headers = response.allHeaders.collectEntries { [it.name, it.value] }
+		clone.body = cloneEntity(response.entity)
 		clone
 	}
 
-	private static HttpEntity cloneEntity(HttpEntity entity) {
+	private static String cloneEntity(HttpEntity entity) {
 		if (entity) {
 			def bytes = new ByteArrayOutputStream()
 			entity.writeTo(bytes)
-			new ByteArrayEntity(bytes.toByteArray())
+			bytes.toString("UTF-8")
 		} else {
 			null
 		}
@@ -80,11 +88,26 @@ class Tape {
 
 }
 
-class HttpInteraction {
+class TapeInteraction {
 
-	HttpRequest request
-	HttpResponse response
-	String description
 	Date recorded
+	String description
+	TapeRequest request
+	TapeResponse response
 
+}
+
+class TapeRequest {
+	String protocol
+	String method
+	String uri
+	Map<String, String> headers
+	String body
+}
+
+class TapeResponse {
+	String protocol
+	int status
+	Map<String, String> headers
+	String body
 }

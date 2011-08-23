@@ -22,6 +22,8 @@ import betamax.storage.*
 import org.apache.http.*
 import org.apache.http.entity.*
 import org.apache.http.message.*
+import org.yaml.snakeyaml.representer.Representer
+import org.yaml.snakeyaml.introspector.Property
 
 @Log4j
 class YamlTapeLoader implements TapeLoader {
@@ -32,7 +34,7 @@ class YamlTapeLoader implements TapeLoader {
 
 	Tape readTape(Reader reader) {
 		try {
-			def yaml = new Yaml()
+			def yaml = new Yaml(new GroovyRepresenter())
 			toTape(yaml.load(reader))
 		} catch (java.text.ParseException e) {
 			throw new TapeLoadException("Invalid tape", e)
@@ -40,12 +42,12 @@ class YamlTapeLoader implements TapeLoader {
 	}
 
 	void writeTape(Tape tape, Writer writer) {
-		def map = [tape: [name: tape.name, interactions: data(tape.interactions)]]
-		def yaml = new Yaml()
-		yaml.dump(map, writer)
+//		def map = [tape: [name: tape.name, interactions: data(tape.interactions)]]
+		def yaml = new Yaml(new GroovyRepresenter())
+		yaml.dump(tape, writer)
 	}
 
-	private List<Map> data(Collection<HttpInteraction> interactions) {
+	private List<Map> data(Collection<TapeInteraction> interactions) {
 		interactions.collect {
 			[recorded: it.recorded, request: data(it.request), response: data(it.response)]
 		}
@@ -87,12 +89,12 @@ class YamlTapeLoader implements TapeLoader {
 		tape
 	}
 
-	private HttpInteraction toInteraction(data) {
+	private TapeInteraction toInteraction(data) {
 		require data, "request", "response", "recorded"
 		def request = toRequest(data.request)
 		def response = loadResponse(data.response)
 		def recorded = data.recorded
-		new HttpInteraction(request: request, response: response, recorded: recorded)
+		new TapeInteraction(request: request, response: response, recorded: recorded)
 	}
 
 	private HttpRequest toRequest(data) {
@@ -130,6 +132,18 @@ class YamlTapeLoader implements TapeLoader {
 				throw new TapeLoadException("Missing element '$key'")
 			}
 		}
+	}
+
+}
+
+class GroovyRepresenter extends Representer {
+	@Override
+	protected Set<Property> getProperties(Class<? extends Object> type) {
+		def set = super.getProperties(type)
+		set.removeAll {
+			it.name == "metaClass"
+		}
+		set
 	}
 
 }
