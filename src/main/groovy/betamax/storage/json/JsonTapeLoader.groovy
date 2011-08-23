@@ -51,7 +51,7 @@ class JsonTapeLoader implements TapeLoader {
 			}
 
 			tape
-		} catch (ParseException e) {
+		} catch (java.text.ParseException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		} catch (JsonException e) {
 			throw new TapeLoadException("Invalid tape", e)
