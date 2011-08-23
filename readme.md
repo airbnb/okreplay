@@ -10,12 +10,20 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
 
+## Current state
+
+Betamax is at quite an early stage of development. It is usable and I would encourage users to give feedback, raise
+issues etc. via GitHub.
+
+Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads]:https://github.com/robfletcher/betamax/archives/master
+section. Dependency details can be found below.
+
 ## Dependencies
 
 Betamax depends on the following libraries (you will need them available on your test classpath in order to use
 Betamax):
 
-* `"org.codehaus.groovy:groovy-all:1.8.0"`
+* `"org.codehaus.groovy:groovy-all:1.8.1"`
 * `"junit:junit:4.8.2"`
 * `"log4j:log4j:1.2.16"`
 * `"org.apache.httpcomponents:httpclient:4.1.2"`
