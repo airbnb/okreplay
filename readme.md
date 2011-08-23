@@ -138,6 +138,7 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 ## Roadmap
 
 * Description in interactions
+* Non-UTF-8 responses
 * Non-text responses
 * Multipart requests
 * Rotate multiple responses for same URI on same tape
