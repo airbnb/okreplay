@@ -5,7 +5,7 @@ so that your tests can run without any real HTTP traffic going to external URLs.
 traffic is recorded to a _tape_ and subsequent runs will play back the HTTP response without really connecting to the
 external endpoint.
 
-Tapes are stored to disk as JSON files and can be modified (or even created) by hand and committed to your project's
+Tapes are stored to disk as [YAML][8] files and can be modified (or even created) by hand and committed to your project's
 source control repository so that other members of the team can use them when running tests. Different tests can use
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
@@ -20,6 +20,7 @@ Betamax):
 * `"log4j:log4j:1.2.16"`
 * `"org.apache.httpcomponents:httpclient:4.1.2"`
 * `"org.apache.httpcomponents:httpcore-nio:4.1.2"`
+* `"org.yaml:snakeyaml:1.10-SNAPSHOT"`
 
 ## Usage
 
@@ -142,3 +143,4 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 [5]:http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/conn/ProxySelectorRoutePlanner.html
 [6]:http://groovy.codehaus.org/modules/http-builder/doc/rest.html
 [7]:http://groovy.codehaus.org/modules/http-builder/doc/httpurlclient.html
+[8]:http://yaml.org/

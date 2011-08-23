@@ -18,6 +18,8 @@ package betamax.storage
 
 interface TapeLoader {
 
+	String getFileExtension()
+
 	Tape readTape(Reader reader)
 
 	void writeTape(Tape tape, Writer writer)

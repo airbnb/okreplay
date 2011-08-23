@@ -17,7 +17,7 @@
 package betamax
 
 import betamax.server.HttpProxyServer
-import betamax.storage.json.JsonTapeLoader
+import betamax.storage.yaml.YamlTapeLoader
 import groovy.util.logging.Log4j
 import java.text.Normalizer
 import org.junit.rules.MethodRule
@@ -70,7 +70,7 @@ class Recorder implements MethodRule {
 	/**
 	 * The strategy for reading and writing tape files.
 	 */
-	TapeLoader loader = new JsonTapeLoader()
+	TapeLoader loader = new YamlTapeLoader()
 
 	private Tape tape
 	private HttpProxyServer proxy = new HttpProxyServer()
@@ -169,7 +169,7 @@ class Recorder implements MethodRule {
 
 	private File getTapeFile(String name) {
 		def filename = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_")
-		new File(tapeRoot, "${filename}.json")
+		new File(tapeRoot, "${filename}.${loader.fileExtension}")
 	}
 
 	private void configureFromProperties(Properties properties) {
