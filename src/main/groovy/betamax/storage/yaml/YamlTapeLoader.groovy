@@ -16,26 +16,15 @@
 
 package betamax.storage.yaml
 
-import betamax.storage.TapeLoader
-import betamax.storage.Tape
-import org.yaml.snakeyaml.Yaml
-import betamax.storage.HttpInteraction
-import java.text.SimpleDateFormat
-import org.apache.http.HttpRequest
-import org.apache.http.HttpEntityEnclosingRequest
-import org.apache.http.HttpResponse
 import groovy.util.logging.Log4j
-import betamax.storage.TapeLoadException
-import org.apache.http.message.BasicHttpRequest
-import org.apache.http.message.BasicHttpResponse
-import org.apache.http.entity.StringEntity
-import org.apache.http.ProtocolVersion
-import org.apache.http.entity.ByteArrayEntity
+import org.yaml.snakeyaml.Yaml
+import betamax.storage.*
+import org.apache.http.*
+import org.apache.http.entity.*
+import org.apache.http.message.*
 
 @Log4j
 class YamlTapeLoader implements TapeLoader {
-
-	static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
 
 	String getFileExtension() {
 		"yaml"
@@ -58,7 +47,7 @@ class YamlTapeLoader implements TapeLoader {
 
 	private List<Map> data(Collection<HttpInteraction> interactions) {
 		interactions.collect {
-			[recorded: new SimpleDateFormat(TIMESTAMP_FORMAT).format(it.recorded), request: data(it.request), response: data(it.response)]
+			[recorded: it.recorded, request: data(it.request), response: data(it.response)]
 		}
 	}
 
@@ -102,7 +91,7 @@ class YamlTapeLoader implements TapeLoader {
 		require data, "request", "response", "recorded"
 		def request = toRequest(data.request)
 		def response = loadResponse(data.response)
-		def recorded = new SimpleDateFormat(TIMESTAMP_FORMAT).parse(data.recorded)
+		def recorded = data.recorded
 		new HttpInteraction(request: request, response: response, recorded: recorded)
 	}
 
