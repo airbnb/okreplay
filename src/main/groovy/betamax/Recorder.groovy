@@ -36,23 +36,24 @@ class Recorder implements MethodRule {
 	static final int DEFAULT_PROXY_PORT = 5555
 
 	Recorder() {
-		def props = getClass().classLoader.getResource("betamax.properties")
-		if (props) {
-			def properties = new Properties()
-			props.withReader { reader ->
-				properties.load(reader)
+		def configFile = getClass().classLoader.getResource("BetamaxConfig.groovy")
+		if (configFile) {
+			def config = new ConfigSlurper().parse(configFile)
+			configureFromConfig(config)
+		} else {
+			def propertiesFile = getClass().classLoader.getResource("betamax.properties")
+			if (propertiesFile) {
+				def properties = new Properties()
+				propertiesFile.withReader { reader ->
+					properties.load(reader)
+				}
+				configureFromProperties(properties)
 			}
-			configureFromProperties(properties)
 		}
 	}
 
 	Recorder(Properties properties) {
 		configureFromProperties(properties)
-	}
-
-	private void configureFromProperties(Properties properties) {
-		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
-		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
 	}
 
 	/**
@@ -156,4 +157,15 @@ class Recorder implements MethodRule {
 		def filename = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_")
 		new File(tapeRoot, "${filename}.json")
 	}
+
+	private void configureFromProperties(Properties properties) {
+		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
+		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
+	}
+
+	private void configureFromConfig(ConfigObject config) {
+		tapeRoot = config.betamax.tapeRoot ?: DEFAULT_TAPE_ROOT
+		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
+	}
+
 }

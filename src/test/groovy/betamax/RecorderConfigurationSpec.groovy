@@ -62,6 +62,32 @@ class RecorderConfigurationSpec extends Specification {
 		propertiesFile.delete()
 	}
 
+	def "recorder picks up configuration from groovy config script"() {
+		given:
+		def configFile = new File(tmpdir, "BetamaxConfig.groovy")
+		configFile.withWriter { writer ->
+			writer << """\
+				betamax {
+					tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+					proxyPort = 1337
+				}
+			"""
+		}
+
+		and:
+		Recorder.classLoader.addURL(new File(tmpdir).toURL())
+
+		and:
+		def recorder = new Recorder()
+
+		expect:
+		recorder.tapeRoot == new File(tmpdir, "tapes")
+		recorder.proxyPort == 1337
+
+		cleanup:
+		configFile.delete()
+	}
+
 	def "constructor arguments take precendence over a properties file"() {
 		given:
 		def propertiesFile = new File(tmpdir, "betamax.properties")
