@@ -10,6 +10,17 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request URI
 
+## Dependencies
+
+Betamax depends on the following libraries (you will need them available on your test classpath in order to use
+Betamax):
+
+* `"org.codehaus.groovy:groovy-all:1.8.0"`
+* `"junit:junit:4.8.2"`
+* `"log4j:log4j:1.2.16"`
+* `"org.apache.httpcomponents:httpclient:4.1.2"`
+* `"org.apache.httpcomponents:httpcore-nio:4.1.2"`
+
 ## Usage
 
 To use Betamax you just need to annotate your JUnit test or [Spock][2] specifications with `@Betamax(tape="tape_name")`
