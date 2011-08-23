@@ -10,6 +10,8 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
+import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.methods.GetMethod
 
 class ProxyNetworkCommsSpec extends Specification {
 
@@ -83,6 +85,21 @@ class ProxyNetworkCommsSpec extends Specification {
 		then:
 		response.status == HTTP_OK
 		response.getFirstHeader(VIA)?.value == "Betamax"
+	}
+
+	@Ignore
+	@Timeout(10)
+	def "proxy intercepts HTTPClient 3.x connections"() {
+		given:
+		def client = new HttpClient()
+		def request = new GetMethod(endpoint.url)
+
+		when:
+		def status = client.executeMethod(request)
+
+		then:
+		status == HTTP_OK
+		request.getResponseHeader(VIA)?.value == "Betamax"
 	}
 
 	@Timeout(10)

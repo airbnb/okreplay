@@ -125,8 +125,6 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 
 ## Roadmap
 
-* Configure Recorder via annotation and config file
-* Test with HTTPClient 3.x
 * Description in interactions
 * Non-text responses
 * Multipart requests
