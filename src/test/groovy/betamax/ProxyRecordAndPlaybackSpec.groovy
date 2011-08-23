@@ -6,19 +6,27 @@ import groovy.json.JsonSlurper
 import groovyx.net.http.HttpURLClient
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
+import groovyx.net.http.RESTClient
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Shared Recorder recorder = Recorder.instance
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
-	EchoServer endpoint = new EchoServer()
+	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	RESTClient http
 
 	def setupSpec() {
 		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 		recorder.insertTape("proxy_record_and_playback_spec")
 
 		proxy.start(recorder)
+	}
+
+	def setup() {
+		http = new RESTClient(endpoint.url)
+		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 	}
 
 	def cleanupSpec() {
@@ -32,29 +40,33 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		given:
 		endpoint.start()
 
-		and:
-		def http = new HttpURLClient(url: endpoint.url)
-
 		when:
-		http.request(path: "/")
+		http.get(path: "/")
 
 		then:
 		recorder.tape.interactions.size() == 1
-
-		cleanup:
-		endpoint.stop()
 	}
 
 	@Timeout(10)
 	def "subsequent requests for the same URI are played back from tape"() {
-		given:
-		def http = new HttpURLClient(url: endpoint.url)
-
 		when:
-		http.request(path: "/")
+		http.get(path: "/")
 
 		then:
 		recorder.tape.interactions.size() == 1
+	}
+
+	@Timeout(10)
+	def "subsequent requests with a different HTTP method are recorded separately"() {
+		given:
+		endpoint.start()
+
+		when:
+		http.head(path: "/")
+
+		then:
+		recorder.tape.interactions.size() == old(recorder.tape.interactions.size()) + 1
+		recorder.tape.interactions[-1].request.requestLine.method == "HEAD"
 	}
 
 	def "when the tape is ejected the data is written to a file"() {
@@ -73,7 +85,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 			reader -> new JsonSlurper().parse(reader)
 		}
 		json.tape.name == "proxy_record_and_playback_spec"
-		json.tape.interactions.size() == 1
+		json.tape.interactions.size() == 2
 	}
 
 	def "can load an existing tape from a file"() {
@@ -115,11 +127,8 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Timeout(10)
 	def "can play back a loaded tape"() {
-		given:
-		def http = new HttpURLClient(url: "http://icanhascheezburger.com/")
-
 		when:
-		def response = http.request(path: "/")
+		def response = http.get(uri: "http://icanhascheezburger.com/")
 
 		then:
 		response.statusLine.statusCode == HTTP_OK

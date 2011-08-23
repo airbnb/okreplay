@@ -27,7 +27,9 @@ class Tape {
 	Collection<HttpInteraction> interactions = []
 
 	boolean play(HttpRequest request, HttpResponse response) {
-		def interaction = interactions.find { it.request.requestLine.uri == request.requestLine.uri }
+		def interaction = interactions.find {
+			it.request.requestLine.uri == request.requestLine.uri && it.request.requestLine.method == request.requestLine.method
+		}
 		if (interaction) {
 			response.statusLine = interaction.response.statusLine
 			response.headers = interaction.response.allHeaders
@@ -42,12 +44,12 @@ class Tape {
 		interactions << new HttpInteraction(request: cloneRequest(request), response: cloneResponse(response), recorded: new Date())
 	}
 
-    @Override
-    String toString() {
-        "Tape[$name]"
-    }
+	@Override
+	String toString() {
+		"Tape[$name]"
+	}
 
-    private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
+	private static HttpEntityEnclosingRequest cloneRequest(HttpEntityEnclosingRequest request) {
 		def clone = new BasicHttpEntityEnclosingRequest(request.requestLine)
 		clone.entity = cloneEntity(request.entity)
 		clone
@@ -65,9 +67,13 @@ class Tape {
 	}
 
 	private static HttpEntity cloneEntity(HttpEntity entity) {
-		def bytes = new ByteArrayOutputStream()
-		entity.writeTo(bytes)
-		new ByteArrayEntity(bytes.toByteArray())
+		if (entity) {
+			def bytes = new ByteArrayOutputStream()
+			entity.writeTo(bytes)
+			new ByteArrayEntity(bytes.toByteArray())
+		} else {
+			null
+		}
 	}
 
 }

@@ -8,7 +8,7 @@ external endpoint.
 Tapes are stored to disk as JSON files and can be modified (or even created) by hand and committed to your project's
 source control repository so that other members of the team can use them when running tests. Different tests can use
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
-interactions but each must (currently) have a unique request URI
+interactions but each must (currently) have a unique request method and URI.
 
 ## Dependencies
 
@@ -64,11 +64,12 @@ and include a `betamax.Recorder` Rule.
 
 ## Recoding and playback
 
-Betamax will record to the current tape when it intercepts any HTTP request to a URI that does not match anything that
-is already on the tape. If a recorded interaction with a matching URI _is_ found then the proxy does not forward the
-request to the target URI but instead returns the previously recorded response to the requestor.
+Betamax will record to the current tape when it intercepts any HTTP request with a combination of method and URI that
+does not match anything that is already on the tape. If a recorded interaction with the same method and URI _is_ found
+then the proxy does not forward the request to the target URI but instead returns the previously recorded response to
+the requestor.
 
-In future it will be possible to match recorded interactions based on criteria other than just the full URI.
+In future it will be possible to match recorded interactions based on criteria other than just method and URI.
 
 ## Security
 
