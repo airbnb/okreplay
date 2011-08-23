@@ -48,6 +48,10 @@ and include a `betamax.Recorder` Rule.
             }
 
     }
+    
+## Configuration
+
+Betamax stores tapes in `src/test/resources/betamax/tapes`. You can change this by assigning a `File` object to `Recorder.instance.tapeRoot`. Likewise you can override the default port (`5555`) by setting `Recorder.instance.port`.
 
 ## Caveats
 
