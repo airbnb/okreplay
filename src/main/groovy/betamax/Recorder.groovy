@@ -22,6 +22,7 @@ import groovy.util.logging.Log4j
 import org.junit.rules.MethodRule
 import betamax.storage.*
 import org.junit.runners.model.*
+import java.text.Normalizer
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -84,6 +85,7 @@ class Recorder implements MethodRule {
 		if (tape) {
 			def file = getTapeFile(tape.name)
 			file.parentFile.mkdirs()
+			log.debug "writing tape $tape to file $file.name"
 			file.withWriter { writer ->
 				loader.writeTape(tape, writer)
 			}
@@ -129,6 +131,7 @@ class Recorder implements MethodRule {
 	}
 
 	private File getTapeFile(String name) {
-		new File(tapeRoot, "${name}.json")
+		def filename = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_")
+		new File(tapeRoot, "${filename}.json")
 	}
 }
