@@ -11,13 +11,12 @@ import spock.lang.*
 
 class FilenameNormalizationSpec extends Specification {
 
-	@Shared Recorder recorder = Recorder.instance
+	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared HttpGet request
 	@Shared HttpResponse response
 
 	def setupSpec() {
-		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-
 		request = new HttpGet("http://icanhascheezburger.com/")
 
 		response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
@@ -28,7 +27,7 @@ class FilenameNormalizationSpec extends Specification {
 	}
 
 	def cleanup() {
-		assert recorder.tapeRoot.deleteDir()
+		assert tapeRoot.deleteDir()
 	}
 
 	@Unroll({"a tape named '$tapeName' is written to a file called '$filename'"})

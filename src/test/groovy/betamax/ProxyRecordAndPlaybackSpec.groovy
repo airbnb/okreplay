@@ -3,22 +3,21 @@ package betamax
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovy.json.JsonSlurper
-import groovyx.net.http.HttpURLClient
-import static java.net.HttpURLConnection.HTTP_OK
-import spock.lang.*
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import static java.net.HttpURLConnection.HTTP_OK
+import spock.lang.*
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-	@Shared Recorder recorder = Recorder.instance
+	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
 	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
 
 	def setupSpec() {
-		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 		recorder.insertTape("proxy_record_and_playback_spec")
 
 		proxy.start(recorder)
@@ -32,7 +31,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	def cleanupSpec() {
 		proxy.stop()
         recorder.ejectTape()
-		assert recorder.tapeRoot.deleteDir()
+		assert tapeRoot.deleteDir()
 	}
 
 	@Timeout(10)

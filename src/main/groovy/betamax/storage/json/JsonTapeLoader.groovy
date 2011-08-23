@@ -16,14 +16,13 @@
 
 package betamax.storage.json
 
-import java.text.*
+import groovy.util.logging.Log4j
+import java.text.SimpleDateFormat
 import org.apache.http.entity.StringEntity
 import betamax.storage.*
 import groovy.json.*
-import static org.apache.commons.codec.binary.Base64.encodeBase64String
 import org.apache.http.*
 import org.apache.http.message.*
-import groovy.util.logging.Log4j
 
 @Log4j
 class JsonTapeLoader implements TapeLoader {

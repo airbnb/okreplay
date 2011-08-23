@@ -10,14 +10,10 @@ import org.junit.*
 
 class AnnotationTest {
 
-	@Rule public Recorder recorder = Recorder.instance
+	static File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Rule public Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	EchoServer endpoint = new EchoServer()
     RESTClient http
-
-	@BeforeClass
-	static void createTapeDir() {
-		Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	}
 
     @Before
     void initRestClient() {
@@ -32,7 +28,7 @@ class AnnotationTest {
 
 	@AfterClass
 	static void cleanUpTapeFiles() {
-		assert Recorder.instance.tapeRoot.deleteDir()
+		assert tapeRoot.deleteDir()
 	}
 
 	@Test

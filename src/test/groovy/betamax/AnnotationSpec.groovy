@@ -12,74 +12,71 @@ import spock.lang.*
 @Stepwise
 class AnnotationSpec extends Specification {
 
-    @Rule Recorder recorder = Recorder.instance
-    @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
-    RESTClient http
+	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	RESTClient http
 
-    def setupSpec() {
-        Recorder.instance.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-    }
+	def setup() {
+		http = new RESTClient(endpoint.url)
+		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+	}
 
-    def setup() {
-        http = new RESTClient(endpoint.url)
-        http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-    }
+	def cleanupSpec() {
+		assert tapeRoot.deleteDir()
+	}
 
-    def cleanupSpec() {
-        assert Recorder.instance.tapeRoot.deleteDir()
-    }
+	def "no tape is inserted if there is no annotation on the feature"() {
+		expect:
+		recorder.tape == null
+	}
 
-    def "no tape is inserted if there is no annotation on the feature"() {
-        expect:
-        recorder.tape == null
-    }
+	@Betamax(tape = "annotation_spec")
+	def "annotation on feature causes tape to be inserted"() {
+		expect:
+		recorder.tape.name == "annotation_spec"
+	}
 
-    @Betamax(tape = "annotation_spec")
-    def "annotation on feature causes tape to be inserted"() {
-        expect:
-        recorder.tape.name == "annotation_spec"
-    }
+	def "tape is ejected after annotated feature completes"() {
+		expect:
+		recorder.tape == null
+	}
 
-    def "tape is ejected after annotated feature completes"() {
-        expect:
-        recorder.tape == null
-    }
+	@Betamax(tape = "annotation_spec")
+	def "annotated feature can record"() {
+		given:
+		endpoint.start()
 
-    @Betamax(tape = "annotation_spec")
-    def "annotated feature can record"() {
-        given:
-        endpoint.start()
+		when:
+		def response = http.get(path: "/")
 
-        when:
-        def response = http.get(path: "/")
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA)?.value == "Betamax"
+		response.getFirstHeader(X_BETAMAX)?.value == "REC"
+	}
 
-        then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == "Betamax"
-        response.getFirstHeader(X_BETAMAX)?.value == "REC"
-    }
+	@Betamax(tape = "annotation_spec")
+	def "annotated feature can play back"() {
+		when:
+		def response = http.get(path: "/")
 
-    @Betamax(tape = "annotation_spec")
-    def "annotated feature can play back"() {
-        when:
-        def response = http.get(path: "/")
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA)?.value == "Betamax"
+		response.getFirstHeader(X_BETAMAX)?.value == "PLAY"
+	}
 
-        then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == "Betamax"
-        response.getFirstHeader(X_BETAMAX)?.value == "PLAY"
-    }
+	def "can make unproxied request after using annotation"() {
+		given:
+		endpoint.start()
 
-    def "can make unproxied request after using annotation"() {
-        given:
-        endpoint.start()
+		when:
+		def response = http.get(path: "/")
 
-        when:
-        def response = http.get(path: "/")
-
-        then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA) == null
-    }
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == null
+	}
 
 }

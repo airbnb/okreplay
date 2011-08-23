@@ -19,17 +19,16 @@ package betamax
 import betamax.server.HttpProxyServer
 import betamax.storage.json.JsonTapeLoader
 import groovy.util.logging.Log4j
+import java.text.Normalizer
 import org.junit.rules.MethodRule
 import betamax.storage.*
 import org.junit.runners.model.*
-import java.text.Normalizer
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
  * run with the Betamax HTTP proxy in the background.
  */
-@Singleton
 @Log4j
 class Recorder implements MethodRule {
 

@@ -13,15 +13,11 @@ import spock.lang.*
 @Stepwise
 class TapeSpec extends Specification {
 
-	@Shared Recorder recorder
+	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared Tape tape = new Tape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
-
-	def setupSpec() {
-		recorder = Recorder.instance
-		recorder.tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-    }
 
 	def setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
@@ -33,7 +29,7 @@ class TapeSpec extends Specification {
 	}
 
     def cleanupSpec() {
-        assert recorder.tapeRoot.deleteDir()
+        assert tapeRoot.deleteDir()
     }
 
 	def "reading from an empty tape does nothing"() {

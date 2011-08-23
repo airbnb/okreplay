@@ -13,11 +13,12 @@ import spock.lang.*
 
 class ProxyNetworkCommsSpec extends Specification {
 
+	@Shared Recorder recorder = new Recorder()
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
     @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 
 	def setupSpec() {
-		proxy.start(Recorder.instance)
+		proxy.start(recorder)
 	}
 
     def setup() {

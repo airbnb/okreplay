@@ -34,7 +34,7 @@ and include a `betamax.Recorder` Rule.
 
     class MyTest {
 
-        @Rule public Recorder recorder = Recorder.instance
+        @Rule public Recorder recorder = new Recorder()
 
         @Betamax(tape="my_tape")
         @Test
@@ -53,7 +53,7 @@ and include a `betamax.Recorder` Rule.
 
     class MySpec extends Specification {
 
-	    @Rule Recorder recorder = Recorder.instance
+	    @Rule Recorder recorder = new Recorder()
 
         @Betamax(tape="my_tape")
         def "test method that accesses external web service"() {
@@ -80,8 +80,10 @@ repository.
 
 ## Configuration
 
-Betamax stores tapes in `src/test/resources/betamax/tapes`. You can change this by assigning a `File` object to
-`Recorder.instance.tapeRoot`. Likewise you can override the default port (`5555`) by setting `Recorder.instance.port`.
+The `Recorder` class has some configuration properties that you can override:
+
+* *tapeRoot*: the base directory where tape files are stored. Defaults to `src/test/resources/betamax/tapes`.
+* *proxyPort*: the port the Betamax proxy listens on. Defaults to `5555`.
 
 ## Caveats
 
