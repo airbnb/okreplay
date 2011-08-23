@@ -56,7 +56,7 @@ Betamax stores tapes in `src/test/resources/betamax/tapes`. You can change this 
 ## Caveats
 
 By default [Apache _HTTPClient_][3] takes no notice of Java's HTTP proxy settings. If you are using HTTPClient then the
-Betamax proxy can only intercept HTTP traffic if the client is set up to use a `[ProxySelectorRoutePlanner][5]`.
+Betamax proxy can only intercept HTTP traffic if the client is set up to use a [`ProxySelectorRoutePlanner`][5].
 
 ### Configuring HTTPClient
 
