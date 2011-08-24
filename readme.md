@@ -28,12 +28,14 @@ section. Dependency details can be found below.
 Betamax depends on the following libraries (you will need them available on your test classpath in order to use
 Betamax):
 
-* `"org.codehaus.groovy:groovy-all:1.8.1"`
-* `"junit:junit:4.8.2"`
-* `"log4j:log4j:1.2.16"`
-* `"org.apache.httpcomponents:httpclient:4.1.2"`
-* `"org.apache.httpcomponents:httpcore-nio:4.1.2"`
-* `"org.yaml:snakeyaml:1.10-SNAPSHOT"`
+* [Groovy](http://groovy.codehaus.org)
+* [Apache HttpClient](http://hc.apache.org/httpcomponents-client-ga/)
+* [Apache HttpCore NIO Extensions](http://hc.apache.org/httpcomponents-core-ga/httpcore-nio/index.html)
+* [SnakeYAML](http://www.snakeyaml.org/)
+* [JUnit 4](http://www.junit.org/)
+* [Apache log4j](http://logging.apache.org/log4j/1.2/)
+
+To see exact dependency versions used by Betamax see the `build.gradle` file.
 
 ## Usage
 
@@ -124,11 +126,11 @@ betamax.proxyPort=1337
 
 ## Caveats
 
-By default [Apache _HTTPClient_][3] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept
-traffic from HTTPClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][5]. When Betamax is not
-active this will mean HTTPClient traffic will be routed via the default proxy configured in Java (if any).
+By default [Apache _HttpClient_][3] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept
+traffic from HttpClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][5]. When Betamax is not
+active this will mean HttpClient traffic will be routed via the default proxy configured in Java (if any).
 
-### Configuring HTTPClient
+### Configuring HttpClient
 
 ```groovy
 def client = new DefaultHttpClient()
@@ -136,7 +138,7 @@ client.routePlanner = new ProxySelectorRoutePlanner(client.connectionManager.sch
 ```
 
 The same is true of [Groovy _HTTPBuilder_][4] and its [_RESTClient_][6] variant as they are wrappers around
-_HTTPClient_.
+_HttpClient_.
 
 ### Configuring HTTPBuilder
 
@@ -147,7 +149,7 @@ http.client.routePlanner = routePlanner
 ```
 
 _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special configuration as it uses a
-`java.net.URLConnection` rather than _HTTPClient_.
+`java.net.URLConnection` rather than _HttpClient_.
 
 [1]:https://github.com/myronmarston/vcr
 [2]:http://spockframework.org/
