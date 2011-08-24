@@ -25,7 +25,7 @@ import org.apache.http.*
 import org.apache.http.message.*
 
 @Log4j
-class JsonTapeLoader implements TapeLoader {
+class JsonTapeLoader extends AbstractTapeLoader {
 
 	static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
 
@@ -84,42 +84,6 @@ class JsonTapeLoader implements TapeLoader {
 			response.addHeader(header.key, header.value)
 		}
 		response
-	}
-
-	private List<Map> data(Collection<HttpInteraction> interactions) {
-		interactions.collect {
-			[recorded: new SimpleDateFormat(TIMESTAMP_FORMAT).format(it.recorded), request: data(it.request), response: data(it.response)]
-		}
-	}
-
-	private Map data(HttpRequest request) {
-		def map = [
-				protocol: request.requestLine.protocolVersion.toString(),
-				method: request.requestLine.method,
-				uri: request.requestLine.uri,
-				headers: request.allHeaders.collectEntries { [it.name, it.value] }
-		]
-		if (request instanceof HttpEntityEnclosingRequest) {
-			map.body = request.entity.content.text
-		}
-		map
-	}
-
-	private Map data(HttpResponse response) {
-		def map = [
-				protocol: response.statusLine.protocolVersion.toString(),
-				status: response.statusLine.statusCode,
-				headers: response.allHeaders.collectEntries { [it.name, it.value] }
-		]
-		if (response.entity) {
-			map.body = response.entity.content.text
-		}
-		map
-	}
-
-	private ProtocolVersion parseProtocol(String protocolString) {
-		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
-		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
 	}
 
 	private void require(Map map, String... keys) {
