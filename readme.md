@@ -135,19 +135,6 @@ _HTTPClient_.
 _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special configuration as it uses a
 `java.net.URLConnection` rather than _HTTPClient_.
 
-## Roadmap
-
-* Description in interactions
-* Non-UTF-8 responses
-* Non-text responses
-* Multipart requests
-* Rotate multiple responses for same URI on same tape
-* Throw exceptions if tape not inserted & proxy gets hit
-* Allow groovy evaluation in tape files
-* Match requests based on URI, host, path, method, body, headers
-* Optionally re-record tapes after TTL expires
-* Record modes
-
 [1]:https://github.com/myronmarston/vcr
 [2]:http://spockframework.org/
 [3]:http://hc.apache.org/httpcomponents-client-ga/httpclient/index.html
