@@ -1,7 +1,6 @@
 package betamax
 
 import betamax.storage.yaml.YamlTapeLoader
-import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpResponse
 import org.yaml.snakeyaml.Yaml
 import betamax.storage.*
@@ -12,6 +11,7 @@ import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import org.apache.http.message.*
 import spock.lang.*
+import java.util.zip.GZIPOutputStream
 
 class WriteTapeToYamlSpec extends Specification {
 
@@ -22,6 +22,7 @@ class WriteTapeToYamlSpec extends Specification {
 	@Shared HttpResponse successResponse
 	@Shared HttpResponse failureResponse
 	@Shared HttpResponse imageResponse
+	@Shared HttpResponse gzippedResponse
 	@Shared File image
 
 	def setupSpec() {
@@ -35,13 +36,13 @@ class WriteTapeToYamlSpec extends Specification {
 		successResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-		successResponse.addHeader(CONTENT_ENCODING, "gzip")
+		successResponse.addHeader(CONTENT_ENCODING, "none")
 		successResponse.entity = new StringEntity("O HAI!", "text/plain", "UTF-8")
 
 		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-		failureResponse.addHeader(CONTENT_ENCODING, "gzip")
+		failureResponse.addHeader(CONTENT_ENCODING, "none")
 		failureResponse.entity = new StringEntity("KTHXBYE!", "text/plain", "UTF-8")
 
 		image = new File("src/test/resources/image.png")
@@ -49,6 +50,15 @@ class WriteTapeToYamlSpec extends Specification {
 		imageResponse.addHeader(CONTENT_TYPE, "image/png")
 		imageResponse.entity = new ByteArrayEntity(image.bytes)
 		imageResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "image/png")
+
+		gzippedResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		gzippedResponse.addHeader(CONTENT_TYPE, "text/plain")
+		gzippedResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
+		gzippedResponse.addHeader(CONTENT_ENCODING, "gzip")
+		def bytes = new ByteArrayOutputStream()
+		def os = new GZIPOutputStream(bytes)
+		os << "O HAI!".bytes
+		gzippedResponse.entity = new ByteArrayEntity(bytes.toByteArray())
 	}
 
 	def "can write a tape to storage"() {
@@ -103,7 +113,7 @@ class WriteTapeToYamlSpec extends Specification {
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
 		yaml.tape.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
-		yaml.tape.interactions[0].response.headers[CONTENT_ENCODING] == "gzip"
+		yaml.tape.interactions[0].response.headers[CONTENT_ENCODING] == "none"
 	}
 
 	def "can write requests with a body"() {
@@ -140,7 +150,6 @@ class WriteTapeToYamlSpec extends Specification {
 		yaml.tape.interactions[1].response.status == HTTP_BAD_REQUEST
 	}
 
-	@Ignore
 	def "can write a binary response body"() {
 		given:
 		def tape = new Tape(name: "tape_loading_spec")
@@ -153,6 +162,45 @@ class WriteTapeToYamlSpec extends Specification {
 		then:
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
-		yaml.tape.interactions[0].response.body == Base64.encodeBase64String(image.bytes)
+		yaml.tape.interactions[0].response.body == image.bytes
+	}
+
+	def "text response body is written to file as plain text"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, successResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		writer.toString().contains("body: O HAI!")
+	}
+
+	def "gzipped response body is written to file as binary data"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, gzippedResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		writer.toString().contains("body: !!binary |-")
+	}
+
+	def "binary response body is written to file as binary data"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, imageResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		writer.toString().contains("body: !!binary |-")
 	}
 }
