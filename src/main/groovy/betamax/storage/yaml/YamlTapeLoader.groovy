@@ -23,6 +23,8 @@ import betamax.storage.*
 import org.apache.http.*
 import org.apache.http.entity.*
 import org.apache.http.message.*
+import static org.apache.http.HttpHeaders.CONTENT_ENCODING
+import betamax.encoding.GzipEncoder
 
 @Log4j
 class YamlTapeLoader extends AbstractTapeLoader {
@@ -81,7 +83,12 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		def response = new BasicHttpResponse(responseProtocol, data.status, null)
 		switch (data.body) {
 			case String:
-				response.entity = new StringEntity(data.body); break
+				if (data.headers[CONTENT_ENCODING] == "gzip") {
+					response.entity = new ByteArrayEntity(GzipEncoder.encode(data.body))
+				} else {
+					response.entity = new StringEntity(data.body)
+				}
+				break
 			case byte[]:
 				response.entity = new ByteArrayEntity(data.body); break
 			default:

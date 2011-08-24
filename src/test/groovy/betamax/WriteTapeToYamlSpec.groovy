@@ -11,7 +11,6 @@ import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import org.apache.http.message.*
 import spock.lang.*
-import java.util.zip.GZIPOutputStream
 
 class WriteTapeToYamlSpec extends Specification {
 
@@ -22,7 +21,6 @@ class WriteTapeToYamlSpec extends Specification {
 	@Shared HttpResponse successResponse
 	@Shared HttpResponse failureResponse
 	@Shared HttpResponse imageResponse
-	@Shared HttpResponse gzippedResponse
 	@Shared File image
 
 	def setupSpec() {
@@ -50,15 +48,6 @@ class WriteTapeToYamlSpec extends Specification {
 		imageResponse.addHeader(CONTENT_TYPE, "image/png")
 		imageResponse.entity = new ByteArrayEntity(image.bytes)
 		imageResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "image/png")
-
-		gzippedResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
-		gzippedResponse.addHeader(CONTENT_TYPE, "text/plain")
-		gzippedResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-		gzippedResponse.addHeader(CONTENT_ENCODING, "gzip")
-		def bytes = new ByteArrayOutputStream()
-		def os = new GZIPOutputStream(bytes)
-		os << "O HAI!".bytes
-		gzippedResponse.entity = new ByteArrayEntity(bytes.toByteArray())
 	}
 
 	def "can write a tape to storage"() {
@@ -71,7 +60,6 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		println writer.toString()
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.name == tape.name
 
@@ -176,19 +164,6 @@ class WriteTapeToYamlSpec extends Specification {
 
 		then:
 		writer.toString().contains("body: O HAI!")
-	}
-
-	def "gzipped response body is written to file as binary data"() {
-		given:
-		def tape = new Tape(name: "tape_loading_spec")
-		def writer = new StringWriter()
-
-		when:
-		tape.record(getRequest, gzippedResponse)
-		loader.writeTape(tape, writer)
-
-		then:
-		writer.toString().contains("body: !!binary |-")
 	}
 
 	def "binary response body is written to file as binary data"() {

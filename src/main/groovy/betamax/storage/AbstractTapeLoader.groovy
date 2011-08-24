@@ -17,6 +17,8 @@
 package betamax.storage
 
 import org.apache.http.*
+import static org.apache.http.HttpHeaders.CONTENT_ENCODING
+import betamax.encoding.GzipEncoder
 
 abstract class AbstractTapeLoader implements TapeLoader {
 
@@ -46,7 +48,11 @@ abstract class AbstractTapeLoader implements TapeLoader {
 				headers: response.allHeaders.collectEntries { [it.name, it.value] }
 		]
 		if (response.entity) {
-			map.body = response.entity.content.text
+			if (response.getFirstHeader(CONTENT_ENCODING)?.value == "gzip") {
+				map.body = GzipEncoder.decode(response.entity.content)
+			} else {
+				map.body = response.entity.content.text
+			}
 		}
 		map
 	}

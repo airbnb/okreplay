@@ -28,7 +28,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
@@ -45,7 +45,6 @@ tape:
 		tape.interactions[0].response.statusLine.statusCode == HTTP_OK
 		tape.interactions[0].response.getFirstHeader(CONTENT_TYPE).value == "text/plain"
 		tape.interactions[0].response.getFirstHeader(CONTENT_LANGUAGE).value == "en-GB"
-		tape.interactions[0].response.getFirstHeader(CONTENT_ENCODING).value == "gzip"
 		tape.interactions[0].response.entity.content.text == "O HAI!"
 	}
 
@@ -64,7 +63,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
   - recorded: 2011-08-23T23:41:40.000Z
     request:
@@ -75,7 +74,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 418
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: I'm a teapot
 """
 		when:
@@ -106,7 +105,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
@@ -145,7 +144,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
@@ -170,7 +169,7 @@ tape:
       headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
     response:
       protocol: HTTP/1.1
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
