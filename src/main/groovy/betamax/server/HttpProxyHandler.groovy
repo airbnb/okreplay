@@ -58,8 +58,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
 
-		request.addHeader(VIA, "Betamax")
-
 		def tape = recorder.tape
 
 		if (tape?.play(request, response)) {
@@ -87,6 +85,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private void execute(HttpRequest request, HttpResponse response) {
 		def proxyRequest = createProxyRequest(request)
 		copyRequestData(request, proxyRequest)
+		proxyRequest.addHeader(VIA, "Betamax")
 
 		def proxyResponse = httpClient.execute(proxyRequest)
 
