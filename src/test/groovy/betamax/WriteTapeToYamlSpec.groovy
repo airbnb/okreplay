@@ -66,8 +66,7 @@ class WriteTapeToYamlSpec extends Specification {
 		yaml.tape.name == tape.name
 
 		yaml.tape.interactions.size() == 1
-		yaml.tape.interactions[0].recorded ==~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\+-]\d{4}/
-
+		yaml.tape.interactions[0].recorded instanceof Date
 		yaml.tape.interactions[0].request.protocol == "HTTP/1.1"
 		yaml.tape.interactions[0].request.method == "GET"
 		yaml.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"

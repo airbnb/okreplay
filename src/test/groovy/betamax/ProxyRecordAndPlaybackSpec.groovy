@@ -90,7 +90,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def "can load an existing tape from a file"() {
 		given:
-		def file = new File(recorder.tapeRoot, "existing_tape.json")
+		def file = new File(recorder.tapeRoot, "existing_tape.yaml")
 		file.parentFile.mkdirs()
 		file.text = """\
 tape:
@@ -105,7 +105,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 

@@ -18,7 +18,7 @@ class ReadTapeFromYamlSpec extends Specification {
 tape:
   name: single_interaction_tape
   interactions:
-  - recorded: 2011-08-23T23:41:40.000Z
+  - recorded: 2011-08-23T22:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
