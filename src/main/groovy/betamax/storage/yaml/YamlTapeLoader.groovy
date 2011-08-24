@@ -17,6 +17,7 @@
 package betamax.storage.yaml
 
 import groovy.util.logging.Log4j
+import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 import org.yaml.snakeyaml.Yaml
 import betamax.storage.*
 import org.apache.http.*
@@ -34,7 +35,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		try {
 			def yaml = new Yaml()
 			toTape(yaml.load(reader))
-		} catch (java.text.ParseException e) {
+		} catch (GroovyCastException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
@@ -45,7 +46,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		yaml.dump(map, writer)
 	}
 
-	private Tape toTape(data) {
+	private Tape toTape(Map data) {
 		require data, "tape"
 		def tape = new Tape()
 		require data.tape, "name", "interactions"
@@ -56,7 +57,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		tape
 	}
 
-	private HttpInteraction toInteraction(data) {
+	private HttpInteraction toInteraction(Map data) {
 		require data, "request", "response", "recorded"
 		def request = toRequest(data.request)
 		def response = loadResponse(data.response)
@@ -64,7 +65,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		new HttpInteraction(request: request, response: response, recorded: recorded)
 	}
 
-	private HttpRequest toRequest(data) {
+	private HttpRequest toRequest(Map data) {
 		require data, "protocol", "method", "uri"
 		def requestProtocol = parseProtocol(data.protocol)
 		def request = new BasicHttpRequest(data.method, data.uri, requestProtocol)
@@ -74,7 +75,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		request
 	}
 
-	private HttpResponse loadResponse(data) {
+	private HttpResponse loadResponse(Map data) {
 		require data, "protocol", "status"
 		def responseProtocol = parseProtocol(data.protocol)
 		def response = new BasicHttpResponse(responseProtocol, data.status, null)
