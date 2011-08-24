@@ -10,7 +10,7 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
 
-An example tape file can be found [here](https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml).
+An example tape file can be found [here][10].
 
 ## Project status
 
@@ -20,7 +20,7 @@ issues etc. via GitHub.
 Please bear in mind that the format and structure of tape files is subject to change at least until there is a first
 stable release.
 
-Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads](https://github.com/robfletcher/betamax/archives/master)
+Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads][9]
 section. Dependency details can be found below.
 
 ## Dependencies
@@ -42,39 +42,43 @@ and include a `betamax.Recorder` Rule.
 
 ### JUnit example
 
-    import betamax.Betamax
-    import betamax.Recorder
-    import org.junit.*
+```groovy
+import betamax.Betamax
+import betamax.Recorder
+import org.junit.*
 
-    class MyTest {
+class MyTest {
 
-        @Rule public Recorder recorder = new Recorder()
+	@Rule public Recorder recorder = new Recorder()
 
-        @Betamax(tape="my_tape")
-        @Test
-        void testMethodThatAccessesExternalWebService() {
+	@Betamax(tape="my_tape")
+	@Test
+	void testMethodThatAccessesExternalWebService() {
 
-        }
+	}
 
-    }
+}
+```
 
 ### Spock example
 
-    import betamax.Betamax
-    import betamax.Recorder
-    import org.junit.*
-    import spock.lang.*
+```groovy
+import betamax.Betamax
+import betamax.Recorder
+import org.junit.*
+import spock.lang.*
 
-    class MySpec extends Specification {
+class MySpec extends Specification {
 
-	    @Rule Recorder recorder = new Recorder()
+	@Rule Recorder recorder = new Recorder()
 
-        @Betamax(tape="my_tape")
-        def "test method that accesses external web service"() {
+	@Betamax(tape="my_tape")
+	def "test method that accesses external web service"() {
 
-        }
+	}
 
-    }
+}
+```
 
 ## Recording and playback
 
@@ -104,15 +108,19 @@ up by the `Recorder` constructor.
 
 ### Example _BetamaxConfig.groovy_ script
 
-	betamax {
-		tapeRoot = new File("test/fixtures/tapes")
-		proxyPort = 1337
-	}
+```groovy
+betamax {
+	tapeRoot = new File("test/fixtures/tapes")
+	proxyPort = 1337
+}
+```
 
 ### Example _betamax.properties_ file
 
-	betamax.tapeRoot=test/fixtures/tapes
-	betamax.proxyPort=1337
+```properties
+betamax.tapeRoot=test/fixtures/tapes
+betamax.proxyPort=1337
+```
 
 ## Caveats
 
@@ -122,17 +130,21 @@ active this will mean HTTPClient traffic will be routed via the default proxy co
 
 ### Configuring HTTPClient
 
-    def client = new DefaultHttpClient()
-    client.routePlanner = new ProxySelectorRoutePlanner(client.connectionManager.schemeRegistry, ProxySelector.default)
+```groovy
+def client = new DefaultHttpClient()
+client.routePlanner = new ProxySelectorRoutePlanner(client.connectionManager.schemeRegistry, ProxySelector.default)
+```
 
 The same is true of [Groovy _HTTPBuilder_][4] and its [_RESTClient_][6] variant as they are wrappers around
 _HTTPClient_.
 
 ### Configuring HTTPBuilder
 
-    def http = new HTTPBuilder("http://groovy.codehaus.org")
-    def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-    http.client.routePlanner = routePlanner
+```groovy
+def http = new HTTPBuilder("http://groovy.codehaus.org")
+def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+http.client.routePlanner = routePlanner
+```
 
 _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special configuration as it uses a
 `java.net.URLConnection` rather than _HTTPClient_.
@@ -145,3 +157,5 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 [6]:http://groovy.codehaus.org/modules/http-builder/doc/rest.html
 [7]:http://groovy.codehaus.org/modules/http-builder/doc/httpurlclient.html
 [8]:http://yaml.org/
+[9]:https://github.com/robfletcher/betamax/archives/master
+[10]:https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml
