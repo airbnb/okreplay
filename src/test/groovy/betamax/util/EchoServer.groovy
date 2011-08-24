@@ -22,7 +22,9 @@ import org.eclipse.jetty.server.handler.AbstractHandler
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
 import static java.net.HttpURLConnection.HTTP_OK
+import java.util.zip.*
 import javax.servlet.http.*
+import static org.eclipse.jetty.http.HttpHeaders.*
 import org.eclipse.jetty.server.*
 
 @Log4j
@@ -83,7 +85,8 @@ class EchoHandler extends AbstractHandler {
 		log.debug "received $request.method request for $target"
 		response.status = HTTP_OK
 		response.contentType = "text/plain"
-		response.writer.withWriter { writer ->
+
+		getResponseWriter(request, response).withWriter { writer ->
 			writer << request.method << " " << request.requestURI
 			if (request.queryString) {
 				writer << "?" << request.queryString
@@ -100,6 +103,23 @@ class EchoHandler extends AbstractHandler {
 				}
 			}
 		}
+	}
+
+	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
+		def out
+		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING).tokenize(",")
+		log.debug "request accepts $acceptedEncodings"
+		if ("gzip" in acceptedEncodings) {
+			response.addHeader(CONTENT_ENCODING, "gzip")
+			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
+		} else if ("deflate" in acceptedEncodings) {
+			response.addHeader(CONTENT_ENCODING, "deflate")
+			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
+		} else {
+			response.addHeader(CONTENT_ENCODING, "none")
+			out = response.writer
+		}
+		out
 	}
 
 }
