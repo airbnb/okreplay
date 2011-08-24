@@ -88,14 +88,14 @@ The `Recorder` class has some configuration properties that you can override:
 If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhere in your classpath it will be picked
 up by the `Recorder` constructor.
 
-### Example `BetamaxConfig.groovy` script
+### Example _BetamaxConfig.groovy_ script
 
 	betamax {
 		tapeRoot = new File("test/fixtures/tapes")
 		proxyPort = 1337
 	}
 
-### Example `betamax.properties` files
+### Example _betamax.properties_ file
 
 	betamax.tapeRoot=test/fixtures/tapes
 	betamax.proxyPort=1337
