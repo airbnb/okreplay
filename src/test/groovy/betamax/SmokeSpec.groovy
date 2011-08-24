@@ -1,34 +1,28 @@
 package betamax
 
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.DefaultHttpClient
+import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.ACCEPT_ENCODING
 import spock.lang.*
 
 class SmokeSpec extends Specification {
 
 	@Rule Recorder recorder = new Recorder()
 
-	@Shared DefaultHttpClient http = new DefaultHttpClient()
+	@Shared RESTClient http = new RESTClient()
 
 	def setupSpec() {
-		http.routePlanner = new ProxySelectorRoutePlanner(http.connectionManager.schemeRegistry, ProxySelector.default)
+		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 	}
 
 	@Betamax(tape = "smoke spec")
 	def "json response data"() {
-		given:
-		def request = new HttpGet(uri)
-		request.setHeader(ACCEPT_ENCODING, "none")
-
 		when:
-		def response = http.execute(request)
+		def response = http.get(uri: uri)
 
 		then:
-		response.statusLine.statusCode == HTTP_OK
+		response.status == HTTP_OK
 
 		where:
 		uri << ["http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"]
