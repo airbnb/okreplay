@@ -18,16 +18,16 @@ package betamax.encoding
 
 import java.util.zip.*
 
-class GzipEncoder extends AbstractEncoder {
+class DeflateEncoder extends AbstractEncoder {
 
 	@Override
 	protected InputStream getDecodingInputStream(InputStream input) {
-		new GZIPInputStream(input)
+		new InflaterInputStream(input)
 	}
 
 	@Override
 	protected OutputStream getEncodingOutputStream(OutputStream output) {
-		new GZIPOutputStream(output)
+		new DeflaterOutputStream(output)
 	}
 
 }

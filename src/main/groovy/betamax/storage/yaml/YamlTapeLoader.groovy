@@ -19,12 +19,12 @@ package betamax.storage.yaml
 import groovy.util.logging.Log4j
 import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 import org.yaml.snakeyaml.Yaml
+import betamax.encoding.*
 import betamax.storage.*
 import org.apache.http.*
+import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import org.apache.http.entity.*
 import org.apache.http.message.*
-import static org.apache.http.HttpHeaders.CONTENT_ENCODING
-import betamax.encoding.GzipEncoder
 
 @Log4j
 class YamlTapeLoader extends AbstractTapeLoader {
@@ -84,7 +84,9 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		switch (data.body) {
 			case String:
 				if (data.headers[CONTENT_ENCODING] == "gzip") {
-					response.entity = new ByteArrayEntity(GzipEncoder.encode(data.body))
+					response.entity = new ByteArrayEntity(new GzipEncoder().encode(data.body))
+				} else if (data.headers[CONTENT_ENCODING] == "deflate") {
+					response.entity = new ByteArrayEntity(new DeflateEncoder().encode(data.body))
 				} else {
 					response.entity = new StringEntity(data.body)
 				}
