@@ -1,179 +1,783 @@
 tape:
   name: smoke spec
   interactions:
-  - recorded: 2011-08-24T21:37:35.489Z
+  - recorded: 2011-08-24T22:42:43.285Z
+    request:
+      protocol: HTTP/1.1
+      method: GET
+      uri: http://grails.org/
+      headers: {Accept: '*/*', Host: grails.org, Proxy-Connection: Keep-Alive, Accept-Encoding: 'gzip,deflate'}
+    response:
+      protocol: HTTP/1.1
+      status: 200
+      headers: {Date: 'Wed, 24 Aug 2011 22:42:43 GMT', Server: Apache/2.2.3 (Red Hat),
+        Content-Language: en-US, Vary: Accept-Encoding, Content-Encoding: gzip, Content-Type: text/html;charset=UTF-8}
+      body: "<!DOCTYPE html>\n<!--[if lt IE 7 ]> <html class=\"ie6\"> <![endif]-->\n\
+        <!--[if IE 7 ]>    <html class=\"ie7\"> <![endif]-->\n<!--[if IE 8 ]>    <html\
+        \ class=\"ie8\"> <![endif]-->\n<!--[if IE 9 ]>    <html class=\"ie9\"> <![endif]-->\n\
+        <!--[if (gt IE 9)|!(IE)]><!--> <html class=\"\"> <!--<![endif]-->\n<head>\n\
+        \    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"\
+        />\n    <meta name=\"robots\" content=\"NOODP\">\t\n    <meta name=\"Description\"\
+        \ content=\"Grails is a high-productivity web framework based on the Groovy\
+        \ language that embraces the coding by convention paradigm, but is designed\
+        \ specifically for the Java platform.\">\t\n\t\n    <title>Grails - The search\
+        \ is over.</title>\n    \n    \n    <link href=\"/static/mnqzhxEka8fg6Hu3z6ra5TBwnHBXIJDpqN0Mz2O4JZw.ico\"\
+        \ rel=\"shortcut icon\" />\n    \n<link href=\"/static/khe6KM5Qe8BczqwESfsTfJf60pT5jC6UqJJDyJEG37w.css\"\
+        \ type=\"text/css\" rel=\"stylesheet\" media=\"screen, projector\" />\n<link\
+        \ href=\"/static/GqIQDLEx8ZUpfNh4oC5LlbNw0cYPgfguzPxjVRsCSm.css\" type=\"\
+        text/css\" rel=\"stylesheet\" media=\"screen, projector\" />\n\n    \n   \
+        \ \n\t<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"\
+        />\n    <meta content=\"homepage\" name=\"layout\"/>\n    <link rel=\"alternate\"\
+        \ type=\"application/rss+xml\" title=\"RSS 2.0\" href=\"/blog/feed/rss\"/>\n\
+        \    <link rel=\"alternate\" type=\"application/atom+xml\" title=\"Atom 1.0\"\
+        \ href=\"/blog/feed/atom\"/>\n\n    \n    \n    <style>\n#events {\n    left:\
+        \ 635px;\n    top: 2px;\n    background: none;\n    width: 270px;\n    height:\
+        \ 270px;\n}\n\n#events h2 {\n    font-weight: bold;\n    color: #363636;\n\
+        \    font-size: 10pt;\n    margin: 0px 0px 0px 8px;\n    padding: 0px;\n}\n\
+        \n    </style>\n</head>\n<body>\n    \n<div align=\"center\">\n\t<div id=\"\
+        springSourceBar\">\n\t<div id=\"grailsLogo\">\n\t\t<a href=\"/\"><img src=\"\
+        /static/cXmUZIAv28XIiNgkRiz4RRl21TsGZ5HoGpZw1UITNyV.png\" border=\"0\" /></a>\t\
+        \t\t\n\t</div>\n\n\t<div id=\"springSourceLogo\">\n\t\t<a href=\"http://www.springsource.com/\"\
+        ><img src=\"/static/xATgakdqUqjehM4CPEgEyIEVaa7xHY09sonkDDDBPA5.png\" border=\"\
+        0\" /></a>\t\t\t\n\t</div>\n\t<div id=\"searchbar\">\n\t\t<form action=\"\
+        /search\" method=\"get\" name=\"searchForm\" id=\"searchForm\" >\n\t\t   \
+        \ <input\n\t\t \t\tonblur=\"this.style.color = '#CDE5C4';\" \n\t\t\t\tonfocus=\"\
+        this.style.color = '#48802C';this.value='';\"\n\t\t\t\ttype=\"text\" accessKey=\"\
+        s\" name=\"q\" value=\"\"/>\t\t\n\t\t</form>\t\t\n\t</div>\n</div>\n\n   \
+        \ <div class=\"mainMenuBarWrapper\">\n\t\t<ul id=\"mainMenuBar\">\n\t\n  \
+        \  <li><a href=\"http://www.springsource.com/products/grails\">Products</a></li>\n\
+        \    <li><a href=\"http://www.springsource.com/groovy-grails-consulting\"\
+        >Services</a></li>\n    <li><a href=\"http://www.springsource.com/training/grv001\"\
+        >Training</a></li>\n    <li><a href=\"/Testimonials\">Case Studies</a></li>\n\
+        \    <li><a href=\"/Community\">Community</a></li>\n    <li><a href=\"/Download\"\
+        >Downloads</a></li>\n    <li><a href=\"/plugins\">Plugins</a> </li>\n    <li><a\
+        \ href=\"/Documentation\">Documentation</a></li>\n</ul><!-- mainMenuBar -->\n\
+        \n    </div><!-- mainMenuBarWrapper -->\n</div><!-- center -->\n\n<div id=\"\
+        graphicHeader\"></div>\n\n<div id=\"barDecoration\"></div>\n\n<div id=\"contentWrapper\"\
+        >\n    <div id=\"contentCenter\" align=\"center\">\n        <div id=\"contentArea\"\
+        >\n            \n            <div id=\"grailsAttributes\">\n             \
+        \   <div class=\"left\">\n        \t        <h2>Rapid</h2>\n             \
+        \       <p>Have your next Web 2.0 project done in weeks instead of months.\
+        \ Grails delivers a new age of Java web application productivity.</p>\t\t\n\
+        \                </div><!-- left column -->\n                <div class=\"\
+        center\">\n        \t\t\t<h2>Dynamic</h2>\n                    <p>Get instant\
+        \ feedback, see instant results. Grails is the premier dynamic language web\
+        \ framework for the JVM.</p>\n                </div><!-- center column -->\n\
+        \                <div class=\"right\">\n        \t\t\t<h2>Robust</h2>\n  \
+        \                  <p>Powered by <a href=\"http://springframework.org\">Spring</a>,\
+        \ Grails outperforms the competition. Dynamic, agile web development without\
+        \ compromises.</p>\n                </div><!-- right column -->\n        \
+        \    </div><!-- grailsAttributes -->\n            \n            <div class=\"\
+        eventDownloadWrapper\">\n                <div id=\"screencasts\">\n      \
+        \              <h2>What is grails?</h2>\n                    <div class=\"\
+        castBox\">\n                        <div class=\"castScreen\">\n         \
+        \                   <a href=\"/screencast/show/15\">\n                   \
+        \             <img src=\"/static/CpDj28oP449kHQlHqE4TEYdFSHMGtBMAu7KkhHHSmKe.png\"\
+        \ width=\"240\" height=\"190\" />\n                            </a>\n    \
+        \                    </div><!-- castScreen -->\n                        <div\
+        \ class=\"playOverlay\">\n                            <a href=\"/screencast/show/15\"\
+        >\n                                <img src=\"/static/lyvgYEWYoeasoqrHHvRaTvuFAMzHQRaYnw1pHPBxGE3.png\"\
+        \ width=\"50\" height=\"51\" />\n                            </a>\n      \
+        \                  </div>\n                        <h4><a href=\"/Grails+Screencasts\"\
+        >More screencasts</a></h4>\n                    </div><!-- castBox -->\n \
+        \               </div><!-- screencasts -->\n\n                <div id=\"downloadBox\"\
+        >\n                    <div class=\"downloadPluginWrapper\">\n           \
+        \             <div id=\"download\">\n                            \n      \
+        \                      <h3>\n                                \n          \
+        \                          <a href=\"/download/file?mirror=187\">\n      \
+        \                                  <img src=\"/static/LGcHmpSUjLH3TV6G6ML9RjmzYq6Hns7wbAqxDUnZe8g.png\"\
+        \ border=\"0\" title=\"Download Grails 1.3.7\" alt=\"Download Grails 1.3.7\"\
+        \ />\n                                    </a>\t\t\t\t\t\t\t\t\n         \
+        \                       \n                            </h3>\n            \
+        \                <p id=\"downloadVersion\">1.3.7</p>\n                   \
+        \         <p>Download the latest Grails&#8482 1.3.7 binary release to experience\
+        \ a new level of productivity on the Java&#8482 platform.</p>\n          \
+        \                  <h4><a href=\"/Download\">More Downloads</a></h4>\n   \
+        \                     </div><!-- download -->\n                        <div\
+        \ id=\"plugins\">\n                            <h3>\n                    \
+        \            <a href=\"/Plugins\">\n                                    <img\
+        \ src=\"/static/eFyREWoThrK40ODSEWYEHtdqdcjWrEgENRMt2uYockV.png\" alt=\"Grails\
+        \ Plugins\" border=\"0\" />\n                                </a>\n      \
+        \                      </h3>\n                            <ul>\n         \
+        \                       \n                                    <li><a href=\"\
+        /plugin/simpledb\">SimpleDB GORM</a></li>\n                              \
+        \  \n                                    <li><a href=\"/plugin/compass-scss-integration\"\
+        >Compass SCSS/SASS compilat...</a></li>\n                                \n\
+        \                                    <li><a href=\"/plugin/inviter\">Inviter\
+        \ - a simple way to ...</a></li>\n                                \n     \
+        \                               <li><a href=\"/plugin/spring-security-saml\"\
+        >SAML 2.x support for the S...</a></li>\n                                \n\
+        \                            </ul>\n                            <h4><a href=\"\
+        /Plugins\">View All</a></h4>\n                        </div><!-- plugins -->\n\
+        \                    </div><!-- downloadPluginWrapper -->\n              \
+        \  </div><!-- downloadBox -->\n            </div><!-- eventDownloadWrapper\
+        \ -->\n            \n            <div class=\"newsScreencastWrapper\">\n \
+        \               <div id=\"latestNews\">\n                    <h2>Latest News</h2>\n\
+        \                    <div id=\"newsBox\">\n                        <ul>\n\
+        \                            \n                                <li>\n    \
+        \                                <a href=\"/blog/view/pledbrook/Micro+Cloud+Foundry+now+available\"\
+        >\n                                        <div class=\"detail\">\n      \
+        \                                      <h4>Micro Cloud Foundry now available</h4>\n\
+        \                                            <div class=\"author\">by pledbrook\
+        \ </div>\n                                            <div class=\"comments\"\
+        >0 comments</div>\n                                        </div>\n      \
+        \                                  <div class=\"calendar\">\n            \
+        \                                <div class=\"month\">Aug</div>\n        \
+        \                                    <div class=\"day\">24</div>\n       \
+        \                                 </div>\n                               \
+        \     </a>\n                                </li>\n                      \
+        \      \n                                <li>\n                          \
+        \          <a href=\"/blog/view/pledbrook/Early+bird+registration+for+Spring+One+2GX\"\
+        >\n                                        <div class=\"detail\">\n      \
+        \                                      <h4>Early bird registration for Spring\
+        \ One 2GX</h4>\n                                            <div class=\"\
+        author\">by pledbrook </div>\n                                           \
+        \ <div class=\"comments\">0 comments</div>\n                             \
+        \           </div>\n                                        <div class=\"\
+        calendar\">\n                                            <div class=\"month\"\
+        >Aug</div>\n                                            <div class=\"day\"\
+        >24</div>\n                                        </div>\n              \
+        \                      </a>\n                                </li>\n     \
+        \                       \n                                <li>\n         \
+        \                           <a href=\"/blog/view/Val+Huber/Announcing+Automated+Business+Logic\"\
+        >\n                                        <div class=\"detail\">\n      \
+        \                                      <h4>Announcing Automated Business Logic</h4>\n\
+        \                                            <div class=\"author\">by Val\
+        \ Huber </div>\n                                            <div class=\"\
+        comments\">0 comments</div>\n                                        </div>\n\
+        \                                        <div class=\"calendar\">\n      \
+        \                                      <div class=\"month\">Aug</div>\n  \
+        \                                          <div class=\"day\">20</div>\n \
+        \                                       </div>\n                         \
+        \           </a>\n                                </li>\n                \
+        \            \n                        </ul>\n                        <div\
+        \ class=\"actions\">\n                            <a href=\"/blog\">More news</a>\
+        \ |\t\n                            <a href=\"/blog/entry/create\">Add news</a>\
+        \ | <a href=\"/blog/feed/rss\">Subscribe</a>\n                        </div><!--\
+        \ actions -->\n                    </div><!-- newsBox -->\n              \
+        \  </div><!-- latestNews -->\n            \n                <div id=\"events\"\
+        >\n                    <h2>Conferences</h2>\n                    <div class=\"\
+        castBox\">\n                        <div class=\"advert\">\n             \
+        \               <a href=\"http://www.springone2gx.com/conference/chicago/2011/10/register\"\
+        >\n                                <img src=\"/static/UjoEXJiuWPvtDse4durdTPscj54WzfWPiZaCd3vHwvS.png\"\
+        \ width=\"250\" height=\"230\" />\n                            </a>\n    \
+        \                    </div>\n\t\t\t\n                    </div>\n        \
+        \            \n                </div><!-- events -->\n                \n\t\
+        \t\n            </div><!-- newsScreencastWrapper -->\n            \n     \
+        \   </div><!-- contentArea -->\n    </div><!-- contentCenter -->\n    \n \
+        \   <div id=\"grailsOptionsWrapper\">\n        <div id=\"btmSectionGraphicsWrapper\"\
+        >\n            <div id=\"mountainLeft\"></div>\n            <div id=\"knight\"\
+        ></div>\n            <div id=\"mountainRight\"></div>\n            <div id=\"\
+        castle\"></div>\n        </div><!-- btmSectionGraphicsWrapper-->\n       \
+        \ <div id=\"btmSectionBackgroundStretch\">\n            <div align=\"center\"\
+        >\n                <div id=\"grailsOptions\">\n                    <div class=\"\
+        left\">\n            \t        <h3>Training</h3>\n                       \
+        \ <p><a href=\"http://www.springsource.com/training\">SpringSource University</a>\
+        \ provides a comprehensive education and certification program for SpringSource\
+        \ software products as well as Spring, Groovy, Grails, and Apache open source\
+        \ technologies.\n\t<br><br>\n\t We offer both public and customized private\
+        \ training and have trained over 4,000 people. Whichever course you decide\
+        \ to take, you are guaranteed to experience what many before you refer to\
+        \ as “The best Enterprise Software Class I have ever attended”.\n\t\t\t\
+        \t\t\t</p>\t\t\n                    </div><!-- left column -->\n         \
+        \           <div class=\"center\">\n            \t\t\t<h3>Support &amp; Services</h3>\n\
+        \                        <p>SpringSource enterprise software and <a href=\"\
+        http://www.springsource.com/services/enterprisesupport\">support subscriptions</a>\
+        \ are the way to get developer and production support for Grails and other\
+        \ SpringSource software products and certified versions of our open source\
+        \ technologies including patches, updates, security fixes, and legal indemnification.\
+        \ \n\t<br><br><a href=\"http://www.springsource.com/groovy-grails-consulting\"\
+        >Consulting services</a> are available to companies that wish to leverage\
+        \ the knowledge and expertise of SpringSource’s Grails technology experts.</p>\n\
+        \                    </div><!-- center column -->\n                    <div\
+        \ class=\"right\">\n                        <h3>Community</h3>\n         \
+        \               <p>\nGet involved! Grails has a vibrant and buzzing community.\
+        \ You can grab the <a href=\"http://github.com/grails/grails-core\">source\
+        \ code</a> from GitHub, report issues on the Grails  <a href=\"http://jira.grails.org/browse/GRAILS\"\
+        >JIRA issue tracker</a>, participate at the <a href=\"http://grails.org/Mailing+lists\"\
+        >mailing lists</a> or <a href=\"http://grails.1312388.n4.nabble.com/Grails-user-f1312389.html\"\
+        >Nabble forums</a> or catch-up on the latest news on the <a href=\"/blog\"\
+        >Grails blog</a>.\t\t\t\t\t\t\t\n<br></br><br></br>\n\nThe whole Grails site\
+        \ is written in Grails 1.3.7 and is an open wiki,  the <a href=\"http://github.com/grails/grails-samples/tree/master/grails.org\"\
+        >source code</a> for which is available from Github.\nVisit the Grails <a\
+        \ href=\"/Community\">community pages</a> for more ways to participate. \n\
+        \                        </p>\n                    </div><!-- right column\
+        \ -->\n                </div><!-- grailsOptions -->\n            </div><!--\
+        \ center -->\n        </div><!-- btmSectionBackgroundStretch -->\n    </div><!--\
+        \ grailsOptionsWrapper -->\n</div><!-- contentWrapper -->\n\n<div id=\"footer\"\
+        >\n    <div align=\"center\">\n        <div class=\"innerFooter\">\n\t\t\t\
+        <a href=\"http://contegix.com\"><img src=\"/static/kyk1IIgLbhsHB7QxrDRoVw08G2anuhJvcSDQnDAEyu9.jpg\"\
+        \ alt=\"Hosted by Contegix\" border=\"0\" /></a>\n            <a href=\"http://twitter.com/grailsframework\"\
+        ><div class=\"twitter\"></div></a>\n            <p>&copy; Copyright 2009-2011\
+        \ SpringSource.<br/>All Rights Reserved.</p>\n        </div><!-- innerFooter\
+        \ -->\n    </div><!-- center -->\n</div><!-- footer -->\n\n    \n    <script\
+        \ type=\"text/javascript\">\nvar gaJsHost = ((\"https:\" == document.location.protocol)\
+        \ ? \"https://ssl.\" : \"http://www.\");\ndocument.write(unescape(\"%3Cscript\
+        \ src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"\
+        ));\n</script>\n<script type=\"text/javascript\">\ntry{\nvar pageTracker =\
+        \ _gat._getTracker(\"UA-2728886-12\");\npageTracker._trackPageview();\n} catch(err)\
+        \ {}\n</script>\n\n    \n    <script src=\"/static/jbOzmStacpIqy8G8fVoiYEvkFzHJB5boPZQAkGnhTZh.js\"\
+        \ type=\"text/javascript\" ></script>\n\n\n<script type=\"text/javascript\"\
+        >\nvar startIndex = Math.floor(Math.random() * 3)\n// Set the ads up for cycling\
+        \ every 4s\nvar ads = $$('div.advert');\n\n/*\nif (startIndex < 2) {\n   \
+        \ ads.slice(startIndex + 1).invoke('hide');\n}\n\nnew PeriodicalExecuter(function(pe)\
+        \ {\n    var firstHiddenAd = ads.find(function(el) { return !el.visible();\
+        \ });\n    if (!firstHiddenAd) {\n        ads.slice(1).invoke('fade');\n \
+        \   }\n    else {\n        firstHiddenAd.appear();\n    }\n}, 4);\n*/\n  \
+        \  </script>\n</body>\n</html>\n"
+  - recorded: 2011-08-24T22:42:44.666Z
     request:
       protocol: HTTP/1.1
       method: GET
       uri: http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true
       headers: {Accept: '*/*', Host: api.twitter.com, Proxy-Connection: Keep-Alive,
-        Accept-Encoding: 'gzip,deflate', Via: Betamax}
+        Accept-Encoding: 'gzip,deflate'}
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Date: 'Wed, 24 Aug 2011 21:37:35 GMT', Server: hi, Status: 200 OK,
-        X-Transaction: 1314221855-9465-43570, X-RateLimit-Limit: '150', ETag: '"3007459ec0854c0b96d08b505b56ff82"-gzip',
-        X-Frame-Options: SAMEORIGIN, Last-Modified: 'Wed, 24 Aug 2011 21:37:35 GMT',
-        X-RateLimit-Remaining: '149', X-Runtime: '0.05157', X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef1141bbf1a1b,
+      headers: {Date: 'Wed, 24 Aug 2011 22:42:44 GMT', Server: hi, Status: 200 OK,
+        X-Transaction: 1314225764-30587-52999, X-RateLimit-Limit: '150', ETag: '"b703f20bd8fd9f5a0730777d0ed96931"-gzip',
+        X-Frame-Options: SAMEORIGIN, Last-Modified: 'Wed, 24 Aug 2011 22:42:44 GMT',
+        X-RateLimit-Remaining: '149', X-Runtime: '0.04640', X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef1141bbf1a1b,
         Content-Type: application/json; charset=utf-8, Pragma: no-cache, X-RateLimit-Class: api,
         X-Revision: DEV, Expires: 'Tue, 31 Mar 1981 05:00:00 GMT', Cache-Control: 'no-cache,
-          no-store, must-revalidate, pre-check=0, post-check=0', X-MID: 0a10e0425bbd2e8bb79ab14d4c1a311dad748f2a,
-        X-RateLimit-Reset: '1314225455', Set-Cookie: _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCJ4Tuv0xAToHaWQiJTRlYmExY2NhMmEwMTk3%250ANWIyM2VlMjNkZTE1MzJjMmViIgpmbGFzaElDOidBY3Rpb25Db250cm9sbGVy%250AOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA--9edfe64b1038cbc3fafc7fddb15bf420b6678acf; domain=.twitter.com; path=/; HttpOnly,
+          no-store, must-revalidate, pre-check=0, post-check=0', X-MID: cf74ad3a2586a67624219a8e4b3353d08e4e19d7,
+        X-RateLimit-Reset: '1314229364', Set-Cookie: _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCJK49f0xAToHaWQiJTU1MjQ5OTJiNTk3NWQx%250AMTJiMTk4MGY5YmU1NTg3MDljIgpmbGFzaElDOidBY3Rpb25Db250cm9sbGVy%250AOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA--b588f0c2604d425bd57c0c2d9ca3eb8657dc06a6; domain=.twitter.com; path=/; HttpOnly,
         Vary: Accept-Encoding, Content-Encoding: gzip}
-      body: '[{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"050505","protected":false,"location":"dihatimu
-        (\u25b0\u02d8\u25e1\u02d8\u25b0)","notifications":false,"friends_count":415,"profile_sidebar_border_color":"cfeb34","followers_count":432,"name":"vivin
-        dwi septian","default_profile_image":false,"contributors_enabled":false,"time_zone":"Pacific
-        Time (US & Canada)","favourites_count":145,"url":null,"statuses_count":16564,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/305733459\/bg.jpg","utc_offset":-28800,"description":"vivin
-        dwi | 2 september  \u25d5\u203f\u25d5  | esasigit \u2764  | potato powers  \u30c4
-        |\r\nAsk me anything http:\/\/www.formspring.me\/vivinesa","is_translator":false,"profile_background_color":"ff2119","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1480207403\/werfrrff_normal.jpg","default_profile":false,"follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/305733459\/bg.jpg","created_at":"Tue
-        Apr 20 10:21:21 +0000 2010","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1480207403\/werfrrff_normal.jpg","id_str":"135103764","profile_text_color":"000000","profile_sidebar_fill_color":"2de042","screen_name":"vivindsp","listed_count":1,"lang":"en","profile_background_tile":true,"id":135103764},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:42 +0000 2011","id_str":"106479822825472000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.snaptu.com\" rel=\"nofollow\"\u003ESnaptu\u003C\/a\u003E","entities":{"user_mentions":[{"name":"divya
-        safitri\u2713","indices":[3,16],"id_str":"181831001","screen_name":"divyasafitri","id":181831001},{"name":"Ikha\u266c","indices":[21,32],"id_str":"237947950","screen_name":"ikhadevira","id":237947950},{"name":"Noviani
-        Puji Lestari","indices":[37,47],"id_str":"208943163","screen_name":"NovianiPL","id":208943163},{"name":"OYEEENN!!!
-        (\u0283\u2323\u01aa) ","indices":[52,63],"id_str":"210422504","screen_name":"laurenzcld","id":210422504},{"name":"De-pi
-        (\u0283o\u01aa)","indices":[71,81],"id_str":"246151127","screen_name":"depiawrrr","id":246151127}],"hashtags":[],"urls":[]},"id":106479822825472000,"place":null,"favorited":false,"text":"RT
-        @divyasafitri: RT @ikhadevira: RT @NovianiPL: RT @laurenzcld: RT!!! @depiawrrr:
-        Semoga THR gue 10 jutaaaa amiiin (\u02d8\u0283\u01aa\u02d8) *ngimpi lo keting"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"FF3300","protected":false,"location":"Earth
-        :\u007B)","notifications":false,"friends_count":53,"profile_sidebar_border_color":"86A4A6","followers_count":27,"name":"Victoria
-        Hern\u00e0ndez","default_profile_image":false,"contributors_enabled":false,"time_zone":"Central
-        America","favourites_count":55,"url":null,"statuses_count":2031,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme6\/bg.gif","utc_offset":-21600,"description":"I
-        Dont Like BS... #JustSaying","is_translator":false,"profile_background_color":"709397","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1479982684\/184029_2228369193089_1363607808_2550456_2695487_n_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme6\/bg.gif","created_at":"Thu
-        Jul 09 23:11:31 +0000 2009","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1479982684\/184029_2228369193089_1363607808_2550456_2695487_n_normal.jpg","id_str":"55395154","profile_text_color":"333333","default_profile":false,"profile_sidebar_fill_color":"A0C5C7","screen_name":"Victoria_Her","listed_count":1,"lang":"es","profile_background_tile":false,"id":55395154},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:42 +0000 2011","id_str":"106479821252608000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/blackberry.com\/twitter\" rel=\"nofollow\"\u003ETwitter for
-        BlackBerry\u00ae\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479821252608000,"place":null,"favorited":false,"text":"Edgar
-        Allan Poe: Los que sue\u00f1an de d\u00eda son conscientes de muchas cosas
-        que escapan a los que sue\u00f1an s\u00f3lo de noche."},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":true,"verified":false,"geo_enabled":false,"profile_link_color":"a65757","protected":false,"location":"Zero
-        Gravity Stagnant Space","notifications":false,"friends_count":250,"profile_sidebar_border_color":"000000","followers_count":112,"name":"B
-        L A N C H E","default_profile_image":false,"contributors_enabled":false,"time_zone":"Alaska","favourites_count":189,"url":"http:\/\/www.ultimateblanche.tumblr.com","statuses_count":8739,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/299918994\/everythings-fine-coming-summer-2011--feat-prf-1302108190.jpg","utc_offset":-32400,"description":"Everything''s
-        fine. =(\r\n\r\nband freak. fangirl. dlsu. artist. writer. ","is_translator":false,"profile_background_color":"ffffff","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1461301720\/f5680b40e4fa4cf3a3757aff7cf3cd29_7_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/299918994\/everythings-fine-coming-summer-2011--feat-prf-1302108190.jpg","created_at":"Sat
-        Jul 18 13:03:23 +0000 2009","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1461301720\/f5680b40e4fa4cf3a3757aff7cf3cd29_7_normal.jpg","id_str":"57927451","profile_text_color":"000000","profile_sidebar_fill_color":"ffebeb","screen_name":"superblanche","listed_count":2,"lang":"en","profile_background_tile":true,"id":57927451},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:42 +0000 2011","id_str":"106479821034496000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[{"indices":[15,26],"text":"nowplaying"}],"urls":[]},"id":106479821034496000,"place":null,"favorited":false,"text":"Lost
-        in Stereo #nowplaying"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0a0103","protected":false,"location":"venezuela","notifications":false,"friends_count":114,"profile_sidebar_border_color":"141112","followers_count":141,"name":"Daniela
-        Cantor:D","default_profile_image":false,"contributors_enabled":false,"time_zone":"Hawaii","favourites_count":9,"url":null,"statuses_count":1461,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/244792935\/encab.jpg","utc_offset":-36000,"description":"","is_translator":false,"profile_background_color":"c232b6","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1491054429\/IMG00015-20110723-1907_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/244792935\/encab.jpg","created_at":"Sat
-        Apr 02 15:10:17 +0000 2011","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1491054429\/IMG00015-20110723-1907_normal.jpg","id_str":"276054202","profile_text_color":"050505","default_profile":false,"profile_sidebar_fill_color":"ff0051","screen_name":"daniC_K","listed_count":0,"lang":"es","profile_background_tile":true,"id":276054202},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:42 +0000 2011","id_str":"106479820816384000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/blackberry.com\/twitter\" rel=\"nofollow\"\u003ETwitter for
-        BlackBerry\u00ae\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Abrahan
-        Santaella","indices":[68,78],"id_str":"341918540","screen_name":"Abrahan_E","id":341918540},{"name":"Daniela
-        Cantor:D","indices":[126,134],"id_str":"276054202","screen_name":"daniC_K","id":276054202}],"hashtags":[],"urls":[]},"id":106479820816384000,"place":null,"favorited":false,"text":"frmams
-        un party, y en mdio dl hmo dsaparecems ni rastros dejams \u2665RT\"@Abrahan_E:
-        llama a tus amigas dile q no vamos a toaaaa \u266b @daniC_K\""},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"FF3300","protected":false,"location":"INKWORLD","notifications":false,"friends_count":295,"profile_sidebar_border_color":"86A4A6","followers_count":461,"name":"Jirrz","default_profile_image":false,"contributors_enabled":false,"time_zone":"Amsterdam","favourites_count":5,"url":"http:\/\/Jirrz.hyves.nl\/","statuses_count":30381,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme6\/bg.gif","utc_offset":3600,"description":"
-        I Tweet English OR Dutch were going International!!","is_translator":false,"profile_background_color":"709397","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1507193028\/325397452_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme6\/bg.gif","created_at":"Tue
-        Mar 09 19:35:34 +0000 2010","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1507193028\/325397452_normal.jpg","id_str":"121524517","profile_text_color":"333333","profile_sidebar_fill_color":"A0C5C7","screen_name":"KissMyInkZ","default_profile":false,"listed_count":0,"lang":"en","profile_background_tile":false,"id":121524517},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:41 +0000 2011","id_str":"106479819679744000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial for BlackBerry\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/S6T6OvV","indices":[16,35],"display_url":"lockerz.com\/s\/132550095","expanded_url":"http:\/\/lockerz.com\/s\/132550095"}]},"id":106479819679744000,"place":null,"favorited":false,"text":"Hinderlijk
-        he ? http:\/\/t.co\/S6T6OvV"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"FF0000","protected":false,"location":"","notifications":false,"friends_count":119,"profile_sidebar_border_color":"65B0DA","followers_count":59,"name":"aline
-        cardoso","default_profile_image":false,"contributors_enabled":false,"time_zone":"Santiago","favourites_count":10,"url":null,"statuses_count":1040,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/315942620\/disney_383.jpg","utc_offset":-14400,"description":"N\u00e3o
-        me prendo a nada que me defina. Serei o que voc\u00ea quiser, mas s\u00f3
-        quando eu quiser.","is_translator":false,"profile_background_color":"642D8B","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1505345195\/disney_350_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/315942620\/disney_383.jpg","created_at":"Thu
-        Jan 28 01:41:03 +0000 2010","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1505345195\/disney_350_normal.jpg","id_str":"109123571","profile_text_color":"3D1957","profile_sidebar_fill_color":"7AC3EE","screen_name":"Liiiinne_","listed_count":0,"lang":"en","profile_background_tile":true,"id":109123571},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:41 +0000 2011","id_str":"106479819243520000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479819243520000,"place":null,"favorited":false,"text":"grande
-        merdaaa --''"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":true,"verified":false,"geo_enabled":false,"profile_link_color":"FF0000","protected":false,"location":"From
-        KC 2 da A","notifications":false,"friends_count":1181,"profile_sidebar_border_color":"F2E195","followers_count":1737,"name":"Kanye
-        w\/o the K","default_profile_image":false,"contributors_enabled":false,"time_zone":"Pacific
-        Time (US & Canada)","favourites_count":3,"url":"http:\/\/ten11consulting.com\/aunje.aspx","statuses_count":26555,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme12\/bg.gif","utc_offset":-28800,"description":"Catch
-        me in videos wit gucci, waka, angie stone, killa mike, joc, titty boy ETC
-        for promo, video, mag bookings tiny.cc\/ww0ec","is_translator":false,"profile_background_color":"BADFCD","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1508664971\/325441979_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme12\/bg.gif","created_at":"Sat
-        Dec 19 04:36:45 +0000 2009","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1508664971\/325441979_normal.jpg","id_str":"97820651","profile_text_color":"0C3E53","profile_sidebar_fill_color":"FFF7CC","screen_name":"aunje","listed_count":40,"lang":"en","profile_background_tile":false,"id":97820651,"default_profile":false},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:41 +0000 2011","id_str":"106479818413056000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial for BlackBerry\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Waka
-        Flocka Flame","indices":[26,40],"id_str":"21475090","screen_name":"WakaFlockaBSM","id":21475090}],"hashtags":[{"indices":[41,51],"text":"itsaparty"}],"urls":[]},"id":106479818413056000,"place":null,"favorited":false,"text":"Hmmm
-        kids head banging to @WakaFlockaBSM #itsaparty LMMFAO"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":37,"profile_sidebar_border_color":"C0DEED","followers_count":32,"name":"LinkeRous","default_profile_image":true,"contributors_enabled":false,"time_zone":null,"favourites_count":0,"url":"http:\/\/businessconcern.net","statuses_count":2901,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"Linkback
-        Service","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/sticky\/default_profile_images\/default_profile_0_normal.png","default_profile":true,"follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Sun
-        Mar 13 18:38:27 +0000 2011","profile_image_url":"http:\/\/a3.twimg.com\/sticky\/default_profile_images\/default_profile_0_normal.png","id_str":"265540555","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"linkertwit","listed_count":0,"lang":"en","profile_background_tile":false,"id":265540555},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:41 +0000 2011","id_str":"106479818194944000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/posterous.com\" rel=\"nofollow\"\u003EPosterous\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/Z02psSO","indices":[67,86],"display_url":"post.ly\/2yv2z","expanded_url":"http:\/\/post.ly\/2yv2z"}]},"id":106479818194944000,"place":null,"favorited":false,"text":"[IT
-        WhitePapers] Apache warns Web server admins of DoS attack tool http:\/\/t.co\/Z02psSO"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"ff8000","protected":false,"location":"Chile","notifications":false,"friends_count":55,"profile_sidebar_border_color":"444444","followers_count":68,"name":"Zacar\u00edas
-        Prado","default_profile_image":false,"contributors_enabled":false,"time_zone":"Santiago","favourites_count":1,"url":"http:\/\/www.facebook.com\/zacarias.prado","statuses_count":1302,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/30392359\/fondo-twitter.jpg","utc_offset":-14400,"description":"ningun
-        estilo me define, Dise\u00f1ador hasta los huesos, simp\u00e1tico, honesto,
-        No soy de conversaciones contingentes o inteligentes, No soy adinerado ni
-        lo busco Dot","is_translator":false,"profile_background_color":"131419","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1488265428\/285125_2031663025259_1054647689_2215648_4980011_n_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/30392359\/fondo-twitter.jpg","default_profile":false,"created_at":"Tue
-        Aug 18 16:47:13 +0000 2009","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1488265428\/285125_2031663025259_1054647689_2215648_4980011_n_normal.jpg","id_str":"66729485","profile_text_color":"666666","profile_sidebar_fill_color":"111111","screen_name":"Zackito","listed_count":3,"lang":"es","profile_background_tile":false,"id":66729485},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:41 +0000 2011","id_str":"106479817058304000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479817058304000,"place":null,"favorited":false,"text":"HRgggg!......
-        Nota Mental : tirarme encima y darle abrazos de OSO.,! y morderle el bigotin.
-        :baba:"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"009999","protected":false,"location":"D--M--V
-        or On your mind! ","notifications":false,"friends_count":385,"profile_sidebar_border_color":"eeeeee","followers_count":459,"name":"Dee
-        Dee aka Dee CUP","default_profile_image":false,"contributors_enabled":false,"time_zone":"Eastern
-        Time (US & Canada)","favourites_count":3,"url":"http:\/\/deandreanicole.blogspot.com","statuses_count":29800,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/51460869\/12735_173540112060_515832060_3457018_5702578_n.jpg","utc_offset":-18000,"description":"They
-        call me Dee but you can call me Dee Cup for short ;-)","is_translator":false,"profile_background_color":"131516","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1505795721\/Dee_cup_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/51460869\/12735_173540112060_515832060_3457018_5702578_n.jpg","created_at":"Tue
-        Mar 10 11:05:11 +0000 2009","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1505795721\/Dee_cup_normal.jpg","id_str":"23579716","profile_text_color":"333333","profile_sidebar_fill_color":"efefef","screen_name":"Dee_cup","default_profile":false,"listed_count":7,"lang":"en","profile_background_tile":true,"id":23579716},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:40 +0000 2011","id_str":"106479815376384000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.echofon.com\/\" rel=\"nofollow\"\u003EEchofon\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479815376384000,"place":null,"favorited":false,"text":"I''m
-        always nice not today noooope im not doing it *Tamar voice*"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"\u00dcT:
-        -6.381865,106.958359","notifications":false,"friends_count":172,"profile_sidebar_border_color":"C0DEED","followers_count":157,"name":"Muhammad
-        Ikhlas","default_profile_image":false,"contributors_enabled":false,"time_zone":"Alaska","favourites_count":5,"url":"http:\/\/Muhammadikhlas.tumblr.com","statuses_count":7227,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/77945771\/22061_107128305967367_100000105934630_166817_4182851_n.jpg","utc_offset":-32400,"description":"Bismillah","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1502321873\/Gadis_20carmanita_20_party__20dila_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/77945771\/22061_107128305967367_100000105934630_166817_4182851_n.jpg","created_at":"Tue
-        Feb 23 22:21:44 +0000 2010","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1502321873\/Gadis_20carmanita_20_party__20dila_normal.jpg","id_str":"116891563","profile_text_color":"050505","profile_sidebar_fill_color":"DDEEF6","screen_name":"IkassIcass","default_profile":false,"listed_count":0,"lang":"en","profile_background_tile":true,"id":116891563},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:40 +0000 2011","id_str":"106479814524928000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial\u003C\/a\u003E","entities":{"user_mentions":[{"name":"thifanya
-        delianna","indices":[19,35],"id_str":"135452959","screen_name":"DelianaThifanya","id":135452959},{"name":"Muhammad
-        Ikhlas","indices":[84,95],"id_str":"116891563","screen_name":"IkassIcass","id":116891563}],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/h8Aj5ot","indices":[111,130],"display_url":"tl.gd\/ckb6g2","expanded_url":"http:\/\/tl.gd\/ckb6g2"}]},"id":106479814524928000,"place":null,"favorited":false,"text":"Hahahaha
-        stress RT @DelianaThifanya: Bernard bear yoi penunggu pintu madrid haha RT
-        @IkassIcass: Hansip (cont) http:\/\/t.co\/h8Aj5ot"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0a000a","protected":false,"location":"Cafofo
-        da Kur\u00ea.","notifications":false,"friends_count":199,"profile_sidebar_border_color":"0a000a","followers_count":211,"name":"Mel","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Brasilia","favourites_count":50,"url":null,"statuses_count":33461,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/257359678\/25.jpg","utc_offset":-10800,"description":"","is_translator":false,"profile_background_color":"9c069c","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1381755838\/of_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/257359678\/25.jpg","created_at":"Sat
-        Jun 13 23:30:35 +0000 2009","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1381755838\/of_normal.jpg","id_str":"46986775","profile_text_color":"5c055c","profile_sidebar_fill_color":"8f088f","screen_name":"melziinhac","listed_count":37,"lang":"en","profile_background_tile":true,"id":46986775},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:40 +0000 2011","id_str":"106479813694464000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479813694464000,"place":null,"favorited":false,"text":"Abre
-        o olho."},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":true,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"Jakarta,
-        Indonesia","notifications":false,"friends_count":37,"profile_sidebar_border_color":"C0DEED","followers_count":96,"name":"Sania
-        Manda","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Jakarta","favourites_count":4,"url":"http:\/\/www.brunomars.com","statuses_count":3756,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/259914509\/images.jpg","utc_offset":25200,"description":"I
-        wanna be a famous international singer like @BrunoMars and I really really
-        want to collaborate with @BrunoMars\r ||In a relationship with @BrunoMars
-        ||\r #73jhs","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1350486356\/images__5__normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/259914509\/images.jpg","created_at":"Sat
-        Jan 02 10:34:58 +0000 2010","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1350486356\/images__5__normal.jpg","id_str":"101192187","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"BrunoMars81085","listed_count":0,"lang":"en","profile_background_tile":true,"id":101192187},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:40 +0000 2011","id_str":"106479812754944000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial for BlackBerry\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Abdul
-        Malik ","indices":[3,12],"id_str":"156183336","screen_name":"malik151","id":156183336}],"hashtags":[],"urls":[]},"id":106479812754944000,"place":null,"favorited":false,"text":"RT
-        @malik151: Ah ngantukk parah!!!"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"ff00ae","protected":false,"location":"Texas\u2665
-        to North Carolina.","notifications":false,"friends_count":310,"profile_sidebar_border_color":"45e8e0","followers_count":351,"name":"Mia
-        Gray","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Central
-        Time (US & Canada)","favourites_count":0,"url":null,"statuses_count":3418,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/317718601\/262482_10150760917740501_532790500_20474644_6368831_n.jpg","utc_offset":-21600,"description":"Mia
-        Danielle&hearts;. College volleyball. I ALWAYS have a smile on my face,,never
-        let em see ya sweat =). No one understands me,,so dnt try.","is_translator":false,"profile_background_color":"642D8B","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1509313616\/Snapshot_20110725_3_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a3.twimg.com\/profile_background_images\/317718601\/262482_10150760917740501_532790500_20474644_6368831_n.jpg","created_at":"Mon
-        Nov 29 03:52:04 +0000 2010","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1509313616\/Snapshot_20110725_3_normal.jpg","id_str":"220889858","profile_text_color":"ae80d1","profile_sidebar_fill_color":"fad7d7","screen_name":"M_Dani11","listed_count":1,"lang":"en","profile_background_tile":true,"id":220889858},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:40 +0000 2011","id_str":"106479811706368000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479811706368000,"place":null,"favorited":false,"text":"birthday
-        in 4 dayssss. :)"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":true,"verified":false,"geo_enabled":false,"profile_link_color":"D02B55","protected":false,"location":"lovely
-        place ever","notifications":false,"friends_count":121,"profile_sidebar_border_color":"829D5E","followers_count":44,"name":"nuuy
-        ","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Pacific
-        Time (US & Canada)","favourites_count":4,"url":null,"statuses_count":366,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme5\/bg.gif","utc_offset":-28800,"description":"","is_translator":false,"profile_background_color":"352726","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1482306426\/prof_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme5\/bg.gif","created_at":"Sun
-        Jan 02 05:30:47 +0000 2011","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1482306426\/prof_normal.jpg","id_str":"233069333","profile_text_color":"3E4415","profile_sidebar_fill_color":"99CC33","screen_name":"nuuysquamosa","listed_count":1,"lang":"en","profile_background_tile":true,"id":233069333},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:39 +0000 2011","id_str":"106479810963968000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.snaptu.com\" rel=\"nofollow\"\u003ESnaptu\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Rendy
-        Achfan","indices":[17,30],"id_str":"80342536","screen_name":"rendy_achfan","id":80342536}],"hashtags":[],"urls":[]},"id":106479810963968000,"place":null,"favorited":false,"text":"Tanya
-        kenapa..RT @rendy_achfan: Mimisan mulu, kenapa ya"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":true,"profile_link_color":"0084B4","protected":false,"location":"JSU
-        & Greenville","notifications":false,"friends_count":457,"profile_sidebar_border_color":"17394a","followers_count":686,"name":"Kelsey
-        Ransome","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Central
-        Time (US & Canada)","favourites_count":0,"url":null,"statuses_count":7924,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/115768318\/kay_n_nana.jpg","utc_offset":-21600,"description":"I''m
-        just a Fungirl,,,                    Living in the Moment.............                       waiting
-        to EXHALE","is_translator":false,"profile_background_color":"ebf2f5","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1505346558\/IMAG1026_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/115768318\/kay_n_nana.jpg","created_at":"Sat
-        May 09 03:41:18 +0000 2009","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1505346558\/IMAG1026_normal.jpg","id_str":"38790799","profile_text_color":"c21fc2","profile_sidebar_fill_color":"000000","screen_name":"Kelsey_THE_Boss","listed_count":5,"lang":"en","profile_background_tile":true,"id":38790799},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:39 +0000 2011","id_str":"106479807293952000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/levelupstudio.com\" rel=\"nofollow\"\u003EPlume\u00a0\u00a0\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479807293952000,"place":null,"favorited":false,"text":"Can''t
-        be nice to black folks"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":1,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":true,"profile_link_color":"995099","protected":false,"location":"Korriban.","notifications":false,"friends_count":845,"profile_sidebar_border_color":"ffffff","followers_count":1299,"name":"Demetria.\ue32e","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Pacific
-        Time (US & Canada)","favourites_count":392,"url":"http:\/\/30.media.tumblr.com\/tumblr_lpiztnQ0E11qe0xqxo1_500.gif","statuses_count":84917,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/313980770\/nick-jesus__4__large.jpg","utc_offset":-28800,"description":"Everyday
-        I fall more in love with you. I love you curly.  8.17.11","is_translator":false,"profile_background_color":"fefaff","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1511019003\/JediFaux_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/313980770\/nick-jesus__4__large.jpg","created_at":"Tue
-        Jun 29 05:49:13 +0000 2010","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1511019003\/JediFaux_normal.jpg","id_str":"160816806","profile_text_color":"382b38","profile_sidebar_fill_color":"ffffff","screen_name":"JediFaux","listed_count":46,"lang":"en","profile_background_tile":true,"id":160816806},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:38 +0000 2011","id_str":"106479806463488000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.echofon.com\/\" rel=\"nofollow\"\u003EEchofon\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479806463488000,"place":null,"favorited":false,"text":"omfg.
-        Gerard Pique is so hot! :o"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":12,"profile_sidebar_border_color":"C0DEED","followers_count":2,"name":"shaiday
-        kelley","default_profile_image":false,"default_profile":true,"contributors_enabled":false,"time_zone":null,"favourites_count":1,"url":null,"statuses_count":4,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1511830625\/nathaneil_jones_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Wed
-        Aug 24 00:09:18 +0000 2011","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1511830625\/nathaneil_jones_normal.jpg","id_str":"360930537","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"daedaeiluvmye","listed_count":0,"lang":"en","profile_background_tile":false,"id":360930537},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:38 +0000 2011","id_str":"106479804890624000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[{"name":"BET''s
-        106 & Park","indices":[9,20],"id_str":"30309979","screen_name":"106andpark","id":30309979}],"hashtags":[],"urls":[]},"id":106479804890624000,"place":null,"favorited":false,"text":"Tweet
-        to @106andpark"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":1,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":true,"profile_link_color":"ff7d12","protected":false,"location":"Brasil","notifications":false,"friends_count":225,"profile_sidebar_border_color":"181A1E","followers_count":1603,"name":"Rodrigo
-        Barreira","default_profile_image":false,"contributors_enabled":false,"time_zone":"Brasilia","favourites_count":2,"url":"http:\/\/rodrigotucano.carbonmade.com","statuses_count":11211,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/296992965\/twitter-capitao.jpg","utc_offset":-10800,"description":"Sou
-        diretor de arte freelancer, crio designs de embalagens, pontos de venda, logomarcas,
-        mascotes, sites e below the line. Eu n\u00e3o sou o Tucano do #Nerdcast.","is_translator":false,"profile_background_color":"1A1B1F","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1467353430\/tucano2-rio_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/296992965\/twitter-capitao.jpg","created_at":"Wed
-        Jul 23 13:09:24 +0000 2008","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1467353430\/tucano2-rio_normal.jpg","id_str":"15561475","profile_text_color":"666666","profile_sidebar_fill_color":"252429","screen_name":"rodrigotucano","listed_count":50,"lang":"en","profile_background_tile":false,"id":15561475,"default_profile":false},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:38 +0000 2011","id_str":"106479804366336000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/GHR9LBO","indices":[55,74],"display_url":"youtu.be\/nrPKCZLbPck","expanded_url":"http:\/\/youtu.be\/nrPKCZLbPck"}]},"id":106479804366336000,"place":null,"favorited":false,"text":"\"O
-        Poderoso Chef\u00e3o: de gra\u00e7a no YouTube\" Tem certeza?  http:\/\/t.co\/GHR9LBO
-        hahaha!"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":76,"profile_sidebar_border_color":"C0DEED","followers_count":70,"name":"NrZlynnsKfle","default_profile_image":false,"default_profile":true,"contributors_enabled":false,"time_zone":null,"favourites_count":2,"url":null,"statuses_count":4522,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"If
-        youre a smoker, clubber and drinker, please dont be friend with me. Cause
-        I''m none of the above. ","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1511659434\/YannisPerkins_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Wed
-        May 11 14:35:41 +0000 2011","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1511659434\/YannisPerkins_normal.jpg","id_str":"296861507","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"YannisPerkins","listed_count":0,"lang":"en","profile_background_tile":false,"id":296861507},"in_reply_to_status_id":null,"created_at":"Wed
-        Aug 24 21:35:38 +0000 2011","id_str":"106479803842048000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
-        href=\"http:\/\/www.echofon.com\/\" rel=\"nofollow\"\u003EEchofon\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106479803842048000,"place":null,"favorited":false,"text":"HAHAHAH
-        . i cant stop laughing cause i cant stop imagine myself with normal length
-        nails . HAHAH ."}]'
+      body: '[{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":true,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"Monroe,
+        La.","notifications":false,"friends_count":433,"profile_sidebar_border_color":"C0DEED","followers_count":1432,"name":"Sermon
+        Ideas","default_profile_image":false,"contributors_enabled":false,"time_zone":"Central
+        Time (US & Canada)","favourites_count":0,"url":"http:\/\/sermonideas.com","statuses_count":26738,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":-21600,"description":"Sermon
+        ideas for preachers & teachers. Witty, contemporary, biblical. Inspirational
+        ideas.","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/327931131\/Wright_normal.bmp","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Thu
+        Jul 23 09:43:32 +0000 2009","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/327931131\/Wright_normal.bmp","id_str":"59412696","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"sermonideas4U","listed_count":47,"lang":"en","profile_background_tile":false,"id":59412696},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:57 +0000 2011","id_str":"106496492868608000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/twitterfeed.com\" rel=\"nofollow\"\u003Etwitterfeed\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/aqxcqpP","indices":[116,135],"display_url":"bit.ly\/oOJHmD","expanded_url":"http:\/\/bit.ly\/oOJHmD"}]},"id":106496492868608000,"place":null,"favorited":false,"text":"Try
+        one of thse faith-based activities: Three-in-one worship in the park: Three
+        Plano churches will participate ... http:\/\/t.co\/aqxcqpP"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":40,"profile_sidebar_border_color":"C0DEED","followers_count":37,"name":"L\u00edviaRodriguesMoura","default_profile_image":false,"contributors_enabled":false,"time_zone":"Santiago","favourites_count":0,"url":null,"statuses_count":3794,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/175586941\/Imag032.jpg","utc_offset":-14400,"description":",n\u00e3o
+        sei amar pela metade,n\u00e3o sei viver de mentira.N\u00e3o sei voar de p\u00e9s
+        no ch\u00e3o.Sou sempre eu mesma, mas com certeza n\u00e3o serei a mesma pra
+        sempre. ;*","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1360213004\/OgAAADUk4HGm3QE-HZbzpBhdHrR3RmRf6yd2AzFPxCzdmMRHKKW7Kov9-S_-3_Guu9TmsrEs2vEq3mGCwetSFF9bZQsAm1T1UHhG7Pm7jcmmCkOeVUmVdKbZ5oB-_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/175586941\/Imag032.jpg","created_at":"Fri
+        Nov 26 22:43:12 +0000 2010","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1360213004\/OgAAADUk4HGm3QE-HZbzpBhdHrR3RmRf6yd2AzFPxCzdmMRHKKW7Kov9-S_-3_Guu9TmsrEs2vEq3mGCwetSFF9bZQsAm1T1UHhG7Pm7jcmmCkOeVUmVdKbZ5oB-_normal.jpg","id_str":"220147671","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"LiiviaR","listed_count":0,"lang":"en","profile_background_tile":true,"id":220147671},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:57 +0000 2011","id_str":"106496492562432000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496492562432000,"place":null,"favorited":false,"text":"acabei
+        de chegar do iguatz ,cansadaa :S"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"FF3300","protected":false,"location":"iPhone:
+        42.349953,-71.094757","notifications":false,"friends_count":181,"profile_sidebar_border_color":"86A4A6","followers_count":257,"name":"Joe
+        Spinelli","default_profile_image":false,"contributors_enabled":false,"time_zone":"Eastern
+        Time (US & Canada)","favourites_count":1,"url":"http:\/\/www.velocityfg.com","statuses_count":2507,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme6\/bg.gif","utc_offset":-18000,"description":"I''m
+        a Partner @ Velocity Financial Group.  Venture debt investor, DJ, perpetual
+        student of emerging technologies.\r\n\r\nhttp:\/\/workingthesis.tumblr.com\/","is_translator":false,"profile_background_color":"709397","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/67644992\/2707110560104542662maBMys_fs_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme6\/bg.gif","created_at":"Wed
+        Apr 09 23:22:00 +0000 2008","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/67644992\/2707110560104542662maBMys_fs_normal.jpg","id_str":"14346668","profile_text_color":"333333","profile_sidebar_fill_color":"A0C5C7","screen_name":"joespinelli","listed_count":9,"lang":"en","profile_background_tile":false,"id":14346668},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:56 +0000 2011","id_str":"106496490553344000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.twittergadget.com\" rel=\"nofollow\"\u003EtGadget\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/vKhL7kS","indices":[35,54],"display_url":"on.wsj.com\/nJApBq","expanded_url":"http:\/\/on.wsj.com\/nJApBq"}]},"id":106496490553344000,"place":null,"favorited":false,"text":"Steve
+        Jobs resigns as CEO of Apple http:\/\/t.co\/vKhL7kS"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"FB072F","protected":false,"location":"El
+        Paso","notifications":false,"friends_count":65,"profile_sidebar_border_color":"bfbfbf","followers_count":70,"name":"V
+        I C K Y n.n","default_profile_image":false,"contributors_enabled":false,"time_zone":"Mountain
+        Time (US & Canada)","favourites_count":69,"url":null,"statuses_count":3643,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/209397698\/hhhhh.jpg","utc_offset":-25200,"description":"astropops&music.
+        just follow. #NextGenerationOfPeace.","is_translator":false,"profile_background_color":"030303","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1489369870\/SWOm4uao_normal","follow_request_sent":false,"profile_background_image_url":"http:\/\/a3.twimg.com\/profile_background_images\/209397698\/hhhhh.jpg","created_at":"Fri
+        Feb 18 19:23:06 +0000 2011","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1489369870\/SWOm4uao_normal","id_str":"254175136","profile_text_color":"FFFFFF","profile_sidebar_fill_color":"000000","screen_name":"Lady_Bug13","listed_count":0,"lang":"en","profile_background_tile":false,"id":254175136},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:56 +0000 2011","id_str":"106496489831936000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003ETwitter
+        for Android\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Secret ;)","indices":[22,33],"id_str":"94700129","screen_name":"HottQuotes","id":94700129}],"hashtags":[],"urls":[]},"id":106496489831936000,"place":null,"favorited":false,"text":"Carlos&Herman!
+        -.- RT @HottQuotes: Dear perverts, I don''t suck on popsicles, I viciously
+        bite them.Sincerely, how''s that for a mental image?"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":true,"verified":false,"geo_enabled":true,"profile_link_color":"93A644","protected":false,"location":"Santiago
+        de Shile","notifications":false,"friends_count":102,"profile_sidebar_border_color":"eeeeee","followers_count":155,"name":"alan
+        spencer","default_profile_image":false,"contributors_enabled":false,"time_zone":"Santiago","favourites_count":2,"url":null,"statuses_count":3054,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme13\/bg.gif","utc_offset":-14400,"description":"   ","is_translator":false,"profile_background_color":"B2DFDA","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1404261475\/6ac1b73e-a472-4939-9aa6-49056c2a3178_normal.png","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme13\/bg.gif","created_at":"Sun
+        Jan 17 14:06:12 +0000 2010","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1404261475\/6ac1b73e-a472-4939-9aa6-49056c2a3178_normal.png","id_str":"105793491","profile_text_color":"333333","profile_sidebar_fill_color":"ffffff","screen_name":"alansonn","listed_count":4,"lang":"es","profile_background_tile":false,"id":105793491},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:56 +0000 2011","id_str":"106496488892416000","geo":{"type":"Point","coordinates":[-33.40710516,-70.59779191]},"truncated":false,"coordinates":{"type":"Point","coordinates":[-70.59779191,-33.40710516]},"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/#!\/download\/iphone\" rel=\"nofollow\"\u003ETwitter
+        for iPhone\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496488892416000,"place":{"bounding_box":{"type":"Polygon","coordinates":[[[-73.991482,-33.750576],[-32.378186,-33.750576],[-32.378186,5.27192],[-73.991482,5.27192]]]},"name":"Brasil","attributes":{},"full_name":"Brasil","url":"http:\/\/api.twitter.com\/1\/geo\/id\/1b107df3ccc0aaa1.json","country_code":"BR","place_type":"country","country":"Brasil","id":"1b107df3ccc0aaa1"},"favorited":false,"text":"Por
+        qu\u00e9 pusieron a Chadwic de vocero? Asquito verlo hablando tan seguido"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":true,"verified":false,"geo_enabled":true,"profile_link_color":"FF0000","protected":false,"location":"Bath","notifications":false,"friends_count":162,"profile_sidebar_border_color":"65B0DA","followers_count":98,"name":"Cree
+        Angelinetta","default_profile_image":false,"contributors_enabled":false,"time_zone":null,"favourites_count":1,"url":null,"statuses_count":439,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"MUA-
+        Media make up & hair & design -- one of the highest qualifications to acheive--
+        Currently working for Yves Saint Laurent--   Model and Promoter ","is_translator":false,"profile_background_color":"f25cbe","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1491441247\/image_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Wed
+        Apr 15 22:01:19 +0000 2009","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1491441247\/image_normal.jpg","id_str":"31535792","profile_text_color":"3D1957","profile_sidebar_fill_color":"7AC3EE","screen_name":"ReeRee_A","listed_count":0,"lang":"en","profile_background_tile":true,"id":31535792},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:56 +0000 2011","id_str":"106496488040960000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/#!\/download\/iphone\" rel=\"nofollow\"\u003ETwitter
+        for iPhone\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496488040960000,"place":null,"favorited":false,"text":"Ummm
+        .... Hmmm ..... What a strange situation and feeling that I can''t shake"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"ad0768","protected":false,"location":"","notifications":false,"friends_count":225,"profile_sidebar_border_color":"e60068","followers_count":122,"name":"Fernanda
+        Horta G.","default_profile_image":false,"contributors_enabled":false,"time_zone":"Mountain
+        Time (US & Canada)","favourites_count":4,"url":null,"statuses_count":2278,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/311262470\/a.jpg","utc_offset":-25200,"description":"ESTO
+        en l\u00ednea... Corre tu imaginaci\u00f3n m\u00e1s haya de tus deseos y tu
+        gravedad de hacer realidad tus sue\u00f1os.. ","is_translator":false,"profile_background_color":"faebfa","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1491853943\/184189_10150106134844119_678189118_6201884_3202455_n_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/311262470\/a.jpg","created_at":"Thu
+        Dec 31 02:23:03 +0000 2009","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1491853943\/184189_10150106134844119_678189118_6201884_3202455_n_normal.jpg","id_str":"100655632","profile_text_color":"eb0e8b","profile_sidebar_fill_color":"080008","screen_name":"FerrHorta","listed_count":1,"lang":"es","profile_background_tile":true,"id":100655632},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496487407616000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496487407616000,"place":null,"favorited":false,"text":"Jajaja
+        que pedo con la gente de twit cam ? XD"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"Salvador,
+        Bahia, Brasil","notifications":false,"friends_count":40,"profile_sidebar_border_color":"0529f7","followers_count":92,"name":"Nordeste
+        Informa","default_profile_image":false,"contributors_enabled":false,"time_zone":"Brasilia","favourites_count":0,"url":"http:\/\/www.nordesteinforma.com.br","statuses_count":28985,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/165728306\/fundo_twitter.jpg","utc_offset":-10800,"description":"","is_translator":false,"profile_background_color":"f2f5f7","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1316249182\/NeI_Twitter_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/165728306\/fundo_twitter.jpg","created_at":"Wed
+        Sep 01 21:16:01 +0000 2010","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1316249182\/NeI_Twitter_normal.jpg","id_str":"185793090","profile_text_color":"333333","profile_sidebar_fill_color":"f5ce1e","screen_name":"nordesteinforma","listed_count":3,"lang":"en","profile_background_tile":true,"id":185793090},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496486883328000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.nordesteinforma.com.br\" rel=\"nofollow\"\u003ENordeste
+        Informa\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/fVBUi5T","indices":[62,81],"display_url":"bit.ly\/mORYxx","expanded_url":"http:\/\/bit.ly\/mORYxx"}]},"id":106496486883328000,"place":null,"favorited":false,"text":"Turismo:
+        TCU manda suspender conv\u00eanio que seria superfaturado http:\/\/t.co\/fVBUi5T"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":true,"profile_link_color":"4a594a","protected":false,"location":"Brazil","notifications":false,"friends_count":69,"profile_sidebar_border_color":"eeeeee","followers_count":6463,"name":"zach
+        ramos.","default_profile_image":false,"contributors_enabled":false,"time_zone":"Brasilia","favourites_count":12514,"url":"http:\/\/zalache.tumblr.com\/","statuses_count":119273,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/315159246\/z.jpg","utc_offset":-10800,"description":"aspirante
+        a escritor (http:\/\/goo.gl\/ZfTDf), fotografia como hobby (http:\/\/goo.gl\/jTCVD)
+        e gosto de aprender latim. lema: scribendi nullus finis.","is_translator":false,"profile_background_color":"ffffff","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1504074491\/_9748_normal.JPG","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/315159246\/z.jpg","created_at":"Thu
+        Apr 30 22:14:52 +0000 2009","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1504074491\/_9748_normal.JPG","id_str":"36789594","profile_text_color":"7d7d7d","profile_sidebar_fill_color":"ffffff","screen_name":"Zalache","listed_count":1283,"lang":"en","profile_background_tile":false,"id":36789594},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496486161920000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.echofon.com\/\" rel=\"nofollow\"\u003EEchofon\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496486161920000,"place":null,"favorited":false,"text":"va
+        adicionar mais shows em sua turn\u00ea e fa\u00e7a um v\u00eddeo decente,
+        sua flopada kkkkkkkkkkk"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"\u5927\u962a\u5e9c\u583a\u5e02","notifications":false,"friends_count":22,"profile_sidebar_border_color":"a8c7f7","followers_count":21,"name":"\u7425\u8302\u90ce","default_profile_image":false,"contributors_enabled":false,"time_zone":"Tokyo","favourites_count":16,"url":null,"statuses_count":3551,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/118779354\/DSC00008.jpg","utc_offset":32400,"description":"\u30ae\u30bf\u30fc\u3068\u30a2\u30cb\u30e1\u3068\u5409\u672c\u65b0\u559c\u5287\u304c\u597d\u304d\u306a\u9ad8\u68211\u5e74\u3067\u3059(
+        *\uff40\u03c9\u00b4) \u30dc\u30ab\u30ed\u3068\u6771\u65b9\u306e\u66f2\u5f37\u5316\u4e2d\uff01\u3044\u3044\u66f2\u304c\u3042\u308c\u3070\u6559\u3048\u3066\u304f\u3060\u3057\u3042(
+        \u00b4 \u25bd ` )\uff89\u57fa\u672c\u3069\u30fc\u3067\u3082\u3044\u3044\u3088\u3046\u306a\u4e8b\u3070\u3063\u304b\u545f\u304d\u307e\u3059\u304c\u3001\u3088\u308d\u3057\u304f\u304a\u9858\u3044\u3057\u307e\u3059m(_
+        _)m","is_translator":false,"profile_background_color":"11181a","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1368226605\/img085_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/118779354\/DSC00008.jpg","created_at":"Mon
+        Dec 07 10:55:28 +0000 2009","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1368226605\/img085_normal.jpg","id_str":"95179048","profile_text_color":"333333","profile_sidebar_fill_color":"C0DFEC","screen_name":"_KUMORO_","listed_count":1,"lang":"ja","profile_background_tile":true,"id":95179048},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496485113344000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/#!\/download\/iphone\" rel=\"nofollow\"\u003ETwitter
+        for iPhone\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496485113344000,"place":null,"favorited":false,"text":"\u6628\u65e5\u7406\u79d1\u306e\u30d7\u30ea\u30f3\u30c8\u3046\u3064\u3055\u3057\u3066\u3082\u3089\u3063\u305f\u304b\u3089\u3001\u4e88\u7fd2\u30d7\u30ea\u30f3\u30c8\u3046\u3064\u3055\u3057\u3066\u3063\u3066\u8a00\u3044\u306b\u304f\u3044\u2026"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":true,"verified":false,"geo_enabled":true,"profile_link_color":"FF0000","protected":false,"location":"Maadi
+        , Cairo","notifications":false,"friends_count":1985,"profile_sidebar_border_color":"e0cb70","followers_count":477,"name":"Ahmed
+        Tawfiq \u277c","default_profile_image":false,"contributors_enabled":false,"time_zone":"Cairo","favourites_count":6,"url":"http:\/\/about.me\/edit\/AhmedTawfiq","statuses_count":14741,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/204820844\/167849_179983385377407_179822532060159_392145_172604_n.jpg","utc_offset":7200,"description":"+21
+        #Maadian #Cancer. Beach addict. Love Trance & House music. #Live4UrLife And
+        Unfortunately A #Pharmacist #HalfRussian   \r\n#0162002336","is_translator":false,"profile_background_color":"cce0d6","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1490717962\/20110722416_HQ-2_cut_normal.jpg","default_profile":false,"follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/204820844\/167849_179983385377407_179822532060159_392145_172604_n.jpg","created_at":"Thu
+        Aug 06 19:45:44 +0000 2009","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1490717962\/20110722416_HQ-2_cut_normal.jpg","id_str":"63521047","profile_text_color":"0C3E53","profile_sidebar_fill_color":"FFF7CC","screen_name":"AhmedTawfiq","listed_count":3,"lang":"en","profile_background_tile":true,"id":63521047},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496484589056000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496484589056000,"place":{"bounding_box":null,"name":"Egypt","attributes":{},"full_name":"Egypt","url":"http:\/\/api.twitter.com\/1\/geo\/id\/c659cb4912229666.json","country_code":"EG","place_type":"country","country":"Egypt","id":"c659cb4912229666"},"favorited":false,"text":"Sometimes
+        the best way to get someone''s attention is to stop giving them yours."},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":null,"notifications":false,"friends_count":20,"profile_sidebar_border_color":"C0DEED","followers_count":2,"name":"Brent","default_profile_image":true,"contributors_enabled":false,"time_zone":null,"favourites_count":0,"url":null,"statuses_count":5,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":null,"is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/sticky\/default_profile_images\/default_profile_1_normal.png","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Fri
+        Apr 03 23:31:33 +0000 2009","profile_image_url":"http:\/\/a0.twimg.com\/sticky\/default_profile_images\/default_profile_1_normal.png","id_str":"28685413","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"Bee74","listed_count":0,"lang":"en","profile_background_tile":false,"id":28685413,"default_profile":true},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:55 +0000 2011","id_str":"106496483955712000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/mobile.twitter.com\" rel=\"nofollow\"\u003EMobile Web\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/vmE3ChW","indices":[41,60],"display_url":"doiop.com\/k1gd5l?pidy","expanded_url":"http:\/\/doiop.com\/k1gd5l?pidy"}]},"id":106496483955712000,"place":null,"favorited":false,"text":"Learn
+        how to become successful from home http:\/\/t.co\/vmE3ChW"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":236,"profile_sidebar_border_color":"C0DEED","followers_count":234,"name":"SPACELIFE_Poochie","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Mountain
+        Time (US & Canada)","favourites_count":6,"url":null,"statuses_count":11191,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/257599812\/mic.jpg","utc_offset":-25200,"description":"Attractive,handsome,hard
+        working,very talented,supra Real,Honest,Good with making conversation,etc...","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1468107282\/profile_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/257599812\/mic.jpg","created_at":"Tue
+        Nov 30 20:14:58 +0000 2010","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1468107282\/profile_normal.jpg","id_str":"221488159","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"Poochie_DazMe","listed_count":1,"lang":"en","profile_background_tile":true,"id":221488159},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:54 +0000 2011","id_str":"106496482491904000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.tweetcaster.com\" rel=\"nofollow\"\u003ETweetCaster for
+        Android\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496482491904000,"place":null,"favorited":false,"text":"Ready
+        to get my car back"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"000000","protected":false,"location":"Changi,
+        Singapore","notifications":false,"friends_count":136,"profile_sidebar_border_color":"000000","followers_count":69,"name":"Wan
+        Muhammad Shazwi","default_profile_image":false,"default_profile":false,"contributors_enabled":false,"time_zone":"Alaska","favourites_count":4,"url":null,"statuses_count":11860,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/261784219\/joker.jpg","utc_offset":-32400,"description":"Think
+        out of the box  & Just be yourself.","is_translator":false,"profile_background_color":"ff0000","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1455419428\/image_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/261784219\/joker.jpg","created_at":"Wed
+        Jan 05 12:44:24 +0000 2011","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1455419428\/image_normal.jpg","id_str":"234346585","profile_text_color":"000000","profile_sidebar_fill_color":"fc0000","screen_name":"WanTheJoker","listed_count":0,"lang":"en","profile_background_tile":true,"id":234346585},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:54 +0000 2011","id_str":"106496481028096000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496481028096000,"place":null,"favorited":false,"text":"GoodMorning
+        ! :)"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":true,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"Anaheim,
+        CA","notifications":false,"friends_count":44,"profile_sidebar_border_color":"C0DEED","followers_count":69,"name":"Thomas
+        J. Wheeler","default_profile_image":false,"contributors_enabled":false,"time_zone":null,"favourites_count":0,"url":"http:\/\/www.abestcellphone.com","statuses_count":697,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"Latest
+        Cell Phone & Smartphone Reviews and Price Comparisons, including Apple,BlackBerry,HTC,LG,Motorola,Nokia,Palm,Samsung
+        & Sony Ericsson. Android,AT&T,Sprint","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1493337460\/man-in-suit_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Sat
+        Aug 13 16:18:20 +0000 2011","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1493337460\/man-in-suit_normal.jpg","id_str":"354373743","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"ThomasCellphone","listed_count":0,"lang":"en","profile_background_tile":false,"id":354373743},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:54 +0000 2011","id_str":"106496480285696000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.abestcellphone.com\/\" rel=\"nofollow\"\u003EBestCellphone\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/g4I2Pcz","indices":[61,80],"display_url":"is.gd\/qGsxJK","expanded_url":"http:\/\/is.gd\/qGsxJK"}]},"id":106496480285696000,"place":null,"favorited":false,"text":"Samsung
+        Galaxy S2 : The Next Generation Smart Phone Unveiled http:\/\/t.co\/g4I2Pcz"},{"in_reply_to_status_id_str":null,"possibly_sensitive":false,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":true,"profile_link_color":"db78c7","protected":false,"location":"\u00dcT:
+        -6.283818,106.742574","notifications":false,"friends_count":236,"profile_sidebar_border_color":"e8e5e8","followers_count":1873,"name":"hesti
+        setyorini","default_profile_image":false,"contributors_enabled":false,"time_zone":"Pacific
+        Time (US & Canada)","favourites_count":16,"url":null,"statuses_count":5126,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/268967723\/Pink-flower-dogwood.JPG","utc_offset":-28800,"description":"
+        \u2661\u2665marie cat and Pocoyo!! :*","is_translator":false,"profile_background_color":"fcfcfc","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1393344721\/IMG00938-20110131-1212_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/268967723\/Pink-flower-dogwood.JPG","created_at":"Tue
+        Jun 09 02:58:15 +0000 2009","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1393344721\/IMG00938-20110131-1212_normal.jpg","id_str":"45747104","profile_text_color":"1da1b3","profile_sidebar_fill_color":"","screen_name":"hesteaa","listed_count":2,"lang":"en","profile_background_tile":true,"id":45747104},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:53 +0000 2011","id_str":"106496479128064000","geo":{"type":"Point","coordinates":[-6.268599,106.765614]},"truncated":false,"coordinates":{"type":"Point","coordinates":[106.765614,-6.268599]},"source":"\u003Ca
+        href=\"http:\/\/foursquare.com\" rel=\"nofollow\"\u003Efoursquare\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[{"url":"http:\/\/t.co\/bkSY3SM","indices":[66,85],"display_url":"4sq.com\/qFhEYa","expanded_url":"http:\/\/4sq.com\/qFhEYa"}]},"id":106496479128064000,"place":{"bounding_box":{"type":"Polygon","coordinates":[[[106.725732,-6.29548],[106.781645,-6.29548],[106.781645,-6.213698],[106.725732,-6.213698]]]},"name":"Pesanggrahan","attributes":{},"full_name":"Pesanggrahan,
+        Jakarta Selatan","url":"http:\/\/api.twitter.com\/1\/geo\/id\/feb0fc297a00e5bb.json","country_code":"ID","place_type":"city","country":"Indonesia","id":"feb0fc297a00e5bb"},"favorited":false,"text":"Duuwh
+        rempong ya pagi2 buta uda mampir mampir (@ Circle k rempoa) http:\/\/t.co\/bkSY3SM"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":true,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"0084B4","protected":false,"location":"","notifications":false,"friends_count":10,"profile_sidebar_border_color":"C0DEED","followers_count":11,"name":"Gabriela
+        \u273e","default_profile_image":false,"contributors_enabled":false,"time_zone":null,"favourites_count":0,"url":null,"statuses_count":52,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","utc_offset":null,"description":"","is_translator":false,"profile_background_color":"C0DEED","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1503525227\/Z1vxvuir_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","created_at":"Wed
+        Jul 27 23:48:09 +0000 2011","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1503525227\/Z1vxvuir_normal.jpg","id_str":"343711519","profile_text_color":"333333","profile_sidebar_fill_color":"DDEEF6","screen_name":"gabisforca","listed_count":0,"lang":"pt","profile_background_tile":false,"id":343711519},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:53 +0000 2011","id_str":"106496478188544000","geo":null,"truncated":false,"coordinates":null,"source":"web","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496478188544000,"place":null,"favorited":false,"text":"Minha
+        m\u00e3e vai ter uma surpresa hoje !"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"038543","protected":false,"location":"michigan","notifications":false,"friends_count":37,"profile_sidebar_border_color":"EEEEEE","followers_count":25,"name":"LOUIE","default_profile_image":false,"contributors_enabled":false,"time_zone":"Quito","favourites_count":0,"url":null,"statuses_count":229,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme18\/bg.gif","utc_offset":-18000,"description":"my
+        name kevin, im a laid back old fashion type of guy that enjoys fishing and
+        bowling,old school r&b and movies and also being around his family and friends","is_translator":false,"profile_background_color":"ACDED6","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1493691079\/c1WYil2r_normal","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme18\/bg.gif","created_at":"Thu
+        Jul 07 19:33:18 +0000 2011","profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1493691079\/c1WYil2r_normal","id_str":"331181258","profile_text_color":"333333","profile_sidebar_fill_color":"F6F6F6","screen_name":"KLLJ_KEVIN_JR","listed_count":0,"lang":"en","profile_background_tile":false,"id":331181258},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:53 +0000 2011","id_str":"106496476397568000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/twitter.com\/download\/android\" rel=\"nofollow\"\u003ETwitter
+        for Android\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[{"indices":[23,35],"text":"stopthatbro"}],"urls":[]},"id":106496476397568000,"place":null,"favorited":false,"text":"Breakin
+        females hearts #stopthatbro"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"default_profile":false,"show_all_inline_media":true,"verified":false,"geo_enabled":false,"profile_link_color":"0707a8","protected":false,"location":"D.C.
+        ","notifications":false,"friends_count":783,"profile_sidebar_border_color":"181a1e","followers_count":1053,"name":"Shakur
+        Jordan ","default_profile_image":false,"contributors_enabled":false,"time_zone":"Eastern
+        Time (US & Canada)","favourites_count":127,"url":"http:\/\/drinkingatoradeinthehood.tumblr.com\/","statuses_count":102642,"following":true,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/309663678\/tumblr_loos6c3QQg1qhj6iko1_1280.jpg","utc_offset":-18000,"description":"If
+        You Bitter Get The Fuck Off Twitter. I grew up a fucking screw-up\r\nGot introduced
+        to the game, to the game then fucking blew up #AYYEE!\r\nCOWBOYS!!!!","is_translator":false,"profile_background_color":"000000","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1504893321\/59264_10150255439650092_510255091_14869740_2912284_n_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/309663678\/tumblr_loos6c3QQg1qhj6iko1_1280.jpg","created_at":"Mon
+        Aug 10 13:03:39 +0000 2009","profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1504893321\/59264_10150255439650092_510255091_14869740_2912284_n_normal.jpg","id_str":"64397414","profile_text_color":"000000","profile_sidebar_fill_color":"ffffff","screen_name":"Faceavelii","listed_count":37,"lang":"en","profile_background_tile":true,"id":64397414},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:52 +0000 2011","id_str":"106496475348992000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E","entities":{"user_mentions":[],"hashtags":[],"urls":[]},"id":106496475348992000,"place":null,"favorited":false,"text":"Niggas
+        pose to get money so why all the fuckin HATE?? I guess everybody want that
+        #1 spot"},{"in_reply_to_status_id_str":null,"in_reply_to_screen_name":null,"in_reply_to_user_id_str":null,"contributors":null,"retweeted":false,"in_reply_to_user_id":null,"retweet_count":0,"user":{"show_all_inline_media":false,"verified":false,"geo_enabled":false,"profile_link_color":"B40B43","protected":false,"location":"Cidodol","default_profile":false,"notifications":false,"friends_count":225,"profile_sidebar_border_color":"CC3366","followers_count":60,"name":"doenat
+        doedoeL","default_profile_image":false,"contributors_enabled":false,"time_zone":"Pacific
+        Time (US & Canada)","favourites_count":30,"url":"http:\/\/www.slank.com","statuses_count":1054,"following":false,"profile_use_background_image":true,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/276820231\/246814_1950796222990_1635164667_1943163_563706_n.jpg","utc_offset":-28800,"description":"inget
+        Allah ! dijamin hati lu bakalan tenang","is_translator":false,"profile_background_color":"FF6699","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1500625103\/31504_1391911931232_1635164667_922751_7097362_n_normal.jpg","follow_request_sent":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/276820231\/246814_1950796222990_1635164667_1943163_563706_n.jpg","created_at":"Sat
+        Aug 22 08:17:53 +0000 2009","profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1500625103\/31504_1391911931232_1635164667_922751_7097362_n_normal.jpg","id_str":"67846455","profile_text_color":"362720","profile_sidebar_fill_color":"E5507E","screen_name":"achiepermadi","listed_count":0,"lang":"en","profile_background_tile":true,"id":67846455},"in_reply_to_status_id":null,"created_at":"Wed
+        Aug 24 22:41:52 +0000 2011","id_str":"106496474212352000","geo":null,"truncated":false,"coordinates":null,"source":"\u003Ca
+        href=\"http:\/\/www.snaptu.com\" rel=\"nofollow\"\u003ESnaptu\u003C\/a\u003E","entities":{"user_mentions":[{"name":"Ayat
+        Quran","indices":[3,13],"id_str":"56593724","screen_name":"ayatquran","id":56593724}],"hashtags":[],"urls":[]},"id":106496474212352000,"place":null,"favorited":false,"text":"RT
+        @ayatquran: Dan tiadalah kehidupan dunia ini, selain dari main-main dan senda
+        gurau belaka (6:32)"}]'
+  - recorded: 2011-08-24T22:42:45.782Z
+    request:
+      protocol: HTTP/1.1
+      method: GET
+      uri: http://feeds.feedburner.com/wondermark
+      headers: {Accept: '*/*', Host: feeds.feedburner.com, Proxy-Connection: Keep-Alive,
+        Accept-Encoding: 'gzip,deflate'}
+    response:
+      protocol: HTTP/1.1
+      status: 200
+      headers: {Content-Type: text/xml; charset=UTF-8, ETag: Zszm705gNlvGRNatA1gBAvZUiWc,
+        Last-Modified: 'Wed, 24 Aug 2011 22:25:53 GMT', Date: 'Wed, 24 Aug 2011 22:42:45
+          GMT', Expires: 'Wed, 24 Aug 2011 22:42:45 GMT', Cache-Control: 'private,
+          max-age=0', X-Content-Type-Options: nosniff, X-XSS-Protection: 1; mode=block,
+        Server: GSE}
+      body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<?xml-stylesheet type=\"\
+        text/xsl\" media=\"screen\" href=\"/~d/styles/rss2full.xsl\"?><?xml-stylesheet\
+        \ type=\"text/css\" media=\"screen\" href=\"http://feeds.feedburner.com/~d/styles/itemcontent.css\"\
+        ?><rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:wfw=\"\
+        http://wellformedweb.org/CommentAPI/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\
+        \ xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\
+        \ xmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\" xmlns:feedburner=\"\
+        http://rssnamespace.org/feedburner/ext/1.0\" version=\"2.0\">\r\n<channel>\r\
+        \n\t<title>Wondermark</title>\r\n\t\r\n\t<link>http://wondermark.com</link>\r\
+        \n\t<description>An Illustrated Jocularity.</description>\r\n\t<lastBuildDate>Tue,\
+        \ 23 Aug 2011 09:45:24 +0000</lastBuildDate>\r\n\t<language>en</language>\r\
+        \n\t<sy:updatePeriod>hourly</sy:updatePeriod>\r\n\t<sy:updateFrequency>1</sy:updateFrequency>\r\
+        \n\t\r\n\t\t<atom10:link xmlns:atom10=\"http://www.w3.org/2005/Atom\" rel=\"\
+        self\" type=\"application/rss+xml\" href=\"http://feeds.feedburner.com/wondermark\"\
+        \ /><feedburner:info uri=\"wondermark\" /><atom10:link xmlns:atom10=\"http://www.w3.org/2005/Atom\"\
+        \ rel=\"hub\" href=\"http://pubsubhubbub.appspot.com/\" /><feedburner:emailServiceId>wondermark</feedburner:emailServiceId><feedburner:feedburnerHostname>http://feedburner.google.com</feedburner:feedburnerHostname><item>\r\
+        \n\t\t<title>#750; The Fickle Strawberry</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/X6-Lp9cP7KM/</link>\r\
+        \n\t\t<comments>http://wondermark.com/750/#comments</comments>\r\n\t\t<pubDate>Tue,\
+        \ 23 Aug 2011 07:00:08 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[anomalies]]></category>\r\
+        \n\t\t<category><![CDATA[dining]]></category>\r\n\t\t<category><![CDATA[narcissism]]></category>\r\
+        \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8438</guid>\r\
+        \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/750/\"><img\
+        \ src=\"http://wondermark.com/c/2011-08-23-750berry.gif\" border=\"0\" alt=\"\
+        The strawberry has an artistic temperament.\" title=\"The strawberry has an\
+        \ artistic temperament.\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/750/\"><img src=\"http://wondermark.com/c/2011-08-23-750berry.gif\"\
+        \ border=\"0\" alt=\"The strawberry has an artistic temperament.\" title=\"\
+        The strawberry has an artistic temperament.\" /></a></p><div class=\"feedflare\"\
+        >\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=X6-Lp9cP7KM:T0sRuonZads:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=X6-Lp9cP7KM:T0sRuonZads:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=X6-Lp9cP7KM:T0sRuonZads:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=X6-Lp9cP7KM:T0sRuonZads:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=X6-Lp9cP7KM:T0sRuonZads:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=X6-Lp9cP7KM:T0sRuonZads:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/X6-Lp9cP7KM\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/750/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/750/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>Bonus comic at SAVEUR Magazine!</title>\r\n\t\t\
+        <link>http://feedproxy.google.com/~r/wondermark/~3/4TUUgItxck4/</link>\r\n\
+        \t\t<comments>http://wondermark.com/saveur/#comments</comments>\r\n\t\t<pubDate>Tue,\
+        \ 23 Aug 2011 06:59:44 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\t<category><![CDATA[dining]]></category>\r\
+        \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8434</guid>\r\
+        \n\t\t<description><![CDATA[I was flattered to be invited to contribute a\
+        \ &#8220;recipe comic&#8221; to SAVEUR Magazine&#8217;s series of same! You\
+        \ can read the whole thing at the SAVEUR blog.]]></description>\r\n\t\t\t\
+        <content:encoded><![CDATA[<p><a href=\"http://www.saveur.com/article/Comix/david-malki-salad\"\
+        ><img src=\"http://wondermark.com/wp-content/uploads/2011/08/recipethumb.gif\"\
+        \ alt=\"\" title=\"oh it gets better\" width=\"343\" height=\"222\" class=\"\
+        alignnone size-full wp-image-8433\" /></a></p>\n<p>I was flattered to be invited\
+        \ to contribute a &#8220;recipe comic&#8221; to SAVEUR Magazine&#8217;s <a\
+        \ rel=\"nofollow\" href=\"http://www.saveur.com/comix\">series</a> of same!\
+        \ You can read the whole thing <a rel=\"nofollow\" href=\"http://www.saveur.com/article/Comix/david-malki-salad\"\
+        >at the SAVEUR blog</a>.</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4TUUgItxck4:9h3qvfu31yw:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4TUUgItxck4:9h3qvfu31yw:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=4TUUgItxck4:9h3qvfu31yw:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4TUUgItxck4:9h3qvfu31yw:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4TUUgItxck4:9h3qvfu31yw:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=4TUUgItxck4:9h3qvfu31yw:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/4TUUgItxck4\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/saveur/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/saveur/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>#749; In which Hubert becomes a Real Boy</title>\r\
+        \n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/u30sHHxJ1Qo/</link>\r\
+        \n\t\t<comments>http://wondermark.com/749/#comments</comments>\r\n\t\t<pubDate>Fri,\
+        \ 19 Aug 2011 06:38:17 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[consequences]]></category>\r\
+        \n\t\t<category><![CDATA[otherworldiness]]></category>\r\n\t\t<category><![CDATA[robots]]></category>\r\
+        \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8427</guid>\r\
+        \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/749/\"><img\
+        \ src=\"http://wondermark.com/c/2011-08-18-749speech.gif\" border=\"0\" alt=\"\
+        close enough\" title=\"close enough\" /></a></p>This comic was created live\
+        \ on stage at WorldCon, during my &#8220;Making of Wondermark&#8221; panel!\
+        \ To demonstrate to an audience how I make Wondermark, I sat down and made\
+        \ a Wondermark. I hope you like it.]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/749/\"><img src=\"http://wondermark.com/c/2011-08-18-749speech.gif\"\
+        \ border=\"0\" alt=\"close enough\" title=\"close enough\" /></a></p><p>This\
+        \ comic was created live on stage at <a rel=\"nofollow\" href=\"http://renovationsf.org\"\
+        >WorldCon</a>, during my &#8220;Making of Wondermark&#8221; panel! To demonstrate\
+        \ to an audience how I make Wondermark, I sat down and made a Wondermark.\
+        \ I hope you like it.</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=u30sHHxJ1Qo:Ig6KOrsG-4A:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=u30sHHxJ1Qo:Ig6KOrsG-4A:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=u30sHHxJ1Qo:Ig6KOrsG-4A:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=u30sHHxJ1Qo:Ig6KOrsG-4A:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=u30sHHxJ1Qo:Ig6KOrsG-4A:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=u30sHHxJ1Qo:Ig6KOrsG-4A:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/u30sHHxJ1Qo\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/749/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/749/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>#748; In which Marsha is lost</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/0tEewbMWSsY/</link>\r\
+        \n\t\t<comments>http://wondermark.com/748/#comments</comments>\r\n\t\t<pubDate>Tue,\
+        \ 16 Aug 2011 07:00:32 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[language]]></category>\r\
+        \n\t\t<category><![CDATA[sex]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
+        false\">http://wondermark.com/?p=8423</guid>\r\n\t\t<description><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/748/\"><img src=\"http://wondermark.com/c/2011-08-16-748bifton.gif\"\
+        \ border=\"0\" alt=\"Before I was just confused -- but now I'm titillated\
+        \ AND confused!\" title=\"Before I was just confused -- but now I'm titillated\
+        \ AND confused!\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/748/\"><img src=\"http://wondermark.com/c/2011-08-16-748bifton.gif\"\
+        \ border=\"0\" alt=\"Before I was just confused -- but now I'm titillated\
+        \ AND confused!\" title=\"Before I was just confused -- but now I'm titillated\
+        \ AND confused!\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=0tEewbMWSsY:nFq8nzndWeU:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=0tEewbMWSsY:nFq8nzndWeU:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=0tEewbMWSsY:nFq8nzndWeU:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=0tEewbMWSsY:nFq8nzndWeU:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=0tEewbMWSsY:nFq8nzndWeU:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=0tEewbMWSsY:nFq8nzndWeU:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/0tEewbMWSsY\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/748/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/748/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>World Science Fiction Convention</title>\r\n\t\t\
+        <link>http://feedproxy.google.com/~r/wondermark/~3/GiH2n6UGZAg/</link>\r\n\
+        \t\t<comments>http://wondermark.com/renovation/#comments</comments>\r\n\t\t\
+        <pubDate>Tue, 16 Aug 2011 04:47:22 +0000</pubDate>\r\n\t\t<dc:creator>David\
+        \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\
+        \r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8418</guid>\r\
+        \n\t\t<description><![CDATA[This week I&#8217;ll be in Reno for my first-ever\
+        \ World Science Fiction Convention! I&#8217;ll be in the dealer room with\
+        \ my Machine of Death co-editor Matthew Bennardo, but I&#8217;ll also be on\
+        \ the following panels: Thu 16:00 &#8211; 17:00, The Science Fiction and Fantasy\
+        \ Canon within Comics What are the essential science fiction and fantasy [...]]]></description>\r\
+        \n\t\t\t<content:encoded><![CDATA[<p><img src=\"http://wondermark.com/wp-content/uploads/2011/08/reno1-400x300.jpg\"\
+        \ alt=\"\" title=\"well, exciting!\" width=\"400\" height=\"300\" class=\"\
+        alignnone size-large wp-image-8419\" /></p>\n<p>This week I&#8217;ll be in\
+        \ Reno for my first-ever <a rel=\"nofollow\" href=\"http://renovationsf.org\"\
+        >World Science Fiction Convention</a>! I&#8217;ll be in the dealer room with\
+        \ my <em>Machine of Death</em> co-editor <a rel=\"nofollow\" href=\"http://mbennardo.com\"\
+        >Matthew Bennardo</a>, but I&#8217;ll also be on the following panels:</p>\n\
+        <p><strong>Thu 16:00 &#8211; 17:00, The Science Fiction and Fantasy Canon\
+        \ within Comics</strong><br />\nWhat are the essential science fiction and\
+        \ fantasy comics?<br />\n<em>Tom Galloway (M), David Malki, Andrew Wheeler,\
+        \ Scott Edelman</em></p>\n<p>(I will say right now that my answer to that\
+        \ question is &#8220;Um&#8230;aren&#8217;t 90% of mainstream comics considered\
+        \ science fiction?&#8221; And then I will make jokes to mask my nervousness.\
+        \ If you have suggestions for BRILLIANT ANSWERS I can whip out to seem learned\
+        \ on this panel, please leave a comment on this post.)</p>\n<p><strong>Thu\
+        \ 18:00 &#8211; 19:00, Making Wondermark: Victorian-Style Collage with a Humorous\
+        \ Bent<br />\n</strong>To make the celebrated comic strip &#8220;Wondermark&#8221;,\
+        \ David Malki repurposes illustrations and engravings from 19th-Century books\
+        \ into sarcastic, silly, and surreal collage-style comic strips. Come watch\
+        \ how it&#8217;s done and find out if he&#8217;s as funny in person as he\
+        \ is in comics!</p>\n<p>(I&#8217;m somewhat more comfortable with the subject\
+        \ matter of this one.)</p>\n<p><strong>Fri 11:00 &#8211; 12:00, Ultimate Steampunk\
+        \ &#8211; Could the Victorians Have Built a Flying Carriage</strong><br />\n\
+        While the Victorians built guns, trains and submarines, they never quite got\
+        \ off the ground.  But, what if they had built a flying carriage, a spacesuit\
+        \ or a non-loom computer?<em><br />\nDavid Malki (M), G. David Nordley, Allison\
+        \ Lonsdale, Harry Turtledove, Lawrence Person</em></p>\n<p>(My role as moderator\
+        \ of this panel will chiefly be to say, &#8220;Have you guys seen <em>Master\
+        \ of the World</em> with Vincent Price and Charles Bronson? It would&#8217;ve\
+        \ been like that, right? Right?&#8221;)</p>\n<p><strong>Fri 14:00 &#8211;\
+        \ 15:00, Book Design and Layout</strong><br />\nA review of the process and\
+        \ challenges involved in designing and producing a book once the written word\
+        \ is in hand.<br />\n<em>Tara O&#8217;Shea (M), David Malki, Sandra Tayler</em></p>\n\
+        <p><strong>Sat 15:00 &#8211; 16:00, Editing Anthologies</strong><br />\nHow\
+        \ do editors approach anthologies?  Do they just call their friends, or do\
+        \ they (or their assistants) plow through slushpiles?  Do the &#8220;Best\
+        \ ofs&#8221; present special issues?<br />\n<em>David Malki (M), Jennifer\
+        \ Brozek, John Joseph Adams, Ellen Datlow</em></p>\n<p><strong>Sun 12:00 &#8211;\
+        \ 13:00, Humor in SF and Fantasy</strong><br />\nGroucho Marx said that comedy\
+        \ is harder than drama.  What are the challenges of writing humor?  Who are\
+        \ influences &#8212; inside the field and out?<br />\n<em>Peter J. Heck (M),\
+        \ David Malki, John DeChancie, Dr. Demento</em></p>\n<p>I&#8217;ve also been\
+        \ playing with a new toy &#8212; an <a rel=\"nofollow\" href=\"http://www.eye.fi/\"\
+        >Eye-Fi</a> camera card that will allow me to take pictures with a nice (non-mobile-device)\
+        \ camera and shoot them straight to my iPad for uploading to the Web. I&#8217;m\
+        \ going to try to make a habit of sharing pics all week long on <a rel=\"\
+        nofollow\" href=\"http://twitter.com/malki\">my Twitter</a>, so keep an eye\
+        \ out for those! Are you curious what the inside of the Reno State Convention\
+        \ Center looks like? No? Well, <em>you&#8217;ll soon find out.</em></p>\n\
+        <div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=GiH2n6UGZAg:ChlqHaNR8Y8:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=GiH2n6UGZAg:ChlqHaNR8Y8:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=GiH2n6UGZAg:ChlqHaNR8Y8:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=GiH2n6UGZAg:ChlqHaNR8Y8:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=GiH2n6UGZAg:ChlqHaNR8Y8:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=GiH2n6UGZAg:ChlqHaNR8Y8:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/GiH2n6UGZAg\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/renovation/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>10</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/renovation/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>#747; In which Henry thinks for Himself</title>\r\
+        \n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/WyVWfiygqZs/</link>\r\
+        \n\t\t<comments>http://wondermark.com/747/#comments</comments>\r\n\t\t<pubDate>Fri,\
+        \ 12 Aug 2011 07:00:51 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[children]]></category>\r\
+        \n\t\t<category><![CDATA[deceit]]></category>\r\n\t\t<category><![CDATA[mr.\
+        \ meanscary]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8408</guid>\r\
+        \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/747/\"><img\
+        \ src=\"http://wondermark.com/c/2011-08-12-747fear.gif\" border=\"0\" alt=\"\
+        And COME ON it's not like I'm DOING anything in there!\" title=\"And COME\
+        \ ON it's not like I'm DOING anything in there!\" /></a></p>]]></description>\r\
+        \n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/747/\"\
+        ><img src=\"http://wondermark.com/c/2011-08-12-747fear.gif\" border=\"0\"\
+        \ alt=\"And COME ON it's not like I'm DOING anything in there!\" title=\"\
+        And COME ON it's not like I'm DOING anything in there!\" /></a></p><div class=\"\
+        feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=WyVWfiygqZs:LVi-oqesHXM:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=WyVWfiygqZs:LVi-oqesHXM:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=WyVWfiygqZs:LVi-oqesHXM:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=WyVWfiygqZs:LVi-oqesHXM:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=WyVWfiygqZs:LVi-oqesHXM:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=WyVWfiygqZs:LVi-oqesHXM:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/WyVWfiygqZs\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/747/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/747/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>Machine of Death Volume 2 submission stats!</title>\r\
+        \n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/JdxTT64mp7A/</link>\r\
+        \n\t\t<comments>http://wondermark.com/machine-of-death-volume-2-submission-stats/#comments</comments>\r\
+        \n\t\t<pubDate>Fri, 12 Aug 2011 06:25:00 +0000</pubDate>\r\n\t\t<dc:creator>David\
+        \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\
+        \t\t<category><![CDATA[machine of death]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
+        false\">http://wondermark.com/?p=8404</guid>\r\n\t\t<description><![CDATA[It&#8217;s\
+        \ taken us a while, but we&#8217;ve finally entered all the data for the story\
+        \ submissions we received for the upcoming second volume of Machine of Death!\
+        \ I wrote up a bit about it for the MOD blog: The final few days of submissions\
+        \ felt, for us, in a weird way just like October 26 [...]]]></description>\r\
+        \n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://machineofdeath.net/v2-summary\"\
+        ><img src=\"http://wondermark.com/wp-content/uploads/2011/08/mod-v2cloud-400x193.gif\"\
+        \ alt=\"\" title=\"Not pictured: &#039;CHEESE POISONING&#039;\" width=\"400\"\
+        \ height=\"193\" class=\"alignnone size-large wp-image-8405\" /></a></p>\n\
+        <p>It&#8217;s taken us a while, but we&#8217;ve finally entered all the data\
+        \ for the story submissions we received for the upcoming second volume of\
+        \ <em>Machine of Death!</em> I wrote up a bit about it for the <a href=\"\
+        http://machineofdeath.net/v2-summary\">MOD blog</a>:</p>\n<blockquote><p>The\
+        \ final few days of submissions felt, for us, in a weird way just like October\
+        \ 26 of last year. The flurry of activity we witnessed on Twitter, on Facebook,\
+        \ and on blogs as you finished writing your stories was incredibly energizing.</p>\n\
+        <p>It???s a wonderful feeling watching people become enthused and finding\
+        \ reward in the thing that you asked them to do. It makes us not want to have\
+        \ to turn anybody down for Volume 2! But we received 6,373,643 words of submissions\
+        \ ??? if we published all of it, it would be longer than all the Harry Potter\
+        \ books <strong>and</strong> all the Lord of the Rings books <strong>and</strong>\
+        \ all the Song of Ice and Fire books <strong>and</strong> all of Stephen King???s\
+        \ Dark Tower books <strong>put together</strong>. You guessed it ??? we???re\
+        \ having a very busy couple of months, reading all of this!</p>\n<p><em><a\
+        \ href=\"http://machineofdeath.net/v2-summary\">(Read more)</a></em></p></blockquote>\n\
+        <p>For more details and all kinds of stats on the final count, as well as\
+        \ some neat new things we need your help with (do you know how to set up and\
+        \ run an academic survey? We&#8217;d very much like to pick your brain or\
+        \ enlist your assistance!), check out <a href=\"http://machineofdeath.net/v2-summary\"\
+        >the full blog post</a>.</p>\n<p>Congrats to everyone who sent in a story,\
+        \ or three! We&#8217;re reading furiously, and I gotta say, it&#8217;s super\
+        \ fun. You devil, you made me have fun!</p>\n<div class=\"feedflare\">\n<a\
+        \ href=\"http://feeds.feedburner.com/~ff/wondermark?a=JdxTT64mp7A:NmGOpmx-4nE:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=JdxTT64mp7A:NmGOpmx-4nE:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=JdxTT64mp7A:NmGOpmx-4nE:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=JdxTT64mp7A:NmGOpmx-4nE:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=JdxTT64mp7A:NmGOpmx-4nE:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=JdxTT64mp7A:NmGOpmx-4nE:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/JdxTT64mp7A\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/machine-of-death-volume-2-submission-stats/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>2</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/machine-of-death-volume-2-submission-stats/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>#746; There is No Sadder Creature</title>\r\n\t\
+        \t<link>http://feedproxy.google.com/~r/wondermark/~3/qRKrEpT_frQ/</link>\r\
+        \n\t\t<comments>http://wondermark.com/746/#comments</comments>\r\n\t\t<pubDate>Tue,\
+        \ 09 Aug 2011 09:32:21 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[consequences]]></category>\r\
+        \n\t\t<category><![CDATA[mr. meanscary]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
+        false\">http://wondermark.com/?p=7836</guid>\r\n\t\t<description><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/746/\"><img src=\"http://wondermark.com/c/2011-08-09-746puppy2.gif\"\
+        \ border=\"0\" alt=\"Mr. Meanscary would LIKE to give back to his community\
+        \ and foster civic engagement, if you people would just LET HIM\" title=\"\
+        Mr. Meanscary would LIKE to give back to his community and foster civic engagement,\
+        \ if you people would just LET HIM\" /></a></p>]]></description>\r\n\t\t\t\
+        <content:encoded><![CDATA[<p><a href=\"http://wondermark.com/746/\"><img src=\"\
+        http://wondermark.com/c/2011-08-09-746puppy2.gif\" border=\"0\" alt=\"Mr.\
+        \ Meanscary would LIKE to give back to his community and foster civic engagement,\
+        \ if you people would just LET HIM\" title=\"Mr. Meanscary would LIKE to give\
+        \ back to his community and foster civic engagement, if you people would just\
+        \ LET HIM\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=qRKrEpT_frQ:zZNsL-lP840:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=qRKrEpT_frQ:zZNsL-lP840:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=qRKrEpT_frQ:zZNsL-lP840:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=qRKrEpT_frQ:zZNsL-lP840:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=qRKrEpT_frQ:zZNsL-lP840:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=qRKrEpT_frQ:zZNsL-lP840:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/qRKrEpT_frQ\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/746/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/746/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>A mystery, solved.</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/NyFNQbXN16o/</link>\r\
+        \n\t\t<comments>http://wondermark.com/a-mystery-solved/#comments</comments>\r\
+        \n\t\t<pubDate>Mon, 08 Aug 2011 18:55:40 +0000</pubDate>\r\n\t\t<dc:creator>David\
+        \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\
+        \t\t<category><![CDATA[goofy elk]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
+        false\">http://wondermark.com/?p=7827</guid>\r\n\t\t<description><![CDATA[Regarding\
+        \ Comic #741, that tale of the elusive goofy elk&#8230;Dave D. writes in with\
+        \ this to say: David, You have inadvertently solved a mystery that has been\
+        \ troubling my wife and I for years. A few years back, we picked up a dog\
+        \ from the boyfriend of a customer who couldn&#8217;t care for her anymore.\
+        \ [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p>Regarding Comic\
+        \ #741, that tale of <a href=\"http://wondermark.com/741\">the elusive goofy\
+        \ elk</a>&#8230;Dave D. writes in with this to say:</p>\n<blockquote><p>David,</p>\n\
+        <p>You have inadvertently solved a mystery that has been troubling my wife\
+        \ and I for years.  A few years back, we picked up a dog from the boyfriend\
+        \ of a customer who couldn&#8217;t care for her anymore.  She is a mixed breed\
+        \ of some sort, but we are the third owners and have only her original vet\
+        \ papers which claim she is a &#8220;Rottweiler/Shepherd/Lab?&#8221; She clearly\
+        \ has some Rottweiler in her,  and most often is mistaken as a Rottie puppy\
+        \ since she is only 60lbs and has a lot of energy.  She also has a tongue\
+        \ much too large for her skull and a rather silly demeanour.</p>\n<p>Well\
+        \ I was reading your comic, as is my habit, and you&#8217;ve solved it! I\
+        \ would bet the farm that she is a Rottie/Goofy Elk cross.  Although the attached\
+        \ picture does not show it as well as it might, she does make the exact face\
+        \ of the beast featured in the latest strip. It would also explain why I have\
+        \ been feeling more and more Marty Feldmanish &#8230; Feldmany .. Feldmanesque\
+        \ .. with each passing day.</p>\n<p>Anyhow, I have always loved your comic\
+        \ but I hadn&#8217;t realized what an educational tool it was.   Thank you.</p>\n\
+        <p>Cheers,<br />\nDave</p></blockquote>\n<p>Dave enclosed the photo below.\
+        \ To which I can only say&#8230;<em>SEPARATED AT BIRTH???</em></p>\n<p><img\
+        \ src=\"http://wondermark.com/wp-content/uploads/2011/08/jasmine-elk1.jpg\"\
+        \ alt=\"\" title=\"CALL NATIONAL GEOGRAPHIC\" width=\"400\" height=\"578\"\
+        \ class=\"alignnone size-full wp-image-7833\" /></p>\n<div class=\"feedflare\"\
+        >\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=NyFNQbXN16o:csvCxpRt1Ds:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=NyFNQbXN16o:csvCxpRt1Ds:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=NyFNQbXN16o:csvCxpRt1Ds:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=NyFNQbXN16o:csvCxpRt1Ds:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=NyFNQbXN16o:csvCxpRt1Ds:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=NyFNQbXN16o:csvCxpRt1Ds:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/NyFNQbXN16o\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/a-mystery-solved/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/a-mystery-solved/</feedburner:origLink></item>\r\
+        \n\t\t<item>\r\n\t\t<title>#745; The Deadliest Puppy Butt</title>\r\n\t\t\
+        <link>http://feedproxy.google.com/~r/wondermark/~3/g5ctFzrzaoc/</link>\r\n\
+        \t\t<comments>http://wondermark.com/745/#comments</comments>\r\n\t\t<pubDate>Fri,\
+        \ 05 Aug 2011 07:00:07 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+        \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[animals]]></category>\r\
+        \n\t\t<category><![CDATA[anomalies]]></category>\r\n\t\t<category><![CDATA[language]]></category>\r\
+        \n\t\t<category><![CDATA[mr. meanscary]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
+        false\">http://wondermark.com/?p=7818</guid>\r\n\t\t<description><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/745/\"><img src=\"http://wondermark.com/c/2011-08-05-745puppy.gif\"\
+        \ border=\"0\" alt=\"We came to this country to escape the terrible famine...The\
+        \ CHILD FAMINE\" title=\"We came to this country to escape the terrible famine...The\
+        \ CHILD FAMINE\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+        \ href=\"http://wondermark.com/745/\"><img src=\"http://wondermark.com/c/2011-08-05-745puppy.gif\"\
+        \ border=\"0\" alt=\"We came to this country to escape the terrible famine...The\
+        \ CHILD FAMINE\" title=\"We came to this country to escape the terrible famine...The\
+        \ CHILD FAMINE\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=g5ctFzrzaoc:uERLxHADbB8:yIl2AUoC8zA\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=g5ctFzrzaoc:uERLxHADbB8:gIN9vFwOqvQ\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=g5ctFzrzaoc:uERLxHADbB8:gIN9vFwOqvQ\"\
+        \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=g5ctFzrzaoc:uERLxHADbB8:qj6IDK7rITs\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
+        0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=g5ctFzrzaoc:uERLxHADbB8:F7zBnMyn0Lo\"\
+        ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=g5ctFzrzaoc:uERLxHADbB8:F7zBnMyn0Lo\"\
+        \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/g5ctFzrzaoc\"\
+        \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/745/feed/</wfw:commentRss>\r\
+        \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/745/</feedburner:origLink></item>\r\
+        \n\t</channel>\r\n</rss><!-- Performance optimized by W3 Total Cache. Learn\
+        \ more: http://www.w3-edge.com/wordpress-plugins/\n\nMinified using disk\n\
+        Page Caching using disk (enhanced)\nDatabase Caching 1/28 queries in 0.034\
+        \ seconds using disk\nObject Caching 830/899 objects using disk\nContent Delivery\
+        \ Network via wondermark.com\n\nServed from: wondermark.com @ 2011-08-23 02:47:39\
+        \ -->\r\n"

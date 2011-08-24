@@ -17,7 +17,8 @@ class SmokeSpec extends Specification {
 	}
 
 	@Betamax(tape = "smoke spec")
-	def "json response data"() {
+	@Unroll({"$type response data"})
+	def "various types of response data"() {
 		when:
 		def response = http.get(uri: uri)
 
@@ -25,7 +26,10 @@ class SmokeSpec extends Specification {
 		response.status == HTTP_OK
 
 		where:
-		uri << ["http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"]
+		type   | uri
+		"html" | "http://grails.org/"
+		"json" | "http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"
+		"xml"  | "http://feeds.feedburner.com/wondermark"
 	}
-	
+
 }
