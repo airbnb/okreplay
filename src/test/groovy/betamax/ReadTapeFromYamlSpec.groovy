@@ -90,6 +90,32 @@ tape:
 		tape.interactions[1].response.entity.content.text == "I'm a teapot"
 	}
 
+	def "reads request headers"() {
+		given:
+		def yaml = """\
+tape:
+  name: single_interaction_tape
+  interactions:
+  - recorded: 2011-08-23T22:41:40.000Z
+    request:
+      protocol: HTTP/1.1
+      method: GET
+      uri: http://icanhascheezburger.com/
+      headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+    response:
+      protocol: HTTP/1.1
+      status: 200
+      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      body: O HAI!
+"""
+		when:
+		def tape = loader.readTape(new StringReader(yaml))
+
+		then:
+		tape.interactions[0].request.getFirstHeader(ACCEPT_LANGUAGE).value == "en-GB,en"
+		tape.interactions[0].request.getFirstHeader(IF_NONE_MATCH).value == "b00b135"
+	}
+
 	def "barfs on non-yaml data"() {
 		given:
 		def yaml = "THIS IS NOT YAML"

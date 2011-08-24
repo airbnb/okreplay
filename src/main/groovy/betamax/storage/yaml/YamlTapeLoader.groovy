@@ -98,7 +98,11 @@ class YamlTapeLoader implements TapeLoader {
 	private HttpRequest toRequest(data) {
 		require data, "protocol", "method", "uri"
 		def requestProtocol = parseProtocol(data.protocol)
-		new BasicHttpRequest(data.method, data.uri, requestProtocol)
+		def request = new BasicHttpRequest(data.method, data.uri, requestProtocol)
+		data.headers.each { header ->
+			request.addHeader(header.key, header.value)
+		}
+		request
 	}
 
 	private HttpResponse loadResponse(data) {
