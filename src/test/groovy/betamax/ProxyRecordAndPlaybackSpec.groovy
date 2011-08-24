@@ -7,6 +7,7 @@ import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
+import org.yaml.snakeyaml.Yaml
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -30,7 +31,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def cleanupSpec() {
 		proxy.stop()
-        recorder.ejectTape()
+		recorder.ejectTape()
 		assert tapeRoot.deleteDir()
 	}
 
@@ -76,44 +77,37 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		def tape = recorder.ejectTape()
 
 		then:
-		def file = new File(recorder.tapeRoot, "${tape.name}.json")
+		def file = new File(recorder.tapeRoot, "${tape.name}.yaml")
 		file.isFile()
 
 		and:
-		def json = file.withReader {
-			reader -> new JsonSlurper().parse(reader)
+		def yaml = file.withReader { reader ->
+			new Yaml().load(reader)
 		}
-		json.tape.name == "proxy_record_and_playback_spec"
-		json.tape.interactions.size() == 2
+		yaml.tape.name == "proxy_record_and_playback_spec"
+		yaml.tape.interactions.size() == 2
 	}
 
 	def "can load an existing tape from a file"() {
 		given:
 		def file = new File(recorder.tapeRoot, "existing_tape.json")
 		file.parentFile.mkdirs()
-		file.withWriter { writer ->
-			writer << """\
-{
-	"tape": {
-		"name": "existing_tape",
-		"interactions": [
-			{
-				"recorded": "2011-08-19 12:45:33 +0100",
-				"request": {
-					"protocol": "HTTP/1.1",
-					"method": "GET",
-					"uri": "http://icanhascheezburger.com/"
-				},
-				"response": {
-					"protocol": "HTTP/1.1",
-					"status": 200,
-					"body": "O HAI!"
-				}
-			}
-		]
-	}
-}"""
-		}
+		file.text = """\
+tape:
+  name: existing_tape
+  interactions:
+  - recorded: 2011-08-19T11:45:33.000Z
+    request:
+      protocol: HTTP/1.1
+      method: GET
+      uri: http://icanhascheezburger.com/
+      headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+    response:
+      protocol: HTTP/1.1
+      status: 200
+      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      body: O HAI!
+"""
 
 		when:
 		recorder.insertTape("existing_tape")

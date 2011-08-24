@@ -18,7 +18,7 @@ class ReadTapeFromYamlSpec extends Specification {
 tape:
   name: single_interaction_tape
   interactions:
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -54,7 +54,7 @@ tape:
 tape:
   name: multiple_interaction_tape
   interactions:
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -65,7 +65,7 @@ tape:
       status: 200
       headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
       body: O HAI!
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -134,7 +134,7 @@ tape:
 tape:
   name: missing_response_status_tape
   interactions:
-  - recorded: THIS IS NOT A DATE!
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET

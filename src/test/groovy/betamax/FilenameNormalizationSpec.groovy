@@ -44,8 +44,8 @@ class FilenameNormalizationSpec extends Specification {
 
 		where:
 		tapeName  | filename
-		"my_tape" | "my_tape.json"
-		"my tape" | "my_tape.json"
-		"%)1aé"   | "_1ae.json"
+		"my_tape" | "my_tape.yaml"
+		"my tape" | "my_tape.yaml"
+		"%)1aé"   | "_1ae.yaml"
 	}
 }
