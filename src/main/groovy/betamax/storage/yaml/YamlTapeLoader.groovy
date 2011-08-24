@@ -18,16 +18,22 @@ package betamax.storage.yaml
 
 import groovy.util.logging.Log4j
 import org.codehaus.groovy.runtime.typehandling.GroovyCastException
-import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.DumperOptions.FlowStyle
 import betamax.encoding.*
 import betamax.storage.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import org.apache.http.entity.*
 import org.apache.http.message.*
+import org.yaml.snakeyaml.*
 
 @Log4j
 class YamlTapeLoader extends AbstractTapeLoader {
+
+	/**
+	 * Options controlling the style of the YAML written out.
+	 */
+	DumperOptions dumperOptions = new DumperOptions(defaultFlowStyle: FlowStyle.BLOCK)
 
 	String getFileExtension() {
 		"yaml"
@@ -44,7 +50,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 
 	void writeTape(Tape tape, Writer writer) {
 		def map = [tape: [name: tape.name, interactions: data(tape.interactions)]]
-		def yaml = new Yaml()
+		def yaml = new Yaml(dumperOptions)
 		yaml.dump(map, writer)
 	}
 
