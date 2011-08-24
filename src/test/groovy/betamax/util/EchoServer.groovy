@@ -107,7 +107,7 @@ class EchoHandler extends AbstractHandler {
 
 	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
 		def out
-		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING).tokenize(",")
+		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(",")
 		log.debug "request accepts $acceptedEncodings"
 		if ("gzip" in acceptedEncodings) {
 			response.addHeader(CONTENT_ENCODING, "gzip")
