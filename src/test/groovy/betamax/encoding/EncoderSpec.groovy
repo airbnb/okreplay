@@ -16,5 +16,5 @@ class EncoderSpec extends Specification {
 		where:
 		encoder << [new GzipEncoder(), new DeflateEncoder()]
 	}
-	
+
 }

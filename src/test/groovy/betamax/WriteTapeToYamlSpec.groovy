@@ -1,9 +1,8 @@
 package betamax
 
+import betamax.storage.Tape
 import betamax.storage.yaml.YamlTapeLoader
 import org.apache.http.HttpResponse
-import org.yaml.snakeyaml.Yaml
-import betamax.storage.*
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
@@ -23,7 +22,7 @@ class WriteTapeToYamlSpec extends Specification {
 	@Shared HttpResponse imageResponse
 	@Shared File image
 
-    def setupSpec() {
+	def setupSpec() {
 		getRequest = new HttpGet("http://icanhascheezburger.com/")
 		getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
 		getRequest.addHeader(IF_NONE_MATCH, "b00b135")

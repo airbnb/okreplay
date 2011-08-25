@@ -2,12 +2,10 @@ package betamax
 
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
-import groovy.json.JsonSlurper
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
-import org.yaml.snakeyaml.Yaml
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {

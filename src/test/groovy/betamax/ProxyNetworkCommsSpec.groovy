@@ -2,6 +2,8 @@ package betamax
 
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
+import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
@@ -10,22 +12,20 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import org.apache.commons.httpclient.HttpClient
-import org.apache.commons.httpclient.methods.GetMethod
 
 class ProxyNetworkCommsSpec extends Specification {
 
 	@Shared Recorder recorder = new Recorder()
 	@Shared HttpProxyServer proxy = new HttpProxyServer()
-    @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 
 	def setupSpec() {
 		proxy.start(recorder)
 	}
 
-    def setup() {
+	def setup() {
 		endpoint.start()
-    }
+	}
 
 	def cleanupSpec() {
 		proxy.stop()

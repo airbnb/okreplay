@@ -37,32 +37,32 @@ class YamlTapeLoader implements TapeLoader {
 
 	Tape readTape(Reader reader) {
 		try {
-            def tape = yaml.load(reader)
-            if (!(tape instanceof Tape)) {
-                throw new TapeLoadException("Expected a Tape but loaded a ${tape.getClass().name}")
-            }
-            tape
+			def tape = yaml.load(reader)
+			if (!(tape instanceof Tape)) {
+				throw new TapeLoadException("Expected a Tape but loaded a ${tape.getClass().name}")
+			}
+			tape
 		} catch (YAMLException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
-    void writeTape(Tape tape, Writer writer) {
-        if (log.isDebugEnabled()) {
-            def sw = new StringWriter()
-            yaml.dump(tape, sw)
-            log.debug sw.toString()
-        }
-        yaml.dump(tape, writer)
+	void writeTape(Tape tape, Writer writer) {
+		if (log.isDebugEnabled()) {
+			def sw = new StringWriter()
+			yaml.dump(tape, sw)
+			log.debug sw.toString()
+		}
+		yaml.dump(tape, writer)
 	}
 
-    Yaml getYaml() {
-        def representer = new TapeRepresenter()
-        representer.addClassTag(Tape, "!tape")
-        def constructor = new Constructor()
-        constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
-        new Yaml(constructor, representer, dumperOptions)
-    }
+	Yaml getYaml() {
+		def representer = new TapeRepresenter()
+		representer.addClassTag(Tape, "!tape")
+		def constructor = new Constructor()
+		constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
+		new Yaml(constructor, representer, dumperOptions)
+	}
 
 }
 

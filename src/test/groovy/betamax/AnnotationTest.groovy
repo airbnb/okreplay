@@ -13,13 +13,13 @@ class AnnotationTest {
 	static File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Rule public Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	EchoServer endpoint = new EchoServer()
-    RESTClient http
+	RESTClient http
 
-    @Before
-    void initRestClient() {
-        http = new RESTClient(endpoint.url)
-        http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-    }
+	@Before
+	void initRestClient() {
+		http = new RESTClient(endpoint.url)
+		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+	}
 
 	@After
 	void ensureEndpointIsStopped() {
