@@ -5,6 +5,7 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
 
+@Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
 
 	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
