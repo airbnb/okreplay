@@ -16,24 +16,36 @@
 
 package betamax.storage
 
-import org.apache.http.entity.StringEntity
+import betamax.encoding.*
 import org.apache.http.*
-import org.apache.http.message.*
 import static org.apache.http.HttpHeaders.CONTENT_ENCODING
-import betamax.encoding.GzipEncoder
-import betamax.encoding.DeflateEncoder
-import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.entity.*
+import org.apache.http.message.*
 
 class Tape {
 
     String name
-    Collection<TapeInteraction> interactions = []
+    List<TapeInteraction> interactions = []
+	private int position = -1
 
-    boolean play(HttpRequest request, HttpResponse response) {
-        def interaction = interactions.find {
-            it.request.uri == request.requestLine.uri && it.request.method == request.requestLine.method
-        }
-        if (interaction) {
+	int size() {
+		interactions.size()
+	}
+
+	boolean seek(HttpRequest request) {
+		position = interactions.findIndexOf {
+			it.request.uri == request.requestLine.uri && it.request.method == request.requestLine.method
+		}
+		position >= 0
+	}
+
+	void reset() {
+		position = -1
+	}
+
+    void play(HttpRequest request, HttpResponse response) {
+        if (position >= 0) {
+			def interaction = interactions[position]
             response.statusLine = new BasicStatusLine(parseProtocol(interaction.response.protocol), interaction.response.status, null)
             response.headers = interaction.response.headers.collect {
                 new BasicHeader(it.key, it.value)
@@ -49,7 +61,7 @@ class Tape {
             }
             true
         } else {
-            false
+            throw new IllegalStateException("Tape is not ready to play")
         }
     }
 

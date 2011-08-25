@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.encoding.GzipEncoder
 import betamax.storage.Tape
 import org.apache.http.message.BasicHttpResponse
 import static groovyx.net.http.ContentType.URLENC
@@ -9,13 +10,10 @@ import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import spock.lang.*
-import betamax.encoding.GzipEncoder
 
 @Stepwise
 class TapeSpec extends Specification {
 
-	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared Tape tape = new Tape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
@@ -30,16 +28,15 @@ class TapeSpec extends Specification {
 		plainTextResponse.entity.contentLength = bytes.length
 	}
 
-    def cleanupSpec() {
-        assert tapeRoot.deleteDir()
-    }
-
-	def "reading from an empty tape does nothing"() {
+	def "reading from an empty tape throws an exception"() {
 		given:
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
-		expect:
-		!tape.play(getRequest, response)
+		when:
+		tape.play(getRequest, response)
+
+		then:
+		thrown IllegalStateException
 	}
 
 	def "can write an HTTP interaction to a tape"() {
@@ -47,7 +44,7 @@ class TapeSpec extends Specification {
 		tape.record(getRequest, plainTextResponse)
 
 		then:
-		tape.interactions.size() == 1
+		tape.size() == old(tape.size()) + 1
 		def interaction = tape.interactions[-1]
 
 		and:
@@ -64,29 +61,33 @@ class TapeSpec extends Specification {
 		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getFirstHeader(CONTENT_ENCODING).value
 	}
 
-	def "can read a stored HTTP interaction"() {
+	def "seek does not match a request for a different URI"() {
+		given:
+		def request = new HttpGet("http://qwantz.com/")
+
+		expect:
+		!tape.seek(request)
+	}
+
+	def "can seek for a previously recorded interaction"() {
+		expect:
+		tape.seek(getRequest)
+	}
+
+	def "can read a stored interaction"() {
 		given:
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
-		expect:
+		when:
 		tape.play(getRequest, response)
 
-		and:
+		then:
 		response.statusLine.protocolVersion == plainTextResponse.statusLine.protocolVersion
 		response.statusLine.statusCode == plainTextResponse.statusLine.statusCode
 		new GzipEncoder().decode(response.entity.content) == "O HAI!"
 		response.getHeaders(CONTENT_TYPE).value == plainTextResponse.getHeaders(CONTENT_TYPE).value
 		response.getHeaders(CONTENT_LANGUAGE).value == plainTextResponse.getHeaders(CONTENT_LANGUAGE).value
 		response.getHeaders(CONTENT_ENCODING).value == plainTextResponse.getHeaders(CONTENT_ENCODING).value
-	}
-
-	def "read does not match a request for a different URI"() {
-		given:
-		def request = new HttpGet("http://qwantz.com/")
-		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
-
-		expect:
-		!tape.play(request, response)
 	}
 
 	def "can record post requests with a body"() {
@@ -98,8 +99,22 @@ class TapeSpec extends Specification {
 		tape.record(request, plainTextResponse)
 
 		then:
+		tape.size() == old(tape.size()) + 1
+
+		and:
 		def interaction = tape.interactions[-1]
 		interaction.request.body == request.entity.content.text
+	}
+
+	def "can reset the tape position"() {
+		given:
+		tape.reset()
+
+		when:
+		tape.play(getRequest, new BasicHttpResponse(HTTP_1_1, 200, "OK"))
+
+		then:
+		thrown IllegalStateException
 	}
     
 }

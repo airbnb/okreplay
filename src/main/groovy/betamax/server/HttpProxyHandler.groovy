@@ -60,8 +60,9 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 		def tape = recorder.tape
 
-		if (tape?.play(request, response)) {
+		if (tape?.seek(request)) {
 			log.debug "playing back from tape '$tape.name'..."
+			tape.play(request, response)
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
 			try {
