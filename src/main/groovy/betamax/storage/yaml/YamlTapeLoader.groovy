@@ -17,16 +17,25 @@
 package betamax.storage.yaml
 
 import groovy.util.logging.Log4j
-import org.yaml.snakeyaml.Yaml
+import org.codehaus.groovy.runtime.typehandling.GroovyCastException
+import org.yaml.snakeyaml.DumperOptions.FlowStyle
+import betamax.encoding.*
 import betamax.storage.*
 import org.apache.http.*
+import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import org.apache.http.entity.*
 import org.apache.http.message.*
+import org.yaml.snakeyaml.*
 import org.yaml.snakeyaml.representer.Representer
 import org.yaml.snakeyaml.introspector.Property
 
 @Log4j
-class YamlTapeLoader implements TapeLoader {
+class YamlTapeLoader extends AbstractTapeLoader {
+
+	/**
+	 * Options controlling the style of the YAML written out.
+	 */
+	DumperOptions dumperOptions = new DumperOptions(defaultFlowStyle: FlowStyle.BLOCK)
 
 	String getFileExtension() {
 		"yaml"
@@ -36,14 +45,13 @@ class YamlTapeLoader implements TapeLoader {
 		try {
 			def yaml = new Yaml(new GroovyRepresenter())
 			toTape(yaml.load(reader))
-		} catch (java.text.ParseException e) {
+		} catch (GroovyCastException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
 	void writeTape(Tape tape, Writer writer) {
-//		def map = [tape: [name: tape.name, interactions: data(tape.interactions)]]
-		def yaml = new Yaml(new GroovyRepresenter())
+		def yaml = new Yaml(new GroovyRepresenter(), dumperOptions)
 		yaml.dump(tape, writer)
 	}
 
@@ -89,7 +97,7 @@ class YamlTapeLoader implements TapeLoader {
 		tape
 	}
 
-	private TapeInteraction toInteraction(data) {
+	private TapeInteraction toInteraction(Map data) {
 		require data, "request", "response", "recorded"
 		def request = toRequest(data.request)
 		def response = loadResponse(data.response)
@@ -97,19 +105,30 @@ class YamlTapeLoader implements TapeLoader {
 		new TapeInteraction(request: request, response: response, recorded: recorded)
 	}
 
-	private HttpRequest toRequest(data) {
+	private HttpRequest toRequest(Map data) {
 		require data, "protocol", "method", "uri"
 		def requestProtocol = parseProtocol(data.protocol)
-		new BasicHttpRequest(data.method, data.uri, requestProtocol)
+		def request = new BasicHttpRequest(data.method, data.uri, requestProtocol)
+		data.headers.each { header ->
+			request.addHeader(header.key, header.value)
+		}
+		request
 	}
 
-	private HttpResponse loadResponse(data) {
+	private HttpResponse loadResponse(Map data) {
 		require data, "protocol", "status"
 		def responseProtocol = parseProtocol(data.protocol)
 		def response = new BasicHttpResponse(responseProtocol, data.status, null)
 		switch (data.body) {
 			case String:
-				response.entity = new StringEntity(data.body); break
+				if (data.headers[CONTENT_ENCODING] == "gzip") {
+					response.entity = new ByteArrayEntity(new GzipEncoder().encode(data.body))
+				} else if (data.headers[CONTENT_ENCODING] == "deflate") {
+					response.entity = new ByteArrayEntity(new DeflateEncoder().encode(data.body))
+				} else {
+					response.entity = new StringEntity(data.body)
+				}
+				break
 			case byte[]:
 				response.entity = new ByteArrayEntity(data.body); break
 			default:
@@ -119,11 +138,6 @@ class YamlTapeLoader implements TapeLoader {
 			response.addHeader(header.key, header.value)
 		}
 		response
-	}
-
-	private ProtocolVersion parseProtocol(String protocolString) {
-		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
-		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
 	}
 
 	private void require(Map map, String... keys) {

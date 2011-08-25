@@ -10,6 +10,8 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
 
+An example tape file can be found [here][10].
+
 ## Project status
 
 Betamax is at quite an early stage of development. It is usable and I would encourage users to give feedback, raise
@@ -18,7 +20,7 @@ issues etc. via GitHub.
 Please bear in mind that the format and structure of tape files is subject to change at least until there is a first
 stable release.
 
-Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads]:https://github.com/robfletcher/betamax/archives/master
+Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads][9]
 section. Dependency details can be found below.
 
 ## Dependencies
@@ -26,12 +28,14 @@ section. Dependency details can be found below.
 Betamax depends on the following libraries (you will need them available on your test classpath in order to use
 Betamax):
 
-* `"org.codehaus.groovy:groovy-all:1.8.1"`
-* `"junit:junit:4.8.2"`
-* `"log4j:log4j:1.2.16"`
-* `"org.apache.httpcomponents:httpclient:4.1.2"`
-* `"org.apache.httpcomponents:httpcore-nio:4.1.2"`
-* `"org.yaml:snakeyaml:1.10-SNAPSHOT"`
+* [Groovy](http://groovy.codehaus.org)
+* [Apache HttpClient](http://hc.apache.org/httpcomponents-client-ga/)
+* [Apache HttpCore NIO Extensions](http://hc.apache.org/httpcomponents-core-ga/httpcore-nio/index.html)
+* [SnakeYAML](http://www.snakeyaml.org/)
+* [JUnit 4](http://www.junit.org/)
+* [Apache log4j](http://logging.apache.org/log4j/1.2/)
+
+To see exact dependency versions used by Betamax see the `build.gradle` file.
 
 ## Usage
 
@@ -40,39 +44,43 @@ and include a `betamax.Recorder` Rule.
 
 ### JUnit example
 
-    import betamax.Betamax
-    import betamax.Recorder
-    import org.junit.*
+```groovy
+import betamax.Betamax
+import betamax.Recorder
+import org.junit.*
 
-    class MyTest {
+class MyTest {
 
-        @Rule public Recorder recorder = new Recorder()
+	@Rule public Recorder recorder = new Recorder()
 
-        @Betamax(tape="my_tape")
-        @Test
-        void testMethodThatAccessesExternalWebService() {
+	@Betamax(tape="my_tape")
+	@Test
+	void testMethodThatAccessesExternalWebService() {
 
-        }
+	}
 
-    }
+}
+```
 
 ### Spock example
 
-    import betamax.Betamax
-    import betamax.Recorder
-    import org.junit.*
-    import spock.lang.*
+```groovy
+import betamax.Betamax
+import betamax.Recorder
+import org.junit.*
+import spock.lang.*
 
-    class MySpec extends Specification {
+class MySpec extends Specification {
 
-	    @Rule Recorder recorder = new Recorder()
+	@Rule Recorder recorder = new Recorder()
 
-        @Betamax(tape="my_tape")
-        def "test method that accesses external web service"() {
+	@Betamax(tape="my_tape")
+	def "test method that accesses external web service"() {
 
-        }
+	}
 
-    }
+}
+```
 
 ## Recording and playback
 
@@ -102,51 +110,46 @@ up by the `Recorder` constructor.
 
 ### Example _BetamaxConfig.groovy_ script
 
-	betamax {
-		tapeRoot = new File("test/fixtures/tapes")
-		proxyPort = 1337
-	}
+```groovy
+betamax {
+	tapeRoot = new File("test/fixtures/tapes")
+	proxyPort = 1337
+}
+```
 
 ### Example _betamax.properties_ file
 
-	betamax.tapeRoot=test/fixtures/tapes
-	betamax.proxyPort=1337
+```properties
+betamax.tapeRoot=test/fixtures/tapes
+betamax.proxyPort=1337
+```
 
 ## Caveats
 
-By default [Apache _HTTPClient_][3] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept
-traffic from HTTPClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][5]. When Betamax is not
-active this will mean HTTPClient traffic will be routed via the default proxy configured in Java (if any).
+By default [Apache _HttpClient_][3] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept
+traffic from HttpClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][5]. When Betamax is not
+active this will mean HttpClient traffic will be routed via the default proxy configured in Java (if any).
 
-### Configuring HTTPClient
+### Configuring HttpClient
 
-    def client = new DefaultHttpClient()
-    client.routePlanner = new ProxySelectorRoutePlanner(client.connectionManager.schemeRegistry, ProxySelector.default)
+```groovy
+def client = new DefaultHttpClient()
+client.routePlanner = new ProxySelectorRoutePlanner(client.connectionManager.schemeRegistry, ProxySelector.default)
+```
 
 The same is true of [Groovy _HTTPBuilder_][4] and its [_RESTClient_][6] variant as they are wrappers around
-_HTTPClient_.
+_HttpClient_.
 
 ### Configuring HTTPBuilder
 
-    def http = new HTTPBuilder("http://groovy.codehaus.org")
-    def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-    http.client.routePlanner = routePlanner
+```groovy
+def http = new HTTPBuilder("http://groovy.codehaus.org")
+def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+http.client.routePlanner = routePlanner
+```
 
 _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special configuration as it uses a
-`java.net.URLConnection` rather than _HTTPClient_.
-
-## Roadmap
-
-* Description in interactions
-* Non-UTF-8 responses
-* Non-text responses
-* Multipart requests
-* Rotate multiple responses for same URI on same tape
-* Throw exceptions if tape not inserted & proxy gets hit
-* Allow groovy evaluation in tape files
-* Match requests based on URI, host, path, method, body, headers
-* Optionally re-record tapes after TTL expires
-* Record modes
+`java.net.URLConnection` rather than _HttpClient_.
 
 [1]:https://github.com/myronmarston/vcr
 [2]:http://spockframework.org/
@@ -156,3 +159,5 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special 
 [6]:http://groovy.codehaus.org/modules/http-builder/doc/rest.html
 [7]:http://groovy.codehaus.org/modules/http-builder/doc/httpurlclient.html
 [8]:http://yaml.org/
+[9]:https://github.com/robfletcher/betamax/archives/master
+[10]:https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml

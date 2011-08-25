@@ -17,12 +17,20 @@ class SmokeSpec extends Specification {
 	}
 
 	@Betamax(tape = "smoke spec")
-	def "json response data"() {
+	@Unroll({"$type response data"})
+	def "various types of response data"() {
 		when:
-		def response = http.get(uri: "http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true")
+		def response = http.get(uri: uri)
 
 		then:
 		response.status == HTTP_OK
+
+		where:
+		type   | uri
+		"html" | "http://grails.org/"
+		"json" | "http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"
+		"xml"  | "http://feeds.feedburner.com/wondermark"
+		"png"  | "http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png"
 	}
-	
+
 }

@@ -22,7 +22,6 @@ class FilenameNormalizationSpec extends Specification {
 		response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
 		response.addHeader(CONTENT_TYPE, "text/plain")
 		response.addHeader(CONTENT_LANGUAGE, "en-GB")
-		response.addHeader(CONTENT_ENCODING, "gzip")
 		response.entity = new StringEntity("O HAI!", "text/plain", "UTF-8")
 	}
 
@@ -44,8 +43,8 @@ class FilenameNormalizationSpec extends Specification {
 
 		where:
 		tapeName  | filename
-		"my_tape" | "my_tape.json"
-		"my tape" | "my_tape.json"
-		"%)1aé"   | "_1ae.json"
+		"my_tape" | "my_tape.yaml"
+		"my tape" | "my_tape.yaml"
+		"%)1aé"   | "_1ae.yaml"
 	}
 }

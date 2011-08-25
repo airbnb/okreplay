@@ -2,11 +2,12 @@ package betamax
 
 import betamax.storage.yaml.YamlTapeLoader
 import groovy.json.JsonException
-import spock.lang.Specification
+import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 import betamax.storage.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
+import spock.lang.*
 
 class ReadTapeFromYamlSpec extends Specification {
 
@@ -18,7 +19,7 @@ class ReadTapeFromYamlSpec extends Specification {
 tape:
   name: single_interaction_tape
   interactions:
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T22:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -27,7 +28,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
@@ -44,7 +45,6 @@ tape:
 		tape.interactions[0].response.statusLine.statusCode == HTTP_OK
 		tape.interactions[0].response.getFirstHeader(CONTENT_TYPE).value == "text/plain"
 		tape.interactions[0].response.getFirstHeader(CONTENT_LANGUAGE).value == "en-GB"
-		tape.interactions[0].response.getFirstHeader(CONTENT_ENCODING).value == "gzip"
 		tape.interactions[0].response.entity.content.text == "O HAI!"
 	}
 
@@ -54,7 +54,7 @@ tape:
 tape:
   name: multiple_interaction_tape
   interactions:
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -63,9 +63,9 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
-  - recorded: 2011-08-23 23:41:40 +0100
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -74,7 +74,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 418
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: I'm a teapot
 """
 		when:
@@ -90,6 +90,33 @@ tape:
 		tape.interactions[1].response.entity.content.text == "I'm a teapot"
 	}
 
+	def "reads request headers"() {
+		given:
+		def yaml = """\
+tape:
+  name: single_interaction_tape
+  interactions:
+  - recorded: 2011-08-23T22:41:40.000Z
+    request:
+      protocol: HTTP/1.1
+      method: GET
+      uri: http://icanhascheezburger.com/
+      headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+    response:
+      protocol: HTTP/1.1
+      status: 200
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
+      body: O HAI!
+"""
+		when:
+		def tape = loader.readTape(new StringReader(yaml))
+
+		then:
+		tape.interactions[0].request.getFirstHeader(ACCEPT_LANGUAGE).value == "en-GB,en"
+		tape.interactions[0].request.getFirstHeader(IF_NONE_MATCH).value == "b00b135"
+	}
+
+	@Ignore
 	def "barfs on non-yaml data"() {
 		given:
 		def yaml = "THIS IS NOT YAML"
@@ -117,7 +144,7 @@ tape:
     response:
       protocol: HTTP/1.1
       status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:
@@ -125,7 +152,7 @@ tape:
 
 		then:
 		def e = thrown(TapeLoadException)
-		e.cause instanceof java.text.ParseException
+		e.cause instanceof GroovyCastException
 	}
 
 	def "barfs on missing fields"() {
@@ -134,7 +161,7 @@ tape:
 tape:
   name: missing_response_status_tape
   interactions:
-  - recorded: THIS IS NOT A DATE!
+  - recorded: 2011-08-23T23:41:40.000Z
     request:
       protocol: HTTP/1.1
       method: GET
@@ -142,7 +169,7 @@ tape:
       headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
     response:
       protocol: HTTP/1.1
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: gzip}
+      headers: {Content-Type: text/plain, Content-Language: en-GB}
       body: O HAI!
 """
 		when:

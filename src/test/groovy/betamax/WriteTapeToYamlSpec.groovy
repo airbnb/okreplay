@@ -1,7 +1,6 @@
 package betamax
 
 import betamax.storage.yaml.YamlTapeLoader
-import org.apache.commons.codec.binary.Base64
 import org.apache.http.HttpResponse
 import org.yaml.snakeyaml.Yaml
 import betamax.storage.*
@@ -35,13 +34,13 @@ class WriteTapeToYamlSpec extends Specification {
 		successResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-		successResponse.addHeader(CONTENT_ENCODING, "gzip")
+		successResponse.addHeader(CONTENT_ENCODING, "none")
 		successResponse.entity = new StringEntity("O HAI!", "text/plain", "UTF-8")
 
 		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-		failureResponse.addHeader(CONTENT_ENCODING, "gzip")
+		failureResponse.addHeader(CONTENT_ENCODING, "none")
 		failureResponse.entity = new StringEntity("KTHXBYE!", "text/plain", "UTF-8")
 
 		image = new File("src/test/resources/image.png")
@@ -61,13 +60,11 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		println writer.toString()
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.name == tape.name
 
 		yaml.tape.interactions.size() == 1
-		yaml.tape.interactions[0].recorded ==~ /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [\+-]\d{4}/
-
+		yaml.tape.interactions[0].recorded instanceof Date
 		yaml.tape.interactions[0].request.protocol == "HTTP/1.1"
 		yaml.tape.interactions[0].request.method == "GET"
 		yaml.tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
@@ -104,7 +101,7 @@ class WriteTapeToYamlSpec extends Specification {
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
 		yaml.tape.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
-		yaml.tape.interactions[0].response.headers[CONTENT_ENCODING] == "gzip"
+		yaml.tape.interactions[0].response.headers[CONTENT_ENCODING] == "none"
 	}
 
 	def "can write requests with a body"() {
@@ -141,7 +138,6 @@ class WriteTapeToYamlSpec extends Specification {
 		yaml.tape.interactions[1].response.status == HTTP_BAD_REQUEST
 	}
 
-	@Ignore
 	def "can write a binary response body"() {
 		given:
 		def tape = new Tape(name: "tape_loading_spec")
@@ -154,6 +150,32 @@ class WriteTapeToYamlSpec extends Specification {
 		then:
 		def yaml = new Yaml().load(writer.toString())
 		yaml.tape.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
-		yaml.tape.interactions[0].response.body == Base64.encodeBase64String(image.bytes)
+		yaml.tape.interactions[0].response.body == image.bytes
+	}
+
+	def "text response body is written to file as plain text"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, successResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		writer.toString().contains("body: O HAI!")
+	}
+
+	def "binary response body is written to file as binary data"() {
+		given:
+		def tape = new Tape(name: "tape_loading_spec")
+		def writer = new StringWriter()
+
+		when:
+		tape.record(getRequest, imageResponse)
+		loader.writeTape(tape, writer)
+
+		then:
+		writer.toString().contains("body: !!binary |-")
 	}
 }
