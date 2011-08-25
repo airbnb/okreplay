@@ -43,7 +43,7 @@ class Tape {
 		position = -1
 	}
 
-    void play(HttpRequest request, HttpResponse response) {
+    void play(HttpResponse response) {
         if (position >= 0) {
 			def interaction = interactions[position]
             response.statusLine = new BasicStatusLine(parseProtocol(interaction.response.protocol), interaction.response.status, null)

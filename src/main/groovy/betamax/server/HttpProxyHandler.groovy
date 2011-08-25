@@ -62,7 +62,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 		if (tape?.seek(request)) {
 			log.debug "playing back from tape '$tape.name'..."
-			tape.play(request, response)
+			tape.play(response)
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
 			try {

@@ -23,8 +23,8 @@ class TapeSpec extends Specification {
 		plainTextResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		plainTextResponse.addHeader(CONTENT_ENCODING, "gzip")
 		plainTextResponse.entity = new BasicHttpEntity()
-        def bytes = new GzipEncoder().encode("O HAI!")
-        plainTextResponse.entity.content = new ByteArrayInputStream(bytes)
+		def bytes = new GzipEncoder().encode("O HAI!")
+		plainTextResponse.entity.content = new ByteArrayInputStream(bytes)
 		plainTextResponse.entity.contentLength = bytes.length
 	}
 
@@ -33,7 +33,7 @@ class TapeSpec extends Specification {
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
 		when:
-		tape.play(getRequest, response)
+		tape.play(response)
 
 		then:
 		thrown IllegalStateException
@@ -79,7 +79,7 @@ class TapeSpec extends Specification {
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
 		when:
-		tape.play(getRequest, response)
+		tape.play(response)
 
 		then:
 		response.statusLine.protocolVersion == plainTextResponse.statusLine.protocolVersion
@@ -111,10 +111,10 @@ class TapeSpec extends Specification {
 		tape.reset()
 
 		when:
-		tape.play(getRequest, new BasicHttpResponse(HTTP_1_1, 200, "OK"))
+		tape.play(new BasicHttpResponse(HTTP_1_1, 200, "OK"))
 
 		then:
 		thrown IllegalStateException
 	}
-    
+
 }
