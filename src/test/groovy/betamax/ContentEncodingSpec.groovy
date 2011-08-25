@@ -51,28 +51,28 @@ class ContentEncodingSpec extends Specification {
 	def "response body is encoded when loaded from tape and a content-encoding header is present"() {
 		given:
 		def yaml = """\
-tape:
-  name: encoded response tape
-  interactions:
-  - recorded: 2011-08-24T20:38:40.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://icanhascheezburger.com/
-      headers: {Accept-Encoding: $encoding}
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
-      body: O HAI!
+!tape
+name: encoded response tape
+interactions:
+- recorded: 2011-08-24T20:38:40.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://icanhascheezburger.com/
+    headers: {Accept-Encoding: $encoding}
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
+    body: O HAI!
 """
 		when:
 		def tape = loader.readTape(new StringReader(yaml))
 
 		then:
 		tape.name == "encoded response tape"
-		tape.interactions[0].response.getFirstHeader(CONTENT_ENCODING).value == encoding
-		encoder.decode(tape.interactions[0].response.entity.content) == "O HAI!"
+		tape.interactions[0].response.headers[CONTENT_ENCODING] == encoding
+		encoder.decode(tape.interactions[0].response.body) == "O HAI!"
 
 		where:
 		encoding  | encoder

@@ -28,6 +28,8 @@ import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import org.apache.http.entity.*
 import org.apache.http.message.*
 import org.yaml.snakeyaml.*
+import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.constructor.ConstructorException
 
 @Log4j
 class YamlTapeLoader implements TapeLoader {
@@ -43,18 +45,29 @@ class YamlTapeLoader implements TapeLoader {
 
 	Tape readTape(Reader reader) {
 		try {
-			def yaml = new Yaml(new GroovyRepresenter())
-			yaml.load(reader)
-		} catch (GroovyCastException e) {
+            def tape = yaml.load(reader)
+            if (!(tape instanceof Tape)) {
+                throw new TapeLoadException("Expected a Tape but loaded a ${tape.getClass().name}")
+            }
+            tape
+		} catch (ConstructorException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
-	void writeTape(Tape tape, Writer writer) {
-		def yaml = new Yaml(new GroovyRepresenter(), dumperOptions)
-		yaml.dump(tape, new OutputStreamWriter(System.out))
-		yaml.dump(tape, writer)
+    void writeTape(Tape tape, Writer writer) {
+        yaml.dump(tape, new OutputStreamWriter(System.out))
+        yaml.dump(tape, writer)
 	}
+
+    Yaml getYaml() {
+        def representer = new GroovyRepresenter()
+        representer.addClassTag(Tape, "!tape")
+        def constructor = new Constructor()
+        constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
+        def yaml = new Yaml(constructor, representer, dumperOptions)
+        return yaml
+    }
 
 	private Tape toTape(data) {
 		require data, "tape"

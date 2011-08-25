@@ -14,7 +14,7 @@ import spock.lang.*
 
 class WriteTapeToYamlSpec extends Specification {
 
-	TapeLoader loader = new YamlTapeLoader()
+	YamlTapeLoader loader = new YamlTapeLoader()
 
 	@Shared HttpGet getRequest
 	@Shared HttpPost postRequest
@@ -23,7 +23,7 @@ class WriteTapeToYamlSpec extends Specification {
 	@Shared HttpResponse imageResponse
 	@Shared File image
 
-	def setupSpec() {
+    def setupSpec() {
 		getRequest = new HttpGet("http://icanhascheezburger.com/")
 		getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
 		getRequest.addHeader(IF_NONE_MATCH, "b00b135")
@@ -60,7 +60,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.name == tape.name
 
 		yaml.interactions.size() == 1
@@ -83,7 +83,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
 		yaml.interactions[0].request.headers[IF_NONE_MATCH] == "b00b135"
 	}
@@ -98,7 +98,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
 		yaml.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
 		yaml.interactions[0].response.headers[CONTENT_ENCODING] == "none"
@@ -114,7 +114,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.interactions[0].request.method == "POST"
 		yaml.interactions[0].request.body == "q=1"
 	}
@@ -130,7 +130,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.interactions.size() == 2
 		yaml.interactions[0].request.method == "GET"
 		yaml.interactions[1].request.method == "POST"
@@ -148,7 +148,7 @@ class WriteTapeToYamlSpec extends Specification {
 		loader.writeTape(tape, writer)
 
 		then:
-		def yaml = new Yaml().load(writer.toString())
+		def yaml = loader.yaml.load(writer.toString())
 		yaml.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
 		yaml.interactions[0].response.body == image.bytes
 	}

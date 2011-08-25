@@ -66,7 +66,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		then:
 		recorder.tape.interactions.size() == old(recorder.tape.interactions.size()) + 1
-		recorder.tape.interactions[-1].request.requestLine.method == "HEAD"
+		recorder.tape.interactions[-1].request.method == "HEAD"
 	}
 
 	def "when the tape is ejected the data is written to a file"() {
@@ -82,10 +82,10 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		and:
 		def yaml = file.withReader { reader ->
-			new Yaml().load(reader)
+			recorder.loader.yaml.load(reader)
 		}
-		yaml.tape.name == "proxy_record_and_playback_spec"
-		yaml.tape.interactions.size() == 2
+		yaml.name == "proxy_record_and_playback_spec"
+		yaml.interactions.size() == 2
 	}
 
 	def "can load an existing tape from a file"() {
@@ -93,20 +93,20 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		def file = new File(recorder.tapeRoot, "existing_tape.yaml")
 		file.parentFile.mkdirs()
 		file.text = """\
-tape:
-  name: existing_tape
-  interactions:
-  - recorded: 2011-08-19T11:45:33.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://icanhascheezburger.com/
-      headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB}
-      body: O HAI!
+!tape
+name: existing_tape
+interactions:
+- recorded: 2011-08-19T11:45:33.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://icanhascheezburger.com/
+    headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain, Content-Language: en-GB}
+    body: O HAI!
 """
 
 		when:

@@ -25,39 +25,39 @@ class RequestMatchingSpec extends Specification {
 	def "default match is method and uri"() {
 		given:
 		new File(tapeRoot, "method_and_uri_tape.yaml").text = """\
-tape:
-  name: method_and_uri_tape
-  interactions:
-  - recorded: 2011-08-23T20:24:33.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://xkcd.com/
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain}
-      body: get method response from xkcd.com
-  - recorded: 2011-08-23T20:24:33.000Z
-    request:
-      protocol: HTTP/1.1
-      method: POST
-      uri: http://xkcd.com/
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain}
-      body: post method response from xkcd.com
-  - recorded: 2011-08-23T20:24:33.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://qwantz.com/
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain}
-      body: get method response from qwantz.com
+!tape
+name: method_and_uri_tape
+interactions:
+- recorded: 2011-08-23T20:24:33.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://xkcd.com/
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain}
+    body: get method response from xkcd.com
+- recorded: 2011-08-23T20:24:33.000Z
+  request:
+    protocol: HTTP/1.1
+    method: POST
+    uri: http://xkcd.com/
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain}
+    body: post method response from xkcd.com
+- recorded: 2011-08-23T20:24:33.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://qwantz.com/
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain}
+    body: get method response from qwantz.com
 """
 		when:
 		def response = recorder.withTape("method_and_uri_tape") {
@@ -78,19 +78,19 @@ tape:
 	def "can match based on host"() {
 		given:
 		new File(tapeRoot, "host_match_tape.yaml").text = """\
-tape:
-  name: host_match_tape
-  interactions:
-  - recorded: 2011-08-23T20:24:33.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://xkcd.com/936/
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain}
-      body: get method response from xkcd.com
+!tape
+name: host_match_tape
+interactions:
+- recorded: 2011-08-23T20:24:33.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://xkcd.com/936/
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain}
+    body: get method response from xkcd.com
 """
 		when:
 		def response = recorder.withTape("host_match_tape", [matchOn: ["host"]]) {

@@ -9,6 +9,7 @@ import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import spock.lang.*
+import betamax.encoding.GzipEncoder
 
 @Stepwise
 class TapeSpec extends Specification {
@@ -24,8 +25,9 @@ class TapeSpec extends Specification {
 		plainTextResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		plainTextResponse.addHeader(CONTENT_ENCODING, "gzip")
 		plainTextResponse.entity = new BasicHttpEntity()
-		plainTextResponse.entity.content = new ByteArrayInputStream("O HAI!".bytes)
-		plainTextResponse.entity.contentLength = 6L
+        def bytes = new GzipEncoder().encode("O HAI!")
+        plainTextResponse.entity.content = new ByteArrayInputStream(bytes)
+		plainTextResponse.entity.contentLength = bytes.length
 	}
 
     def cleanupSpec() {
@@ -72,7 +74,7 @@ class TapeSpec extends Specification {
 		and:
 		response.statusLine.protocolVersion == plainTextResponse.statusLine.protocolVersion
 		response.statusLine.statusCode == plainTextResponse.statusLine.statusCode
-		response.entity.content.text == "O HAI!"
+		new GzipEncoder().decode(response.entity.content) == "O HAI!"
 		response.getHeaders(CONTENT_TYPE).value == plainTextResponse.getHeaders(CONTENT_TYPE).value
 		response.getHeaders(CONTENT_LANGUAGE).value == plainTextResponse.getHeaders(CONTENT_LANGUAGE).value
 		response.getHeaders(CONTENT_ENCODING).value == plainTextResponse.getHeaders(CONTENT_ENCODING).value
