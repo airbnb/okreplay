@@ -16,20 +16,20 @@ class ReadTapeFromYamlSpec extends Specification {
 	def "can load a valid tape with a single interaction"() {
 		given:
 		def yaml = """\
-tape:
-  name: single_interaction_tape
-  interactions:
-  - recorded: 2011-08-23T22:41:40.000Z
-    request:
-      protocol: HTTP/1.1
-      method: GET
-      uri: http://icanhascheezburger.com/
-      headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
-    response:
-      protocol: HTTP/1.1
-      status: 200
-      headers: {Content-Type: text/plain, Content-Language: en-GB}
-      body: O HAI!
+!!betamax.storage.Tape
+name: single_interaction_tape
+interactions:
+- recorded: 2011-08-23T22:41:40.000Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://icanhascheezburger.com/
+    headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers: {Content-Type: text/plain, Content-Language: en-GB}
+    body: O HAI!
 """
 		when:
 		def tape = loader.readTape(new StringReader(yaml))

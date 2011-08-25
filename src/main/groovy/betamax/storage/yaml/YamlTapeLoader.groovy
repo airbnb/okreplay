@@ -19,6 +19,8 @@ package betamax.storage.yaml
 import groovy.util.logging.Log4j
 import org.codehaus.groovy.runtime.typehandling.GroovyCastException
 import org.yaml.snakeyaml.DumperOptions.FlowStyle
+import org.yaml.snakeyaml.introspector.Property
+import org.yaml.snakeyaml.representer.Representer
 import betamax.encoding.*
 import betamax.storage.*
 import org.apache.http.*
@@ -26,11 +28,9 @@ import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import org.apache.http.entity.*
 import org.apache.http.message.*
 import org.yaml.snakeyaml.*
-import org.yaml.snakeyaml.representer.Representer
-import org.yaml.snakeyaml.introspector.Property
 
 @Log4j
-class YamlTapeLoader extends AbstractTapeLoader {
+class YamlTapeLoader implements TapeLoader {
 
 	/**
 	 * Options controlling the style of the YAML written out.
@@ -44,7 +44,7 @@ class YamlTapeLoader extends AbstractTapeLoader {
 	Tape readTape(Reader reader) {
 		try {
 			def yaml = new Yaml(new GroovyRepresenter())
-			toTape(yaml.load(reader))
+			yaml.load(reader)
 		} catch (GroovyCastException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
@@ -52,38 +52,8 @@ class YamlTapeLoader extends AbstractTapeLoader {
 
 	void writeTape(Tape tape, Writer writer) {
 		def yaml = new Yaml(new GroovyRepresenter(), dumperOptions)
+		yaml.dump(tape, new OutputStreamWriter(System.out))
 		yaml.dump(tape, writer)
-	}
-
-	private List<Map> data(Collection<TapeInteraction> interactions) {
-		interactions.collect {
-			[recorded: it.recorded, request: data(it.request), response: data(it.response)]
-		}
-	}
-
-	private Map data(HttpRequest request) {
-		def map = [
-				protocol: request.requestLine.protocolVersion.toString(),
-				method: request.requestLine.method,
-				uri: request.requestLine.uri,
-				headers: request.allHeaders.collectEntries { [it.name, it.value] }
-		]
-		if (request instanceof HttpEntityEnclosingRequest) {
-			map.body = request.entity.content.text
-		}
-		map
-	}
-
-	private Map data(HttpResponse response) {
-		def map = [
-				protocol: response.statusLine.protocolVersion.toString(),
-				status: response.statusLine.statusCode,
-				headers: response.allHeaders.collectEntries { [it.name, it.value] }
-		]
-		if (response.entity) {
-			map.body = response.entity.content.text
-		}
-		map
 	}
 
 	private Tape toTape(data) {
@@ -148,6 +118,10 @@ class YamlTapeLoader extends AbstractTapeLoader {
 		}
 	}
 
+	private ProtocolVersion parseProtocol(String protocolString) {
+		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
+		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
+	}
 }
 
 class GroovyRepresenter extends Representer {

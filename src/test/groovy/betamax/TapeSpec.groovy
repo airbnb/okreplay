@@ -49,21 +49,17 @@ class TapeSpec extends Specification {
 		def interaction = tape.interactions[-1]
 
 		and:
-		interaction.request.requestLine.method == getRequest.requestLine.method
-		interaction.request.requestLine.uri == getRequest.requestLine.uri
-		interaction.request.requestLine.protocolVersion == getRequest.requestLine.protocolVersion
+		interaction.request.method == getRequest.requestLine.method
+		interaction.request.uri == getRequest.requestLine.uri
+		interaction.request.protocol == getRequest.requestLine.protocolVersion.toString()
 
 		and:
-		interaction.response.statusLine.protocolVersion == plainTextResponse.statusLine.protocolVersion
-		interaction.response.statusLine.statusCode == plainTextResponse.statusLine.statusCode
-		interaction.response.entity.content.text == "O HAI!"
-		interaction.response.getHeaders(CONTENT_TYPE).value == plainTextResponse.getHeaders(CONTENT_TYPE).value
-		interaction.response.getHeaders(CONTENT_LANGUAGE).value == plainTextResponse.getHeaders(CONTENT_LANGUAGE).value
-		interaction.response.getHeaders(CONTENT_ENCODING).value == plainTextResponse.getHeaders(CONTENT_ENCODING).value
-
-		and:
-		!interaction.request.is(getRequest)
-		!interaction.response.is(plainTextResponse)
+		interaction.response.protocol == plainTextResponse.statusLine.protocolVersion.toString()
+		interaction.response.status == plainTextResponse.statusLine.statusCode
+		interaction.response.body == "O HAI!"
+		interaction.response.headers[CONTENT_TYPE] == plainTextResponse.getFirstHeader(CONTENT_TYPE).value
+		interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.getFirstHeader(CONTENT_LANGUAGE).value
+		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getFirstHeader(CONTENT_ENCODING).value
 	}
 
 	def "can read a stored HTTP interaction"() {
@@ -101,7 +97,7 @@ class TapeSpec extends Specification {
 
 		then:
 		def interaction = tape.interactions[-1]
-		interaction.request.entity.content.text == request.entity.content.text
+		interaction.request.body == request.entity.content.text
 	}
     
 }

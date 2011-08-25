@@ -16,7 +16,9 @@
 
 package betamax.storage
 
+import org.apache.http.entity.StringEntity
 import org.apache.http.*
+import org.apache.http.message.*
 
 class Tape {
 
@@ -26,12 +28,14 @@ class Tape {
 
 	boolean play(HttpRequest request, HttpResponse response) {
 		def interaction = interactions.find {
-			it.request.requestLine.uri == request.requestLine.uri && it.request.requestLine.method == request.requestLine.method
+			it.request.uri == request.requestLine.uri && it.request.method == request.requestLine.method
 		}
 		if (interaction) {
-			response.statusLine = interaction.response.statusLine
-			response.headers = interaction.response.allHeaders
-			response.entity = interaction.response.entity
+			response.statusLine = new BasicStatusLine(parseProtocol(interaction.response.protocol), interaction.response.status, null)
+			response.headers = interaction.response.headers.collect {
+				new BasicHeader(it.key, it.value)
+			}
+			response.entity = new StringEntity(interaction.response.body)
 			true
 		} else {
 			false
@@ -86,6 +90,11 @@ class Tape {
 		}
 	}
 
+	// TODO: duplicated in betamax.storage.yaml.YamlTapeLoader
+	private ProtocolVersion parseProtocol(String protocolString) {
+		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
+		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
+	}
 }
 
 class TapeInteraction {
