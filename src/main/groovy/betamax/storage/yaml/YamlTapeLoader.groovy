@@ -60,8 +60,7 @@ class YamlTapeLoader implements TapeLoader {
         representer.addClassTag(Tape, "!tape")
         def constructor = new Constructor()
         constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
-        def yaml = new Yaml(constructor, representer, dumperOptions)
-        return yaml
+        new Yaml(constructor, representer, dumperOptions)
     }
 
 }
