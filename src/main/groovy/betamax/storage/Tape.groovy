@@ -27,7 +27,6 @@ import org.apache.http.entity.ByteArrayEntity
 class Tape {
 
     String name
-    String description
     Collection<TapeInteraction> interactions = []
 
     boolean play(HttpRequest request, HttpResponse response) {
@@ -118,7 +117,6 @@ class Tape {
 class TapeInteraction {
 
     Date recorded
-    String description
     TapeRequest request
     TapeResponse response
 

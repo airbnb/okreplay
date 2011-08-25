@@ -18,8 +18,6 @@ package betamax.storage.yaml
 
 import groovy.util.logging.Log4j
 import org.yaml.snakeyaml.DumperOptions.FlowStyle
-import org.yaml.snakeyaml.introspector.Property
-import org.yaml.snakeyaml.representer.Representer
 import betamax.storage.*
 import org.yaml.snakeyaml.*
 import org.yaml.snakeyaml.constructor.*
@@ -54,7 +52,7 @@ class YamlTapeLoader implements TapeLoader {
 	}
 
     Yaml getYaml() {
-        def representer = new GroovyRepresenter()
+        def representer = new TapeRepresenter()
         representer.addClassTag(Tape, "!tape")
         def constructor = new Constructor()
         constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
@@ -64,14 +62,3 @@ class YamlTapeLoader implements TapeLoader {
 
 }
 
-class GroovyRepresenter extends Representer {
-	@Override
-	protected Set<Property> getProperties(Class<? extends Object> type) {
-		def set = super.getProperties(type)
-		set.removeAll {
-			it.name == "metaClass"
-		}
-		set
-	}
-
-}
