@@ -47,7 +47,11 @@ class YamlTapeLoader implements TapeLoader {
 	}
 
     void writeTape(Tape tape, Writer writer) {
-        yaml.dump(tape, new OutputStreamWriter(System.out))
+        if (log.isDebugEnabled()) {
+            def sw = new StringWriter()
+            yaml.dump(tape, sw)
+            log.debug sw.toString()
+        }
         yaml.dump(tape, writer)
 	}
 

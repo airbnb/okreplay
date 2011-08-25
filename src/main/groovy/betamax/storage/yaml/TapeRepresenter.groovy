@@ -41,7 +41,6 @@ class TapeRepresenter extends GroovyRepresenter {
 class TapePropertyUtils extends PropertyUtils {
     @Override
     protected Set<Property> createPropertySet(Class<? extends Object> type, BeanAccess bAccess) {
-        println "type: $type"
         def properties = super.createPropertySet(type, bAccess)
         switch (type) {
             case Tape:
