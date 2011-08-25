@@ -10,7 +10,7 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
 
-An example tape file can be found [here][https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml].
+An example tape file can be found [here](https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml).
 
 ## Project status
 
@@ -20,7 +20,7 @@ issues etc. via GitHub.
 Please bear in mind that the format and structure of tape files is subject to change at least until there is a first
 stable release.
 
-Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads]:https://github.com/robfletcher/betamax/archives/master
+Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads](https://github.com/robfletcher/betamax/archives/master)
 section. Dependency details can be found below.
 
 ## Dependencies
