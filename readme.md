@@ -10,6 +10,8 @@ source control repository so that other members of the team can use them when ru
 different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
 interactions but each must (currently) have a unique request method and URI.
 
+An example tape file can be found [here][https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml].
+
 ## Project status
 
 Betamax is at quite an early stage of development. It is usable and I would encourage users to give feedback, raise
