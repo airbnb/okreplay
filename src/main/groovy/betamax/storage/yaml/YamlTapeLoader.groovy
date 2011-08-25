@@ -18,9 +18,10 @@ package betamax.storage.yaml
 
 import groovy.util.logging.Log4j
 import org.yaml.snakeyaml.DumperOptions.FlowStyle
+import org.yaml.snakeyaml.constructor.Constructor
+import org.yaml.snakeyaml.error.YAMLException
 import betamax.storage.*
 import org.yaml.snakeyaml.*
-import org.yaml.snakeyaml.constructor.*
 
 @Log4j
 class YamlTapeLoader implements TapeLoader {
@@ -41,7 +42,7 @@ class YamlTapeLoader implements TapeLoader {
                 throw new TapeLoadException("Expected a Tape but loaded a ${tape.getClass().name}")
             }
             tape
-		} catch (ConstructorException e) {
+		} catch (YAMLException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}

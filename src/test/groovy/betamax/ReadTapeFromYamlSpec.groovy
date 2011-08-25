@@ -1,14 +1,12 @@
 package betamax
 
 import betamax.storage.yaml.YamlTapeLoader
-import groovy.json.JsonException
-import org.codehaus.groovy.runtime.typehandling.GroovyCastException
+import org.yaml.snakeyaml.constructor.ConstructorException
+import spock.lang.Specification
 import betamax.storage.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
-import spock.lang.*
-import org.yaml.snakeyaml.constructor.ConstructorException
 
 class ReadTapeFromYamlSpec extends Specification {
 
@@ -152,31 +150,6 @@ interactions:
 		then:
 		def e = thrown(TapeLoadException)
 		e.cause instanceof ConstructorException
-	}
-
-	def "barfs on missing fields"() {
-		given:
-		def json = """\
-!tape
-name: missing_response_status_tape
-interactions:
-- recorded: 2011-08-23T23:41:40.000Z
-  request:
-    protocol: HTTP/1.1
-    method: GET
-    uri: http://icanhascheezburger.com/
-    headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
-  response:
-    protocol: HTTP/1.1
-    headers: {Content-Type: text/plain, Content-Language: en-GB}
-    body: O HAI!
-"""
-		when:
-		loader.readTape(new StringReader(json))
-
-		then:
-		def e = thrown(TapeLoadException)
-		e.message == "Missing element 'status'"
 	}
 
 	def "barfs if no tape at root"() {

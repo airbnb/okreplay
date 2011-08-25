@@ -47,8 +47,8 @@ class ContentEncodingSpec extends Specification {
 		"deflate" | new DeflateEncoder()
 	}
 
-	@Unroll({"response body is encoded when loaded from tape and a $encoding content-encoding header is present"})
-	def "response body is encoded when loaded from tape and a content-encoding header is present"() {
+	@Unroll({"response body is encoded when played from tape and a $encoding content-encoding header is present"})
+	def "response body is encoded when played from tape and a content-encoding header is present"() {
 		given:
 		def yaml = """\
 !tape
@@ -66,13 +66,18 @@ interactions:
     headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
     body: O HAI!
 """
-		when:
 		def tape = loader.readTape(new StringReader(yaml))
 
+		and:
+		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+
+		when:
+		tape.seek(new HttpGet("http://icanhascheezburger.com/"))
+		tape.play(response)
+
 		then:
-		tape.name == "encoded response tape"
-		tape.interactions[0].response.headers[CONTENT_ENCODING] == encoding
-		encoder.decode(tape.interactions[0].response.body) == "O HAI!"
+		response.getFirstHeader(CONTENT_ENCODING).value == encoding
+		encoder.decode(response.entity.content) == "O HAI!"
 
 		where:
 		encoding  | encoder

@@ -16,15 +16,9 @@
 
 package betamax.storage.yaml
 
-import betamax.storage.Tape
+import betamax.storage.*
 import org.yaml.snakeyaml.introspector.*
-import betamax.storage.TapeInteraction
-import betamax.storage.TapeResponse
-import betamax.storage.TapeRequest
-import org.yaml.snakeyaml.nodes.NodeTuple
-import org.yaml.snakeyaml.nodes.Tag
-import org.yaml.snakeyaml.nodes.CollectionNode
-import org.yaml.snakeyaml.nodes.Node
+import org.yaml.snakeyaml.nodes.*
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
