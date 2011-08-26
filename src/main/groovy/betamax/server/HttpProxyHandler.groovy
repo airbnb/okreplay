@@ -60,21 +60,22 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 		def tape = recorder.tape
 
-		if (tape?.seek(request)) {
-			log.debug "playing back from tape '$tape.name'..."
+		if (!tape) {
+			log.error "no tape inserted..."
+			response.statusCode = HTTP_BAD_GATEWAY
+			response.reasonPhrase = "No tape"
+		} else if (tape.seek(request)) {
+			log.info "playing back from tape '$tape.name'..."
 			tape.play(response)
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
 			try {
 				execute(request, response)
-				if (tape) {
-					log.debug "recording response with status $response.statusLine to tape '$tape.name'..."
-					tape.record(request, response)
-					response.addHeader(X_BETAMAX, "REC")
-				} else {
-					log.debug "no tape inserted..."
-				}
+				log.info "recording response with status $response.statusLine to tape '$tape.name'..."
+				tape.record(request, response)
+				response.addHeader(X_BETAMAX, "REC")
 			} catch (IOException e) {
+				// TODO: handle timeout by setting HTTP_GATEWAY_TIMEOUT
 				log.error "problem connecting to $request.requestLine.uri: $e.message"
 				response.statusCode = HTTP_BAD_GATEWAY
 			}
