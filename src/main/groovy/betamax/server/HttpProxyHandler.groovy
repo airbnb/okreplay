@@ -20,13 +20,14 @@ import betamax.Recorder
 import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
-import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
-import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
+import static java.net.HttpURLConnection.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
-import org.apache.http.client.methods.*
+import org.apache.http.impl.client.*
 import org.apache.http.protocol.*
+import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.entity.HttpEntityWrapper
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
@@ -57,6 +58,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
+		def requestWrapper = request instanceof HttpEntityEnclosingRequest ? new EntityBufferingRequestWrapper(request) : new RequestWrapper(request)
 
 		def tape = recorder.tape
 
@@ -64,46 +66,47 @@ class HttpProxyHandler implements HttpRequestHandler {
 			log.error "no tape inserted..."
 			response.statusCode = HTTP_BAD_GATEWAY
 			response.reasonPhrase = "No tape"
-		} else if (tape.seek(request)) {
+		} else if (tape.seek(requestWrapper)) {
 			log.info "playing back from tape '$tape.name'..."
 			tape.play(response)
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
 			try {
-				execute(request, response)
+				execute(requestWrapper, response)
 				log.info "recording response with status $response.statusLine to tape '$tape.name'..."
-				tape.record(request, response)
+				tape.record(requestWrapper, response)
+				log.info "recording complete..."
 				response.addHeader(X_BETAMAX, "REC")
 			} catch (IOException e) {
 				// TODO: handle timeout by setting HTTP_GATEWAY_TIMEOUT
-				log.error "problem connecting to $request.requestLine.uri: $e.message"
+				log.error "problem connecting to $request.requestLine.uri", e
 				response.statusCode = HTTP_BAD_GATEWAY
+			} catch (Exception e) {
+				log.fatal "error recording HTTP exchange", e
+				response.statusCode = HTTP_INTERNAL_ERROR
+				response.reasonPhrase = e.message
 			}
 		}
 
 		response.addHeader(VIA, "Betamax")
+		log.debug "proxied request complete..."
 	}
 
 	private void execute(HttpRequest request, HttpResponse response) {
 		def proxyRequest = createProxyRequest(request)
-		copyRequestData(request, proxyRequest)
-		proxyRequest.addHeader(VIA, "Betamax")
 
 		def proxyResponse = httpClient.execute(proxyRequest)
 
 		copyResponseData(proxyResponse, response)
 	}
 
-	private void copyRequestData(HttpRequest from, HttpRequest to) {
-		for (header in from.allHeaders) {
-			if (!(header.name in NO_PASS_HEADERS)) {
-				to.addHeader(header)
-			}
+	private HttpUriRequest createProxyRequest(HttpRequest request) {
+		def proxyRequest = request instanceof HttpEntityEnclosingRequest ? new EntityEnclosingRequestWrapper(request) : new RequestWrapper(request)
+		for (headerName in NO_PASS_HEADERS) {
+			proxyRequest.removeHeaders(headerName)
 		}
-
-		if (from instanceof HttpEntityEnclosingRequest) {
-			to.entity = copyEntity(from.entity)
-		}
+		proxyRequest.addHeader(VIA, "Betamax")
+		proxyRequest
 	}
 
 	private void copyResponseData(HttpResponse from, HttpResponse to) {
@@ -121,7 +124,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private HttpEntity copyEntity(HttpEntity entity) {
 		if (entity.isRepeatable()) {
 			log.debug "re-using repeatable entity with content type ${entity.contentType?.value}..."
-			entity
+			new HttpEntityWrapper(entity)
 		} else {
 			log.debug "copying non-repeatable entity ${entity.getClass().name} with content type ${entity.contentType?.value}..."
 			def bytes = new ByteArrayOutputStream()
@@ -132,26 +135,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 			copy.contentType = entity.contentType
 			log.debug "copied entity..."
 			copy
-		}
-	}
-
-	private HttpRequest createProxyRequest(HttpRequest request) {
-		def method = request.requestLine.method.toUpperCase(Locale.ENGLISH)
-		switch (method) {
-			case "DELETE":
-				return new HttpDelete(request.requestLine.uri)
-			case "GET":
-				return new HttpGet(request.requestLine.uri)
-			case "HEAD":
-				return new HttpHead(request.requestLine.uri)
-			case "OPTIONS":
-				return new HttpOptions(request.requestLine.uri)
-			case "POST":
-				return new HttpPost(request.requestLine.uri)
-			case "PUT":
-				return new HttpPut(request.requestLine.uri)
-			default:
-				throw new MethodNotSupportedException("$method method not supported")
 		}
 	}
 

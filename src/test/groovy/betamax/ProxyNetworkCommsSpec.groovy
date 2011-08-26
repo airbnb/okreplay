@@ -1,11 +1,11 @@
 package betamax
 
-import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import org.junit.Rule
 import groovyx.net.http.*
 import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
@@ -15,149 +15,149 @@ import spock.lang.*
 
 class ProxyNetworkCommsSpec extends Specification {
 
-	@Shared Recorder recorder = new Recorder()
-	@Shared HttpProxyServer proxy = new HttpProxyServer()
-	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+    @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+    @Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+    @Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 
-	def setupSpec() {
-		proxy.start(recorder)
-	}
+    def setupSpec() {
+        endpoint.start()
+    }
 
-	def setup() {
-		endpoint.start()
-	}
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy intercepts URL connections"() {
+        given:
+        HttpURLConnection connection = new URL(endpoint.url).openConnection()
+        connection.connect()
 
-	def cleanupSpec() {
-		proxy.stop()
-	}
+        expect:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
 
-	@Timeout(10)
-	def "proxy intercepts URL connections"() {
-		given:
-		HttpURLConnection connection = new URL(endpoint.url).openConnection()
-		connection.connect()
+        cleanup:
+        connection.disconnect()
+    }
 
-		expect:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == "Betamax"
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
+        given:
+        def http = new RESTClient(endpoint.url)
+        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+        http.client.routePlanner = routePlanner
 
-		cleanup:
-		connection.disconnect()
-	}
+        when:
+        def response = http.get(path: "/")
 
-	@Timeout(10)
-	def "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
-		given:
-		def http = new RESTClient(endpoint.url)
-		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-		http.client.routePlanner = routePlanner
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == "Betamax"
+    }
 
-		when:
-		def response = http.get(path: "/")
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy intercepts HTTPClient connections when explicitly told to"() {
+        given:
+        def http = new RESTClient(endpoint.url)
+        http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", recorder.proxyPort, "http"))
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
-	}
+        when:
+        def response = http.get(path: "/")
 
-	@Timeout(10)
-	def "proxy intercepts HTTPClient connections when explicitly told to"() {
-		given:
-		def http = new RESTClient(endpoint.url)
-		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost("localhost", proxy.port, "http"))
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == "Betamax"
+    }
 
-		when:
-		def response = http.get(path: "/")
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy intercepts HttpURLClient connections"() {
+        given:
+        def http = new HttpURLClient(url: endpoint.url)
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
-	}
+        when:
+        def response = http.request(path: "/")
 
-	@Timeout(10)
-	def "proxy intercepts HttpURLClient connections"() {
-		given:
-		def http = new HttpURLClient(url: endpoint.url)
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == "Betamax"
+    }
 
-		when:
-		def response = http.request(path: "/")
+    @Ignore
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy intercepts HTTPClient 3.x connections"() {
+        given:
+        def client = new HttpClient()
+        def request = new GetMethod(endpoint.url)
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
-	}
+        when:
+        def status = client.executeMethod(request)
 
-	@Ignore
-	@Timeout(10)
-	def "proxy intercepts HTTPClient 3.x connections"() {
-		given:
-		def client = new HttpClient()
-		def request = new GetMethod(endpoint.url)
+        then:
+        status == HTTP_OK
+        request.getResponseHeader(VIA)?.value == "Betamax"
+    }
 
-		when:
-		def status = client.executeMethod(request)
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    @Unroll({"proxy handles $method requests"})
+    def "proxy handles all request methods"() {
+        given:
+        def http = new RESTClient(endpoint.url)
+        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+        http.client.routePlanner = routePlanner
 
-		then:
-		status == HTTP_OK
-		request.getResponseHeader(VIA)?.value == "Betamax"
-	}
+        when:
+        def response = http."$method"(path: "/")
 
-	@Timeout(10)
-	@Unroll({"proxy handles $method requests"})
-	def "proxy handles all request methods"() {
-		given:
-		def http = new RESTClient(endpoint.url)
-		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-		http.client.routePlanner = routePlanner
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == "Betamax"
 
-		when:
-		def response = http."$method"(path: "/")
+        cleanup:
+        http.shutdown()
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
+        where:
+        method << ["get", "post", "put", "head", "delete", "options"]
+    }
 
-		cleanup:
-		http.shutdown()
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy forwards query string"() {
+        given:
+        def http = new RESTClient(endpoint.url)
+        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+        http.client.routePlanner = routePlanner
 
-		where:
-		method << ["get", "post", "put", "head", "delete", "options"]
-	}
+        when:
+        def response = http.get(path: "/", query: [q: "1"])
 
-	@Timeout(10)
-	def "proxy forwards query string"() {
-		given:
-		def http = new RESTClient(endpoint.url)
-		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-		http.client.routePlanner = routePlanner
+        then:
+        response.status == HTTP_OK
+        response.data.text.contains("GET /?q=1 HTTP/1.1")
 
-		when:
-		def response = http.get(path: "/", query: [q: "1"])
+        cleanup:
+        http.shutdown()
+    }
 
-		then:
-		response.status == HTTP_OK
-		response.data.text.contains("GET /?q=1 HTTP/1.1")
+    @Timeout(10)
+	@Betamax(tape = "proxy network comms spec")
+    def "proxy forwards post data"() {
+        given:
+        def http = new RESTClient(endpoint.url)
+        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+        http.client.routePlanner = routePlanner
 
-		cleanup:
-		http.shutdown()
-	}
+        when:
+        def response = http.post(path: "/", body: [q: "1"], requestContentType: URLENC)
 
-	@Timeout(10)
-	def "proxy forwards post data"() {
-		given:
-		def http = new RESTClient(endpoint.url)
-		def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-		http.client.routePlanner = routePlanner
+        then:
+        response.status == HTTP_OK
+        response.data.text.endsWith("\nq=1")
 
-		when:
-		def response = http.post(path: "/", body: [q: "1"], requestContentType: URLENC)
-
-		then:
-		response.status == HTTP_OK
-		response.data.text.endsWith("\nq=1")
-
-		cleanup:
-		http.shutdown()
-	}
+        cleanup:
+        http.shutdown()
+    }
 
 }

@@ -106,36 +106,25 @@ interactions:
       \ alt=\"Grails Plugins\" border=\"0\" />\n                                </a>\n\
       \                            </h3>\n                            <ul>\n     \
       \                           \n                                    <li><a href=\"\
-      /plugin/gorm-native-finders\">gorm native finders</a></li>\n               \
-      \                 \n                                    <li><a href=\"/plugin/simpledb\"\
-      >SimpleDB GORM</a></li>\n                                \n                \
-      \                    <li><a href=\"/plugin/compass-scss-integration\">Compass\
-      \ CSS Framework - SA...</a></li>\n                                \n       \
-      \                             <li><a href=\"/plugin/inviter\">Inviter - a simple\
-      \ way to ...</a></li>\n                                \n                  \
-      \          </ul>\n                            <h4><a href=\"/Plugins\">View\
-      \ All</a></h4>\n                        </div><!-- plugins -->\n           \
-      \         </div><!-- downloadPluginWrapper -->\n                </div><!-- downloadBox\
-      \ -->\n            </div><!-- eventDownloadWrapper -->\n            \n     \
-      \       <div class=\"newsScreencastWrapper\">\n                <div id=\"latestNews\"\
-      >\n                    <h2>Latest News</h2>\n                    <div id=\"\
-      newsBox\">\n                        <ul>\n                            \n   \
-      \                             <li>\n                                    <a href=\"\
-      /blog/view/emrul/SmartGWT-Server+Plugin+-+Part+2\">\n                      \
-      \                  <div class=\"detail\">\n                                \
-      \            <h4>SmartGWT-Server Plugin - Part 2</h4>\n                    \
-      \                        <div class=\"author\">by emrul </div>\n           \
-      \                                 <div class=\"comments\">0 comments</div>\n\
-      \                                        </div>\n                          \
-      \              <div class=\"calendar\">\n                                  \
-      \          <div class=\"month\">Aug</div>\n                                \
-      \            <div class=\"day\">24</div>\n                                 \
-      \       </div>\n                                    </a>\n                 \
-      \               </li>\n                            \n                      \
-      \          <li>\n                                    <a href=\"/blog/view/pledbrook/Micro+Cloud+Foundry+now+available\"\
+      /plugin/external-config-reload\">External Configuration Rel...</a></li>\n  \
+      \                              \n                                    <li><a\
+      \ href=\"/plugin/gorm-native-finders\">gorm native finders</a></li>\n      \
+      \                          \n                                    <li><a href=\"\
+      /plugin/simpledb\">SimpleDB GORM</a></li>\n                                \n\
+      \                                    <li><a href=\"/plugin/compass-scss-integration\"\
+      >Compass CSS Framework - SA...</a></li>\n                                \n\
+      \                            </ul>\n                            <h4><a href=\"\
+      /Plugins\">View All</a></h4>\n                        </div><!-- plugins -->\n\
+      \                    </div><!-- downloadPluginWrapper -->\n                </div><!--\
+      \ downloadBox -->\n            </div><!-- eventDownloadWrapper -->\n       \
+      \     \n            <div class=\"newsScreencastWrapper\">\n                <div\
+      \ id=\"latestNews\">\n                    <h2>Latest News</h2>\n           \
+      \         <div id=\"newsBox\">\n                        <ul>\n             \
+      \               \n                                <li>\n                   \
+      \                 <a href=\"/blog/view/emrul/SmartGWT-Server+Plugin+-+Part+2\"\
       >\n                                        <div class=\"detail\">\n        \
-      \                                    <h4>Micro Cloud Foundry now available</h4>\n\
-      \                                            <div class=\"author\">by pledbrook\
+      \                                    <h4>SmartGWT-Server Plugin - Part 2</h4>\n\
+      \                                            <div class=\"author\">by emrul\
       \ </div>\n                                            <div class=\"comments\"\
       >0 comments</div>\n                                        </div>\n        \
       \                                <div class=\"calendar\">\n                \
@@ -144,20 +133,31 @@ interactions:
       \                         </div>\n                                    </a>\n\
       \                                </li>\n                            \n     \
       \                           <li>\n                                    <a href=\"\
-      /blog/view/pledbrook/Early+bird+registration+for+Spring+One+2GX\">\n       \
-      \                                 <div class=\"detail\">\n                 \
-      \                           <h4>Early bird registration for Spring One 2GX</h4>\n\
-      \                                            <div class=\"author\">by pledbrook\
-      \ </div>\n                                            <div class=\"comments\"\
-      >0 comments</div>\n                                        </div>\n        \
-      \                                <div class=\"calendar\">\n                \
-      \                            <div class=\"month\">Aug</div>\n              \
-      \                              <div class=\"day\">24</div>\n               \
-      \                         </div>\n                                    </a>\n\
-      \                                </li>\n                            \n     \
-      \                   </ul>\n                        <div class=\"actions\">\n\
-      \                            <a href=\"/blog\">More news</a> |\t\n         \
-      \                   <a href=\"/blog/entry/create\">Add news</a> | <a href=\"\
+      /blog/view/pledbrook/Micro+Cloud+Foundry+now+available\">\n                \
+      \                        <div class=\"detail\">\n                          \
+      \                  <h4>Micro Cloud Foundry now available</h4>\n            \
+      \                                <div class=\"author\">by pledbrook </div>\n\
+      \                                            <div class=\"comments\">0 comments</div>\n\
+      \                                        </div>\n                          \
+      \              <div class=\"calendar\">\n                                  \
+      \          <div class=\"month\">Aug</div>\n                                \
+      \            <div class=\"day\">24</div>\n                                 \
+      \       </div>\n                                    </a>\n                 \
+      \               </li>\n                            \n                      \
+      \          <li>\n                                    <a href=\"/blog/view/pledbrook/Early+bird+registration+for+Spring+One+2GX\"\
+      >\n                                        <div class=\"detail\">\n        \
+      \                                    <h4>Early bird registration for Spring\
+      \ One 2GX</h4>\n                                            <div class=\"author\"\
+      >by pledbrook </div>\n                                            <div class=\"\
+      comments\">0 comments</div>\n                                        </div>\n\
+      \                                        <div class=\"calendar\">\n        \
+      \                                    <div class=\"month\">Aug</div>\n      \
+      \                                      <div class=\"day\">24</div>\n       \
+      \                                 </div>\n                                 \
+      \   </a>\n                                </li>\n                          \
+      \  \n                        </ul>\n                        <div class=\"actions\"\
+      >\n                            <a href=\"/blog\">More news</a> |\t\n       \
+      \                     <a href=\"/blog/entry/create\">Add news</a> | <a href=\"\
       /blog/feed/rss\">Subscribe</a>\n                        </div><!-- actions -->\n\
       \                    </div><!-- newsBox -->\n                </div><!-- latestNews\
       \ -->\n            \n                <div id=\"events\">\n                 \
@@ -181,8 +181,8 @@ interactions:
       \ software products as well as Spring, Groovy, Grails, and Apache open source\
       \ technologies.\n\t<br><br>\n\t We offer both public and customized private\
       \ training and have trained over 4,000 people. Whichever course you decide to\
-      \ take, you are guaranteed to experience what many before you refer to as ‚Ä\
-      úThe best Enterprise Software Class I have ever attended‚Äù.\n\t\t\t\t\t\t</p>\t\
+      \ take, you are guaranteed to experience what many before you refer to as ‚Äú\
+      The best Enterprise Software Class I have ever attended‚Äù.\n\t\t\t\t\t\t</p>\t\
       \t\n                    </div><!-- left column -->\n                    <div\
       \ class=\"center\">\n            \t\t\t<h3>Support &amp; Services</h3>\n   \
       \                     <p>SpringSource enterprise software and <a href=\"http://www.springsource.com/services/enterprisesupport\"\
