@@ -4,7 +4,7 @@ import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
-import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import spock.lang.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
@@ -31,7 +31,7 @@ class NoTapeSpec extends Specification {
 
 		then:
 		def e = thrown(HttpResponseException)
-		e.statusCode == HTTP_BAD_GATEWAY
+		e.statusCode == HTTP_FORBIDDEN
 		e.message == "No tape"
 	}
 }

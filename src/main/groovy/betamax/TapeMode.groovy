@@ -16,14 +16,18 @@
 
 package betamax
 
-import static betamax.TapeMode.READ_WRITE
-import java.lang.annotation.*
-import static java.lang.annotation.ElementType.METHOD
-import static java.lang.annotation.RetentionPolicy.RUNTIME
+enum TapeMode {
 
-@Retention(RUNTIME)
-@Target(METHOD)
-@interface Betamax {
-	String tape()
-	TapeMode mode() default READ_WRITE
+	READ_WRITE(true, true),
+	READ_ONLY(true, false),
+	WRITE_ONLY(false, true)
+
+	final boolean readable
+	final boolean writable
+
+	private TapeMode(boolean readable, boolean writable) {
+		this.readable = readable
+		this.writable = writable
+	}
+
 }

@@ -19,15 +19,14 @@ package betamax.server
 import betamax.Recorder
 import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
-import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import static java.net.HttpURLConnection.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
+import org.apache.http.entity.*
 import org.apache.http.impl.client.*
 import org.apache.http.protocol.*
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.entity.HttpEntityWrapper
 
 @Log4j
 class HttpProxyHandler implements HttpRequestHandler {
@@ -64,19 +63,24 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 		if (!tape) {
 			log.error "no tape inserted..."
-			response.statusCode = HTTP_BAD_GATEWAY
+			response.statusCode = HTTP_FORBIDDEN
 			response.reasonPhrase = "No tape"
-		} else if (tape.seek(requestWrapper)) {
+		} else if (tape.seek(requestWrapper) && tape.isReadable()) {
 			log.info "playing back from tape '$tape.name'..."
 			tape.play(response)
 			response.addHeader(X_BETAMAX, "PLAY")
 		} else {
 			try {
-				execute(requestWrapper, response)
-				log.info "recording response with status $response.statusLine to tape '$tape.name'..."
-				tape.record(requestWrapper, response)
-				log.info "recording complete..."
-				response.addHeader(X_BETAMAX, "REC")
+				if (tape.isWritable()) {
+					execute(requestWrapper, response)
+					log.info "recording response with status $response.statusLine to tape '$tape.name'..."
+					tape.record(requestWrapper, response)
+					log.info "recording complete..."
+					response.addHeader(X_BETAMAX, "REC")
+				} else {
+					response.statusCode = HTTP_FORBIDDEN
+					response.reasonPhrase = "Tape is read-only"
+				}
 			} catch (IOException e) {
 				// TODO: handle timeout by setting HTTP_GATEWAY_TIMEOUT
 				log.error "problem connecting to $request.requestLine.uri", e

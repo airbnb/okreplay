@@ -21,6 +21,7 @@ import betamax.storage.yaml.YamlTapeLoader
 import groovy.util.logging.Log4j
 import java.text.Normalizer
 import org.junit.rules.MethodRule
+import static betamax.TapeMode.*
 import betamax.storage.*
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
@@ -78,18 +79,21 @@ class Recorder implements MethodRule {
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
 	 * @param name the name of the _tape_.
+	 * @param mode the read/write mode of the tape.
 	 * @return the tape either loaded from file or newly created.
 	 */
-	Tape insertTape(String name) {
+	Tape insertTape(String name, TapeMode mode = READ_WRITE) {
 		def file = getTapeFile(name)
 		if (file.isFile()) {
-			log.debug "reading tape from file $file.name"
 			file.withReader { reader ->
 				tape = loader.readTape(reader)
+				tape.mode = mode
 			}
+			log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name"
 		} else {
-			tape = new Tape(name: name)
+			tape = new Tape(name: name, mode: mode)
 		}
+
 		tape
 	}
 
@@ -142,7 +146,7 @@ class Recorder implements MethodRule {
 	def withTape(String name, Map arguments, Closure closure) {
 		try {
 			proxy.start(this)
-			insertTape(name)
+			insertTape(name, arguments.mode ?: READ_WRITE)
 			closure()
 		} finally {
 			proxy.stop()
@@ -156,7 +160,7 @@ class Recorder implements MethodRule {
 			log.debug "found @Betamax annotation on '$method.name'"
 			new Statement() {
 				void evaluate() {
-					withTape(annotation.tape()) {
+					withTape(annotation.tape(), [mode: annotation.mode()]) {
 						statement.evaluate()
 					}
 				}
