@@ -17,9 +17,6 @@ An example tape file can be found [here][10].
 Betamax is at quite an early stage of development. It is usable and I would encourage users to give feedback, raise
 issues etc. via GitHub.
 
-Please bear in mind that the format and structure of tape files is subject to change at least until there is a first
-stable release.
-
 Betamax is not yet hosted on a maven repository. You can build from source or use the jar from the [downloads][9]
 section. Dependency details can be found below.
 
