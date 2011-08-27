@@ -1,8 +1,29 @@
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		mavenRepo name: "Gradle", urls: "http://repo.gradle.org/gradle/plugins-snapshots/"
+	}
+	dependencies {
+		classpath "org.gradle.plugins:gradle-signing-plugin:0.0.1-SNAPSHOT"
+	}
+}
+
 apply plugin: "groovy"
+apply plugin: "maven"
+apply plugin: "signing"
 apply plugin: "idea"
 
-task wrapper(type: Wrapper) {
-	gradleVersion = "1.0-milestone-3"
+group = "com.github.robfletcher"
+version = "1.0-M2"
+
+signing {
+	sign configurations.archives
+}
+
+configurations {
+	deployerJars
+	published.extendsFrom archives, signatures
 }
 
 repositories {
@@ -26,4 +47,82 @@ dependencies {
 	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
 	testCompile "commons-httpclient:commons-httpclient:3.1"
 	testRuntime "cglib:cglib-nodep:2.2.2"
+	deployerJars "org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6"
+}
+
+uploadArchives {
+	repositories.mavenDeployer {
+		configuration = configurations.archives
+
+		repository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+			authentication(userName: sonatypeUsername, password: sonatypePassword)
+		}
+
+		pom.project {
+			name "Betamax - An HTTP stubbing proxy for testing JVM applications."
+			packaging "jar"
+			description "Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby's VCR."
+			url "http://robfletcher.github.com/betamax"
+			inceptionYear "2011"
+
+			scm {
+				url "https://github.com/robfletcher/betamax/"
+			}
+
+			licenses {
+				license {
+					name "The Apache Software License, Version 2.0"
+					url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+					distribution "repo"
+				}
+			}
+
+			developers {
+				developer {
+					id "robfletcher"
+					name "Rob Fletcher"
+					url "http://adhockery.blogspot.com/"
+					roles {
+						role "Lead"
+						role "Founder"
+					}
+				}
+			}
+		}
+	}
+}
+
+uploadPublished {
+	repositories {
+		mavenDeployer {
+			beforeDeployment { deployment -> signPom(deployment) }
+		}
+	}
+}
+
+// custom tasks for creating source/javadoc jars
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = "javadoc"
+	from javadoc.destinationDir
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+	classifier = "groovydoc"
+	from groovydoc.destinationDir
+}
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+	archives sourcesJar
+	archives javadocJar
+	archives groovydocJar
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = "1.0-milestone-3"
 }
