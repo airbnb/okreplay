@@ -4,6 +4,7 @@ import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
 
@@ -80,7 +81,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		and:
 		def yaml = file.withReader { reader ->
-			recorder.loader.yaml.load(reader)
+			new Yaml().loadAs(reader, Map)
 		}
 		yaml.name == "proxy_record_and_playback_spec"
 		yaml.interactions.size() == 2

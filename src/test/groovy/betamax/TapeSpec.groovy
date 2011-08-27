@@ -1,7 +1,7 @@
 package betamax
 
 import betamax.encoding.GzipEncoder
-import betamax.storage.Tape
+import betamax.storage.MemoryTape
 import org.apache.http.message.BasicHttpResponse
 import static betamax.TapeMode.*
 import static groovyx.net.http.ContentType.URLENC
@@ -15,7 +15,7 @@ import spock.lang.*
 @Stepwise
 class TapeSpec extends Specification {
 
-	@Shared Tape tape = new Tape(name: "tape_spec")
+	@Shared Tape tape = new MemoryTape(name: "tape_spec")
 	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 

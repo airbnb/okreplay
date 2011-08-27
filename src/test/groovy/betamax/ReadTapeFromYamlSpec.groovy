@@ -1,16 +1,16 @@
 package betamax
 
-import betamax.storage.yaml.YamlTapeLoader
+import betamax.storage.TapeLoadException
+import betamax.storage.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.Specification
-import betamax.storage.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 
 class ReadTapeFromYamlSpec extends Specification {
 
-	TapeLoader loader = new YamlTapeLoader()
+	StorableTape tape = new YamlTape()
 
 	def "can load a valid tape with a single interaction"() {
 		given:
@@ -31,7 +31,7 @@ interactions:
     body: O HAI!
 """
 		when:
-		def tape = loader.readTape(new StringReader(yaml))
+		tape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.name == "single_interaction_tape"
@@ -77,7 +77,7 @@ interactions:
     body: I'm a teapot
 """
 		when:
-		def tape = loader.readTape(new StringReader(yaml))
+		tape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.interactions.size() == 2
@@ -108,7 +108,7 @@ interactions:
     body: O HAI!
 """
 		when:
-		def tape = loader.readTape(new StringReader(yaml))
+		tape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
@@ -120,7 +120,7 @@ interactions:
 		def yaml = "THIS IS NOT YAML"
 
 		when:
-		loader.readTape(new StringReader(yaml))
+		tape.readFrom(new StringReader(yaml))
 
 		then:
 		thrown TapeLoadException
@@ -145,24 +145,11 @@ interactions:
     body: O HAI!
 """
 		when:
-		loader.readTape(new StringReader(yaml))
+		tape.readFrom(new StringReader(yaml))
 
 		then:
 		def e = thrown(TapeLoadException)
 		e.cause instanceof ConstructorException
-	}
-
-	def "barfs if no tape at root"() {
-		given:
-		def json = """\
-name: invalid_structure_tape
-"""
-		when:
-		loader.readTape(new StringReader(json))
-
-		then:
-		def e = thrown(TapeLoadException)
-		e.message =~ /^Expected a Tape but loaded a /
 	}
 
 }

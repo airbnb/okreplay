@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
-package betamax.storage
+package betamax
 
-interface TapeLoader {
+/**
+ * A `Tape` that can be read from an written to a backing store.
+ */
+interface StorableTape extends Tape {
 
-	String getFileExtension()
+	/**
+	 * Writes the current state of the tape to `writer`.
+	 */
+	void writeTo(Writer writer)
 
-	Tape readTape(Reader reader)
+	/**
+	 * Reads the state of the tape from `writer` discarding any existing state.
+	 */
+	void readFrom(Reader reader)
 
-	void writeTape(Tape tape, Writer writer)
+	/**
+	 * @return an appropriate filename for storing the tape to the filesystem.
+	 */
+	String getFilename()
 
 }

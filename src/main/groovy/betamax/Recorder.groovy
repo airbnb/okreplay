@@ -17,12 +17,10 @@
 package betamax
 
 import betamax.server.HttpProxyServer
-import betamax.storage.yaml.YamlTapeLoader
+import betamax.storage.yaml.YamlTape
 import groovy.util.logging.Log4j
-import java.text.Normalizer
 import org.junit.rules.MethodRule
-import static betamax.TapeMode.*
-import betamax.storage.*
+import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
 
@@ -68,12 +66,7 @@ class Recorder implements MethodRule {
 	 */
 	File tapeRoot = new File(DEFAULT_TAPE_ROOT)
 
-	/**
-	 * The strategy for reading and writing tape files.
-	 */
-	TapeLoader loader = new YamlTapeLoader()
-
-	private Tape tape
+	private StorableTape tape
 	private HttpProxyServer proxy = new HttpProxyServer()
 
 	/**
@@ -83,17 +76,15 @@ class Recorder implements MethodRule {
 	 * @return the tape either loaded from file or newly created.
 	 */
 	Tape insertTape(String name, TapeMode mode = READ_WRITE) {
-		def file = getTapeFile(name)
+		tape = new YamlTape(name: name, mode: mode)
+		def file = new File(tapeRoot, tape.filename)
 		if (file.isFile()) {
 			file.withReader { reader ->
-				tape = loader.readTape(reader)
+				tape.readFrom(reader)
 				tape.mode = mode
 			}
-			log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name"
-		} else {
-			tape = new Tape(name: name, mode: mode)
+			log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
 		}
-
 		tape
 	}
 
@@ -112,11 +103,11 @@ class Recorder implements MethodRule {
 	 */
 	Tape ejectTape() {
 		if (tape) {
-			def file = getTapeFile(tape.name)
+			def file = new File(tapeRoot, tape.filename)
 			file.parentFile.mkdirs()
-			log.debug "writing tape $tape to file $file.name"
+			log.debug "writing tape $tape to file $file.name..."
 			file.withWriter { writer ->
-				loader.writeTape(tape, writer)
+				tape.writeTo(writer)
 			}
 		}
 		def tapeToReturn = tape
@@ -169,11 +160,6 @@ class Recorder implements MethodRule {
 			log.debug "no @Betamax annotation on '$method.name'"
 			statement
 		}
-	}
-
-	private File getTapeFile(String name) {
-		def filename = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_")
-		new File(tapeRoot, "${filename}.${loader.fileExtension}")
 	}
 
 	private void configureFromProperties(Properties properties) {

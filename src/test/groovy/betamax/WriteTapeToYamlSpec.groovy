@@ -1,8 +1,8 @@
 package betamax
 
-import betamax.storage.Tape
-import betamax.storage.yaml.YamlTapeLoader
+import betamax.storage.yaml.YamlTape
 import org.apache.http.HttpResponse
+import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
@@ -13,14 +13,14 @@ import spock.lang.*
 
 class WriteTapeToYamlSpec extends Specification {
 
-	YamlTapeLoader loader = new YamlTapeLoader()
-
 	@Shared HttpGet getRequest
 	@Shared HttpPost postRequest
 	@Shared HttpResponse successResponse
 	@Shared HttpResponse failureResponse
 	@Shared HttpResponse imageResponse
 	@Shared File image
+
+	Yaml yamlReader
 
 	def setupSpec() {
 		getRequest = new HttpGet("http://icanhascheezburger.com/")
@@ -49,17 +49,21 @@ class WriteTapeToYamlSpec extends Specification {
 		imageResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "image/png")
 	}
 
+	def setup() {
+		yamlReader = new Yaml()
+	}
+
 	def "can write a tape to storage"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, successResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.name == tape.name
 
 		yaml.interactions.size() == 1
@@ -74,30 +78,30 @@ class WriteTapeToYamlSpec extends Specification {
 
 	def "writes request headers"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, successResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
 		yaml.interactions[0].request.headers[IF_NONE_MATCH] == "b00b135"
 	}
 
 	def "writes response headers"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, successResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
 		yaml.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
 		yaml.interactions[0].response.headers[CONTENT_ENCODING] == "none"
@@ -105,31 +109,31 @@ class WriteTapeToYamlSpec extends Specification {
 
 	def "can write requests with a body"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(postRequest, successResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.interactions[0].request.method == "POST"
 		yaml.interactions[0].request.body == "q=1"
 	}
 
 	def "can write multiple interactions"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, successResponse)
 		tape.record(postRequest, failureResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.interactions.size() == 2
 		yaml.interactions[0].request.method == "GET"
 		yaml.interactions[1].request.method == "POST"
@@ -139,27 +143,27 @@ class WriteTapeToYamlSpec extends Specification {
 
 	def "can write a binary response body"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, imageResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
-		def yaml = loader.yaml.load(writer.toString())
+		def yaml = yamlReader.loadAs(writer.toString(), Map)
 		yaml.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
 		yaml.interactions[0].response.body == image.bytes
 	}
 
 	def "text response body is written to file as plain text"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, successResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
 		writer.toString().contains("body: O HAI!")
@@ -167,12 +171,12 @@ class WriteTapeToYamlSpec extends Specification {
 
 	def "binary response body is written to file as binary data"() {
 		given:
-		def tape = new Tape(name: "tape_loading_spec")
+		def tape = new YamlTape(name: "tape_loading_spec")
 		def writer = new StringWriter()
 
 		when:
 		tape.record(getRequest, imageResponse)
-		loader.writeTape(tape, writer)
+		tape.writeTo(writer)
 
 		then:
 		writer.toString().contains("body: !!binary |-")

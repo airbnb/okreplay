@@ -16,53 +16,45 @@
 
 package betamax.storage.yaml
 
-import groovy.util.logging.Log4j
-import org.yaml.snakeyaml.DumperOptions.FlowStyle
+import betamax.StorableTape
+import java.text.Normalizer
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
 import betamax.storage.*
 import org.yaml.snakeyaml.*
+import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 
-@Log4j
-class YamlTapeLoader implements TapeLoader {
+class YamlTape extends MemoryTape implements StorableTape {
 
-	/**
-	 * Options controlling the style of the YAML written out.
-	 */
-	DumperOptions dumperOptions = new DumperOptions(defaultFlowStyle: FlowStyle.BLOCK)
-
-	String getFileExtension() {
-		"yaml"
+	void writeTo(Writer writer) {
+		yaml.dump(this, writer)
 	}
 
-	Tape readTape(Reader reader) {
+	void readFrom(Reader reader) {
 		try {
-			def tape = yaml.load(reader)
-			if (!(tape instanceof Tape)) {
-				throw new TapeLoadException("Expected a Tape but loaded a ${tape.getClass().name}")
-			}
-			tape
+			// TODO: loading a tape, cloning its state & discarding it feels a little wrong
+			def tape = yaml.loadAs(reader, YamlTape)
+			this.name = tape.name
+			this.interactions = tape.interactions
 		} catch (YAMLException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
-	void writeTape(Tape tape, Writer writer) {
-		if (log.isDebugEnabled()) {
-			def sw = new StringWriter()
-			yaml.dump(tape, sw)
-			log.debug sw.toString()
-		}
-		yaml.dump(tape, writer)
+	String getFilename() {
+		def normalizedName = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_").replaceFirst(/^_/, "").replaceFirst(/_$/, "")
+		"${normalizedName}.yaml"
 	}
 
-	Yaml getYaml() {
+	private Yaml getYaml() {
 		def representer = new TapeRepresenter()
-		representer.addClassTag(Tape, "!tape")
+		representer.addClassTag(YamlTape, "!tape")
+
 		def constructor = new Constructor()
-		constructor.addTypeDescription(new TypeDescription(Tape, "!tape"))
+		constructor.addTypeDescription(new TypeDescription(YamlTape, "!tape"))
+
+		def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK)
+
 		new Yaml(constructor, representer, dumperOptions)
 	}
-
 }
-

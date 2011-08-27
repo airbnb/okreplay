@@ -16,6 +16,7 @@
 
 package betamax.storage.yaml
 
+import betamax.Tape
 import betamax.storage.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*

@@ -16,7 +16,7 @@
 
 package betamax.storage
 
-import betamax.TapeMode
+import betamax.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.encoding.*
 import org.apache.http.*
@@ -27,50 +27,29 @@ import org.apache.http.message.*
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
-class Tape {
+class MemoryTape implements Tape {
 
-	/**
-	 * @return The name of the tape.
-	 */
 	String name
 	List<RecordedInteraction> interactions = []
 	private TapeMode mode = READ_WRITE
 	private int position = -1
 
-	/**
-	 * @param mode the new record mode of the tape.
-	 */
 	void setMode(TapeMode mode) {
 		this.mode = mode
 	}
 
-	/**
-	 * @return `true` if the tape is readable, `false` otherwise.
-	 */
 	boolean isReadable() {
 		mode.readable
 	}
 
-	/**
-	 * @return `true` if the tape is writable, `false` otherwise.
-	 */
 	boolean isWritable() {
 		mode.writable
 	}
 
-	/**
-	 * @return the number of recorded HTTP interactions currently stored on the tape.
-	 */
 	int size() {
 		interactions.size()
 	}
 
-	/**
-	 * Attempts to find a recorded interaction on the tape that matches the supplied request's method and URI. If the
-	 * method succeeds then subsequent calls to `play` will play back the response that was found.
-	 * @param request the HTTP request to match.
-	 * @return `true` if a matching recorded interaction was found, `false` otherwise.
-	 */
 	boolean seek(HttpRequest request) {
 		position = interactions.findIndexOf {
 			it.request.uri == request.requestLine.uri && it.request.method == request.requestLine.method
@@ -78,20 +57,10 @@ class Tape {
 		position >= 0
 	}
 
-	/**
-	 * Resets the tape so that no recorded interaction is ready to play. Subsequent calls to `play` will throw
-	 * `IllegalStateException` until a successful call to `seek` is made.
-	 */
 	void reset() {
 		position = -1
 	}
 
-	/**
-	 * Plays back a previously recorded interaction to the supplied response. Status, headers and entities are copied
-	 * from the recorded interaction to `response`.
-	 * @param response the HTTP response to populate.
-	 * @throws IllegalStateException if no recorded interaction has been found by a previous call to `seek`.
-	 */
 	void play(HttpResponse response) {
 		if (!mode.readable) {
 			throw new IllegalStateException("the tape is not readable")
@@ -116,14 +85,6 @@ class Tape {
 		}
 	}
 
-	/**
-	 * Records a new interaction to the tape. If the tape is currently positioned to read a recorded interaction due to
-	 * a previous successful `seek` call then this method will overwrite the existing recorded interaction. Otherwise
-	 * the newly recorded interaction is appended to the tape.
-	 * @param request the request to record.
-	 * @param response the response to record.
-	 * @throws UnsupportedOperationException if this `Tape` implementation is not writable.
-	 */
 	void record(HttpRequest request, HttpResponse response) {
 		if (mode.writable) {
 			def interaction = new RecordedInteraction(request: recordRequest(request), response: recordResponse(response), recorded: new Date())
