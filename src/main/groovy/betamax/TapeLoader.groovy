@@ -14,18 +14,27 @@
  * limitations under the License.
  */
 
-package betamax.storage
+package betamax
 
-import betamax.Tape
+import betamax.storage.StorableTape
 
 /**
- * A `Tape` that can be read from an written to a backing store.
+ * The interface for factories that load tapes from file storage.
  */
-interface StorableTape extends Tape {
+public interface TapeLoader<T extends StorableTape> {
 
 	/**
-	 * Writes the current state of the tape to `writer`.
+	 * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
+	 * @param name the name of the tape.
+	 * @return a tape loaded from a file or a new blank tape.
 	 */
-	void writeTo(Writer writer)
+	T loadTape(String name)
+
+	void writeTape(StorableTape tape)
+
+	/**
+	 * @return an appropriate file for storing a tape with the supplied name.
+	 */
+	File fileFor(String tapeName)
 
 }

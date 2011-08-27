@@ -46,7 +46,8 @@ class TapeModeSpec extends Specification {
 
 	def "in write-only mode the an interaction can be recorded"() {
 		given: "an empty write-only tape is inserted"
-		def tape = recorder.insertTape("blank write only tape", WRITE_ONLY)
+		recorder.insertTape("blank write only tape", WRITE_ONLY)
+		def tape = recorder.tape
 
 		when: "a request is made"
 		http.get(uri: endpoint.url)
@@ -74,7 +75,8 @@ interactions:
     headers: {}
     body: Previous response made when endpoint was down.
 """
-		def tape = recorder.insertTape("write only tape", WRITE_ONLY)
+		recorder.insertTape("write only tape", WRITE_ONLY)
+		def tape = recorder.tape
 
 		when: "a request is made that matches a request already recorded on the tape"
 		http.get(uri: endpoint.url)

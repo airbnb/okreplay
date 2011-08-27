@@ -16,38 +16,28 @@
 
 package betamax.storage.yaml
 
-import betamax.storage.StorableTape
-import java.text.Normalizer
+import betamax.tape.MemoryTape
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
 import betamax.storage.*
 import org.yaml.snakeyaml.*
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
-import betamax.tape.MemoryTape
 
 class YamlTape extends MemoryTape implements StorableTape {
 
-	void writeTo(Writer writer) {
-		yaml.dump(this, writer)
-	}
-
-	void readFrom(Reader reader) {
+	static YamlTape readFrom(Reader reader) {
 		try {
-			// TODO: loading a tape, cloning its state & discarding it feels a little wrong
-			def tape = yaml.loadAs(reader, YamlTape)
-			this.name = tape.name
-			this.interactions = tape.interactions
+			yaml.loadAs(reader, YamlTape)
 		} catch (YAMLException e) {
 			throw new TapeLoadException("Invalid tape", e)
 		}
 	}
 
-	String getFilename() {
-		def normalizedName = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_").replaceFirst(/^_/, "").replaceFirst(/_$/, "")
-		"${normalizedName}.yaml"
+	void writeTo(Writer writer) {
+		yaml.dump(this, writer)
 	}
 
-	private Yaml getYaml() {
+	private static Yaml getYaml() {
 		def representer = new TapeRepresenter()
 		representer.addClassTag(YamlTape, "!tape")
 

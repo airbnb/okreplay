@@ -7,11 +7,8 @@ import spock.lang.Specification
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
-import betamax.storage.StorableTape
 
 class ReadTapeFromYamlSpec extends Specification {
-
-	StorableTape tape = new YamlTape()
 
 	def "can load a valid tape with a single interaction"() {
 		given:
@@ -32,7 +29,7 @@ interactions:
     body: O HAI!
 """
 		when:
-		tape.readFrom(new StringReader(yaml))
+		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.name == "single_interaction_tape"
@@ -78,7 +75,7 @@ interactions:
     body: I'm a teapot
 """
 		when:
-		tape.readFrom(new StringReader(yaml))
+		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.interactions.size() == 2
@@ -109,7 +106,7 @@ interactions:
     body: O HAI!
 """
 		when:
-		tape.readFrom(new StringReader(yaml))
+		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		then:
 		tape.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
@@ -121,7 +118,7 @@ interactions:
 		def yaml = "THIS IS NOT YAML"
 
 		when:
-		tape.readFrom(new StringReader(yaml))
+		YamlTape.readFrom(new StringReader(yaml))
 
 		then:
 		thrown TapeLoadException
@@ -146,7 +143,7 @@ interactions:
     body: O HAI!
 """
 		when:
-		tape.readFrom(new StringReader(yaml))
+		YamlTape.readFrom(new StringReader(yaml))
 
 		then:
 		def e = thrown(TapeLoadException)

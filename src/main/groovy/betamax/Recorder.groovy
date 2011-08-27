@@ -17,13 +17,13 @@
 package betamax
 
 import betamax.server.HttpProxyServer
-import betamax.storage.yaml.YamlTape
+import betamax.storage.StorableTape
+import betamax.storage.yaml.YamlTapeLoader
 import groovy.util.logging.Log4j
 import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
-import betamax.storage.StorableTape
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -74,18 +74,10 @@ class Recorder implements MethodRule {
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
 	 * @param name the name of the _tape_.
 	 * @param mode the read/write mode of the tape.
-	 * @return the tape either loaded from file or newly created.
 	 */
-	Tape insertTape(String name, TapeMode mode = READ_WRITE) {
-		tape = new YamlTape(name: name, mode: mode)
-		def file = new File(tapeRoot, tape.filename)
-		if (file.isFile()) {
-			file.withReader { reader ->
-				tape.readFrom(reader)
-				tape.mode = mode
-			}
-			log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
-		}
+	void insertTape(String name, TapeMode mode = READ_WRITE) {
+		tape = tapeLoader.loadTape(name)
+		tape.mode = mode
 		tape
 	}
 
@@ -100,20 +92,10 @@ class Recorder implements MethodRule {
 	/**
 	 * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
 	 * will no longer record or play back any HTTP traffic until another tape is inserted.
-	 * @return the ejected _tape_.
 	 */
-	Tape ejectTape() {
-		if (tape) {
-			def file = new File(tapeRoot, tape.filename)
-			file.parentFile.mkdirs()
-			log.debug "writing tape $tape to file $file.name..."
-			file.withWriter { writer ->
-				tape.writeTo(writer)
-			}
-		}
-		def tapeToReturn = tape
+	void ejectTape() {
+		tapeLoader.writeTape(tape)
 		tape = null
-		tapeToReturn
 	}
 
 	/**
@@ -161,6 +143,10 @@ class Recorder implements MethodRule {
 			log.debug "no @Betamax annotation on '$method.name'"
 			statement
 		}
+	}
+
+	private TapeLoader getTapeLoader() {
+		new YamlTapeLoader(tapeRoot)
 	}
 
 	private void configureFromProperties(Properties properties) {

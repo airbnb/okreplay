@@ -13,7 +13,7 @@ class RequestMatchingSpec extends Specification {
 	@Shared RESTClient http = new RESTClient()
 
 	def setupSpec() {
-		assert tapeRoot.mkdirs()
+		tapeRoot.mkdirs()
 
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 	}

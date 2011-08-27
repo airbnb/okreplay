@@ -73,10 +73,10 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		proxy.stop()
 
 		when:
-		def tape = recorder.ejectTape()
+		recorder.ejectTape()
 
 		then:
-		def file = new File(recorder.tapeRoot, "${tape.name}.yaml")
+		def file = new File(recorder.tapeRoot, "proxy_record_and_playback_spec.yaml")
 		file.isFile()
 
 		and:

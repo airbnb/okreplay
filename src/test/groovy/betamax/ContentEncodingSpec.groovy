@@ -63,8 +63,7 @@ interactions:
     headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
     body: O HAI!
 """
-		def tape = new YamlTape()
-		tape.readFrom(new StringReader(yaml))
+		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
