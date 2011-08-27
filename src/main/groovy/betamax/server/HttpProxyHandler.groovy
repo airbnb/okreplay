@@ -21,6 +21,7 @@ import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.util.EntityUtils
 import static java.net.HttpURLConnection.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
@@ -131,9 +132,7 @@ class HttpProxyHandler implements HttpRequestHandler {
 			new HttpEntityWrapper(entity)
 		} else {
 			log.debug "copying non-repeatable entity ${entity.getClass().name} with content type ${entity.contentType?.value}..."
-			def bytes = new ByteArrayOutputStream()
-			entity.writeTo(bytes)
-			def copy = new ByteArrayEntity(bytes.toByteArray())
+			def copy = new ByteArrayEntity(EntityUtils.toByteArray(entity))
 			copy.chunked = entity.chunked
 			copy.contentEncoding = entity.contentEncoding
 			copy.contentType = entity.contentType

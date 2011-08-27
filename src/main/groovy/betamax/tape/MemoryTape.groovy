@@ -16,6 +16,7 @@
 
 package betamax.tape
 
+import org.apache.http.util.EntityUtils
 import betamax.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.encoding.*
@@ -136,15 +137,13 @@ class MemoryTape implements Tape {
 		if (!entity) {
 			null
 		} else if (entity instanceof StringEntity) {
-			entity.content.text
+			EntityUtils.toString(entity)
 		} else if (contentEncoding == "gzip") {
 			new GzipEncoder().decode(entity.content)
 		} else if (contentEncoding == "deflate") {
 			new DeflateEncoder().decode(entity.content)
 		} else {
-			def bytes = new ByteArrayOutputStream()
-			entity.writeTo(bytes)
-			bytes.toByteArray()
+			EntityUtils.toByteArray(entity)
 		}
 	}
 
