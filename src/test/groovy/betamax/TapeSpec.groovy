@@ -20,13 +20,14 @@ class TapeSpec extends Specification {
 	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
 	def setup() {
-		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
+		def entity = new ByteArrayEntity(new GzipEncoder().encode("O HAI!", "UTF-8"))
+		entity.setContentEncoding("gzip")
+		entity.setContentType("text/plain;charset=UTF-8")
+
+		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain;charset=UTF-8")
 		plainTextResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		plainTextResponse.addHeader(CONTENT_ENCODING, "gzip")
-		plainTextResponse.entity = new BasicHttpEntity()
-		def bytes = new GzipEncoder().encode("O HAI!")
-		plainTextResponse.entity.content = new ByteArrayInputStream(bytes)
-		plainTextResponse.entity.contentLength = bytes.length
+		plainTextResponse.entity = entity
 	}
 
 	def cleanup() {

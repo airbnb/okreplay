@@ -16,20 +16,20 @@
 
 package betamax.encoding
 
+import java.nio.charset.Charset
+
 abstract class AbstractEncoder {
 
-	final String decode(InputStream input) {
-		def out = new StringWriter()
-		new InputStreamReader(getDecodingInputStream(input)).withReader { Reader reader ->
-			out << reader.text
-		}
-		out.toString()
+	final String decode(InputStream input, String charset = Charset.defaultCharset().toString()) {
+		if (!charset) charset = Charset.defaultCharset().toString()
+		new InputStreamReader(getDecodingInputStream(input), charset).text
 	}
 
-	final byte[] encode(String input) {
+	final byte[] encode(String input, String charset = Charset.defaultCharset().toString()) {
+		if (!charset) charset = Charset.defaultCharset().toString()
 		def out = new ByteArrayOutputStream()
 		getEncodingOutputStream(out).withStream { OutputStream stream ->
-			stream << input.bytes
+			stream << input.getBytes(charset)
 		}
 		out.toByteArray()
 	}

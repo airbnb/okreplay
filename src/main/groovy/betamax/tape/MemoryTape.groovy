@@ -129,19 +129,25 @@ class MemoryTape implements Tape {
 		clone.protocol = response.statusLine.protocolVersion.toString()
 		clone.status = response.statusLine.statusCode
 		clone.headers = response.allHeaders.collectEntries { [it.name, it.value] }
-		clone.body = recordEntity(response.entity, response.getFirstHeader(CONTENT_ENCODING)?.value)
+		clone.body = recordEntity(response.entity)
 		clone
 	}
 
-	private static recordEntity(HttpEntity entity, String contentEncoding) {
+	private static recordEntity(HttpEntity entity) {
 		if (!entity) {
-			null
-		} else if (entity instanceof StringEntity) {
-			EntityUtils.toString(entity)
-		} else if (contentEncoding == "gzip") {
-			new GzipEncoder().decode(entity.content)
-		} else if (contentEncoding == "deflate") {
-			new DeflateEncoder().decode(entity.content)
+			return null
+		}
+
+		def encoding = entity.contentEncoding?.value
+		def charset = EntityUtils.getContentCharSet(entity)
+		if (entity instanceof StringEntity) {
+			EntityUtils.toString(entity, charset)
+		} else if (encoding == "gzip") {
+			new GzipEncoder().decode(entity.content, charset)
+		} else if (encoding == "deflate") {
+			new DeflateEncoder().decode(entity.content, charset)
+		} else if (charset) {
+			EntityUtils.toString(entity, charset)
 		} else {
 			EntityUtils.toByteArray(entity)
 		}

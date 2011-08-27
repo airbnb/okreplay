@@ -19,11 +19,12 @@ class ContentEncodingSpec extends Specification {
 		def request = new HttpGet("http://icanhascheezburger.com/")
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
+		def entity = new ByteArrayEntity(encoder.encode("O HAI!"))
+		entity.setContentType("text/plain")
+		entity.setContentEncoding(encoding)
+
 		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
-		response.addHeader(CONTENT_TYPE, "text/plain")
-		response.addHeader(CONTENT_LANGUAGE, "en-GB")
-		response.addHeader(CONTENT_ENCODING, encoding)
-		response.entity = new ByteArrayEntity(encoder.encode("O HAI!"))
+		response.entity = entity
 
 		and:
 		def tape = new YamlTape(name: "encoded response tape")
@@ -35,7 +36,6 @@ class ContentEncodingSpec extends Specification {
 
 		then:
 		def yaml = writer.toString()
-		yaml.contains("Content-Encoding: $encoding")
 		yaml.contains("body: O HAI!")
 
 		where:
