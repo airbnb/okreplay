@@ -17,9 +17,12 @@
 package betamax.storage.yaml
 
 import betamax.Tape
-import betamax.storage.*
+
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
+import betamax.tape.RecordedResponse
+import betamax.tape.RecordedRequest
+import betamax.tape.RecordedInteraction
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.

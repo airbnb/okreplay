@@ -7,6 +7,7 @@ import spock.lang.Specification
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
+import betamax.storage.StorableTape
 
 class ReadTapeFromYamlSpec extends Specification {
 

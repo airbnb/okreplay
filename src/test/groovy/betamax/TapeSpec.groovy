@@ -1,7 +1,7 @@
 package betamax
 
 import betamax.encoding.GzipEncoder
-import betamax.storage.MemoryTape
+import betamax.tape.MemoryTape
 import org.apache.http.message.BasicHttpResponse
 import static betamax.TapeMode.*
 import static groovyx.net.http.ContentType.URLENC

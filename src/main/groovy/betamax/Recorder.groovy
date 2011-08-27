@@ -23,6 +23,7 @@ import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
+import betamax.storage.StorableTape
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and

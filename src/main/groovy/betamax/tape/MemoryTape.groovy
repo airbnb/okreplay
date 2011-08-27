@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package betamax.storage
+package betamax.tape
 
 import betamax.*
 import static betamax.TapeMode.READ_WRITE

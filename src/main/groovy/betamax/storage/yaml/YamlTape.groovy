@@ -16,13 +16,14 @@
 
 package betamax.storage.yaml
 
-import betamax.StorableTape
+import betamax.storage.StorableTape
 import java.text.Normalizer
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
 import betamax.storage.*
 import org.yaml.snakeyaml.*
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
+import betamax.tape.MemoryTape
 
 class YamlTape extends MemoryTape implements StorableTape {
 
