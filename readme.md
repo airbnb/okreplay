@@ -151,7 +151,7 @@ http.client.routePlanner = routePlanner
 _HTTPBuilder_ also includes a [_HttpURLClient_][7] class which needs no special configuration as it uses a
 `java.net.URLConnection` rather than _HttpClient_.
 
-[1]:https://github.com/myronmarston/vcr
+[1]:http://relishapp.com/myronmarston/vcr
 [2]:http://spockframework.org/
 [3]:http://hc.apache.org/httpcomponents-client-ga/httpclient/index.html
 [4]:http://groovy.codehaus.org/modules/http-builder/
