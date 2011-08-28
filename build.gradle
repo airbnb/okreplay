@@ -1,3 +1,5 @@
+import org.gradle.plugin.pgp.signing.*
+
 buildscript {
 	repositories {
 		mavenLocal()
@@ -15,7 +17,7 @@ apply plugin: "signing"
 apply plugin: "idea"
 
 group = "com.github.robfletcher"
-version = "1.0-M2"
+version = "1.0-M1"
 
 signing {
 	sign configurations.archives
@@ -50,11 +52,26 @@ dependencies {
 	deployerJars "org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6"
 }
 
-uploadArchives {
-	repositories.mavenDeployer {
-		configuration = configurations.archives
+project.poms = [project.install.repositories.mavenInstaller.pom]
+uploadPublished {
+	project.deployer = repositories.mavenDeployer {
+		beforeDeployment { MavenDeployment deployment ->
+			if (signing.signatory) {
+				def signedPomArtifact = sign(deployment.pomArtifact).singleArtifact
+				// Have to alter the '?type'? of the artifact to match what is published
+				// See http://issues.gradle.org/browse/GRADLE-1589
+				signedPomArtifact.type = "pom." + signing.type.extension
+				deployment.addArtifact(signedPomArtifact)
+			}
+		}
 
-		repository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+		uniqueVersion = false
+		configuration = configurations.deployerJars
+
+		repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+			authentication(userName: sonatypeUsername, password: sonatypePassword)
+		}
+		snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
 			authentication(userName: sonatypeUsername, password: sonatypePassword)
 		}
 
@@ -90,15 +107,16 @@ uploadArchives {
 			}
 		}
 	}
+	project.poms << project.deployer.pom
 }
 
-uploadPublished {
-	repositories {
-		mavenDeployer {
-			beforeDeployment { deployment -> signPom(deployment) }
-		}
-	}
-}
+//uploadPublished {
+//	repositories {
+//		mavenDeployer {
+//			beforeDeployment { deployment -> signPom(deployment) }
+//		}
+//	}
+//}
 
 // custom tasks for creating source/javadoc jars
 task sourcesJar(type: Jar, dependsOn: classes) {
