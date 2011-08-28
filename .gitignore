@@ -2,6 +2,7 @@
 /.gradle
 /build
 /out
+/_site
 *.iml
 *.ipr
 *.iws
