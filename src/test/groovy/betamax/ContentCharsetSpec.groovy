@@ -79,7 +79,8 @@ interactions:
 		tape.play(response)
 
 		then:
-		response.entity.content.bytes == encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
+		def expected = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
+		response.entity.content.bytes == expected
 
 		where:
 		charset      | encoding  | encoder

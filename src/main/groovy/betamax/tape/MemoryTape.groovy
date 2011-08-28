@@ -21,7 +21,7 @@ import betamax.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.encoding.*
 import org.apache.http.*
-import static org.apache.http.HttpHeaders.CONTENT_ENCODING
+import static org.apache.http.HttpHeaders.*
 import org.apache.http.entity.*
 import org.apache.http.message.*
 
@@ -75,12 +75,17 @@ class MemoryTape implements Tape {
 			}
 			if (interaction.response.body instanceof byte[]) {
 				response.entity = new ByteArrayEntity(interaction.response.body)
-			} else if (interaction.response.headers[CONTENT_ENCODING] == "gzip") {
-				response.entity = new ByteArrayEntity(new GzipEncoder().encode(interaction.response.body))
-			} else if (interaction.response.headers[CONTENT_ENCODING] == "deflate") {
-				response.entity = new ByteArrayEntity(new DeflateEncoder().encode(interaction.response.body))
 			} else {
-				response.entity = new StringEntity(interaction.response.body)
+				def mimeType = indentifyMimeType(response.getFirstHeader(CONTENT_TYPE))
+				def charset = identifyCharset(response.getFirstHeader(CONTENT_TYPE))
+				def encoding = response.getFirstHeader(CONTENT_ENCODING)?.value
+				if (encoding == "gzip") {
+					response.entity = new ByteArrayEntity(new GzipEncoder().encode(interaction.response.body, charset))
+				} else if (encoding == "deflate") {
+					response.entity = new ByteArrayEntity(new DeflateEncoder().encode(interaction.response.body, charset))
+				} else {
+					response.entity = new StringEntity(interaction.response.body, mimeType, charset)
+				}
 			}
 			true
 		}
@@ -151,6 +156,14 @@ class MemoryTape implements Tape {
 		} else {
 			EntityUtils.toByteArray(entity)
 		}
+	}
+
+	private String indentifyMimeType(Header contentType) {
+		contentType?.elements[0]?.name
+	}
+
+	private String identifyCharset(Header contentType) {
+		contentType?.elements[0]?.getParameterByName("charset")?.value
 	}
 
 	private ProtocolVersion parseProtocol(String protocolString) {
