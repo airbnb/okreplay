@@ -19,13 +19,34 @@ apply plugin: "idea"
 group = "com.github.robfletcher"
 version = "1.0-M1"
 
-signing {
-	sign configurations.archives
+// custom tasks for creating source/javadoc jars
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = "sources"
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = "javadoc"
+	from javadoc.destinationDir
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+	classifier = "groovydoc"
+	from groovydoc.destinationDir
+}
+
+// add javadoc/source jar tasks as artifacts
+artifacts {
+	archives sourcesJar, javadocJar, groovydocJar
 }
 
 configurations {
 	deployerJars
 	published.extendsFrom archives, signatures
+}
+
+signing {
+	sign configurations.archives
 }
 
 repositories {
@@ -117,29 +138,6 @@ uploadPublished {
 //		}
 //	}
 //}
-
-// custom tasks for creating source/javadoc jars
-task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = "javadoc"
-	from javadoc.destinationDir
-}
-
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-	classifier = "groovydoc"
-	from groovydoc.destinationDir
-}
-
-// add javadoc/source jar tasks as artifacts
-artifacts {
-	archives sourcesJar
-	archives javadocJar
-	archives groovydocJar
-}
 
 task wrapper(type: Wrapper) {
 	gradleVersion = "1.0-milestone-3"
