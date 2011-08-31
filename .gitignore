@@ -7,3 +7,4 @@
 *.ipr
 *.iws
 *~
+/examples/grails-betamax/target/

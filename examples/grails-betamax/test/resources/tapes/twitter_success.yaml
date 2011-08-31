@@ -1,0 +1,65 @@
+!tape
+name: twitter success
+interactions:
+- recorded: 2011-08-31T13:12:42.293Z
+  request:
+    protocol: HTTP/1.1
+    method: GET
+    uri: http://search.twitter.com/search.json?q=betamax&rpp=10&page=1
+    headers:
+      Accept: application/json
+      Accept-Encoding: gzip,deflate
+      Host: search.twitter.com
+      Proxy-Connection: Keep-Alive
+  response:
+    protocol: HTTP/1.1
+    status: 200
+    headers:
+      Age: '0'
+      Cache-Control: max-age=15, must-revalidate, max-age=300
+      Content-Encoding: gzip
+      Content-Type: application/json;charset=utf-8
+      Date: Wed, 31 Aug 2011 13:12:42 GMT
+      Expires: Wed, 31 Aug 2011 13:17:42 GMT
+      Server: hi
+      Vary: Accept-Encoding
+      Via: 1.1 varnish
+      X-Varnish: '2033991101'
+    body: '{"completed_in":0.072,"max_id":108888091493801987,"max_id_str":"108888091493801987","next_page":"?page=2&max_id=108888091493801987&q=betamax&rpp=10","page":1,"query":"betamax","refresh_url":"?since_id=108888091493801987&q=betamax","results":[{"created_at":"Wed,
+      31 Aug 2011 13:05:18 +0000","from_user":"la_dyosa","from_user_id":270942488,"from_user_id_str":"270942488","geo":null,"id":108888091493801987,"id_str":"108888091493801987","iso_language_code":"es","metadata":{"result_type":"recent"},"profile_image_url":"http://a2.twimg.com/profile_images/1519045948/300187_2371213239070_1212664926_2946242_1820635_n__1__normal.jpg","source":"&lt;a
+      href=&quot;http://ubersocial.com&quot; rel=&quot;nofollow&quot;&gt;\u00DCberSocial
+      for BlackBerry&lt;/a&gt;","text":"Haha! RT @iamrhouan: Collector''s item! Aylayk!
+      RT @la_dyosa: Haha! Betamax copy pa! :D","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed,
+      31 Aug 2011 12:59:17 +0000","from_user":"iamrhouan","from_user_id":138561254,"from_user_id_str":"138561254","geo":null,"id":108886577731747840,"id_str":"108886577731747840","iso_language_code":"es","metadata":{"result_type":"recent"},"profile_image_url":"http://a2.twimg.com/profile_images/1512692128/325562785_normal.jpg","source":"&lt;a
+      href=&quot;http://ubersocial.com&quot; rel=&quot;nofollow&quot;&gt;\u00DCberSocial
+      for BlackBerry&lt;/a&gt;","text":"Collector''s item! Aylayk! RT @la_dyosa: Haha!
+      Betamax copy pa! :D","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed,
+      31 Aug 2011 12:51:06 +0000","from_user":"la_dyosa","from_user_id":270942488,"from_user_id_str":"270942488","geo":null,"id":108884518131335168,"id_str":"108884518131335168","iso_language_code":"in","metadata":{"result_type":"recent"},"profile_image_url":"http://a2.twimg.com/profile_images/1519045948/300187_2371213239070_1212664926_2946242_1820635_n__1__normal.jpg","source":"&lt;a
+      href=&quot;http://ubersocial.com&quot; rel=&quot;nofollow&quot;&gt;\u00DCberSocial
+      for BlackBerry&lt;/a&gt;","text":"Haha! Betamax copy pa! :D RT @iamrhouan: Ay
+      ter! Bago yan ah.. Dvd copy na agad!? RT @la_dyosa: Now showing 27 dresses!
+      #bagongbago","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed, 31
+      Aug 2011 12:43:15 +0000","from_user":"BandaBetamax","from_user_id":181234296,"from_user_id_str":"181234296","geo":null,"id":108882541867569153,"id_str":"108882541867569153","iso_language_code":"pt","metadata":{"result_type":"recent"},"profile_image_url":"http://a3.twimg.com/profile_images/1387116994/Betamax_-_twitter_normal.jpg","source":"&lt;a
+      href=&quot;http://www.echofon.com/&quot; rel=&quot;nofollow&quot;&gt;Echofon&lt;/a&gt;","text":"Bom
+      dia! Est\u00E3o participando da promo\u00E7\u00E3o da @jovempanmcz? Vale um
+      CD autografado da Betamax!","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed,
+      31 Aug 2011 12:33:10 +0000","from_user":"DAJ1000","from_user_id":117527481,"from_user_id_str":"117527481","geo":null,"id":108880004212998144,"id_str":"108880004212998144","iso_language_code":"es","metadata":{"result_type":"recent"},"profile_image_url":"http://a1.twimg.com/profile_images/1413204446/IMG01297-20110625-0856_normal.jpg","source":"&lt;a
+      href=&quot;http://blackberry.com/twitter&quot; rel=&quot;nofollow&quot;&gt;Twitter
+      for BlackBerry\u00AE&lt;/a&gt;","text":"@VitoMunoz_U gracias vito, me acuerdo
+      q tenia unos videos en betamax y salia esa cancion...","to_user":"VitoMunoz_U","to_user_id":122632138,"to_user_id_str":"122632138"},{"created_at":"Wed,
+      31 Aug 2011 11:12:30 +0000","from_user":"pindsvin","from_user_id":159696,"from_user_id_str":"159696","geo":null,"id":108859705593565184,"id_str":"108859705593565184","iso_language_code":"nl","metadata":{"result_type":"recent"},"profile_image_url":"http://a1.twimg.com/profile_images/1239316794/ron-nirvana__2__normal.jpg","source":"&lt;a
+      href=&quot;http://www.tweetdeck.com&quot; rel=&quot;nofollow&quot;&gt;TweetDeck&lt;/a&gt;","text":"@tomzw
+      avid, da''s toch de betamax van de videowereld aan het worden :-P","to_user":"tomzw","to_user_id":80750301,"to_user_id_str":"80750301"},{"created_at":"Wed,
+      31 Aug 2011 10:51:02 +0000","from_user":"gabrielghali","from_user_id":2749005,"from_user_id_str":"2749005","geo":null,"id":108854299790028800,"id_str":"108854299790028800","iso_language_code":"en","metadata":{"result_type":"recent"},"profile_image_url":"http://a2.twimg.com/profile_images/1180977428/5771_139540854135_513509135_3392788_6765226_n_normal.jpg","source":"&lt;a
+      href=&quot;http://www.tweetdeck.com&quot; rel=&quot;nofollow&quot;&gt;TweetDeck&lt;/a&gt;","text":"You''re
+      about as much use as a Betamax video recorder.","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed,
+      31 Aug 2011 10:48:45 +0000","from_user":"mykeeabelo","from_user_id":169962063,"from_user_id_str":"169962063","geo":null,"id":108853726147657728,"id_str":"108853726147657728","iso_language_code":"no","metadata":{"result_type":"recent"},"profile_image_url":"http://a1.twimg.com/profile_images/1413806807/Mobile_Shots__iPhone__047_normal.JPG","source":"&lt;a
+      href=&quot;http://ubersocial.com&quot; rel=&quot;nofollow&quot;&gt;\u00DCberSocial
+      for BlackBerry&lt;/a&gt;","text":"@kalkaimo still, better than betamax :)","to_user":"kalkaimo","to_user_id":187652371,"to_user_id_str":"187652371"},{"created_at":"Wed,
+      31 Aug 2011 10:44:17 +0000","from_user":"Daz123Walt","from_user_id":115721829,"from_user_id_str":"115721829","geo":null,"id":108852601663139840,"id_str":"108852601663139840","iso_language_code":"en","metadata":{"result_type":"recent"},"profile_image_url":"http://a1.twimg.com/profile_images/1519976848/dmx-grand-champ-2003-flac-0_normal.jpg","source":"&lt;a
+      href=&quot;http://mobile.twitter.com&quot; rel=&quot;nofollow&quot;&gt;Mobile
+      Web&lt;/a&gt;","text":"Stop sleeping on my flow take u back to 80s and slap
+      u with a betamax video.lol","to_user_id":null,"to_user_id_str":null},{"created_at":"Wed,
+      31 Aug 2011 10:12:29 +0000","from_user":"vivoenlaerapop","from_user_id":5498723,"from_user_id_str":"5498723","geo":null,"id":108844600097128449,"id_str":"108844600097128449","iso_language_code":"eo","metadata":{"result_type":"recent"},"profile_image_url":"http://a2.twimg.com/profile_images/1474914064/Flash_2_normal.png","source":"&lt;a
+      href=&quot;http://www.snaptu.com&quot; rel=&quot;nofollow&quot;&gt;Snaptu&lt;/a&gt;","text":"@Vigalondo
+      Eras de Betamax?","to_user":"Vigalondo","to_user_id":1387866,"to_user_id_str":"1387866"}],"results_per_page":10,"since_id":0,"since_id_str":"0"}'
