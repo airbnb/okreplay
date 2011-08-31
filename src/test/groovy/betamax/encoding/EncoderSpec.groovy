@@ -4,9 +4,10 @@ import spock.lang.*
 
 class EncoderSpec extends Specification {
 
-	@Unroll({"${encoder.getClass().simpleName} can decode what it has encoded"})
+	@Unroll("#encoderClass can decode what it has encoded")
 	def "can decode what it has encoded"() {
 		given:
+		def encoder = encoderClass.newInstance()
 		def bytes = encoder.encode("this is some text that gets encoded")
 
 		expect:
@@ -14,7 +15,7 @@ class EncoderSpec extends Specification {
 		encoder.decode(new ByteArrayInputStream(bytes)) == "this is some text that gets encoded"
 
 		where:
-		encoder << [new GzipEncoder(), new DeflateEncoder()]
+		encoderClass << [GzipEncoder, DeflateEncoder]
 	}
 
 }

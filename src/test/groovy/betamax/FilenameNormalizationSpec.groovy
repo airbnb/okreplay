@@ -7,7 +7,7 @@ class FilenameNormalizationSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 
-	@Unroll({"a tape named '$tapeName' is written to a file called '$filename'"})
+	@Unroll("a tape named '#tapeName' is written to a file called '#filename'")
 	def "tape filenames are normalized"() {
 		given:
 		def loader = new YamlTapeLoader(tapeRoot)

@@ -19,7 +19,7 @@ package betamax
 import betamax.server.HttpProxyServer
 import betamax.storage.StorableTape
 import betamax.storage.yaml.YamlTapeLoader
-import groovy.util.logging.Log4j
+import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
@@ -30,11 +30,11 @@ import org.junit.runners.model.*
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
  * run with the Betamax HTTP proxy in the background.
  */
-@Log4j
 class Recorder implements MethodRule {
 
 	static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
 	static final int DEFAULT_PROXY_PORT = 5555
+	private final log = Logger.getLogger(Recorder)
 
 	Recorder() {
 		def configFile = getClass().classLoader.getResource("BetamaxConfig.groovy")

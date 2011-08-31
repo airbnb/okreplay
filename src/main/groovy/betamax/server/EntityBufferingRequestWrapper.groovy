@@ -16,13 +16,15 @@
 
 package betamax.server
 
-import groovy.util.logging.Log4j
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.EntityEnclosingRequestWrapper
+import org.apache.log4j.Logger
 import org.apache.http.*
 
-@Log4j
 class EntityBufferingRequestWrapper extends EntityEnclosingRequestWrapper {
+
+	// this is static as it's called from setEntity which is called from the superclass constructor, i.e. before non-static field would be initialized
+	private static final log = Logger.getLogger(EntityBufferingRequestWrapper)
 
 	EntityBufferingRequestWrapper(HttpEntityEnclosingRequest request) {
 		super(request)

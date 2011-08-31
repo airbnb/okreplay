@@ -17,11 +17,11 @@
 package betamax.server
 
 import betamax.Recorder
-import groovy.util.logging.Log4j
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.util.EntityUtils
+import org.apache.log4j.Logger
 import static java.net.HttpURLConnection.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
@@ -29,7 +29,6 @@ import org.apache.http.entity.*
 import org.apache.http.impl.client.*
 import org.apache.http.protocol.*
 
-@Log4j
 class HttpProxyHandler implements HttpRequestHandler {
 
 	static final String X_BETAMAX = "X-Betamax"
@@ -47,10 +46,11 @@ class HttpProxyHandler implements HttpRequestHandler {
 			TRAILER,
 			TRANSFER_ENCODING,
 			UPGRADE
-	].toSet().asImmutable()
+	].asImmutable()
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 	private final Recorder recorder
+	private final log = Logger.getLogger(HttpProxyHandler)
 
 	HttpProxyHandler(Recorder recorder) {
 		this.recorder = recorder

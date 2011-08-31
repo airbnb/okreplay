@@ -18,13 +18,13 @@ package betamax.storage.yaml
 
 import betamax.TapeLoader
 import betamax.storage.StorableTape
-import groovy.util.logging.Log4j
 import java.text.Normalizer
+import org.apache.log4j.Logger
 
-@Log4j
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 
 	final File tapeRoot
+	private final log = Logger.getLogger(YamlTapeLoader)
 
 	YamlTapeLoader(File tapeRoot) {
 		this.tapeRoot = tapeRoot

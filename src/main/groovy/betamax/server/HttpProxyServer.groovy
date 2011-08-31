@@ -17,12 +17,12 @@
 package betamax.server
 
 import betamax.Recorder
-import groovy.util.logging.Log4j
 import org.apache.http.impl.nio.DefaultServerIOEventDispatch
 import org.apache.http.impl.nio.reactor.DefaultListeningIOReactor
 import org.apache.http.nio.NHttpConnection
 import org.apache.http.nio.protocol.BufferingHttpServiceHandler
 import org.apache.http.params.SyncBasicHttpParams
+import org.apache.log4j.Logger
 import org.apache.http.*
 import org.apache.http.impl.*
 import org.apache.http.nio.reactor.*
@@ -34,7 +34,6 @@ import org.apache.http.protocol.*
  * A simple proxy server that can run in the background. The code here is based on the "Basic non-blocking HTTP server"
  * example from http://hc.apache.org/httpcomponents-core-ga/examples.html
  */
-@Log4j
 class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 
 	private IOReactor reactor
@@ -42,6 +41,8 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 
 	private String originalProxyHost
 	private String originalProxyPort
+
+	private final log = Logger.getLogger(HttpProxyServer)
 
 	HttpProxyServer() {
 		port = 5555

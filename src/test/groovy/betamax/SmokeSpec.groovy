@@ -17,7 +17,7 @@ class SmokeSpec extends Specification {
 	}
 
 	@Betamax(tape = "smoke spec")
-	@Unroll({"$type response data"})
+	@Unroll("#type response data")
 	def "various types of response data"() {
 		when:
 		def response = http.get(uri: uri)

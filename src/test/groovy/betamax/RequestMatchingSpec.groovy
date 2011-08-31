@@ -22,7 +22,7 @@ class RequestMatchingSpec extends Specification {
 		assert tapeRoot.deleteDir()
 	}
 
-	@Unroll({"$method request for $uri returns '$responseText'"})
+	@Unroll("#method request for #uri returns '#responseText'")
 	def "default match is method and uri"() {
 		given:
 		new File(tapeRoot, "method_and_uri_tape.yaml").text = """\

@@ -56,7 +56,7 @@ repositories {
 }
 
 dependencies {
-	groovy "org.codehaus.groovy:groovy-all:1.8.1"
+	groovy "org.codehaus.groovy:groovy-all:1.7.10"
 	compile "junit:junit:4.8.2"
 	compile "log4j:log4j:1.2.16"
 	compile "org.apache.httpcomponents:httpclient:4.1.2"
@@ -67,7 +67,7 @@ dependencies {
 		exclude module: "httpclient"
 	}
 	testCompile "org.eclipse.jetty:jetty-server:8.0.0.RC0"
-	testCompile "org.spockframework:spock-core:0.6-groovy-1.8-SNAPSHOT"
+	testCompile "org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT"
 	testCompile "commons-httpclient:commons-httpclient:3.1"
 	testRuntime "cglib:cglib-nodep:2.2.2"
 	deployerJars "org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6"

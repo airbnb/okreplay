@@ -13,7 +13,7 @@ import spock.lang.*
 @Issue("https://github.com/robfletcher/betamax/issues/21")
 class ContentCharsetSpec extends Specification {
 
-	@Unroll({"a response with a $charset body is recorded correctly"})
+	@Unroll("a response with a #charset body is recorded correctly")
 	def "response body's charset is recorded correctly"() {
 		given:
 		def request = new HttpGet("http://icanhascheezburger.com/")
@@ -49,7 +49,7 @@ class ContentCharsetSpec extends Specification {
 		"ISO-8859-1" | "deflate" | new DeflateEncoder()
 	}
 
-	@Unroll({"a response with a $charset body is played back correctly"})
+	@Unroll("a response with a #charset body is played back correctly")
 	def "response body's charset is played back correctly"() {
 		given:
 		def yaml = """\

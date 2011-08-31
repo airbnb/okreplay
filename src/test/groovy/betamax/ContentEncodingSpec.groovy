@@ -13,7 +13,7 @@ import spock.lang.*
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 class ContentEncodingSpec extends Specification {
 
-	@Unroll({"a $encoding encoded response body is stored as plain text in a tape file"})
+	@Unroll("a #encoding encoded response body is stored as plain text in a tape file")
 	def "an encoded response body is stored as plain text in a tape file"() {
 		given:
 		def request = new HttpGet("http://icanhascheezburger.com/")
@@ -44,7 +44,7 @@ class ContentEncodingSpec extends Specification {
 		"deflate" | new DeflateEncoder()
 	}
 
-	@Unroll({"response body is encoded when played from tape and a $encoding content-encoding header is present"})
+	@Unroll("response body is encoded when played from tape and a #encoding content-encoding header is present")
 	def "response body is encoded when played from tape and a content-encoding header is present"() {
 		given:
 		def yaml = """\

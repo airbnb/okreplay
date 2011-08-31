@@ -101,7 +101,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
     @Timeout(10)
 	@Betamax(tape = "proxy network comms spec")
-    @Unroll({"proxy handles $method requests"})
+    @Unroll("proxy handles #method requests")
     def "proxy handles all request methods"() {
         given:
         def http = new RESTClient(endpoint.url)

@@ -16,8 +16,8 @@
 
 package betamax.util
 
-import groovy.util.logging.Log4j
 import java.util.concurrent.CountDownLatch
+import org.apache.log4j.Logger
 import org.eclipse.jetty.server.handler.AbstractHandler
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
@@ -27,7 +27,6 @@ import javax.servlet.http.*
 import static org.eclipse.jetty.http.HttpHeaders.*
 import org.eclipse.jetty.server.*
 
-@Log4j
 class EchoServer extends AbstractLifeCycleListener {
 
 	private final String host
@@ -35,6 +34,7 @@ class EchoServer extends AbstractLifeCycleListener {
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
+	private final log = Logger.getLogger(EchoServer)
 
 	EchoServer() {
 		host = InetAddress.localHost.hostAddress
@@ -78,8 +78,9 @@ class EchoServer extends AbstractLifeCycleListener {
 
 }
 
-@Log4j
 class EchoHandler extends AbstractHandler {
+
+	private final log = Logger.getLogger(EchoHandler)
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.debug "received $request.method request for $target"
