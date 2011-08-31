@@ -1,5 +1,6 @@
 package betamax
 
+import static betamax.TapeMode.*
 import spock.lang.*
 
 class RecorderConfigurationSpec extends Specification {
@@ -13,15 +14,17 @@ class RecorderConfigurationSpec extends Specification {
 		expect:
 		recorder.tapeRoot == new File("src/test/resources/betamax/tapes")
 		recorder.proxyPort == 5555
+		recorder.defaultMode == READ_WRITE
 	}
 
 	def "recorder configuration is overridden by map arguments"() {
 		given:
-		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337)
+		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337, defaultMode: READ_ONLY)
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
+		recorder.defaultMode == READ_ONLY
 	}
 
 	def "recorder picks up configuration from properties"() {
@@ -29,6 +32,7 @@ class RecorderConfigurationSpec extends Specification {
 		def properties = new Properties()
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
+		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 
 		and:
 		def recorder = new Recorder(properties)
@@ -36,6 +40,7 @@ class RecorderConfigurationSpec extends Specification {
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
+		recorder.defaultMode == READ_ONLY
 	}
 
 	def "recorder picks up configuration from properties file"() {
@@ -44,6 +49,7 @@ class RecorderConfigurationSpec extends Specification {
 		def properties = new Properties()
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
+		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -57,6 +63,7 @@ class RecorderConfigurationSpec extends Specification {
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
+		recorder.defaultMode == READ_ONLY
 
 		cleanup:
 		propertiesFile.delete()
@@ -70,6 +77,7 @@ class RecorderConfigurationSpec extends Specification {
 				betamax {
 					tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 					proxyPort = 1337
+					defaultMode = betamax.TapeMode.READ_ONLY
 				}
 			"""
 		}
@@ -83,6 +91,7 @@ class RecorderConfigurationSpec extends Specification {
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
+		recorder.defaultMode == READ_ONLY
 
 		cleanup:
 		configFile.delete()
@@ -94,6 +103,7 @@ class RecorderConfigurationSpec extends Specification {
 		def properties = new Properties()
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
+		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -102,11 +112,12 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234)
+		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234, defaultMode: WRITE_ONLY)
 
 		expect:
 		recorder.tapeRoot == new File("test/fixtures/tapes")
 		recorder.proxyPort == 1234
+		recorder.defaultMode == WRITE_ONLY
 
 		cleanup:
 		propertiesFile.delete()

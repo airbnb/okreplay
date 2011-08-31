@@ -34,6 +34,7 @@ class Recorder implements MethodRule {
 
 	static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
 	static final int DEFAULT_PROXY_PORT = 5555
+
 	private final log = Logger.getLogger(Recorder)
 
 	Recorder() {
@@ -67,6 +68,11 @@ class Recorder implements MethodRule {
 	 */
 	File tapeRoot = new File(DEFAULT_TAPE_ROOT)
 
+	/**
+	 * The default mode for an inserted tape.
+	 */
+	TapeMode defaultMode = READ_WRITE
+
 	private StorableTape tape
 	private HttpProxyServer proxy = new HttpProxyServer()
 
@@ -75,7 +81,7 @@ class Recorder implements MethodRule {
 	 * @param name the name of the _tape_.
 	 * @param mode the read/write mode of the tape.
 	 */
-	void insertTape(String name, TapeMode mode = READ_WRITE) {
+	void insertTape(String name, TapeMode mode = defaultMode) {
 		tape = tapeLoader.loadTape(name)
 		tape.mode = mode
 		tape
@@ -120,7 +126,7 @@ class Recorder implements MethodRule {
 	def withTape(String name, Map arguments, Closure closure) {
 		try {
 			proxy.start(this)
-			insertTape(name, arguments.mode ?: READ_WRITE)
+			insertTape(name, arguments.mode ?: defaultMode)
 			closure()
 		} finally {
 			proxy.stop()
@@ -152,11 +158,15 @@ class Recorder implements MethodRule {
 	private void configureFromProperties(Properties properties) {
 		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
 		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
+		def defaultModeValue = properties.getProperty("betamax.defaultMode")
+		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
+
 	}
 
 	private void configureFromConfig(ConfigObject config) {
 		tapeRoot = config.betamax.tapeRoot ?: DEFAULT_TAPE_ROOT
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
+		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 	}
 
 }
