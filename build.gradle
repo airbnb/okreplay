@@ -17,7 +17,7 @@ apply plugin: "signing"
 apply plugin: "idea"
 
 group = "com.github.robfletcher"
-version = "1.0-M1"
+version = "1.0-M2-SNAPSHOT"
 
 // custom tasks for creating source/javadoc jars
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -131,13 +131,10 @@ uploadPublished {
 	project.poms << project.deployer.pom
 }
 
-//uploadPublished {
-//	repositories {
-//		mavenDeployer {
-//			beforeDeployment { deployment -> signPom(deployment) }
-//		}
-//	}
-//}
+// Remove test deps from all poms
+project.poms*.whenConfigured { pom ->
+	pom.dependencies.removeAll(pom.dependencies.findAll { it.scope == "test" })
+}
 
 task wrapper(type: Wrapper) {
 	gradleVersion = "1.0-milestone-3"
