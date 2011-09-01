@@ -4,11 +4,8 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 
 grails.project.dependency.resolution = {
-    inherits("global") {
-        // uncomment to disable ehcache
-        // excludes 'ehcache'
-    }
-    log "error"
+    inherits "global"
+	log "error"
     checksums true
 
     repositories {
@@ -16,6 +13,7 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
+		mavenLocal()
         mavenCentral()
 		mavenRepo "http://oss.sonatype.org/content/groups/public/"
     }
@@ -23,7 +21,7 @@ grails.project.dependency.resolution = {
 		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
 			excludes "groovy", "xml-apis"
 		}
-		test "com.github.robfletcher:betamax:1.0-M1"
+		test "com.github.robfletcher:betamax:1.0-M2-SNAPSHOT"
     }
 
     plugins {
