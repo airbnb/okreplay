@@ -18,14 +18,9 @@ package betamax.util
 
 import java.util.concurrent.CountDownLatch
 import org.apache.log4j.Logger
-import org.eclipse.jetty.server.handler.AbstractHandler
+import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
-import static java.net.HttpURLConnection.HTTP_OK
-import java.util.zip.*
-import javax.servlet.http.*
-import static org.eclipse.jetty.http.HttpHeaders.*
-import org.eclipse.jetty.server.*
 
 class EchoServer extends AbstractLifeCycleListener {
 
@@ -78,49 +73,3 @@ class EchoServer extends AbstractLifeCycleListener {
 
 }
 
-class EchoHandler extends AbstractHandler {
-
-	private final log = Logger.getLogger(EchoHandler)
-
-	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-		log.debug "received $request.method request for $target"
-		response.status = HTTP_OK
-		response.contentType = "text/plain"
-
-		getResponseWriter(request, response).withWriter { writer ->
-			writer << request.method << " " << request.requestURI
-			if (request.queryString) {
-				writer << "?" << request.queryString
-			}
-			writer << " " << request.protocol << "\n"
-			for (headerName in request.headerNames) {
-				for (header in request.getHeaders(headerName)) {
-					writer << headerName << ": " << header << "\n"
-				}
-			}
-			request.reader.withReader { reader ->
-				while (reader.ready()) {
-					writer << (char) reader.read()
-				}
-			}
-		}
-	}
-
-	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
-		def out
-		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(",")
-		log.debug "request accepts $acceptedEncodings"
-		if ("gzip" in acceptedEncodings) {
-			response.addHeader(CONTENT_ENCODING, "gzip")
-			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
-		} else if ("deflate" in acceptedEncodings) {
-			response.addHeader(CONTENT_ENCODING, "deflate")
-			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
-		} else {
-			response.addHeader(CONTENT_ENCODING, "none")
-			out = response.writer
-		}
-		out
-	}
-
-}
