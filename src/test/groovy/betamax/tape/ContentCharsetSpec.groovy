@@ -1,4 +1,4 @@
-package betamax
+package betamax.tape
 
 import betamax.storage.yaml.YamlTape
 import org.apache.http.client.methods.HttpGet

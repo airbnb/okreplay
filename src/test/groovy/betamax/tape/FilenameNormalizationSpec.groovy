@@ -1,4 +1,4 @@
-package betamax
+package betamax.tape
 
 import betamax.storage.yaml.YamlTapeLoader
 import spock.lang.*

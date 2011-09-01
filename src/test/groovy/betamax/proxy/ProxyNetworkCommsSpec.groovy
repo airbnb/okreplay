@@ -1,4 +1,4 @@
-package betamax
+package betamax.proxy
 
 import betamax.util.EchoServer
 import org.apache.commons.httpclient.HttpClient
@@ -12,6 +12,8 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
+import betamax.Recorder
+import betamax.Betamax
 
 class ProxyNetworkCommsSpec extends Specification {
 

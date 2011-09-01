@@ -1,4 +1,4 @@
-package betamax
+package betamax.proxy
 
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
@@ -7,6 +7,7 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
+import betamax.Recorder
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {

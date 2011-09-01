@@ -1,7 +1,8 @@
-package betamax
+package betamax.recorder
 
 import static betamax.TapeMode.*
 import spock.lang.*
+import betamax.Recorder
 
 class RecorderConfigurationSpec extends Specification {
 

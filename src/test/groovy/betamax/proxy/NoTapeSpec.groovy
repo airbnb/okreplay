@@ -1,4 +1,4 @@
-package betamax
+package betamax.proxy
 
 import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
@@ -6,6 +6,7 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import spock.lang.*
+import betamax.Recorder
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {

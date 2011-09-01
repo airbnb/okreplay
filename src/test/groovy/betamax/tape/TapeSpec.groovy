@@ -1,4 +1,4 @@
-package betamax
+package betamax.tape
 
 import betamax.encoding.GzipEncoder
 import betamax.tape.MemoryTape
@@ -11,6 +11,7 @@ import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import spock.lang.*
+import betamax.Tape
 
 @Stepwise
 class TapeSpec extends Specification {

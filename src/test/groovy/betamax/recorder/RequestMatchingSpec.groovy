@@ -1,9 +1,10 @@
-package betamax
+package betamax.recorder
 
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
+import betamax.Recorder
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
@@ -90,7 +91,7 @@ interactions:
     body: get method response from xkcd.com
 """
 		when:
-		def response = recorder.withTape("host_match_tape", [matchOn: ["host"]]) {
+		def response = recorder.withTape("host_match_tape", [match: ["host"]]) {
 			http.get(uri: "http://xkcd.com/875/")
 		}
 
