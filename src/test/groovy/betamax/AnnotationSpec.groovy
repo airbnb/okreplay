@@ -1,6 +1,5 @@
 package betamax
 
-import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
@@ -21,10 +20,6 @@ class AnnotationSpec extends Specification {
 	def setup() {
 		http = new RESTClient(endpoint.url)
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-	}
-
-	def cleanupSpec() {
-		HttpProxyServer.instance.stop()
 	}
 
 	def "no tape is inserted if there is no annotation on the feature"() {

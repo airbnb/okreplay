@@ -11,12 +11,12 @@ import spock.lang.*
 class NoTapeSpec extends Specification {
 
 	@Shared Recorder recorder = new Recorder()
-	@Shared @AutoCleanup("stop") HttpProxyServer proxy = HttpProxyServer.instance
+	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
 	@Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
 
 	def setupSpec() {
-		proxy.connect(recorder)
+		proxy.start(recorder)
 		endpoint.start()
 	}
 

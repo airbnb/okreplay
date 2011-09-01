@@ -74,7 +74,7 @@ class Recorder implements MethodRule {
 	TapeMode defaultMode = READ_WRITE
 
 	private StorableTape tape
-	private HttpProxyServer proxy = HttpProxyServer.instance
+	private HttpProxyServer proxy = new HttpProxyServer()
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -101,10 +101,8 @@ class Recorder implements MethodRule {
 	 * will no longer record or play back any HTTP traffic until another tape is inserted.
 	 */
 	void ejectTape() {
-		if (tape) {
-			tapeLoader.writeTape(tape)
-			tape = null
-		}
+		tapeLoader.writeTape(tape)
+		tape = null
 	}
 
 	/**
@@ -127,19 +125,12 @@ class Recorder implements MethodRule {
 	 * @return the return value of the closure.
 	 */
 	def withTape(String name, Map arguments, Closure closure) {
-		final originalProxyHost
-		final originalProxyPort
 		try {
-			proxy.connect(this)
+			proxy.start(this)
 			insertTape(name, arguments.mode ?: defaultMode)
-
 			closure()
-		} catch (e) {
-			// TODO: temporary
-			e.printStackTrace()
-			throw e
 		} finally {
-			proxy.disconnect()
+			proxy.stop()
 			ejectTape()
 		}
 	}

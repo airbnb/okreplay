@@ -28,7 +28,6 @@ import static org.apache.http.HttpHeaders.*
 import org.apache.http.entity.*
 import org.apache.http.impl.client.*
 import org.apache.http.protocol.*
-import betamax.Tape
 
 class HttpProxyHandler implements HttpRequestHandler {
 
@@ -50,9 +49,12 @@ class HttpProxyHandler implements HttpRequestHandler {
 	].asImmutable()
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
+	private final Recorder recorder
 	private final log = Logger.getLogger(HttpProxyHandler)
 
-	Recorder recorder
+	HttpProxyHandler(Recorder recorder) {
+		this.recorder = recorder
+	}
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."

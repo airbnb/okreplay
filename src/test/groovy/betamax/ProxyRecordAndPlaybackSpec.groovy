@@ -13,14 +13,14 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") HttpProxyServer proxy = HttpProxyServer.instance
+	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
 	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
 
 	def setupSpec() {
 		recorder.insertTape("proxy_record_and_playback_spec")
 
-		proxy.connect(recorder)
+		proxy.start(recorder)
 	}
 
 	def setup() {
@@ -104,7 +104,7 @@ interactions:
 
 		when:
 		recorder.insertTape("existing_tape")
-		proxy.connect(recorder)
+		proxy.start(recorder)
 
 		then:
 		recorder.tape.name == "existing_tape"

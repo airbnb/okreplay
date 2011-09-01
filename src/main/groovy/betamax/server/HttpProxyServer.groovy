@@ -21,12 +21,11 @@ import org.apache.http.impl.nio.DefaultServerIOEventDispatch
 import org.apache.http.impl.nio.reactor.DefaultListeningIOReactor
 import org.apache.http.nio.NHttpConnection
 import org.apache.http.nio.protocol.BufferingHttpServiceHandler
-import org.apache.http.nio.reactor.IOReactor
 import org.apache.http.params.SyncBasicHttpParams
 import org.apache.log4j.Logger
 import org.apache.http.*
 import org.apache.http.impl.*
-import static org.apache.http.nio.reactor.IOReactorStatus.ACTIVE
+import org.apache.http.nio.reactor.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
@@ -35,40 +34,21 @@ import org.apache.http.protocol.*
  * A simple proxy server that can run in the background. The code here is based on the "Basic non-blocking HTTP server"
  * example from http://hc.apache.org/httpcomponents-core-ga/examples.html
  */
-@Singleton
 class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 
-	final int port
-
-	private HttpProxyHandler proxyHandler
 	private IOReactor reactor
-
-	private final log = Logger.getLogger(HttpProxyServer)
+	final int port
 
 	private String originalProxyHost
 	private String originalProxyPort
 
-	private HttpProxyServer() {
+	private final log = Logger.getLogger(HttpProxyServer)
+
+	HttpProxyServer() {
 		port = 5555
 	}
 
-	void connect(Recorder recorder) {
-		if (reactor?.status == ACTIVE) {
-			log.debug "proxy server is already running..."
-		} else {
-			start()
-		}
-
-		proxyHandler.recorder = recorder
-		overrideProxySettings()
-	}
-
-	void disconnect() {
-		restoreProxySettings()
-		proxyHandler.recorder = null
-	}
-
-	void start() {
+	void start(Recorder recorder) {
 		def params = new SyncBasicHttpParams()
 		params.setIntParameter(SO_TIMEOUT, 5000)
 		params.setIntParameter(SOCKET_BUFFER_SIZE, 8 * 1024)
@@ -89,10 +69,8 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 				new DefaultConnectionReuseStrategy(),
 				params)
 
-		proxyHandler = new HttpProxyHandler()
-
 		def reqistry = new HttpRequestHandlerRegistry()
-		reqistry.register "*", proxyHandler
+		reqistry.register "*", new HttpProxyHandler(recorder)
 
 		handler.handlerResolver = reqistry
 		handler.eventListener = this
@@ -101,12 +79,14 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 		reactor = new DefaultListeningIOReactor(2, params)
 		reactor.listen(new InetSocketAddress(port))
 
+		overrideProxySettings()
+
 		Thread.start {
 			log.debug "starting proxy server..."
 			reactor.execute(ioEventDispatch)
 		}
 
-		while (reactor.status != ACTIVE) {
+		while (reactor.status != IOReactorStatus.ACTIVE) {
 			log.debug "waiting..."
 			sleep 100
 		}
@@ -114,7 +94,28 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 
 	void stop() {
 		log.debug "stopping proxy server..."
+		restoreOriginalProxySettings()
 		reactor.shutdown()
+	}
+
+	private void overrideProxySettings() {
+		originalProxyHost = System.properties."http.proxyHost"
+		originalProxyPort = System.properties."http.proxyPort"
+		System.properties."http.proxyHost" = "localhost"
+		System.properties."http.proxyPort" = port.toString()
+	}
+
+	private void restoreOriginalProxySettings() {
+		if (originalProxyHost) {
+			System.properties."http.proxyHost" = originalProxyHost
+		} else {
+			System.clearProperty("http.proxyHost")
+		}
+		if (originalProxyPort) {
+			System.properties."http.proxyPort" = originalProxyPort
+		} else {
+			System.clearProperty("http.proxyPort")
+		}
 	}
 
 	void connectionOpen(final NHttpConnection conn) {
@@ -135,30 +136,6 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 
 	void fatalProtocolException(final HttpException ex, final NHttpConnection conn) {
 		log.error "HTTP error: $ex.message"
-	}
-
-	private void overrideProxySettings() {
-		originalProxyHost = System.properties."http.proxyHost"
-		originalProxyPort = System.properties."http.proxyPort"
-		System.properties."http.proxyHost" = "localhost"
-		System.properties."http.proxyPort" = port.toString()
-
-		log.debug "configured to use proxy on ${System.properties."http.proxyHost"}:${System.properties."http.proxyPort"}"
-	}
-
-	private void restoreProxySettings() {
-		if (originalProxyHost) {
-			System.properties."http.proxyHost" = originalProxyHost
-		} else {
-			System.clearProperty("http.proxyHost")
-		}
-		if (originalProxyPort) {
-			System.properties."http.proxyPort" = originalProxyPort
-		} else {
-			System.clearProperty("http.proxyPort")
-		}
-
-		log.debug "restored default proxy ${System.properties."http.proxyHost"}:${System.properties."http.proxyPort"}"
 	}
 
 }

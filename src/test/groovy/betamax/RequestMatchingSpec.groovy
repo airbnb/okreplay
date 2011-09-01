@@ -1,6 +1,5 @@
 package betamax
 
-import betamax.server.HttpProxyServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static org.apache.http.HttpHeaders.VIA
@@ -17,10 +16,6 @@ class RequestMatchingSpec extends Specification {
 		tapeRoot.mkdirs()
 
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-	}
-
-	def cleanupSpec() {
-		HttpProxyServer.instance.stop()
 	}
 
 	@Unroll("#method request for #uri returns '#responseText'")
