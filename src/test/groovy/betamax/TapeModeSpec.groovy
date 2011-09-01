@@ -12,13 +12,13 @@ class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
+	@Shared @AutoCleanup("stop") HttpProxyServer proxy = HttpProxyServer.instance
 	@Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
 
 	def setupSpec() {
 		tapeRoot.mkdirs()
-		proxy.start(recorder)
+		proxy.connect(recorder)
 		endpoint.start()
 	}
 

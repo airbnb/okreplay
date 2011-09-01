@@ -11,27 +11,21 @@ import spock.lang.*
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared HttpProxyServer proxy = new HttpProxyServer()
+	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Shared @AutoCleanup("stop") HttpProxyServer proxy = HttpProxyServer.instance
 	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
 
 	def setupSpec() {
 		recorder.insertTape("proxy_record_and_playback_spec")
 
-		proxy.start(recorder)
+		proxy.connect(recorder)
 	}
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-	}
-
-	def cleanupSpec() {
-		proxy.stop()
-		recorder.ejectTape()
-		assert tapeRoot.deleteDir()
 	}
 
 	@Timeout(10)
@@ -110,7 +104,7 @@ interactions:
 
 		when:
 		recorder.insertTape("existing_tape")
-		proxy.start(recorder)
+		proxy.connect(recorder)
 
 		then:
 		recorder.tape.name == "existing_tape"

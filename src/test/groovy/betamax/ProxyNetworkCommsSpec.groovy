@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.GetMethod
@@ -22,6 +23,10 @@ class ProxyNetworkCommsSpec extends Specification {
     def setupSpec() {
         endpoint.start()
     }
+
+	def cleanupSpec() {
+		HttpProxyServer.instance.stop()
+	}
 
     @Timeout(10)
 	@Betamax(tape = "proxy network comms spec")

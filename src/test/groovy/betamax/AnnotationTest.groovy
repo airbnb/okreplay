@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
@@ -28,7 +29,12 @@ class AnnotationTest {
 
 	@AfterClass
 	static void cleanUpTapeFiles() {
-		assert tapeRoot.deleteDir()
+		tapeRoot.deleteDir()
+	}
+
+	@AfterClass()
+	static void stopProxyServer() {
+		HttpProxyServer.instance.stop()
 	}
 
 	@Test

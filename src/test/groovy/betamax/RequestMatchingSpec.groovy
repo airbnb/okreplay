@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static org.apache.http.HttpHeaders.VIA
@@ -8,7 +9,7 @@ import spock.lang.*
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
 
-	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared RESTClient http = new RESTClient()
 
@@ -19,7 +20,7 @@ class RequestMatchingSpec extends Specification {
 	}
 
 	def cleanupSpec() {
-		assert tapeRoot.deleteDir()
+		HttpProxyServer.instance.stop()
 	}
 
 	@Unroll("#method request for #uri returns '#responseText'")

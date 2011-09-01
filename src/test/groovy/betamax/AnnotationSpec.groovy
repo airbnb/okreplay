@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
@@ -12,7 +13,7 @@ import spock.lang.*
 @Stepwise
 class AnnotationSpec extends Specification {
 
-	@Shared File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
 	RESTClient http
@@ -23,7 +24,7 @@ class AnnotationSpec extends Specification {
 	}
 
 	def cleanupSpec() {
-		assert tapeRoot.deleteDir()
+		HttpProxyServer.instance.stop()
 	}
 
 	def "no tape is inserted if there is no annotation on the feature"() {

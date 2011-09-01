@@ -1,5 +1,6 @@
 package betamax
 
+import betamax.server.HttpProxyServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
@@ -14,6 +15,10 @@ class SmokeSpec extends Specification {
 
 	def setupSpec() {
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+	}
+
+	def cleanupSpec() {
+		HttpProxyServer.instance.stop()
 	}
 
 	@Betamax(tape = "smoke spec")
