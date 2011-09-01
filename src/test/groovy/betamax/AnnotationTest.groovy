@@ -1,18 +1,19 @@
 package betamax
 
-import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.server.HttpProxyHandler.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import org.junit.*
+import betamax.util.SimpleServer
+import betamax.util.EchoHandler
 
 class AnnotationTest {
 
 	static File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Rule public Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	EchoServer endpoint = new EchoServer()
+	SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	@Before
@@ -50,7 +51,7 @@ class AnnotationTest {
 	@Test
 	@Betamax(tape = "annotation_test")
 	void annotatedTestCanRecord() {
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		def response = http.get(path: "/")
 
@@ -71,7 +72,7 @@ class AnnotationTest {
 
 	@Test
 	void canMakeUnproxiedRequestAfterUsingAnnotation() {
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		def response = http.get(path: "/")
 

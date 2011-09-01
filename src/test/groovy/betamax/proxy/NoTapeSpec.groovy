@@ -1,24 +1,26 @@
 package betamax.proxy
 
 import betamax.server.HttpProxyServer
-import betamax.util.EchoServer
+
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import spock.lang.*
 import betamax.Recorder
+import betamax.util.SimpleServer
+import betamax.util.EchoHandler
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
 
 	@Shared Recorder recorder = new Recorder()
 	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
-	@Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setupSpec() {
 		proxy.start(recorder)
-		endpoint.start()
+		endpoint.start(EchoHandler)
 	}
 
 	def setup() {

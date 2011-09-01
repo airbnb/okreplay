@@ -1,6 +1,5 @@
 package betamax
 
-import betamax.util.EchoServer
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
@@ -8,13 +7,15 @@ import static betamax.server.HttpProxyHandler.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
+import betamax.util.SimpleServer
+import betamax.util.EchoHandler
 
 @Stepwise
 class AnnotationSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setup() {
@@ -41,7 +42,7 @@ class AnnotationSpec extends Specification {
 	@Betamax(tape = "annotation_spec")
 	def "annotated feature can record"() {
 		given:
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		when:
 		def response = http.get(path: "/")
@@ -65,7 +66,7 @@ class AnnotationSpec extends Specification {
 
 	def "can make unproxied request after using annotation"() {
 		given:
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		when:
 		def response = http.get(path: "/")

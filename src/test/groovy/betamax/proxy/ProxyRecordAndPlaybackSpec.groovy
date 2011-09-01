@@ -1,13 +1,15 @@
 package betamax.proxy
 
 import betamax.server.HttpProxyServer
-import betamax.util.EchoServer
+
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
 import betamax.Recorder
+import betamax.util.SimpleServer
+import betamax.util.EchoHandler
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -15,7 +17,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
-	@AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setupSpec() {
@@ -32,7 +34,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	@Timeout(10)
 	def "proxy makes processes a real HTTP request the first time it gets a request for a URI"() {
 		given:
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		when:
 		http.get(path: "/")
@@ -53,7 +55,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	@Timeout(10)
 	def "subsequent requests with a different HTTP method are recorded separately"() {
 		given:
-		endpoint.start()
+		endpoint.start(EchoHandler)
 
 		when:
 		http.head(path: "/")

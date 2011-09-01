@@ -18,20 +18,20 @@ package betamax.util
 
 import java.util.concurrent.CountDownLatch
 import org.apache.log4j.Logger
-import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
+import org.eclipse.jetty.server.*
 
-class EchoServer extends AbstractLifeCycleListener {
+class SimpleServer extends AbstractLifeCycleListener {
 
 	private final String host
 	private final int port
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
-	private final log = Logger.getLogger(EchoServer)
+	private final log = Logger.getLogger(SimpleServer)
 
-	EchoServer() {
+	SimpleServer() {
 		host = InetAddress.localHost.hostAddress
 		port = 5000
 	}
@@ -40,12 +40,12 @@ class EchoServer extends AbstractLifeCycleListener {
 		"http://$host:$port/"
 	}
 
-	void start() {
+	void start(Class <? extends Handler> handlerClass) {
 		startedLatch = new CountDownLatch(1)
 		stoppedLatch = new CountDownLatch(1)
 
 		server = new Server(port)
-		server.handler = new EchoHandler()
+		server.handler = handlerClass.newInstance()
 		server.addLifeCycleListener(this)
 		server.start()
 

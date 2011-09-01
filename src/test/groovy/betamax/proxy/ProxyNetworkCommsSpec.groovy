@@ -1,6 +1,6 @@
 package betamax.proxy
 
-import betamax.util.EchoServer
+import betamax.util.SimpleServer
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
@@ -14,15 +14,16 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
 import betamax.Recorder
 import betamax.Betamax
+import betamax.util.EchoHandler
 
 class ProxyNetworkCommsSpec extends Specification {
 
     @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
     @Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-    @Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+    @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 
     def setupSpec() {
-        endpoint.start()
+        endpoint.start(EchoHandler)
     }
 
     @Timeout(10)

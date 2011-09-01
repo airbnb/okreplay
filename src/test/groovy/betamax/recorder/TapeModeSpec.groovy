@@ -1,26 +1,28 @@
 package betamax.recorder
 
 import betamax.server.HttpProxyServer
-import betamax.util.EchoServer
+
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.TapeMode.*
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.*
 import spock.lang.*
 import betamax.Recorder
+import betamax.util.SimpleServer
+import betamax.util.EchoHandler
 
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
-	@Shared @AutoCleanup("stop") EchoServer endpoint = new EchoServer()
+	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setupSpec() {
 		tapeRoot.mkdirs()
 		proxy.start(recorder)
-		endpoint.start()
+		endpoint.start(EchoHandler)
 	}
 
 	def setup() {
