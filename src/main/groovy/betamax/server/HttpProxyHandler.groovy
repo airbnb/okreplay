@@ -20,6 +20,7 @@ import betamax.Recorder
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.params.HttpConnectionParams
 import org.apache.http.util.EntityUtils
 import org.apache.log4j.Logger
 import static java.net.HttpURLConnection.*
@@ -31,9 +32,19 @@ import org.apache.http.protocol.*
 
 class HttpProxyHandler implements HttpRequestHandler {
 
+	/**
+	 * The default timeout after which the proxy will abort a connection to the target.
+	 */
+	static final int DEFAULT_PROXY_TIMEOUT = 500
+
+	/**
+	 * Header placed in the response to indicate whether the response was recorded or played back.
+	 */
 	static final String X_BETAMAX = "X-Betamax"
-	static final String PROXY_CONNECTION = "Proxy-Connection"
-	static final String KEEP_ALIVE = "Keep-Alive"
+
+	/**
+	 * These headers are stripped from the proxied request and response.
+	 */
 	private static final NO_PASS_HEADERS = [
 			CONTENT_LENGTH,
 			HOST,
@@ -47,6 +58,8 @@ class HttpProxyHandler implements HttpRequestHandler {
 			TRANSFER_ENCODING,
 			UPGRADE
 	].asImmutable()
+	private static final String PROXY_CONNECTION = "Proxy-Connection"
+	private static final String KEEP_ALIVE = "Keep-Alive"
 
 	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
 	private final Recorder recorder
@@ -82,10 +95,14 @@ class HttpProxyHandler implements HttpRequestHandler {
 					response.statusCode = HTTP_FORBIDDEN
 					response.reasonPhrase = "Tape is read-only"
 				}
+			} catch (SocketTimeoutException e) {
+				log.error "timed out connecting to $request.requestLine.uri"
+				response.statusCode = HTTP_GATEWAY_TIMEOUT
+				response.reasonPhrase = "Target server took too long to respond"
 			} catch (IOException e) {
-				// TODO: handle timeout by setting HTTP_GATEWAY_TIMEOUT
 				log.error "problem connecting to $request.requestLine.uri", e
 				response.statusCode = HTTP_BAD_GATEWAY
+				response.reasonPhrase = e.message
 			} catch (Exception e) {
 				log.fatal "error recording HTTP exchange", e
 				response.statusCode = HTTP_INTERNAL_ERROR
@@ -94,14 +111,12 @@ class HttpProxyHandler implements HttpRequestHandler {
 		}
 
 		response.addHeader(VIA, "Betamax")
-		log.debug "proxied request complete..."
+		log.debug "proxied request complete with response code ${response.statusLine.statusCode}..."
 	}
 
 	private void execute(HttpRequest request, HttpResponse response) {
 		def proxyRequest = createProxyRequest(request)
-
 		def proxyResponse = httpClient.execute(proxyRequest)
-
 		copyResponseData(proxyResponse, response)
 	}
 
@@ -111,6 +126,10 @@ class HttpProxyHandler implements HttpRequestHandler {
 			proxyRequest.removeHeaders(headerName)
 		}
 		proxyRequest.addHeader(VIA, "Betamax")
+
+		HttpConnectionParams.setConnectionTimeout(request.params, DEFAULT_PROXY_TIMEOUT)
+		HttpConnectionParams.setSoTimeout(request.params, DEFAULT_PROXY_TIMEOUT)
+
 		proxyRequest
 	}
 
