@@ -1,6 +1,6 @@
 package betamax.recorder
 
-import betamax.server.HttpProxyServer
+import betamax.proxy.HttpProxyServer
 
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.TapeMode.*

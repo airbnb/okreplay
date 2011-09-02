@@ -2,7 +2,7 @@ package betamax
 
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import static betamax.server.HttpProxyHandler.X_BETAMAX
+import static betamax.proxy.HttpProxyHandler.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import org.junit.*

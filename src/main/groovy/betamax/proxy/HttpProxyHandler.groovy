@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package betamax.server
+package betamax.proxy
 
 import betamax.Recorder
 import org.apache.http.client.HttpClient

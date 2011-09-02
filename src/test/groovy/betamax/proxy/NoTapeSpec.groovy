@@ -1,7 +1,5 @@
 package betamax.proxy
 
-import betamax.server.HttpProxyServer
-
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN

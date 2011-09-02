@@ -1,7 +1,5 @@
 package betamax.proxy
 
-import betamax.server.HttpProxyServer
-
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml

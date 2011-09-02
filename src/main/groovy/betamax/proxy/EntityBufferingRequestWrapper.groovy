@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package betamax.server
+package betamax.proxy
 
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.EntityEnclosingRequestWrapper
