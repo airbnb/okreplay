@@ -17,8 +17,8 @@
 package betamax
 
 import betamax.proxy.HttpProxyServer
-import betamax.storage.StorableTape
-import betamax.storage.yaml.YamlTapeLoader
+import betamax.tape.StorableTape
+import betamax.tape.yaml.YamlTapeLoader
 import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE

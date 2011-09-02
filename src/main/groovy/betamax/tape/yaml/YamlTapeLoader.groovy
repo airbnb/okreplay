@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package betamax.storage.yaml
+package betamax.tape.yaml
 
 import betamax.TapeLoader
-import betamax.storage.StorableTape
+import betamax.tape.StorableTape
 import java.text.Normalizer
 import org.apache.log4j.Logger
 

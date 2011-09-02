@@ -1,7 +1,6 @@
 package betamax.tape
 
-import betamax.storage.TapeLoadException
-import betamax.storage.yaml.YamlTape
+import betamax.tape.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.Specification
 import static java.net.HttpURLConnection.HTTP_OK

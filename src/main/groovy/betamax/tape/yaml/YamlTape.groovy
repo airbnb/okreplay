@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package betamax.storage.yaml
+package betamax.tape.yaml
 
-import betamax.tape.MemoryTape
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
-import betamax.storage.*
+import betamax.tape.*
 import org.yaml.snakeyaml.*
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 

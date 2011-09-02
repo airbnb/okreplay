@@ -1,20 +1,18 @@
 package betamax.proxy
 
-import betamax.util.SimpleServer
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
+import betamax.*
+import betamax.util.*
 import groovyx.net.http.*
 import static groovyx.net.http.ContentType.URLENC
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import betamax.Recorder
-import betamax.Betamax
-import betamax.util.EchoHandler
 
 class ProxyNetworkCommsSpec extends Specification {
 

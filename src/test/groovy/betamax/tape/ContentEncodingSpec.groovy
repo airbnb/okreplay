@@ -1,6 +1,6 @@
 package betamax.tape
 
-import betamax.storage.yaml.YamlTape
+import betamax.tape.yaml.YamlTape
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.message.BasicHttpResponse

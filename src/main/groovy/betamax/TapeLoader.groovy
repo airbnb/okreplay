@@ -16,7 +16,7 @@
 
 package betamax
 
-import betamax.storage.StorableTape
+import betamax.tape.StorableTape
 
 /**
  * The interface for factories that load tapes from file storage.

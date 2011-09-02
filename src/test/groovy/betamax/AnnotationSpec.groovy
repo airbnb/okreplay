@@ -4,11 +4,10 @@ import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import static betamax.proxy.HttpProxyHandler.X_BETAMAX
+import betamax.util.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
-import betamax.util.SimpleServer
-import betamax.util.EchoHandler
 
 @Stepwise
 class AnnotationSpec extends Specification {

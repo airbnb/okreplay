@@ -1,10 +1,10 @@
 package betamax.recorder
 
+import betamax.Recorder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
-import betamax.Recorder
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {

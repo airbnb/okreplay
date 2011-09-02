@@ -1,7 +1,7 @@
 package betamax.tape
 
+import betamax.Tape
 import betamax.encoding.GzipEncoder
-import betamax.tape.MemoryTape
 import org.apache.http.message.BasicHttpResponse
 import static betamax.TapeMode.*
 import static groovyx.net.http.ContentType.URLENC
@@ -11,7 +11,6 @@ import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
 import org.apache.http.entity.*
 import spock.lang.*
-import betamax.Tape
 
 @Stepwise
 class TapeSpec extends Specification {

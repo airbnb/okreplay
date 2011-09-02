@@ -1,13 +1,12 @@
 package betamax.proxy
 
+import betamax.Recorder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
+import betamax.util.*
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
-import betamax.Recorder
-import betamax.util.SimpleServer
-import betamax.util.EchoHandler
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {

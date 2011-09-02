@@ -1,6 +1,6 @@
 package betamax.tape
 
-import betamax.storage.yaml.YamlTapeLoader
+import betamax.tape.yaml.YamlTapeLoader
 import spock.lang.*
 
 class FilenameNormalizationSpec extends Specification {

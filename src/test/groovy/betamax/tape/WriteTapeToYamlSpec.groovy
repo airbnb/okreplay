@@ -1,6 +1,6 @@
 package betamax.tape
 
-import betamax.storage.yaml.YamlTape
+import betamax.tape.yaml.YamlTape
 import org.apache.http.HttpResponse
 import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.*
