@@ -12,7 +12,7 @@ import spock.lang.*
 @Issue("https://github.com/robfletcher/betamax/issues/20")
 class ProxyTimeoutSpec extends Specification {
 
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxyTimeout: 100)
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()

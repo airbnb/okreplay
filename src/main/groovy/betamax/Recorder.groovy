@@ -32,8 +32,9 @@ import org.junit.runners.model.*
  */
 class Recorder implements MethodRule {
 
-	static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
-	static final int DEFAULT_PROXY_PORT = 5555
+	public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
+	public static final int DEFAULT_PROXY_PORT = 5555
+	public static final int DEFAULT_PROXY_TIMEOUT = 5000
 
 	private final log = Logger.getLogger(Recorder)
 
@@ -73,6 +74,11 @@ class Recorder implements MethodRule {
 	 */
 	TapeMode defaultMode = READ_WRITE
 
+	/**
+	 * The time the proxy will wait before aborting a request in milliseconds.
+	 */
+	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
+
 	private StorableTape tape
 	private HttpProxyServer proxy = new HttpProxyServer()
 
@@ -101,8 +107,10 @@ class Recorder implements MethodRule {
 	 * will no longer record or play back any HTTP traffic until another tape is inserted.
 	 */
 	void ejectTape() {
+		if (tape) {
 		tapeLoader.writeTape(tape)
 		tape = null
+		}
 	}
 
 	/**
@@ -159,6 +167,7 @@ class Recorder implements MethodRule {
 	private void configureFromProperties(Properties properties) {
 		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
 		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
+		proxyTimeout = properties.getProperty("betamax.proxyTimeout")?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
 		def defaultModeValue = properties.getProperty("betamax.defaultMode")
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
 
@@ -167,6 +176,7 @@ class Recorder implements MethodRule {
 	private void configureFromConfig(ConfigObject config) {
 		tapeRoot = config.betamax.tapeRoot ?: DEFAULT_TAPE_ROOT
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
+		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 	}
 

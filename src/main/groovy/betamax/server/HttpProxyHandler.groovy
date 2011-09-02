@@ -33,11 +33,6 @@ import org.apache.http.protocol.*
 class HttpProxyHandler implements HttpRequestHandler {
 
 	/**
-	 * The default timeout after which the proxy will abort a connection to the target.
-	 */
-	static final int DEFAULT_PROXY_TIMEOUT = 500
-
-	/**
 	 * Header placed in the response to indicate whether the response was recorded or played back.
 	 */
 	static final String X_BETAMAX = "X-Betamax"
@@ -127,8 +122,8 @@ class HttpProxyHandler implements HttpRequestHandler {
 		}
 		proxyRequest.addHeader(VIA, "Betamax")
 
-		HttpConnectionParams.setConnectionTimeout(request.params, DEFAULT_PROXY_TIMEOUT)
-		HttpConnectionParams.setSoTimeout(request.params, DEFAULT_PROXY_TIMEOUT)
+		HttpConnectionParams.setConnectionTimeout(request.params, recorder.proxyTimeout)
+		HttpConnectionParams.setSoTimeout(request.params, recorder.proxyTimeout)
 
 		proxyRequest
 	}

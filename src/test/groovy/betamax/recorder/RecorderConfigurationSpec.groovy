@@ -1,8 +1,9 @@
 package betamax.recorder
 
+import betamax.Recorder
+import static betamax.Recorder.DEFAULT_PROXY_TIMEOUT
 import static betamax.TapeMode.*
 import spock.lang.*
-import betamax.Recorder
 
 class RecorderConfigurationSpec extends Specification {
 
@@ -16,16 +17,18 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.tapeRoot == new File("src/test/resources/betamax/tapes")
 		recorder.proxyPort == 5555
 		recorder.defaultMode == READ_WRITE
+		recorder.proxyTimeout == DEFAULT_PROXY_TIMEOUT
 	}
 
 	def "recorder configuration is overridden by map arguments"() {
 		given:
-		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337, defaultMode: READ_ONLY)
+		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337, defaultMode: READ_ONLY, proxyTimeout: 30000)
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
+		recorder.proxyTimeout == 30000
 	}
 
 	def "recorder picks up configuration from properties"() {
@@ -34,6 +37,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
+		properties.setProperty("betamax.proxyTimeout", "30000")
 
 		and:
 		def recorder = new Recorder(properties)
@@ -42,6 +46,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
+		recorder.proxyTimeout == 30000
 	}
 
 	def "recorder picks up configuration from properties file"() {
@@ -51,6 +56,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
+		properties.setProperty("betamax.proxyTimeout", "30000")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -65,6 +71,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
+		recorder.proxyTimeout == 30000
 
 		cleanup:
 		propertiesFile.delete()
@@ -79,6 +86,7 @@ class RecorderConfigurationSpec extends Specification {
 					tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 					proxyPort = 1337
 					defaultMode = betamax.TapeMode.READ_ONLY
+					proxyTimeout = 30000
 				}
 			"""
 		}
@@ -93,6 +101,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
+		recorder.proxyTimeout == 30000
 
 		cleanup:
 		configFile.delete()
@@ -105,6 +114,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.tapeRoot", "$tmpdir/tapes")
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
+		properties.setProperty("betamax.proxyTimeout", "30000")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -113,12 +123,13 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234, defaultMode: WRITE_ONLY)
+		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234, defaultMode: WRITE_ONLY, proxyTimeout: 10000)
 
 		expect:
 		recorder.tapeRoot == new File("test/fixtures/tapes")
 		recorder.proxyPort == 1234
 		recorder.defaultMode == WRITE_ONLY
+		recorder.proxyTimeout == 10000
 
 		cleanup:
 		propertiesFile.delete()
