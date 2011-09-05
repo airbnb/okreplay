@@ -17,7 +17,6 @@
 package betamax.tape.yaml
 
 import betamax.Tape
-import groovy.util.Node
 import betamax.tape.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
