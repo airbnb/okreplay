@@ -23,37 +23,39 @@ import org.apache.log4j.Logger
 
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 
-	final File tapeRoot
-	private final log = Logger.getLogger(YamlTapeLoader)
+    final File tapeRoot
+    private final log = Logger.getLogger(YamlTapeLoader)
 
-	YamlTapeLoader(File tapeRoot) {
-		this.tapeRoot = tapeRoot
-	}
+    YamlTapeLoader(File tapeRoot) {
+        this.tapeRoot = tapeRoot
+    }
 
-	YamlTape loadTape(String name) {
-		def file = fileFor(name)
-		if (file.isFile()) {
-			def tape = file.withReader { reader ->
-				YamlTape.readFrom(reader)
-			}
-			log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
-			tape
-		} else {
-			new YamlTape(name: name)
-		}
-	}
+    YamlTape loadTape(String name) {
+        def file = fileFor(name)
+        if (file.isFile()) {
+            def tape = file.withReader { reader ->
+                YamlTape.readFrom(reader)
+            }
+            log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
+            tape
+        } else {
+            new YamlTape(name: name)
+        }
+    }
 
-	void writeTape(StorableTape tape) {
-		def file = fileFor(tape.name)
-		file.parentFile.mkdirs()
-		file.withWriter { writer ->
-			log.debug "writing tape $tape to file $file.name..."
-			tape.writeTo(writer)
-		}
-	}
+    void writeTape(StorableTape tape) {
+        def file = fileFor(tape.name)
+        file.parentFile.mkdirs()
+        if (tape.isDirty()) {
+            file.withWriter { writer ->
+                log.debug "writing tape $tape to file $file.name..."
+                tape.writeTo(writer)
+            }
+        }
+    }
 
-	File fileFor(String tapeName) {
-		def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_").replaceFirst(/^_/, "").replaceFirst(/_$/, "")
-		new File(tapeRoot, "${normalizedName}.yaml")
-	}
+    File fileFor(String tapeName) {
+        def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_").replaceFirst(/^_/, "").replaceFirst(/_$/, "")
+        new File(tapeRoot, "${normalizedName}.yaml")
+    }
 }

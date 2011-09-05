@@ -19,32 +19,45 @@ package betamax.tape.yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
 import betamax.tape.*
+import org.apache.http.*
 import org.yaml.snakeyaml.*
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 
 class YamlTape extends MemoryTape implements StorableTape {
 
-	static YamlTape readFrom(Reader reader) {
-		try {
-			yaml.loadAs(reader, YamlTape)
-		} catch (YAMLException e) {
-			throw new TapeLoadException("Invalid tape", e)
-		}
-	}
+    private boolean dirty = false
 
-	void writeTo(Writer writer) {
-		yaml.dump(this, writer)
-	}
+    static YamlTape readFrom(Reader reader) {
+        try {
+            yaml.loadAs(reader, YamlTape)
+        } catch (YAMLException e) {
+            throw new TapeLoadException("Invalid tape", e)
+        }
+    }
 
-	private static Yaml getYaml() {
-		def representer = new TapeRepresenter()
-		representer.addClassTag(YamlTape, "!tape")
+    void writeTo(Writer writer) {
+        yaml.dump(this, writer)
+    }
 
-		def constructor = new Constructor()
-		constructor.addTypeDescription(new TypeDescription(YamlTape, "!tape"))
+    boolean isDirty() {
+        dirty
+    }
 
-		def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK)
+    @Override
+    void record(HttpRequest request, HttpResponse response) {
+        super.record(request, response)
+        dirty = true
+    }
 
-		new Yaml(constructor, representer, dumperOptions)
-	}
+    private static Yaml getYaml() {
+        def representer = new TapeRepresenter()
+        representer.addClassTag(YamlTape, "!tape")
+
+        def constructor = new Constructor()
+        constructor.addTypeDescription(new TypeDescription(YamlTape, "!tape"))
+
+        def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK)
+
+        new Yaml(constructor, representer, dumperOptions)
+    }
 }
