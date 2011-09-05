@@ -20,6 +20,7 @@ import betamax.Tape
 import betamax.tape.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
+import static org.yaml.snakeyaml.nodes.Tag.NULL
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
@@ -33,7 +34,7 @@ class TapeRepresenter extends GroovyRepresenter {
 	@Override
 	protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag customTag) {
 		def tuple = super.representJavaBeanProperty(bean, property, value, customTag)
-		if (Tag.NULL == tuple.valueNode.tag) {
+		if (tuple.valueNode.tag == NULL) {
 			null
 		} else if (tuple.valueNode instanceof CollectionNode && tuple.valueNode.value.empty) {
 			null

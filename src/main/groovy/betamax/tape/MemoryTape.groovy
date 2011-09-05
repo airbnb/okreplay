@@ -143,8 +143,10 @@ class MemoryTape implements Tape {
 			return null
 		}
 
+		def contentType = EntityUtils.getContentMimeType(entity)
 		def encoding = entity.contentEncoding?.value
 		def charset = EntityUtils.getContentCharSet(entity)
+		println "entity: ${entity.getClass().name}, type: $contentType, encoding: $encoding, charset: $charset"
 		if (entity instanceof StringEntity) {
 			EntityUtils.toString(entity, charset)
 		} else if (encoding == "gzip") {
@@ -153,9 +155,15 @@ class MemoryTape implements Tape {
 			new DeflateEncoder().decode(entity.content, charset)
 		} else if (charset) {
 			EntityUtils.toString(entity, charset)
+		} else if (isTextContentType(contentType)) {
+			EntityUtils.toString(entity)
 		} else {
 			EntityUtils.toByteArray(entity)
 		}
+	}
+
+	static boolean isTextContentType(String contentType) {
+		contentType.startsWith("text/") || contentType in ["application/json", "application/javascript"]
 	}
 
 	private String indentifyMimeType(Header contentType) {

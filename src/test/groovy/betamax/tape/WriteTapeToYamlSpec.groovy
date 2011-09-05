@@ -1,13 +1,13 @@
 package betamax.tape
 
 import betamax.tape.yaml.YamlTape
-import org.apache.http.HttpResponse
+import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.*
+import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
-import org.apache.http.entity.*
 import org.apache.http.message.*
 import spock.lang.*
 
@@ -34,13 +34,13 @@ class WriteTapeToYamlSpec extends Specification {
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		successResponse.addHeader(CONTENT_ENCODING, "none")
-		successResponse.entity = new StringEntity("O HAI!", "text/plain", "UTF-8")
+		successResponse.entity = createEntity("O HAI!", "text/plain", "none", "UTF-8")
 
 		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		failureResponse.addHeader(CONTENT_ENCODING, "none")
-		failureResponse.entity = new StringEntity("KTHXBYE!", "text/plain", "UTF-8")
+		failureResponse.entity = createEntity("KTHXBYE!", "text/plain", "none", "UTF-8")
 
 		image = new File("src/test/resources/image.png")
 		imageResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
@@ -181,4 +181,12 @@ class WriteTapeToYamlSpec extends Specification {
 		then:
 		writer.toString().contains("body: !!binary |-")
 	}
+
+	private HttpEntity createEntity(String text, String contentType, String encoding, String charset) {
+		def entity = new ByteArrayEntity(text.getBytes(charset))
+		entity.setContentEncoding(encoding)
+		entity.setContentType(contentType)
+		return entity
+	}
+
 }
