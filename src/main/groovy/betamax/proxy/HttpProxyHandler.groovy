@@ -16,7 +16,6 @@
 
 package betamax.proxy
 
-import betamax.Recorder
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
@@ -31,11 +30,6 @@ import org.apache.http.impl.client.*
 import org.apache.http.protocol.*
 
 class HttpProxyHandler implements HttpRequestHandler {
-
-	/**
-	 * Header placed in the response to indicate whether the response was recorded or played back.
-	 */
-	static final String X_BETAMAX = "X-Betamax"
 
 	/**
 	 * These headers are stripped from the proxied request and response.
@@ -56,40 +50,23 @@ class HttpProxyHandler implements HttpRequestHandler {
 	private static final String PROXY_CONNECTION = "Proxy-Connection"
 	private static final String KEEP_ALIVE = "Keep-Alive"
 
-	private final HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
-	private final Recorder recorder
-	private final log = Logger.getLogger(HttpProxyHandler)
+	HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
+	int timeout
+	VetoingProxyInterceptor interceptor
 
-	HttpProxyHandler(Recorder recorder) {
-		this.recorder = recorder
-	}
+	private final log = Logger.getLogger(HttpProxyHandler)
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
 		def requestWrapper = request instanceof HttpEntityEnclosingRequest ? new EntityBufferingRequestWrapper(request) : new RequestWrapper(request)
 
-		def tape = recorder.tape
-
-		if (!tape) {
-			log.error "no tape inserted..."
-			response.statusCode = HTTP_FORBIDDEN
-			response.reasonPhrase = "No tape"
-		} else if (tape.seek(requestWrapper) && tape.isReadable()) {
-			log.info "playing back from tape '$tape.name'..."
-			tape.play(response)
-			response.addHeader(X_BETAMAX, "PLAY")
-		} else {
+		boolean handled = interceptor?.interceptRequest(requestWrapper, response)
+		if (!handled) {
 			try {
-				if (tape.isWritable()) {
-					execute(requestWrapper, response)
-					log.info "recording response with status $response.statusLine to tape '$tape.name'..."
-					tape.record(requestWrapper, response)
-					log.info "recording complete..."
-					response.addHeader(X_BETAMAX, "REC")
-				} else {
-					response.statusCode = HTTP_FORBIDDEN
-					response.reasonPhrase = "Tape is read-only"
-				}
+				def proxyRequest = createProxyRequest(requestWrapper)
+				def proxyResponse = httpClient.execute(proxyRequest)
+				copyResponseData(proxyResponse, response)
+				interceptor?.interceptResponse(requestWrapper, response)
 			} catch (SocketTimeoutException e) {
 				log.error "timed out connecting to $request.requestLine.uri"
 				response.statusCode = HTTP_GATEWAY_TIMEOUT
@@ -109,12 +86,6 @@ class HttpProxyHandler implements HttpRequestHandler {
 		log.debug "proxied request complete with response code ${response.statusLine.statusCode}..."
 	}
 
-	private void execute(HttpRequest request, HttpResponse response) {
-		def proxyRequest = createProxyRequest(request)
-		def proxyResponse = httpClient.execute(proxyRequest)
-		copyResponseData(proxyResponse, response)
-	}
-
 	private HttpUriRequest createProxyRequest(HttpRequest request) {
 		def proxyRequest = request instanceof HttpEntityEnclosingRequest ? new EntityEnclosingRequestWrapper(request) : new RequestWrapper(request)
 		for (headerName in NO_PASS_HEADERS) {
@@ -122,8 +93,8 @@ class HttpProxyHandler implements HttpRequestHandler {
 		}
 		proxyRequest.addHeader(VIA, "Betamax")
 
-		HttpConnectionParams.setConnectionTimeout(request.params, recorder.proxyTimeout)
-		HttpConnectionParams.setSoTimeout(request.params, recorder.proxyTimeout)
+		HttpConnectionParams.setConnectionTimeout(request.params, timeout)
+		HttpConnectionParams.setSoTimeout(request.params, timeout)
 
 		proxyRequest
 	}

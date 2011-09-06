@@ -123,42 +123,4 @@ class ProxyNetworkCommsSpec extends Specification {
         method << ["get", "post", "put", "head", "delete", "options"]
     }
 
-    @Timeout(10)
-	@Betamax(tape = "proxy network comms spec")
-    def "proxy forwards query string"() {
-        given:
-        def http = new RESTClient(endpoint.url)
-        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-        http.client.routePlanner = routePlanner
-
-        when:
-        def response = http.get(path: "/", query: [q: "1"])
-
-        then:
-        response.status == HTTP_OK
-        response.data.text.contains("GET /?q=1 HTTP/1.1")
-
-        cleanup:
-        http.shutdown()
-    }
-
-    @Timeout(10)
-	@Betamax(tape = "proxy network comms spec")
-    def "proxy forwards post data"() {
-        given:
-        def http = new RESTClient(endpoint.url)
-        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-        http.client.routePlanner = routePlanner
-
-        when:
-        def response = http.post(path: "/", body: [q: "1"], requestContentType: URLENC)
-
-        then:
-        response.status == HTTP_OK
-        response.data.text.endsWith("\nq=1")
-
-        cleanup:
-        http.shutdown()
-    }
-
 }

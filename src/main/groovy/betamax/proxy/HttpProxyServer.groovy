@@ -69,8 +69,11 @@ class HttpProxyServer implements org.apache.http.nio.protocol.EventListener {
 				new DefaultConnectionReuseStrategy(),
 				params)
 
+		def proxyHandler = new HttpProxyHandler(timeout: recorder.proxyTimeout)
+		proxyHandler.interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
+
 		def reqistry = new HttpRequestHandlerRegistry()
-		reqistry.register "*", new HttpProxyHandler(recorder)
+		reqistry.register "*", proxyHandler
 
 		handler.handlerResolver = reqistry
 		handler.eventListener = this

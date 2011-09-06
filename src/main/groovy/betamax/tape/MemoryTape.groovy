@@ -146,7 +146,6 @@ class MemoryTape implements Tape {
 		def contentType = EntityUtils.getContentMimeType(entity)
 		def encoding = entity.contentEncoding?.value
 		def charset = EntityUtils.getContentCharSet(entity)
-		println "entity: ${entity.getClass().name}, type: $contentType, encoding: $encoding, charset: $charset"
 		if (entity instanceof StringEntity) {
 			EntityUtils.toString(entity, charset)
 		} else if (encoding == "gzip") {
