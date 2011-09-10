@@ -2,32 +2,26 @@ package betamax.tape
 
 import betamax.Tape
 import betamax.encoding.GzipEncoder
-import org.apache.http.message.BasicHttpResponse
 import static betamax.TapeMode.*
+import betamax.proxy.*
+
 import static groovyx.net.http.ContentType.URLENC
-import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
-import static org.apache.http.HttpVersion.HTTP_1_1
-import org.apache.http.client.methods.*
-import org.apache.http.entity.*
 import spock.lang.*
+import betamax.util.message.BasicResponse
+import betamax.util.message.BasicRequest
 
 @Stepwise
 class TapeSpec extends Specification {
 
 	@Shared Tape tape = new MemoryTape(name: "tape_spec")
-	HttpRequest getRequest = new HttpGet("http://icanhascheezburger.com/")
-	HttpResponse plainTextResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+	Request getRequest = new BasicRequest("GET", "http://icanhascheezburger.com/")
+	Response plainTextResponse = new BasicResponse(status: 200, reason: "OK", body: new GzipEncoder().encode("O HAI!", "UTF-8"))
 
 	def setup() {
-		def entity = new ByteArrayEntity(new GzipEncoder().encode("O HAI!", "UTF-8"))
-		entity.setContentEncoding("gzip")
-		entity.setContentType("text/plain;charset=UTF-8")
-
 		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain;charset=UTF-8")
 		plainTextResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		plainTextResponse.addHeader(CONTENT_ENCODING, "gzip")
-		plainTextResponse.entity = entity
 	}
 
 	def cleanup() {
@@ -37,7 +31,7 @@ class TapeSpec extends Specification {
 
 	def "reading from an empty tape throws an exception"() {
 		when: "an empty tape is played"
-		tape.play(new BasicHttpResponse(HTTP_1_1, 200, "OK"))
+		tape.play(new BasicResponse())
 
 		then: "an exception is thrown"
 		thrown IllegalStateException
@@ -52,17 +46,15 @@ class TapeSpec extends Specification {
 		def interaction = tape.interactions[-1]
 
 		and: "the request data is correctly stored"
-		interaction.request.method == getRequest.requestLine.method
-		interaction.request.uri == getRequest.requestLine.uri
-		interaction.request.protocol == getRequest.requestLine.protocolVersion.toString()
+		interaction.request.method == getRequest.method
+		interaction.request.uri == getRequest.target.toString()
 
 		and: "the response data is correctly stored"
-		interaction.response.protocol == plainTextResponse.statusLine.protocolVersion.toString()
-		interaction.response.status == plainTextResponse.statusLine.statusCode
+		interaction.response.status == plainTextResponse.status
 		interaction.response.body == "O HAI!"
-		interaction.response.headers[CONTENT_TYPE] == plainTextResponse.getFirstHeader(CONTENT_TYPE).value
-		interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.getFirstHeader(CONTENT_LANGUAGE).value
-		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getFirstHeader(CONTENT_ENCODING).value
+		interaction.response.headers[CONTENT_TYPE] == plainTextResponse.getFirstHeader(CONTENT_TYPE)
+		interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.getFirstHeader(CONTENT_LANGUAGE)
+		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getFirstHeader(CONTENT_ENCODING)
 	}
 	
 	def "can overwrite a recorded interaction"() {
@@ -81,7 +73,7 @@ class TapeSpec extends Specification {
 
 	def "seek does not match a request for a different URI"() {
 		given:
-		def request = new HttpGet("http://qwantz.com/")
+		def request = new BasicRequest("GET", "http://qwantz.com/")
 
 		expect:
 		!tape.seek(request)
@@ -94,7 +86,7 @@ class TapeSpec extends Specification {
 
 	def "can read a stored interaction"() {
 		given: "an http response to play back to"
-		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+		def response = new BasicResponse()
 
 		and: "the tape is ready to play"
 		tape.seek(getRequest)
@@ -103,25 +95,23 @@ class TapeSpec extends Specification {
 		tape.play(response)
 
 		then: "the recorded response data is copied onto the response"
-		response.statusLine.protocolVersion == plainTextResponse.statusLine.protocolVersion
-		response.statusLine.statusCode == plainTextResponse.statusLine.statusCode
-		new GzipEncoder().decode(response.entity.content) == "O HAI!"
-		response.getHeaders(CONTENT_TYPE).value == plainTextResponse.getHeaders(CONTENT_TYPE).value
-		response.getHeaders(CONTENT_LANGUAGE).value == plainTextResponse.getHeaders(CONTENT_LANGUAGE).value
-		response.getHeaders(CONTENT_ENCODING).value == plainTextResponse.getHeaders(CONTENT_ENCODING).value
+		response.status == plainTextResponse.status
+		response.bodyAsText.text == "O HAI!"
+		response.headers == plainTextResponse.headers
 	}
 
 	def "can record post requests with a body"() {
 		given: "a request with some content"
-		def request = new HttpPost("http://github.com/")
-		request.entity = new StringEntity("q=1", URLENC.toString(), "UTF-8")
+		def request = new BasicRequest("POST", "http://github.com/")
+		request.body = "q=1".getBytes("UTF-8")
+		request.addHeader(CONTENT_TYPE, URLENC.toString())
 
 		when: "the request and its response are recorded"
 		tape.record(request, plainTextResponse)
 
 		then: "the request body is stored on the tape"
 		def interaction = tape.interactions[-1]
-		interaction.request.body == request.entity.content.text
+		interaction.request.body == request.bodyAsText.text
 	}
 
 	def "can reset the tape position"() {
@@ -132,7 +122,7 @@ class TapeSpec extends Specification {
 		tape.reset()
 
 		and: "the tape is played"
-		tape.play(new BasicHttpResponse(HTTP_1_1, 200, "OK"))
+		tape.play(new BasicResponse())
 
 		then: "an exception is thrown"
 		def e = thrown(IllegalStateException)
@@ -147,7 +137,7 @@ class TapeSpec extends Specification {
 		tape.seek(getRequest)
 
 		when: "the tape is played"
-		tape.play(new BasicHttpResponse(HTTP_1_1, 200, "OK"))
+		tape.play(new BasicResponse())
 
 		then: "an exception is thrown"
 		def e = thrown(IllegalStateException)

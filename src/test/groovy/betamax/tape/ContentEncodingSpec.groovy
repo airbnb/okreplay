@@ -1,7 +1,7 @@
 package betamax.tape
 
 import betamax.tape.yaml.YamlTape
-import org.apache.http.client.methods.HttpGet
+
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.message.BasicHttpResponse
 import betamax.encoding.*
@@ -9,6 +9,8 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 import spock.lang.*
+import betamax.util.message.BasicRequest
+import betamax.proxy.httpcore.HttpCoreResponseImpl
 
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 class ContentEncodingSpec extends Specification {
@@ -16,7 +18,7 @@ class ContentEncodingSpec extends Specification {
 	@Unroll("a #encoding encoded response body is stored as plain text in a tape file")
 	def "an encoded response body is stored as plain text in a tape file"() {
 		given:
-		def request = new HttpGet("http://icanhascheezburger.com/")
+		def request = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
 		def entity = new ByteArrayEntity(encoder.encode("O HAI!"))
@@ -24,11 +26,13 @@ class ContentEncodingSpec extends Specification {
 		entity.setContentEncoding(encoding)
 
 		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		response.addHeader(CONTENT_TYPE, "text/plain")
+		response.addHeader(CONTENT_ENCODING, encoding)
 		response.entity = entity
 
 		and:
 		def tape = new YamlTape(name: "encoded response tape")
-		tape.record(request, response)
+		tape.record(request, new HttpCoreResponseImpl(response))
 
 		when:
 		def writer = new StringWriter()
@@ -55,7 +59,7 @@ interactions:
   request:
     protocol: HTTP/1.1
     method: GET
-    uri: http://icanhascheezburger.com/
+    uri: http://robfletcher.github.com/betamax
     headers: {Accept-Encoding: $encoding}
   response:
     protocol: HTTP/1.1
@@ -69,8 +73,8 @@ interactions:
 		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
 		when:
-		tape.seek(new HttpGet("http://icanhascheezburger.com/"))
-		tape.play(response)
+		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
+		tape.play(new HttpCoreResponseImpl(response))
 
 		then:
 		response.getFirstHeader(CONTENT_ENCODING).value == encoding

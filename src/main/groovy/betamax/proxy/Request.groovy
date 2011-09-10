@@ -16,10 +16,10 @@
 
 package betamax.proxy
 
-interface VetoingProxyInterceptor {
+interface Request extends Message {
 
-	boolean interceptRequest(Request request, Response response)
-
-	void interceptResponse(Request request, Response response)
+    String getMethod()
+    URI getTarget()
+    boolean hasBody()
 
 }

@@ -1,52 +1,52 @@
 package betamax.tape
 
 import betamax.tape.yaml.YamlTape
+import org.apache.http.HttpEntity
 import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
+import betamax.proxy.*
+
 import static java.net.HttpURLConnection.*
-import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
-import static org.apache.http.HttpVersion.HTTP_1_1
-import org.apache.http.client.methods.*
-import org.apache.http.message.*
 import spock.lang.*
+import betamax.util.message.BasicResponse
+import betamax.util.message.BasicRequest
 
 class WriteTapeToYamlSpec extends Specification {
 
-	@Shared HttpGet getRequest
-	@Shared HttpPost postRequest
-	@Shared HttpResponse successResponse
-	@Shared HttpResponse failureResponse
-	@Shared HttpResponse imageResponse
+	@Shared Request getRequest
+	@Shared Request postRequest
+	@Shared Response successResponse
+	@Shared Response failureResponse
+	@Shared Response imageResponse
 	@Shared File image
 
 	Yaml yamlReader
 
 	def setupSpec() {
-		getRequest = new HttpGet("http://icanhascheezburger.com/")
+		getRequest = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
 		getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
 		getRequest.addHeader(IF_NONE_MATCH, "b00b135")
 
-		postRequest = new HttpPost("http://github.com/")
-		postRequest.entity = new ByteArrayEntity("q=1".bytes)
+		postRequest = new BasicRequest("POST", "http://github.com/")
+		postRequest.body = "q=1".bytes
 
-		successResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		successResponse = new BasicResponse(HTTP_OK, "OK")
 		successResponse.addHeader(CONTENT_TYPE, "text/plain")
 		successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		successResponse.addHeader(CONTENT_ENCODING, "none")
-		successResponse.entity = createEntity("O HAI!", "text/plain", "none", "UTF-8")
+		successResponse.body = "O HAI!".getBytes("UTF-8")
 
-		failureResponse = new BasicHttpResponse(HTTP_1_1, HTTP_BAD_REQUEST, "BAD REQUEST")
+		failureResponse = new BasicResponse(HTTP_BAD_REQUEST, "BAD REQUEST")
 		failureResponse.addHeader(CONTENT_TYPE, "text/plain")
 		failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
 		failureResponse.addHeader(CONTENT_ENCODING, "none")
-		failureResponse.entity = createEntity("KTHXBYE!", "text/plain", "none", "UTF-8")
+		failureResponse.body = "KTHXBYE!".getBytes("UTF-8")
 
 		image = new File("src/test/resources/image.png")
-		imageResponse = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		imageResponse = new BasicResponse(HTTP_OK, "OK")
 		imageResponse.addHeader(CONTENT_TYPE, "image/png")
-		imageResponse.entity = new ByteArrayEntity(image.bytes)
-		imageResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "image/png")
+		imageResponse.body = image.bytes
 	}
 
 	def setup() {
@@ -68,10 +68,8 @@ class WriteTapeToYamlSpec extends Specification {
 
 		yaml.interactions.size() == 1
 		yaml.interactions[0].recorded instanceof Date
-		yaml.interactions[0].request.protocol == "HTTP/1.1"
 		yaml.interactions[0].request.method == "GET"
-		yaml.interactions[0].request.uri == "http://icanhascheezburger.com/"
-		yaml.interactions[0].response.protocol == "HTTP/1.1"
+		yaml.interactions[0].request.uri == "http://robfletcher.github.com/betamax"
 		yaml.interactions[0].response.status == HTTP_OK
 		yaml.interactions[0].response.body == "O HAI!"
 	}

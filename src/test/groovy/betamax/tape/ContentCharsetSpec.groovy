@@ -1,7 +1,8 @@
 package betamax.tape
 
+import betamax.proxy.httpcore.HttpCoreResponseImpl
+import betamax.util.message.BasicRequest
 import betamax.tape.yaml.YamlTape
-import org.apache.http.client.methods.HttpGet
 import org.apache.http.entity.ByteArrayEntity
 import betamax.encoding.*
 import static java.net.HttpURLConnection.HTTP_OK
@@ -16,20 +17,25 @@ class ContentCharsetSpec extends Specification {
 	@Unroll("a response with a #charset body is recorded correctly")
 	def "response body's charset is recorded correctly"() {
 		given:
-		def request = new HttpGet("http://icanhascheezburger.com/")
+		def request = new BasicRequest()
 
 		def bytes = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
 
+		def contentTypeHeader = new BasicHeader(CONTENT_TYPE, "text/plain;charset=$charset")
+		def contentEncodingHeader = new BasicHeader(CONTENT_ENCODING, encoding)
+
 		def entity = new ByteArrayEntity(bytes)
-		entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=$charset")
-		entity.contentEncoding = new BasicHeader(CONTENT_ENCODING, encoding)
+		entity.contentType = contentTypeHeader
+		entity.contentEncoding = contentEncodingHeader
 
 		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		response.addHeader(contentTypeHeader)
+		response.addHeader(contentEncodingHeader)
 		response.entity = entity
 
 		and:
 		def tape = new YamlTape(name: "charsets")
-		tape.record(request, response)
+		tape.record(request, new HttpCoreResponseImpl(response))
 
 		when:
 		def writer = new StringWriter()
@@ -60,7 +66,7 @@ interactions:
   request:
     protocol: HTTP/1.1
     method: GET
-    uri: http://icanhascheezburger.com/
+    uri: http://robfletcher.github.com/betamax
   response:
     protocol: HTTP/1.1
     status: 200
@@ -75,8 +81,8 @@ interactions:
 		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
 
 		when:
-		tape.seek(new HttpGet("http://icanhascheezburger.com/"))
-		tape.play(response)
+		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
+		tape.play(new HttpCoreResponseImpl(response))
 
 		then:
 		def expected = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)

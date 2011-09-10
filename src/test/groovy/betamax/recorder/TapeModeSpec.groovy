@@ -1,13 +1,15 @@
 package betamax.recorder
 
 import betamax.Recorder
-import betamax.proxy.HttpProxyServer
+import betamax.proxy.httpcore.HttpProxyServer
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.TapeMode.*
-import betamax.util.*
+
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.*
 import spock.lang.*
+import betamax.util.server.SimpleServer
+import betamax.util.server.EchoHandler
 
 class TapeModeSpec extends Specification {
 

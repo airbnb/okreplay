@@ -18,8 +18,8 @@ package betamax.tape.yaml
 
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
+import betamax.proxy.*
 import betamax.tape.*
-import org.apache.http.*
 import org.yaml.snakeyaml.*
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 
@@ -44,7 +44,7 @@ class YamlTape extends MemoryTape implements StorableTape {
     }
 
     @Override
-    void record(HttpRequest request, HttpResponse response) {
+    void record(Request request, Response response) {
         super.record(request, response)
         dirty = true
     }

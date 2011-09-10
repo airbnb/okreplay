@@ -16,7 +16,7 @@
 
 package betamax
 
-import org.apache.http.*
+import betamax.proxy.*
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -54,7 +54,7 @@ interface Tape {
 	 * @param request the HTTP request to match.
 	 * @return `true` if a matching recorded interaction was found, `false` otherwise.
 	 */
-	boolean seek(HttpRequest request)
+	boolean seek(Request request)
 
 	/**
 	 * Resets the tape so that no recorded interaction is ready to play. Subsequent calls to `play` will throw
@@ -68,7 +68,7 @@ interface Tape {
 	 * @param response the HTTP response to populate.
 	 * @throws IllegalStateException if no recorded interaction has been found by a previous call to `seek`.
 	 */
-	void play(HttpResponse response)
+	void play(Response response)
 
 	/**
 	 * Records a new interaction to the tape. If the tape is currently positioned to read a recorded interaction due to
@@ -78,5 +78,5 @@ interface Tape {
 	 * @param response the response to record.
 	 * @throws UnsupportedOperationException if this `Tape` implementation is not writable.
 	 */
-	void record(HttpRequest request, HttpResponse response)
+	void record(Request request, Response response)
 }

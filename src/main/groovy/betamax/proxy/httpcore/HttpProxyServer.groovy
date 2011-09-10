@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package betamax.proxy
+package betamax.proxy.httpcore
 
 import betamax.Recorder
 import org.apache.http.impl.nio.DefaultServerIOEventDispatch
@@ -29,6 +29,7 @@ import org.apache.http.nio.reactor.*
 import static org.apache.http.params.CoreConnectionPNames.*
 import static org.apache.http.params.CoreProtocolPNames.ORIGIN_SERVER
 import org.apache.http.protocol.*
+import betamax.proxy.RecordAndPlaybackProxyInterceptor
 
 /**
  * A simple proxy server that can run in the background. The code here is based on the "Basic non-blocking HTTP server"

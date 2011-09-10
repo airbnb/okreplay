@@ -16,14 +16,10 @@
 
 package betamax.tape
 
-import org.apache.http.util.EntityUtils
 import betamax.*
 import static betamax.TapeMode.READ_WRITE
-import betamax.encoding.*
+import betamax.proxy.*
 import org.apache.http.*
-import static org.apache.http.HttpHeaders.*
-import org.apache.http.entity.*
-import org.apache.http.message.*
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -51,9 +47,9 @@ class MemoryTape implements Tape {
 		interactions.size()
 	}
 
-	boolean seek(HttpRequest request) {
+	boolean seek(Request request) {
 		position = interactions.findIndexOf {
-			it.request.uri == request.requestLine.uri && it.request.method == request.requestLine.method
+			it.request.uri == request.target.toString() && it.request.method == request.method
 		}
 		position >= 0
 	}
@@ -62,36 +58,31 @@ class MemoryTape implements Tape {
 		position = -1
 	}
 
-	void play(HttpResponse response) {
+	void play(Response response) {
 		if (!mode.readable) {
 			throw new IllegalStateException("the tape is not readable")
 		} else if (position < 0) {
 			throw new IllegalStateException("the tape is not ready to play")
 		} else {
 			def interaction = interactions[position]
-			response.statusLine = new BasicStatusLine(parseProtocol(interaction.response.protocol), interaction.response.status, null)
-			response.headers = interaction.response.headers.collect {
-				new BasicHeader(it.key, it.value)
+			response.status = interaction.response.status
+			interaction.response.headers.each {
+				response.addHeader(it.key, it.value)
 			}
-			if (interaction.response.body instanceof byte[]) {
-				response.entity = new ByteArrayEntity(interaction.response.body)
+			if (interaction.response.body instanceof String) {
+				response.writer.withWriter {
+					it << interaction.response.body
+				}
 			} else {
-				def mimeType = indentifyMimeType(response.getFirstHeader(CONTENT_TYPE))
-				def charset = identifyCharset(response.getFirstHeader(CONTENT_TYPE))
-				def encoding = response.getFirstHeader(CONTENT_ENCODING)?.value
-				if (encoding == "gzip") {
-					response.entity = new ByteArrayEntity(new GzipEncoder().encode(interaction.response.body, charset))
-				} else if (encoding == "deflate") {
-					response.entity = new ByteArrayEntity(new DeflateEncoder().encode(interaction.response.body, charset))
-				} else {
-					response.entity = new StringEntity(interaction.response.body, mimeType, charset)
+				response.outputStream.withStream {
+					it << interaction.response.body
 				}
 			}
 			true
 		}
 	}
 
-	void record(HttpRequest request, HttpResponse response) {
+	void record(Request request, Response response) {
 		if (mode.writable) {
 			def interaction = new RecordedInteraction(request: recordRequest(request), response: recordResponse(response), recorded: new Date())
 			if (position >= 0) {
@@ -109,60 +100,31 @@ class MemoryTape implements Tape {
 		"Tape[$name]"
 	}
 
-	private static RecordedRequest recordRequest(HttpEntityEnclosingRequest request) {
+	private static RecordedRequest recordRequest(Request request) {
 		def clone = new RecordedRequest()
-		clone.protocol = request.requestLine.protocolVersion.toString()
-		clone.method = request.requestLine.method
-		clone.uri = request.requestLine.uri
-		clone.headers = request.allHeaders.collectEntries { [it.name, it.value] }
-		clone.body = request.entity.content.text // TODO: handle encoded request bodies
+		clone.method = request.method
+		clone.uri = request.target
+		clone.headers = request.headers.collectEntries { [it.key, it.value.join(", ")] }
+		clone.body = request.hasBody() ? request.bodyAsText.text : null // TODO: handle encoded request bodies
 		clone
 	}
 
-	private static RecordedRequest recordRequest(HttpRequest request) {
-		def clone = new RecordedRequest()
-		clone.protocol = request.requestLine.protocolVersion.toString()
-		clone.method = request.requestLine.method
-		clone.uri = request.requestLine.uri
-		clone.headers = request.allHeaders.collectEntries { [it.name, it.value] }
-		clone.body = null
-		clone
-	}
-
-	private static RecordedResponse recordResponse(HttpResponse response) {
+	private static RecordedResponse recordResponse(Response response) {
 		def clone = new RecordedResponse()
-		clone.protocol = response.statusLine.protocolVersion.toString()
-		clone.status = response.statusLine.statusCode
-		clone.headers = response.allHeaders.collectEntries { [it.name, it.value] }
-		clone.body = recordEntity(response.entity)
+		clone.status = response.status
+		clone.headers = response.headers.collectEntries { [it.key, it.value.join(", ")] }
+		if (response.hasBody()) {
+			clone.body = isTextContentType(response.contentType) ? response.bodyAsText.text : response.bodyAsBinary.bytes
+		}
 		clone
-	}
-
-	private static recordEntity(HttpEntity entity) {
-		if (!entity) {
-			return null
-		}
-
-		def contentType = EntityUtils.getContentMimeType(entity)
-		def encoding = entity.contentEncoding?.value
-		def charset = EntityUtils.getContentCharSet(entity)
-		if (entity instanceof StringEntity) {
-			EntityUtils.toString(entity, charset)
-		} else if (encoding == "gzip") {
-			new GzipEncoder().decode(entity.content, charset)
-		} else if (encoding == "deflate") {
-			new DeflateEncoder().decode(entity.content, charset)
-		} else if (charset) {
-			EntityUtils.toString(entity, charset)
-		} else if (isTextContentType(contentType)) {
-			EntityUtils.toString(entity)
-		} else {
-			EntityUtils.toByteArray(entity)
-		}
 	}
 
 	static boolean isTextContentType(String contentType) {
-		contentType.startsWith("text/") || contentType in ["application/json", "application/javascript"]
+		if (contentType) {
+			contentType.startsWith("text/") || contentType in ["application/json", "application/javascript"]
+		} else {
+			false
+		}
 	}
 
 	private String indentifyMimeType(Header contentType) {

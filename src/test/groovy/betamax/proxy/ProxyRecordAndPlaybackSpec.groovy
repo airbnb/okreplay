@@ -4,9 +4,12 @@ import betamax.Recorder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
-import betamax.util.*
+
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
+import betamax.proxy.httpcore.HttpProxyServer
+import betamax.util.server.SimpleServer
+import betamax.util.server.EchoHandler
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
@@ -29,7 +32,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	}
 
 	@Timeout(10)
-	def "proxy makes processes a real HTTP request the first time it gets a request for a URI"() {
+	def "proxy makes a real HTTP request the first time it gets a request for a URI"() {
 		given:
 		endpoint.start(EchoHandler)
 

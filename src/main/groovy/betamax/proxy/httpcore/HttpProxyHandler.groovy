@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package betamax.proxy
+package betamax.proxy.httpcore
 
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
-import org.apache.http.util.EntityUtils
 import org.apache.log4j.Logger
+import betamax.proxy.*
 import static java.net.HttpURLConnection.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
-import org.apache.http.entity.*
-import org.apache.http.impl.client.*
+import org.apache.http.client.methods.*
 import org.apache.http.protocol.*
 
 class HttpProxyHandler implements HttpRequestHandler {
@@ -58,15 +58,16 @@ class HttpProxyHandler implements HttpRequestHandler {
 
 	void handle(HttpRequest request, HttpResponse response, HttpContext context) {
 		log.debug "proxying request $request.requestLine..."
-		def requestWrapper = request instanceof HttpEntityEnclosingRequest ? new EntityBufferingRequestWrapper(request) : new RequestWrapper(request)
+		def requestWrapper = new HttpCoreRequestImpl(request)
+		def responseWrapper = new HttpCoreResponseImpl(response)
 
-		boolean handled = interceptor?.interceptRequest(requestWrapper, response)
+		boolean handled = interceptor?.interceptRequest(requestWrapper, responseWrapper)
 		if (!handled) {
 			try {
 				def proxyRequest = createProxyRequest(requestWrapper)
 				def proxyResponse = httpClient.execute(proxyRequest)
-				copyResponseData(proxyResponse, response)
-				interceptor?.interceptResponse(requestWrapper, response)
+				copyResponseData(proxyResponse, responseWrapper)
+				interceptor?.interceptResponse(requestWrapper, responseWrapper)
 			} catch (SocketTimeoutException e) {
 				log.error "timed out connecting to $request.requestLine.uri"
 				response.statusCode = HTTP_GATEWAY_TIMEOUT
@@ -86,43 +87,50 @@ class HttpProxyHandler implements HttpRequestHandler {
 		log.debug "proxied request complete with response code ${response.statusLine.statusCode}..."
 	}
 
-	private HttpUriRequest createProxyRequest(HttpRequest request) {
-		def proxyRequest = request instanceof HttpEntityEnclosingRequest ? new EntityEnclosingRequestWrapper(request) : new RequestWrapper(request)
-		for (headerName in NO_PASS_HEADERS) {
-			proxyRequest.removeHeaders(headerName)
+	private HttpUriRequest createProxyRequest(Request request) {
+		def proxyRequest = newRequestInstance(request)
+		for (header in request.headers) {
+			if (!(header.key in NO_PASS_HEADERS)) {
+				for (value in header.value) {
+					proxyRequest.addHeader(header.key, value)
+				}
+			}
 		}
 		proxyRequest.addHeader(VIA, "Betamax")
+		if (request.hasBody()) {
+			proxyRequest.entity = new ByteArrayEntity(request.bodyAsBinary.bytes)
+		}
 
-		HttpConnectionParams.setConnectionTimeout(request.params, timeout)
-		HttpConnectionParams.setSoTimeout(request.params, timeout)
+		HttpConnectionParams.setConnectionTimeout(proxyRequest.params, timeout)
+		HttpConnectionParams.setSoTimeout(proxyRequest.params, timeout)
 
 		proxyRequest
 	}
 
-	private void copyResponseData(HttpResponse from, HttpResponse to) {
-		to.statusCode = from.statusLine.statusCode
-		for (header in from.allHeaders) {
-			if (!(header.name in NO_PASS_HEADERS)) {
-				to.addHeader(header)
-			}
-		}
-		if (from.entity) {
-			to.entity = copyEntity(from.entity)
+	HttpUriRequest newRequestInstance(Request request) {
+		switch (request.method) {
+			case "DELETE": return new HttpDelete(request.target.toString())
+			case "GET": return new HttpGet(request.target.toString())
+			case "HEAD": return new HttpHead(request.target.toString())
+			case "OPTIONS": return new HttpOptions(request.target.toString())
+			case "POST": return new HttpPost(request.target.toString())
+			case "PUT": return new HttpPut(request.target.toString())
+			case "TRACE": return new HttpTrace(request.target.toString())
 		}
 	}
 
-	private HttpEntity copyEntity(HttpEntity entity) {
-		if (entity.isRepeatable()) {
-			log.debug "re-using repeatable entity with content type ${entity.contentType?.value}..."
-			new HttpEntityWrapper(entity)
-		} else {
-			log.debug "copying non-repeatable entity ${entity.getClass().name} with content type ${entity.contentType?.value}..."
-			def copy = new ByteArrayEntity(EntityUtils.toByteArray(entity))
-			copy.chunked = entity.chunked
-			copy.contentEncoding = entity.contentEncoding
-			copy.contentType = entity.contentType
-			log.debug "copied entity..."
-			copy
+	private void copyResponseData(HttpResponse from, Response to) {
+		to.status = from.statusLine.statusCode
+		to.reason = from.statusLine.reasonPhrase
+		for (header in from.allHeaders) {
+			if (!(header.name in NO_PASS_HEADERS)) {
+				to.addHeader(header.name, header.value)
+			}
+		}
+		if (from.entity) {
+			to.outputStream.withStream {
+				it << from.entity.content
+			}
 		}
 	}
 

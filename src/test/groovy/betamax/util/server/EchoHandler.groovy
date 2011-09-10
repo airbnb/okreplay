@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package betamax.util
+package betamax.util.server
 
 import org.apache.log4j.Logger
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
+import static java.net.HttpURLConnection.HTTP_OK
 import java.util.zip.*
 import javax.servlet.http.*
+import static org.eclipse.jetty.http.HttpHeaders.*
 
 class EchoHandler extends AbstractHandler {
 
@@ -28,7 +30,7 @@ class EchoHandler extends AbstractHandler {
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.debug "received $request.method request for $target"
-		response.status = java.net.HttpURLConnection.HTTP_OK
+		response.status = HTTP_OK
 		response.contentType = "text/plain"
 
 		getResponseWriter(request, response).withWriter { writer ->
@@ -52,16 +54,19 @@ class EchoHandler extends AbstractHandler {
 
 	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
 		def out
-		def acceptedEncodings = request.getHeader(org.eclipse.jetty.http.HttpHeaders.ACCEPT_ENCODING)?.tokenize(",")
+		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(",")
 		log.debug "request accepts $acceptedEncodings"
 		if ("gzip" in acceptedEncodings) {
-			response.addHeader(org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING, "gzip")
+			log.debug "gzipping..."
+			response.addHeader(CONTENT_ENCODING, "gzip")
 			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
 		} else if ("deflate" in acceptedEncodings) {
-			response.addHeader(org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING, "deflate")
+			log.debug "deflating..."
+			response.addHeader(CONTENT_ENCODING, "deflate")
 			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
 		} else {
-			response.addHeader(org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING, "none")
+			log.debug "not encoding..."
+			response.addHeader(CONTENT_ENCODING, "none")
 			out = response.writer
 		}
 		out

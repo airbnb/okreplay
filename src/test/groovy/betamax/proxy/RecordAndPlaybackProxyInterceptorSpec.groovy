@@ -1,19 +1,18 @@
 package betamax.proxy
 
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.message.BasicHttpResponse
 import spock.lang.Specification
 import betamax.*
+
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
-import org.apache.http.*
-import static org.apache.http.HttpVersion.HTTP_1_1
+import betamax.util.message.BasicResponse
+import betamax.util.message.BasicRequest
 
 class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 
 	Recorder recorder = Mock(Recorder)
 	VetoingProxyInterceptor interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
-	HttpRequest request = new HttpGet("http://robfletcher.github.com/betamax")
-	HttpResponse response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+	Request request = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
+	Response response = new BasicResponse(status: 200, reason: "OK")
 
 	def "does not veto a request when no matching recording is found on tape"() {
 		given:
@@ -61,7 +60,7 @@ class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 		veto
 
 		and:
-		response.statusLine.statusCode == HTTP_FORBIDDEN
+		response.status == HTTP_FORBIDDEN
 	}
 
 	def "does not veto a request if the tape is not readable"() {
@@ -96,7 +95,7 @@ class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 		veto
 
 		and:
-		response.statusLine.statusCode == HTTP_FORBIDDEN
+		response.status == HTTP_FORBIDDEN
 	}
 
 	def "records response when intercepted"() {

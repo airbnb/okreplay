@@ -3,10 +3,12 @@ package betamax
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
-import betamax.util.*
+
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import org.junit.*
+import betamax.util.server.SimpleServer
+import betamax.util.server.EchoHandler
 
 class AnnotationTest {
 

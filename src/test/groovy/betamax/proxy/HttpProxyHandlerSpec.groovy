@@ -12,6 +12,7 @@ import org.apache.http.client.*
 import org.apache.http.client.methods.*
 
 import betamax.util.RequestCapturingMockHttpClient
+import betamax.proxy.httpcore.HttpProxyHandler
 
 class HttpProxyHandlerSpec extends Specification {
 
@@ -63,7 +64,7 @@ class HttpProxyHandlerSpec extends Specification {
 
 		then:
 		response.statusLine.statusCode == upstreamResponse.statusLine.statusCode
-		response.getFirstHeader(CACHE_CONTROL) == upstreamResponse.getFirstHeader(CACHE_CONTROL)
+		response.getFirstHeader(CACHE_CONTROL).value == upstreamResponse.getFirstHeader(CACHE_CONTROL).value
 		response.entity.content.text == upstreamResponse.entity.content.text
 	}
 
@@ -81,7 +82,7 @@ class HttpProxyHandlerSpec extends Specification {
 		handler.handle(postRequest, response, null)
 
 		then:
-		client.lastRequest.getFirstHeader(IF_NONE_MATCH) == postRequest.getFirstHeader(IF_NONE_MATCH)
+		client.lastRequest.getFirstHeader(IF_NONE_MATCH).value == postRequest.getFirstHeader(IF_NONE_MATCH).value
 		client.lastRequest.entity.content.text == postRequest.entity.content.text
 	}
 

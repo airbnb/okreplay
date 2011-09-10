@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package betamax.proxy
+package betamax.util.message
 
-interface VetoingProxyInterceptor {
+import betamax.proxy.Request
 
-	boolean interceptRequest(Request request, Response response)
+class BasicRequest extends BasicMessage implements Request {
 
-	void interceptResponse(Request request, Response response)
+	String method
+	URI target
+
+	BasicRequest() { }
+
+	BasicRequest(String method, String target) {
+		this.method = method
+		this.target = target.toURI()
+	}
+
+	@Override
+	protected OutputStream initOutputStream() {
+		throw new UnsupportedOperationException()
+	}
 
 }

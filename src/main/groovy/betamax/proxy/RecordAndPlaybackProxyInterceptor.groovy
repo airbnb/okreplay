@@ -19,7 +19,6 @@ package betamax.proxy
 import betamax.Recorder
 import org.apache.log4j.Logger
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
-import org.apache.http.*
 
 class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 
@@ -35,12 +34,12 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 		this.recorder = recorder
 	}
 
-	boolean interceptRequest(HttpRequest request, HttpResponse response) {
+	boolean interceptRequest(Request request, Response response) {
 		def tape = recorder.tape
 		if (!tape) {
 			log.error "no tape inserted..."
-			response.statusCode = HTTP_FORBIDDEN
-			response.reasonPhrase = "No tape"
+			response.status = HTTP_FORBIDDEN
+			response.reason = "No tape"
 			true
 		} else if (tape.seek(request) && tape.isReadable()) {
 			log.info "playing back from tape '$tape.name'..."
@@ -48,17 +47,17 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 			response.addHeader(X_BETAMAX, "PLAY")
 			true
 		} else if (!tape.isWritable()) {
-			response.statusCode = HTTP_FORBIDDEN
-			response.reasonPhrase = "Tape is read-only"
+			response.status = HTTP_FORBIDDEN
+			response.reason = "Tape is read-only"
 			true
 		} else {
 			false
 		}
 	}
 
-	void interceptResponse(HttpRequest request, HttpResponse response) {
+	void interceptResponse(Request request, Response response) {
 		def tape = recorder.tape
-		log.info "recording response with status $response.statusLine to tape '$tape.name'..."
+		log.info "recording response with status $response.status to tape '$tape.name'..."
 		tape.record(request, response)
 		log.info "recording complete..."
 		response.addHeader(X_BETAMAX, "REC")

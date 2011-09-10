@@ -1,4 +1,4 @@
-package betamax.util
+package betamax.util.server
 
 import java.util.concurrent.CountDownLatch
 import org.apache.log4j.Logger
