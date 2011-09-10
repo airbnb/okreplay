@@ -24,24 +24,46 @@ interface Message {
 	/**
 	 * @return all HTTP headers attached to this message.
 	 */
-    Map<String, List<String>> getHeaders()
+	Map<String, List<String>> getHeaders()
 
 	/**
 	 * @param name an HTTP header name.
 	 * @return values for all HTTP headers with the specified name or an empty list if there are no headers with that name.
 	 */
-    List<String> getHeaders(String name)
+	List<String> getHeaders(String name)
 
 	/**
 	 * @param name an HTTP header name.
 	 * @return the value for the first HTTP header with the specified name or `null` if there are no headers with that name.
 	 */
-    String getFirstHeader(String name)
+	String getFirstHeader(String name)
 
-    void addHeader(String name, String value)
+	/**
+	 * Adds a header to this message. Multiple headers with the same name can be added to the message.
+	 * @param name the header name.
+	 * @param value the header value.
+	 */
+	void addHeader(String name, String value)
 
+	/**
+	 * @return `true` if the message currently contains a body, `false` otherwise.
+	 */
 	boolean hasBody()
-    Reader getBodyAsText()
-    InputStream getBodyAsBinary()
+
+	/**
+	 * Returns the message body as a string. If the message body is encoded then the implementation must decode it
+	 * before converting it to a string.
+	 * @return the message body as a string.
+	 * @throws IllegalStateException if the message does not have a body.
+	 */
+	Reader getBodyAsText()
+
+	/**
+	 * Returns the message body in its raw binary form. If the body is encoded then the implementation should return the
+	 * encoded data _without_ decoding it first.
+	 * @return the message body as binary data.
+	 * @throws IllegalStateException if the message does not have a body.
+	 */
+	InputStream getBodyAsBinary()
 
 }

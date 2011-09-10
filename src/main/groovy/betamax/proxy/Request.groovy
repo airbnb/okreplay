@@ -18,8 +18,14 @@ package betamax.proxy
 
 interface Request extends Message {
 
-    String getMethod()
-    URI getTarget()
-    boolean hasBody()
+	/**
+	 * @return the request method.
+	 */
+	String getMethod()
+
+	/**
+	 * @return the target URI of the request.
+	 */
+	URI getTarget()
 
 }

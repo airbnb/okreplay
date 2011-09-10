@@ -18,18 +18,37 @@ package betamax.proxy
 
 interface Response extends Message {
 
+	/**
+	 * @return the HTTP status code of the response.
+	 */
     int getStatus()
 
     void setStatus(int status)
 
+	/**
+	 * @return the reason string corresponding to the HTTP status code.
+	 */
     String getReason()
 
     void setReason(String reason)
 
+	/**
+	 * @return the content MIME type of the response.
+	 */
     String getContentType()
 
+	/**
+	 * Returns a stream that can be used to write data to the response body. If the response body should be encoded then
+	 * this method must return an `OutputStream` implementation that will handle the encoding.
+	 * @return a stream for writing data to the response body.
+	 */
     OutputStream getOutputStream()
 
+	/**
+	 * Returns a `Writer` that can be used to write text to the response body. If the response body should be encoded
+	 * then this method must return a `Writer` implementation that will handle the encoding.
+	 * @return a writer for writing text to the response body.
+	 */
     Writer getWriter()
 
 }
