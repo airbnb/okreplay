@@ -1,16 +1,13 @@
 package betamax.proxy.httpcore
 
-import org.apache.http.entity.ByteArrayEntity
 import betamax.encoding.*
 import org.apache.http.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 import org.apache.http.client.methods.*
+import org.apache.http.entity.*
 import org.apache.http.message.*
 import spock.lang.*
-import org.apache.commons.codec.StringEncoder
-import org.apache.http.entity.StringEntity
-import org.apache.http.entity.BasicHttpEntity
 
 class HttpCoreMessageImplSpec extends Specification {
 
