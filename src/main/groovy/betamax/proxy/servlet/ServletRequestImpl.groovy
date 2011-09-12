@@ -55,7 +55,7 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 		for (headerName in delegate.headerNames) {
 			headers[headerName] = delegate.getHeaders(headerName).toList()
 		}
-		headers
+		headers.asImmutable()
 	}
 
 	@Override
@@ -64,7 +64,7 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	void addHeader(String name, String value) {
-		//To change body of implemented methods use File | Settings | File Templates.
+		delegate.addHeader(name, value)
 	}
 
 	boolean hasBody() {
@@ -72,7 +72,7 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	InputStream getBodyAsBinary() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.inputStream
 	}
 
 

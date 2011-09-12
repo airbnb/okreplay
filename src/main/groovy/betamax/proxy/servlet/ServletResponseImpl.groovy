@@ -28,11 +28,11 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	int getStatus() {
-		return 0  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.status
 	}
 
 	void setStatus(int status) {
-		//To change body of implemented methods use File | Settings | File Templates.
+		delegate.status = status
 	}
 
 	@Override

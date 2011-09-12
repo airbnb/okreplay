@@ -1,24 +1,19 @@
 package betamax.proxy.servlet
 
-import betamax.encoding.*
-import org.apache.http.*
-import spock.lang.*
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import org.apache.commons.collections.EnumerationUtils
 import org.apache.commons.collections.iterators.IteratorEnumeration
+import spock.lang.Specification
+import betamax.util.servlet.*
+import static javax.servlet.http.HttpServletResponse.SC_OK
 
 class ServletMessageImplSpec extends Specification {
-	
-//	HttpServletRequest getRequest = new HttpServletRequest("http://robfletcher.github.com/betamax")
-//	HttpServletRequest postRequest = new HttpServletRequest("http://robfletcher.github.com/betamax")
-//	HttpServletResponse successResponse = new HttpServletResponse(HTTP_1_1, 200, "OK")
+
+	MockHttpServletRequest getRequest = new MockHttpServletRequest(method: "GET")
+	MockHttpServletRequest postRequest = new MockHttpServletRequest(method: "POST")
+	MockHttpServletResponse successResponse = new MockHttpServletResponse(status: SC_OK, message: "OK")
 
 	def "request can read basic fields"() {
 		given:
-		HttpServletRequest getRequest = Mock(HttpServletRequest)
-		getRequest.method >> "GET"
-		getRequest.requestURL >> new StringBuffer("http://robfletcher.github.com/betamax")
 		def request = new ServletRequestImpl(getRequest)
 
 		expect:
@@ -28,10 +23,9 @@ class ServletMessageImplSpec extends Specification {
 
 	def "request can read headers"() {
 		given:
-		HttpServletRequest getRequest = Mock(HttpServletRequest)
-		getRequest.getHeaderNames() >> new IteratorEnumeration(["If-None-Match", "Accept-Encoding"].iterator())
-		getRequest.getHeaders("If-None-Match") >> new IteratorEnumeration(["abc123"].iterator())
-		getRequest.getHeaders("Accept-Encoding") >> new IteratorEnumeration(["gzip", "deflate"].iterator())
+		getRequest.setHeader("If-None-Match", "abc123")
+		getRequest.addHeader("Accept-Encoding", "gzip")
+		getRequest.addHeader("Accept-Encoding", "deflate")
 
 		and:
 		def request = new ServletRequestImpl(getRequest)
@@ -41,77 +35,79 @@ class ServletMessageImplSpec extends Specification {
 		request.getHeaders("Accept-Encoding") == ["gzip", "deflate"]
 	}
 
-//	def "request headers are immutable"() {
-//		given:
-//		def request = new ServletRequestImpl(getRequest)
-//
-//		when:
-//		request.headers["If-None-Match"] = ["abc123"]
-//
-//		then:
-//		thrown UnsupportedOperationException
-//	}
-//
-//	def "request can add headers"() {
-//		given:
-//		getRequest.addHeader("Accept-Encoding", "gzip")
-//
-//		and:
-//		def request = new ServletRequestImpl(getRequest)
-//
-//		when:
-//		request.addHeader("If-None-Match", "abc123")
-//		request.addHeader("Accept-Encoding", "deflate")
-//
-//		then:
-//		getRequest.getFirstHeader("If-None-Match").value == "abc123"
-//		getRequest.getHeaders("Accept-Encoding")*.value == ["gzip", "deflate"]
-//	}
-//
-//	def "request body is not readable if there is no body"() {
-//		given:
-//		def request = new ServletRequestImpl(getRequest)
-//
-//		when:
-//		request.bodyAsText
-//
-//		then:
-//		thrown UnsupportedOperationException
-//	}
-//
-//	def "request body is readable as text"() {
-//		given:
-//		postRequest.entity = new ByteArrayEntity("value=£1".getBytes("ISO-8859-1"))
-//		postRequest.entity.contentType = new BasicHeader(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=ISO-8859-1")
-//
-//		and:
-//		def request = new ServletRequestImpl(postRequest)
-//
-//		expect:
-//		request.bodyAsText.text == "value=£1"
-//	}
-//
-//	def "request body is readable as binary"() {
-//		given:
-//		postRequest.entity = new ByteArrayEntity("value=£1".getBytes("ISO-8859-1"))
-//		postRequest.entity.contentType = new BasicHeader(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=ISO-8859-1")
-//
-//		and:
-//		def request = new ServletRequestImpl(postRequest)
-//
-//		expect:
-//		request.bodyAsBinary.text == "value=£1"
-//	}
-//
-//	def "response can read basic fields"() {
-//		given:
-//		def response = new HttpCoreResponseImpl(successResponse)
-//
-//		expect:
-//		response.status == 200
-//		response.reason == "OK"
-//	}
-//
+	def "request headers are immutable"() {
+		given:
+		def request = new ServletRequestImpl(getRequest)
+
+		when:
+		request.headers["If-None-Match"] = ["abc123"]
+
+		then:
+		thrown UnsupportedOperationException
+	}
+
+	def "request can add headers"() {
+		given:
+		getRequest.addHeader("Accept-Encoding", "gzip")
+
+		and:
+		def request = new ServletRequestImpl(getRequest)
+
+		when:
+		request.addHeader("If-None-Match", "abc123")
+		request.addHeader("Accept-Encoding", "deflate")
+
+		then:
+		getRequest.getHeader("If-None-Match") == "abc123"
+		getRequest.getHeader("Accept-Encoding") == "gzip, deflate"
+	}
+
+	def "request body is not readable if there is no body"() {
+		given:
+		def request = new ServletRequestImpl(getRequest)
+
+		when:
+		request.bodyAsText
+
+		then:
+		thrown UnsupportedOperationException
+	}
+
+	def "request body is readable as text"() {
+		given:
+		postRequest.body = "value=\u00a31".getBytes("ISO-8859-1")
+		postRequest.contentType = "application/x-www-form-urlencoded"
+		postRequest.characterEncoding = "ISO-8859-1"
+
+		and:
+		def request = new ServletRequestImpl(postRequest)
+
+		expect:
+		request.bodyAsText.text == "value=\u00a31"
+	}
+
+	def "request body is readable as binary"() {
+		given:
+		postRequest.body = "value=\u00a31".getBytes("ISO-8859-1")
+		postRequest.contentType = "application/x-www-form-urlencoded"
+		postRequest.characterEncoding = "ISO-8859-1"
+
+		and:
+		def request = new ServletRequestImpl(postRequest)
+
+		expect:
+		request.bodyAsBinary.bytes == "value=\u00a31".getBytes("ISO-8859-1")
+	}
+
+	def "response can read basic fields"() {
+		given:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.status == 200
+		response.reason == "OK"
+	}
+
 //	def "response can read headers"() {
 //		given:
 //		successResponse.addHeader(ETAG, "abc123")
@@ -119,7 +115,7 @@ class ServletMessageImplSpec extends Specification {
 //		successResponse.addHeader(VARY, "Content-Type")
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		expect:
 //		response.getFirstHeader(ETAG) == "abc123"
@@ -128,7 +124,7 @@ class ServletMessageImplSpec extends Specification {
 //
 //	def "response headers are immutable"() {
 //		given:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		when:
 //		response.headers[ETAG] = ["abc123"]
@@ -142,7 +138,7 @@ class ServletMessageImplSpec extends Specification {
 //		successResponse.addHeader(VARY, "Content-Language")
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		when:
 //		response.addHeader(ETAG, "abc123")
@@ -155,7 +151,7 @@ class ServletMessageImplSpec extends Specification {
 //
 //	def "response body is not readable if there is no body"() {
 //		given:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		when:
 //		response.bodyAsText
@@ -166,51 +162,51 @@ class ServletMessageImplSpec extends Specification {
 //
 //	def "response body is readable as text"() {
 //		given:
-//		successResponse.entity = new ByteArrayEntity("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1"))
+//		successResponse.entity = new ByteArrayEntity("O HAI! ï¿½1 KTHXBYE".getBytes("ISO-8859-1"))
 //		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		expect:
-//		response.bodyAsText.text == "O HAI! £1 KTHXBYE"
+//		response.bodyAsText.text == "O HAI! ï¿½1 KTHXBYE"
 //	}
 //
 //	def "response body is readable as binary"() {
 //		given:
-//		successResponse.entity = new ByteArrayEntity("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1"))
+//		successResponse.entity = new ByteArrayEntity("O HAI! ï¿½1 KTHXBYE".getBytes("ISO-8859-1"))
 //		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		expect:
-//		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
+//		response.bodyAsBinary.text == "O HAI! ï¿½1 KTHXBYE"
 //	}
 //
 //	def "response body can be re-read even if underlying entity is not repeatable"() {
 //		given:
-//		successResponse.entity = new BasicHttpEntity(content: new ByteArrayInputStream("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1")))
+//		successResponse.entity = new BasicHttpEntity(content: new ByteArrayInputStream("O HAI! ï¿½1 KTHXBYE".getBytes("ISO-8859-1")))
 //		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //
 //		expect:
-//		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
-//		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
+//		response.bodyAsBinary.text == "O HAI! ï¿½1 KTHXBYE"
+//		response.bodyAsBinary.text == "O HAI! ï¿½1 KTHXBYE"
 //	}
 //
 //	@Unroll("#encoding encoded response body is not decoded when read as binary")
 //	def "encoded response body is not decoded when read as binary"() {
 //		given:
-//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! £1 KTHXBYE", "ISO-8859-1"))
+//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! ï¿½1 KTHXBYE", "ISO-8859-1"))
 //		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 //		successResponse.entity.contentEncoding = new BasicHeader(CONTENT_ENCODING, encoding)
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		expect:
 //		response.bodyAsBinary.bytes == successResponse.entity.content.bytes
@@ -228,15 +224,15 @@ class ServletMessageImplSpec extends Specification {
 //		def encodingHeader = new BasicHeader(CONTENT_ENCODING, encoding)
 //		successResponse.addHeader(contentTypeHeader)
 //		successResponse.addHeader(encodingHeader)
-//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! £1 KTHXBYE", "ISO-8859-1"))
+//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! ï¿½1 KTHXBYE", "ISO-8859-1"))
 //		successResponse.entity.contentType = contentTypeHeader
 //		successResponse.entity.contentEncoding = encodingHeader
 //
 //		and:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		expect:
-//		response.bodyAsText.text == "O HAI! £1 KTHXBYE"
+//		response.bodyAsText.text == "O HAI! ï¿½1 KTHXBYE"
 //
 //		where:
 //		encoding  | encoder
@@ -246,31 +242,31 @@ class ServletMessageImplSpec extends Specification {
 //
 //	def "can write to response body"() {
 //		given:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //		response.addHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 //
 //		when:
 //		response.writer.withWriter {
-//			it << "O HAI! £1 KTHXBYE"
+//			it << "O HAI! ï¿½1 KTHXBYE"
 //		}
 //
 //		then:
-//		successResponse.entity.content.bytes == "O HAI! £1 KTHXBYE".getBytes("ISO-8859-1")
+//		successResponse.entity.content.bytes == "O HAI! ï¿½1 KTHXBYE".getBytes("ISO-8859-1")
 //	}
 //
 //	@Unroll("response body is #encoding encoded when written")
 //	def "response body is encoded when written"() {
 //		given:
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //		response.addHeader(CONTENT_ENCODING, encoding)
 //
 //		when:
 //		response.writer.withWriter {
-//			it << "O HAI! £1 KTHXBYE"
+//			it << "O HAI! ï¿½1 KTHXBYE"
 //		}
 //
 //		then:
-//		successResponse.entity.content.bytes == encoder.encode("O HAI! £1 KTHXBYE")
+//		successResponse.entity.content.bytes == encoder.encode("O HAI! ï¿½1 KTHXBYE")
 //
 //		where:
 //		encoding  | encoder
@@ -282,10 +278,10 @@ class ServletMessageImplSpec extends Specification {
 //		given:
 //		successResponse.entity = new StringEntity("KTHXBYE", "text/plain", "ISO-8859-1")
 //
-//		def response = new HttpCoreResponseImpl(successResponse)
+//		def response = new ServletResponseImpl(successResponse)
 //
 //		when:
-//		response.writer << "O HAI! £1 KTHXBYE"
+//		response.writer << "O HAI! ï¿½1 KTHXBYE"
 //
 //		then:
 //		thrown IllegalStateException

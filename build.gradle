@@ -66,7 +66,7 @@ dependencies {
 		exclude module: "groovy"
 		exclude module: "httpclient"
 	}
-	testCompile "org.eclipse.jetty:jetty-server:8.0.0.RC0"
+	compile "org.eclipse.jetty:jetty-server:7.5.0.RC2"
 	testCompile "org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT"
 	testCompile "commons-httpclient:commons-httpclient:3.1"
 	testRuntime "cglib:cglib-nodep:2.2.2"
