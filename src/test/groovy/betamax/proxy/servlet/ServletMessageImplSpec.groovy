@@ -1,10 +1,9 @@
 package betamax.proxy.servlet
 
-import javax.servlet.http.HttpServletRequest
-import org.apache.commons.collections.iterators.IteratorEnumeration
-import spock.lang.Specification
+import betamax.encoding.*
 import betamax.util.servlet.*
 import static javax.servlet.http.HttpServletResponse.SC_OK
+import spock.lang.*
 
 class ServletMessageImplSpec extends Specification {
 
@@ -108,183 +107,180 @@ class ServletMessageImplSpec extends Specification {
 		response.reason == "OK"
 	}
 
-//	def "response can read headers"() {
-//		given:
-//		successResponse.addHeader(ETAG, "abc123")
-//		successResponse.addHeader(VARY, "Content-Language")
-//		successResponse.addHeader(VARY, "Content-Type")
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		expect:
-//		response.getFirstHeader(ETAG) == "abc123"
-//		response.getHeaders(VARY) == ["Content-Language", "Content-Type"]
-//	}
-//
-//	def "response headers are immutable"() {
-//		given:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		when:
-//		response.headers[ETAG] = ["abc123"]
-//
-//		then:
-//		thrown UnsupportedOperationException
-//	}
-//
-//	def "response can add headers"() {
-//		given:
-//		successResponse.addHeader(VARY, "Content-Language")
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		when:
-//		response.addHeader(ETAG, "abc123")
-//		response.addHeader(VARY, "Content-Type")
-//
-//		then:
-//		successResponse.getFirstHeader(ETAG).value == "abc123"
-//		successResponse.getHeaders(VARY)*.value == ["Content-Language", "Content-Type"]
-//	}
-//
-//	def "response body is not readable if there is no body"() {
-//		given:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		when:
-//		response.bodyAsText
-//
-//		then:
-//		thrown UnsupportedOperationException
-//	}
-//
-//	def "response body is readable as text"() {
-//		given:
-//		successResponse.entity = new ByteArrayEntity("O HAI! �1 KTHXBYE".getBytes("ISO-8859-1"))
-//		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		expect:
-//		response.bodyAsText.text == "O HAI! �1 KTHXBYE"
-//	}
-//
-//	def "response body is readable as binary"() {
-//		given:
-//		successResponse.entity = new ByteArrayEntity("O HAI! �1 KTHXBYE".getBytes("ISO-8859-1"))
-//		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		expect:
-//		response.bodyAsBinary.text == "O HAI! �1 KTHXBYE"
-//	}
-//
-//	def "response body can be re-read even if underlying entity is not repeatable"() {
-//		given:
-//		successResponse.entity = new BasicHttpEntity(content: new ByteArrayInputStream("O HAI! �1 KTHXBYE".getBytes("ISO-8859-1")))
-//		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//
-//		expect:
-//		response.bodyAsBinary.text == "O HAI! �1 KTHXBYE"
-//		response.bodyAsBinary.text == "O HAI! �1 KTHXBYE"
-//	}
-//
-//	@Unroll("#encoding encoded response body is not decoded when read as binary")
-//	def "encoded response body is not decoded when read as binary"() {
-//		given:
-//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! �1 KTHXBYE", "ISO-8859-1"))
-//		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//		successResponse.entity.contentEncoding = new BasicHeader(CONTENT_ENCODING, encoding)
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		expect:
-//		response.bodyAsBinary.bytes == successResponse.entity.content.bytes
-//
-//		where:
-//		encoding  | encoder
-//		"gzip"    | new GzipEncoder()
-//		"deflate" | new DeflateEncoder()
-//	}
-//
-//	@Unroll("#encoding encoded response body is readable as text")
-//	def "encoded response body is readable as text"() {
-//		given:
-//		def contentTypeHeader = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//		def encodingHeader = new BasicHeader(CONTENT_ENCODING, encoding)
-//		successResponse.addHeader(contentTypeHeader)
-//		successResponse.addHeader(encodingHeader)
-//		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! �1 KTHXBYE", "ISO-8859-1"))
-//		successResponse.entity.contentType = contentTypeHeader
-//		successResponse.entity.contentEncoding = encodingHeader
-//
-//		and:
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		expect:
-//		response.bodyAsText.text == "O HAI! �1 KTHXBYE"
-//
-//		where:
-//		encoding  | encoder
-//		"gzip"    | new GzipEncoder()
-//		"deflate" | new DeflateEncoder()
-//	}
-//
-//	def "can write to response body"() {
-//		given:
-//		def response = new ServletResponseImpl(successResponse)
-//		response.addHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
-//
-//		when:
-//		response.writer.withWriter {
-//			it << "O HAI! �1 KTHXBYE"
-//		}
-//
-//		then:
-//		successResponse.entity.content.bytes == "O HAI! �1 KTHXBYE".getBytes("ISO-8859-1")
-//	}
-//
-//	@Unroll("response body is #encoding encoded when written")
-//	def "response body is encoded when written"() {
-//		given:
-//		def response = new ServletResponseImpl(successResponse)
-//		response.addHeader(CONTENT_ENCODING, encoding)
-//
-//		when:
-//		response.writer.withWriter {
-//			it << "O HAI! �1 KTHXBYE"
-//		}
-//
-//		then:
-//		successResponse.entity.content.bytes == encoder.encode("O HAI! �1 KTHXBYE")
-//
-//		where:
-//		encoding  | encoder
-//		"gzip"    | new GzipEncoder()
-//		"deflate" | new DeflateEncoder()
-//	}
-//
-//	def "cannot write to response body if the response already has an entity"() {
-//		given:
-//		successResponse.entity = new StringEntity("KTHXBYE", "text/plain", "ISO-8859-1")
-//
-//		def response = new ServletResponseImpl(successResponse)
-//
-//		when:
-//		response.writer << "O HAI! �1 KTHXBYE"
-//
-//		then:
-//		thrown IllegalStateException
-//	}
+	def "response can read headers"() {
+		given:
+		successResponse.addHeader("E-Tag", "abc123")
+		successResponse.addHeader("Vary", "Content-Language")
+		successResponse.addHeader("Vary", "Content-Type")
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.getFirstHeader("E-Tag") == "abc123"
+		response.getHeaders("Vary") == ["Content-Language", "Content-Type"]
+	}
+
+	def "response headers are immutable"() {
+		given:
+		def response = new ServletResponseImpl(successResponse)
+
+		when:
+		response.headers["E-Tag"] = ["abc123"]
+
+		then:
+		thrown UnsupportedOperationException
+	}
+
+	def "response can add headers"() {
+		given:
+		successResponse.addHeader("Vary", "Content-Language")
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		when:
+		response.addHeader("E-Tag", "abc123")
+		response.addHeader("Vary", "Content-Type")
+
+		then:
+		successResponse.getHeader("E-Tag") == "abc123"
+		successResponse.getHeader("Vary") == "Content-Language, Content-Type"
+	}
+
+	def "response body is not readable if there is no body"() {
+		given:
+		def response = new ServletResponseImpl(successResponse)
+
+		when:
+		response.bodyAsText
+
+		then:
+		thrown UnsupportedOperationException
+	}
+
+	def "response body is readable as text"() {
+		given:
+		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+		successResponse.characterEncoding = "ISO-8859-1"
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
+	}
+
+	def "response body is readable as binary"() {
+		given:
+		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+		successResponse.characterEncoding = "ISO-8859-1"
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
+	}
+
+	def "response body can be re-read even if underlying entity is not repeatable"() {
+		given:
+		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+		successResponse.characterEncoding = "ISO-8859-1"
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+
+		expect:
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
+	}
+
+	@Unroll("#encoding encoded response body is not decoded when read as binary")
+	def "encoded response body is not decoded when read as binary"() {
+		given:
+		successResponse.body = encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1")
+		successResponse.contentType = "text/plain;charset=ISO-8859-1"
+		successResponse.addHeader("Content-Encoding", encoding)
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.bodyAsBinary.bytes == successResponse.body
+
+		where:
+		encoding  | encoder
+		"gzip"    | new GzipEncoder()
+		"deflate" | new DeflateEncoder()
+	}
+
+	@Unroll("#encoding encoded response body is readable as text")
+	def "encoded response body is readable as text"() {
+		given:
+		successResponse.body = encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1")
+		successResponse.contentType = "text/plain;charset=ISO-8859-1"
+		successResponse.addHeader("Content-Encoding", encoding)
+
+		and:
+		def response = new ServletResponseImpl(successResponse)
+
+		expect:
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
+
+		where:
+		encoding  | encoder
+		"gzip"    | new GzipEncoder()
+		"deflate" | new DeflateEncoder()
+	}
+
+	def "can write to response body"() {
+		given:
+		def response = new ServletResponseImpl(successResponse)
+		response.addHeader("Content-Type", "text/plain;charset=ISO-8859-1")
+
+		when:
+		response.writer.withWriter {
+			it << "O HAI! \u00a31 KTHXBYE"
+		}
+
+		then:
+		successResponse.body == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+	}
+
+	@Unroll("response body is #encoding encoded when written")
+	def "response body is encoded when written"() {
+		given:
+		def response = new ServletResponseImpl(successResponse)
+		response.addHeader("Content-Encoding", encoding)
+
+		when:
+		response.writer.withWriter {
+			it << "O HAI! \u00a31 KTHXBYE"
+		}
+
+		then:
+		successResponse.body == encoder.encode("O HAI! \u00a31 KTHXBYE")
+
+		where:
+		encoding  | encoder
+		"gzip"    | new GzipEncoder()
+		"deflate" | new DeflateEncoder()
+	}
+
+	def "cannot write to response body if the response already has an entity"() {
+		given:
+		successResponse.body = "KTHXBYE".getBytes("ISO-8859-1")
+		successResponse.characterEncoding = "ISO-8859-1"
+
+		def response = new ServletResponseImpl(successResponse)
+
+		when:
+		response.writer << "O HAI! \u00a31 KTHXBYE"
+
+		then:
+		thrown IllegalStateException
+	}
 
 }

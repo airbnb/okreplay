@@ -37,17 +37,17 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 
 	@Override
 	String getContentType() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.contentType
 	}
 
 	@Override
 	String getCharset() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.characterEncoding
 	}
 
 	@Override
 	String getEncoding() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.getHeader("Content-Encoding")
 	}
 
 	String getReason() {
@@ -64,11 +64,11 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 
 	@Override
 	protected OutputStream initOutputStream() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.outputStream
 	}
 
 	void addHeader(String name, String value) {
-		//To change body of implemented methods use File | Settings | File Templates.
+		delegate.addHeader(name, value)
 	}
 
 	boolean hasBody() {
@@ -76,7 +76,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	InputStream getBodyAsBinary() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.inputStream
 	}
 
 }
