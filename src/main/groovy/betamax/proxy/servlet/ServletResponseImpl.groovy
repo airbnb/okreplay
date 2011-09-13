@@ -78,7 +78,6 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	void addHeader(String name, String value) {
-		delegate.addHeader(name, value)
 		if (headers.containsKey(name)) {
 			headers[name] << value
 		} else {
@@ -86,9 +85,9 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 		}
 
 		if (name == "Content-Type") {
-			def match = value =~ /^(.+?)(?:;\s*charset=(.+))?$/
-			delegate.contentType = match[0][1]
-			delegate.characterEncoding = match[0][2]
+			delegate.contentType = value
+		} else {
+			delegate.addHeader(name, value)
 		}
 	}
 

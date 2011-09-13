@@ -135,16 +135,18 @@ class ServletMessageImplSpec extends Specification {
 		1 * servletResponse.addHeader("Vary", "Content-Type")
 	}
 
-	def "content type header is handled"() {
+	def "content type header is handled by delegating to setContentType"() {
 		def response = new ServletResponseImpl(servletResponse)
 
 		when:
 		response.addHeader("Content-Type", "text/html; charset=ISO-8859-1")
 
 		then:
-		1 * servletResponse.addHeader("Content-Type", "text/html; charset=ISO-8859-1")
-		1 * servletResponse.setContentType("text/html")
-		1 * servletResponse.setCharacterEncoding("ISO-8859-1")
+		1 * servletResponse.setContentType("text/html; charset=ISO-8859-1")
+		0 * servletResponse.addHeader(_, _)
+
+		and:
+		response.getFirstHeader("Content-Type") == "text/html; charset=ISO-8859-1"
 	}
 
 	def "response headers are immutable"() {
