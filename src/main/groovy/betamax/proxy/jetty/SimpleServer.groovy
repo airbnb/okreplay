@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package betamax.util.server
+package betamax.proxy.jetty
 
 import java.util.concurrent.CountDownLatch
 import org.apache.log4j.Logger
@@ -32,8 +32,12 @@ class SimpleServer extends AbstractLifeCycleListener {
 	private final log = Logger.getLogger(SimpleServer)
 
 	SimpleServer() {
+		this(5000)
+	}
+
+	SimpleServer(int port) {
 		host = InetAddress.localHost.hostAddress
-		port = 5000
+		this.port = port
 	}
 
 	String getUrl() {
@@ -41,11 +45,15 @@ class SimpleServer extends AbstractLifeCycleListener {
 	}
 
 	void start(Class <? extends Handler> handlerClass) {
+		start handlerClass.newInstance()
+	}
+
+	void start(Handler handler) {
 		startedLatch = new CountDownLatch(1)
 		stoppedLatch = new CountDownLatch(1)
 
 		server = new Server(port)
-		server.handler = handlerClass.newInstance()
+		server.handler = handler
 		server.addLifeCycleListener(this)
 		server.start()
 

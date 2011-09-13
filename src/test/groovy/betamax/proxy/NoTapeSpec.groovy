@@ -8,7 +8,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import spock.lang.*
 import betamax.proxy.httpcore.HttpProxyServer
 import betamax.util.server.EchoHandler
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {

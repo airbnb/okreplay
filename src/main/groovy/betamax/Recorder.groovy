@@ -16,12 +16,13 @@
 
 package betamax
 
-import betamax.proxy.httpcore.HttpProxyServer
+import betamax.proxy.RecordAndPlaybackProxyInterceptor
 import betamax.tape.StorableTape
 import betamax.tape.yaml.YamlTapeLoader
 import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE
+import betamax.proxy.jetty.*
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
 
@@ -80,7 +81,7 @@ class Recorder implements MethodRule {
 	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
 	private StorableTape tape
-	private HttpProxyServer proxy = new HttpProxyServer()
+	private SimpleServer proxy = new SimpleServer(proxyPort)
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -134,10 +135,18 @@ class Recorder implements MethodRule {
 	 */
 	def withTape(String name, Map arguments, Closure closure) {
 		try {
-			proxy.start(this)
+			def handler = new ProxyHandler()
+			handler.interceptor = new RecordAndPlaybackProxyInterceptor(this)
+
+			proxy.start(handler)
+
 			insertTape(name, arguments.mode ?: defaultMode)
+
+			overrideProxySettings()
+
 			closure()
 		} finally {
+			restoreOriginalProxySettings()
 			proxy.stop()
 			ejectTape()
 		}
@@ -170,7 +179,6 @@ class Recorder implements MethodRule {
 		proxyTimeout = properties.getProperty("betamax.proxyTimeout")?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
 		def defaultModeValue = properties.getProperty("betamax.defaultMode")
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
-
 	}
 
 	private void configureFromConfig(ConfigObject config) {
@@ -178,6 +186,29 @@ class Recorder implements MethodRule {
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
+	}
+
+	private originalProxyHost
+	private originalProxyPort
+
+	private void overrideProxySettings() {
+		originalProxyHost = System.properties."http.proxyHost"
+		originalProxyPort = System.properties."http.proxyPort"
+		System.properties."http.proxyHost" = "localhost"
+		System.properties."http.proxyPort" = proxyPort.toString()
+	}
+
+	private void restoreOriginalProxySettings() {
+		if (originalProxyHost) {
+			System.properties."http.proxyHost" = originalProxyHost
+		} else {
+			System.clearProperty("http.proxyHost")
+		}
+		if (originalProxyPort) {
+			System.properties."http.proxyPort" = originalProxyPort
+		} else {
+			System.clearProperty("http.proxyPort")
+		}
 	}
 
 }

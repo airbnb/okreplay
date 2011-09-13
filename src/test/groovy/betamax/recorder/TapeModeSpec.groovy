@@ -8,7 +8,7 @@ import static betamax.TapeMode.*
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.*
 import spock.lang.*
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 import betamax.util.server.EchoHandler
 
 class TapeModeSpec extends Specification {

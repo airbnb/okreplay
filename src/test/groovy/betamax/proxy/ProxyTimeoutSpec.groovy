@@ -8,7 +8,7 @@ import betamax.*
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 import spock.lang.*
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 import betamax.util.server.SlowHandler
 
 @Issue("https://github.com/robfletcher/betamax/issues/20")

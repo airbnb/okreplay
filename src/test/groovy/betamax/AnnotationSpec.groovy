@@ -8,7 +8,7 @@ import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 import betamax.util.server.EchoHandler
 
 @Stepwise

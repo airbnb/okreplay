@@ -13,7 +13,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 import spock.lang.*
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 import betamax.util.server.EchoHandler
 
 class ProxyNetworkCommsSpec extends Specification {

@@ -8,7 +8,7 @@ import org.yaml.snakeyaml.Yaml
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
 import betamax.proxy.httpcore.HttpProxyServer
-import betamax.util.server.SimpleServer
+import betamax.proxy.jetty.SimpleServer
 import betamax.util.server.EchoHandler
 
 @Stepwise
