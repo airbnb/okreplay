@@ -32,6 +32,7 @@ interface Message {
 	 */
 	List<String> getHeaders(String name)
 
+	// TODO: replace with a method that joins headers into comma-separated string
 	/**
 	 * @param name an HTTP header name.
 	 * @return the value for the first HTTP header with the specified name or `null` if there are no headers with that name.

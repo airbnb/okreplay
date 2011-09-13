@@ -22,17 +22,21 @@ import betamax.proxy.*
 class ServletResponseImpl extends AbstractMessage implements Response {
 
 	private final HttpServletResponse delegate
+	private int status
+	private final Map<String, List<String>> headers = [:]
+	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
 
 	ServletResponseImpl(HttpServletResponse delegate) {
 		this.delegate = delegate
 	}
 
 	int getStatus() {
-		delegate.status
+		status
 	}
 
 	void setStatus(int status) {
 		delegate.status = status
+		this.status = status
 	}
 
 	@Override
@@ -47,14 +51,10 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 
 	@Override
 	String getEncoding() {
-		delegate.getHeader("Content-Encoding")
+		headers["Content-Encoding"]?.first()
 	}
 
 	String getReason() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	Map<String, List<String>> getHeaders() {
 		return null  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
@@ -62,13 +62,34 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 		//To change body of implemented methods use File | Settings | File Templates.
 	}
 
+	Map<String, List<String>> getHeaders() {
+		headers.asImmutable()
+	}
+
 	@Override
 	protected OutputStream initOutputStream() {
-		delegate.outputStream
+		new OutputStream() {
+			@Override
+			void write(int b) {
+				delegate.outputStream.write(b)
+				outputStream.write(b)
+			}
+		}
 	}
 
 	void addHeader(String name, String value) {
 		delegate.addHeader(name, value)
+		if (headers.containsKey(name)) {
+			headers[name] << value
+		} else {
+			headers[name] = [value]
+		}
+
+		if (name == "Content-Type") {
+			def match = value =~ /^(.+?)(?:;\s*charset=(.+))?$/
+			delegate.contentType = match[0][1]
+			delegate.characterEncoding = match[0][2]
+		}
 	}
 
 	boolean hasBody() {
@@ -76,7 +97,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	InputStream getBodyAsBinary() {
-		delegate.inputStream
+		new ByteArrayInputStream(outputStream.toByteArray())
 	}
 
 }

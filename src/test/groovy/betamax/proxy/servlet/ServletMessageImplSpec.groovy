@@ -1,15 +1,16 @@
 package betamax.proxy.servlet
 
+import betamax.util.servlet.MockHttpServletRequest
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletResponse
 import betamax.encoding.*
-import betamax.util.servlet.*
-import static javax.servlet.http.HttpServletResponse.SC_OK
 import spock.lang.*
 
 class ServletMessageImplSpec extends Specification {
 
 	MockHttpServletRequest getRequest = new MockHttpServletRequest(method: "GET")
 	MockHttpServletRequest postRequest = new MockHttpServletRequest(method: "POST")
-	MockHttpServletResponse successResponse = new MockHttpServletResponse(status: SC_OK, message: "OK")
+	HttpServletResponse servletResponse = Mock(HttpServletResponse)
 
 	def "request can read basic fields"() {
 		given:
@@ -100,30 +101,55 @@ class ServletMessageImplSpec extends Specification {
 
 	def "response can read basic fields"() {
 		given:
-		def response = new ServletResponseImpl(successResponse)
+		def response = new ServletResponseImpl(servletResponse)
 
-		expect:
+		when: "status and reason are set"
+		response.status = 200
+		response.reason = "OK"
+
+		then: "they can be retrieved again"
 		response.status == 200
 		response.reason == "OK"
+
+		and: "the underlying servlet response values are set"
+		1 * servletResponse.setStatus(200)
+		1 * servletResponse.setMessage("OK")
 	}
 
-	def "response can read headers"() {
+	def "response can add and read headers"() {
 		given:
-		successResponse.addHeader("E-Tag", "abc123")
-		successResponse.addHeader("Vary", "Content-Language")
-		successResponse.addHeader("Vary", "Content-Type")
+		def response = new ServletResponseImpl(servletResponse)
 
-		and:
-		def response = new ServletResponseImpl(successResponse)
+		when: "headers are added"
+		response.addHeader("E-Tag", "abc123")
+		response.addHeader("Vary", "Content-Language")
+		response.addHeader("Vary", "Content-Type")
 
-		expect:
+		then: "they can be retrieved again"
 		response.getFirstHeader("E-Tag") == "abc123"
 		response.getHeaders("Vary") == ["Content-Language", "Content-Type"]
+
+		and: "they are added to the underlying servlet response"
+		1 * servletResponse.addHeader("E-Tag", "abc123")
+		1 * servletResponse.addHeader("Vary", "Content-Language")
+		1 * servletResponse.addHeader("Vary", "Content-Type")
+	}
+
+	def "content type header is handled"() {
+		def response = new ServletResponseImpl(servletResponse)
+
+		when:
+		response.addHeader("Content-Type", "text/html; charset=ISO-8859-1")
+
+		then:
+		1 * servletResponse.addHeader("Content-Type", "text/html; charset=ISO-8859-1")
+		1 * servletResponse.setContentType("text/html")
+		1 * servletResponse.setCharacterEncoding("ISO-8859-1")
 	}
 
 	def "response headers are immutable"() {
 		given:
-		def response = new ServletResponseImpl(successResponse)
+		def response = new ServletResponseImpl(servletResponse)
 
 		when:
 		response.headers["E-Tag"] = ["abc123"]
@@ -132,25 +158,9 @@ class ServletMessageImplSpec extends Specification {
 		thrown UnsupportedOperationException
 	}
 
-	def "response can add headers"() {
-		given:
-		successResponse.addHeader("Vary", "Content-Language")
-
-		and:
-		def response = new ServletResponseImpl(successResponse)
-
-		when:
-		response.addHeader("E-Tag", "abc123")
-		response.addHeader("Vary", "Content-Type")
-
-		then:
-		successResponse.getHeader("E-Tag") == "abc123"
-		successResponse.getHeader("Vary") == "Content-Language, Content-Type"
-	}
-
 	def "response body is not readable if there is no body"() {
 		given:
-		def response = new ServletResponseImpl(successResponse)
+		def response = new ServletResponseImpl(servletResponse)
 
 		when:
 		response.bodyAsText
@@ -159,128 +169,101 @@ class ServletMessageImplSpec extends Specification {
 		thrown UnsupportedOperationException
 	}
 
-	def "response body is readable as text"() {
-		given:
-		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
-		successResponse.characterEncoding = "ISO-8859-1"
+	@Unroll("response body can be written to and read from as #charset text")
+	def "response body can be written to and read from as text"() {
+		given: "the underlying servlet response writer"
+		def servletOutputStream = new ByteArrayOutputStream()
+		servletResponse.getOutputStream() >> new ServletOutputStream() {
+			@Override
+			void write(int b) {
+				servletOutputStream.write(b)
+			}
+		}
+
+		and: "the underlying response charset has been set"
+		servletResponse.getCharacterEncoding() >> charset
 
 		and:
-		def response = new ServletResponseImpl(successResponse)
+		def response = new ServletResponseImpl(servletResponse)
 
-		expect:
-		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
-	}
-
-	def "response body is readable as binary"() {
-		given:
-		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
-		successResponse.characterEncoding = "ISO-8859-1"
-
-		and:
-		def response = new ServletResponseImpl(successResponse)
-
-		expect:
-		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
-	}
-
-	def "response body can be re-read even if underlying entity is not repeatable"() {
-		given:
-		successResponse.body = "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
-		successResponse.characterEncoding = "ISO-8859-1"
-
-		and:
-		def response = new ServletResponseImpl(successResponse)
-
-
-		expect:
-		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
-		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
-	}
-
-	@Unroll("#encoding encoded response body is not decoded when read as binary")
-	def "encoded response body is not decoded when read as binary"() {
-		given:
-		successResponse.body = encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1")
-		successResponse.contentType = "text/plain;charset=ISO-8859-1"
-		successResponse.addHeader("Content-Encoding", encoding)
-
-		and:
-		def response = new ServletResponseImpl(successResponse)
-
-		expect:
-		response.bodyAsBinary.bytes == successResponse.body
-
-		where:
-		encoding  | encoder
-		"gzip"    | new GzipEncoder()
-		"deflate" | new DeflateEncoder()
-	}
-
-	@Unroll("#encoding encoded response body is readable as text")
-	def "encoded response body is readable as text"() {
-		given:
-		successResponse.body = encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1")
-		successResponse.contentType = "text/plain;charset=ISO-8859-1"
-		successResponse.addHeader("Content-Encoding", encoding)
-
-		and:
-		def response = new ServletResponseImpl(successResponse)
-
-		expect:
-		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
-
-		where:
-		encoding  | encoder
-		"gzip"    | new GzipEncoder()
-		"deflate" | new DeflateEncoder()
-	}
-
-	def "can write to response body"() {
-		given:
-		def response = new ServletResponseImpl(successResponse)
-		response.addHeader("Content-Type", "text/plain;charset=ISO-8859-1")
-
-		when:
+		when: "the response is written to"
 		response.writer.withWriter {
 			it << "O HAI! \u00a31 KTHXBYE"
 		}
 
-		then:
-		successResponse.body == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+		then: "the content can be read back as text"
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
+
+		and: "the underlying servlet response is written to"
+		servletOutputStream.toByteArray() == "O HAI! \u00a31 KTHXBYE".getBytes(charset)
+
+		where:
+		charset << ["ISO-8859-1", "UTF-8"]
 	}
 
-	@Unroll("response body is #encoding encoded when written")
-	def "response body is encoded when written"() {
-		given:
-		def response = new ServletResponseImpl(successResponse)
+	def "response body can be written to and read from as binary"() {
+		given: "the underlying servlet response output stream"
+		def servletOutputStream = new ByteArrayOutputStream()
+		servletResponse.getOutputStream() >> new ServletOutputStream() {
+			@Override
+			void write(int b) {
+				servletOutputStream.write(b)
+			}
+		}
+
+		and:
+		def response = new ServletResponseImpl(servletResponse)
+
+		when: "the response is written to"
+		response.outputStream.withStream {
+			it << "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+		}
+
+		then: "the content can be read back as binary data"
+		response.bodyAsBinary.bytes == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+
+		and: "the underlying servlet response is written to"
+		servletOutputStream.toByteArray() == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
+	}
+
+	@Unroll("#encoding encoded response body with #charset charset can be written to and read from")
+	def "encoded response body can be written to and read from"() {
+		given: "the underlying servlet response output stream"
+		def servletOutputStream = new ByteArrayOutputStream()
+		servletResponse.getOutputStream() >> new ServletOutputStream() {
+			@Override
+			void write(int b) {
+				servletOutputStream.write(b)
+			}
+		}
+
+		and: "the underlying response charset has been set"
+		servletResponse.getCharacterEncoding() >> charset
+
+		and:
+		def response = new ServletResponseImpl(servletResponse)
+
+		when: "the response is written to"
 		response.addHeader("Content-Encoding", encoding)
-
-		when:
 		response.writer.withWriter {
 			it << "O HAI! \u00a31 KTHXBYE"
 		}
 
-		then:
-		successResponse.body == encoder.encode("O HAI! \u00a31 KTHXBYE")
+		then: "the content can be read back as encoded binary data"
+		response.bodyAsBinary.bytes == encoder.encode("O HAI! \u00a31 KTHXBYE", charset)
+
+		then: "the content can be read back as text"
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
+
+		and: "the underlying servlet response is written to"
+		servletOutputStream.toByteArray() == encoder.encode("O HAI! \u00a31 KTHXBYE", charset)
 
 		where:
-		encoding  | encoder
-		"gzip"    | new GzipEncoder()
-		"deflate" | new DeflateEncoder()
-	}
-
-	def "cannot write to response body if the response already has an entity"() {
-		given:
-		successResponse.body = "KTHXBYE".getBytes("ISO-8859-1")
-		successResponse.characterEncoding = "ISO-8859-1"
-
-		def response = new ServletResponseImpl(successResponse)
-
-		when:
-		response.writer << "O HAI! \u00a31 KTHXBYE"
-
-		then:
-		thrown IllegalStateException
+		encoding  | encoder              | charset
+		"gzip"    | new GzipEncoder()    | "ISO-8859-1"
+		"deflate" | new DeflateEncoder() | "ISO-8859-1"
+		"gzip"    | new GzipEncoder()    | "UTF-8"
+		"deflate" | new DeflateEncoder() | "UTF-8"
 	}
 
 }
