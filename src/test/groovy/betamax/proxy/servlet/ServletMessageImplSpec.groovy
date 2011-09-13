@@ -1,20 +1,24 @@
 package betamax.proxy.servlet
 
-import betamax.util.servlet.MockHttpServletRequest
 import javax.servlet.ServletOutputStream
-import javax.servlet.http.HttpServletResponse
 import betamax.encoding.*
+import javax.servlet.http.*
 import spock.lang.*
+import betamax.util.servlet.MockServletInputStream
+import org.apache.commons.collections.iterators.IteratorEnumeration
 
 class ServletMessageImplSpec extends Specification {
 
-	MockHttpServletRequest getRequest = new MockHttpServletRequest(method: "GET")
-	MockHttpServletRequest postRequest = new MockHttpServletRequest(method: "POST")
+	HttpServletRequest servletRequest = Mock(HttpServletRequest)
 	HttpServletResponse servletResponse = Mock(HttpServletResponse)
 
 	def "request can read basic fields"() {
 		given:
-		def request = new ServletRequestImpl(getRequest)
+		servletRequest.getMethod() >> "GET"
+		servletRequest.getRequestURL() >> new StringBuffer("http://robfletcher.github.com/betamax")
+
+		and:
+		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
 		request.method == "GET"
@@ -23,12 +27,12 @@ class ServletMessageImplSpec extends Specification {
 
 	def "request can read headers"() {
 		given:
-		getRequest.setHeader("If-None-Match", "abc123")
-		getRequest.addHeader("Accept-Encoding", "gzip")
-		getRequest.addHeader("Accept-Encoding", "deflate")
+		servletRequest.getHeaderNames() >> new IteratorEnumeration(["If-None-Match", "Accept-Encoding"].iterator())
+		servletRequest.getHeaders("If-None-Match") >> new IteratorEnumeration(["abc123"].iterator())
+		servletRequest.getHeaders("Accept-Encoding") >> new IteratorEnumeration(["gzip", "deflate"].iterator())
 
 		and:
-		def request = new ServletRequestImpl(getRequest)
+		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
 		request.getFirstHeader("If-None-Match") == "abc123"
@@ -37,7 +41,7 @@ class ServletMessageImplSpec extends Specification {
 
 	def "request headers are immutable"() {
 		given:
-		def request = new ServletRequestImpl(getRequest)
+		def request = new ServletRequestImpl(servletRequest)
 
 		when:
 		request.headers["If-None-Match"] = ["abc123"]
@@ -48,39 +52,23 @@ class ServletMessageImplSpec extends Specification {
 
 	def "request can add headers"() {
 		given:
-		getRequest.addHeader("Accept-Encoding", "gzip")
-
-		and:
-		def request = new ServletRequestImpl(getRequest)
+		def request = new ServletRequestImpl(servletRequest)
 
 		when:
 		request.addHeader("If-None-Match", "abc123")
-		request.addHeader("Accept-Encoding", "deflate")
 
 		then:
-		getRequest.getHeader("If-None-Match") == "abc123"
-		getRequest.getHeader("Accept-Encoding") == "gzip, deflate"
-	}
-
-	def "request body is not readable if there is no body"() {
-		given:
-		def request = new ServletRequestImpl(getRequest)
-
-		when:
-		request.bodyAsText
-
-		then:
-		thrown UnsupportedOperationException
+		1 * servletRequest.addHeader("If-None-Match", "abc123")
 	}
 
 	def "request body is readable as text"() {
 		given:
-		postRequest.body = "value=\u00a31".getBytes("ISO-8859-1")
-		postRequest.contentType = "application/x-www-form-urlencoded"
-		postRequest.characterEncoding = "ISO-8859-1"
+		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
+		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
+		servletRequest.getCharacterEncoding() >> "ISO-8859-1"
 
 		and:
-		def request = new ServletRequestImpl(postRequest)
+		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
 		request.bodyAsText.text == "value=\u00a31"
@@ -88,12 +76,12 @@ class ServletMessageImplSpec extends Specification {
 
 	def "request body is readable as binary"() {
 		given:
-		postRequest.body = "value=\u00a31".getBytes("ISO-8859-1")
-		postRequest.contentType = "application/x-www-form-urlencoded"
-		postRequest.characterEncoding = "ISO-8859-1"
+		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
+		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
+		servletRequest.getCharacterEncoding() >> "ISO-8859-1"
 
 		and:
-		def request = new ServletRequestImpl(postRequest)
+		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
 		request.bodyAsBinary.bytes == "value=\u00a31".getBytes("ISO-8859-1")
@@ -155,17 +143,6 @@ class ServletMessageImplSpec extends Specification {
 
 		when:
 		response.headers["E-Tag"] = ["abc123"]
-
-		then:
-		thrown UnsupportedOperationException
-	}
-
-	def "response body is not readable if there is no body"() {
-		given:
-		def response = new ServletResponseImpl(servletResponse)
-
-		when:
-		response.bodyAsText
 
 		then:
 		thrown UnsupportedOperationException

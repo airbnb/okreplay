@@ -22,6 +22,7 @@ import betamax.proxy.*
 class ServletRequestImpl extends AbstractMessage implements Request {
 
 	private final HttpServletRequest delegate
+	private final Map<String, List<String>> headers = [:]
 
 	ServletRequestImpl(HttpServletRequest delegate) {
 		this.delegate = delegate
@@ -51,9 +52,10 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	Map<String, List<String>> getHeaders() {
-		def headers = [:]
-		for (headerName in delegate.headerNames) {
-			headers[headerName] = delegate.getHeaders(headerName).toList()
+		if (headers.isEmpty()) {
+			for (headerName in delegate.headerNames) {
+				headers[headerName] = delegate.getHeaders(headerName).toList()
+			}
 		}
 		headers.asImmutable()
 	}
