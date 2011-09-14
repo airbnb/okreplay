@@ -194,8 +194,9 @@ class Recorder implements MethodRule {
 	private void overrideProxySettings() {
 		originalProxyHost = System.properties."http.proxyHost"
 		originalProxyPort = System.properties."http.proxyPort"
-		System.properties."http.proxyHost" = "localhost"
+		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
 		System.properties."http.proxyPort" = proxyPort.toString()
+		println "*** set proxy host to ${System.properties.'http.proxyHost'}"
 	}
 
 	private void restoreOriginalProxySettings() {
