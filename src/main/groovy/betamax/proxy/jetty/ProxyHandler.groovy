@@ -70,6 +70,7 @@ class ProxyHandler extends AbstractHandler {
         boolean handled = interceptor?.interceptRequest(requestWrapper, responseWrapper)
         if (!handled) {
             try {
+				responseWrapper.addHeader(VIA, "Betamax")
 				proceedRequest(requestWrapper, responseWrapper)
                 interceptor?.interceptResponse(requestWrapper, responseWrapper)
             } catch (SocketTimeoutException e) {
@@ -84,7 +85,6 @@ class ProxyHandler extends AbstractHandler {
             }
         }
 
-        responseWrapper.addHeader(VIA, "Betamax")
         log.debug "proxied request complete with response code ${responseWrapper.status} and content type ${responseWrapper.contentType}..."
     }
 
