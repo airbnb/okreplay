@@ -67,10 +67,10 @@ class ProxyHandler extends AbstractHandler {
 		def requestWrapper = new ServletRequestImpl(request)
 		def responseWrapper = new ServletResponseImpl(response)
 
+		responseWrapper.addHeader(VIA, "Betamax")
         boolean handled = interceptor?.interceptRequest(requestWrapper, responseWrapper)
         if (!handled) {
             try {
-				responseWrapper.addHeader(VIA, "Betamax")
 				proceedRequest(requestWrapper, responseWrapper)
                 interceptor?.interceptResponse(requestWrapper, responseWrapper)
             } catch (SocketTimeoutException e) {

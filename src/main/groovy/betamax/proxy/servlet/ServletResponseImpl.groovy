@@ -24,7 +24,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	private final HttpServletResponse delegate
 	private int status
 	private final Map<String, List<String>> headers = [:]
-	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
+	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() // TODO: this is a duplicate of a superclass field
 
 	ServletResponseImpl(HttpServletResponse delegate) {
 		this.delegate = delegate
@@ -94,7 +94,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	boolean hasBody() {
-		return false  //To change body of implemented methods use File | Settings | File Templates.
+		outputStream.size() > 0
 	}
 
 	InputStream getBodyAsBinary() {

@@ -77,12 +77,14 @@ class ServletMessageImplSpec extends Specification {
 		given:
 		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
 		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
+		servletRequest.getContentLength() >> 8
 		servletRequest.getCharacterEncoding() >> "ISO-8859-1"
 
 		and:
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
+		request.hasBody()
 		request.bodyAsText.text == "value=\u00a31"
 	}
 
@@ -90,12 +92,14 @@ class ServletMessageImplSpec extends Specification {
 		given:
 		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
 		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
+		servletRequest.getContentLength() >> 8
 		servletRequest.getCharacterEncoding() >> "ISO-8859-1"
 
 		and:
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
+		request.hasBody()
 		request.bodyAsBinary.bytes == "value=\u00a31".getBytes("ISO-8859-1")
 	}
 
@@ -157,6 +161,14 @@ class ServletMessageImplSpec extends Specification {
 		thrown UnsupportedOperationException
 	}
 
+	def "response reports having no body before it is written to"() {
+		given:
+		def response = new ServletResponseImpl(servletResponse)
+
+		expect:
+		!response.hasBody()
+	}
+
 	@Unroll("response body can be written to and read from as #charset text")
 	def "response body can be written to and read from as text"() {
 		given: "the underlying servlet response writer"
@@ -180,6 +192,7 @@ class ServletMessageImplSpec extends Specification {
 		}
 
 		then: "the content can be read back as text"
+		response.hasBody()
 		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
 
 		and: "the underlying servlet response is written to"
@@ -208,6 +221,7 @@ class ServletMessageImplSpec extends Specification {
 		}
 
 		then: "the content can be read back as binary data"
+		response.hasBody()
 		response.bodyAsBinary.bytes == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
 
 		and: "the underlying servlet response is written to"

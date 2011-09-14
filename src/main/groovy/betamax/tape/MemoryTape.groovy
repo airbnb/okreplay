@@ -20,6 +20,8 @@ import betamax.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.proxy.*
 import org.apache.http.*
+import static org.apache.http.HttpHeaders.VIA
+import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -104,7 +106,11 @@ class MemoryTape implements Tape {
 		def clone = new RecordedRequest()
 		clone.method = request.method
 		clone.uri = request.target
-		clone.headers = request.headers.collectEntries { [it.key, it.value.join(", ")] }
+		request.headers.each {
+			if (it.key != VIA) {
+				clone.headers[it.key] = it.value.join(", ")
+			}
+		}
 		clone.body = request.hasBody() ? request.bodyAsText.text : null // TODO: handle encoded request bodies
 		clone
 	}
@@ -112,7 +118,11 @@ class MemoryTape implements Tape {
 	private static RecordedResponse recordResponse(Response response) {
 		def clone = new RecordedResponse()
 		clone.status = response.status
-		clone.headers = response.headers.collectEntries { [it.key, it.value.join(", ")] }
+		response.headers.each {
+			if (!(it.key in [VIA, X_BETAMAX])) {
+				clone.headers[it.key] = it.value.join(", ")
+			}
+		}
 		if (response.hasBody()) {
 			clone.body = isTextContentType(response.contentType) ? response.bodyAsText.text : response.bodyAsBinary.bytes
 		}
@@ -152,13 +162,13 @@ class RecordedRequest {
 	String protocol
 	String method
 	String uri
-	Map<String, String> headers
+	Map<String, String> headers = [:]
 	String body
 }
 
 class RecordedResponse {
 	String protocol
 	int status
-	Map<String, String> headers
+	Map<String, String> headers = [:]
 	def body
 }

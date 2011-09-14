@@ -25,7 +25,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 	/**
 	 * Header placed in the response to indicate whether the response was recorded or played back.
 	 */
-	static final String X_BETAMAX = "X-Betamax"
+	public static final String X_BETAMAX = "X-Betamax"
 
 	private final Recorder recorder
 	private final Logger log = Logger.getLogger(RecordAndPlaybackProxyInterceptor)
@@ -43,8 +43,8 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 			true
 		} else if (tape.seek(request) && tape.isReadable()) {
 			log.info "playing back from tape '$tape.name'..."
-			tape.play(response)
 			response.addHeader(X_BETAMAX, "PLAY")
+			tape.play(response)
 			true
 		} else if (!tape.isWritable()) {
 			response.status = HTTP_FORBIDDEN

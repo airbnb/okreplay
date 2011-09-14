@@ -1,14 +1,13 @@
 package betamax
 
+import betamax.proxy.jetty.SimpleServer
+import betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
-
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import org.junit.*
-import betamax.proxy.jetty.SimpleServer
-import betamax.util.server.EchoHandler
 
 class AnnotationTest {
 

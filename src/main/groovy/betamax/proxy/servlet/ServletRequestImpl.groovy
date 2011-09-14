@@ -75,7 +75,7 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	boolean hasBody() {
-		return false  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.contentLength > 0
 	}
 
 	InputStream getBodyAsBinary() {
