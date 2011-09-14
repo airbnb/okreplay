@@ -51,6 +51,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 			response.reason = "Tape is read-only"
 			true
 		} else {
+			response.addHeader(X_BETAMAX, "REC")
 			false
 		}
 	}
@@ -60,7 +61,6 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 		log.info "recording response with status $response.status to tape '$tape.name'..."
 		tape.record(request, response)
 		log.info "recording complete..."
-		response.addHeader(X_BETAMAX, "REC")
 	}
 
 }
