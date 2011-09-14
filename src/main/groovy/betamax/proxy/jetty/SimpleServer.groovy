@@ -36,7 +36,17 @@ class SimpleServer extends AbstractLifeCycleListener {
 	}
 
 	SimpleServer(int port) {
-		host = InetAddress.localHost.hostAddress
+		// if there is no network connection we need to connect to the server via hostname rather than IP. At least this
+		// is true on a Mac. Suspect it may be OS dependent. I should really make an effort to understand this but this
+		// workaround means the proxy seems to operate correctly with or without a network connection. The weird thing
+		// is that the hostName _doesn't_ work when there _is_ a network connection.
+		def localAddress = InetAddress.localHost
+		if (localAddress.loopbackAddress) {
+			log.info "local address is loopback, using hostname $localAddress.hostName"
+			host = localAddress.hostName
+		} else {
+			host = localAddress.hostAddress
+		}
 		this.port = port
 	}
 
@@ -44,7 +54,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 		"http://$host:$port/"
 	}
 
-	void start(Class <? extends Handler> handlerClass) {
+	void start(Class<? extends Handler> handlerClass) {
 		start handlerClass.newInstance()
 	}
 
