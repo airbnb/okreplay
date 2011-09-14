@@ -36,7 +36,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 	}
 
 	SimpleServer(int port) {
-		host = InetAddress.localHost.hostName
+		host = InetAddress.localHost.hostAddress
 		this.port = port
 	}
 
