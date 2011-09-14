@@ -26,13 +26,6 @@ interface Response extends Message {
     void setStatus(int status)
 
 	/**
-	 * @return the reason string corresponding to the HTTP status code.
-	 */
-    String getReason()
-
-    void setReason(String reason)
-
-	/**
 	 * @return the content MIME type of the response.
 	 */
     String getContentType()

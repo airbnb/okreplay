@@ -54,14 +54,6 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 		headers["Content-Encoding"]?.first()
 	}
 
-	String getReason() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	void setReason(String reason) {
-		//To change body of implemented methods use File | Settings | File Templates.
-	}
-
 	Map<String, List<String>> getHeaders() {
 		headers.asImmutable()
 	}

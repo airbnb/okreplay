@@ -105,15 +105,12 @@ class ServletMessageImplSpec extends Specification {
 
 		when: "status and reason are set"
 		response.status = 200
-		response.reason = "OK"
 
 		then: "they can be retrieved again"
 		response.status == 200
-		response.reason == "OK"
 
 		and: "the underlying servlet response values are set"
 		1 * servletResponse.setStatus(200)
-		1 * servletResponse.setMessage("OK")
 	}
 
 	def "response can add and read headers"() {
