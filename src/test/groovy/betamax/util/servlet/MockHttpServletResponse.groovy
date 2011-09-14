@@ -9,6 +9,8 @@ class MockHttpServletResponse extends AbstractMockServletMessage implements Http
 	String message
 
 	private boolean written = false
+	private ServletOutputStream outputStream
+	private PrintWriter writer
 
 	void sendError(int sc, String msg) {
 		status = sc
@@ -25,21 +27,27 @@ class MockHttpServletResponse extends AbstractMockServletMessage implements Http
 	}
 
 	ServletOutputStream getOutputStream() {
-		if (written) {
-			throw new IllegalStateException()
-		} else {
-			written = true
-			new MockServletOutputStream(this)
+		if (!outputStream) {
+			if (written) {
+				throw new IllegalStateException()
+			} else {
+				written = true
+				outputStream = new MockServletOutputStream(this)
+			}
 		}
+		outputStream
 	}
 
 	PrintWriter getWriter() {
-		if (written) {
-			throw new IllegalStateException()
-		} else {
-			written = true
-			new PrintWriter(new MockServletOutputStream(this), characterEncoding)
+		if (!writer) {
+			if (written) {
+				throw new IllegalStateException()
+			} else {
+				written = true
+				writer = new PrintWriter(new MockServletOutputStream(this), characterEncoding)
+			}
 		}
+		writer
 	}
 
 	void addCookie(Cookie cookie) {
