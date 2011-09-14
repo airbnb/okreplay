@@ -32,7 +32,7 @@ class ProxyTimeoutSpec extends Specification {
 		endpoint.start(SlowHandler)
 
 		when:
-		http.head(path: "/")
+		http.get(path: "/")
 
 		then:
 		def e = thrown(HttpResponseException)

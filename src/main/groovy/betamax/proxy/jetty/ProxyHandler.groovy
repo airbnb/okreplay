@@ -115,7 +115,6 @@ class ProxyHandler extends AbstractHandler {
 				break
 			case "TRACE":
 				proxyRequest = new HttpTrace(request.target); break
-
 		}
 
 		for (header in request.headers) {
@@ -144,7 +143,9 @@ class ProxyHandler extends AbstractHandler {
             to.outputStream.withStream {
 				it << from.entity.content
 			}
-        }
+        } else {
+			to.outputStream.close()
+		}
     }
 
 }
