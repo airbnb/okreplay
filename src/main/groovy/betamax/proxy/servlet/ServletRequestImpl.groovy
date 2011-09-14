@@ -38,7 +38,12 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	URI getTarget() {
-		new URI(delegate.requestURL.toString())
+		def uri = delegate.requestURL
+		def qs = delegate.queryString
+		if (qs) {
+			uri << "?" << qs
+		}
+		new URI(uri.toString())
 	}
 
 	@Override

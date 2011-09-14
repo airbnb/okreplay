@@ -25,6 +25,18 @@ class ServletMessageImplSpec extends Specification {
 		request.target == new URI("http://robfletcher.github.com/betamax")
 	}
 
+	def "request target includes query string"() {
+		given:
+		servletRequest.getRequestURL() >> new StringBuffer("http://robfletcher.github.com/betamax")
+		servletRequest.getQueryString() >> "q=1"
+
+		and:
+		def request = new ServletRequestImpl(servletRequest)
+
+		expect:
+		request.target == new URI("http://robfletcher.github.com/betamax?q=1")
+	}
+
 	def "request can read headers"() {
 		given:
 		servletRequest.getHeaderNames() >> new IteratorEnumeration(["If-None-Match", "Accept-Encoding"].iterator())
