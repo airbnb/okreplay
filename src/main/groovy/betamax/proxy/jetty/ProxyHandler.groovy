@@ -84,8 +84,8 @@ class ProxyHandler extends AbstractHandler {
             }
         }
 
-        response.addHeader(VIA, "Betamax")
-        log.debug "proxied request complete with response code ${response.status}..."
+        responseWrapper.addHeader(VIA, "Betamax")
+        log.debug "proxied request complete with response code ${responseWrapper.status} and content type ${responseWrapper.contentType}..."
     }
 
 	private void proceedRequest(betamax.proxy.Request request, Response response) {
@@ -107,11 +107,11 @@ class ProxyHandler extends AbstractHandler {
 				proxyRequest = new HttpOptions(request.target); break
 			case "POST":
 				proxyRequest = new HttpPost(request.target)
-				proxyRequest.entity = new ByteArrayEntity(request.inputStream.bytes)
+				proxyRequest.entity = new ByteArrayEntity(request.bodyAsBinary.bytes)
 				break
 			case "PUT":
 				proxyRequest = new HttpPut(request.target)
-				proxyRequest.entity = new ByteArrayEntity(request.inputStream.bytes)
+				proxyRequest.entity = new ByteArrayEntity(request.bodyAsBinary.bytes)
 				break
 			case "TRACE":
 				proxyRequest = new HttpTrace(request.target); break
@@ -141,7 +141,9 @@ class ProxyHandler extends AbstractHandler {
             }
         }
         if (from.entity) {
-            to.outputStream << from.entity.content
+            to.outputStream.withStream {
+				it << from.entity.content
+			}
         }
     }
 

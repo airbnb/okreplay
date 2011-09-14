@@ -74,6 +74,16 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 				delegate.outputStream.write(b)
 				outputStream.write(b)
 			}
+
+			@Override
+			void flush() {
+				delegate.outputStream.flush()
+			}
+
+			@Override
+			void close() {
+				delegate.outputStream.close()
+			}
 		}
 	}
 
