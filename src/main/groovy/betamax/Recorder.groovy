@@ -137,6 +137,7 @@ class Recorder implements MethodRule {
 		try {
 			def handler = new ProxyHandler()
 			handler.interceptor = new RecordAndPlaybackProxyInterceptor(this)
+			handler.timeout = proxyTimeout
 
 			proxy.start(handler)
 
