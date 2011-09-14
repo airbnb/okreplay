@@ -70,10 +70,6 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 		return null  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
-	void addHeader(String name, String value) {
-		delegate.addHeader(name, value)
-	}
-
 	boolean hasBody() {
 		delegate.contentLength > 0
 	}

@@ -40,13 +40,6 @@ interface Message {
 	String getFirstHeader(String name)
 
 	/**
-	 * Adds a header to this message. Multiple headers with the same name can be added to the message.
-	 * @param name the header name.
-	 * @param value the header value.
-	 */
-	void addHeader(String name, String value)
-
-	/**
 	 * @return `true` if the message currently contains a body, `false` otherwise.
 	 */
 	boolean hasBody()

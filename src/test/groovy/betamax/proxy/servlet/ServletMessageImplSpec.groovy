@@ -1,11 +1,11 @@
 package betamax.proxy.servlet
 
+import betamax.util.servlet.MockServletInputStream
 import javax.servlet.ServletOutputStream
+import org.apache.commons.collections.iterators.IteratorEnumeration
 import betamax.encoding.*
 import javax.servlet.http.*
 import spock.lang.*
-import betamax.util.servlet.MockServletInputStream
-import org.apache.commons.collections.iterators.IteratorEnumeration
 
 class ServletMessageImplSpec extends Specification {
 
@@ -60,17 +60,6 @@ class ServletMessageImplSpec extends Specification {
 
 		then:
 		thrown UnsupportedOperationException
-	}
-
-	def "request can add headers"() {
-		given:
-		def request = new ServletRequestImpl(servletRequest)
-
-		when:
-		request.addHeader("If-None-Match", "abc123")
-
-		then:
-		1 * servletRequest.addHeader("If-None-Match", "abc123")
 	}
 
 	def "request body is readable as text"() {

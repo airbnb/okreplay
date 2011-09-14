@@ -26,6 +26,13 @@ interface Response extends Message {
     void setStatus(int status)
 
 	/**
+	 * Adds a header to this response. Multiple headers with the same name can be added.
+	 * @param name the header name.
+	 * @param value the header value.
+	 */
+	void addHeader(String name, String value)
+
+	/**
 	 * @return the content MIME type of the response.
 	 */
     String getContentType()
