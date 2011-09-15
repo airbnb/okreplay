@@ -73,6 +73,7 @@ class ProxyHandler extends AbstractHandler {
             try {
 				proceedRequest(requestWrapper, responseWrapper)
                 interceptor?.interceptResponse(requestWrapper, responseWrapper)
+				responseWrapper.outputStream.close()
             } catch (SocketTimeoutException e) {
                 log.error "timed out connecting to $requestWrapper.target"
                 response.sendError(HTTP_GATEWAY_TIMEOUT, "Target server took too long to respond")
@@ -140,11 +141,7 @@ class ProxyHandler extends AbstractHandler {
             }
         }
         if (from.entity) {
-            to.outputStream.withStream {
-				it << from.entity.content
-			}
-        } else {
-			to.outputStream.close()
+            to.outputStream << from.entity.content
 		}
     }
 

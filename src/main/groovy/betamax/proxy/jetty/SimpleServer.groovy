@@ -31,7 +31,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
-	private final log = Logger.getLogger(SimpleServer)
+	private final log = Logger.getLogger(getClass())
 
 	SimpleServer() {
 		this(DEFAULT_PORT)

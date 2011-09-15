@@ -20,7 +20,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	RESTClient http
 
 	def setupSpec() {
-		recorder.insertTape("proxy_record_and_playback_spec")
+		recorder.insertTape("proxy record and playback spec")
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 	}
@@ -43,7 +43,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.get(path: "/")
 
 		then:
-		recorder.tape.interactions.size() == 1
+		recorder.tape.size() == 1
 	}
 
 	@Timeout(10)
@@ -52,7 +52,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.get(path: "/")
 
 		then:
-		recorder.tape.interactions.size() == 1
+		recorder.tape.size() == 1
 
 		cleanup:
 		recorder.tape.reset()
@@ -67,7 +67,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		http.head(path: "/")
 
 		then:
-		recorder.tape.interactions.size() == old(recorder.tape.interactions.size()) + 1
+		recorder.tape.size() == old(recorder.tape.size()) + 1
 		recorder.tape.interactions[-1].request.method == "HEAD"
 	}
 
@@ -86,8 +86,8 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		def yaml = file.withReader { reader ->
 			new Yaml().loadAs(reader, Map)
 		}
-		yaml.name == "proxy_record_and_playback_spec"
-		yaml.interactions.size() == 2
+		yaml.name == "proxy record and playback spec"
+		yaml.size() == 2
 	}
 
 	def "can load an existing tape from a file"() {
@@ -117,7 +117,7 @@ interactions:
 
 		then:
 		recorder.tape.name == "existing_tape"
-		recorder.tape.interactions.size() == 1
+		recorder.tape.size() == 1
 	}
 
 	@Timeout(10)
