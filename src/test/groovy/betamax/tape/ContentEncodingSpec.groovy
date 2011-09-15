@@ -68,7 +68,7 @@ interactions:
 		tape.play(response)
 
 		then:
-		response.getFirstHeader(CONTENT_ENCODING) == encoding
+		response.getHeader(CONTENT_ENCODING) == encoding
 		encoder.decode(new ByteArrayInputStream(response.body)) == "O HAI!"
 
 		where:

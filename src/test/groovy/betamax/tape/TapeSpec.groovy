@@ -52,9 +52,9 @@ class TapeSpec extends Specification {
 		and: "the response data is correctly stored"
 		interaction.response.status == plainTextResponse.status
 		interaction.response.body == "O HAI!"
-		interaction.response.headers[CONTENT_TYPE] == plainTextResponse.getFirstHeader(CONTENT_TYPE)
-		interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.getFirstHeader(CONTENT_LANGUAGE)
-		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getFirstHeader(CONTENT_ENCODING)
+		interaction.response.headers[CONTENT_TYPE] == plainTextResponse.getHeader(CONTENT_TYPE)
+		interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.getHeader(CONTENT_LANGUAGE)
+		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getHeader(CONTENT_ENCODING)
 	}
 	
 	def "can overwrite a recorded interaction"() {

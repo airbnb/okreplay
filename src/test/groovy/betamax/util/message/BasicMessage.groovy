@@ -44,18 +44,18 @@ abstract class BasicMessage extends AbstractMessage {
 
 	@Override
 	String getContentType() {
-		StringUtils.substringBefore(getFirstHeader(CONTENT_TYPE), ";")
+		StringUtils.substringBefore(getHeader(CONTENT_TYPE), ";")
 	}
 
 	@Override
 	String getCharset() {
-		getFirstHeader(CONTENT_TYPE)?.find(/charset=(.*)/) { match, charset ->
+		getHeader(CONTENT_TYPE)?.find(/charset=(.*)/) { match, charset ->
 			charset
 		}
 	}
 
 	@Override
 	String getEncoding() {
-		getFirstHeader(CONTENT_ENCODING)
+		getHeader(CONTENT_ENCODING)
 	}
 }

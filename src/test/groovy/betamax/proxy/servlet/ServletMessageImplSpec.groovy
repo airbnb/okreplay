@@ -47,7 +47,7 @@ class ServletMessageImplSpec extends Specification {
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
-		request.getFirstHeader("If-None-Match") == "abc123"
+		request.getHeader("If-None-Match") == "abc123"
 		request.getHeaders("Accept-Encoding") == ["gzip", "deflate"]
 	}
 
@@ -116,7 +116,7 @@ class ServletMessageImplSpec extends Specification {
 		response.addHeader("Vary", "Content-Type")
 
 		then: "they can be retrieved again"
-		response.getFirstHeader("E-Tag") == "abc123"
+		response.getHeader("E-Tag") == "abc123"
 		response.getHeaders("Vary") == ["Content-Language", "Content-Type"]
 
 		and: "they are added to the underlying servlet response"
@@ -136,7 +136,7 @@ class ServletMessageImplSpec extends Specification {
 		0 * servletResponse.addHeader(_, _)
 
 		and:
-		response.getFirstHeader("Content-Type") == "text/html; charset=ISO-8859-1"
+		response.getHeader("Content-Type") == "text/html; charset=ISO-8859-1"
 	}
 
 	def "response headers are immutable"() {
