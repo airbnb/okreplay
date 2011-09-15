@@ -78,26 +78,26 @@ class HttpCoreMessageImplSpec extends Specification {
 
 	def "request body is readable as text"() {
 		given:
-		postRequest.entity = new ByteArrayEntity("value=£1".getBytes("ISO-8859-1"))
+		postRequest.entity = new ByteArrayEntity("value=\u00a31".getBytes("ISO-8859-1"))
 		postRequest.entity.contentType = new BasicHeader(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=ISO-8859-1")
 
 		and:
 		def request = new HttpCoreRequestImpl(postRequest)
 
 		expect:
-		request.bodyAsText.text == "value=£1"
+		request.bodyAsText.text == "value=\u00a31"
 	}
 
 	def "request body is readable as binary"() {
 		given:
-		postRequest.entity = new ByteArrayEntity("value=£1".getBytes("ISO-8859-1"))
+		postRequest.entity = new ByteArrayEntity("value=\u00a31".getBytes("ISO-8859-1"))
 		postRequest.entity.contentType = new BasicHeader(CONTENT_TYPE, "application/x-www-form-urlencoded;charset=ISO-8859-1")
 
 		and:
 		def request = new HttpCoreRequestImpl(postRequest)
 
 		expect:
-		request.bodyAsBinary.text == "value=£1"
+		request.bodyAsBinary.text == "value=\u00a31"
 	}
 
 	def "response can read basic fields"() {
@@ -163,31 +163,31 @@ class HttpCoreMessageImplSpec extends Specification {
 
 	def "response body is readable as text"() {
 		given:
-		successResponse.entity = new ByteArrayEntity("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1"))
+		successResponse.entity = new ByteArrayEntity("O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1"))
 		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 
 		and:
 		def response = new HttpCoreResponseImpl(successResponse)
 
 		expect:
-		response.bodyAsText.text == "O HAI! £1 KTHXBYE"
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
 	}
 
 	def "response body is readable as binary"() {
 		given:
-		successResponse.entity = new ByteArrayEntity("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1"))
+		successResponse.entity = new ByteArrayEntity("O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1"))
 		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 
 		and:
 		def response = new HttpCoreResponseImpl(successResponse)
 
 		expect:
-		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
 	}
 
 	def "response body can be re-read even if underlying entity is not repeatable"() {
 		given:
-		successResponse.entity = new BasicHttpEntity(content: new ByteArrayInputStream("O HAI! £1 KTHXBYE".getBytes("ISO-8859-1")))
+		successResponse.entity = new BasicHttpEntity(content: new ByteArrayInputStream("O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")))
 		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 
 		and:
@@ -195,14 +195,14 @@ class HttpCoreMessageImplSpec extends Specification {
 
 
 		expect:
-		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
-		response.bodyAsBinary.text == "O HAI! £1 KTHXBYE"
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
+		response.bodyAsBinary.text == "O HAI! \u00a31 KTHXBYE"
 	}
 
 	@Unroll("#encoding encoded response body is not decoded when read as binary")
 	def "encoded response body is not decoded when read as binary"() {
 		given:
-		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! £1 KTHXBYE", "ISO-8859-1"))
+		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1"))
 		successResponse.entity.contentType = new BasicHeader(CONTENT_TYPE, "text/plain;charset=ISO-8859-1")
 		successResponse.entity.contentEncoding = new BasicHeader(CONTENT_ENCODING, encoding)
 
@@ -225,7 +225,7 @@ class HttpCoreMessageImplSpec extends Specification {
 		def encodingHeader = new BasicHeader(CONTENT_ENCODING, encoding)
 		successResponse.addHeader(contentTypeHeader)
 		successResponse.addHeader(encodingHeader)
-		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! £1 KTHXBYE", "ISO-8859-1"))
+		successResponse.entity = new ByteArrayEntity(encoder.encode("O HAI! \u00a31 KTHXBYE", "ISO-8859-1"))
 		successResponse.entity.contentType = contentTypeHeader
 		successResponse.entity.contentEncoding = encodingHeader
 
@@ -233,7 +233,7 @@ class HttpCoreMessageImplSpec extends Specification {
 		def response = new HttpCoreResponseImpl(successResponse)
 
 		expect:
-		response.bodyAsText.text == "O HAI! £1 KTHXBYE"
+		response.bodyAsText.text == "O HAI! \u00a31 KTHXBYE"
 
 		where:
 		encoding  | encoder
@@ -248,11 +248,11 @@ class HttpCoreMessageImplSpec extends Specification {
 
 		when:
 		response.writer.withWriter {
-			it << "O HAI! £1 KTHXBYE"
+			it << "O HAI! \u00a31 KTHXBYE"
 		}
 
 		then:
-		successResponse.entity.content.bytes == "O HAI! £1 KTHXBYE".getBytes("ISO-8859-1")
+		successResponse.entity.content.bytes == "O HAI! \u00a31 KTHXBYE".getBytes("ISO-8859-1")
 	}
 
 	@Unroll("response body is #encoding encoded when written")
@@ -263,11 +263,11 @@ class HttpCoreMessageImplSpec extends Specification {
 
 		when:
 		response.writer.withWriter {
-			it << "O HAI! £1 KTHXBYE"
+			it << "O HAI! \u00a31 KTHXBYE"
 		}
 
 		then:
-		successResponse.entity.content.bytes == encoder.encode("O HAI! £1 KTHXBYE")
+		successResponse.entity.content.bytes == encoder.encode("O HAI! \u00a31 KTHXBYE")
 
 		where:
 		encoding  | encoder
@@ -282,7 +282,7 @@ class HttpCoreMessageImplSpec extends Specification {
 		def response = new HttpCoreResponseImpl(successResponse)
 
 		when:
-		response.writer << "O HAI! £1 KTHXBYE"
+		response.writer << "O HAI! \u00a31 KTHXBYE"
 
 		then:
 		thrown IllegalStateException
