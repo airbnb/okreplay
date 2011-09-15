@@ -17,12 +17,10 @@ name: single_interaction_tape
 interactions:
 - recorded: 2011-08-23T22:41:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!
@@ -34,10 +32,8 @@ interactions:
 		tape.name == "single_interaction_tape"
 		tape.interactions.size() == 1
 		tape.interactions[0].recorded == new Date(111, 7, 23, 23, 41, 40)
-		tape.interactions[0].request.protocol == HTTP_1_1.toString()
 		tape.interactions[0].request.method == "GET"
 		tape.interactions[0].request.uri == "http://icanhascheezburger.com/"
-		tape.interactions[0].response.protocol == HTTP_1_1.toString()
 		tape.interactions[0].response.status == HTTP_OK
 		tape.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
 		tape.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
@@ -52,23 +48,19 @@ name: multiple_interaction_tape
 interactions:
 - recorded: 2011-08-23T23:41:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!
 - recorded: 2011-08-23T23:41:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 418
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: I'm a teapot
@@ -94,12 +86,10 @@ name: single_interaction_tape
 interactions:
 - recorded: 2011-08-23T22:41:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!
@@ -131,12 +121,10 @@ name: invalid_date_tape
 interactions:
 - recorded: THIS IS NOT A DATE!
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!

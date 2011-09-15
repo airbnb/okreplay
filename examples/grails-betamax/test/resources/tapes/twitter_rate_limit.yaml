@@ -3,7 +3,6 @@ name: twitter rate limit
 interactions:
 - recorded: 2011-08-31T13:39:02.368Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://search.twitter.com/search.json?q=betamax&rpp=10&page=1
     headers:
@@ -12,7 +11,6 @@ interactions:
       Host: api.twitter.com
       Proxy-Connection: Keep-Alive
   response:
-    protocol: HTTP/1.1
     status: 400
     headers:
       Cache-Control: no-cache, max-age=300

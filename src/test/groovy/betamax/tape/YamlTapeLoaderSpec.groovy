@@ -24,12 +24,10 @@ name: $tapeName
 interactions:
 - recorded: 2011-08-23T22:41:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!

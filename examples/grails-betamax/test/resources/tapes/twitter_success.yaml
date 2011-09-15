@@ -3,7 +3,6 @@ name: twitter success
 interactions:
 - recorded: 2011-08-31T13:12:42.293Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://search.twitter.com/search.json?q=betamax&rpp=10&page=1
     headers:
@@ -12,7 +11,6 @@ interactions:
       Host: search.twitter.com
       Proxy-Connection: Keep-Alive
   response:
-    protocol: HTTP/1.1
     status: 200
     headers:
       Age: '0'

@@ -60,9 +60,9 @@ class TapePropertyUtils extends PropertyUtils {
 			case RecordedInteraction:
 				return sort(properties, ["recorded", "request", "response"])
 			case RecordedRequest:
-				return sort(properties, ["protocol", "method", "uri", "headers", "body"])
+				return sort(properties, ["method", "uri", "headers", "body"])
 			case RecordedResponse:
-				return sort(properties, ["protocol", "status", "headers", "body"])
+				return sort(properties, ["status", "headers", "body"])
 			default:
 				return properties
 		}

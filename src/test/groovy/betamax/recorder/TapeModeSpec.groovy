@@ -71,12 +71,10 @@ name: write only tape
 interactions:
 - recorded: 2011-08-26T21:46:52.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: $endpoint.url
     headers: {}
   response:
-    protocol: HTTP/1.1
     status: 202
     headers: {}
     body: Previous response made when endpoint was down.

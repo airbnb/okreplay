@@ -48,12 +48,10 @@ name: encoded response tape
 interactions:
 - recorded: 2011-08-24T20:38:40.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://robfletcher.github.com/betamax
     headers: {Accept-Encoding: $encoding}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
     body: O HAI!

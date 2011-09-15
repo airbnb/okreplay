@@ -99,12 +99,10 @@ name: existing_tape
 interactions:
 - recorded: 2011-08-19T11:45:33.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://icanhascheezburger.com/
     headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
   response:
-    protocol: HTTP/1.1
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!

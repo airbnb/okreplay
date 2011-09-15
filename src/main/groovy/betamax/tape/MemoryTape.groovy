@@ -145,7 +145,6 @@ class RecordedInteraction {
 }
 
 class RecordedRequest {
-	String protocol
 	String method
 	String uri
 	Map<String, String> headers = [:]
@@ -153,7 +152,6 @@ class RecordedRequest {
 }
 
 class RecordedResponse {
-	String protocol
 	int status
 	Map<String, String> headers = [:]
 	def body

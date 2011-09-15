@@ -51,11 +51,9 @@ name: charsets
 interactions:
 - recorded: 2011-08-27T23:25:45.000Z
   request:
-    protocol: HTTP/1.1
     method: GET
     uri: http://robfletcher.github.com/betamax
   response:
-    protocol: HTTP/1.1
     status: 200
     headers:
       Content-Type: text/plain;charset=$charset
