@@ -19,9 +19,8 @@ package betamax.tape
 import betamax.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.proxy.*
-import org.apache.http.*
-import static org.apache.http.HttpHeaders.VIA
 import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
+import static org.apache.http.HttpHeaders.VIA
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -135,19 +134,6 @@ class MemoryTape implements Tape {
 		} else {
 			false
 		}
-	}
-
-	private String indentifyMimeType(Header contentType) {
-		contentType?.elements[0]?.name
-	}
-
-	private String identifyCharset(Header contentType) {
-		contentType?.elements[0]?.getParameterByName("charset")?.value
-	}
-
-	private ProtocolVersion parseProtocol(String protocolString) {
-		def matcher = protocolString =~ /^(\w+)\/(\d+)\.(\d+)$/
-		new ProtocolVersion(matcher[0][1], matcher[0][2].toInteger(), matcher[0][3].toInteger())
 	}
 
 }

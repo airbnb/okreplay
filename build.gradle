@@ -60,7 +60,6 @@ dependencies {
 	compile "junit:junit:4.8.2"
 	compile "log4j:log4j:1.2.16"
 	compile "org.apache.httpcomponents:httpclient:4.1.2"
-	compile "org.apache.httpcomponents:httpcore-nio:4.1.2"
 	compile "org.yaml:snakeyaml:1.9"
 	testCompile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
 		exclude module: "groovy"
