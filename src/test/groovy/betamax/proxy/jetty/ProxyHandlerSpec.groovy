@@ -14,37 +14,37 @@ import static org.apache.http.HttpVersion.HTTP_1_1
 
 class ProxyHandlerSpec extends Specification {
 
-    ProxyHandler servlet = new ProxyHandler()
+    ProxyHandler handler = new ProxyHandler()
     MockHttpServletRequest request = new MockHttpServletRequest(method: "GET", requestURI: "/betamax")
     MockHttpServletResponse response = new MockHttpServletResponse()
     final BasicHttpResponse okResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")
 
     def "proceeds request if interceptor does not veto it"() {
         given:
-        servlet.httpClient = Mock(HttpClient)
-        servlet.interceptor = Mock(VetoingProxyInterceptor)
+        handler.httpClient = Mock(HttpClient)
+        handler.interceptor = Mock(VetoingProxyInterceptor)
 
         when:
-        servlet.handle(null, null, request, response)
+        handler.handle(null, null, request, response)
 
         then:
-        1 * servlet.interceptor.interceptRequest(_, _) >> false
-        1 * servlet.httpClient.execute(_) >> okResponse
-        1 * servlet.interceptor.interceptResponse(_, _)
+        1 * handler.interceptor.interceptRequest(_, _) >> false
+        1 * handler.httpClient.execute(_) >> okResponse
+        1 * handler.interceptor.interceptResponse(_, _)
     }
 
     def "does not proceed request if interceptor vetoes it"() {
         given:
-        servlet.httpClient = Mock(HttpClient)
-        servlet.interceptor = Mock(VetoingProxyInterceptor)
+        handler.httpClient = Mock(HttpClient)
+        handler.interceptor = Mock(VetoingProxyInterceptor)
 
         when:
-		servlet.handle(null, null, request, response)
+		handler.handle(null, null, request, response)
 
         then:
-        1 * servlet.interceptor.interceptRequest(_, _) >> true
-        0 * servlet.httpClient.execute(_)
-        0 * servlet.interceptor.interceptResponse(_, _)
+        1 * handler.interceptor.interceptRequest(_, _) >> true
+        0 * handler.httpClient.execute(_)
+        0 * handler.interceptor.interceptResponse(_, _)
     }
 
     def "copies proxy response to actual response"() {
@@ -54,11 +54,11 @@ class ProxyHandlerSpec extends Specification {
         upstreamResponse.entity = new StringEntity("O HAI", "text/plain", "UTF-8")
 
         and:
-        servlet.httpClient = Mock(HttpClient)
-        servlet.httpClient.execute(_) >> upstreamResponse
+        handler.httpClient = Mock(HttpClient)
+        handler.httpClient.execute(_) >> upstreamResponse
 
         when:
-		servlet.handle(null, null, request, response)
+		handler.handle(null, null, request, response)
 
         then:
         response.status == upstreamResponse.statusLine.statusCode
@@ -76,10 +76,10 @@ class ProxyHandlerSpec extends Specification {
 
         and:
         def client = new RequestCapturingMockHttpClient()
-        servlet.httpClient = client
+        handler.httpClient = client
 
         when:
-		servlet.handle(null, null, request, response)
+		handler.handle(null, null, request, response)
 
         then:
 		client.lastRequest instanceof HttpPost
