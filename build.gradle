@@ -60,15 +60,15 @@ dependencies {
 	compile "junit:junit:4.8.2"
 	compile "log4j:log4j:1.2.16"
 	compile "org.apache.httpcomponents:httpclient:4.1.2"
+	compile "org.eclipse.jetty:jetty-server:7.5.1.v20110908"
 	compile "org.yaml:snakeyaml:1.9"
 	testCompile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
 		exclude module: "groovy"
 		exclude module: "httpclient"
 	}
-	compile "org.eclipse.jetty:jetty-server:7.5.0.RC2"
-	testCompile "org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT"
-	testCompile "commons-httpclient:commons-httpclient:3.1"
 	testRuntime "cglib:cglib-nodep:2.2.2"
+	testCompile "commons-httpclient:commons-httpclient:3.1"
+	testCompile "org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT"
 	deployerJars "org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6"
 }
 
