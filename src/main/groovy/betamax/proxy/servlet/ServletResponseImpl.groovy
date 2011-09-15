@@ -24,7 +24,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	private final HttpServletResponse delegate
 	private int status
 	private final Map<String, List<String>> headers = [:]
-	private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream() // TODO: this is a duplicate of a superclass field
+	private final ByteArrayOutputStream readBackOutputStream = new ByteArrayOutputStream()
 
 	ServletResponseImpl(HttpServletResponse delegate) {
 		this.delegate = delegate
@@ -69,7 +69,7 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 			@Override
 			void write(int b) {
 				delegate.outputStream.write(b)
-				outputStream.write(b)
+				readBackOutputStream.write(b)
 			}
 
 			@Override
@@ -99,11 +99,11 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	boolean hasBody() {
-		outputStream.size() > 0
+		readBackOutputStream.size() > 0
 	}
 
 	InputStream getBodyAsBinary() {
-		new ByteArrayInputStream(outputStream.toByteArray())
+		new ByteArrayInputStream(readBackOutputStream.toByteArray())
 	}
 
 }
