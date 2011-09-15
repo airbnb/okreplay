@@ -39,6 +39,11 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 		this.status = status
 	}
 
+	void setError(int status, String reason) {
+		delegate.sendError(status, reason)
+		this.status = status
+	}
+
 	@Override
 	String getContentType() {
 		delegate.contentType

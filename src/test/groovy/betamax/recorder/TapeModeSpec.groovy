@@ -1,27 +1,27 @@
 package betamax.recorder
 
 import betamax.Recorder
-import betamax.proxy.httpcore.HttpProxyServer
+import betamax.util.server.EchoHandler
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import static betamax.Recorder.*
 import static betamax.TapeMode.*
-
+import betamax.proxy.jetty.*
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.*
 import spock.lang.*
-import betamax.proxy.jetty.SimpleServer
-import betamax.util.server.EchoHandler
 
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
+	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(DEFAULT_PROXY_PORT, DEFAULT_PROXY_TIMEOUT)
 	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setupSpec() {
 		tapeRoot.mkdirs()
 		proxy.start(recorder)
+		recorder.overrideProxySettings()
 		endpoint.start(EchoHandler)
 	}
 
@@ -32,6 +32,10 @@ class TapeModeSpec extends Specification {
 
 	def cleanup() {
 		recorder.ejectTape()
+	}
+
+	def cleanupSpec() {
+		recorder.restoreOriginalProxySettings()
 	}
 
 	def "in read-only mode the proxy rejects a request if no recorded interaction exists"() {

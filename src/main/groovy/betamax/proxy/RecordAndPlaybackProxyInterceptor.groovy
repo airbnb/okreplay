@@ -38,8 +38,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 		def tape = recorder.tape
 		if (!tape) {
 			log.error "no tape inserted..."
-			response.status = HTTP_FORBIDDEN
-			response.reason = "No tape"
+			response.setError(HTTP_FORBIDDEN, "No tape")
 			true
 		} else if (tape.seek(request) && tape.isReadable()) {
 			log.info "playing back from tape '$tape.name'..."
@@ -47,8 +46,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 			tape.play(response)
 			true
 		} else if (!tape.isWritable()) {
-			response.status = HTTP_FORBIDDEN
-			response.reason = "Tape is read-only"
+			response.setError(HTTP_FORBIDDEN, "Tape is read-only")
 			true
 		} else {
 			response.addHeader(X_BETAMAX, "REC")

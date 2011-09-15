@@ -1,34 +1,37 @@
 package betamax.proxy
 
 import betamax.Recorder
+import betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
-
+import static betamax.Recorder.*
+import betamax.proxy.jetty.*
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
-import betamax.proxy.httpcore.HttpProxyServer
-import betamax.proxy.jetty.SimpleServer
-import betamax.util.server.EchoHandler
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") HttpProxyServer proxy = new HttpProxyServer()
+	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(DEFAULT_PROXY_PORT, DEFAULT_PROXY_TIMEOUT)
 	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	def setupSpec() {
 		recorder.insertTape("proxy_record_and_playback_spec")
-
 		proxy.start(recorder)
+		recorder.overrideProxySettings()
 	}
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+	}
+
+	def cleanupSpec() {
+		recorder.restoreOriginalProxySettings()
 	}
 
 	@Timeout(10)
@@ -50,6 +53,10 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		then:
 		recorder.tape.interactions.size() == 1
+
+
+		cleanup:
+		recorder.tape.reset()
 	}
 
 	@Timeout(10)

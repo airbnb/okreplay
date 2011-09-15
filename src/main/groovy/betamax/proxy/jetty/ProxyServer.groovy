@@ -14,31 +14,27 @@
  * limitations under the License.
  */
 
-package betamax.util.message
+package betamax.proxy.jetty
 
-import betamax.proxy.Response
+import betamax.Recorder
+import betamax.proxy.RecordAndPlaybackProxyInterceptor
 
-class BasicResponse extends BasicMessage implements Response {
+class ProxyServer extends SimpleServer {
 
-	int status
-	String reason
+	private final int timeout
 
-	BasicResponse() {}
-
-	BasicResponse(int status, String reason) {
-		this.status = status
-		this.reason = reason
+	ProxyServer(int port, int timeout) {
+		super(port)
+		this.timeout = timeout
 	}
 
-	void setError(int status, String reason) {
-		this.status = status
-		this.reason = reason
+	void start(Recorder recorder) {
+		def handler = new ProxyHandler()
+		handler.interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
+		handler.timeout = timeout
+
+		super.start(handler)
 	}
 
-	@Override
-	protected OutputStream initOutputStream() {
-		new MessageOutputStream(this)
-	}
 
 }
-

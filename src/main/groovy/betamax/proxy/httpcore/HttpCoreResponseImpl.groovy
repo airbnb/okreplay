@@ -41,6 +41,11 @@ class HttpCoreResponseImpl extends HttpCoreMessageImpl<HttpResponse> implements 
 		delegate.reasonPhrase = reason
 	}
 
+	void setError(int status, String reason) {
+		delegate.statusCode = status
+		delegate.reasonPhrase = reason
+	}
+
 	boolean hasBody() {
 		delegate.entity != null
 	}

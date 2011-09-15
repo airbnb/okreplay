@@ -16,13 +16,12 @@
 
 package betamax
 
-import betamax.proxy.RecordAndPlaybackProxyInterceptor
+import betamax.proxy.jetty.ProxyServer
 import betamax.tape.StorableTape
 import betamax.tape.yaml.YamlTapeLoader
 import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
 import static betamax.TapeMode.READ_WRITE
-import betamax.proxy.jetty.*
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
 
@@ -81,7 +80,7 @@ class Recorder implements MethodRule {
 	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
 	private StorableTape tape
-	private SimpleServer proxy = new SimpleServer(proxyPort)
+	private ProxyServer proxy = new ProxyServer(proxyPort, proxyTimeout) // TODO: setting params here isn't working as it's before config parsing
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -109,8 +108,8 @@ class Recorder implements MethodRule {
 	 */
 	void ejectTape() {
 		if (tape) {
-		tapeLoader.writeTape(tape)
-		tape = null
+			tapeLoader.writeTape(tape)
+			tape = null
 		}
 	}
 
@@ -128,28 +127,17 @@ class Recorder implements MethodRule {
 	/**
 	 * Runs the supplied closure after starting the Betamax proxy and inserting a _tape_. After the closure completes
 	 * the _tape_ is ejected and the proxy stopped.
-	 * @param name the name of the _tape_.
+	 * @param tapeName the name of the _tape_.
 	 * @param arguments arguments that affect the operation of the proxy.
 	 * @param closure the closure to execute.
 	 * @return the return value of the closure.
 	 */
-	def withTape(String name, Map arguments, Closure closure) {
+	def withTape(String tapeName, Map arguments, Closure closure) {
 		try {
-			def handler = new ProxyHandler()
-			handler.interceptor = new RecordAndPlaybackProxyInterceptor(this)
-			handler.timeout = proxyTimeout
-
-			proxy.start(handler)
-
-			insertTape(name, arguments.mode ?: defaultMode)
-
-			overrideProxySettings()
-
+			startProxy(tapeName, arguments)
 			closure()
 		} finally {
-			restoreOriginalProxySettings()
-			proxy.stop()
-			ejectTape()
+			stopProxy()
 		}
 	}
 
@@ -168,6 +156,18 @@ class Recorder implements MethodRule {
 			log.debug "no @Betamax annotation on '$method.name'"
 			statement
 		}
+	}
+
+	private void startProxy(String tapeName, Map arguments) {
+		proxy.start(this)
+		insertTape(tapeName, arguments.mode ?: defaultMode)
+		overrideProxySettings()
+	}
+
+	private void stopProxy() {
+		restoreOriginalProxySettings()
+		proxy.stop()
+		ejectTape()
 	}
 
 	private TapeLoader getTapeLoader() {
@@ -192,14 +192,14 @@ class Recorder implements MethodRule {
 	private originalProxyHost
 	private originalProxyPort
 
-	private void overrideProxySettings() {
+	void overrideProxySettings() {
 		originalProxyHost = System.properties."http.proxyHost"
 		originalProxyPort = System.properties."http.proxyPort"
 		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
 		System.properties."http.proxyPort" = proxyPort.toString()
 	}
 
-	private void restoreOriginalProxySettings() {
+	void restoreOriginalProxySettings() {
 		if (originalProxyHost) {
 			System.properties."http.proxyHost" = originalProxyHost
 		} else {
