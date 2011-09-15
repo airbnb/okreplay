@@ -3,7 +3,6 @@ package betamax.recorder
 import betamax.Recorder
 import betamax.util.server.EchoHandler
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import static betamax.Recorder.DEFAULT_PROXY_PORT
 import static betamax.TapeMode.*
 import betamax.proxy.jetty.*
 import groovyx.net.http.*
@@ -14,7 +13,7 @@ class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(DEFAULT_PROXY_PORT)
+	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
 	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

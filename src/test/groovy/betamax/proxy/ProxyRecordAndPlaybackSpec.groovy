@@ -5,7 +5,6 @@ import betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
-import static betamax.Recorder.DEFAULT_PROXY_PORT
 import betamax.proxy.jetty.*
 import static java.net.HttpURLConnection.HTTP_OK
 import spock.lang.*
@@ -15,7 +14,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
 	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(DEFAULT_PROXY_PORT)
+	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
 	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

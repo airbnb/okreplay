@@ -80,7 +80,7 @@ class Recorder implements MethodRule {
 	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
 	private StorableTape tape
-	private ProxyServer proxy = new ProxyServer(proxyPort) // TODO: setting params here isn't working as it's before config parsing
+	private ProxyServer proxy = new ProxyServer()
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -159,7 +159,10 @@ class Recorder implements MethodRule {
 	}
 
 	private void startProxy(String tapeName, Map arguments) {
-		proxy.start(this)
+		if (!proxy.running) {
+			proxy.port = proxyPort
+			proxy.start(this)
+		}
 		insertTape(tapeName, arguments.mode ?: defaultMode)
 		overrideProxySettings()
 	}

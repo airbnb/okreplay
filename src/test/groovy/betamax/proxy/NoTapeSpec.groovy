@@ -3,7 +3,6 @@ package betamax.proxy
 import betamax.Recorder
 import betamax.util.server.EchoHandler
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import static betamax.Recorder.DEFAULT_PROXY_PORT
 import betamax.proxy.jetty.*
 import groovyx.net.http.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
@@ -13,7 +12,7 @@ import spock.lang.*
 class NoTapeSpec extends Specification {
 
 	@Shared @AutoCleanup("restoreOriginalProxySettings") Recorder recorder = new Recorder()
-	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(DEFAULT_PROXY_PORT)
+	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
 	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

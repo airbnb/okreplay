@@ -18,11 +18,12 @@ package betamax.proxy.jetty
 
 import betamax.Recorder
 import betamax.proxy.RecordAndPlaybackProxyInterceptor
+import static betamax.Recorder.DEFAULT_PROXY_PORT
 
 class ProxyServer extends SimpleServer {
 
-	ProxyServer(int port) {
-		super(port)
+	ProxyServer() {
+		super(DEFAULT_PROXY_PORT)
 	}
 
 	void start(Recorder recorder) {

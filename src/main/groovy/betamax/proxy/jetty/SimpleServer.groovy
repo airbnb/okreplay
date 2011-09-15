@@ -27,7 +27,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 	static final int DEFAULT_PORT = 5000
 	
 	private final String host
-	private final int port
+	private int port
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
@@ -77,6 +77,17 @@ class SimpleServer extends AbstractLifeCycleListener {
 			server.stop()
 			stoppedLatch.await()
 		}
+	}
+
+	void setPort(int port) {
+		if (running) {
+			throw new IllegalStateException("Cannot set port once the server is already started")
+		}
+		this.port = port
+	}
+
+	boolean isRunning() {
+		startedLatch?.count == 0 && stoppedLatch?.count > 0
 	}
 
 	@Override
