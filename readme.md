@@ -22,7 +22,7 @@ The current stable version of Betamax is 1.0-M1 which is available from [Maven C
 
 The current development version of Betamax is 1.0-M2-SNAPSHOT which is available from [Sonatype][sonatype].
 
-I would encourage users to give feedback, raise issues etc. via GitHub.
+Please get in touch if you have any  feedback. You can raise defects and feature requests via [GitHub issues][issues].
 
 ## Usage
 
@@ -30,6 +30,7 @@ To use Betamax you just need to annotate your JUnit test or [Spock][spock] speci
 and include a `betamax.Recorder` Rule.
 
 [home]:http://robfletcher.github.com/betamax
+[issues]:http://github.com/robfletcher/betamax/issues
 [maven]:http://repo1.maven.org/maven2/com/github/robfletcher/betamax/
 [sonatype]:https://oss.sonatype.org/content/groups/public/com/github/robfletcher/betamax/
 [spock]:http://spockframework.org/
