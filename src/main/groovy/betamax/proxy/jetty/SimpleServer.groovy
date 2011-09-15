@@ -24,6 +24,8 @@ import org.eclipse.jetty.server.*
 
 class SimpleServer extends AbstractLifeCycleListener {
 
+	static final int DEFAULT_PORT = 5000
+	
 	private final String host
 	private final int port
 	private Server server
@@ -32,7 +34,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 	private final log = Logger.getLogger(SimpleServer)
 
 	SimpleServer() {
-		this(5000)
+		this(DEFAULT_PORT)
 	}
 
 	SimpleServer(int port) {

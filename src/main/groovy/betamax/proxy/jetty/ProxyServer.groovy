@@ -21,17 +21,14 @@ import betamax.proxy.RecordAndPlaybackProxyInterceptor
 
 class ProxyServer extends SimpleServer {
 
-	private final int timeout
-
-	ProxyServer(int port, int timeout) {
+	ProxyServer(int port) {
 		super(port)
-		this.timeout = timeout
 	}
 
 	void start(Recorder recorder) {
 		def handler = new ProxyHandler()
 		handler.interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
-		handler.timeout = timeout
+		handler.timeout = recorder.proxyTimeout
 
 		super.start(handler)
 	}
