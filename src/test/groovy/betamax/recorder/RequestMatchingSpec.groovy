@@ -72,7 +72,6 @@ interactions:
 		"get"  | "http://qwantz.com/" | "get method response from qwantz.com"
 	}
 
-	@Ignore
 	def "can match based on host"() {
 		given:
 		new File(tapeRoot, "host_match_tape.yaml").text = """\
@@ -96,7 +95,7 @@ interactions:
 		}
 
 		then:
-		response.getFirstHeader(VIA, "Betamax")
+		response.getFirstHeader(VIA)?.value == "Betamax"
 		response.data.text == "get method response from xkcd.com"
 	}
 }
