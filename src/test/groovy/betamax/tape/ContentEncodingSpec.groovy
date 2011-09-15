@@ -1,16 +1,11 @@
 package betamax.tape
 
 import betamax.tape.yaml.YamlTape
-
-import org.apache.http.entity.ByteArrayEntity
-import org.apache.http.message.BasicHttpResponse
 import betamax.encoding.*
+import betamax.util.message.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
-import static org.apache.http.HttpVersion.HTTP_1_1
 import spock.lang.*
-import betamax.util.message.BasicRequest
-import betamax.proxy.httpcore.HttpCoreResponseImpl
 
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 class ContentEncodingSpec extends Specification {
@@ -21,18 +16,14 @@ class ContentEncodingSpec extends Specification {
 		def request = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
-		def entity = new ByteArrayEntity(encoder.encode("O HAI!"))
-		entity.setContentType("text/plain")
-		entity.setContentEncoding(encoding)
-
-		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		def response = new BasicResponse(HTTP_OK, "OK")
 		response.addHeader(CONTENT_TYPE, "text/plain")
 		response.addHeader(CONTENT_ENCODING, encoding)
-		response.entity = entity
+		response.body = encoder.encode("O HAI!")
 
 		and:
 		def tape = new YamlTape(name: "encoded response tape")
-		tape.record(request, new HttpCoreResponseImpl(response))
+		tape.record(request, response)
 
 		when:
 		def writer = new StringWriter()
@@ -70,15 +61,15 @@ interactions:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
-		def response = new BasicHttpResponse(HTTP_1_1, 200, "OK")
+		def response = new BasicResponse(200, "OK")
 
 		when:
 		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
-		tape.play(new HttpCoreResponseImpl(response))
+		tape.play(response)
 
 		then:
-		response.getFirstHeader(CONTENT_ENCODING).value == encoding
-		encoder.decode(response.entity.content) == "O HAI!"
+		response.getFirstHeader(CONTENT_ENCODING) == encoding
+		encoder.decode(new ByteArrayInputStream(response.body)) == "O HAI!"
 
 		where:
 		encoding  | encoder

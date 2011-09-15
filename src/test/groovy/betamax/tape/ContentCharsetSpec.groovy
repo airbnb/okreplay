@@ -1,14 +1,10 @@
 package betamax.tape
 
-import betamax.proxy.httpcore.HttpCoreResponseImpl
-import betamax.util.message.BasicRequest
 import betamax.tape.yaml.YamlTape
-import org.apache.http.entity.ByteArrayEntity
 import betamax.encoding.*
+import betamax.util.message.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
-import static org.apache.http.HttpVersion.HTTP_1_1
-import org.apache.http.message.*
 import spock.lang.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/21")
@@ -19,23 +15,14 @@ class ContentCharsetSpec extends Specification {
 		given:
 		def request = new BasicRequest()
 
-		def bytes = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
-
-		def contentTypeHeader = new BasicHeader(CONTENT_TYPE, "text/plain;charset=$charset")
-		def contentEncodingHeader = new BasicHeader(CONTENT_ENCODING, encoding)
-
-		def entity = new ByteArrayEntity(bytes)
-		entity.contentType = contentTypeHeader
-		entity.contentEncoding = contentEncodingHeader
-
-		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
-		response.addHeader(contentTypeHeader)
-		response.addHeader(contentEncodingHeader)
-		response.entity = entity
+		def response = new BasicResponse(HTTP_OK, "OK")
+		response.addHeader(CONTENT_TYPE, "text/plain;charset=$charset")
+		response.addHeader(CONTENT_ENCODING, encoding)
+		response.body = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
 
 		and:
 		def tape = new YamlTape(name: "charsets")
-		tape.record(request, new HttpCoreResponseImpl(response))
+		tape.record(request, response)
 
 		when:
 		def writer = new StringWriter()
@@ -78,15 +65,15 @@ interactions:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
-		def response = new BasicHttpResponse(HTTP_1_1, HTTP_OK, "OK")
+		def response = new BasicResponse(HTTP_OK, "OK")
 
 		when:
 		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
-		tape.play(new HttpCoreResponseImpl(response))
+		tape.play(response)
 
 		then:
 		def expected = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
-		response.entity.content.bytes == expected
+		response.body == expected
 
 		where:
 		charset      | encoding  | encoder
