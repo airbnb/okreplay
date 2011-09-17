@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
 		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
 			excludes "groovy", "xml-apis"
 		}
-		test "com.github.robfletcher:betamax:1.0-M2-SNAPSHOT"
+		test "com.github.robfletcher:betamax:1.0"
     }
 
     plugins {
