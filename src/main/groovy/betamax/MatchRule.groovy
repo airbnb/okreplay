@@ -46,6 +46,24 @@ enum MatchRule implements Comparator<Request> {
 			a.uri.path <=> b.uri.path
 		}
 	},
+	port {
+		@Override
+		int compare(Request a, Request b) {
+			a.uri.port <=> b.uri.port
+		}
+	},
+	query {
+		@Override
+		int compare(Request a, Request b) {
+			a.uri.query <=> b.uri.query
+		}
+	},
+	fragment {
+		@Override
+		int compare(Request a, Request b) {
+			a.uri.fragment <=> b.uri.fragment
+		}
+	},
 	headers {
 		@Override
 		int compare(Request a, Request b) {
