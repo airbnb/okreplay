@@ -18,9 +18,9 @@ Full documentation can be found on [Betamax's home page][home].
 
 ## Project status
 
-The current stable version of Betamax is 1.0-M1 which is available from [Maven Central][maven].
+The current stable version of Betamax is 1.0 which is available from [Maven Central][maven].
 
-The current development version of Betamax is 1.0-M2-SNAPSHOT which is available from [Sonatype][sonatype].
+Development versions are available from [Sonatype][sonatype].
 
 Please get in touch if you have any  feedback. You can raise defects and feature requests via [GitHub issues][issues].
 
