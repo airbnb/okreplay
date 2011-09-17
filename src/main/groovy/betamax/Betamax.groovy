@@ -27,5 +27,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME
 @interface Betamax {
 	String tape()
 	TapeMode mode() default READ_WRITE
-	MatchRule[] matchRules() default [method, uri]
+	MatchRule[] match() default [method, uri]
 }

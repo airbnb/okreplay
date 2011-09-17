@@ -91,7 +91,7 @@ class Recorder implements MethodRule {
 	void insertTape(String name, Map arguments = [:]) {
 		tape = tapeLoader.loadTape(name)
 		tape.mode = arguments.mode ?: defaultMode
-		tape.matchRules = arguments.matchRules ?: [method, uri]
+		tape.matchRules = arguments.match ?: [method, uri]
 		tape
 	}
 
@@ -149,7 +149,7 @@ class Recorder implements MethodRule {
 			log.debug "found @Betamax annotation on '$method.name'"
 			new Statement() {
 				void evaluate() {
-					withTape(annotation.tape(), [mode: annotation.mode(), matchRules: annotation.matchRules()]) {
+					withTape(annotation.tape(), [mode: annotation.mode(), match: annotation.match()]) {
 						statement.evaluate()
 					}
 				}

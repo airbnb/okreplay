@@ -83,7 +83,7 @@ interactions:
     body: get method response from xkcd.com
 """
 		when:
-		def response = recorder.withTape("host match tape", [matchRules: [host]]) {
+		def response = recorder.withTape("host match tape", [match: [host]]) {
 			http.get(uri: "http://xkcd.com/875/")
 		}
 
