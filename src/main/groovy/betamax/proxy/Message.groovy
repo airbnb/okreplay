@@ -24,13 +24,7 @@ interface Message {
 	/**
 	 * @return all HTTP headers attached to this message.
 	 */
-	Map<String, List<String>> getHeaders()
-
-	/**
-	 * @param name an HTTP header name.
-	 * @return values for all HTTP headers with the specified name or an empty list if there are no headers with that name.
-	 */
-	List<String> getHeaders(String name)
+	Map<String, String> getHeaders()
 
 	/**
 	 * @param name an HTTP header name.

@@ -3,6 +3,7 @@ package betamax.recorder
 import betamax.Recorder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import static betamax.MatchRule.host
 import static org.apache.http.HttpHeaders.VIA
 import spock.lang.*
 
@@ -24,7 +25,7 @@ class RequestMatchingSpec extends Specification {
 		given:
 		new File(tapeRoot, "method_and_uri_tape.yaml").text = """\
 !tape
-name: method_and_uri_tape
+name: method and uri tape
 interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
@@ -52,7 +53,7 @@ interactions:
     body: get method response from qwantz.com
 """
 		when:
-		def response = recorder.withTape("method_and_uri_tape") {
+		def response = recorder.withTape("method and uri tape") {
 			http."$method"(uri: uri)
 		}
 
@@ -70,7 +71,7 @@ interactions:
 		given:
 		new File(tapeRoot, "host_match_tape.yaml").text = """\
 !tape
-name: host_match_tape
+name: host match tape
 interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
@@ -82,7 +83,7 @@ interactions:
     body: get method response from xkcd.com
 """
 		when:
-		def response = recorder.withTape("host_match_tape", [match: ["host"]]) {
+		def response = recorder.withTape("host match tape", [matchRules: [host]]) {
 			http.get(uri: "http://xkcd.com/875/")
 		}
 

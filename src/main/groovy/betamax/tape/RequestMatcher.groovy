@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package betamax.proxy
+package betamax.tape
 
-interface Response extends Message {
+import betamax.proxy.Request
+import static betamax.MatchRule.*
 
-	/**
-	 * @return the HTTP status code of the response.
-	 */
-    int getStatus()
+class RequestMatcher {
 
-	/**
-	 * @return the content MIME type of the response.
-	 */
-    String getContentType()
+	private final Comparator<Request>[] rules
+	private final Request request
+
+	RequestMatcher(Request request) {
+		this(request, [method, uri] as Comparator<Request>[]) // not sure why varargs doesn't want to work here
+	}
+
+	RequestMatcher(Request request, Comparator<Request>... rules) {
+		this.request = request
+		this.rules = rules
+	}
+
+	boolean matches(RecordedRequest recordedRequest) {
+		rules.every { it.compare(request, recordedRequest) == 0 }
+	}
 
 }
+

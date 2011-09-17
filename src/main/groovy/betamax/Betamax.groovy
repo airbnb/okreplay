@@ -16,6 +16,7 @@
 
 package betamax
 
+import static betamax.MatchRule.*
 import static betamax.TapeMode.READ_WRITE
 import java.lang.annotation.*
 import static java.lang.annotation.ElementType.METHOD
@@ -26,4 +27,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME
 @interface Betamax {
 	String tape()
 	TapeMode mode() default READ_WRITE
+	MatchRule[] matchRules() default [method, uri]
 }

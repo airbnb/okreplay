@@ -26,6 +26,6 @@ interface Request extends Message {
 	/**
 	 * @return the target URI of the request.
 	 */
-	URI getTarget()
+	URI getUri()
 
 }

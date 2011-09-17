@@ -22,7 +22,7 @@ import static org.apache.http.HttpHeaders.*
 
 abstract class BasicMessage extends AbstractMessage {
 
-	Map<String, List<String>> headers = [:]
+	private Map<String, List<String>> headers = [:]
 	byte[] body = new byte[0]
 
 	void addHeader(String name, String value) {
@@ -31,6 +31,15 @@ abstract class BasicMessage extends AbstractMessage {
 		} else {
 			headers[name] = [value]
 		}
+	}
+
+	void setHeaders(Map<String, List<String>> headers) {
+		this.headers = headers
+	}
+
+	Map<String, String> getHeaders() {
+		def map = headers.collectEntries { [(it.key): it.value.join(", ")] }
+		map.asImmutable()
 	}
 
 	final boolean hasBody() {

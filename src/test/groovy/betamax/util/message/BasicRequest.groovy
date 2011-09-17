@@ -21,13 +21,13 @@ import betamax.proxy.Request
 class BasicRequest extends BasicMessage implements Request {
 
 	String method
-	URI target
+	URI uri
 
 	BasicRequest() { }
 
-	BasicRequest(String method, String target) {
+	BasicRequest(String method, String uri) {
 		this.method = method
-		this.target = target.toURI()
+		this.uri = uri.toURI()
 	}
 
 	@Override

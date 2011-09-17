@@ -21,6 +21,7 @@ import betamax.tape.StorableTape
 import betamax.tape.yaml.YamlTapeLoader
 import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
+import static betamax.MatchRule.*
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
@@ -85,11 +86,12 @@ class Recorder implements MethodRule {
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
 	 * @param name the name of the _tape_.
-	 * @param mode the read/write mode of the tape.
+	 * @param arguments customize the behaviour of the tape.
 	 */
-	void insertTape(String name, TapeMode mode = defaultMode) {
+	void insertTape(String name, Map arguments = [:]) {
 		tape = tapeLoader.loadTape(name)
-		tape.mode = mode
+		tape.mode = arguments.mode ?: defaultMode
+		tape.matchRules = arguments.matchRules ?: [method, uri]
 		tape
 	}
 
@@ -147,7 +149,7 @@ class Recorder implements MethodRule {
 			log.debug "found @Betamax annotation on '$method.name'"
 			new Statement() {
 				void evaluate() {
-					withTape(annotation.tape(), [mode: annotation.mode()]) {
+					withTape(annotation.tape(), [mode: annotation.mode(), matchRules: annotation.matchRules()]) {
 						statement.evaluate()
 					}
 				}
@@ -163,7 +165,7 @@ class Recorder implements MethodRule {
 			proxy.port = proxyPort
 			proxy.start(this)
 		}
-		insertTape(tapeName, arguments.mode ?: defaultMode)
+		insertTape(tapeName, arguments)
 		overrideProxySettings()
 	}
 

@@ -39,7 +39,7 @@ class TapeModeSpec extends Specification {
 
 	def "in read-only mode the proxy rejects a request if no recorded interaction exists"() {
 		given: "a read-only tape is inserted"
-		recorder.insertTape("read only tape", READ_ONLY)
+		recorder.insertTape("read only tape", [mode: READ_ONLY])
 
 		when: "a request is made that does not match anything recorded on the tape"
 		http.get(uri: endpoint.url)
@@ -52,7 +52,7 @@ class TapeModeSpec extends Specification {
 
 	def "in write-only mode the an interaction can be recorded"() {
 		given: "an empty write-only tape is inserted"
-		recorder.insertTape("blank write only tape", WRITE_ONLY)
+		recorder.insertTape("blank write only tape", [mode: WRITE_ONLY])
 		def tape = recorder.tape
 
 		when: "a request is made"
@@ -79,7 +79,7 @@ interactions:
     headers: {}
     body: Previous response made when endpoint was down.
 """
-		recorder.insertTape("write only tape", WRITE_ONLY)
+		recorder.insertTape("write only tape", [mode: WRITE_ONLY])
 		def tape = recorder.tape
 
 		when: "a request is made that matches a request already recorded on the tape"

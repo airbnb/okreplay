@@ -4,12 +4,10 @@ import betamax.Tape
 import betamax.encoding.GzipEncoder
 import static betamax.TapeMode.*
 import betamax.proxy.*
-
+import betamax.util.message.*
 import static groovyx.net.http.ContentType.URLENC
 import static org.apache.http.HttpHeaders.*
 import spock.lang.*
-import betamax.util.message.BasicResponse
-import betamax.util.message.BasicRequest
 
 @Stepwise
 class TapeSpec extends Specification {
@@ -17,6 +15,7 @@ class TapeSpec extends Specification {
 	@Shared Tape tape = new MemoryTape(name: "tape_spec")
 	Request getRequest = new BasicRequest("GET", "http://icanhascheezburger.com/")
 	Response plainTextResponse = new BasicResponse(status: 200, reason: "OK", body: new GzipEncoder().encode("O HAI!", "UTF-8"))
+	RequestMatcher requestMatcher = new RequestMatcher(getRequest)
 
 	def setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, "text/plain;charset=UTF-8")
@@ -47,7 +46,7 @@ class TapeSpec extends Specification {
 
 		and: "the request data is correctly stored"
 		interaction.request.method == getRequest.method
-		interaction.request.uri == getRequest.target.toString()
+		interaction.request.uri == getRequest.uri
 
 		and: "the response data is correctly stored"
 		interaction.response.status == plainTextResponse.status

@@ -59,8 +59,9 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 		headers["Content-Encoding"]?.first()
 	}
 
-	Map<String, List<String>> getHeaders() {
-		headers.asImmutable()
+	Map<String, String> getHeaders() {
+		def map = headers.collectEntries { [(it.key): it.value.join(", ")] }
+		map.asImmutable()
 	}
 
 	@Override

@@ -2,10 +2,8 @@ package betamax.proxy
 
 import spock.lang.Specification
 import betamax.*
-
+import betamax.util.message.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
-import betamax.util.message.BasicResponse
-import betamax.util.message.BasicRequest
 
 class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 

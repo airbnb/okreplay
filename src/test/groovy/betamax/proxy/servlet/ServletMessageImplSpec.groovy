@@ -22,7 +22,7 @@ class ServletMessageImplSpec extends Specification {
 
 		expect:
 		request.method == "GET"
-		request.target == new URI("http://robfletcher.github.com/betamax")
+		request.uri == new URI("http://robfletcher.github.com/betamax")
 	}
 
 	def "request target includes query string"() {
@@ -34,7 +34,7 @@ class ServletMessageImplSpec extends Specification {
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
-		request.target == new URI("http://robfletcher.github.com/betamax?q=1")
+		request.uri == new URI("http://robfletcher.github.com/betamax?q=1")
 	}
 
 	def "request can read headers"() {
@@ -48,7 +48,7 @@ class ServletMessageImplSpec extends Specification {
 
 		expect:
 		request.getHeader("If-None-Match") == "abc123"
-		request.getHeaders("Accept-Encoding") == ["gzip", "deflate"]
+		request.getHeader("Accept-Encoding") == "gzip, deflate"
 	}
 
 	def "request headers are immutable"() {
@@ -117,7 +117,7 @@ class ServletMessageImplSpec extends Specification {
 
 		then: "they can be retrieved again"
 		response.getHeader("E-Tag") == "abc123"
-		response.getHeaders("Vary") == ["Content-Language", "Content-Type"]
+		response.getHeader("Vary") == "Content-Language, Content-Type"
 
 		and: "they are added to the underlying servlet response"
 		1 * servletResponse.addHeader("E-Tag", "abc123")

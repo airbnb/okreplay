@@ -56,7 +56,7 @@ class YamlTape extends MemoryTape implements StorableTape {
         def constructor = new Constructor()
         constructor.addTypeDescription(new TypeDescription(YamlTape, "!tape"))
 
-        def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK)
+        def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK, width: 256)
 
         new Yaml(constructor, representer, dumperOptions)
     }

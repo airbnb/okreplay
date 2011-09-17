@@ -5,12 +5,10 @@ import org.apache.http.HttpEntity
 import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
 import betamax.proxy.*
-
+import betamax.util.message.*
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import spock.lang.*
-import betamax.util.message.BasicResponse
-import betamax.util.message.BasicRequest
 
 class WriteTapeToYamlSpec extends Specification {
 

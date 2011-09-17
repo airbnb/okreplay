@@ -17,10 +17,11 @@
 package betamax.tape.yaml
 
 import betamax.Tape
+import org.yaml.snakeyaml.representer.Represent
 import betamax.tape.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
-import static org.yaml.snakeyaml.nodes.Tag.NULL
+import static org.yaml.snakeyaml.nodes.Tag.*
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
@@ -29,6 +30,7 @@ class TapeRepresenter extends GroovyRepresenter {
 
 	TapeRepresenter() {
 		propertyUtils = new TapePropertyUtils()
+		representers[URI] = new RepresentURI()
 	}
 
 	@Override
@@ -48,6 +50,11 @@ class TapeRepresenter extends GroovyRepresenter {
 		super.representMapping(tag, mapping.sort(), flowStyle)
 	}
 
+	private class RepresentURI implements Represent {
+		Node representData(Object data) {
+			representScalar STR, data.toString()
+		}
+	}
 }
 
 class TapePropertyUtils extends PropertyUtils {

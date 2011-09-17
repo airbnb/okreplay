@@ -32,10 +32,6 @@ abstract class AbstractMessage implements Message {
 	protected abstract OutputStream initOutputStream()
 
 	final String getHeader(String name) {
-		getHeaders(name)?.join(", ")
-	}
-
-	final List<String> getHeaders(String name) {
 		headers[name]
 	}
 

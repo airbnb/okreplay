@@ -17,10 +17,11 @@
 package betamax.tape
 
 import betamax.*
+import static betamax.MatchRule.*
 import static betamax.TapeMode.READ_WRITE
 import betamax.proxy.*
 import static betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
-import static org.apache.http.HttpHeaders.VIA
+import static org.apache.http.HttpHeaders.*
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -30,10 +31,15 @@ class MemoryTape implements Tape {
 	String name
 	List<RecordedInteraction> interactions = []
 	private TapeMode mode = READ_WRITE
+	private Comparator<Request>[] matchRules = [method, uri]
 	private int position = -1
 
 	void setMode(TapeMode mode) {
 		this.mode = mode
+	}
+
+	void setMatchRules(Comparator<Request>[] matchRules) {
+		this.matchRules = matchRules
 	}
 
 	boolean isReadable() {
@@ -49,8 +55,9 @@ class MemoryTape implements Tape {
 	}
 
 	boolean seek(Request request) {
+		def requestMatcher = new RequestMatcher(request, matchRules)
 		position = interactions.findIndexOf {
-			it.request.uri == request.target.toString() && it.request.method == request.method
+			requestMatcher.matches(it.request)
 		}
 		position >= 0
 	}
@@ -104,10 +111,10 @@ class MemoryTape implements Tape {
 	private static RecordedRequest recordRequest(Request request) {
 		def clone = new RecordedRequest()
 		clone.method = request.method
-		clone.uri = request.target
+		clone.uri = request.uri
 		request.headers.each {
 			if (it.key != VIA) {
-				clone.headers[it.key] = it.value.join(", ")
+				clone.headers[it.key] = it.value
 			}
 		}
 		clone.body = request.hasBody() ? request.bodyAsText.text : null // TODO: handle encoded request bodies
@@ -119,7 +126,7 @@ class MemoryTape implements Tape {
 		clone.status = response.status
 		response.headers.each {
 			if (!(it.key in [VIA, X_BETAMAX])) {
-				clone.headers[it.key] = it.value.join(", ")
+				clone.headers[it.key] = it.value
 			}
 		}
 		if (response.hasBody()) {
@@ -144,15 +151,51 @@ class RecordedInteraction {
 	RecordedResponse response
 }
 
-class RecordedRequest {
+class RecordedRequest implements Request {
 	String method
-	String uri
+	URI uri
 	Map<String, String> headers = [:]
 	String body
+
+	String getHeader(String name) {
+		headers[name]
+	}
+
+	boolean hasBody() {
+		body
+	}
+
+	Reader getBodyAsText() {
+		new InputStreamReader(bodyAsBinary) // TODO: charset
+	}
+
+	InputStream getBodyAsBinary() {
+		new ByteArrayInputStream(body.bytes)
+	}
 }
 
-class RecordedResponse {
+class RecordedResponse implements Response {
 	int status
 	Map<String, String> headers = [:]
 	def body
+
+	String getHeader(String name) {
+		headers[name]
+	}
+
+	boolean hasBody() {
+		body
+	}
+
+	Reader getBodyAsText() {
+		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary) // TODO: charset
+	}
+
+	InputStream getBodyAsBinary() {
+		body instanceof String ? new ByteArrayInputStream(body.bytes) : new ByteArrayInputStream(body)
+	}
+
+	String getContentType() {
+		headers[CONTENT_TYPE]
+	}
 }
