@@ -137,7 +137,7 @@ class MemoryTape implements Tape {
 
 	static boolean isTextContentType(String contentType) {
 		if (contentType) {
-			contentType.startsWith("text/") || contentType in ["application/json", "application/javascript"]
+			contentType =~ /^text\/|application\/(json|javascript)/
 		} else {
 			false
 		}

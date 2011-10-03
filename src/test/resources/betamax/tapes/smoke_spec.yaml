@@ -1,7 +1,7 @@
 !tape
 name: smoke spec
 interactions:
-- recorded: 2011-09-15T19:32:57.988Z
+- recorded: 2011-10-03T22:17:20.136Z
   request:
     method: GET
     uri: http://grails.org/
@@ -16,215 +16,74 @@ interactions:
       Content-Encoding: gzip
       Content-Language: en-US
       Content-Type: text/html;charset=UTF-8
-      Date: Thu, 15 Sep 2011 19:32:56 GMT
+      Date: Mon, 03 Oct 2011 22:17:19 GMT
       Server: Apache/2.2.3 (Red Hat)
       Vary: Accept-Encoding
-    body: "<!DOCTYPE html>\n<!--[if lt IE 7 ]> <html class=\"ie6\"> <![endif]-->\n\
-      <!--[if IE 7 ]>    <html class=\"ie7\"> <![endif]-->\n<!--[if IE 8 ]>    <html\
-      \ class=\"ie8\"> <![endif]-->\n<!--[if IE 9 ]>    <html class=\"ie9\"> <![endif]-->\n\
-      <!--[if (gt IE 9)|!(IE)]><!--> <html class=\"\"> <!--<![endif]-->\n<head>\n\
-      \    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"\
-      />\n    <meta name=\"robots\" content=\"NOODP\">\t\n    <meta name=\"Description\"\
-      \ content=\"Grails is a high-productivity web framework based on the Groovy\
-      \ language that embraces the coding by convention paradigm, but is designed\
-      \ specifically for the Java platform.\">\t\n\t\n    <title>Grails - The search\
-      \ is over.</title>\n    \n    \n    <link href=\"/static/mnqzhxEka8fg6Hu3z6ra5TBwnHBXIJDpqN0Mz2O4JZw.ico\"\
-      \ rel=\"shortcut icon\" />\n    \n<link href=\"/static/khe6KM5Qe8BczqwESfsTfJf60pT5jC6UqJJDyJEG37w.css\"\
-      \ type=\"text/css\" rel=\"stylesheet\" media=\"screen, projector\" />\n<link\
-      \ href=\"/static/GqIQDLEx8ZUpfNh4oC5LlbNw0cYPgfguzPxjVRsCSm.css\" type=\"text/css\"\
-      \ rel=\"stylesheet\" media=\"screen, projector\" />\n\n    \n    \n\t<meta http-equiv=\"\
-      Content-type\" content=\"text/html; charset=utf-8\"/>\n    <meta content=\"\
-      homepage\" name=\"layout\"/>\n    <link rel=\"alternate\" type=\"application/rss+xml\"\
-      \ title=\"RSS 2.0\" href=\"/blog/feed/rss\"/>\n    <link rel=\"alternate\" type=\"\
-      application/atom+xml\" title=\"Atom 1.0\" href=\"/blog/feed/atom\"/>\n\n   \
-      \ \n    \n    <style>\n#events {\n    left: 635px;\n    top: 2px;\n    background:\
-      \ none;\n    width: 270px;\n    height: 270px;\n}\n\n#events h2 {\n    font-weight:\
-      \ bold;\n    color: #363636;\n    font-size: 10pt;\n    margin: 0px 0px 0px\
-      \ 8px;\n    padding: 0px;\n}\n\n    </style>\n</head>\n<body>\n    \n<div align=\"\
-      center\">\n\t<div id=\"springSourceBar\">\n\t<div id=\"grailsLogo\">\n\t\t<a\
-      \ href=\"/\"><img src=\"/static/cXmUZIAv28XIiNgkRiz4RRl21TsGZ5HoGpZw1UITNyV.png\"\
-      \ border=\"0\" /></a>\t\t\t\n\t</div>\n\n\t<div id=\"springSourceLogo\">\n\t\
-      \t<a href=\"http://www.springsource.com/\"><img src=\"/static/xATgakdqUqjehM4CPEgEyIEVaa7xHY09sonkDDDBPA5.png\"\
-      \ border=\"0\" /></a>\t\t\t\n\t</div>\n\t<div id=\"searchbar\">\n\t\t<form action=\"\
-      /search\" method=\"get\" name=\"searchForm\" id=\"searchForm\" >\n\t\t    <input\n\
-      \t\t \t\tonblur=\"this.style.color = '#CDE5C4';\" \n\t\t\t\tonfocus=\"this.style.color\
-      \ = '#48802C';this.value='';\"\n\t\t\t\ttype=\"text\" accessKey=\"s\" name=\"\
-      q\" value=\"\"/>\t\t\n\t\t</form>\t\t\n\t</div>\n</div>\n\n    <div class=\"\
-      mainMenuBarWrapper\">\n\t\t<ul id=\"mainMenuBar\">\n\t\n    <li><a href=\"http://www.springsource.com/products/grails\"\
-      >Products</a></li>\n    <li><a href=\"http://www.springsource.com/groovy-grails-consulting\"\
-      >Services</a></li>\n    <li><a href=\"http://www.springsource.com/training/grv001\"\
-      >Training</a></li>\n    <li><a href=\"/Testimonials\">Case Studies</a></li>\n\
-      \    <li><a href=\"/Community\">Community</a></li>\n    <li><a href=\"/Download\"\
-      >Downloads</a></li>\n    <li><a href=\"/plugins\">Plugins</a> </li>\n    <li><a\
-      \ href=\"/Documentation\">Documentation</a></li>\n</ul><!-- mainMenuBar -->\n\
-      \n    </div><!-- mainMenuBarWrapper -->\n</div><!-- center -->\n\n<div id=\"\
-      graphicHeader\"></div>\n\n<div id=\"barDecoration\"></div>\n\n<div id=\"contentWrapper\"\
-      >\n    <div id=\"contentCenter\" align=\"center\">\n        <div id=\"contentArea\"\
-      >\n            \n            <div id=\"grailsAttributes\">\n               \
-      \ <div class=\"left\">\n        \t        <h2>Rapid</h2>\n                 \
-      \   <p>Have your next Web 2.0 project done in weeks instead of months. Grails\
-      \ delivers a new age of Java web application productivity.</p>\t\t\n       \
-      \         </div><!-- left column -->\n                <div class=\"center\"\
-      >\n        \t\t\t<h2>Dynamic</h2>\n                    <p>Get instant feedback,\
-      \ see instant results. Grails is the premier dynamic language web framework\
-      \ for the JVM.</p>\n                </div><!-- center column -->\n         \
-      \       <div class=\"right\">\n        \t\t\t<h2>Robust</h2>\n             \
-      \       <p>Powered by <a href=\"http://springframework.org\">Spring</a>, Grails\
-      \ outperforms the competition. Dynamic, agile web development without compromises.</p>\n\
-      \                </div><!-- right column -->\n            </div><!-- grailsAttributes\
-      \ -->\n            \n            <div class=\"eventDownloadWrapper\">\n    \
-      \            <div id=\"screencasts\">\n                    <h2>What is grails?</h2>\n\
-      \                    <div class=\"castBox\">\n                        <div class=\"\
-      castScreen\">\n                            <a href=\"/screencast/show/15\">\n\
-      \                                <img src=\"/static/CpDj28oP449kHQlHqE4TEYdFSHMGtBMAu7KkhHHSmKe.png\"\
-      \ width=\"240\" height=\"190\" />\n                            </a>\n      \
-      \                  </div><!-- castScreen -->\n                        <div class=\"\
-      playOverlay\">\n                            <a href=\"/screencast/show/15\"\
-      >\n                                <img src=\"/static/lyvgYEWYoeasoqrHHvRaTvuFAMzHQRaYnw1pHPBxGE3.png\"\
-      \ width=\"50\" height=\"51\" />\n                            </a>\n        \
-      \                </div>\n                        <h4><a href=\"/Grails+Screencasts\"\
-      >More screencasts</a></h4>\n                    </div><!-- castBox -->\n   \
-      \             </div><!-- screencasts -->\n\n                <div id=\"downloadBox\"\
-      >\n                    <div class=\"downloadPluginWrapper\">\n             \
-      \           <div id=\"download\">\n                            \n          \
-      \                  <h3>\n                                \n                \
-      \                    <a href=\"/download/file?mirror=187\">\n              \
-      \                          <img src=\"/static/LGcHmpSUjLH3TV6G6ML9RjmzYq6Hns7wbAqxDUnZe8g.png\"\
-      \ border=\"0\" title=\"Download Grails 1.3.7\" alt=\"Download Grails 1.3.7\"\
-      \ />\n                                    </a>\t\t\t\t\t\t\t\t\n           \
-      \                     \n                            </h3>\n                \
-      \            <p id=\"downloadVersion\">1.3.7</p>\n                         \
-      \   <p>Download the latest Grails&#8482 1.3.7 binary release to experience a\
-      \ new level of productivity on the Java&#8482 platform.</p>\n              \
-      \              <h4><a href=\"/Download\">More Downloads</a></h4>\n         \
-      \               </div><!-- download -->\n                        <div id=\"\
-      plugins\">\n                            <h3>\n                             \
-      \   <a href=\"/Plugins\">\n                                    <img src=\"/static/eFyREWoThrK40ODSEWYEHtdqdcjWrEgENRMt2uYockV.png\"\
-      \ alt=\"Grails Plugins\" border=\"0\" />\n                                </a>\n\
-      \                            </h3>\n                            <ul>\n     \
-      \                           \n                                    <li><a href=\"\
-      /plugin/grails-console-enhancements\">Grails console enhancement...</a></li>\n\
-      \                                \n                                    <li><a\
-      \ href=\"/plugin/image-builder\">A simple image builder.</a></li>\n        \
-      \                        \n                                    <li><a href=\"\
-      /plugin\">Delete this</a></li>\n                                \n         \
-      \                           <li><a href=\"/plugin/proxool\">Proxool jdbc connection\
-      \ po...</a></li>\n                                \n                       \
-      \     </ul>\n                            <h4><a href=\"/Plugins\">View All</a></h4>\n\
-      \                        </div><!-- plugins -->\n                    </div><!--\
-      \ downloadPluginWrapper -->\n                </div><!-- downloadBox -->\n  \
-      \          </div><!-- eventDownloadWrapper -->\n            \n            <div\
-      \ class=\"newsScreencastWrapper\">\n                <div id=\"latestNews\">\n\
-      \                    <h2>Latest News</h2>\n                    <div id=\"newsBox\"\
-      >\n                        <ul>\n                            \n            \
-      \                    <li>\n                                    <a href=\"/blog/view/pledbrook/Grails+2.0.0.M2+released%21\"\
-      >\n                                        <div class=\"detail\">\n        \
-      \                                    <h4>Grails 2.0.0.M2 released!</h4>\n  \
-      \                                          <div class=\"author\">by pledbrook\
-      \ </div>\n                                            <div class=\"comments\"\
-      >1 comments</div>\n                                        </div>\n        \
-      \                                <div class=\"calendar\">\n                \
-      \                            <div class=\"month\">Sept</div>\n             \
-      \                               <div class=\"day\">12</div>\n              \
-      \                          </div>\n                                    </a>\n\
-      \                                </li>\n                            \n     \
-      \                           <li>\n                                    <a href=\"\
-      /blog/view/mgkimsal2/GroovyMag+September+2011+available\">\n               \
-      \                         <div class=\"detail\">\n                         \
-      \                   <h4>GroovyMag September 2011 available</h4>\n          \
-      \                                  <div class=\"author\">by mgkimsal2 </div>\n\
-      \                                            <div class=\"comments\">0 comments</div>\n\
-      \                                        </div>\n                          \
-      \              <div class=\"calendar\">\n                                  \
-      \          <div class=\"month\">Sept</div>\n                               \
-      \             <div class=\"day\">7</div>\n                                 \
-      \       </div>\n                                    </a>\n                 \
-      \               </li>\n                            \n                      \
-      \          <li>\n                                    <a href=\"/blog/view/emrul/SmartGWT-Server+Plugin+-+Part+2\"\
-      >\n                                        <div class=\"detail\">\n        \
-      \                                    <h4>SmartGWT-Server Plugin - Part 2</h4>\n\
-      \                                            <div class=\"author\">by emrul\
-      \ </div>\n                                            <div class=\"comments\"\
-      >0 comments</div>\n                                        </div>\n        \
-      \                                <div class=\"calendar\">\n                \
-      \                            <div class=\"month\">Aug</div>\n              \
-      \                              <div class=\"day\">24</div>\n               \
-      \                         </div>\n                                    </a>\n\
-      \                                </li>\n                            \n     \
-      \                   </ul>\n                        <div class=\"actions\">\n\
-      \                            <a href=\"/blog\">More news</a> |\t\n         \
-      \                   <a href=\"/blog/entry/create\">Add news</a> | <a href=\"\
-      /blog/feed/rss\">Subscribe</a>\n                        </div><!-- actions -->\n\
-      \                    </div><!-- newsBox -->\n                </div><!-- latestNews\
-      \ -->\n            \n                <div id=\"events\">\n                 \
-      \   <h2>Conferences</h2>\n                    <div class=\"castBox\">\n    \
-      \                    <div class=\"advert\">\n                            <a\
-      \ href=\"http://www.springone2gx.com/conference/chicago/2011/10/register\">\n\
-      \                                <img src=\"/static/UjoEXJiuWPvtDse4durdTPscj54WzfWPiZaCd3vHwvS.png\"\
-      \ width=\"250\" height=\"230\" />\n                            </a>\n      \
-      \                  </div>\n\t\t\t\n                    </div>\n            \
-      \        \n                </div><!-- events -->\n                \n\t\t\n \
-      \           </div><!-- newsScreencastWrapper -->\n            \n        </div><!--\
-      \ contentArea -->\n    </div><!-- contentCenter -->\n    \n    <div id=\"grailsOptionsWrapper\"\
-      >\n        <div id=\"btmSectionGraphicsWrapper\">\n            <div id=\"mountainLeft\"\
-      ></div>\n            <div id=\"knight\"></div>\n            <div id=\"mountainRight\"\
-      ></div>\n            <div id=\"castle\"></div>\n        </div><!-- btmSectionGraphicsWrapper-->\n\
-      \        <div id=\"btmSectionBackgroundStretch\">\n            <div align=\"\
-      center\">\n                <div id=\"grailsOptions\">\n                    <div\
-      \ class=\"left\">\n            \t        <h3>Training</h3>\n               \
-      \         <p><a href=\"http://www.springsource.com/training\">SpringSource University</a>\
-      \ provides a comprehensive education and certification program for SpringSource\
-      \ software products as well as Spring, Groovy, Grails, and Apache open source\
-      \ technologies.\n\t<br><br>\n\t We offer both public and customized private\
-      \ training and have trained over 4,000 people. Whichever course you decide to\
-      \ take, you are guaranteed to experience what many before you refer to as “\
-      The best Enterprise Software Class I have ever attended”.\n\t\t\t\t\t\t</p>\t\
-      \t\n                    </div><!-- left column -->\n                    <div\
-      \ class=\"center\">\n            \t\t\t<h3>Support &amp; Services</h3>\n   \
-      \                     <p>SpringSource enterprise software and <a href=\"http://www.springsource.com/services/enterprisesupport\"\
-      >support subscriptions</a> are the way to get developer and production support\
-      \ for Grails and other SpringSource software products and certified versions\
-      \ of our open source technologies including patches, updates, security fixes,\
-      \ and legal indemnification. \n\t<br><br><a href=\"http://www.springsource.com/groovy-grails-consulting\"\
-      >Consulting services</a> are available to companies that wish to leverage the\
-      \ knowledge and expertise of SpringSource’s Grails technology experts.</p>\n\
-      \                    </div><!-- center column -->\n                    <div\
-      \ class=\"right\">\n                        <h3>Community</h3>\n           \
-      \             <p>\nGet involved! Grails has a vibrant and buzzing community.\
-      \ You can grab the <a href=\"http://github.com/grails/grails-core\">source code</a>\
-      \ from GitHub, report issues on the Grails  <a href=\"http://jira.grails.org/browse/GRAILS\"\
-      >JIRA issue tracker</a>, participate at the <a href=\"http://grails.org/Mailing+lists\"\
-      >mailing lists</a> or <a href=\"http://grails.1312388.n4.nabble.com/Grails-user-f1312389.html\"\
-      >Nabble forums</a> or catch-up on the latest news on the <a href=\"/blog\">Grails\
-      \ blog</a>.\t\t\t\t\t\t\t\n<br></br><br></br>\n\nThe whole Grails site is written\
-      \ in Grails 1.3.7 and is an open wiki,  the <a href=\"http://github.com/grails/grails-samples/tree/master/grails.org\"\
-      >source code</a> for which is available from Github.\nVisit the Grails <a href=\"\
-      /Community\">community pages</a> for more ways to participate. \n          \
-      \              </p>\n                    </div><!-- right column -->\n     \
-      \           </div><!-- grailsOptions -->\n            </div><!-- center -->\n\
-      \        </div><!-- btmSectionBackgroundStretch -->\n    </div><!-- grailsOptionsWrapper\
-      \ -->\n</div><!-- contentWrapper -->\n\n<div id=\"footer\">\n    <div align=\"\
-      center\">\n        <div class=\"innerFooter\">\n\t\t\t<a href=\"http://contegix.com\"\
-      ><img src=\"/static/kyk1IIgLbhsHB7QxrDRoVw08G2anuhJvcSDQnDAEyu9.jpg\" alt=\"\
-      Hosted by Contegix\" border=\"0\" /></a>\n            <a href=\"http://twitter.com/grailsframework\"\
-      ><div class=\"twitter\"></div></a>\n            <p>&copy; Copyright 2009-2011\
-      \ SpringSource.<br/>All Rights Reserved.</p>\n        </div><!-- innerFooter\
-      \ -->\n    </div><!-- center -->\n</div><!-- footer -->\n\n    \n    <script\
-      \ type=\"text/javascript\">\nvar gaJsHost = ((\"https:\" == document.location.protocol)\
-      \ ? \"https://ssl.\" : \"http://www.\");\ndocument.write(unescape(\"%3Cscript\
-      \ src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"\
-      ));\n</script>\n<script type=\"text/javascript\">\ntry{\nvar pageTracker = _gat._getTracker(\"\
-      UA-2728886-12\");\npageTracker._trackPageview();\n} catch(err) {}\n</script>\n\
-      \n    \n    <script src=\"/static/jbOzmStacpIqy8G8fVoiYEvkFzHJB5boPZQAkGnhTZh.js\"\
-      \ type=\"text/javascript\" ></script>\n\n\n<script type=\"text/javascript\"\
-      >\nvar startIndex = Math.floor(Math.random() * 3)\n// Set the ads up for cycling\
-      \ every 4s\nvar ads = $$('div.advert');\n\n/*\nif (startIndex < 2) {\n    ads.slice(startIndex\
-      \ + 1).invoke('hide');\n}\n\nnew PeriodicalExecuter(function(pe) {\n    var\
-      \ firstHiddenAd = ads.find(function(el) { return !el.visible(); });\n    if\
-      \ (!firstHiddenAd) {\n        ads.slice(1).invoke('fade');\n    }\n    else\
-      \ {\n        firstHiddenAd.appear();\n    }\n}, 4);\n*/\n    </script>\n</body>\n\
-      </html>\n"
-- recorded: 2011-09-15T19:32:59.367Z
+    body: "<!DOCTYPE html>\n<!--[if lt IE 7 ]> <html class=\"ie6\"> <![endif]-->\n<!--[if IE 7 ]>    <html class=\"ie7\"> <![endif]-->\n<!--[if IE 8 ]>    <html class=\"ie8\"> <![endif]-->\n<!--[if IE 9 ]>    <html class=\"ie9\"> <![endif]-->\n<!--[if (gt IE\
+      \ 9)|!(IE)]><!--> <html class=\"\"> <!--<![endif]-->\n<head>\n    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"/>\n    <meta name=\"robots\" content=\"NOODP\">\t\n    <meta name=\"Description\" content=\"Grails is a high-productivity\
+      \ web framework based on the Groovy language that embraces the coding by convention paradigm, but is designed specifically for the Java platform.\">\t\n\t\n    <title>Grails - The search is over.</title>\n    \n    \n    <link href=\"/static/mnqzhxEka8fg6Hu3z6ra5TBwnHBXIJDpqN0Mz2O4JZw.ico\"\
+      \ rel=\"shortcut icon\" />\n    \n<link href=\"/static/khe6KM5Qe8BczqwESfsTfJf60pT5jC6UqJJDyJEG37w.css\" type=\"text/css\" rel=\"stylesheet\" media=\"screen, projector\" />\n<link href=\"/static/GqIQDLEx8ZUpfNh4oC5LlbNw0cYPgfguzPxjVRsCSm.css\" type=\"\
+      text/css\" rel=\"stylesheet\" media=\"screen, projector\" />\n\n    \n    \n\t<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"/>\n    <meta content=\"homepage\" name=\"layout\"/>\n    <link rel=\"alternate\" type=\"application/rss+xml\"\
+      \ title=\"RSS 2.0\" href=\"/blog/feed/rss\"/>\n    <link rel=\"alternate\" type=\"application/atom+xml\" title=\"Atom 1.0\" href=\"/blog/feed/atom\"/>\n\n    \n    \n    <style>\n#events {\n    left: 635px;\n    top: 2px;\n    background: none;\n    width:\
+      \ 270px;\n    height: 270px;\n}\n\n#events h2 {\n    font-weight: bold;\n    color: #363636;\n    font-size: 10pt;\n    margin: 0px 0px 0px 8px;\n    padding: 0px;\n}\n\n    </style>\n</head>\n<body>\n    \n<div align=\"center\">\n\t<div id=\"springSourceBar\"\
+      >\n\t<div id=\"grailsLogo\">\n\t\t<a href=\"/\"><img src=\"/static/cXmUZIAv28XIiNgkRiz4RRl21TsGZ5HoGpZw1UITNyV.png\" border=\"0\" /></a>\t\t\t\n\t</div>\n\n\t<div id=\"springSourceLogo\">\n\t\t<a href=\"http://www.springsource.com/\"><img src=\"/static/xATgakdqUqjehM4CPEgEyIEVaa7xHY09sonkDDDBPA5.png\"\
+      \ border=\"0\" /></a>\t\t\t\n\t</div>\n\t<div id=\"searchbar\">\n\t\t<form action=\"/search\" method=\"get\" name=\"searchForm\" id=\"searchForm\" >\n\t\t    <input\n\t\t \t\tonblur=\"this.style.color = '#CDE5C4';\" \n\t\t\t\tonfocus=\"this.style.color\
+      \ = '#48802C';this.value='';\"\n\t\t\t\ttype=\"text\" accessKey=\"s\" name=\"q\" value=\"\"/>\t\t\n\t\t</form>\t\t\n\t</div>\n</div>\n\n    <div class=\"mainMenuBarWrapper\">\n\t\t<ul id=\"mainMenuBar\">\n\t\n    <li><a href=\"http://www.springsource.com/products/grails\"\
+      >Products</a></li>\n    <li><a href=\"http://www.springsource.com/groovy-grails-consulting\">Services</a></li>\n    <li><a href=\"http://www.springsource.com/training/grv001\">Training</a></li>\n    <li><a href=\"/Testimonials\">Case Studies</a></li>\n\
+      \    <li><a href=\"/Community\">Community</a></li>\n    <li><a href=\"/Download\">Downloads</a></li>\n    <li><a href=\"/plugins\">Plugins</a> </li>\n    <li><a href=\"/Documentation\">Documentation</a></li>\n</ul><!-- mainMenuBar -->\n\n    </div><!--\
+      \ mainMenuBarWrapper -->\n</div><!-- center -->\n\n<div id=\"graphicHeader\"></div>\n\n<div id=\"barDecoration\"></div>\n\n<div id=\"contentWrapper\">\n    <div id=\"contentCenter\" align=\"center\">\n        <div id=\"contentArea\">\n            \n  \
+      \          <div id=\"grailsAttributes\">\n                <div class=\"left\">\n        \t        <h2>Rapid</h2>\n                    <p>Have your next Web 2.0 project done in weeks instead of months. Grails delivers a new age of Java web application productivity.</p>\t\
+      \t\n                </div><!-- left column -->\n                <div class=\"center\">\n        \t\t\t<h2>Dynamic</h2>\n                    <p>Get instant feedback, see instant results. Grails is the premier dynamic language web framework for the JVM.</p>\n\
+      \                </div><!-- center column -->\n                <div class=\"right\">\n        \t\t\t<h2>Robust</h2>\n                    <p>Powered by <a href=\"http://springframework.org\">Spring</a>, Grails outperforms the competition. Dynamic, agile\
+      \ web development without compromises.</p>\n                </div><!-- right column -->\n            </div><!-- grailsAttributes -->\n            \n            <div class=\"eventDownloadWrapper\">\n                <div id=\"screencasts\">\n           \
+      \         <h2>What is grails?</h2>\n                    <div class=\"castBox\">\n                        <div class=\"castScreen\">\n                            <a href=\"/screencast/show/15\">\n                                <img src=\"/static/CpDj28oP449kHQlHqE4TEYdFSHMGtBMAu7KkhHHSmKe.png\"\
+      \ width=\"240\" height=\"190\" />\n                            </a>\n                        </div><!-- castScreen -->\n                        <div class=\"playOverlay\">\n                            <a href=\"/screencast/show/15\">\n                \
+      \                <img src=\"/static/lyvgYEWYoeasoqrHHvRaTvuFAMzHQRaYnw1pHPBxGE3.png\" width=\"50\" height=\"51\" />\n                            </a>\n                        </div>\n                        <h4><a href=\"/Grails+Screencasts\">More screencasts</a></h4>\n\
+      \                    </div><!-- castBox -->\n                </div><!-- screencasts -->\n\n                <div id=\"downloadBox\">\n                    <div class=\"downloadPluginWrapper\">\n                        <div id=\"download\">\n            \
+      \                \n                            <h3>\n                                \n                                    <a href=\"/download/file?mirror=187\">\n                                        <img src=\"/static/LGcHmpSUjLH3TV6G6ML9RjmzYq6Hns7wbAqxDUnZe8g.png\"\
+      \ border=\"0\" title=\"Download Grails 1.3.7\" alt=\"Download Grails 1.3.7\" />\n                                    </a>\t\t\t\t\t\t\t\t\n                                \n                            </h3>\n                            <p id=\"downloadVersion\"\
+      >1.3.7</p>\n                            <p>Download the latest Grails&#8482 1.3.7 binary release to experience a new level of productivity on the Java&#8482 platform.</p>\n                            <h4><a href=\"/Download\">More Downloads</a></h4>\n\
+      \                        </div><!-- download -->\n                        <div id=\"plugins\">\n                            <h3>\n                                <a href=\"/Plugins\">\n                                    <img src=\"/static/eFyREWoThrK40ODSEWYEHtdqdcjWrEgENRMt2uYockV.png\"\
+      \ alt=\"Grails Plugins\" border=\"0\" />\n                                </a>\n                            </h3>\n                            <ul>\n                                \n                                    <li><a href=\"/plugin/recurly-plugin\"\
+      >Recurly Plugin</a></li>\n                                \n                                    <li><a href=\"/plugin/spring-security-oauth2-provider\">OAuth2 Provider support fo...</a></li>\n                                \n                         \
+      \           <li><a href=\"/plugin/recurly\">Recurly Grails API</a></li>\n                                \n                                    <li><a href=\"/plugin/easyrec\">Easyrec</a></li>\n                                \n                        \
+      \    </ul>\n                            <h4><a href=\"/Plugins\">View All</a></h4>\n                        </div><!-- plugins -->\n                    </div><!-- downloadPluginWrapper -->\n                </div><!-- downloadBox -->\n            </div><!--\
+      \ eventDownloadWrapper -->\n            \n            <div class=\"newsScreencastWrapper\">\n                <div id=\"latestNews\">\n                    <h2>Latest News</h2>\n                    <div id=\"newsBox\">\n                        <ul>\n   \
+      \                         \n                                <li>\n                                    <a href=\"/blog/view/pledbrook/Yes%2C+Grails+can+handle+heavy+load\">\n                                        <div class=\"detail\">\n              \
+      \                              <h4>Yes, Grails can handle heavy load</h4>\n                                            <div class=\"author\">by pledbrook </div>\n                                            <div class=\"comments\">0 comments</div>\n   \
+      \                                     </div>\n                                        <div class=\"calendar\">\n                                            <div class=\"month\">Sept</div>\n                                            <div class=\"day\"\
+      >30</div>\n                                        </div>\n                                    </a>\n                                </li>\n                            \n                                <li>\n                                    <a href=\"\
+      /blog/view/pledbrook/Grails+2.0.0.M2+released%21\">\n                                        <div class=\"detail\">\n                                            <h4>Grails 2.0.0.M2 released!</h4>\n                                            <div class=\"\
+      author\">by pledbrook </div>\n                                            <div class=\"comments\">1 comments</div>\n                                        </div>\n                                        <div class=\"calendar\">\n                     \
+      \                       <div class=\"month\">Sept</div>\n                                            <div class=\"day\">12</div>\n                                        </div>\n                                    </a>\n                               \
+      \ </li>\n                            \n                                <li>\n                                    <a href=\"/blog/view/mgkimsal2/GroovyMag+September+2011+available\">\n                                        <div class=\"detail\">\n    \
+      \                                        <h4>GroovyMag September 2011 available</h4>\n                                            <div class=\"author\">by mgkimsal2 </div>\n                                            <div class=\"comments\">0 comments</div>\n\
+      \                                        </div>\n                                        <div class=\"calendar\">\n                                            <div class=\"month\">Sept</div>\n                                            <div class=\"day\"\
+      >7</div>\n                                        </div>\n                                    </a>\n                                </li>\n                            \n                        </ul>\n                        <div class=\"actions\">\n  \
+      \                          <a href=\"/blog\">More news</a> |\t\n                            <a href=\"/blog/entry/create\">Add news</a> | <a href=\"/blog/feed/rss\">Subscribe</a>\n                        </div><!-- actions -->\n                    </div><!--\
+      \ newsBox -->\n                </div><!-- latestNews -->\n            \n                <div id=\"events\">\n                    <h2>Conferences</h2>\n                    <div class=\"castBox\">\n                        <div class=\"advert\">\n       \
+      \                     <a href=\"http://www.springone2gx.com/conference/chicago/2011/10/register\">\n                                <img src=\"/static/UjoEXJiuWPvtDse4durdTPscj54WzfWPiZaCd3vHwvS.png\" width=\"250\" height=\"230\" />\n                 \
+      \           </a>\n                        </div>\n\t\t\t\n                    </div>\n                    \n                </div><!-- events -->\n                \n\t\t\n            </div><!-- newsScreencastWrapper -->\n            \n        </div><!--\
+      \ contentArea -->\n    </div><!-- contentCenter -->\n    \n    <div id=\"grailsOptionsWrapper\">\n        <div id=\"btmSectionGraphicsWrapper\">\n            <div id=\"mountainLeft\"></div>\n            <div id=\"knight\"></div>\n            <div id=\"\
+      mountainRight\"></div>\n            <div id=\"castle\"></div>\n        </div><!-- btmSectionGraphicsWrapper-->\n        <div id=\"btmSectionBackgroundStretch\">\n            <div align=\"center\">\n                <div id=\"grailsOptions\">\n         \
+      \           <div class=\"left\">\n            \t        <h3>Training</h3>\n                        <p><a href=\"http://www.springsource.com/training\">SpringSource University</a> provides a comprehensive education and certification program for SpringSource\
+      \ software products as well as Spring, Groovy, Grails, and Apache open source technologies.\n\t<br><br>\n\t We offer both public and customized private training and have trained over 4,000 people. Whichever course you decide to take, you are guaranteed\
+      \ to experience what many before you refer to as “The best Enterprise Software Class I have ever attended”.\n\t\t\t\t\t\t</p>\t\t\n                    </div><!-- left column -->\n                    <div class=\"center\">\n            \t\t\t<h3>Support\
+      \ &amp; Services</h3>\n                        <p>SpringSource enterprise software and <a href=\"http://www.springsource.com/services/enterprisesupport\">support subscriptions</a> are the way to get developer and production support for Grails and other\
+      \ SpringSource software products and certified versions of our open source technologies including patches, updates, security fixes, and legal indemnification. \n\t<br><br><a href=\"http://www.springsource.com/groovy-grails-consulting\">Consulting services</a>\
+      \ are available to companies that wish to leverage the knowledge and expertise of SpringSource’s Grails technology experts.</p>\n                    </div><!-- center column -->\n                    <div class=\"right\">\n                        <h3>Community</h3>\n\
+      \                        <p>\nGet involved! Grails has a vibrant and buzzing community. You can grab the <a href=\"http://github.com/grails/grails-core\">source code</a> from GitHub, report issues on the Grails  <a href=\"http://jira.grails.org/browse/GRAILS\"\
+      >JIRA issue tracker</a>, participate at the <a href=\"http://grails.org/Mailing+lists\">mailing lists</a> or <a href=\"http://grails.1312388.n4.nabble.com/Grails-user-f1312389.html\">Nabble forums</a> or catch-up on the latest news on the <a href=\"/blog\"\
+      >Grails blog</a>.\t\t\t\t\t\t\t\n<br></br><br></br>\n\nThe whole Grails site is written in Grails 1.3.7 and is an open wiki,  the <a href=\"http://github.com/grails/grails-samples/tree/master/grails.org\">source code</a> for which is available from Github.\n\
+      Visit the Grails <a href=\"/Community\">community pages</a> for more ways to participate. \n                        </p>\n                    </div><!-- right column -->\n                </div><!-- grailsOptions -->\n            </div><!-- center -->\n\
+      \        </div><!-- btmSectionBackgroundStretch -->\n    </div><!-- grailsOptionsWrapper -->\n</div><!-- contentWrapper -->\n\n<div id=\"footer\">\n    <div align=\"center\">\n        <div class=\"innerFooter\">\n\t\t\t<a href=\"http://contegix.com\"><img\
+      \ src=\"/static/kyk1IIgLbhsHB7QxrDRoVw08G2anuhJvcSDQnDAEyu9.jpg\" alt=\"Hosted by Contegix\" border=\"0\" /></a>\n            <a href=\"http://twitter.com/grailsframework\"><div class=\"twitter\"></div></a>\n            <p>&copy; Copyright 2009-2011 SpringSource.<br/>All\
+      \ Rights Reserved.</p>\n        </div><!-- innerFooter -->\n    </div><!-- center -->\n</div><!-- footer -->\n\n    \n    <script type=\"text/javascript\">\nvar gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\"\
+      );\ndocument.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));\n</script>\n<script type=\"text/javascript\">\ntry{\nvar pageTracker = _gat._getTracker(\"UA-2728886-12\");\npageTracker._trackPageview();\n\
+      } catch(err) {}\n</script>\n\n    \n    <script src=\"/static/jbOzmStacpIqy8G8fVoiYEvkFzHJB5boPZQAkGnhTZh.js\" type=\"text/javascript\" ></script>\n\n\n<script type=\"text/javascript\">\nvar startIndex = Math.floor(Math.random() * 3)\n// Set the ads up\
+      \ for cycling every 4s\nvar ads = $$('div.advert');\n\n/*\nif (startIndex < 2) {\n    ads.slice(startIndex + 1).invoke('hide');\n}\n\nnew PeriodicalExecuter(function(pe) {\n    var firstHiddenAd = ads.find(function(el) { return !el.visible(); });\n   \
+      \ if (!firstHiddenAd) {\n        ads.slice(1).invoke('fade');\n    }\n    else {\n        firstHiddenAd.appear();\n    }\n}, 4);\n*/\n    </script>\n</body>\n</html>\n"
+- recorded: 2011-10-03T22:17:21.906Z
   request:
     method: GET
     uri: http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true
@@ -239,29 +98,105 @@ interactions:
       Cache-Control: no-cache, no-store, must-revalidate, pre-check=0, post-check=0
       Content-Encoding: gzip
       Content-Type: application/json; charset=utf-8
-      Date: Thu, 15 Sep 2011 19:32:58 GMT
-      ETag: '"08619f29cf09551e5609e10de52b6c06"-gzip'
+      Date: Mon, 03 Oct 2011 22:17:21 GMT
+      ETag: '"c79a3cf2e7a5ad965eb0e7909ad362e2"-gzip'
       Expires: Tue, 31 Mar 1981 05:00:00 GMT
-      Last-Modified: Thu, 15 Sep 2011 19:32:58 GMT
+      Last-Modified: Mon, 03 Oct 2011 22:17:21 GMT
       Pragma: no-cache
-      Server: hi
-      Set-Cookie: k=90.201.42.129.1316115178108427; path=/; expires=Thu, 22-Sep-11 19:32:58 GMT; domain=.twitter.com, guest_id=v1%3A131611517811133829; domain=.twitter.com; path=/; expires=Sun, 15 Sep 2013 07:32:58 GMT, _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCIDik24yAToHaWQiJTM5MzIxMjlhNTIxZjY5%250AZmM5MTQyN2E1YjYzZTgxNDU3IgpmbGFzaElDOidBY3Rpb25Db250cm9sbGVy%250AOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA--4e975106e66ff29ec904b8e49c084c232885a7db; domain=.twitter.com; path=/; HttpOnly
+      Server: tfe
+      Set-Cookie: k=10.34.251.113.1317680241316754; path=/; expires=Mon, 10-Oct-11 22:17:21 GMT; domain=.twitter.com, guest_id=v1%3A131768024132129374; domain=.twitter.com; path=/; expires=Thu, 03-Oct-2013 10:17:21 GMT, _twitter_sess=BAh7CDoPY3JlYXRlZF9hdGwrCKva3MsyAToHaWQiJWM1OTRjNjI1ZTAzMzIx%250AODVkMWQ5MjNiNDgxZDRlM2Q5IgpmbGFzaElDOidBY3Rpb25Db250cm9sbGVy%250AOjpGbGFzaDo6Rmxhc2hIYXNoewAGOgpAdXNlZHsA--c930111c1f8514228b7546e54eb7dfbf72983fde; domain=.twitter.com; path=/
       Status: 200 OK
       Vary: Accept-Encoding
       X-Content-Type-Options: nosniff
       X-Frame-Options: SAMEORIGIN
-      X-MID: 1edefa684c0235f7b82e6b3b1f02680530543e2c
+      X-MID: 153960ae6fa33375bbaf6e21d0930dc9ca2e411c
       X-RateLimit-Class: api
       X-RateLimit-Limit: '150'
       X-RateLimit-Remaining: '146'
-      X-RateLimit-Reset: '1316116349'
+      X-RateLimit-Reset: '1317683434'
       X-Revision: DEV
-      X-Runtime: '0.28486'
-      X-Transaction: 1316115178-83059-10218
-      X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef11414140d46
-    body: !!binary |-
-      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
-- recorded: 2011-09-15T19:33:00.505Z
+      X-Runtime: '0.04743'
+      X-Transaction: 1965907d7cb5c067
+      X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef114bb3578b9
+    body: '[{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:52 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"131516","protected":false,"profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1566888144\/avatarFinale_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1566888144\/avatarFinale_normal.jpg","name":"Gadhafy","show_all_inline_media":true,"contributors_enabled":false,"favourites_count":46,"profile_sidebar_fill_color":"0a0121","listed_count":4,"lang":"en","utc_offset":-21600,"created_at":"Fri
+      Jun 17 11:19:09 +0000 2011","description":"GAD. I am @gadhafy. I''ve got the Moves Like Jagger, Hips that Don''t Lie and I Really HATE Turning Tables. So... Show me your guns, and keep your stupid roses!","time_zone":"Central Time (US & Canada)","profile_sidebar_border_color":"eeeeee","followers_count":356,"verified":false,"statuses_count":14836,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"4668f0","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme14\/bg.gif","location":"Lima,
+      Per\u00fa","id_str":"318981915","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme14\/bg.gif","profile_link_color":"42adde","id":318981915,"follow_request_sent":false,"friends_count":271,"url":"http:\/\/planh.wordpress.com","screen_name":"Mahomma"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E","id_str":"120985192381952000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985192381952000,"truncated":false,"text":"We can go down...
+      like there''s no one around!"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:51 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"FF6699","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1461199896\/image_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1461199896\/image_normal.jpg","name":"Taylor
+      Lenz","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":34,"profile_sidebar_fill_color":"d74fe3","listed_count":0,"lang":"en","utc_offset":null,"created_at":"Mon Oct 04 00:49:11 +0000 2010","description":"sing, dance, and live
+      ur life :) 3","time_zone":null,"profile_sidebar_border_color":"CC3366","followers_count":27,"verified":false,"statuses_count":122,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"8312e0","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme4\/bg.gif","location":"","id_str":"198333677","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme4\/bg.gif","profile_link_color":"B40B43","id":198333677,"follow_request_sent":false,"friends_count":31,"url":null,"screen_name":"TaylorL04"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/www.htc.com\" rel=\"nofollow\"\u003E  HTC Peep\u003C\/a\u003E","id_str":"120985190481920000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985190481920000,"truncated":false,"text":"Never thought we''d
+      have a last. Kiss. Never imagined we''d end. Like. This."},{"favorited":false,"entities":{"hashtags":[],"user_mentions":[],"urls":[]},"in_reply_to_status_id":null,"place":null,"retweet_count":0,"in_reply_to_screen_name":null,"user":{"protected":false,"statuses_count":65025,"time_zone":"Pacific
+      Time (US & Canada)","profile_sidebar_border_color":"570fff","name":"8o''s Baby . ","default_profile_image":false,"verified":false,"notifications":false,"default_profile":false,"lang":"en","geo_enabled":true,"profile_use_background_image":true,"utc_offset":-28800,"description":"|
+      Skype: SaddityBarbie | #teamandroid | #teamredhair | #teamtattedup | Rip Joffy (Abdur) | Rip Joop (Jeremy) | Free Rob \u2661  | Free Alan","location":"your niggah house .","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/315469881\/LuckkyMe_018.JPG","profile_text_color":"36fa0a","follow_request_sent":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/profile_background_images\/315469881\/LuckkyMe_018.JPG","friends_count":816,"url":null,"screen_name":"_BellaYasmin_","id_str":"64036702","profile_link_color":"f50ed2","profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1512952669\/pic_011_normal.JPG","profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1512952669\/pic_011_normal.JPG","following":true,"profile_background_color":"11c2b0","listed_count":49,"profile_background_tile":true,"created_at":"Sat
+      Aug 08 20:33:09 +0000 2009","id":64036702,"show_all_inline_media":false,"contributors_enabled":false,"favourites_count":23,"profile_sidebar_fill_color":"7e0291","followers_count":1553},"truncated":false,"id_str":"120985190066688000","retweeted":false,"in_reply_to_user_id":null,"in_reply_to_status_id_str":null,"geo":null,"source":"\u003Ca
+      href=\"http:\/\/levelupstudio.com\" rel=\"nofollow\"\u003EPlume\u00a0\u00a0\u003C\/a\u003E","in_reply_to_user_id_str":null,"coordinates":null,"id":120985190066688000,"created_at":"Mon Oct 03 22:14:51 +0000 2011","contributors":null,"text":"you just one
+      simple btc ."},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:51 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"C0DEED","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1533042839\/tumblr_lqqwon5rrY1r25rvxo1_500_normal.jpg","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1533042839\/tumblr_lqqwon5rrY1r25rvxo1_500_normal.jpg","name":"J
+      . T . A","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":5,"profile_sidebar_fill_color":"DDEEF6","listed_count":0,"lang":"en","utc_offset":null,"created_at":"Wed Jul 20 11:30:59 +0000 2011","description":"Grumpy old man","time_zone":null,"profile_sidebar_border_color":"C0DEED","followers_count":26,"verified":false,"statuses_count":1332,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"333333","default_profile":true,"following":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","location":"Swindon","id_str":"338970071","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","profile_link_color":"0084B4","id":338970071,"follow_request_sent":false,"friends_count":67,"url":"http:\/\/springtextures.tumblr.com\/","screen_name":"SpringTextures"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985189433344000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985189433344000,"truncated":false,"text":"pretty
+      stoked about the fact it wont be boiling hot again tomorrow....well it doesnt seem that way at the moment"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:51 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"f25309","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1563732615\/327173448_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1563732615\/327173448_normal.jpg","name":"99\u2714","show_all_inline_media":true,"contributors_enabled":false,"favourites_count":0,"profile_sidebar_fill_color":"efefef","listed_count":0,"lang":"en","utc_offset":-18000,"created_at":"Tue
+      Mar 15 20:17:24 +0000 2011","description":"Finance student @AlYamamah_Uni , born on January 13.     \n\nThis person is taken by the most beautiful woman in the world\u2665 ","time_zone":"Quito","profile_sidebar_border_color":"eeeeee","followers_count":237,"verified":false,"statuses_count":1314,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"380d38","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme14\/bg.gif","location":"Riyadh","id_str":"266782704","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme14\/bg.gif","profile_link_color":"009999","id":266782704,"follow_request_sent":false,"friends_count":98,"url":null,"screen_name":"SalehAlSaeed99"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial for BlackBerry\u003C\/a\u003E","id_str":"120985187860480000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985187860480000,"truncated":false,"text":"\u0645\u0627\u062e\u0633\u0631\u062a
+      \u0645\u0646 \u0627\u0644\u0628\u0634\u0631 \u0627\u0644\u0627 \u0627\u0644\u0631\u062e\u064a\u0635 \u0648\u0645\u0627\u0643\u0633\u0628\u062a \u0628\u0636\u064a\u0642 \u0627\u0644\u0638\u0631\u0648\u0641 \u0627\u0644\u0627\u0627\u0644\u0642\u0644\u0648\u0628
+      \u0627\u0644\u0646\u0638\u064a\u0641\u0647"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:51 +0000
+      2011","contributors":null,"place":null,"user":{"profile_background_color":"efadff","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1555213999\/img011_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1555213999\/img011_normal.jpg","name":"Vanesa
+      Osorio","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":9,"profile_sidebar_fill_color":"000000","listed_count":0,"lang":"es","utc_offset":-21600,"created_at":"Fri Jun 24 02:07:07 +0000 2011","description":"Se perdona cuando
+      ya no se recrimina a nadie ni se siente,rencor cuando se recuerda el ayer con nostalgia pero sin tratar de encontrar culpables.*","time_zone":"Central Time (US & Canada)","profile_sidebar_border_color":"90459c","followers_count":215,"verified":false,"statuses_count":1799,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"ff82ff","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a3.twimg.com\/profile_background_images\/338075981\/tal_vez_no_le_importo_tanto_co.jpg","location":"","id_str":"322981481","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/338075981\/tal_vez_no_le_importo_tanto_co.jpg","profile_link_color":"f985ff","id":322981481,"follow_request_sent":false,"friends_count":95,"url":null,"screen_name":"vanesa_smile"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985187554304000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985187554304000,"truncated":false,"text":"Me
+      acuerdo tan bien de ese dia 18 de junio ...\u2665"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:50
+      +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"ffffff","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1513826459\/sou1puto_1__normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1513826459\/sou1puto_1__normal.jpg","name":"junio
+      sem r \u263a","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":148,"profile_sidebar_fill_color":"ffffff","listed_count":1790,"lang":"en","utc_offset":-14400,"created_at":"Sat Sep 05 17:27:20 +0000 2009","description":"~~ oS
+      mAnO fAlA mAu E aS MiNa PaGa PaU !!!","time_zone":"Santiago","profile_sidebar_border_color":"ffffff","followers_count":13314,"verified":false,"statuses_count":38466,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"000000","following":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/319714961\/various_pokemon_in_paint_by_kosenwing-d3io6s6.png","location":"MINAS
+      GERAIS","id_str":"71849060","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/319714961\/various_pokemon_in_paint_by_kosenwing-d3io6s6.png","profile_link_color":"ff3b48","id":71849060,"default_profile":false,"follow_request_sent":false,"friends_count":256,"url":"http:\/\/favstar.fm\/users\/sou1puto\/most_retweeted","screen_name":"sou1puto"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985186723840000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985186723840000,"truncated":false,"text":"QBOA
+      DE POBRE \u00c9 CAJU"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:50 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"B2DFDA","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1525429819\/311138_1772182484979_1851806068_1194736_3289358_n_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1525429819\/311138_1772182484979_1851806068_1194736_3289358_n_normal.jpg","name":"Robert
+      Horton","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":1,"profile_sidebar_fill_color":"ffffff","listed_count":2,"lang":"en","utc_offset":-32400,"created_at":"Mon Feb 15 06:26:44 +0000 2010","description":"","time_zone":"Alaska","profile_sidebar_border_color":"eeeeee","followers_count":202,"verified":false,"statuses_count":1344,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"333333","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a3.twimg.com\/profile_background_images\/321633605\/sfa-3d-small.jpg","location":"","id_str":"114381633","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/321633605\/sfa-3d-small.jpg","profile_link_color":"93A644","id":114381633,"follow_request_sent":false,"friends_count":377,"url":null,"screen_name":"2k15_SFA"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985184932864000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985184932864000,"truncated":false,"text":"i
+      wonder whats the big suprise"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:50 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"9AE4E8","protected":false,"profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1564466506\/327198214_normal.jpg","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1564466506\/327198214_normal.jpg","name":"Dollyface","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":4,"profile_sidebar_fill_color":"DDFFCC","listed_count":2,"lang":"en","utc_offset":null,"created_at":"Mon
+      May 04 02:29:14 +0000 2009","description":"I''m selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can''t handle me at my worst, then....","time_zone":null,"profile_sidebar_border_color":"BDDCAD","followers_count":205,"verified":false,"statuses_count":6412,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"333333","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/11402830\/dolly2.jpg","location":"Wherever
+      my spirit takes me ","id_str":"37572169","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/11402830\/dolly2.jpg","profile_link_color":"0084B4","id":37572169,"follow_request_sent":false,"friends_count":148,"url":null,"screen_name":"DollyFaze"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/ubersocial.com\" rel=\"nofollow\"\u003EUberSocial for BlackBerry\u003C\/a\u003E","id_str":"120985184102400000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985184102400000,"truncated":false,"text":"Just
+      watched the Scooby Doo movie.... Shit just made so much since lol"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[{"expanded_url":"http:\/\/4ms.me\/r9RUTR","indices":[116,136],"display_url":"4ms.me\/r9RUTR","url":"http:\/\/t.co\/V1PExKfX"}],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:49 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"080808","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1528372293\/389751248_normal.png","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1528372293\/389751248_normal.png","name":"lifepedrolucas","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":281,"profile_sidebar_fill_color":"","listed_count":190,"lang":"en","utc_offset":-14400,"created_at":"Mon
+      Jun 28 17:08:33 +0000 2010","description":"FC dedicado ao @pelurestart.\r\nO Pedro Lucas \u00e9 sua vida?\r\nSince: 28\/06\/2010.\r\nDona: @mayarakuhn","time_zone":"Santiago","profile_sidebar_border_color":"C0DEED","followers_count":6185,"verified":false,"statuses_count":44496,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"4b7ee3","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/300438326\/bg_mayara_life.jpg","location":"","id_str":"160606178","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/300438326\/bg_mayara_life.jpg","profile_link_color":"232928","id":160606178,"follow_request_sent":false,"friends_count":777,"url":null,"screen_name":"lifepedrolucas"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/formspring.me\" rel=\"nofollow\"\u003EFormspring.me\u003C\/a\u003E","id_str":"120985181262848000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985181262848000,"possibly_sensitive":false,"truncated":false,"text":"Read
+      my response to \"Acho voce t\u00e3o legal , sl\u00e1 queria ser sua amiga , mais tenho vergonha de me aproximar no fc \u2026\": http:\/\/t.co\/V1PExKfX"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[{"expanded_url":"http:\/\/tumblr.com\/xer51tp5pl","indices":[8,28],"display_url":"tumblr.com\/xer51tp5pl","url":"http:\/\/t.co\/ummM26Ff"}],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:49 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"f59ff5","protected":false,"profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1276367369\/DSC04983_normal.JPG","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1276367369\/DSC04983_normal.JPG","name":"Mariana
+      Henrique ","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":2,"profile_sidebar_fill_color":"000000","listed_count":2,"lang":"en","utc_offset":-14400,"created_at":"Thu Jan 07 13:57:14 +0000 2010","description":"sou apenas uma
+      menina que sonha alto,que muitos conhecem, outros pensam que conhecem,e outros,n\u00e3o tem id\u00e9ia do que sou capaz. :D","time_zone":"Santiago","profile_sidebar_border_color":"ff0091","followers_count":59,"verified":false,"statuses_count":1707,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"f01376","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/331082970\/fundo-para-twitter-colorido-9.jpg","location":"","id_str":"102685990","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/331082970\/fundo-para-twitter-colorido-9.jpg","profile_link_color":"0df7ff","id":102685990,"follow_request_sent":false,"friends_count":156,"url":null,"screen_name":"Mariana_Berry"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/www.tumblr.com\/\" rel=\"nofollow\"\u003ETumblr\u003C\/a\u003E","id_str":"120985180956672000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985180956672000,"possibly_sensitive":false,"truncated":false,"text":"Photo:  http:\/\/t.co\/ummM26Ff"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:49 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"a8a8a8","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1571423961\/scheibe_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1571423961\/scheibe_normal.jpg","name":"Guille
+      Gonz\u00e1lez","default_profile":false,"show_all_inline_media":true,"contributors_enabled":false,"favourites_count":2,"profile_sidebar_fill_color":"252429","listed_count":27,"lang":"es","utc_offset":-14400,"created_at":"Mon Nov 01 10:57:59 +0000 2010","description":"Freak
+      guy who loves photography, sunglasses + @ladygaga. We need fantasy to survive cause reality is too dificult. I''m gonna marry NYC, and meet mother monster.","time_zone":"Santiago","profile_sidebar_border_color":"999999","followers_count":1470,"verified":false,"statuses_count":4586,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"000000","following":true,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/337516793\/283312_229522117081083_100000698887282_749405_998099_n.jpg","location":"Paraguay.","id_str":"210774382","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/337516793\/283312_229522117081083_100000698887282_749405_998099_n.jpg","profile_link_color":"1e63b8","id":210774382,"follow_request_sent":false,"friends_count":1213,"url":"http:\/\/www.ladygaga.com","screen_name":"TheMonstersKing"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985180323328000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985180323328000,"truncated":false,"text":"RT
+      if a woman called Lady Gaga made who you are."},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:49 +0000
+      2011","contributors":null,"place":null,"user":{"profile_background_color":"C0DEED","protected":false,"profile_image_url":"http:\/\/a2.twimg.com\/profile_images\/1490852439\/__iso-2022-jp_B_GyRCPi49VRsoQi5qcGc____normal","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1490852439\/__iso-2022-jp_B_GyRCPi49VRsoQi5qcGc____normal","name":"\u306c\u306c(\uff61\uff65_\uff65\uff61)\uff89","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":0,"profile_sidebar_fill_color":"DDEEF6","listed_count":0,"lang":"ja","utc_offset":32400,"created_at":"Fri
+      May 27 06:53:36 +0000 2011","description":"\u3042\u306e\u82b1\/\u3046\u3055\u304e\u30c9\u30ed\u30c3\u30d7\/\u30c6\u30cb\u30d7\u30ea\/\u30bb\u30d6\u30f3\u30b4\u30fc\u30b9\u30c8\/\u6226\u56fd\uff22\uff21\uff33\uff21\uff32\uff21\u306a\u3069\u8272\u3005\u597d\u304d\u3067\u3059(\uff61\uff65_\uff65\uff61)\uff89\u3088\u3051\u308c\u3070\u4ef2\u826f\u304f\u3057\u3066\u304f\u3060\u3055\u3044(*\u00b4\u2207\uff40)\u30cb\u30b3\u751f\u3067\u8272\u3093\u306a\u653e\u9001\u884c\u304f\u306e\u304c\u597d\u304d\uff57\uff57\uff57","time_zone":"Tokyo","profile_sidebar_border_color":"C0DEED","followers_count":20,"verified":false,"statuses_count":3797,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"333333","default_profile":true,"following":false,"profile_background_image_url":"http:\/\/a0.twimg.com\/images\/themes\/theme1\/bg.png","location":"\u6771\u4eac\u306e\u4e0bw(\uff9fo\uff9f)w\u306f\u3044\u3001\u795e\u5948\u5ddd\u3067\u3059(=\u30fb\u03c9\u30fb)\/","id_str":"306066275","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme1\/bg.png","profile_link_color":"0084B4","id":306066275,"follow_request_sent":false,"friends_count":19,"url":null,"screen_name":"nukanunu"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/twtr.jp\" rel=\"nofollow\"\u003EKeitai Web\u003C\/a\u003E","id_str":"120985179580928000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985179580928000,"truncated":false,"text":"\u306d\u308b\u3002\u4eca\u5ea6\u3053\u305d\u5bdd\u308b\u3002\u3046\u3093\u3002\u5bdd\u305f\u3044"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:49 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"f02b5c","protected":false,"profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1521081467\/Festa_Junina_042_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1521081467\/Festa_Junina_042_normal.jpg","name":"Julia!","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":14,"profile_sidebar_fill_color":"9e9e9e","listed_count":1,"lang":"pt","utc_offset":-10800,"created_at":"Sun
+      Nov 21 18:25:40 +0000 2010","description":"Sou totalmente imperfeita. Mas acima de tudo, sou totalmente eu.","time_zone":"Greenland","profile_sidebar_border_color":"9e9598","followers_count":216,"verified":false,"statuses_count":7278,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"e82a60","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/322121178\/fundo-xadrez_thumb.jpg","location":"","id_str":"218205110","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/322121178\/fundo-xadrez_thumb.jpg","profile_link_color":"e8a7a7","id":218205110,"follow_request_sent":false,"friends_count":181,"url":null,"screen_name":"JubsFarias"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985179274752000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985179274752000,"truncated":false,"text":"Hoje
+      a Michele disse \"Deixe me ver\" e eu comecei a cantar m\u00f3 espontanea \"Deixe ficar, deixe estar como est\u00e1aa\" e ela ficou me olhando :X KKK"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:49 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"bca4c4","protected":false,"profile_image_url":"http:\/\/a0.twimg.com\/profile_images\/1564248789\/1293320047261535_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1564248789\/1293320047261535_normal.jpg","name":"Thalyta
+      Karin","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":4,"profile_sidebar_fill_color":"141413","listed_count":1,"lang":"en","utc_offset":-10800,"created_at":"Wed Dec 23 18:55:42 +0000 2009","description":"Seja a paz, sinta
+      o amor, fa\u00e7a o bem!","time_zone":"Greenland","profile_sidebar_border_color":"f0a21a","followers_count":154,"verified":false,"statuses_count":2548,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"eb0ed5","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a3.twimg.com\/profile_background_images\/338131047\/Cupcake8.jpg","location":"","id_str":"98938664","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/338131047\/Cupcake8.jpg","profile_link_color":"5acc43","id":98938664,"follow_request_sent":false,"friends_count":44,"url":null,"screen_name":"LipstickRedd"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985178641408000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985178641408000,"truncated":false,"text":"Entre
+      um acordo existe um motivo."},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:48 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"8b948f","protected":false,"profile_image_url":"http:\/\/a1.twimg.com\/profile_images\/1555895992\/326923472_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1555895992\/326923472_normal.jpg","name":"Araw
+      :)","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":5,"profile_sidebar_fill_color":"1a0a1a","listed_count":4,"lang":"en","utc_offset":-28800,"created_at":"Fri Sep 18 22:52:48 +0000 2009","description":"20 JHS - @CLASSVENTHY
+      (7C) - @DECODE8H | @shilviaaacim , @sitisyaptiana , @sucidmrtri''s besties ~ Kpopers esp: BIGBANG, 2NE1, FTI :)","time_zone":"Pacific Time (US & Canada)","profile_sidebar_border_color":"f7edf7","followers_count":447,"verified":false,"statuses_count":14662,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"816d8f","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a2.twimg.com\/profile_background_images\/318460969\/tumblr_lq8tboaQb61qmqj2jo1_500.jpg","location":"di
+      dorm BIGBANG ~","id_str":"75408956","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/318460969\/tumblr_lq8tboaQb61qmqj2jo1_500.jpg","profile_link_color":"8f13f5","id":75408956,"follow_request_sent":false,"friends_count":330,"url":"http:\/\/www.ohyeahvip.tumblr.com","screen_name":"salzaDCD"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/www.tweetcaster.com\" rel=\"nofollow\"\u003ETweetCaster for Android\u003C\/a\u003E","id_str":"120985177592832000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985177592832000,"truncated":false,"text":"Mager._."},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:48 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"352c3d","protected":false,"profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1531907541\/pengin03_normal.jpg","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1531907541\/pengin03_normal.jpg","name":"\u30da\u30f3\u30ae\u30f3","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":139,"profile_sidebar_fill_color":"fafafa","listed_count":38,"lang":"ja","utc_offset":-36000,"created_at":"Thu
+      May 06 13:00:38 +0000 2010","description":"\u30b9\u30a4\u30b9\u30a4\u3002","time_zone":"Hawaii","profile_sidebar_border_color":"e6e6e6","followers_count":458,"verified":false,"statuses_count":18793,"geo_enabled":false,"profile_use_background_image":false,"default_profile_image":false,"notifications":false,"profile_text_color":"333333","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme13\/bg.gif","location":"\u3055\u3063\u307d\u308d\u3002","id_str":"140819867","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme13\/bg.gif","profile_link_color":"22a18a","id":140819867,"follow_request_sent":false,"friends_count":445,"url":null,"screen_name":"onodera0627"},"favorited":false,"in_reply_to_status_id":null,"source":"\u003Ca
+      href=\"http:\/\/www.echofon.com\/\" rel=\"nofollow\"\u003EEchofon\u003C\/a\u003E","id_str":"120985176019968000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985176019968000,"truncated":false,"text":"\u306a\u3093\u3064\u3063\u3066\u3002"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:47 +0000 2011","contributors":null,"place":{"bounding_box":{"type":"Polygon","coordinates":[[[-51.249136,-29.9717101],[-51.1050161,-29.9717101],[-51.1050161,-29.858964],[-51.249136,-29.858964]]]},"name":"Canoas","country_code":"BR","attributes":{},"full_name":"Canoas,
+      Rio Grande do Sul","place_type":"city","id":"b9a7379f71583666","country":"Brasil","url":"http:\/\/api.twitter.com\/1\/geo\/id\/b9a7379f71583666.json"},"user":{"profile_background_color":"000000","protected":false,"profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1481997524\/Foto0134_normal.jpg","profile_background_tile":true,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1481997524\/Foto0134_normal.jpg","name":"p\u00e2mela
+      r . \u221e","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":2,"profile_sidebar_fill_color":"0f0f0f","listed_count":0,"lang":"en","utc_offset":-10800,"created_at":"Mon Feb 07 04:52:36 +0000 2011","description":"g\u00eamea da
+      @icantbeafreak ,filha da @queaKucatepega ,m\u00e3e do @ai7pego  ,melhor da @ovomaltine__ e do @ricardochavesxx ,bombom do @lacassagne e do @SukoDeFruta 33","time_zone":"Greenland","profile_sidebar_border_color":"000000","followers_count":145,"verified":false,"statuses_count":14112,"geo_enabled":true,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"b8077a","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/333220722\/tumblr_lout4hstOH1qza84qo1_500.gif","location":"Canoas","id_str":"248515644","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/333220722\/tumblr_lout4hstOH1qza84qo1_500.gif","profile_link_color":"b30754","id":248515644,"follow_request_sent":false,"friends_count":45,"url":"http:\/\/oisoudramatica.tumblr.com\/","screen_name":"BiteMarshmallow"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985174140928000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985174140928000,"truncated":false,"text":"voltei
+      meu amor *u*"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon Oct 03 22:14:47 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"DBE9ED","protected":false,"profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1547820315\/barbara01_normal.jpg","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1547820315\/barbara01_normal.jpg","name":"Barbara
+      Dwornik","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":0,"profile_sidebar_fill_color":"151717","listed_count":0,"lang":"pt","utc_offset":null,"created_at":"Sun Sep 18 02:55:15 +0000 2011","description":"#RAWR ","time_zone":null,"profile_sidebar_border_color":"DBE9ED","followers_count":185,"verified":false,"statuses_count":116,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"917f91","default_profile":false,"following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/images\/themes\/theme17\/bg.gif","location":"Porto
+      :)","id_str":"375412914","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/images\/themes\/theme17\/bg.gif","profile_link_color":"CC3366","id":375412914,"follow_request_sent":false,"friends_count":162,"url":null,"screen_name":"_bahaas"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985173704704000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985173704704000,"truncated":false,"text":"E
+      ele foi l\u00e1 comprar em 10mins ja tava de volta e dai o onibus dele chego e n\u00e3o deu nem tempo de perguntar o nome do guri lindo e fofo :)"},{"retweeted":false,"in_reply_to_status_id_str":null,"geo":null,"in_reply_to_user_id_str":null,"entities":{"urls":[],"hashtags":[],"user_mentions":[]},"coordinates":null,"created_at":"Mon
+      Oct 03 22:14:47 +0000 2011","contributors":null,"place":null,"user":{"profile_background_color":"1A1B1F","protected":false,"profile_image_url":"http:\/\/a3.twimg.com\/profile_images\/1401047549\/feriad_o_035_normal.jpg","profile_background_tile":false,"profile_image_url_https":"https:\/\/si0.twimg.com\/profile_images\/1401047549\/feriad_o_035_normal.jpg","name":"fernando
+      aguiar bilh","show_all_inline_media":false,"contributors_enabled":false,"favourites_count":0,"profile_sidebar_fill_color":"252429","listed_count":1,"lang":"pt","utc_offset":null,"created_at":"Sat Jun 18 03:59:52 +0000 2011","description":"musico brasileiro,na
+      essencia e com amor","time_zone":null,"profile_sidebar_border_color":"181A1E","followers_count":19,"default_profile":false,"verified":false,"statuses_count":395,"geo_enabled":false,"profile_use_background_image":true,"default_profile_image":false,"notifications":false,"profile_text_color":"666666","following":false,"profile_background_image_url":"http:\/\/a1.twimg.com\/profile_background_images\/288125056\/PQAAANYTGmltj6SuoWOn6gc0cQjR4higOHqNo-C8C9X_xz4S2yV-e7bKzVCzlzSmLvXxHMotJ6MalCI__-mw4qgJvOQAm1T1UPKX6FzV1uefBmqtxbb4xvOS-eH3.jpg","location":"uruguaiana
+      -rs","id_str":"319446166","is_translator":false,"profile_background_image_url_https":"https:\/\/si0.twimg.com\/profile_background_images\/288125056\/PQAAANYTGmltj6SuoWOn6gc0cQjR4higOHqNo-C8C9X_xz4S2yV-e7bKzVCzlzSmLvXxHMotJ6MalCI__-mw4qgJvOQAm1T1UPKX6FzV1uefBmqtxbb4xvOS-eH3.jpg","profile_link_color":"2FC2EF","id":319446166,"follow_request_sent":false,"friends_count":32,"url":null,"screen_name":"nandobilhalva"},"favorited":false,"in_reply_to_status_id":null,"source":"web","id_str":"120985172043776000","retweet_count":0,"in_reply_to_screen_name":null,"in_reply_to_user_id":null,"id":120985172043776000,"truncated":false,"text":";largando
+      pra faculdade...dia de prova"}]'
+- recorded: 2011-10-03T22:17:23.018Z
   request:
     method: GET
     uri: http://feeds.feedburner.com/wondermark
@@ -275,431 +210,146 @@ interactions:
     headers:
       Cache-Control: private, max-age=0
       Content-Type: text/xml; charset=UTF-8
-      Date: Thu, 15 Sep 2011 19:32:59 GMT
-      ETag: Dp3oDRMgFwO1iqR1vGW7VtvttUU
-      Expires: Thu, 15 Sep 2011 19:32:59 GMT
-      Last-Modified: Thu, 15 Sep 2011 19:16:09 GMT
+      Date: Mon, 03 Oct 2011 22:17:22 GMT
+      ETag: mm5dhz1UcYLtA/1VODpkwvrid2M
+      Expires: Mon, 03 Oct 2011 22:17:22 GMT
+      Last-Modified: Mon, 03 Oct 2011 21:30:07 GMT
       Server: GSE
       X-Content-Type-Options: nosniff
       X-XSS-Protection: 1; mode=block
-    body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<?xml-stylesheet type=\"\
-      text/xsl\" media=\"screen\" href=\"/~d/styles/rss2full.xsl\"?><?xml-stylesheet\
-      \ type=\"text/css\" media=\"screen\" href=\"http://feeds.feedburner.com/~d/styles/itemcontent.css\"\
-      ?><rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:wfw=\"\
-      http://wellformedweb.org/CommentAPI/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\
-      \ xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\
-      \ xmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\" xmlns:feedburner=\"\
-      http://rssnamespace.org/feedburner/ext/1.0\" version=\"2.0\">\r\n<channel>\r\
-      \n\t<title>Wondermark</title>\r\n\t\r\n\t<link>http://wondermark.com</link>\r\
-      \n\t<description>An Illustrated Jocularity.</description>\r\n\t<lastBuildDate>Tue,\
-      \ 13 Sep 2011 11:44:34 +0000</lastBuildDate>\r\n\t<language>en</language>\r\n\
-      \t<sy:updatePeriod>hourly</sy:updatePeriod>\r\n\t<sy:updateFrequency>1</sy:updateFrequency>\r\
-      \n\t\r\n\t\t<atom10:link xmlns:atom10=\"http://www.w3.org/2005/Atom\" rel=\"\
-      self\" type=\"application/rss+xml\" href=\"http://feeds.feedburner.com/wondermark\"\
-      \ /><feedburner:info uri=\"wondermark\" /><atom10:link xmlns:atom10=\"http://www.w3.org/2005/Atom\"\
-      \ rel=\"hub\" href=\"http://pubsubhubbub.appspot.com/\" /><feedburner:emailServiceId>wondermark</feedburner:emailServiceId><feedburner:feedburnerHostname>http://feedburner.google.com</feedburner:feedburnerHostname><item>\r\
-      \n\t\t<title>THIS WEEK: Machine of Death game testing!</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/Fu_NK0zZH9s/</link>\r\
-      \n\t\t<comments>http://wondermark.com/mod-game-la/#comments</comments>\r\n\t\
-      \t<pubDate>Tue, 13 Sep 2011 08:53:52 +0000</pubDate>\r\n\t\t<dc:creator>David\
-      \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\
-      \t<category><![CDATA[machine of death]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
-      false\">http://wondermark.com/?p=8500</guid>\r\n\t\t<description><![CDATA[You\
-      \ may have heard that we&#8217;re developing some Machine of Death card games.\
-      \ If you haven&#8217;t heard &#8212; well, now you have! We are. And even better\
-      \ &#8212; I&#8217;m hosting some play-testing events at my studio here in West\
-      \ Los Angeles, and you&#8217;re invited! Come have some pizza and play card\
-      \ games with me! The [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><img\
-      \ src=\"http://machineofdeath.net/a/wp-content/uploads/2011/09/mod-game2-300x225.jpg\"\
-      \ alt=\"\" title=\"TOWER of POWER\" width=\"300\" height=\"225\" class=\"alignnone\
-      \ size-medium wp-image-2341\" /></p>\n<p>You may have heard that we&#8217;re\
-      \ developing some <em>Machine of Death</em> card games. If you haven&#8217;t\
-      \ heard &#8212; well, now you have! We are. And <em>even better</em> &#8212;\
-      \ I&#8217;m hosting some play-testing events at my studio here in West Los Angeles,\
-      \ and <em>you&#8217;re invited!</em> Come have some pizza and play card games\
-      \ with me!</p>\n<p>The first two events will be TONIGHT, Tuesday September 13,\
-      \ and TOMORROW, Wednesday September 14, from 8-10pm. I know it&#8217;s short\
-      \ notice, but if you&#8217;d like to come, <a href=\"http://machineofdeath.net/card-games-update#comments\"\
-      >leave an RSVP on the Machine of Death site</a> and I&#8217;ll be in touch with\
-      \ directions! </p>\n<p><strong>Each evening will be limited to eight people</strong>,\
-      \ so if there aren&#8217;t eight RSVP&#8217;d yet for the night you&#8217;d\
-      \ like to come &#8212; and you know you can make it &#8212; go ahead and sign\
-      \ up. (You can come both nights if you want! We&#8217;ll be playing different\
-      \ games each time.) </p>\n<p>Now, if you&#8217;re not local, that&#8217;s okay.\
-      \ The MOD card games will be coming to other cities and the internet soon! We\
-      \ talk a little more about them <a href=\"http://machineofdeath.net/card-games-update\"\
-      >here</a>. And even if you can&#8217;t make it to a play-test event, there&#8217;s\
-      \ details at that link about how to, <em>right now,</em> (a) play a dice-based\
-      \ role-playing game I just invented and (b) fire up your arts-n-craftiness to\
-      \ make us a custom Machine of Death prediction card. </p>\n<p>You see, the motto\
-      \ of the entire Machine of Death opus is, &#8220;Things to keep you busy.&#8221;\
-      \ If you do end up playing my dice game, &#8220;Hitman on a Budget,&#8221; let\
-      \ me know what you think!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=Fu_NK0zZH9s:SA13ABreJsc:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=Fu_NK0zZH9s:SA13ABreJsc:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/Fu_NK0zZH9s\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/mod-game-la/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/mod-game-la/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#755; Fine Feathered Friend</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/pjJQhBQehSI/</link>\r\
-      \n\t\t<comments>http://wondermark.com/755/#comments</comments>\r\n\t\t<pubDate>Tue,\
-      \ 13 Sep 2011 07:00:18 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[animals]]></category>\r\
-      \n\t\t<category><![CDATA[relationships]]></category>\r\n\t\t<category><![CDATA[sex]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8512</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/755/\"><img src=\"\
-      http://wondermark.com/c/2011-09-13-755eyes.gif\" border=\"0\" alt=\"Do you even\
-      \ CARE about my INTERESTS? (regurgitating earthworms; eating beetles; screaming\
-      \ at the top of my lungs for no reason whatsoever)\" title=\"Do you even CARE\
-      \ about my INTERESTS? (regurgitating earthworms; eating beetles; screaming at\
-      \ the top of my lungs for no reason whatsoever)\" /></a></p>]]></description>\r\
-      \n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/755/\"\
-      ><img src=\"http://wondermark.com/c/2011-09-13-755eyes.gif\" border=\"0\" alt=\"\
-      Do you even CARE about my INTERESTS? (regurgitating earthworms; eating beetles;\
-      \ screaming at the top of my lungs for no reason whatsoever)\" title=\"Do you\
-      \ even CARE about my INTERESTS? (regurgitating earthworms; eating beetles; screaming\
-      \ at the top of my lungs for no reason whatsoever)\" /></a></p><div class=\"\
-      feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=pjJQhBQehSI:3iGC_J4AZWc:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=pjJQhBQehSI:3iGC_J4AZWc:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/pjJQhBQehSI\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/755/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/755/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>Book Review: “The Story of a Broken Arm,” by Amelia\
-      \ Vaughan</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/sdpA2w-gwns/</link>\r\
-      \n\t\t<comments>http://wondermark.com/book-review-broken-arm/#comments</comments>\r\
-      \n\t\t<pubDate>Fri, 09 Sep 2011 10:19:23 +0000</pubDate>\r\n\t\t<dc:creator>David\
-      \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\
-      \t<category><![CDATA[blog: reviews]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
-      false\">http://wondermark.com/?p=8484</guid>\r\n\t\t<description><![CDATA[Childhood\
-      \ is a time when mysteries loom tall, when the mind is still sorting out what\
-      \ is real about the world, what might be just assumption, and what is outright\
-      \ lie. Childhood memories often betray a fluidity in the nature of reality,\
-      \ and the contrast between imagined dangers and their real consequences is the\
-      \ subject [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<blockquote><p>Childhood\
-      \ is a time when mysteries loom tall, when the mind is still sorting out what\
-      \ is real about the world, what might be just assumption, and what is outright\
-      \ lie. Childhood memories often betray a fluidity in the nature of reality,\
-      \ and the contrast between imagined dangers and their real consequences is the\
-      \ subject of this remarkable new work by first-time writer Amelia Vaughan.</p>\n\
-      <p>Part memoir, part <em>roman à clef,</em> <em>The Story of a Broken Arm</em>\
-      \ tells the tale of a childhood accident that left lasting scars on its victim\
-      \ &#8212; and for all the brutal caprice of the incident, the account blends\
-      \ poetic questions of causality with meditations on the truth and power of the\
-      \ imagination into a visceral story of survival. </p>\n<p>I believe <em>The\
-      \ Story of a Broken Arm</em> was printed only in limited edition, and I was\
-      \ very fortunate to secure an autographed first-run copy direct from the author.</p></blockquote>\n\
-      <p><a href=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm1.jpg\"\
-      ><img src=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm1-400x300.jpg\"\
-      \ alt=\"\" title=\"first edition!\" width=\"400\" height=\"300\" class=\"alignnone\
-      \ size-large wp-image-8486\" /></a></p>\n<p>Recently I stopped by my local print\
-      \ shop, <a rel=\"nofollow\" href=\"http://www.dsjprinting.com/\">DSJ Printing</a>\
-      \ in Santa Monica, to pick up a batch of <a rel=\"nofollow\" href=\"https://www.facebook.com/photo.php?fbid=204042339658959&#038;set=a.115298968533297.17309.114958475234013&#038;type=1&#038;ref=nf\"\
-      ><em>Machine of Death</em> card games</a>. While my order was being brought\
-      \ out, a tiny hand suddenly popped up from behind the counter and <em>casually</em>\
-      \ placed out a sign: &#8220;The Story of a Broken Arm, by Amelia Vaughan. Only\
-      \ $1.99!&#8221;</p>\n<p>Of course I leapt at the chance. I grew up as a kid\
-      \ running around my parents&#8217; business, amusing myself however I could\
-      \ in stacks of car parts, coming up with weird schemes and cutting up cardboard\
-      \ boxes and bolting together old pieces of junk just to stay sane during the\
-      \ interminable afternoons after school. I am totally, 100% behind any kid-at-the-parents&#8217;-work\
-      \ (DSJ has been Vaughan-owned for 55 years) enterprise. I gladly paid my $2,\
-      \ took a polite penny in change, and was pleased to also teach Amelia, who&#8217;s\
-      \ maybe about seven, the concept of &#8220;autographing your work.&#8221; </p>\n\
-      <p><a href=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm2.jpg\"\
-      ><img src=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm2-400x300.jpg\"\
-      \ alt=\"\" title=\"captivating!!\" width=\"400\" height=\"300\" class=\"alignnone\
-      \ size-large wp-image-8485\" /></a></p>\n<p>I didn&#8217;t realize it would\
-      \ only be a single page long until after I&#8217;d already pre-paid, but <em>what\
-      \ a page it is</em>. Action, pathos, heartbreak, and a bit of ambiguity right\
-      \ at the end as well. Anyway, I consider this an (inflation-adjusted) pay-it-forward\
-      \ for the guy who bought &#8220;bitten beans&#8221; from me for a dollar, back\
-      \ in about 1994, after I realized that &#8220;I SELL BITTEN BEANS&#8221; was\
-      \ the only thing I could spell out of a bunch of leftover stickers I found.\
-      \ </p>\n<p><img src=\"http://davidmalki.com/tmh/beans.jpg\" title=\"this is\
-      \ where I spent 1980-1998\"></p>\n<p>(I tell the story of the transaction in\
-      \ <a rel=\"nofollow\" href=\"http://tweetmeharder.com/post/327886570/tmh31\"\
-      >Tweet Me Harder 31</a>, and my mom comes on to verify it all in <a rel=\"nofollow\"\
-      \ href=\"http://tweetmeharder.com/post/376867459/tmh34\">TMH 34</a>.) </p>\n\
-      <p>The moral is: I started out as a teenager selling <em>dry beans with bite\
-      \ marks.</em> And look at me now! I own my own business where I sell even <em>more</em>\
-      \ ridiculous things. Support entrepreneurial kids, folks!</p>\n<div class=\"\
-      feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=sdpA2w-gwns:dk5gekgBaKw:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=sdpA2w-gwns:dk5gekgBaKw:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/sdpA2w-gwns\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/book-review-broken-arm/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>5</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/book-review-broken-arm/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#754; All Aboard the Snooze Express</title>\r\n\t\
-      \t<link>http://feedproxy.google.com/~r/wondermark/~3/2rsqvZz8J5M/</link>\r\n\
-      \t\t<comments>http://wondermark.com/754/#comments</comments>\r\n\t\t<pubDate>Fri,\
-      \ 09 Sep 2011 07:00:22 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[relationships]]></category>\r\
-      \n\t\t<category><![CDATA[sex]]></category>\r\n\t\t<category><![CDATA[sleep]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8481</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/754/\"><img src=\"\
-      http://wondermark.com/c/2011-09-09-754snooze.gif\" border=\"0\" alt=\"The whole\
-      \ thing was clearly a pork project from the get-go. It doesn't make sound economic\
-      \ sense to lay high-speed rail track all the way from Bakersfield to Fresno\
-      \ just so one person can fall asleep faster. EVEN IF SHE IS ADORABLE WHEN SHE\
-      \ SNORES\" title=\"The whole thing was clearly a pork project from the get-go.\
-      \ It doesn't make sound economic sense to lay high-speed rail track all the\
-      \ way from Bakersfield to Fresno just so one person can fall asleep faster.\
-      \ EVEN IF SHE IS ADORABLE WHEN SHE SNORES\" /></a></p>]]></description>\r\n\t\
-      \t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/754/\"><img\
-      \ src=\"http://wondermark.com/c/2011-09-09-754snooze.gif\" border=\"0\" alt=\"\
-      The whole thing was clearly a pork project from the get-go. It doesn't make\
-      \ sound economic sense to lay high-speed rail track all the way from Bakersfield\
-      \ to Fresno just so one person can fall asleep faster. EVEN IF SHE IS ADORABLE\
-      \ WHEN SHE SNORES\" title=\"The whole thing was clearly a pork project from\
-      \ the get-go. It doesn't make sound economic sense to lay high-speed rail track\
-      \ all the way from Bakersfield to Fresno just so one person can fall asleep\
-      \ faster. EVEN IF SHE IS ADORABLE WHEN SHE SNORES\" /></a></p><div class=\"\
-      feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=2rsqvZz8J5M:sHuFmMpMCGE:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=2rsqvZz8J5M:sHuFmMpMCGE:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=2rsqvZz8J5M:sHuFmMpMCGE:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=2rsqvZz8J5M:sHuFmMpMCGE:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=2rsqvZz8J5M:sHuFmMpMCGE:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=2rsqvZz8J5M:sHuFmMpMCGE:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/2rsqvZz8J5M\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/754/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/754/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>This weekend: SPX in Maryland!</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/HXR5mo8Yo6k/</link>\r\
-      \n\t\t<comments>http://wondermark.com/this-weekend-spx-in-maryland/#comments</comments>\r\
-      \n\t\t<pubDate>Tue, 06 Sep 2011 08:24:38 +0000</pubDate>\r\n\t\t<dc:creator>David\
-      \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\
-      \t<category><![CDATA[blog: appearances]]></category>\r\n\r\n\t\t<guid isPermaLink=\"\
-      false\">http://wondermark.com/?p=8469</guid>\r\n\t\t<description><![CDATA[This\
-      \ weekend I&#8217;ll be returning to Bethesda, Maryland for the annual Small\
-      \ Press Expo! I&#8217;m on a panel too: Constraint Based Cartooning : Saturday\
-      \ 5:00 pm A blank canvas and an infinite palette can be liberating—and intimidating.\
-      \ Most work ultimately ends up operating according to a set of self-generated\
-      \ rules which govern its scope. Bill [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
-      \ rel=\"nofollow\" href=\"http://spxpo.com\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/spx-400x607.jpg\"\
-      \ alt=\"\" title=\"silly putty expo???\" width=\"400\" height=\"607\" class=\"\
-      alignnone size-large wp-image-8470\" /></a></p>\n<p>This weekend I&#8217;ll\
-      \ be returning to Bethesda, Maryland for the annual <a rel=\"nofollow\" href=\"\
-      http://spxpo.com\">Small Press Expo</a>! I&#8217;m on a panel too:</p>\n<blockquote><p><strong>Constraint\
-      \ Based Cartooning : Saturday 5:00 pm</strong><br />\nA blank canvas and an\
-      \ infinite palette can be liberating—and intimidating. Most work ultimately\
-      \ ends up operating according to a set of self-generated rules which govern\
-      \ its scope. Bill Kartalopoulos will talk to David Malki ! (Wondermark), Brian\
-      \ Ralph (Daybreak), Karl Stevens (The Lodger) and Daniel Spottswood (Disquietville)\
-      \ about producing comics which operate more explicitly according to a governing\
-      \ set of aesthetic, stylistic and formal principles.</p></blockquote>\n<p>SPX\
-      \ was one of the first shows I ever considered attending, back in the early\
-      \ 2000s when I would buy their annual anthologies at my local comic book shop.\
-      \ I&#8217;ve now been going since 2006, and ever since I discovered that North\
-      \ Bethesda is just a short train ride from the Library of Congress, I&#8217;ve\
-      \ made a habit of building an extra day into my trip. Saturday and Sunday I&#8217;ll\
-      \ be at the show, and then Monday I&#8217;ll be in DC researching some strange\
-      \ Victorian children&#8217;s books for a future &#8220;True Stuff from Old Books&#8221;\
-      \ installment.</p>\n<p>SPEAKING OF WHICH: Earlier this summer, I was honored\
-      \ to be invited to Google Boston to speak as part of their excellent &#8220;Authors@Google&#8221;\
-      \ series (which can be <a rel=\"nofollow\" href=\"http://www.youtube.com/user/AtGoogleTalks\"\
-      >viewed for free on YouTube</a>). This version of &#8220;True Stuff from Old\
-      \ Books&#8221; runs about an hour long and is full of some of my favorite finds\
-      \ from Victorian-era magazines and newspapers. <a rel=\"nofollow\" href=\"http://www.youtube.com/watch?v=5q-EO2PkrKc\"\
-      >Enjoy!</a></p>\n<p><iframe width=\"400\" height=\"255\" src=\"http://www.youtube.com/embed/5q-EO2PkrKc\"\
-      \ frameborder=\"0\" allowfullscreen></iframe></p>\n<p>As you can see, &#8220;True\
-      \ Stuff from Old Books&#8221; is full of hilarity and wonder, and throughout\
-      \ all the strangeness, it uniquely illuminates the modern human condition through\
-      \ a sepia-tinted lens of the past. If you&#8217;re part of an organization that\
-      \ might be interested in hearing me speak, please <a href=\"mailto:dave[AT]wondermark.com?Subject=True\
-      \ Stuff from Old Books\">drop me a line</a>! I&#8217;m constantly adding new\
-      \ weird old tidbits as I stumble across them, so the talk has yet to be the\
-      \ same twice.</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=HXR5mo8Yo6k:GD1pu7fYrrE:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=HXR5mo8Yo6k:GD1pu7fYrrE:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=HXR5mo8Yo6k:GD1pu7fYrrE:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=HXR5mo8Yo6k:GD1pu7fYrrE:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=HXR5mo8Yo6k:GD1pu7fYrrE:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=HXR5mo8Yo6k:GD1pu7fYrrE:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/HXR5mo8Yo6k\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/this-weekend-spx-in-maryland/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>1</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/this-weekend-spx-in-maryland/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#753; A Mean Glimpse of Eternity</title>\r\n\t\t\
-      <link>http://feedproxy.google.com/~r/wondermark/~3/eK-1B6nPVTY/</link>\r\n\t\
-      \t<comments>http://wondermark.com/753/#comments</comments>\r\n\t\t<pubDate>Tue,\
-      \ 06 Sep 2011 07:00:31 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[deceit]]></category>\r\
-      \n\t\t<category><![CDATA[despair]]></category>\r\n\t\t<category><![CDATA[medicine]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8475</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/753/\"><img src=\"\
-      http://wondermark.com/c/2011-09-06-753plague.gif\" border=\"0\" alt=\"the stomach\
-      \ flu is like Nature picking your body's pockets OVER and OVER and OVER again\
-      \ - and not finding anything but VILENESS, but still COMING BACK to TRY AGAIN.\
-      \ Nature is DISGUSTING\" title=\"the stomach flu is like Nature picking your\
-      \ body's pockets OVER and OVER and OVER again - and not finding anything but\
-      \ VILENESS, but still COMING BACK to TRY AGAIN. Nature is DISGUSTING\" /></a></p>]]></description>\r\
-      \n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/753/\"\
-      ><img src=\"http://wondermark.com/c/2011-09-06-753plague.gif\" border=\"0\"\
-      \ alt=\"the stomach flu is like Nature picking your body's pockets OVER and\
-      \ OVER and OVER again - and not finding anything but VILENESS, but still COMING\
-      \ BACK to TRY AGAIN. Nature is DISGUSTING\" title=\"the stomach flu is like\
-      \ Nature picking your body's pockets OVER and OVER and OVER again - and not\
-      \ finding anything but VILENESS, but still COMING BACK to TRY AGAIN. Nature\
-      \ is DISGUSTING\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=eK-1B6nPVTY:gHK2SJipylY:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=eK-1B6nPVTY:gHK2SJipylY:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=eK-1B6nPVTY:gHK2SJipylY:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=eK-1B6nPVTY:gHK2SJipylY:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=eK-1B6nPVTY:gHK2SJipylY:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=eK-1B6nPVTY:gHK2SJipylY:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/eK-1B6nPVTY\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/753/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/753/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#752; The Straw Man at Home</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/hGqcSk3YHwM/</link>\r\
-      \n\t\t<comments>http://wondermark.com/752/#comments</comments>\r\n\t\t<pubDate>Fri,\
-      \ 02 Sep 2011 07:00:26 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[dining]]></category>\r\
-      \n\t\t<category><![CDATA[solutions]]></category>\r\n\t\t<category><![CDATA[visual]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8465</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/752/\"><img src=\"\
-      http://wondermark.com/c/2011-09-02-752straw.gif\" border=\"0\" alt=\"sluurrrrppppp\"\
-      \ title=\"sluurrrrppppp\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
-      \ href=\"http://wondermark.com/752/\"><img src=\"http://wondermark.com/c/2011-09-02-752straw.gif\"\
-      \ border=\"0\" alt=\"sluurrrrppppp\" title=\"sluurrrrppppp\" /></a></p><div\
-      \ class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hGqcSk3YHwM:pN9LU3RAlD0:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hGqcSk3YHwM:pN9LU3RAlD0:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=hGqcSk3YHwM:pN9LU3RAlD0:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hGqcSk3YHwM:pN9LU3RAlD0:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hGqcSk3YHwM:pN9LU3RAlD0:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=hGqcSk3YHwM:pN9LU3RAlD0:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/hGqcSk3YHwM\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/752/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/752/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#751; The Beast in the Labyrinth</title>\r\n\t\t\
-      <link>http://feedproxy.google.com/~r/wondermark/~3/IEtSwrbpcss/</link>\r\n\t\
-      \t<comments>http://wondermark.com/751/#comments</comments>\r\n\t\t<pubDate>Tue,\
-      \ 30 Aug 2011 05:39:51 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[anomalies]]></category>\r\
-      \n\t\t<category><![CDATA[color]]></category>\r\n\t\t<category><![CDATA[hand-drawn]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8460</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/751/\"><img src=\"\
-      http://wondermark.com/c/2011-08-29-751bull.jpg\" border=\"0\" alt=\"You're lucky\
-      \ I didn't show you what IT'S running from\" title=\"You're lucky I didn't show\
-      \ you what IT'S running from\" /></a></p>This is not a guest comic! East Coast\
-      \ weather has played havoc with the airlines, so a weekend trip to Massachusetts\
-      \ has unexpectedly turned into a week, and I&#8217;m still not at home where\
-      \ I can access my computer. Left without my database of weird images, my choices\
-      \ were to scour the web for something [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
-      \ href=\"http://wondermark.com/751/\"><img src=\"http://wondermark.com/c/2011-08-29-751bull.jpg\"\
-      \ border=\"0\" alt=\"You're lucky I didn't show you what IT'S running from\"\
-      \ title=\"You're lucky I didn't show you what IT'S running from\" /></a></p><p>This\
-      \ is not a guest comic! East Coast weather has played havoc with the airlines,\
-      \ so a weekend trip to Massachusetts has unexpectedly turned into a week, and\
-      \ I&#8217;m still not at home where I can access my computer. Left without my\
-      \ database of weird images, my choices were to scour the web for something usable\
-      \ to make a comic&#8230;or do something a little more fun. I&#8217;m staying\
-      \ with <a rel=\"nofollow\" href=\"http://overcompensating.com\">Jeffrey Rowland</a>\
-      \ at the moment, and while he doesn&#8217;t have shelves full of Victorian books\
-      \ like I do, he most certainly does have art supplies and a scanner. So I drew\
-      \ and colored this comic for you! I&#8217;m sure our regular players are fervently\
-      \ hoping that this mysterious new character doesn&#8217;t find his way back\
-      \ into the normal strips&#8230;but who knows?</p>\n<p><img src=\"http://wondermark.com/wp-content/uploads/2011/08/751.jpg\"\
-      \ alt=\"\" title=\"ruuunnnnnnnn\" width=\"400\" height=\"300\" class=\"alignnone\
-      \ size-full wp-image-8463\" /></p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=IEtSwrbpcss:9jUDN7gcCuo:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=IEtSwrbpcss:9jUDN7gcCuo:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=IEtSwrbpcss:9jUDN7gcCuo:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=IEtSwrbpcss:9jUDN7gcCuo:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=IEtSwrbpcss:9jUDN7gcCuo:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=IEtSwrbpcss:9jUDN7gcCuo:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/IEtSwrbpcss\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/751/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/751/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>Book signing – Irene Special!!</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/OZdznYZECT8/</link>\r\
-      \n\t\t<comments>http://wondermark.com/book-signing-irene-special/#comments</comments>\r\
-      \n\t\t<pubDate>Sun, 28 Aug 2011 17:14:40 +0000</pubDate>\r\n\t\t<dc:creator>David\
-      \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\r\
-      \n\t\t<guid isPermaLink=\"false\">http://wondermark.com/book-signing-irene-special/</guid>\r\
-      \n\t\t<description><![CDATA[My wife and I traveled from California to Massachusetts\
-      \ to visit friends this weekend &#8212; only to have our flight home cancelled\
-      \ by Irene! So we&#8217;re hanging out here in western Mass for a few extra\
-      \ days, and I thought I&#8217;d take the opportunity &#8212; while I&#8217;m\
-      \ in the same zip code as the TopatoCo [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p>My\
-      \ wife and I traveled from California to Massachusetts to visit friends this\
-      \ weekend &#8212; only to have our flight home cancelled by Irene! So we&#8217;re\
-      \ hanging out here in western Mass for a few extra days, and I thought I&#8217;d\
-      \ take the opportunity &#8212; while I&#8217;m in the same zip code as the TopatoCo\
-      \ warehouse, which only happens a few times a year &#8212; to offer signed books\
-      \ and prints!</p>\n<p><s><strong>Between now and 2PM Monday (Eastern time),\
-      \ order any book, print, and/or poster from <a href=\"http://topatoco.com/wondermark\"\
-      >my TopatoCo store</a> and I&#8217;ll personalize it for free!</strong></p>\n\
-      <p>In the &#8220;Special Instructions&#8221; box at checkout, just enter &#8220;SIGN\
-      \ TO:&#8221; and the name you&#8217;d like me to inscribe. I won&#8217;t have\
-      \ time to do sketches, but I&#8217;m happy to do signatures on any or all of\
-      \ my <a href=\"http://topatoco.com/wondermark\">books, prints, and posters</a>.</p>\n\
-      <p>Free personalizations are available RIGHT NOW through Monday at 2PM Eastern\
-      \ ONLY! After that, I will be throwing all books off buildings instead; they\
-      \ will arrive all crumply. Or something.</s><strong> UPDATE: All done! Thanks!\
-      \ There&#8217;ll be a chance for sketch editions later this fall, I hope.</strong></p>\n\
-      <div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=OZdznYZECT8:X4P_-0e0AKw:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=OZdznYZECT8:X4P_-0e0AKw:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=OZdznYZECT8:X4P_-0e0AKw:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=OZdznYZECT8:X4P_-0e0AKw:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=OZdznYZECT8:X4P_-0e0AKw:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=OZdznYZECT8:X4P_-0e0AKw:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/OZdznYZECT8\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/book-signing-irene-special/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>1</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/book-signing-irene-special/</feedburner:origLink></item>\r\
-      \n\t\t<item>\r\n\t\t<title>#406; In which there’s a Problem in the Orchestra</title>\r\
-      \n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/4ae8J3dwoQw/</link>\r\
-      \n\t\t<comments>http://wondermark.com/406b/#comments</comments>\r\n\t\t<pubDate>Fri,\
-      \ 26 Aug 2011 07:00:05 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
-      \n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[music]]></category>\r\
-      \n\t\t<category><![CDATA[otherworldliness]]></category>\r\n\t\t<category><![CDATA[success]]></category>\r\
-      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8441</guid>\r\
-      \n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/406b/\"><img\
-      \ src=\"http://wondermark.com/c/2011-08-26-406music.jpg\" border=\"0\" alt=\"\
-      rodney kill the violinssssss\" title=\"rodney kill the violinssssss\" /></a></p>Enjoy\
-      \ this Classic Wondermark, originally published May 9, 2008 and newly colored\
-      \ by Philip R. Obermarck!]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
-      \ href=\"http://wondermark.com/406b/\"><img src=\"http://wondermark.com/c/2011-08-26-406music.jpg\"\
-      \ border=\"0\" alt=\"rodney kill the violinssssss\" title=\"rodney kill the\
-      \ violinssssss\" /></a></p><p>Enjoy this Classic Wondermark, originally published\
-      \ May 9, 2008 and newly colored by <a rel=\"nofollow\" href=\"http://philobermarck.com/\"\
-      >Philip R. Obermarck</a>!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4ae8J3dwoQw:QhRMzV290Wo:yIl2AUoC8zA\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4ae8J3dwoQw:QhRMzV290Wo:gIN9vFwOqvQ\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=4ae8J3dwoQw:QhRMzV290Wo:gIN9vFwOqvQ\"\
-      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4ae8J3dwoQw:QhRMzV290Wo:qj6IDK7rITs\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"\
-      0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=4ae8J3dwoQw:QhRMzV290Wo:F7zBnMyn0Lo\"\
-      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=4ae8J3dwoQw:QhRMzV290Wo:F7zBnMyn0Lo\"\
-      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/4ae8J3dwoQw\"\
-      \ height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/406b/feed/</wfw:commentRss>\r\
-      \n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/406b/</feedburner:origLink></item>\r\
-      \n\t</channel>\r\n</rss><!-- Performance optimized by W3 Total Cache. Learn\
-      \ more: http://www.w3-edge.com/wordpress-plugins/\n\nMinified using disk: basic\n\
-      Page Caching using disk: enhanced\nDatabase Caching 1/30 queries in 0.089 seconds\
-      \ using disk: basic\nObject Caching 830/900 objects using disk: basic\nContent\
-      \ Delivery Network via wondermark.com\n\nServed from: wondermark.com @ 2011-09-13\
-      \ 04:49:53 -->\r\n"
-- recorded: 2011-09-15T19:33:01.358Z
+    body: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<?xml-stylesheet type=\"text/xsl\" media=\"screen\" href=\"/~d/styles/rss2full.xsl\"?><?xml-stylesheet type=\"text/css\" media=\"screen\" href=\"http://feeds.feedburner.com/~d/styles/itemcontent.css\"\
+      ?><rss xmlns:content=\"http://purl.org/rss/1.0/modules/content/\" xmlns:wfw=\"http://wellformedweb.org/CommentAPI/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:atom=\"http://www.w3.org/2005/Atom\" xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\
+      \ xmlns:slash=\"http://purl.org/rss/1.0/modules/slash/\" xmlns:feedburner=\"http://rssnamespace.org/feedburner/ext/1.0\" version=\"2.0\">\r\n<channel>\r\n\t<title>Wondermark</title>\r\n\t\r\n\t<link>http://wondermark.com</link>\r\n\t<description>An Illustrated\
+      \ Jocularity.</description>\r\n\t<lastBuildDate>Fri, 30 Sep 2011 08:39:59 +0000</lastBuildDate>\r\n\t<language>en</language>\r\n\t<sy:updatePeriod>hourly</sy:updatePeriod>\r\n\t<sy:updateFrequency>1</sy:updateFrequency>\r\n\t\r\n\t\t<atom10:link xmlns:atom10=\"\
+      http://www.w3.org/2005/Atom\" rel=\"self\" type=\"application/rss+xml\" href=\"http://feeds.feedburner.com/wondermark\" /><feedburner:info uri=\"wondermark\" /><atom10:link xmlns:atom10=\"http://www.w3.org/2005/Atom\" rel=\"hub\" href=\"http://pubsubhubbub.appspot.com/\"\
+      \ /><feedburner:emailServiceId>wondermark</feedburner:emailServiceId><feedburner:feedburnerHostname>http://feedburner.google.com</feedburner:feedburnerHostname><item>\r\n\t\t<title>The Miserable Encounter at the National Park</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/ekwIUCMMBbM/</link>\r\
+      \n\t\t<comments>http://wondermark.com/vid1/#comments</comments>\r\n\t\t<pubDate>Fri, 30 Sep 2011 04:30:48 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[Kinetic]]></category>\r\
+      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.org/?p=5</guid>\r\n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/vid1/\"><img src=\"http://wondermark.com/\" border=\"0\" alt=\"Would alt-text even work on a video post? I don't know!\"\
+      \ title=\"Would alt-text even work on a video post? I don't know!\" /></a></p>Today&#8217;s episode is a video! If it doesn&#8217;t appear for you, watch it here. We had a lot of fun with this dumb idea, and made a bunch more videos like this as well.\
+      \ You can see the whole series here. The videos feature the voices of myself and Zachary Sigelko (who was also my [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/vid1/\"><img src=\"http://wondermark.com/\" border=\"\
+      0\" alt=\"Would alt-text even work on a video post? I don't know!\" title=\"Would alt-text even work on a video post? I don't know!\" /></a></p><p>Today&#8217;s episode is a video! If it doesn&#8217;t appear for you, watch it <a rel=\"nofollow\" href=\"\
+      http://vimeo.com/29803107\">here</a>. We had a lot of fun with this dumb idea, and made a bunch more videos like this as well. You can see the whole series <a rel=\"nofollow\" href=\"http://vimeo.com/channels/246356\">here</a>. </p>\n<p>The videos feature\
+      \ the voices of myself and Zachary Sigelko (who was also my co-star in <a rel=\"nofollow\" href=\"http://vimeo.com/22413071\">the party hit of the summer</a>).</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=ekwIUCMMBbM:KpjQlkHO-Bg:yIl2AUoC8zA\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=ekwIUCMMBbM:KpjQlkHO-Bg:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=ekwIUCMMBbM:KpjQlkHO-Bg:gIN9vFwOqvQ\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=ekwIUCMMBbM:KpjQlkHO-Bg:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=ekwIUCMMBbM:KpjQlkHO-Bg:F7zBnMyn0Lo\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=ekwIUCMMBbM:KpjQlkHO-Bg:F7zBnMyn0Lo\" border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/ekwIUCMMBbM\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t\
+      <wfw:commentRss>http://wondermark.com/vid1/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/vid1/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>#759; And the Guests Never Notice</title>\r\
+      \n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/InyabPWI_Xk/</link>\r\n\t\t<comments>http://wondermark.com/759/#comments</comments>\r\n\t\t<pubDate>Tue, 27 Sep 2011 07:00:06 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\
+      \t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[relationships]]></category>\r\n\t\t<category><![CDATA[the culture]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8548</guid>\r\n\t\t<description><![CDATA[<p><a\
+      \ href=\"http://wondermark.com/759/\"><img src=\"http://wondermark.com/c/2011-09-27-759wedding.gif\" border=\"0\" alt=\"fine. wintergreen? how about custom packages of tic tacs? folks can rattle them when they want us to kiss! -- JASON are you TRYING to\
+      \ give me a migraine\" title=\"fine. wintergreen? how about custom packages of tic tacs? folks can rattle them when they want us to kiss! -- JASON are you TRYING to give me a migraine\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+      \ href=\"http://wondermark.com/759/\"><img src=\"http://wondermark.com/c/2011-09-27-759wedding.gif\" border=\"0\" alt=\"fine. wintergreen? how about custom packages of tic tacs? folks can rattle them when they want us to kiss! -- JASON are you TRYING to\
+      \ give me a migraine\" title=\"fine. wintergreen? how about custom packages of tic tacs? folks can rattle them when they want us to kiss! -- JASON are you TRYING to give me a migraine\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=InyabPWI_Xk:5Y_nsHris8U:yIl2AUoC8zA\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=InyabPWI_Xk:5Y_nsHris8U:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=InyabPWI_Xk:5Y_nsHris8U:gIN9vFwOqvQ\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=InyabPWI_Xk:5Y_nsHris8U:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=InyabPWI_Xk:5Y_nsHris8U:F7zBnMyn0Lo\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=InyabPWI_Xk:5Y_nsHris8U:F7zBnMyn0Lo\" border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/InyabPWI_Xk\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t\
+      <wfw:commentRss>http://wondermark.com/759/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/759/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>Check out: Hark! A Vagrant in book\
+      \ form</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/hAVur-p-F3U/</link>\r\n\t\t<comments>http://wondermark.com/hav-book/#comments</comments>\r\n\t\t<pubDate>Tue, 27 Sep 2011 06:55:58 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\
+      \n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\t<category><![CDATA[blog: things you should check out]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8539</guid>\r\n\t\t<description><![CDATA[Are you familiar with the\
+      \ work of the inestimable Kate Beaton? If not, the above is but the merest sample of her whimsical linework and delightfully daffy humor. (She was also one of the many cartoonist contributors to Machine of Death.) And today marks the release of a new collection\
+      \ of her &#8220;Hark! A Vagrant&#8221; [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a rel=\"nofollow\" href=\"http://harkavagrant.com/index.php?id=315\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/fopgun.gif\" alt=\"\"\
+      \ title=\"oh my\" width=\"400\" height=\"502\" class=\"alignnone size-full wp-image-8541\" /></a></p>\n<p>Are you familiar with the work of the inestimable <a rel=\"nofollow\" href=\"http://harkavagrant.com\">Kate Beaton</a>? If not, the above is but the\
+      \ merest sample of her whimsical linework and delightfully daffy humor. (She was also one of the many cartoonist contributors to <em><a href=\"http://machineofdeath.net\">Machine of Death</a></em>.) And today marks the release of <a href=\"http://www.topatoco.com/merchant.mvc?Screen=PROD&#038;Store_Code=TO&#038;Product_Code=BEAT-HARK-BOOK&#038;Category_Code=BEAT\"\
+      >a new collection</a> of her &#8220;Hark! A Vagrant&#8221; comics in hardcover!</p>\n<p><a href=\"http://topatoco.com/hark\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/beat-hark-book-400x278.jpg\" alt=\"\" title=\"hark! a book!\" width=\"\
+      400\" height=\"278\" class=\"alignnone size-large wp-image-8542\" /></a></p>\n<p>Advance copies of Kate&#8217;s book were made available both at Comic-Con in July and at SPX earlier this month, and in both cases they vanished very quickly. Kate&#8217;s\
+      \ posted some reviews and tour info <a rel=\"nofollow\" href=\"http://www.harkavagrant.com/index.php?id=322\">on her site</a> (below the Wuthering Heights comic) if you want to know more &#8212; or just <em>take it from me.</em> It&#8217;s super, duper-great,\
+      \ and doubly so if you have an interest in history or literature. But if you do, I bet you&#8217;re already reading Kate&#8217;s work &#8212; and if you&#8217;re somehow<em> not</em>, you better <a rel=\"nofollow\" href=\"http://harkavagrant.com\">get\
+      \ with it</a>!</p>\n<p>TopatoCo is also offering <a href=\"http://www.topatoco.com/merchant.mvc?Screen=PROD&#038;Store_Code=TO&#038;Product_Code=BEAT-2BOOK-COMBO&#038;Category_Code=BEAT\">a special double-pack</a> with Kate&#8217;s earlier book, <em>Never\
+      \ Learn Anything From History</em>, a collection of specifically history-themed comics. The new hardcover is available pretty much anywhere &#8212; like <a rel=\"nofollow\" href=\"http://www.amazon.com/Hark-Vagrant-Kate-Beaton/dp/1770460608\">Amazon</a>\
+      \ if you want &#8212; but <em>Never Learn</em> is exclusive to TopatoCo and/or selected comic shops such as Toronto&#8217;s <a rel=\"nofollow\" href=\"http://www.beguiling.com/index.php\">The Beguiling</a>. Grab em both! You&#8217;ll like the smiles they\
+      \ put on your face, <em>I guarantee it.</em></p>\n<p><a href=\"http://www.topatoco.com/merchant.mvc?Screen=CTGY&amp;Store_Code=TO&amp;Category_Code=BEAT\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/beat-book2pack-400x264.jpg\" alt=\"\"\
+      \ title=\"hark! two books!\" width=\"400\" height=\"264\" class=\"alignnone size-large wp-image-8544\" /></a></p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hAVur-p-F3U:9c9FxsqKU1Y:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hAVur-p-F3U:9c9FxsqKU1Y:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=hAVur-p-F3U:9c9FxsqKU1Y:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hAVur-p-F3U:9c9FxsqKU1Y:qj6IDK7rITs\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=hAVur-p-F3U:9c9FxsqKU1Y:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=hAVur-p-F3U:9c9FxsqKU1Y:F7zBnMyn0Lo\"\
+      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/hAVur-p-F3U\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/hav-book/feed/</wfw:commentRss>\r\n\t\t<slash:comments>2</slash:comments>\r\
+      \n\t\t<feedburner:origLink>http://wondermark.com/hav-book/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>#758; Take Care of Yourself</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/J01Pe8Rn6z8/</link>\r\n\t\t<comments>http://wondermark.com/758/#comments</comments>\r\
+      \n\t\t<pubDate>Fri, 23 Sep 2011 05:28:25 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[dining]]></category>\r\n\t\t<category><![CDATA[narcissism]]></category>\r\
+      \n\t\t<category><![CDATA[relationships]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8535</guid>\r\n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/758/\"><img src=\"http://wondermark.com/c/2011-09-22-758needs.gif\"\
+      \ border=\"0\" alt=\"He had also wrapped himself in a bath towel but that had somehow fallen into the toilet and clogged it. Oh I'm sorry am I DISGUSTING you with tales of your GRANDFATHER'S TOILET MISADVENTURE, CHILDREN??\" title=\"He had also wrapped\
+      \ himself in a bath towel but that had somehow fallen into the toilet and clogged it. Oh I'm sorry am I DISGUSTING you with tales of your GRANDFATHER'S TOILET MISADVENTURE, CHILDREN??\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a\
+      \ href=\"http://wondermark.com/758/\"><img src=\"http://wondermark.com/c/2011-09-22-758needs.gif\" border=\"0\" alt=\"He had also wrapped himself in a bath towel but that had somehow fallen into the toilet and clogged it. Oh I'm sorry am I DISGUSTING you\
+      \ with tales of your GRANDFATHER'S TOILET MISADVENTURE, CHILDREN??\" title=\"He had also wrapped himself in a bath towel but that had somehow fallen into the toilet and clogged it. Oh I'm sorry am I DISGUSTING you with tales of your GRANDFATHER'S TOILET\
+      \ MISADVENTURE, CHILDREN??\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=J01Pe8Rn6z8:mtatw0x77Vc:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a>\
+      \ <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=J01Pe8Rn6z8:mtatw0x77Vc:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=J01Pe8Rn6z8:mtatw0x77Vc:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=J01Pe8Rn6z8:mtatw0x77Vc:qj6IDK7rITs\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=J01Pe8Rn6z8:mtatw0x77Vc:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=J01Pe8Rn6z8:mtatw0x77Vc:F7zBnMyn0Lo\"\
+      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/J01Pe8Rn6z8\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/758/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\
+      \n\t\t<feedburner:origLink>http://wondermark.com/758/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>#757; Long Time No Sell</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/QRNZoCRHHBU/</link>\r\n\t\t<comments>http://wondermark.com/757/#comments</comments>\r\
+      \n\t\t<pubDate>Tue, 20 Sep 2011 03:39:37 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[anomalies]]></category>\r\n\t\t<category><![CDATA[schemes]]></category>\r\
+      \n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8530</guid>\r\n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/757/\"><img src=\"http://wondermark.com/c/2011-09-19-757wolf.gif\" border=\"0\" alt=\"I - I just want to PRACTICE\
+      \ my pitch, and you tell me what you think! I won't even bring the papers WITH me!\" title=\"I - I just want to PRACTICE my pitch, and you tell me what you think! I won't even bring the papers WITH me!\" /></a></p>Here&#8217;s a detail view as well!]]></description>\r\
+      \n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/757/\"><img src=\"http://wondermark.com/c/2011-09-19-757wolf.gif\" border=\"0\" alt=\"I - I just want to PRACTICE my pitch, and you tell me what you think! I won't even bring the papers\
+      \ WITH me!\" title=\"I - I just want to PRACTICE my pitch, and you tell me what you think! I won't even bring the papers WITH me!\" /></a></p><p>Here&#8217;s a <a rel=\"nofollow\" href=\"http://davidmalki.tumblr.com/post/10430357350/detail-from-comic-757-he-could-no-longer\"\
+      >detail view</a> as well!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=QRNZoCRHHBU:Xl7g7bW5WcQ:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"\
+      http://feeds.feedburner.com/~ff/wondermark?a=QRNZoCRHHBU:Xl7g7bW5WcQ:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=QRNZoCRHHBU:Xl7g7bW5WcQ:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=QRNZoCRHHBU:Xl7g7bW5WcQ:qj6IDK7rITs\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=QRNZoCRHHBU:Xl7g7bW5WcQ:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=QRNZoCRHHBU:Xl7g7bW5WcQ:F7zBnMyn0Lo\"\
+      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/QRNZoCRHHBU\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/757/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\
+      \n\t\t<feedburner:origLink>http://wondermark.com/757/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>I drew some pachyderms</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/x09mak5WUOo/</link>\r\n\t\t<comments>http://wondermark.com/i-drew-some-pachyderms/#comments</comments>\r\
+      \n\t\t<pubDate>Tue, 20 Sep 2011 01:13:54 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\t<category><![CDATA[blog: drawings]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8526</guid>\r\
+      \n\t\t<description><![CDATA[In a winter scene!]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/wp-content/uploads/2011/09/elephants.jpg\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/elephants-400x226.jpg\"\
+      \ alt=\"\" title=\"whoop!\" width=\"400\" height=\"226\" class=\"alignnone size-large wp-image-8527\" /></a></p>\n<p>In a winter scene!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=x09mak5WUOo:suAouJwoRC4:yIl2AUoC8zA\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=x09mak5WUOo:suAouJwoRC4:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=x09mak5WUOo:suAouJwoRC4:gIN9vFwOqvQ\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=x09mak5WUOo:suAouJwoRC4:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=x09mak5WUOo:suAouJwoRC4:F7zBnMyn0Lo\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=x09mak5WUOo:suAouJwoRC4:F7zBnMyn0Lo\" border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/x09mak5WUOo\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t\
+      <wfw:commentRss>http://wondermark.com/i-drew-some-pachyderms/feed/</wfw:commentRss>\r\n\t\t<slash:comments>4</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/i-drew-some-pachyderms/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>#756;\
+      \ The Insistent Announcement</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/-AJNlbNeKz0/</link>\r\n\t\t<comments>http://wondermark.com/756/#comments</comments>\r\n\t\t<pubDate>Fri, 16 Sep 2011 08:55:19 +0000</pubDate>\r\n\t\t<dc:creator>David\
+      \ Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[anomalies]]></category>\r\n\t\t<category><![CDATA[commerce]]></category>\r\n\t\t<category><![CDATA[dining]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\"\
+      >http://wondermark.com/?p=8516</guid>\r\n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/756/\"><img src=\"http://wondermark.com/c/2011-09-16-756fish.gif\" border=\"0\" alt=\"This was my father's fish! And HIS father's stick!!\" title=\"This\
+      \ was my father's fish! And HIS father's stick!!\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/756/\"><img src=\"http://wondermark.com/c/2011-09-16-756fish.gif\" border=\"0\" alt=\"This was my father's\
+      \ fish! And HIS father's stick!!\" title=\"This was my father's fish! And HIS father's stick!!\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=-AJNlbNeKz0:x-WJDXVgFB8:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=-AJNlbNeKz0:x-WJDXVgFB8:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=-AJNlbNeKz0:x-WJDXVgFB8:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=-AJNlbNeKz0:x-WJDXVgFB8:qj6IDK7rITs\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=-AJNlbNeKz0:x-WJDXVgFB8:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=-AJNlbNeKz0:x-WJDXVgFB8:F7zBnMyn0Lo\"\
+      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/-AJNlbNeKz0\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/756/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\
+      \n\t\t<feedburner:origLink>http://wondermark.com/756/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>THIS WEEK: Machine of Death game testing!</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/Fu_NK0zZH9s/</link>\r\n\t\t<comments>http://wondermark.com/mod-game-la/#comments</comments>\r\
+      \n\t\t<pubDate>Tue, 13 Sep 2011 08:53:52 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\t<category><![CDATA[machine of death]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8500</guid>\r\
+      \n\t\t<description><![CDATA[You may have heard that we&#8217;re developing some Machine of Death card games. If you haven&#8217;t heard &#8212; well, now you have! We are. And even better &#8212; I&#8217;m hosting some play-testing events at my studio\
+      \ here in West Los Angeles, and you&#8217;re invited! Come have some pizza and play card games with me! The [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><img src=\"http://machineofdeath.net/a/wp-content/uploads/2011/09/mod-game2-300x225.jpg\"\
+      \ alt=\"\" title=\"TOWER of POWER\" width=\"300\" height=\"225\" class=\"alignnone size-medium wp-image-2341\" /></p>\n<p>You may have heard that we&#8217;re developing some <em>Machine of Death</em> card games. If you haven&#8217;t heard &#8212; well,\
+      \ now you have! We are. And <em>even better</em> &#8212; I&#8217;m hosting some play-testing events at my studio here in West Los Angeles, and <em>you&#8217;re invited!</em> Come have some pizza and play card games with me!</p>\n<p>The first two events\
+      \ will be TONIGHT, Tuesday September 13, and TOMORROW, Wednesday September 14, from 8-10pm. I know it&#8217;s short notice, but if you&#8217;d like to come, <a href=\"http://machineofdeath.net/card-games-update#comments\">leave an RSVP on the Machine of\
+      \ Death site</a> and I&#8217;ll be in touch with directions! </p>\n<p><strong>Each evening will be limited to eight people</strong>, so if there aren&#8217;t eight RSVP&#8217;d yet for the night you&#8217;d like to come &#8212; and you know you can make\
+      \ it &#8212; go ahead and sign up. (You can come both nights if you want! We&#8217;ll be playing different games each time.) </p>\n<p>Now, if you&#8217;re not local, that&#8217;s okay. The MOD card games will be coming to other cities and the internet\
+      \ soon! We talk a little more about them <a href=\"http://machineofdeath.net/card-games-update\">here</a>. And even if you can&#8217;t make it to a play-test event, there&#8217;s details at that link about how to, <em>right now,</em> (a) play a dice-based\
+      \ role-playing game I just invented and (b) fire up your arts-n-craftiness to make us a custom Machine of Death prediction card. </p>\n<p>You see, the motto of the entire Machine of Death opus is, &#8220;Things to keep you busy.&#8221; If you do end up\
+      \ playing my dice game, &#8220;Hitman on a Budget,&#8221; let me know what you think!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=Fu_NK0zZH9s:SA13ABreJsc:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:qj6IDK7rITs\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=Fu_NK0zZH9s:SA13ABreJsc:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=Fu_NK0zZH9s:SA13ABreJsc:F7zBnMyn0Lo\"\
+      \ border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/Fu_NK0zZH9s\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/mod-game-la/feed/</wfw:commentRss>\r\n\t\t<slash:comments>1</slash:comments>\r\
+      \n\t\t<feedburner:origLink>http://wondermark.com/mod-game-la/</feedburner:origLink></item>\r\n\t\t<item>\r\n\t\t<title>#755; Fine Feathered Friend</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/pjJQhBQehSI/</link>\r\n\t\t<comments>http://wondermark.com/755/#comments</comments>\r\
+      \n\t\t<pubDate>Tue, 13 Sep 2011 07:00:18 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Comic]]></category>\r\n\t\t<category><![CDATA[animals]]></category>\r\n\t\t<category><![CDATA[relationships]]></category>\r\
+      \n\t\t<category><![CDATA[sex]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8512</guid>\r\n\t\t<description><![CDATA[<p><a href=\"http://wondermark.com/755/\"><img src=\"http://wondermark.com/c/2011-09-13-755eyes.gif\" border=\"\
+      0\" alt=\"Do you even CARE about my INTERESTS? (regurgitating earthworms; eating beetles; screaming at the top of my lungs for no reason whatsoever)\" title=\"Do you even CARE about my INTERESTS? (regurgitating earthworms; eating beetles; screaming at\
+      \ the top of my lungs for no reason whatsoever)\" /></a></p>]]></description>\r\n\t\t\t<content:encoded><![CDATA[<p><a href=\"http://wondermark.com/755/\"><img src=\"http://wondermark.com/c/2011-09-13-755eyes.gif\" border=\"0\" alt=\"Do you even CARE about\
+      \ my INTERESTS? (regurgitating earthworms; eating beetles; screaming at the top of my lungs for no reason whatsoever)\" title=\"Do you even CARE about my INTERESTS? (regurgitating earthworms; eating beetles; screaming at the top of my lungs for no reason\
+      \ whatsoever)\" /></a></p><div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:yIl2AUoC8zA\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:gIN9vFwOqvQ\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=pjJQhBQehSI:3iGC_J4AZWc:gIN9vFwOqvQ\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=pjJQhBQehSI:3iGC_J4AZWc:F7zBnMyn0Lo\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=pjJQhBQehSI:3iGC_J4AZWc:F7zBnMyn0Lo\" border=\"0\"></img></a>\n</div><img src=\"\
+      http://feeds.feedburner.com/~r/wondermark/~4/pjJQhBQehSI\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t<wfw:commentRss>http://wondermark.com/755/feed/</wfw:commentRss>\r\n\t\t<slash:comments>0</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/755/</feedburner:origLink></item>\r\
+      \n\t\t<item>\r\n\t\t<title>Book Review: “The Story of a Broken Arm,” by Amelia Vaughan</title>\r\n\t\t<link>http://feedproxy.google.com/~r/wondermark/~3/sdpA2w-gwns/</link>\r\n\t\t<comments>http://wondermark.com/book-review-broken-arm/#comments</comments>\r\
+      \n\t\t<pubDate>Fri, 09 Sep 2011 10:19:23 +0000</pubDate>\r\n\t\t<dc:creator>David Malki !</dc:creator>\r\n\t\t\t\t<category><![CDATA[Blog]]></category>\r\n\t\t<category><![CDATA[blog: reviews]]></category>\r\n\r\n\t\t<guid isPermaLink=\"false\">http://wondermark.com/?p=8484</guid>\r\
+      \n\t\t<description><![CDATA[Childhood is a time when mysteries loom tall, when the mind is still sorting out what is real about the world, what might be just assumption, and what is outright lie. Childhood memories often betray a fluidity in the nature\
+      \ of reality, and the contrast between imagined dangers and their real consequences is the subject [...]]]></description>\r\n\t\t\t<content:encoded><![CDATA[<blockquote><p>Childhood is a time when mysteries loom tall, when the mind is still sorting out\
+      \ what is real about the world, what might be just assumption, and what is outright lie. Childhood memories often betray a fluidity in the nature of reality, and the contrast between imagined dangers and their real consequences is the subject of this remarkable\
+      \ new work by first-time writer Amelia Vaughan.</p>\n<p>Part memoir, part <em>roman à clef,</em> <em>The Story of a Broken Arm</em> tells the tale of a childhood accident that left lasting scars on its victim &#8212; and for all the brutal caprice of the\
+      \ incident, the account blends poetic questions of causality with meditations on the truth and power of the imagination into a visceral story of survival. </p>\n<p>I believe <em>The Story of a Broken Arm</em> was printed only in limited edition, and I\
+      \ was very fortunate to secure an autographed first-run copy direct from the author.</p></blockquote>\n<p><a href=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm1.jpg\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm1-400x300.jpg\"\
+      \ alt=\"\" title=\"first edition!\" width=\"400\" height=\"300\" class=\"alignnone size-large wp-image-8486\" /></a></p>\n<p>Recently I stopped by my local print shop, <a rel=\"nofollow\" href=\"http://www.dsjprinting.com/\">DSJ Printing</a> in Santa Monica,\
+      \ to pick up a batch of <a rel=\"nofollow\" href=\"https://www.facebook.com/photo.php?fbid=204042339658959&#038;set=a.115298968533297.17309.114958475234013&#038;type=1&#038;ref=nf\"><em>Machine of Death</em> card games</a>. While my order was being brought\
+      \ out, a tiny hand suddenly popped up from behind the counter and <em>casually</em> placed out a sign: &#8220;The Story of a Broken Arm, by Amelia Vaughan. Only $1.99!&#8221;</p>\n<p>Of course I leapt at the chance. I grew up as a kid running around my\
+      \ parents&#8217; business, amusing myself however I could in stacks of car parts, coming up with weird schemes and cutting up cardboard boxes and bolting together old pieces of junk just to stay sane during the interminable afternoons after school. I am\
+      \ totally, 100% behind any kid-at-the-parents&#8217;-work (DSJ has been Vaughan-owned for 55 years) enterprise. I gladly paid my $2, took a polite penny in change, and was pleased to also teach Amelia, who&#8217;s maybe about seven, the concept of &#8220;autographing\
+      \ your work.&#8221; </p>\n<p><a href=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm2.jpg\"><img src=\"http://wondermark.com/wp-content/uploads/2011/09/brokenarm2-400x300.jpg\" alt=\"\" title=\"captivating!!\" width=\"400\" height=\"300\"\
+      \ class=\"alignnone size-large wp-image-8485\" /></a></p>\n<p>I didn&#8217;t realize it would only be a single page long until after I&#8217;d already pre-paid, but <em>what a page it is</em>. Action, pathos, heartbreak, and a bit of ambiguity right at\
+      \ the end as well. Anyway, I consider this an (inflation-adjusted) pay-it-forward for the guy who bought &#8220;bitten beans&#8221; from me for a dollar, back in about 1994, after I realized that &#8220;I SELL BITTEN BEANS&#8221; was the only thing I could\
+      \ spell out of a bunch of leftover stickers I found. </p>\n<p><img src=\"http://davidmalki.com/tmh/beans.jpg\" title=\"this is where I spent 1980-1998\"></p>\n<p>(I tell the story of the transaction in <a rel=\"nofollow\" href=\"http://tweetmeharder.com/post/327886570/tmh31\"\
+      >Tweet Me Harder 31</a>, and my mom comes on to verify it all in <a rel=\"nofollow\" href=\"http://tweetmeharder.com/post/376867459/tmh34\">TMH 34</a>.) </p>\n<p>The moral is: I started out as a teenager selling <em>dry beans with bite marks.</em> And\
+      \ look at me now! I own my own business where I sell even <em>more</em> ridiculous things. Support entrepreneurial kids, folks!</p>\n<div class=\"feedflare\">\n<a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:yIl2AUoC8zA\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=yIl2AUoC8zA\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:gIN9vFwOqvQ\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=sdpA2w-gwns:dk5gekgBaKw:gIN9vFwOqvQ\"\
+      \ border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:qj6IDK7rITs\"><img src=\"http://feeds.feedburner.com/~ff/wondermark?d=qj6IDK7rITs\" border=\"0\"></img></a> <a href=\"http://feeds.feedburner.com/~ff/wondermark?a=sdpA2w-gwns:dk5gekgBaKw:F7zBnMyn0Lo\"\
+      ><img src=\"http://feeds.feedburner.com/~ff/wondermark?i=sdpA2w-gwns:dk5gekgBaKw:F7zBnMyn0Lo\" border=\"0\"></img></a>\n</div><img src=\"http://feeds.feedburner.com/~r/wondermark/~4/sdpA2w-gwns\" height=\"1\" width=\"1\"/>]]></content:encoded>\r\n\t\t\t\
+      <wfw:commentRss>http://wondermark.com/book-review-broken-arm/feed/</wfw:commentRss>\r\n\t\t<slash:comments>7</slash:comments>\r\n\t\t<feedburner:origLink>http://wondermark.com/book-review-broken-arm/</feedburner:origLink></item>\r\n\t</channel>\r\n</rss><!--\
+      \ Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/\n\nMinified using disk: basic\nPage Caching using disk: enhanced\nDatabase Caching 2/17 queries in 0.050 seconds using disk: basic\nObject Caching 833/871\
+      \ objects using disk: basic\nContent Delivery Network via wondermark.com\n\nServed from: wondermark.com @ 2011-09-30 01:53:06 -->\r\n"
+- recorded: 2011-10-03T22:17:25.106Z
   request:
     method: GET
     uri: http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png
@@ -713,7 +363,7 @@ interactions:
     headers:
       Accept-Ranges: bytes
       Content-Type: image/png
-      Date: Thu, 15 Sep 2011 19:33:00 GMT
+      Date: Mon, 03 Oct 2011 22:17:23 GMT
       ETag: '"ff0c5a-18b3-15af9780"'
       Last-Modified: Fri, 07 Jul 2006 06:36:30 GMT
       Server: Apache/2.0.52 (Red Hat)
