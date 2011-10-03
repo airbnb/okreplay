@@ -78,4 +78,20 @@ class RequestMatcherSpec extends Specification {
 		!requestMatcher.matches(request4)
 	}
 
+	def "can match post body"() {
+		given:
+		def request1 = new RecordedRequest(method: "POST", uri: "http://robfletcher.github.com/betamax".toURI(), body: "q=1")
+		def request2 = new RecordedRequest(method: "POST", uri: "http://robfletcher.github.com/betamax".toURI(), body: "q=2")
+		def request3 = new RecordedRequest(method: "POST", uri: "http://robfletcher.github.com/betamax".toURI(), body: "q=1&r=1")
+
+		and:
+		def request = new BasicRequest(method: "POST", uri: "http://robfletcher.github.com/betamax".toURI(), body: "q=1")
+		def requestMatcher = new RequestMatcher(request, body)
+
+		expect:
+		requestMatcher.matches(request1)
+		!requestMatcher.matches(request2)
+		!requestMatcher.matches(request3)
+	}
+
 }
