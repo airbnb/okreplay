@@ -211,7 +211,6 @@ class Recorder implements MethodRule {
 		originalNonProxyHosts = System.properties."http.nonProxyHosts"
 		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
 		System.properties."http.proxyPort" = proxyPort.toString()
-		println "ignoring ${ignoreHosts.join('|')}"
 		System.properties."http.nonProxyHosts" = ignoreHosts.join("|")
 	}
 

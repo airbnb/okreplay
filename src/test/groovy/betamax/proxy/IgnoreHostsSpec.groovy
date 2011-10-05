@@ -22,7 +22,7 @@ class IgnoreHostsSpec extends Specification {
 	}
 
 	def setup() {
-		http = new RESTClient(endpoint.url)
+		http = new RESTClient()
 		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
 
 		recorder.insertTape("ignore hosts spec")
@@ -35,12 +35,12 @@ class IgnoreHostsSpec extends Specification {
 	@Unroll("does not proxy a request to #requestURI when ignoring #ignoreHosts")
 	def "does not proxy requests to ignored hosts"() {
 		given: "proxy is configured to ignore local connections"
-		recorder.ignoreHosts = [endpoint.url.toURI().host]
+		recorder.ignoreHosts = [ignoreHosts]
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 
 		when: "a request is made"
-		def response = http.get(path: "/")
+		def response = http.get(uri: requestURI)
 
 		then: "the request is not intercepted by the proxy"
 		!response.headers[VIA]
@@ -53,6 +53,7 @@ class IgnoreHostsSpec extends Specification {
 		endpoint.url.toURI().host | endpoint.url
 		"localhost"               | "http://localhost:${endpoint.url.toURI().port}"
 		"127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
+		endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
 	}
 
 }
