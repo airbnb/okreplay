@@ -18,17 +18,19 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyPort == 5555
 		recorder.defaultMode == READ_WRITE
 		recorder.proxyTimeout == DEFAULT_PROXY_TIMEOUT
+		recorder.ignoreHosts == []
 	}
 
 	def "recorder configuration is overridden by map arguments"() {
 		given:
-		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337, defaultMode: READ_ONLY, proxyTimeout: 30000)
+		def recorder = new Recorder(tapeRoot: new File(tmpdir, "tapes"), proxyPort: 1337, defaultMode: READ_ONLY, proxyTimeout: 30000, ignoreHosts: ["localhost"])
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, "tapes")
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
 		recorder.proxyTimeout == 30000
+		recorder.ignoreHosts == ["localhost"]
 	}
 
 	def "recorder picks up configuration from properties"() {
@@ -38,6 +40,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 		properties.setProperty("betamax.proxyTimeout", "30000")
+		properties.setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
 
 		and:
 		def recorder = new Recorder(properties)
@@ -47,6 +50,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
 		recorder.proxyTimeout == 30000
+		recorder.ignoreHosts == ["localhost", "127.0.0.1"]
 	}
 
 	def "recorder picks up configuration from properties file"() {
@@ -57,6 +61,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 		properties.setProperty("betamax.proxyTimeout", "30000")
+		properties.setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -72,6 +77,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
 		recorder.proxyTimeout == 30000
+		recorder.ignoreHosts == ["localhost", "127.0.0.1"]
 
 		cleanup:
 		propertiesFile.delete()
@@ -87,6 +93,7 @@ class RecorderConfigurationSpec extends Specification {
 					proxyPort = 1337
 					defaultMode = betamax.TapeMode.READ_ONLY
 					proxyTimeout = 30000
+					ignoreHosts = ["localhost", "127.0.0.1"]
 				}
 			"""
 		}
@@ -102,6 +109,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyPort == 1337
 		recorder.defaultMode == READ_ONLY
 		recorder.proxyTimeout == 30000
+		recorder.ignoreHosts == ["localhost", "127.0.0.1"]
 
 		cleanup:
 		configFile.delete()
@@ -115,6 +123,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty("betamax.proxyPort", "1337")
 		properties.setProperty("betamax.defaultMode", "READ_ONLY")
 		properties.setProperty("betamax.proxyTimeout", "30000")
+		properties.setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -123,13 +132,14 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234, defaultMode: WRITE_ONLY, proxyTimeout: 10000)
+		def recorder = new Recorder(tapeRoot: new File("test/fixtures/tapes"), proxyPort: 1234, defaultMode: WRITE_ONLY, proxyTimeout: 10000, ignoreHosts: ["github.com"])
 
 		expect:
 		recorder.tapeRoot == new File("test/fixtures/tapes")
 		recorder.proxyPort == 1234
 		recorder.defaultMode == WRITE_ONLY
 		recorder.proxyTimeout == 10000
+		recorder.ignoreHosts == ["github.com"]
 
 		cleanup:
 		propertiesFile.delete()

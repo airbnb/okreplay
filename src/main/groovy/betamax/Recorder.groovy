@@ -80,6 +80,11 @@ class Recorder implements MethodRule {
 	 */
 	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
+	/**
+	 * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be intercepted.
+	 */
+	Collection<String> ignoreHosts = []
+
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
 
@@ -185,6 +190,7 @@ class Recorder implements MethodRule {
 		proxyTimeout = properties.getProperty("betamax.proxyTimeout")?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
 		def defaultModeValue = properties.getProperty("betamax.defaultMode")
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
+		ignoreHosts = properties.getProperty("betamax.ignoreHosts")?.tokenize(",") ?: []
 	}
 
 	private void configureFromConfig(ConfigObject config) {
@@ -192,16 +198,21 @@ class Recorder implements MethodRule {
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
+		ignoreHosts = config.betamax.ignoreHosts ?: []
 	}
 
 	private originalProxyHost
 	private originalProxyPort
+	private originalNonProxyHosts
 
 	void overrideProxySettings() {
 		originalProxyHost = System.properties."http.proxyHost"
 		originalProxyPort = System.properties."http.proxyPort"
+		originalNonProxyHosts = System.properties."http.nonProxyHosts"
 		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
 		System.properties."http.proxyPort" = proxyPort.toString()
+		println "ignoring ${ignoreHosts.join('|')}"
+		System.properties."http.nonProxyHosts" = ignoreHosts.join("|")
 	}
 
 	void restoreOriginalProxySettings() {
@@ -214,6 +225,11 @@ class Recorder implements MethodRule {
 			System.properties."http.proxyPort" = originalProxyPort
 		} else {
 			System.clearProperty("http.proxyPort")
+		}
+		if (originalNonProxyHosts) {
+			System.properties."http.nonProxyHosts" = originalNonProxyHosts
+		} else {
+			System.clearProperty("http.nonProxyHosts")
 		}
 	}
 
