@@ -85,6 +85,12 @@ class Recorder implements MethodRule {
 	 */
 	Collection<String> ignoreHosts = []
 
+	/**
+	 * If set to true all connections to localhost addresses are ignored.
+	 * This is equivalent to setting `ignoreHosts` to `["localhost", "127.0.0.1", InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]`.
+	 */
+	boolean ignoreLocalhost = false
+
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
 
@@ -191,6 +197,7 @@ class Recorder implements MethodRule {
 		def defaultModeValue = properties.getProperty("betamax.defaultMode")
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
 		ignoreHosts = properties.getProperty("betamax.ignoreHosts")?.tokenize(",") ?: []
+		ignoreLocalhost = properties.getProperty("betamax.ignoreLocalhost")?.toBoolean()
 	}
 
 	private void configureFromConfig(ConfigObject config) {
@@ -199,6 +206,7 @@ class Recorder implements MethodRule {
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 		ignoreHosts = config.betamax.ignoreHosts ?: []
+		ignoreLocalhost = config.betamax.ignoreLocalhost
 	}
 
 	private originalProxyHost
@@ -211,7 +219,15 @@ class Recorder implements MethodRule {
 		originalNonProxyHosts = System.properties."http.nonProxyHosts"
 		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
 		System.properties."http.proxyPort" = proxyPort.toString()
-		System.properties."http.nonProxyHosts" = ignoreHosts.join("|")
+		def nonProxyHosts = ignoreHosts as Set
+		if (ignoreLocalhost) {
+			def local = InetAddress.localHost
+			nonProxyHosts << local.hostName
+			nonProxyHosts << local.hostAddress
+			nonProxyHosts << "localhost"
+			nonProxyHosts << "127.0.0.1"
+		}
+		System.properties."http.nonProxyHosts" = nonProxyHosts.join("|")
 	}
 
 	void restoreOriginalProxySettings() {

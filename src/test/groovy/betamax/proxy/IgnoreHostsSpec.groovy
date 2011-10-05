@@ -46,7 +46,7 @@ class IgnoreHostsSpec extends Specification {
 		!response.headers[VIA]
 
 		and: "nothing is recorded to the tape"
-		recorder.tape.size() == 0
+		recorder.tape.size() == old(recorder.tape.size())
 
 		where:
 		ignoreHosts               | requestURI
@@ -54,6 +54,26 @@ class IgnoreHostsSpec extends Specification {
 		"localhost"               | "http://localhost:${endpoint.url.toURI().port}"
 		"127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
 		endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
+	}
+
+	@Unroll("does not proxy a request to #requestURI when ignoreLocalhost is true")
+	def "does not proxy request to localhost when ignored"() {
+		given: "proxy is configured to ignore local connections"
+		recorder.ignoreLocalhost = true
+		proxy.start(recorder)
+		recorder.overrideProxySettings()
+
+		when: "a request is made"
+		def response = http.get(uri: requestURI)
+
+		then: "the request is not intercepted by the proxy"
+		!response.headers[VIA]
+
+		and: "nothing is recorded to the tape"
+		recorder.tape.size() == old(recorder.tape.size())
+
+		where:
+		requestURI << [endpoint.url, "http://localhost:${endpoint.url.toURI().port}"]
 	}
 
 }
