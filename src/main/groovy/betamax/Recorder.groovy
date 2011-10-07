@@ -25,6 +25,7 @@ import static betamax.MatchRule.*
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
+import betamax.util.SystemPropertyUtils
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -209,16 +210,9 @@ class Recorder implements MethodRule {
 		ignoreLocalhost = config.betamax.ignoreLocalhost
 	}
 
-	private originalProxyHost
-	private originalProxyPort
-	private originalNonProxyHosts
-
 	void overrideProxySettings() {
-		originalProxyHost = System.properties."http.proxyHost"
-		originalProxyPort = System.properties."http.proxyPort"
-		originalNonProxyHosts = System.properties."http.nonProxyHosts"
-		System.properties."http.proxyHost" = InetAddress.localHost.hostAddress
-		System.properties."http.proxyPort" = proxyPort.toString()
+		SystemPropertyUtils.override("http.proxyHost", InetAddress.localHost.hostAddress)
+		SystemPropertyUtils.override("http.proxyPort", proxyPort.toString())
 		def nonProxyHosts = ignoreHosts as Set
 		if (ignoreLocalhost) {
 			def local = InetAddress.localHost
@@ -227,25 +221,11 @@ class Recorder implements MethodRule {
 			nonProxyHosts << "localhost"
 			nonProxyHosts << "127.0.0.1"
 		}
-		System.properties."http.nonProxyHosts" = nonProxyHosts.join("|")
+		SystemPropertyUtils.override("http.nonProxyHosts", nonProxyHosts.join("|"))
 	}
 
 	void restoreOriginalProxySettings() {
-		if (originalProxyHost) {
-			System.properties."http.proxyHost" = originalProxyHost
-		} else {
-			System.clearProperty("http.proxyHost")
-		}
-		if (originalProxyPort) {
-			System.properties."http.proxyPort" = originalProxyPort
-		} else {
-			System.clearProperty("http.proxyPort")
-		}
-		if (originalNonProxyHosts) {
-			System.properties."http.nonProxyHosts" = originalNonProxyHosts
-		} else {
-			System.clearProperty("http.nonProxyHosts")
-		}
+		SystemPropertyUtils.resetAll()
 	}
 
 }
