@@ -38,7 +38,10 @@ abstract class BasicMessage extends AbstractMessage {
 	}
 
 	Map<String, String> getHeaders() {
-		def map = headers.collectEntries { [(it.key): it.value.join(", ")] }
+		def map = [:]
+		for (header in headers) {
+			map[header.key] = header.value.join(", ")
+		}
 		map.asImmutable()
 	}
 

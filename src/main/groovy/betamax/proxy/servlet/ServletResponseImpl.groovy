@@ -60,7 +60,10 @@ class ServletResponseImpl extends AbstractMessage implements Response {
 	}
 
 	Map<String, String> getHeaders() {
-		def map = headers.collectEntries { [(it.key): it.value.join(", ")] }
+		def map = [:]
+		for (header in headers) {
+			map[header.key] = header.value.join(", ")
+		}
 		map.asImmutable()
 	}
 
