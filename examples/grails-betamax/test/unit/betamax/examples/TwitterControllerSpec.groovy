@@ -1,16 +1,14 @@
 package betamax.examples
 
-import grails.test.mixin.TestFor
+import grails.plugin.spock.ControllerSpec
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-import spock.lang.Specification
 import betamax.*
 import static javax.servlet.http.HttpServletResponse.SC_SERVICE_UNAVAILABLE
 
-@TestFor(TwitterController)
-class TwitterControllerSpec extends Specification {
+class TwitterControllerSpec extends ControllerSpec {
 
 	File baseDir = BuildSettingsHolder.settings?.baseDir ?: new File("examples/grails-betamax")
 	@Rule Recorder recorder = new Recorder(tapeRoot: new File(baseDir, "test/resources/tapes"))
@@ -37,6 +35,6 @@ class TwitterControllerSpec extends Specification {
 		controller.index()
 
 		then:
-		controller.response.status == SC_SERVICE_UNAVAILABLE
+		renderArgs.status == SC_SERVICE_UNAVAILABLE
 	}
 }

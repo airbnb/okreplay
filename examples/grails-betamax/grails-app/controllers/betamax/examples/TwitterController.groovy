@@ -18,8 +18,9 @@ class TwitterController {
 			def response = restClient.get(query: [q: q, rpp: resultsPerPage, page: page], contentType: "application/json")
 			def results = JSONArray.toCollection(response.data.results)
 
-			def clients = results.countBy {
-				StringEscapeUtils.unescapeHtml(it.source)
+			def clients = [:].withDefault { 0 }
+			for (result in results) {
+				clients[StringEscapeUtils.unescapeHtml(result.source)]++
 			}
 
 			[q: q, clients: clients]
