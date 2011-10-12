@@ -1,30 +1,17 @@
 package betamax.examples
 
-import net.sf.json.JSONArray
-import org.apache.commons.lang.StringEscapeUtils
-import groovyx.net.http.*
 import static javax.servlet.http.HttpServletResponse.SC_SERVICE_UNAVAILABLE
 
 class TwitterController {
 
-	RESTClient restClient
+	def twitterService
 
 	def index() {
 		def q = params.q ?: "betamax"
-		int resultsPerPage = 10
-		int page = 1
-
 		try {
-			def response = restClient.get(query: [q: q, rpp: resultsPerPage, page: page], contentType: "application/json")
-			def results = JSONArray.toCollection(response.data.results)
-
-			def clients = [:].withDefault { 0 }
-			for (result in results) {
-				clients[StringEscapeUtils.unescapeHtml(result.source)]++
-			}
-
+			def clients = twitterService.tweetsByClient(q)
 			[q: q, clients: clients]
-		} catch (HttpResponseException e) {
+		} catch (TwitterException e) {
 			render status: SC_SERVICE_UNAVAILABLE, text: e.message
 		}
 	}
