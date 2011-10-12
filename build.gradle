@@ -51,8 +51,8 @@ signing {
 
 repositories {
 	mavenCentral()
-	mavenRepo name: "spock-snapshots", urls: ["http://m2repo.spockframework.org/snapshots"]
-	mavenRepo name: "sonatype-public", urls: ["http://oss.sonatype.org/content/groups/public/"]
+	mavenRepo urls: ["http://m2repo.spockframework.org/snapshots"]
+	mavenRepo urls: ["http://oss.sonatype.org/content/groups/public/"]
 }
 
 dependencies {
