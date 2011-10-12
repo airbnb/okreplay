@@ -17,8 +17,8 @@
 package betamax.proxy
 
 import betamax.Recorder
-import org.apache.log4j.Logger
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
+import java.util.logging.Logger
 
 class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 
@@ -28,7 +28,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 	public static final String X_BETAMAX = "X-Betamax"
 
 	private final Recorder recorder
-	private final Logger log = Logger.getLogger(RecordAndPlaybackProxyInterceptor)
+	private final Logger log = Logger.getLogger(RecordAndPlaybackProxyInterceptor.name)
 
 	RecordAndPlaybackProxyInterceptor(Recorder recorder) {
 		this.recorder = recorder
@@ -37,7 +37,7 @@ class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 	boolean interceptRequest(Request request, Response response) {
 		def tape = recorder.tape
 		if (!tape) {
-			log.error "no tape inserted..."
+			log.severe "no tape inserted..."
 			response.setError(HTTP_FORBIDDEN, "No tape")
 			true
 		} else if (tape.seek(request) && tape.isReadable()) {

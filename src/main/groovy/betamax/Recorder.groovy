@@ -19,13 +19,13 @@ package betamax
 import betamax.proxy.jetty.ProxyServer
 import betamax.tape.StorableTape
 import betamax.tape.yaml.YamlTapeLoader
-import org.apache.log4j.Logger
 import org.junit.rules.MethodRule
 import static betamax.MatchRule.*
 import static betamax.TapeMode.READ_WRITE
 import static java.util.Collections.EMPTY_MAP
 import org.junit.runners.model.*
 import betamax.util.SystemPropertyUtils
+import java.util.logging.Logger
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -38,7 +38,7 @@ class Recorder implements MethodRule {
 	public static final int DEFAULT_PROXY_PORT = 5555
 	public static final int DEFAULT_PROXY_TIMEOUT = 5000
 
-	private final log = Logger.getLogger(Recorder)
+	private final log = Logger.getLogger(Recorder.name)
 
 	Recorder() {
 		def configFile = getClass().classLoader.getResource("BetamaxConfig.groovy")
@@ -158,7 +158,7 @@ class Recorder implements MethodRule {
 	Statement apply(Statement statement, FrameworkMethod method, Object target) {
 		def annotation = method.getAnnotation(Betamax)
 		if (annotation) {
-			log.debug "found @Betamax annotation on '$method.name'"
+			log.fine "found @Betamax annotation on '$method.name'"
 			new Statement() {
 				void evaluate() {
 					withTape(annotation.tape(), [mode: annotation.mode(), match: annotation.match()]) {
@@ -167,7 +167,7 @@ class Recorder implements MethodRule {
 				}
 			}
 		} else {
-			log.debug "no @Betamax annotation on '$method.name'"
+			log.fine "no @Betamax annotation on '$method.name'"
 			statement
 		}
 	}

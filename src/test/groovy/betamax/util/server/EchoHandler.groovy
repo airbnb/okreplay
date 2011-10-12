@@ -16,20 +16,20 @@
 
 package betamax.util.server
 
-import org.apache.log4j.Logger
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import static java.net.HttpURLConnection.HTTP_OK
 import java.util.zip.*
 import javax.servlet.http.*
 import static org.eclipse.jetty.http.HttpHeaders.*
+import java.util.logging.Logger
 
 class EchoHandler extends AbstractHandler {
 
-	private final log = Logger.getLogger(EchoHandler)
+	private final log = Logger.getLogger(EchoHandler.name)
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-		log.debug "received $request.method request for $target"
+		log.fine "received $request.method request for $target"
 		response.status = HTTP_OK
 		response.contentType = "text/plain"
 
@@ -55,17 +55,17 @@ class EchoHandler extends AbstractHandler {
 	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
 		def out
 		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(",")
-		log.debug "request accepts $acceptedEncodings"
+		log.fine "request accepts $acceptedEncodings"
 		if ("gzip" in acceptedEncodings) {
-			log.debug "gzipping..."
+			log.fine "gzipping..."
 			response.addHeader(CONTENT_ENCODING, "gzip")
 			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
 		} else if ("deflate" in acceptedEncodings) {
-			log.debug "deflating..."
+			log.fine "deflating..."
 			response.addHeader(CONTENT_ENCODING, "deflate")
 			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
 		} else {
-			log.debug "not encoding..."
+			log.fine "not encoding..."
 			response.addHeader(CONTENT_ENCODING, "none")
 			out = response.writer
 		}

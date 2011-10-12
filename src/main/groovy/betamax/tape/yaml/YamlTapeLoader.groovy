@@ -19,12 +19,12 @@ package betamax.tape.yaml
 import betamax.TapeLoader
 import betamax.tape.StorableTape
 import java.text.Normalizer
-import org.apache.log4j.Logger
+import java.util.logging.Logger
 
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     final File tapeRoot
-    private final log = Logger.getLogger(YamlTapeLoader)
+    private final log = Logger.getLogger(YamlTapeLoader.name)
 
     YamlTapeLoader(File tapeRoot) {
         this.tapeRoot = tapeRoot
@@ -36,7 +36,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
             def tape = file.withReader { reader ->
                 YamlTape.readFrom(reader)
             }
-            log.debug "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
+            log.fine "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
             tape
         } else {
             new YamlTape(name: name)
@@ -48,7 +48,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
         file.parentFile.mkdirs()
         if (tape.isDirty()) {
             file.withWriter { writer ->
-                log.debug "writing tape $tape to file $file.name..."
+                log.fine "writing tape $tape to file $file.name..."
                 tape.writeTo(writer)
             }
         }

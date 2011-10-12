@@ -22,7 +22,6 @@ import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
-import org.apache.log4j.Logger
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import betamax.proxy.*
@@ -31,6 +30,7 @@ import static java.net.HttpURLConnection.*
 import javax.servlet.http.*
 import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
+import java.util.logging.Logger
 
 class ProxyHandler extends AbstractHandler {
 
@@ -57,10 +57,10 @@ class ProxyHandler extends AbstractHandler {
 	int timeout
 	VetoingProxyInterceptor interceptor
 
-	private final Logger log = Logger.getLogger(ProxyHandler)
+	private final Logger log = Logger.getLogger(ProxyHandler.name)
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-		log.debug "proxying request $request.method: $request.requestURI..."
+		log.fine "proxying request $request.method: $request.requestURI..."
 
 		def requestWrapper = new ServletRequestImpl(request)
 		def responseWrapper = new ServletResponseImpl(response)
@@ -73,18 +73,18 @@ class ProxyHandler extends AbstractHandler {
 				interceptor?.interceptResponse(requestWrapper, responseWrapper)
 				responseWrapper.outputStream.close()
 			} catch (SocketTimeoutException e) {
-				log.error "timed out connecting to $requestWrapper.uri"
+				log.severe "timed out connecting to $requestWrapper.uri"
 				response.sendError(HTTP_GATEWAY_TIMEOUT, "Target server took too long to respond")
 			} catch (IOException e) {
-				log.error "problem connecting to $requestWrapper.uri", e
+				log.severe "problem connecting to $requestWrapper.uri", e
 				response.sendError(HTTP_BAD_GATEWAY, e.message)
 			} catch (Exception e) {
-				log.fatal "error recording HTTP exchange", e
+				log.severe "error recording HTTP exchange", e
 				response.sendError(HTTP_INTERNAL_ERROR, e.message)
 			}
 		}
 
-		log.debug "proxied request complete with response code ${responseWrapper.status} and content type ${responseWrapper.contentType}..."
+		log.fine "proxied request complete with response code ${responseWrapper.status} and content type ${responseWrapper.contentType}..."
 	}
 
 	private void proceedRequest(betamax.proxy.Request request, Response response) {

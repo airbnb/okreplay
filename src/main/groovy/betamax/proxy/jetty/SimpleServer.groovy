@@ -17,10 +17,10 @@
 package betamax.proxy.jetty
 
 import java.util.concurrent.CountDownLatch
-import org.apache.log4j.Logger
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
 import org.eclipse.jetty.server.*
+import java.util.logging.Logger
 
 class SimpleServer extends AbstractLifeCycleListener {
 
@@ -31,7 +31,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
-	private final log = Logger.getLogger(getClass())
+	private final log = Logger.getLogger(getClass().name)
 
 	SimpleServer() {
 		this(DEFAULT_PORT)
@@ -92,13 +92,13 @@ class SimpleServer extends AbstractLifeCycleListener {
 
 	@Override
 	void lifeCycleStarted(LifeCycle event) {
-		log.debug "started..."
+		log.fine "started..."
 		startedLatch.countDown()
 	}
 
 	@Override
 	void lifeCycleStopped(LifeCycle event) {
-		log.debug "stopped..."
+		log.fine "stopped..."
 		stoppedLatch.countDown()
 	}
 
