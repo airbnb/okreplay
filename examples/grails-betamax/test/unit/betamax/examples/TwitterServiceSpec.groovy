@@ -1,11 +1,15 @@
 package betamax.examples
 
+import betamax.Betamax
+import betamax.Recorder
 import grails.plugin.spock.UnitSpec
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient
+import java.util.logging.ConsoleHandler
+import java.util.logging.Level
+import java.util.logging.Logger
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-import betamax.*
 
 class TwitterServiceSpec extends UnitSpec {
 
@@ -13,6 +17,12 @@ class TwitterServiceSpec extends UnitSpec {
 	@Rule Recorder recorder = new Recorder(tapeRoot: new File(baseDir, "test/resources/tapes"))
 
 	TwitterService service = new TwitterService()
+
+	def setupSpec() {
+		def log = Logger.getLogger("betamax")
+		log.addHandler(new ConsoleHandler())
+		log.level = Level.ALL
+	}
 
 	def setup() {
 		def restClient = new RESTClient("http://search.twitter.com/search.json")
