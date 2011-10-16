@@ -27,5 +27,8 @@ interactions:
       X-RateLimit-Remaining: '0'
       X-RateLimit-Reset: '1314798164'
       X-Runtime: '0.00718'
-    body: '{"error":"Rate limit exceeded. Clients may not make more than 150 requests
-      per hour.","request":"\/1\/statuses\/public_timeline.json?count=3&include_entities=true"}'
+    body: |-
+      {
+        "error": "Rate limit exceeded. Clients may not make more than 150 requests per hour.",
+        "request": "\/1\/statuses\/public_timeline.json?count=3&include_entities=true"
+      }

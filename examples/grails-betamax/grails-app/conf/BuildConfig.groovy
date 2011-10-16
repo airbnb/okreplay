@@ -4,6 +4,10 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.dependency.resolution = {
 	inherits "global"
 	log "warn"
+
+	def gebVersion = "0.6.0"
+	def seleniumVersion = "2.8.0"
+
 	repositories {
 		grailsPlugins()
 		grailsHome()
@@ -18,13 +22,18 @@ grails.project.dependency.resolution = {
 			excludes "groovy", "xml-apis"
 		}
 		test "com.github.robfletcher:betamax:1.1-SNAPSHOT"
+		test "org.codehaus.geb:geb-spock:$gebVersion"
+		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+			exclude "xml-apis"
+		}
 	}
 	plugins {
 		compile ":hibernate:$grailsVersion"
-		compile ":jquery:1.6.1.1"
-		compile ":resources:1.0.2"
+//		compile ":jquery:1.6.1.1"
+//		compile ":resources:1.0.2"
 		build ":tomcat:$grailsVersion"
 //		test ":spock:0.6-SNAPSHOT" // use this to run with Grails 2
 		test ":spock:0.5-groovy-1.7"
+		test ":geb:$gebVersion"
 	}
 }

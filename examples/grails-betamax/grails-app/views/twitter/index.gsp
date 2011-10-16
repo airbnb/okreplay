@@ -1,29 +1,24 @@
 <!doctype html>
 <html>
 	<head>
-		<g:if test="${!request.xhr}"><meta name="layout" content="main"></g:if>
-		<title>Twitter clients tweeting about '${q}'</title>
-		%{--<r:use module="graphs"/>--}%
+		<g:if test="${!request.xhr}"><meta name="layout" content="bootstrap"></g:if>
+		<title>Twitter Search Results</title>
 	</head>
 
 	<body>
 
-		<table id="twitter-clients">
-			<thead>
-				<tr>
-					<th scope="col">Client</th>
-					<th scope="col">Tweets</th>
-				</tr>
-			</thead>
-			<tbody>
-				<g:each in="${clients}">
-					<tr>
-						<th scope="row">${it.key}</th>
-						<td>${it.value}</td>
-					</tr>
-				</g:each>
-			</tbody>
-		</table>
+		<div class="page-header">
+			<h1>Twitter Search Results <small><em>${q}</em></small></h1>
+		</div>
+
+		<div class="row">
+			<div class="span10">
+				<g:include action="tweets" params="[q: q]"/>
+			</div>
+			<div class="span4">
+				<g:include action="clients" params="[q: q]"/>
+			</div>
+		</div>
 
 	</body>
 </html>

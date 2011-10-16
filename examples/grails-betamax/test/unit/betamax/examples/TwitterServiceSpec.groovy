@@ -35,6 +35,16 @@ class TwitterServiceSpec extends UnitSpec {
 		clients["Twitter for BlackBerry\u00AE"] == 1
 	}
 
+	@Betamax(tape = "twitter success")
+	def "only retrieves tweets containing the search term"() {
+		when:
+		def tweets = service.tweets("betamax")
+
+		then:
+		tweets.size() == 10
+		tweets.every { it.text =~ /(?i)betamax/ }
+	}
+
 	@Betamax(tape = "twitter rate limit")
 	def "sets an error status when twitter rate limit is exceeded"() {
 		when:
