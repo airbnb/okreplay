@@ -1,14 +1,13 @@
 package betamax.examples
 
-import geb.spock.GebSpec
-import betamax.Recorder
-import org.junit.Rule
-import betamax.Betamax
-import org.codehaus.groovy.grails.commons.ApplicationHolder
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import grails.util.BuildSettingsHolder
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import com.gargoylesoftware.htmlunit.ProxyConfig
+import geb.spock.GebSpec
+import grails.util.BuildSettingsHolder
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import org.codehaus.groovy.grails.commons.ApplicationHolder
+import org.junit.Rule
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import betamax.*
 
 class TwitterPageSpec extends GebSpec {
 
