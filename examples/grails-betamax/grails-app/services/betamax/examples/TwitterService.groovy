@@ -31,7 +31,11 @@ class TwitterService {
 		int page = 1
 
 		try {
-			def response = restClient.get(query: [q: q, rpp: resultsPerPage, page: page], contentType: "application/json")
+			def response = restClient.get(
+				uri: "http://search.twitter.com/search.json",
+				query: [q: q, rpp: resultsPerPage, page: page],
+				contentType: "application/json"
+			)
 			JSONArray.toCollection(response.data.results)
 		} catch (HttpResponseException e) {
 			throw new TwitterException(e)

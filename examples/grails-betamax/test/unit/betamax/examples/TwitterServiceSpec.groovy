@@ -21,11 +21,10 @@ class TwitterServiceSpec extends UnitSpec {
 	def setupSpec() {
 		def log = Logger.getLogger("betamax")
 		log.addHandler(new ConsoleHandler())
-		log.level = Level.ALL
 	}
 
 	def setup() {
-		def restClient = new RESTClient("http://search.twitter.com/search.json")
+		def restClient = new RESTClient()
 		restClient.client.routePlanner = new ProxySelectorRoutePlanner(restClient.client.connectionManager.schemeRegistry, ProxySelector.default)
 		service.restClient = restClient
 	}
