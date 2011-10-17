@@ -19,6 +19,7 @@ package betamax.tape.yaml
 import betamax.Tape
 import org.yaml.snakeyaml.representer.Represent
 import betamax.tape.*
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
 import static org.yaml.snakeyaml.nodes.Tag.*
@@ -40,6 +41,13 @@ class TapeRepresenter extends GroovyRepresenter {
 			null
 		} else if (tuple.valueNode instanceof CollectionNode && tuple.valueNode.value.empty) {
 			null
+		} else if (property.name == "body") {
+			ScalarNode n = tuple.valueNode
+			if (n.style == PLAIN.char) {
+				tuple
+			} else {
+				new NodeTuple(tuple.keyNode, new ScalarNode(n.tag, n.value, n.startMark, n.endMark, LITERAL.char))
+			}
 		} else {
 			tuple
 		}
