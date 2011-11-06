@@ -26,11 +26,14 @@ interactions:
 """
 		when:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
+		def utc = Calendar.getInstance(TimeZone.getTimeZone('UTC'))
+		utc.set(2011, 7, 23, 22, 41, 40)
+		utc.set(Calendar.MILLISECOND, 0)
 
 		then:
 		tape.name == "single_interaction_tape"
 		tape.interactions.size() == 1
-		tape.interactions[0].recorded == new Date(111, 7, 23, 23, 41, 40)
+		tape.interactions[0].recorded == utc.time
 		tape.interactions[0].request.method == "GET"
 		tape.interactions[0].request.uri == "http://icanhascheezburger.com/".toURI()
 		tape.interactions[0].response.status == HTTP_OK
