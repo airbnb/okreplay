@@ -15,7 +15,7 @@ class TwitterController {
 		def q = params.q ?: "betamax"
 		try {
 			def clients = twitterService.tweetsByClient(q)
-			[q: params.q, clients: clients]
+			[q: q, clients: clients]
 		} catch (TwitterException e) {
 			render status: SC_SERVICE_UNAVAILABLE, text: e.message
 		}

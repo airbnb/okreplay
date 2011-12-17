@@ -16,6 +16,7 @@
 
 package betamax.proxy.jetty
 
+import java.util.logging.Logger
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
@@ -27,10 +28,10 @@ import org.eclipse.jetty.server.handler.AbstractHandler
 import betamax.proxy.*
 import betamax.proxy.servlet.*
 import static java.net.HttpURLConnection.*
+import static java.util.logging.Level.SEVERE
 import javax.servlet.http.*
 import static org.apache.http.HttpHeaders.*
 import org.apache.http.client.methods.*
-import java.util.logging.Logger
 
 class ProxyHandler extends AbstractHandler {
 
@@ -76,10 +77,10 @@ class ProxyHandler extends AbstractHandler {
 				log.severe "timed out connecting to $requestWrapper.uri"
 				response.sendError(HTTP_GATEWAY_TIMEOUT, "Target server took too long to respond")
 			} catch (IOException e) {
-				log.severe "problem connecting to $requestWrapper.uri", e
+				log.log SEVERE, "problem connecting to $requestWrapper.uri", e
 				response.sendError(HTTP_BAD_GATEWAY, e.message)
 			} catch (Exception e) {
-				log.severe "error recording HTTP exchange", e
+				log.log SEVERE, "error recording HTTP exchange", e
 				response.sendError(HTTP_INTERNAL_ERROR, e.message)
 			}
 		}
