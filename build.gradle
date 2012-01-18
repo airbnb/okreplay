@@ -93,7 +93,7 @@ uploadArchives {
                     developer {
                         id 'robfletcher'
                         name 'Rob Fletcher'
-                        url 'http://adhockery.blogspot.com/'
+                        url 'http://adhockery.github.com/'
                         roles {
                             role 'Lead'
                             role 'Founder'
