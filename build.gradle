@@ -1,141 +1,117 @@
-import org.gradle.plugin.pgp.signing.*
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'idea'
 
-buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-		mavenRepo name: "Gradle", urls: "http://repo.gradle.org/gradle/plugins-snapshots/"
-	}
-	dependencies {
-		classpath "org.gradle.plugins:gradle-signing-plugin:0.0.1-SNAPSHOT"
-	}
-}
-
-apply plugin: "groovy"
-apply plugin: "maven"
-apply plugin: "signing"
-apply plugin: "idea"
-
-group = "com.github.robfletcher"
-version = "1.1-SNAPSHOT"
+group = 'com.github.robfletcher'
+version = '1.1-SNAPSHOT'
 
 // custom tasks for creating source/javadoc jars
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = "sources"
-	from sourceSets.main.allSource
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = "javadoc"
-	from javadoc.destinationDir
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 task groovydocJar(type: Jar, dependsOn: groovydoc) {
-	classifier = "groovydoc"
-	from groovydoc.destinationDir
+    classifier = 'groovydoc'
+    from groovydoc.destinationDir
 }
 
 // add javadoc/source jar tasks as artifacts
 artifacts {
-	archives sourcesJar, javadocJar, groovydocJar
-}
-
-configurations {
-	deployerJars
-	published.extendsFrom archives, signatures
+    archives jar, sourcesJar, javadocJar, groovydocJar
 }
 
 signing {
-	sign configurations.archives
+    sign configurations.archives
 }
 
 repositories {
-	mavenCentral()
-	mavenRepo urls: ["http://m2repo.spockframework.org/snapshots"]
-	mavenRepo urls: ["http://oss.sonatype.org/content/groups/public/"]
+    mavenCentral()
+    mavenRepo url: 'http://m2repo.spockframework.org/snapshots'
+    mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
 }
 
 dependencies {
-	groovy "org.codehaus.groovy:groovy-all:1.7.8"
-	compile "junit:junit:4.8.2"
-	compile "org.apache.httpcomponents:httpclient:4.1.2"
-	compile "org.eclipse.jetty:jetty-server:7.3.1.v20110307"
-	compile "org.yaml:snakeyaml:1.9"
-	testCompile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
-		exclude module: "groovy"
-		exclude module: "httpclient"
-	}
-	testRuntime "cglib:cglib-nodep:2.2.2"
-	testCompile "commons-httpclient:commons-httpclient:3.1"
-	testCompile("org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT") {
-		exclude module: "groovy-all"
-	}
-	deployerJars "org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6"
+    groovy 'org.codehaus.groovy:groovy-all:1.7.8'
+    compile 'junit:junit:4.8.2'
+    compile 'org.apache.httpcomponents:httpclient:4.1.2'
+    compile 'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
+    compile 'org.yaml:snakeyaml:1.9'
+    testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.1') {
+        exclude module: 'groovy'
+        exclude module: 'httpclient'
+    }
+    testRuntime 'cglib:cglib-nodep:2.2.2'
+    testCompile 'commons-httpclient:commons-httpclient:3.1'
+    testCompile('org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT') {
+        exclude module: 'groovy-all'
+    }
 }
 
 project.poms = [project.install.repositories.mavenInstaller.pom]
-uploadPublished {
-	project.deployer = repositories.mavenDeployer {
-		beforeDeployment { MavenDeployment deployment ->
-			if (signing.signatory) {
-				def signedPomArtifact = sign(deployment.pomArtifact).singleArtifact
-				// Have to alter the '?type'? of the artifact to match what is published
-				// See http://issues.gradle.org/browse/GRADLE-1589
-				signedPomArtifact.type = "pom." + signing.type.extension
-				deployment.addArtifact(signedPomArtifact)
-			}
-		}
 
-		uniqueVersion = false
-		configuration = configurations.deployerJars
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signPom(deployment) }
 
-		repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
-			authentication(userName: sonatypeUsername, password: sonatypePassword)
-		}
-		snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-			authentication(userName: sonatypeUsername, password: sonatypePassword)
-		}
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
 
-		pom.project {
-			name "Betamax - An HTTP stubbing proxy for testing JVM applications."
-			packaging "jar"
-			description "Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby's VCR."
-			url "http://robfletcher.github.com/betamax"
-			inceptionYear "2011"
+            pom.project {
+                name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
+                packaging 'jar'
+                description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
+                url 'http://robfletcher.github.com/betamax'
+                inceptionYear '2011'
 
-			scm {
-				url "https://github.com/robfletcher/betamax/"
-			}
+                scm {
+                    url 'scm:git@github.com:robfletcher/betamax.git'
+                    connection 'scm:git@github.com:robfletcher/betamax.git'
+                    developerConnection 'scm:git@github.com:robfletcher/betamax.git'
+                }
 
-			licenses {
-				license {
-					name "The Apache Software License, Version 2.0"
-					url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-					distribution "repo"
-				}
-			}
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
 
-			developers {
-				developer {
-					id "robfletcher"
-					name "Rob Fletcher"
-					url "http://adhockery.blogspot.com/"
-					roles {
-						role "Lead"
-						role "Founder"
-					}
-				}
-			}
-		}
-	}
-	project.poms << project.deployer.pom
+                developers {
+                    developer {
+                        id 'robfletcher'
+                        name 'Rob Fletcher'
+                        url 'http://adhockery.blogspot.com/'
+                        roles {
+                            role 'Lead'
+                            role 'Founder'
+                        }
+                    }
+                }
+            }
+
+            project.poms << pom
+        }
+    }
 }
 
 // Remove test deps from all poms
 project.poms*.whenConfigured { pom ->
-	pom.dependencies.removeAll(pom.dependencies.findAll { it.scope == "test" })
+	pom.dependencies.removeAll(pom.dependencies.findAll { it.scope == 'test' })
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = "1.0-milestone-7"
+    gradleVersion = '1.0-milestone-7'
 }
