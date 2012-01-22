@@ -29,7 +29,7 @@ Please get in touch if you have any  feedback. You can raise defects and feature
 To use Betamax you just need to annotate your JUnit test or [Spock][spock] specifications with `@Betamax(tape="tape name")`
 and include a `betamax.Recorder` Rule.
 
-[home]:http://robfletcher.github.com/betamax
+[home]:http://freeside.co/betamax
 [issues]:http://github.com/robfletcher/betamax/issues
 [maven]:http://repo1.maven.org/maven2/com/github/robfletcher/betamax/
 [sonatype]:https://oss.sonatype.org/content/groups/public/com/github/robfletcher/betamax/
