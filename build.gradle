@@ -49,7 +49,7 @@ dependencies {
     }
     testRuntime 'cglib:cglib-nodep:2.2.2'
     testCompile 'commons-httpclient:commons-httpclient:3.1'
-    testCompile('org.spockframework:spock-core:0.6-groovy-1.7-SNAPSHOT') {
+    testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
         exclude module: 'groovy-all'
     }
 }
@@ -72,7 +72,7 @@ uploadArchives {
                 name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
                 packaging 'jar'
                 description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
-                url 'http://robfletcher.github.com/betamax'
+                url 'http://freeside.co/betamax'
                 inceptionYear '2011'
 
                 scm {
