@@ -5,7 +5,7 @@ import org.apache.http.HttpEntity
 import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
 
-import betamax.util.message.*
+import co.freeside.betamax.util.message.*
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 import spock.lang.*
@@ -26,7 +26,7 @@ class WriteTapeToYamlSpec extends Specification {
 	Yaml yamlReader
 
 	def setupSpec() {
-		getRequest = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
+		getRequest = new BasicRequest("GET", "http://freeside.co/betamax")
 		getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
 		getRequest.addHeader(IF_NONE_MATCH, "b00b135")
 
@@ -71,7 +71,7 @@ class WriteTapeToYamlSpec extends Specification {
 		yaml.interactions.size() == 1
 		yaml.interactions[0].recorded instanceof Date
 		yaml.interactions[0].request.method == "GET"
-		yaml.interactions[0].request.uri == "http://robfletcher.github.com/betamax"
+		yaml.interactions[0].request.uri == "http://freeside.co/betamax"
 		yaml.interactions[0].response.status == HTTP_OK
 		yaml.interactions[0].response.body == "O HAI!"
 	}

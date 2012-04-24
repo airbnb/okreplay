@@ -31,7 +31,7 @@ interactions:
 		then:
 		tape.name == "single_interaction_tape"
 		tape.interactions.size() == 1
-		tape.interactions[0].recorded == new Date(111, 7, 23, 23, 41, 40)
+		tape.interactions[0].recorded.time == new Date(111, 7, 23, 23, 41, 40).time
 		tape.interactions[0].request.method == "GET"
 		tape.interactions[0].request.uri == "http://icanhascheezburger.com/".toURI()
 		tape.interactions[0].response.status == HTTP_OK

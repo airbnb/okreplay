@@ -56,7 +56,7 @@ interactions:
 - recorded: 2011-08-27T23:25:45.000Z
   request:
     method: GET
-    uri: http://robfletcher.github.com/betamax
+    uri: http://freeside.co/betamax
   response:
     status: 200
     headers:
@@ -70,7 +70,7 @@ interactions:
 		def response = new BasicResponse(HTTP_OK, "OK")
 
 		when:
-		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
+		tape.seek(new BasicRequest("GET", "http://freeside.co/betamax"))
 		tape.play(response)
 
 		then:

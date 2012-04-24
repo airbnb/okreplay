@@ -15,7 +15,7 @@ class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 
 	Recorder recorder = Mock(Recorder)
 	VetoingProxyInterceptor interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
-	Request request = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
+	Request request = new BasicRequest("GET", "http://freeside.co/betamax")
 	Response response = new BasicResponse(status: 200, reason: "OK")
 
 	def "does not veto a request when no matching recording is found on tape"() {

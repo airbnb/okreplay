@@ -17,7 +17,7 @@ class ContentEncodingSpec extends Specification {
 	@Unroll("a #encoding encoded response body is stored as plain text in a tape file")
 	def "an encoded response body is stored as plain text in a tape file"() {
 		given:
-		def request = new BasicRequest("GET", "http://robfletcher.github.com/betamax")
+		def request = new BasicRequest("GET", "http://freeside.co/betamax")
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
 		def response = new BasicResponse(HTTP_OK, "OK")
@@ -53,7 +53,7 @@ interactions:
 - recorded: 2011-08-24T20:38:40.000Z
   request:
     method: GET
-    uri: http://robfletcher.github.com/betamax
+    uri: http://freeside.co/betamax
     headers: {Accept-Encoding: $encoding}
   response:
     status: 200
@@ -66,7 +66,7 @@ interactions:
 		def response = new BasicResponse(200, "OK")
 
 		when:
-		tape.seek(new BasicRequest("GET", "http://robfletcher.github.com/betamax"))
+		tape.seek(new BasicRequest("GET", "http://freeside.co/betamax"))
 		tape.play(response)
 
 		then:

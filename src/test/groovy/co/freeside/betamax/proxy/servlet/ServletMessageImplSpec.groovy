@@ -15,32 +15,32 @@ class ServletMessageImplSpec extends Specification {
 	HttpServletRequest servletRequest = Mock(HttpServletRequest)
 	HttpServletResponse servletResponse = Mock(HttpServletResponse)
 
-	def "request can read basic fields"() {
+	void "request can read basic fields"() {
 		given:
 		servletRequest.getMethod() >> "GET"
-		servletRequest.getRequestURL() >> new StringBuffer("http://robfletcher.github.com/betamax")
+		servletRequest.getRequestURL() >> new StringBuffer("http://freeside.co/betamax")
 
 		and:
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
 		request.method == "GET"
-		request.uri == new URI("http://robfletcher.github.com/betamax")
+		request.uri == new URI("http://freeside.co/betamax")
 	}
 
-	def "request target includes query string"() {
+	void "request target includes query string"() {
 		given:
-		servletRequest.getRequestURL() >> new StringBuffer("http://robfletcher.github.com/betamax")
+		servletRequest.getRequestURL() >> new StringBuffer("http://freeside.co/betamax")
 		servletRequest.getQueryString() >> "q=1"
 
 		and:
 		def request = new ServletRequestImpl(servletRequest)
 
 		expect:
-		request.uri == new URI("http://robfletcher.github.com/betamax?q=1")
+		request.uri == new URI("http://freeside.co/betamax?q=1")
 	}
 
-	def "request can read headers"() {
+	void "request can read headers"() {
 		given:
 		servletRequest.getHeaderNames() >> new IteratorEnumeration(["If-None-Match", "Accept-Encoding"].iterator())
 		servletRequest.getHeaders("If-None-Match") >> new IteratorEnumeration(["abc123"].iterator())
@@ -54,7 +54,7 @@ class ServletMessageImplSpec extends Specification {
 		request.getHeader("Accept-Encoding") == "gzip, deflate"
 	}
 
-	def "request headers are immutable"() {
+	void "request headers are immutable"() {
 		given:
 		def request = new ServletRequestImpl(servletRequest)
 
@@ -65,7 +65,7 @@ class ServletMessageImplSpec extends Specification {
 		thrown UnsupportedOperationException
 	}
 
-	def "request body is readable as text"() {
+	void "request body is readable as text"() {
 		given:
 		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
 		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
@@ -80,7 +80,7 @@ class ServletMessageImplSpec extends Specification {
 		request.bodyAsText.text == "value=\u00a31"
 	}
 
-	def "request body is readable as binary"() {
+	void "request body is readable as binary"() {
 		given:
 		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream("value=\u00a31".getBytes("ISO-8859-1")))
 		servletRequest.getContentType() >> "application/x-www-form-urlencoded; charset=ISO-8859-1"
@@ -95,7 +95,7 @@ class ServletMessageImplSpec extends Specification {
 		request.bodyAsBinary.bytes == "value=\u00a31".getBytes("ISO-8859-1")
 	}
 
-	def "response can read basic fields"() {
+	void "response can read basic fields"() {
 		given:
 		def response = new ServletResponseImpl(servletResponse)
 
@@ -109,7 +109,7 @@ class ServletMessageImplSpec extends Specification {
 		1 * servletResponse.setStatus(200)
 	}
 
-	def "response can add and read headers"() {
+	void "response can add and read headers"() {
 		given:
 		def response = new ServletResponseImpl(servletResponse)
 
@@ -128,7 +128,7 @@ class ServletMessageImplSpec extends Specification {
 		1 * servletResponse.addHeader("Vary", "Content-Type")
 	}
 
-	def "content type header is handled by delegating to setContentType"() {
+	void "content type header is handled by delegating to setContentType"() {
 		def response = new ServletResponseImpl(servletResponse)
 
 		when:
@@ -142,7 +142,7 @@ class ServletMessageImplSpec extends Specification {
 		response.getHeader("Content-Type") == "text/html; charset=ISO-8859-1"
 	}
 
-	def "response headers are immutable"() {
+	void "response headers are immutable"() {
 		given:
 		def response = new ServletResponseImpl(servletResponse)
 
@@ -153,7 +153,7 @@ class ServletMessageImplSpec extends Specification {
 		thrown UnsupportedOperationException
 	}
 
-	def "response reports having no body before it is written to"() {
+	void "response reports having no body before it is written to"() {
 		given:
 		def response = new ServletResponseImpl(servletResponse)
 
@@ -162,7 +162,7 @@ class ServletMessageImplSpec extends Specification {
 	}
 
 	@Unroll("response body can be written to and read from as #charset text")
-	def "response body can be written to and read from as text"() {
+	void "response body can be written to and read from as text"() {
 		given: "the underlying servlet response writer"
 		def servletOutputStream = new ByteArrayOutputStream()
 		servletResponse.getOutputStream() >> new ServletOutputStream() {
@@ -194,7 +194,7 @@ class ServletMessageImplSpec extends Specification {
 		charset << ["ISO-8859-1", "UTF-8"]
 	}
 
-	def "response body can be written to and read from as binary"() {
+	void "response body can be written to and read from as binary"() {
 		given: "the underlying servlet response output stream"
 		def servletOutputStream = new ByteArrayOutputStream()
 		servletResponse.getOutputStream() >> new ServletOutputStream() {
@@ -221,7 +221,7 @@ class ServletMessageImplSpec extends Specification {
 	}
 
 	@Unroll("#encoding encoded response body with #charset charset can be written to and read from")
-	def "encoded response body can be written to and read from"() {
+	void "encoded response body can be written to and read from"() {
 		given: "the underlying servlet response output stream"
 		def servletOutputStream = new ByteArrayOutputStream()
 		servletResponse.getOutputStream() >> new ServletOutputStream() {
