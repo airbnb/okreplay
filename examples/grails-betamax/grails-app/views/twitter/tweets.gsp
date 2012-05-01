@@ -4,7 +4,7 @@
 		<li>
 			<blockquote>
 				<p>${it.text}</p>
-				<small><a href="http://twitter.com/${it.user}" rel="external">@${it.user}</a></small>
+				<small><a href="http://m.twitter.com/${it.user}" rel="external">@${it.user}</a></small>
 			</blockquote>
 		</li>
 	</g:each>
