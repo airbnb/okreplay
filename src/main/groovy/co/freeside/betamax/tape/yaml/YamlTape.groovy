@@ -18,14 +18,11 @@ package co.freeside.betamax.tape.yaml
 
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
-
+import co.freeside.betamax.proxy.*
+import co.freeside.betamax.tape.*
 import org.yaml.snakeyaml.*
+
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
-import co.freeside.betamax.tape.MemoryTape
-import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.proxy.Response
-import co.freeside.betamax.tape.StorableTape
-import co.freeside.betamax.tape.TapeLoadException
 
 class YamlTape extends MemoryTape implements StorableTape {
 

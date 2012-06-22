@@ -16,15 +16,13 @@
 
 package co.freeside.betamax.tape
 
-import static co.freeside.betamax.MatchRule.*
-import static TapeMode.READ_WRITE
+import co.freeside.betamax.*
+import co.freeside.betamax.proxy.*
 
+import static TapeMode.READ_WRITE
+import static co.freeside.betamax.MatchRule.*
 import static co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 import static org.apache.http.HttpHeaders.*
-import co.freeside.betamax.TapeMode
-import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.proxy.Response
-import co.freeside.betamax.Tape
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.

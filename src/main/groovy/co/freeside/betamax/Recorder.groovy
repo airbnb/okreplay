@@ -19,13 +19,18 @@ package co.freeside.betamax
 import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.tape.StorableTape
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import org.junit.rules.MethodRule
-import static MatchRule.*
-import static TapeMode.READ_WRITE
-import static java.util.Collections.EMPTY_MAP
-import org.junit.runners.model.*
 import co.freeside.betamax.util.SystemPropertyUtils
+import org.junit.rules.MethodRule
+
+import java.security.Security
 import java.util.logging.Logger
+
+import co.freeside.betamax.proxy.ssl.*
+import org.junit.runners.model.*
+
+import static TapeMode.READ_WRITE
+import static co.freeside.betamax.MatchRule.*
+import static java.util.Collections.EMPTY_MAP
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -91,6 +96,21 @@ class Recorder implements MethodRule {
 	 * This is equivalent to setting `ignoreHosts` to `["localhost", "127.0.0.1", InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]`.
 	 */
 	boolean ignoreLocalhost = false
+	
+	/**
+	 * If set to true add support for proxying SSL (disable certificate checking)
+	 */
+	boolean sslSupport = false
+	
+
+    String getProxyHost() {
+        proxy.url.toURI().host
+    }
+
+    int getHttpsProxyPort() {
+        //proxyPort + 1
+		proxyPort
+    }
 
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
@@ -177,6 +197,10 @@ class Recorder implements MethodRule {
 			proxy.port = proxyPort
 			proxy.start(this)
 		}
+		if(sslSupport) {
+			Security.setProperty("ssl.SocketFactory.provider", DummyJVMSSLSocketFactory.name)
+			DummyHostNameVerifier.useForHttpsURLConnection()
+		}
 		insertTape(tapeName, arguments)
 		overrideProxySettings()
 	}
@@ -211,8 +235,11 @@ class Recorder implements MethodRule {
 	}
 
 	void overrideProxySettings() {
-		SystemPropertyUtils.override("http.proxyHost", InetAddress.localHost.hostAddress)
+		def proxyHost = InetAddress.localHost.hostAddress
+		SystemPropertyUtils.override("http.proxyHost", proxyHost)
 		SystemPropertyUtils.override("http.proxyPort", proxyPort.toString())
+		SystemPropertyUtils.override("https.proxyHost", proxyHost)
+		SystemPropertyUtils.override("https.proxyPort", httpsProxyPort.toString())
 		def nonProxyHosts = ignoreHosts as Set
 		if (ignoreLocalhost) {
 			def local = InetAddress.localHost

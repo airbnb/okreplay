@@ -6,15 +6,14 @@ import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-
+import co.freeside.betamax.*
 import groovyx.net.http.*
-import static java.net.HttpURLConnection.HTTP_OK
 import org.apache.commons.httpclient.*
+import spock.lang.*
+
+import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
-import spock.lang.*
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.Betamax
 
 class ProxyNetworkCommsSpec extends Specification {
 

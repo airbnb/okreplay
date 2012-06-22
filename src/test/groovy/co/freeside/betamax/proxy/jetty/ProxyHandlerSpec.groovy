@@ -1,24 +1,21 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.proxy.VetoingProxyInterceptor
-
+import co.freeside.betamax.util.RequestCapturingMockHttpClient
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.message.BasicHttpResponse
 import spock.lang.Specification
 import co.freeside.betamax.util.servlet.*
+
 import static java.net.HttpURLConnection.HTTP_PARTIAL
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 
-import co.freeside.betamax.util.servlet.MockHttpServletRequest
-import co.freeside.betamax.util.servlet.MockHttpServletResponse
-import co.freeside.betamax.util.RequestCapturingMockHttpClient
-
 class ProxyHandlerSpec extends Specification {
 
-    ProxyHandler handler = new ProxyHandler()
+    ProxyHandler handler = new ProxyHandler(false)
     MockHttpServletRequest request = new MockHttpServletRequest(method: "GET", requestURI: "/betamax")
     MockHttpServletResponse response = new MockHttpServletResponse()
     final BasicHttpResponse okResponse = new BasicHttpResponse(HTTP_1_1, 200, "OK")

@@ -1,14 +1,14 @@
 package co.freeside.betamax.proxy.servlet
 
 import co.freeside.betamax.util.servlet.MockServletInputStream
-import javax.servlet.ServletOutputStream
 import org.apache.commons.collections.iterators.IteratorEnumeration
 
-import javax.servlet.http.*
+import javax.servlet.ServletOutputStream
+
+import co.freeside.betamax.encoding.*
 import spock.lang.*
 
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
+import javax.servlet.http.*
 
 class ServletMessageImplSpec extends Specification {
 

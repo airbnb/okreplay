@@ -16,8 +16,7 @@
 
 package co.freeside.betamax
 
-import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.proxy.Response
+import co.freeside.betamax.proxy.*
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.

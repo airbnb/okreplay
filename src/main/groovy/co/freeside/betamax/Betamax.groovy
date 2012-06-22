@@ -16,9 +16,10 @@
 
 package co.freeside.betamax
 
-import static MatchRule.*
-import static TapeMode.READ_WRITE
 import java.lang.annotation.*
+
+import static TapeMode.READ_WRITE
+import static co.freeside.betamax.MatchRule.*
 import static java.lang.annotation.ElementType.METHOD
 import static java.lang.annotation.RetentionPolicy.RUNTIME
 

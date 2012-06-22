@@ -16,8 +16,9 @@
 
 package co.freeside.betamax.tape
 
-import static co.freeside.betamax.MatchRule.*
 import co.freeside.betamax.proxy.Request
+
+import static co.freeside.betamax.MatchRule.*
 
 class RequestMatcher {
 

@@ -1,8 +1,6 @@
 package co.freeside.betamax.encoding
 
 import spock.lang.*
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
 
 class EncoderSpec extends Specification {
 

@@ -16,18 +16,20 @@
 
 package co.freeside.betamax.proxy.jetty
 
-import java.util.concurrent.CountDownLatch
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
-import org.eclipse.jetty.server.*
+
+import java.util.concurrent.CountDownLatch
 import java.util.logging.Logger
+
+import org.eclipse.jetty.server.*
 
 class SimpleServer extends AbstractLifeCycleListener {
 
 	static final int DEFAULT_PORT = 5000
-	
-	private final String host
-	private int port
+
+	protected final String host
+	protected int port
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
@@ -64,7 +66,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 		startedLatch = new CountDownLatch(1)
 		stoppedLatch = new CountDownLatch(1)
 
-		server = new Server(port)
+		server = createServer(port)
 		server.handler = handler
 		server.addLifeCycleListener(this)
 		server.start()
@@ -102,5 +104,8 @@ class SimpleServer extends AbstractLifeCycleListener {
 		stoppedLatch.countDown()
 	}
 
-}
+	protected Server createServer(int port) {
+		new Server(port)
+    }
 
+}

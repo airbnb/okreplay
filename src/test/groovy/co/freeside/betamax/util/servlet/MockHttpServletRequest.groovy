@@ -1,7 +1,8 @@
 package co.freeside.betamax.util.servlet
 
-import java.security.Principal
 import org.apache.commons.collections.iterators.IteratorEnumeration
+
+import java.security.Principal
 import javax.servlet.*
 import javax.servlet.http.*
 

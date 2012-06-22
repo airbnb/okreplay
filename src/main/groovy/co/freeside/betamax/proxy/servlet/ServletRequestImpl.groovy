@@ -18,8 +18,7 @@ package co.freeside.betamax.proxy.servlet
 
 import javax.servlet.http.HttpServletRequest
 
-import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.proxy.AbstractMessage
+import co.freeside.betamax.proxy.*
 
 class ServletRequestImpl extends AbstractMessage implements Request {
 

@@ -1,15 +1,12 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTape
-
+import co.freeside.betamax.encoding.*
 import co.freeside.betamax.util.message.*
+import spock.lang.*
+
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
-import spock.lang.*
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
 
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 class ContentEncodingSpec extends Specification {

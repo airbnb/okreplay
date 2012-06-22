@@ -18,11 +18,13 @@ package co.freeside.betamax.util.server
 
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-import static java.net.HttpURLConnection.HTTP_OK
+
+import java.util.logging.Logger
 import java.util.zip.*
 import javax.servlet.http.*
+
+import static java.net.HttpURLConnection.HTTP_OK
 import static org.eclipse.jetty.http.HttpHeaders.*
-import java.util.logging.Logger
 
 class EchoHandler extends AbstractHandler {
 

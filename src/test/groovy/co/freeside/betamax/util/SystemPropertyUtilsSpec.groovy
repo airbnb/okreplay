@@ -1,7 +1,6 @@
 package co.freeside.betamax.util
 
 import spock.lang.*
-import co.freeside.betamax.util.SystemPropertyUtils
 
 @Stepwise
 class SystemPropertyUtilsSpec extends Specification {

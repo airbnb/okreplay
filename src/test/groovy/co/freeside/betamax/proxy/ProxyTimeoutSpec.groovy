@@ -1,17 +1,15 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.proxy.jetty.SimpleServer
-
+import co.freeside.betamax.util.server.SlowHandler
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-
+import co.freeside.betamax.*
 import groovyx.net.http.*
-import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 import spock.lang.*
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.util.server.SlowHandler
+
+import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 
 @Issue("https://github.com/robfletcher/betamax/issues/20")
 class ProxyTimeoutSpec extends Specification {

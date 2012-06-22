@@ -1,9 +1,10 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
+import spock.lang.*
+
 import static co.freeside.betamax.Recorder.DEFAULT_PROXY_TIMEOUT
 import static co.freeside.betamax.TapeMode.*
-import spock.lang.*
 
 class RecorderConfigurationSpec extends Specification {
 

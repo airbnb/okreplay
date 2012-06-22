@@ -18,6 +18,7 @@ package co.freeside.betamax.util.message
 
 import co.freeside.betamax.proxy.AbstractMessage
 import org.apache.commons.lang.StringUtils
+
 import static org.apache.http.HttpHeaders.*
 
 abstract class BasicMessage extends AbstractMessage {

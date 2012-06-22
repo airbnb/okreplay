@@ -2,18 +2,13 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.Tape
 import co.freeside.betamax.encoding.GzipEncoder
-import static co.freeside.betamax.TapeMode.*
-
+import co.freeside.betamax.proxy.*
 import co.freeside.betamax.util.message.*
-import static groovyx.net.http.ContentType.URLENC
-import static org.apache.http.HttpHeaders.*
 import spock.lang.*
 
-import co.freeside.betamax.proxy.Request
-
-import co.freeside.betamax.proxy.Response
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
+import static co.freeside.betamax.TapeMode.*
+import static groovyx.net.http.ContentType.URLENC
+import static org.apache.http.HttpHeaders.*
 
 @Stepwise
 class TapeSpec extends Specification {

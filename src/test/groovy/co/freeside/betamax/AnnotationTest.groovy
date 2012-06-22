@@ -4,10 +4,11 @@ import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import org.junit.*
+
 import static co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
-import org.junit.*
 
 class AnnotationTest {
 

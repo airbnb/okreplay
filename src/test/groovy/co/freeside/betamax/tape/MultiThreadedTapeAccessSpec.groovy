@@ -2,13 +2,11 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.Tape
 import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
-import spock.lang.Issue
-import spock.lang.Shared
-import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
+
+import co.freeside.betamax.util.message.*
+import spock.lang.*
 
 import static java.util.concurrent.TimeUnit.SECONDS
 

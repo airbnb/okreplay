@@ -18,14 +18,12 @@ package co.freeside.betamax.tape.yaml
 
 import co.freeside.betamax.Tape
 import org.yaml.snakeyaml.representer.Represent
-
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*
+import co.freeside.betamax.tape.*
 import org.yaml.snakeyaml.introspector.*
 import org.yaml.snakeyaml.nodes.*
+
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*
 import static org.yaml.snakeyaml.nodes.Tag.*
-import co.freeside.betamax.tape.RecordedInteraction
-import co.freeside.betamax.tape.RecordedRequest
-import co.freeside.betamax.tape.RecordedResponse
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.

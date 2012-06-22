@@ -4,11 +4,10 @@ import co.freeside.betamax.Recorder
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import co.freeside.betamax.proxy.jetty.*
+import spock.lang.*
 
 import static org.apache.http.HttpHeaders.VIA
-import spock.lang.*
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
 
 @Issue("https://github.com/robfletcher/betamax/issues/16")
 class IgnoreHostsSpec extends Specification {

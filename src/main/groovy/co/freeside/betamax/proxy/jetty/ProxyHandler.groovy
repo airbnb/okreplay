@@ -16,22 +16,28 @@
 
 package co.freeside.betamax.proxy.jetty
 
-import java.util.logging.Logger
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
+import org.apache.http.conn.scheme.Scheme
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
+
+import java.util.logging.Logger
+
 import co.freeside.betamax.proxy.*
 import co.freeside.betamax.proxy.servlet.*
+import org.apache.http.client.methods.*
+
+import javax.servlet.http.*
+
 import static java.net.HttpURLConnection.*
 import static java.util.logging.Level.SEVERE
-import javax.servlet.http.*
 import static org.apache.http.HttpHeaders.*
-import org.apache.http.client.methods.*
 
 class ProxyHandler extends AbstractHandler {
 
@@ -54,11 +60,19 @@ class ProxyHandler extends AbstractHandler {
 	private static final String PROXY_CONNECTION = "Proxy-Connection"
 	private static final String KEEP_ALIVE = "Keep-Alive"
 
-	HttpClient httpClient = new DefaultHttpClient(new ThreadSafeClientConnManager())
+	HttpClient httpClient
 	int timeout
 	VetoingProxyInterceptor interceptor
 
 	private final Logger log = Logger.getLogger(ProxyHandler.name)
+	
+	public ProxyHandler(boolean sslSupport) {
+		def connectionManager = new ThreadSafeClientConnManager()
+		httpClient = new DefaultHttpClient(connectionManager)
+		if(sslSupport) {
+			connectionManager.schemeRegistry.register new Scheme("https", DummySSLSocketFactory.getInstance(), 443)
+		}
+	}
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.fine "proxying request $request.method: $request.requestURI..."

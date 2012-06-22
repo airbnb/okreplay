@@ -3,12 +3,11 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.util.server.EchoHandler
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-
+import co.freeside.betamax.proxy.jetty.*
 import groovyx.net.http.*
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import spock.lang.*
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
+
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {

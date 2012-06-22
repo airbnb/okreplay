@@ -17,10 +17,10 @@
 package co.freeside.betamax.tape.yaml
 
 import co.freeside.betamax.TapeLoader
+import co.freeside.betamax.tape.StorableTape
 
 import java.text.Normalizer
 import java.util.logging.Logger
-import co.freeside.betamax.tape.StorableTape
 
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 

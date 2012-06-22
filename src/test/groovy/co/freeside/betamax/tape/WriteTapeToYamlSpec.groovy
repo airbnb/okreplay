@@ -4,15 +4,12 @@ import co.freeside.betamax.tape.yaml.YamlTape
 import org.apache.http.HttpEntity
 import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
-
+import co.freeside.betamax.proxy.*
 import co.freeside.betamax.util.message.*
+import spock.lang.*
+
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
-import spock.lang.*
-import co.freeside.betamax.proxy.Request
-import co.freeside.betamax.proxy.Response
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
 
 class WriteTapeToYamlSpec extends Specification {
 

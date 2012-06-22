@@ -1,15 +1,10 @@
 package co.freeside.betamax.proxy
 
 import spock.lang.Specification
-
+import co.freeside.betamax.*
 import co.freeside.betamax.util.message.*
+
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
-
-import co.freeside.betamax.Recorder
-
-import co.freeside.betamax.Tape
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
 
 class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 

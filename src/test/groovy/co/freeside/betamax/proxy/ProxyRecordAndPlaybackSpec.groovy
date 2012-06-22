@@ -5,11 +5,10 @@ import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
+import co.freeside.betamax.proxy.jetty.*
+import spock.lang.*
 
 import static java.net.HttpURLConnection.HTTP_OK
-import spock.lang.*
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {

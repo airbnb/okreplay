@@ -17,8 +17,10 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
+
 import java.util.logging.Logger
+
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
 class RecordAndPlaybackProxyInterceptor implements VetoingProxyInterceptor {
 

@@ -3,9 +3,10 @@ package co.freeside.betamax.recorder
 import co.freeside.betamax.Recorder
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import spock.lang.*
+
 import static co.freeside.betamax.MatchRule.host
 import static org.apache.http.HttpHeaders.VIA
-import spock.lang.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
