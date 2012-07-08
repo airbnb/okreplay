@@ -1,0 +1,7 @@
+ext.modifyPom = { Closure modification ->
+	project.poms.each {
+		it.whenConfigured { project.configure(it, modification) }
+	}
+}
+
+ext.poms = [install.repositories.mavenInstaller(), uploadArchives.repositories.mavenDeployer()]*.pom

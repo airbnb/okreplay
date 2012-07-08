@@ -1,110 +1,121 @@
 apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: 'signing'
 apply plugin: 'idea'
+apply plugin: 'signing'
+apply plugin: 'maven'
+apply from: "maven-customise.gradle"
 
-group = 'co.freeside'
 version = '1.1'
+group = 'co.freeside'
+archivesBaseName = 'betamax'
 
 // custom tasks for creating source/javadoc jars
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+task sourceJar(type: Jar, dependsOn: classes) {
+	classifier 'source'
+	from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-task groovydocJar(type: Jar, dependsOn: groovydoc) {
-    classifier = 'groovydoc'
-    from groovydoc.destinationDir
+	classifier 'javadoc'
+	from groovydoc
 }
 
 // add javadoc/source jar tasks as artifacts
 artifacts {
-    archives jar, sourcesJar, javadocJar, groovydocJar
+	archives sourceJar, javadocJar
 }
 
 signing {
-    sign configurations.archives
+	sign configurations.archives
+	required { gradle.taskGraph.hasTask(uploadArchives) && !version.endsWith('SNAPSHOT') }
+	tasks.withType(Upload) {
+		repositories.withType(MavenResolver) {
+			beforeDeployment { signPom(it) }
+		}
+	}
 }
 
 repositories {
-    mavenCentral()
-    mavenRepo url: 'http://m2repo.spockframework.org/snapshots'
-    mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
+	mavenCentral()
+	mavenRepo url: 'http://m2repo.spockframework.org/snapshots'
+	mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
 }
 
 dependencies {
-    groovy 'org.codehaus.groovy:groovy-all:1.7.8'
-    compile 'junit:junit:4.8.2'
-    compile 'org.apache.httpcomponents:httpclient:4.1.2'
-    compile 'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
-    compile 'org.yaml:snakeyaml:1.10'
-    testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.1') {
-        exclude module: 'groovy'
-        exclude module: 'httpclient'
-    }
-    testRuntime 'cglib:cglib-nodep:2.2.2'
-    testCompile 'commons-httpclient:commons-httpclient:3.1'
-    testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
-        exclude module: 'groovy-all'
-    }
+	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
+	compile 'junit:junit:4.8.2'
+	compile 'org.apache.httpcomponents:httpclient:4.1.2'
+	compile 'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
+	compile 'org.yaml:snakeyaml:1.10'
+	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.1') {
+		exclude module: 'groovy'
+		exclude module: 'httpclient'
+	}
+	testRuntime 'cglib:cglib-nodep:2.2.2'
+	testCompile 'commons-httpclient:commons-httpclient:3.1'
+	testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
+		exclude module: 'groovy-all'
+	}
 }
 
+modifyPom {
+	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
+
+	project {
+		name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
+		packaging 'jar'
+		description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
+		url 'http://freeside.co/betamax'
+		inceptionYear '2011'
+
+		scm {
+			url 'scm:git@github.com:robfletcher/betamax.git'
+			connection 'scm:git@github.com:robfletcher/betamax.git'
+			developerConnection 'scm:git@github.com:robfletcher/betamax.git'
+		}
+
+		licenses {
+			license {
+				name 'The Apache Software License, Version 2.0'
+				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+				distribution 'repo'
+			}
+		}
+
+		developers {
+			developer {
+				id 'robfletcher'
+				name 'Rob Fletcher'
+				url 'http://blog.freeside.co/'
+				roles {
+					role 'Lead'
+					role 'Founder'
+				}
+			}
+		}
+	}
+}
 project.poms = [project.install.repositories.mavenInstaller.pom]
 
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signPom(deployment) }
-
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                authentication(userName: sonatypeUsername, password: sonatypePassword)
-            }
-
-            pom.project {
-                name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
-                packaging 'jar'
-                description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
-                url 'http://freeside.co/betamax'
-                inceptionYear '2011'
-
-                scm {
-                    url 'scm:git@github.com:robfletcher/betamax.git'
-                    connection 'scm:git@github.com:robfletcher/betamax.git'
-                    developerConnection 'scm:git@github.com:robfletcher/betamax.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'robfletcher'
-                        name 'Rob Fletcher'
-                        url 'http://blog.freeside.co/'
-                        roles {
-                            role 'Lead'
-                            role 'Founder'
-                        }
-                    }
-                }
-            }
-
-            project.poms << pom
-        }
-    }
+	repositories {
+		mavenDeployer {
+			gradle.taskGraph.whenReady { taskGraph ->
+				if (taskGraph.hasTask(uploadArchives)) {
+					if (!project.hasProperty('sonatypeUsername')) {
+						throw new InvalidUserDataException(
+							"You are trying to upload and do not have credentials set. Please set 'sonatypeUsername' and 'sonatypePassword'"
+						)
+					}
+					repository(url: 'https://nexus.codehaus.org/service/local/staging/deploy/maven2/') {
+						authentication(userName: sonatypeUsername, password: sonatypePassword)
+					}
+					snapshotRepository(url: 'https://nexus.codehaus.org/content/repositories/snapshots/') {
+						authentication(userName: sonatypeUsername, password: sonatypePassword)
+					}
+				}
+			}
+		}
+	}
 }
 
 // Remove test deps from all poms
@@ -113,5 +124,5 @@ project.poms*.whenConfigured { pom ->
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.0-milestone-8a'
+	gradleVersion = '1.0-milestone-8a'
 }
