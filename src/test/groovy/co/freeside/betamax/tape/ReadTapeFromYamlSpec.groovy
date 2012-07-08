@@ -1,10 +1,11 @@
 package betamax.tape
 
-import betamax.tape.yaml.YamlTape
+import co.freeside.betamax.tape.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.Specification
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
+import co.freeside.betamax.tape.TapeLoadException
 
 class ReadTapeFromYamlSpec extends Specification {
 
