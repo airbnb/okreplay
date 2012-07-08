@@ -25,6 +25,7 @@ class TwitterPageSpec extends GebSpec {
 		def proxyConfig = new ProxyConfig("localhost", 5555)
 		proxyConfig.addHostsToProxyBypass("localhost")
 		driver.webClient.proxyConfig = proxyConfig
+		//driver.setJavascriptEnabled(true) //not work. see http://groups.google.com/group/webdriver/browse_thread/thread/6bbb18dca79c4e92?pli=1
 	}
 
 	@Betamax(tape = "twitter success")
@@ -50,7 +51,7 @@ class TwitterPageSpec extends GebSpec {
 		$('#tweets li').eq(0).find('small a').click()
 
 		then:
-		title == "Christine Romero (@la_dyosa) on Twitter"
+		$('div.user-screen-name').text() == "la_dyosa (Christine Romero)"
 	}
 
 }

@@ -1,11 +1,10 @@
-package co.freeside.betamax.tape
+package betamax.tape
 
-import co.freeside.betamax.tape.yaml.YamlTape
+import betamax.tape.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.Specification
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
-import co.freeside.betamax.tape.TapeLoadException
 
 class ReadTapeFromYamlSpec extends Specification {
 
@@ -27,11 +26,14 @@ interactions:
 """
 		when:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
+		def utc = Calendar.getInstance(TimeZone.getTimeZone('UTC'))
+		utc.set(2011, 7, 23, 22, 41, 40)
+		utc.set(Calendar.MILLISECOND, 0)
 
 		then:
 		tape.name == "single_interaction_tape"
 		tape.interactions.size() == 1
-		tape.interactions[0].recorded.time == new Date(111, 7, 23, 23, 41, 40).time
+		tape.interactions[0].recorded == utc.time
 		tape.interactions[0].request.method == "GET"
 		tape.interactions[0].request.uri == "http://icanhascheezburger.com/".toURI()
 		tape.interactions[0].response.status == HTTP_OK
