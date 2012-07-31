@@ -38,8 +38,8 @@ class TwitterPageSpec extends GebSpec {
 
 		and:
 		$('#tweets li').size() == 10
-		$('#tweets li p')*.text().every { it =~ /(?i)betamax/ }
-		$('#tweets li').eq(0).find('p').text() == "Haha! RT @iamrhouan: Collector's item! Aylayk! RT @la_dyosa: Haha! Betamax copy pa! :D"
+		$('#tweets li p')*.text().every { it =~ /(?i)#gr8conf/ }
+		$('#tweets li').eq(0).find('p').text() == "Slides for my #gr8conf talk: \u2018Spock Soup to Nuts\u2019. Thanks to everyone who showed up! http://t.co/CNA9ertp"
 	}
 
 	@Betamax(tape = "twitter success")
@@ -51,7 +51,7 @@ class TwitterPageSpec extends GebSpec {
 		$('#tweets li').eq(0).find('small a').click()
 
 		then:
-		$('div.user-screen-name').text() == "la_dyosa (Christine Romero)"
+		$('.user-info .username').text() == "@zanthrash"
 	}
 
 }

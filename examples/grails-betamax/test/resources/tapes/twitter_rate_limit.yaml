@@ -4,7 +4,7 @@ interactions:
 - recorded: 2011-08-31T13:39:02.368Z
   request:
     method: GET
-    uri: http://search.twitter.com/search.json?q=betamax&rpp=10&page=1
+    uri: http://search.twitter.com/search.json?q=%23gr8conf&rpp=10&page=1
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate

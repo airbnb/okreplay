@@ -12,30 +12,30 @@ class TwitterControllerSpec extends ControllerSpec {
 		controller.twitterService = twitterService
 	}
 	
-	def "default query is 'betamax'"() {
+	def "default query is '#gr8conf'"() {
 		when:
 		controller.clients()
 		
 		then:
-		1 * twitterService.tweetsByClient("betamax")
+		1 * twitterService.tweetsByClient("#gr8conf")
 	}
 	
 	def "passes query and results to view"() {
 		given:
 		def results = [web: 2, iPhone: 4, android: 1]
-		twitterService.tweetsByClient("betamax") >> results
+		twitterService.tweetsByClient("#gr8conf") >> results
 		
 		when:
 		def model = controller.clients()
 		
 		then:
-		model.q == "betamax"
+		model.q == "#gr8conf"
 		model.clients == results
 	}
 	
 	def "handles twitter error"() {
 		given:
-		twitterService.tweetsByClient("betamax") >> { throw new TwitterException() }
+		twitterService.tweetsByClient("#gr8conf") >> { throw new TwitterException() }
 		
 		when:
 		controller.clients()

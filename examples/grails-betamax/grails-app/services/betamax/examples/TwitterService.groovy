@@ -11,6 +11,10 @@ class TwitterService {
 
 	RESTClient restClient
 
+	/**
+	 * For a given search term returns the breakdown of number of tweets by each
+	 * Twitter client application.
+	 */
 	Map<String, Integer> tweetsByClient(String q) {
 		def results = searchTwitter(q)
 		def clients = [:].withDefault { 0 }
@@ -21,6 +25,9 @@ class TwitterService {
 		clients
 	}
 
+	/**
+	 * Searches for latest tweets with a specific term.
+	 */
 	List<String> tweets(String q) {
 		def results = searchTwitter(q)
 		results.collect { [user: it.from_user, text: it.text] }

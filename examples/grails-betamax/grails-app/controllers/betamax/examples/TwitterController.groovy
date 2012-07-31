@@ -7,12 +7,12 @@ class TwitterController {
 	def twitterService
 
 	def index = {
-		def q = params.q ?: "betamax"
+		def q = params.q ?: "#gr8conf"
 		[q: q]
 	}
 
 	def clients = {
-		def q = params.q ?: "betamax"
+		def q = params.q ?: "#gr8conf"
 		try {
 			def clients = twitterService.tweetsByClient(q)
 			[q: q, clients: clients]
@@ -22,7 +22,7 @@ class TwitterController {
 	}
 
 	def tweets = {
-		def q = params.q ?: "betamax"
+		def q = params.q ?: "#gr8conf"
 		try {
 			def tweets = twitterService.tweets(q)
 			[q: q, tweets: tweets]

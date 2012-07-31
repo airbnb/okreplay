@@ -32,32 +32,32 @@ class TwitterServiceSpec extends UnitSpec {
 	@Betamax(tape = "twitter success")
 	def "returns aggregated twitter client stats when a successful response is received"() {
 		when:
-		def clients = service.tweetsByClient("betamax")
+		def clients = service.tweetsByClient("#gr8conf")
 
 		then:
 		clients.size() == 6
-		clients["\u00DCberSocial for BlackBerry"] == 4
-		clients["TweetDeck"] == 2
+		clients["Twitterrific"] == 1
 		clients["Echofon"] == 1
-		clients["Mobile Web"] == 1
-		clients["Snaptu"] == 1
-		clients["Twitter for BlackBerry\u00AE"] == 1
+		clients["Tweetbot for Mac"] == 1
+		clients["Twitter for Mac"] == 5
+		clients["Twitter for iPhone"] == 1
+		clients["Twitter for Android"] == 1
 	}
 
 	@Betamax(tape = "twitter success")
 	def "only retrieves tweets containing the search term"() {
 		when:
-		def tweets = service.tweets("betamax")
+		def tweets = service.tweets("#gr8conf")
 
 		then:
 		tweets.size() == 10
-		tweets.every { it.text =~ /(?i)betamax/ }
+		tweets.every { it.text =~ /(?i)#gr8conf/ }
 	}
 
 	@Betamax(tape = "twitter rate limit")
 	def "sets an error status when twitter rate limit is exceeded"() {
 		when:
-		service.tweetsByClient("betamax")
+		service.tweetsByClient("#gr8conf")
 
 		then:
 		thrown TwitterException
