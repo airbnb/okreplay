@@ -35,7 +35,6 @@ class MemoryTape implements Tape {
 	List<RecordedInteraction> interactions = []
 	private TapeMode mode = READ_WRITE
 	private Comparator<Request>[] matchRules = [method, uri]
-	private int position = -1
 
 	void setMode(TapeMode mode) {
 		this.mode = mode
@@ -57,23 +56,20 @@ class MemoryTape implements Tape {
 		interactions.size()
 	}
 
+
 	boolean seek(Request request) {
 		def requestMatcher = new RequestMatcher(request, matchRules)
-		position = interactions.findIndexOf {
+		interactions.any {
 			requestMatcher.matches(it.request)
 		}
-		position >= 0
 	}
 
-	void reset() {
-		position = -1
-	}
+	void play(Request request, Response response) {
+		if (!mode.readable) throw new IllegalStateException("the tape is not readable")
 
-	void play(Response response) {
-		if (!mode.readable) {
-			throw new IllegalStateException("the tape is not readable")
-		} else if (position < 0) {
-			throw new IllegalStateException("the tape is not ready to play")
+		int position = findMatch(request)
+		if (position < 0) {
+			throw new IllegalStateException("no matching recording found")
 		} else {
 			def interaction = interactions[position]
 			response.status = interaction.response.status
@@ -94,21 +90,27 @@ class MemoryTape implements Tape {
 	}
 
 	void record(Request request, Response response) {
-		if (mode.writable) {
-			def interaction = new RecordedInteraction(request: recordRequest(request), response: recordResponse(response), recorded: new Date())
-			if (position >= 0) {
-				interactions[position] = interaction
-			} else {
-				interactions << interaction
-			}
+		if (!mode.writable) throw new IllegalStateException("the tape is not writable")
+
+		def interaction = new RecordedInteraction(request: recordRequest(request), response: recordResponse(response), recorded: new Date())
+		int position = findMatch(request)
+		if (position >= 0) {
+			interactions[position] = interaction
 		} else {
-			throw new IllegalStateException("the tape is not writable")
+			interactions << interaction
 		}
 	}
 
 	@Override
 	String toString() {
 		"Tape[$name]"
+	}
+
+	private int findMatch(Request request) {
+		def requestMatcher = new RequestMatcher(request, matchRules)
+		interactions.findIndexOf {
+			requestMatcher.matches(it.request)
+		}
 	}
 
 	private static RecordedRequest recordRequest(Request request) {

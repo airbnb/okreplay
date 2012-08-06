@@ -63,11 +63,11 @@ interactions:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
+		def request = new BasicRequest("GET", "http://freeside.co/betamax")
 		def response = new BasicResponse(200, "OK")
 
 		when:
-		tape.seek(new BasicRequest("GET", "http://freeside.co/betamax"))
-		tape.play(response)
+		tape.play(request, response)
 
 		then:
 		response.getHeader(CONTENT_ENCODING) == encoding

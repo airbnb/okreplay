@@ -50,7 +50,7 @@ class RecordAndPlaybackProxyInterceptorSpec extends Specification {
 		veto
 
 		and:
-		1 * tape.play(response)
+		1 * tape.play(request, response)
 	}
 
 	def "vetos a request and sets failing response code if no tape is inserted"() {

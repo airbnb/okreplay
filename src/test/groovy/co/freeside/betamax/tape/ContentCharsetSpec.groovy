@@ -67,11 +67,11 @@ interactions:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
+		def request = new BasicRequest("GET", "http://freeside.co/betamax")
 		def response = new BasicResponse(HTTP_OK, "OK")
 
 		when:
-		tape.seek(new BasicRequest("GET", "http://freeside.co/betamax"))
-		tape.play(response)
+		tape.play(request, response)
 
 		then:
 		def expected = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)

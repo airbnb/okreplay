@@ -50,31 +50,23 @@ interface Tape {
 	int size()
 
 	/**
-	 * Attempts to find a recorded interaction on the tape that matches the supplied request's method and URI. If the
-	 * method succeeds then subsequent calls to `play` will play back the response that was found.
+	 * Attempts to find a recorded interaction on the tape that matches the supplied request.
 	 * @param request the HTTP request to match.
 	 * @return `true` if a matching recorded interaction was found, `false` otherwise.
 	 */
 	boolean seek(Request request)
 
 	/**
-	 * Resets the tape so that no recorded interaction is ready to play. Subsequent calls to `play` will throw
-	 * `IllegalStateException` until a successful call to `seek` is made.
-	 */
-	void reset()
-
-	/**
 	 * Plays back a previously recorded interaction to the supplied response. Status, headers and entities are copied
 	 * from the recorded interaction to `response`.
 	 * @param response the HTTP response to populate.
-	 * @throws IllegalStateException if no recorded interaction has been found by a previous call to `seek`.
+	 * @throws IllegalStateException if no matching recorded interaction exists.
 	 */
-	void play(Response response)
+	void play(Request request, Response response)
 
 	/**
-	 * Records a new interaction to the tape. If the tape is currently positioned to read a recorded interaction due to
-	 * a previous successful `seek` call then this method will overwrite the existing recorded interaction. Otherwise
-	 * the newly recorded interaction is appended to the tape.
+	 * Records a new interaction to the tape. If `request` matches an existing interaction this method will overwrite
+	 * it. Otherwise the newly recorded interaction is appended to the tape.
 	 * @param request the request to record.
 	 * @param response the response to record.
 	 * @throws UnsupportedOperationException if this `Tape` implementation is not writable.

@@ -54,9 +54,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 		then:
 		recorder.tape.size() == 1
-
-		cleanup:
-		recorder.tape.reset()
 	}
 
 	@Timeout(10)
