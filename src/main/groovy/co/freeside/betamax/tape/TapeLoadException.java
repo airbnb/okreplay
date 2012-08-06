@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package co.freeside.betamax.tape;
 
-import groovy.transform.InheritConstructors
+public class TapeLoadException extends RuntimeException {
 
-@InheritConstructors
-class TapeLoadException extends RuntimeException {
+    public TapeLoadException() {
+        super();
+    }
+
+    public TapeLoadException(String message) {
+        super(message);
+    }
+
+    public TapeLoadException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public TapeLoadException(Throwable cause) {
+        super(cause);
+    }
+
 }
