@@ -2,7 +2,7 @@ package co.freeside.betamax.proxy
 
 import spock.lang.Specification
 
-import betamax.util.message.*
+import co.freeside.betamax.util.message.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
 import co.freeside.betamax.Recorder

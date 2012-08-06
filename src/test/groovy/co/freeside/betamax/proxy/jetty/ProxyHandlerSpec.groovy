@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.message.BasicHttpResponse
 import spock.lang.Specification
-import betamax.util.servlet.*
+import co.freeside.betamax.util.servlet.*
 import static java.net.HttpURLConnection.HTTP_PARTIAL
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1

@@ -2,7 +2,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTape
 
-import betamax.util.message.*
+import co.freeside.betamax.util.message.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 import spock.lang.*

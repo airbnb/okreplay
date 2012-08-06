@@ -1,7 +1,7 @@
 package betamax.examples
 
-import betamax.Betamax
-import betamax.Recorder
+import co.freeside.betamax.Betamax
+import co.freeside.betamax.Recorder
 import grails.plugin.spock.UnitSpec
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient

@@ -7,7 +7,7 @@ import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.junit.Rule
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import betamax.*
+import co.freeside.betamax.*
 
 class TwitterPageSpec extends GebSpec {
 

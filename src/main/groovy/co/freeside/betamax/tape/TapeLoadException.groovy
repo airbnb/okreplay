@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Rob Fletcher
+ * Copyright 2012 Rob Fletcher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,5 +19,4 @@ package co.freeside.betamax.tape
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
-class TapeLoadException extends RuntimeException {
-}
+public class TapeLoadException extends RuntimeException { }

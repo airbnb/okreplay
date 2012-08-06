@@ -4,7 +4,7 @@ import co.freeside.betamax.Tape
 import co.freeside.betamax.encoding.GzipEncoder
 import static co.freeside.betamax.TapeMode.*
 
-import betamax.util.message.*
+import co.freeside.betamax.util.message.*
 import static groovyx.net.http.ContentType.URLENC
 import static org.apache.http.HttpHeaders.*
 import spock.lang.*
