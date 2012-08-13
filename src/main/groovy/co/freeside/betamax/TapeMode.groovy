@@ -20,7 +20,8 @@ enum TapeMode {
 
 	READ_WRITE(true, true),
 	READ_ONLY(true, false),
-	WRITE_ONLY(false, true)
+	WRITE_ONLY(false, true),
+	DEFAULT(false, false)
 
 	final boolean readable
 	final boolean writable
@@ -28,6 +29,10 @@ enum TapeMode {
 	private TapeMode(boolean readable, boolean writable) {
 		this.readable = readable
 		this.writable = writable
+	}
+
+	boolean asBoolean() {
+		readable || writable
 	}
 
 }

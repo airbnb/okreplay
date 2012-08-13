@@ -17,9 +17,8 @@
 package co.freeside.betamax
 
 import java.lang.annotation.*
-
-import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
+import static co.freeside.betamax.TapeMode.DEFAULT
 import static java.lang.annotation.ElementType.METHOD
 import static java.lang.annotation.RetentionPolicy.RUNTIME
 
@@ -27,6 +26,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME
 @Target(METHOD)
 @interface Betamax {
 	String tape()
-	TapeMode mode() default READ_WRITE
+	TapeMode mode() default DEFAULT
 	MatchRule[] match() default [method, uri]
 }
