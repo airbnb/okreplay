@@ -4,7 +4,7 @@ apply plugin: 'signing'
 apply plugin: 'maven'
 apply from: "maven-customise.gradle"
 
-version = '1.1'
+version = '1.1-SNAPSHOT'
 group = 'co.freeside'
 archivesBaseName = 'betamax'
 
