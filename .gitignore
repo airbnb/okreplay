@@ -10,3 +10,4 @@
 *~
 /examples/grails-betamax/target/
 *.log
+/.gradletasknamecache
