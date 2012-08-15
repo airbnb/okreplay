@@ -37,6 +37,18 @@ class SystemPropertyUtils {
 		}
 	}
 
+	static boolean isOverridden(String key) {
+		overriddenProperties.containsKey(key)
+	}
+
+	static String getOverriddenValue(String key) {
+		overriddenProperties[key]
+	}
+
+	static void clearAll() {
+		overriddenProperties.clear()
+	}
+
 	private SystemPropertyUtils() {}
 
 }
