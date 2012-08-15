@@ -17,21 +17,22 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.proxy.ssl.DummyHostNameVerifier
+import co.freeside.betamax.proxy.ssl.DummyJVMSSLSocketFactory
 import co.freeside.betamax.tape.StorableTape
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import co.freeside.betamax.util.SystemPropertyUtils
+import co.freeside.betamax.util.ProxyOverrider
 import org.junit.rules.MethodRule
+import org.junit.runners.model.FrameworkMethod
+import org.junit.runners.model.Statement
 
 import java.security.Security
 import java.util.logging.Logger
 
-import co.freeside.betamax.proxy.ssl.*
-import org.junit.runners.model.*
-
 import static TapeMode.READ_WRITE
-import static co.freeside.betamax.MatchRule.*
+import static co.freeside.betamax.MatchRule.method
+import static co.freeside.betamax.MatchRule.uri
 import static java.util.Collections.EMPTY_MAP
-
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
@@ -114,6 +115,7 @@ class Recorder implements MethodRule {
 
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
+	private ProxyOverrider proxyOverrider = new ProxyOverrider()
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -236,10 +238,6 @@ class Recorder implements MethodRule {
 
 	void overrideProxySettings() {
 		def proxyHost = InetAddress.localHost.hostAddress
-		SystemPropertyUtils.override("http.proxyHost", proxyHost)
-		SystemPropertyUtils.override("http.proxyPort", proxyPort.toString())
-		SystemPropertyUtils.override("https.proxyHost", proxyHost)
-		SystemPropertyUtils.override("https.proxyPort", httpsProxyPort.toString())
 		def nonProxyHosts = ignoreHosts as Set
 		if (ignoreLocalhost) {
 			def local = InetAddress.localHost
@@ -248,11 +246,11 @@ class Recorder implements MethodRule {
 			nonProxyHosts << "localhost"
 			nonProxyHosts << "127.0.0.1"
 		}
-		SystemPropertyUtils.override("http.nonProxyHosts", nonProxyHosts.join("|"))
+		proxyOverrider.activate proxyHost, proxyPort, nonProxyHosts
 	}
 
 	void restoreOriginalProxySettings() {
-		SystemPropertyUtils.resetAll()
+		proxyOverrider.deactivateAll()
 	}
 
 }
