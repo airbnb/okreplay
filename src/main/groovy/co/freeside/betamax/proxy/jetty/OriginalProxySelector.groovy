@@ -16,6 +16,9 @@ class OriginalProxySelector extends ProxySelector {
 		} else if (uri.scheme.equalsIgnoreCase('https')) {
 			addHttpsProxy(proxies)
 		}
+
+		if (!proxies) proxies << Proxy.NO_PROXY
+
 		proxies
 	}
 

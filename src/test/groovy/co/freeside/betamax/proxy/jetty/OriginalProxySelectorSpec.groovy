@@ -54,7 +54,12 @@ class OriginalProxySelectorSpec extends Specification {
 		overrideProxy proxyScheme
 
 		expect:
-		proxySelector.select(uri).empty
+		def proxies = proxySelector.select(uri)
+		proxies.size() == 1
+
+		and:
+		def proxy = proxies.first()
+		proxy.type() == Proxy.Type.DIRECT
 
 		where:
 		proxyScheme | uri
