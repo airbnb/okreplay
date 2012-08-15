@@ -1,6 +1,5 @@
 package co.freeside.betamax.proxy.jetty
 
-import static java.util.Collections.EMPTY_LIST
 import co.freeside.betamax.util.SystemPropertyUtils
 
 /**
@@ -11,17 +10,34 @@ class OriginalProxySelector extends ProxySelector {
 
 	@Override
 	List<Proxy> select(URI uri) {
+		def proxies = []
+		if (uri.scheme.equalsIgnoreCase('http')) {
+			addHttpProxy(proxies)
+		} else if (uri.scheme.equalsIgnoreCase('https')) {
+			addHttpsProxy(proxies)
+		}
+		proxies
+	}
+
+	@Override
+	void connectFailed(URI uri, SocketAddress socketAddress, IOException e) { }
+
+	private void addHttpProxy(List<Proxy> proxies) {
 		if (SystemPropertyUtils.isOverridden('http.proxyHost')) {
 			def host = SystemPropertyUtils.getOverriddenValue('http.proxyHost')
 			def port = SystemPropertyUtils.getOverriddenValue('http.proxyPort').toInteger()
 			def address = InetSocketAddress.createUnresolved(host, port)
-			[new Proxy(Proxy.Type.HTTP, address)]
-		} else {
-			EMPTY_LIST
+			proxies << new Proxy(Proxy.Type.HTTP, address)
 		}
 	}
 
-	@Override
-	void connectFailed(URI uri, SocketAddress socketAddress, IOException e) {
+	private void addHttpsProxy(List<Proxy> proxies) {
+		if (SystemPropertyUtils.isOverridden('https.proxyHost')) {
+			def host = SystemPropertyUtils.getOverriddenValue('https.proxyHost')
+			def port = SystemPropertyUtils.getOverriddenValue('https.proxyPort').toInteger()
+			def address = InetSocketAddress.createUnresolved(host, port)
+			proxies << new Proxy(Proxy.Type.HTTP, address)
+		}
 	}
+
 }
