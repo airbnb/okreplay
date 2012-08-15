@@ -88,6 +88,10 @@ class SimpleServer extends AbstractLifeCycleListener {
 		this.port = port
 	}
 
+	int getPort() {
+		port
+	}
+
 	boolean isRunning() {
 		startedLatch?.count == 0 && stoppedLatch?.count > 0
 	}

@@ -2,29 +2,23 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
-import co.freeside.betamax.util.server.EchoHandler
 import groovy.transform.InheritConstructors
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
-import org.eclipse.jetty.server.handler.AbstractHandler
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
 import org.junit.Rule
 import co.freeside.betamax.*
+import co.freeside.betamax.util.server.*
 import org.apache.http.conn.scheme.*
 import org.apache.http.params.*
 import org.eclipse.jetty.server.*
 import spock.lang.*
-
-import javax.servlet.http.*
-
-import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.HttpVersion.HTTP_1_1
-import org.eclipse.jetty.server.Request
 
 @Issue("https://github.com/robfletcher/betamax/issues/34")
 class HttpsSpec extends Specification {
@@ -135,16 +129,4 @@ class SimpleSecureServer extends SimpleServer {
 
 		server
 	}
-}
-
-class HelloHandler extends AbstractHandler {
-
-	@Override
-    void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-        response.status = HTTP_OK
-        response.contentType = "text/plain"
-        response.outputStream.withWriter { writer ->
-            writer << 'Hello World!'
-        }
-    }
 }
