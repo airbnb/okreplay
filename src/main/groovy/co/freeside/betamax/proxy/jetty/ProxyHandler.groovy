@@ -16,25 +16,26 @@
 
 package co.freeside.betamax.proxy.jetty
 
+import co.freeside.betamax.proxy.Response
+import co.freeside.betamax.proxy.VetoingProxyInterceptor
+import co.freeside.betamax.proxy.servlet.ServletRequestImpl
+import co.freeside.betamax.proxy.servlet.ServletResponseImpl
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import co.freeside.betamax.util.ProxyOverrider
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
+import org.apache.http.client.methods.*
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import java.util.logging.Logger
-
-import co.freeside.betamax.proxy.*
-import co.freeside.betamax.proxy.servlet.*
-import org.apache.http.client.methods.*
-
-import javax.servlet.http.*
-
 import static java.net.HttpURLConnection.*
 import static java.util.logging.Level.SEVERE
 import static org.apache.http.HttpHeaders.*
@@ -65,12 +66,13 @@ class ProxyHandler extends AbstractHandler {
 	VetoingProxyInterceptor interceptor
 
 	private final Logger log = Logger.getLogger(ProxyHandler.name)
-	
-	public ProxyHandler(boolean sslSupport) {
+
+	ProxyHandler(boolean sslSupport, ProxyOverrider proxyOverrider) {
 		def connectionManager = new ThreadSafeClientConnManager()
 		httpClient = new DefaultHttpClient(connectionManager)
-		if(sslSupport) {
-			connectionManager.schemeRegistry.register new Scheme("https", DummySSLSocketFactory.getInstance(), 443)
+		httpClient.routePlanner = new ProxySelectorRoutePlanner(httpClient.connectionManager.schemeRegistry, proxyOverrider.originalProxySelector)
+		if (sslSupport) {
+			connectionManager.schemeRegistry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
 		}
 	}
 

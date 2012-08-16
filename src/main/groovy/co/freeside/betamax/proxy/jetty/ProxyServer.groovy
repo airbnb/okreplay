@@ -35,7 +35,7 @@ class ProxyServer extends SimpleServer {
 	}
 
 	void start(Recorder recorder) {
-		def handler = new ProxyHandler(recorder.sslSupport)
+		def handler = new ProxyHandler(recorder.sslSupport, recorder.proxyOverrider)
 		handler.interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
 		handler.timeout = recorder.proxyTimeout
 

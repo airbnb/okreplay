@@ -115,7 +115,7 @@ class Recorder implements MethodRule {
 
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
-	private ProxyOverrider proxyOverrider = new ProxyOverrider()
+	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -136,6 +136,13 @@ class Recorder implements MethodRule {
 	Tape getTape() {
 		// TODO: throw ISE if no tape
 		tape
+	}
+
+	/**
+	 * @return the proxy overrider used by this recorder.
+	 */
+	ProxyOverrider getProxyOverrider() {
+		proxyOverrider
 	}
 
 	/**
