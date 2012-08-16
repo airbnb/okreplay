@@ -54,7 +54,7 @@ class ProxyServer extends SimpleServer {
 	private Connector createSSLConnector(int port) {
 		def sslConnector = new SslSelectChannelConnector()
 		sslConnector.port = port // TODO: separate property
-		sslConnector.keystore = new File("src/main/resources/keystore").absolutePath // TODO: need to make this a classpath resource
+		sslConnector.keystore = Class.getResource('/keystore')
 		sslConnector.password = "password"
 		sslConnector.keyPassword = "password"
 		return sslConnector
