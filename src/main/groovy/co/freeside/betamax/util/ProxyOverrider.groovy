@@ -1,8 +1,10 @@
 package co.freeside.betamax.util
 
 import static java.net.Proxy.Type.HTTP
-import static java.util.Collections.EMPTY_SET
 
+/**
+ * Provides a mechanism to temporarily override current HTTP and HTTPS proxy settings and restore them later.
+ */
 class ProxyOverrider {
 
 	private final Map<String, InetSocketAddress> originalProxies = [:]

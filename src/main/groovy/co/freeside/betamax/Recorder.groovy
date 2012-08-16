@@ -33,6 +33,7 @@ import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.method
 import static co.freeside.betamax.MatchRule.uri
 import static java.util.Collections.EMPTY_MAP
+
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
