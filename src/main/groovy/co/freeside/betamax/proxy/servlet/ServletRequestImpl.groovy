@@ -24,6 +24,7 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 
 	private final HttpServletRequest delegate
 	private final Map<String, String> headers = [:]
+	private byte[] body
 
 	ServletRequestImpl(HttpServletRequest delegate) {
 		this.delegate = delegate
@@ -76,8 +77,10 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 	}
 
 	InputStream getBodyAsBinary() {
-		delegate.inputStream
+		if (!body) {
+			body = delegate.inputStream.bytes
+		}
+		new ByteArrayInputStream(body)
 	}
-
 
 }
