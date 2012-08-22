@@ -22,7 +22,6 @@ class MultiThreadedTapeAccessSpec extends Specification {
 			request.addHeader('X-Thread', i.toString())
 			request
 		}
-		println requests
 
 		and: 'some existing responses on tape'
 		requests.eachWithIndex { request, i ->
