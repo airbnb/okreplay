@@ -62,10 +62,12 @@ interactions:
 		response.data.text == responseText
 
 		where:
-		method | uri                  | responseText
-		"get"  | "http://xkcd.com/"   | "get method response from xkcd.com"
-		"post" | "http://xkcd.com/"   | "post method response from xkcd.com"
-		"get"  | "http://qwantz.com/" | "get method response from qwantz.com"
+		method | uri
+		"get"  | "http://xkcd.com/"
+		"post" | "http://xkcd.com/"
+		"get"  | "http://qwantz.com/"
+
+		responseText = "$method method response from ${uri.toURI().host}"
 	}
 
 	def "can match based on host"() {
