@@ -125,7 +125,3 @@ uploadArchives {
 project.poms*.whenConfigured { pom ->
 	pom.dependencies.removeAll(pom.dependencies.findAll { it.scope == 'test' })
 }
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '1.1'
-}
