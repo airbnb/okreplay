@@ -176,7 +176,7 @@ class RecordedRequest implements Request {
 	}
 
 	Reader getBodyAsText() {
-		new InputStreamReader(bodyAsBinary, 'ISO-8859-1') // TODO: charset
+		new InputStreamReader(bodyAsBinary) // TODO: charset
 	}
 
 	InputStream getBodyAsBinary() {
@@ -198,7 +198,7 @@ class RecordedResponse implements Response {
 	}
 
 	Reader getBodyAsText() {
-		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary, 'ISO-8859-1') // TODO: charset
+		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary) // TODO: charset
 	}
 
 	InputStream getBodyAsBinary() {

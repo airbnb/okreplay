@@ -42,7 +42,7 @@ abstract class AbstractMessage implements Message {
 			case "deflate": stream = new InflaterInputStream(bodyAsBinary); break
 			default: stream = bodyAsBinary
 		}
-		charset ? new InputStreamReader(stream, charset) : new InputStreamReader(stream, 'ISO-8859-1')
+		charset ? new InputStreamReader(stream, charset) : new InputStreamReader(stream)
 	}
 
 	final OutputStream getOutputStream() {
