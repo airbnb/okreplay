@@ -18,6 +18,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.*
 import co.freeside.betamax.proxy.*
+import org.yaml.snakeyaml.reader.StreamReader
 
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
@@ -133,7 +134,7 @@ class MemoryTape implements Tape {
 			}
 		}
 		if (response.hasBody()) {
-			clone.body = isTextContentType(response.contentType) ? response.bodyAsText.text : response.bodyAsBinary.bytes
+			clone.body = isTextContentType(response.contentType) && isPrintable(response.bodyAsText.text) ? response.bodyAsText.text : response.bodyAsBinary.bytes
 		}
 		clone
 	}
@@ -144,6 +145,12 @@ class MemoryTape implements Tape {
 		} else {
 			false
 		}
+	}
+
+	static boolean isPrintable(String s) {
+		// this check is performed by SnakeYaml but we need to do so *before* unzipping the byte stream otherwise we
+		// won't be able to read it back again.
+		!(s =~ StreamReader.NON_PRINTABLE)
 	}
 
 }
@@ -169,7 +176,7 @@ class RecordedRequest implements Request {
 	}
 
 	Reader getBodyAsText() {
-		new InputStreamReader(bodyAsBinary) // TODO: charset
+		new InputStreamReader(bodyAsBinary, 'ISO-8859-1') // TODO: charset
 	}
 
 	InputStream getBodyAsBinary() {
@@ -191,7 +198,7 @@ class RecordedResponse implements Response {
 	}
 
 	Reader getBodyAsText() {
-		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary) // TODO: charset
+		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary, 'ISO-8859-1') // TODO: charset
 	}
 
 	InputStream getBodyAsBinary() {

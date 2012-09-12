@@ -34,7 +34,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
     YamlTape loadTape(String name) {
         def file = fileFor(name)
         if (file.isFile()) {
-            def tape = file.withReader { reader ->
+            def tape = file.withReader('UTF-8') { reader ->
                 YamlTape.readFrom(reader)
             }
             log.info "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
@@ -48,7 +48,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
         def file = fileFor(tape.name)
         file.parentFile.mkdirs()
         if (tape.isDirty()) {
-            file.withWriter { writer ->
+            file.withWriter('UTF-8') { writer ->
                 log.info "writing tape $tape to file $file.name..."
                 tape.writeTo(writer)
             }

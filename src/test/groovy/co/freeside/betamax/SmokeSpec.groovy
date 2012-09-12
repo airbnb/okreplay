@@ -36,6 +36,7 @@ class SmokeSpec extends Specification {
 		"json" | "http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"
 		"xml"  | "http://feeds.feedburner.com/wondermark"
 		"png"  | "http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png"
+		"css"  | "http://d297h9he240fqh.cloudfront.net/cache-1633a825c/assets/views_one.css"
 	}
 
 	@Betamax(tape = 'smoke spec')
