@@ -16,10 +16,7 @@
 
 package co.freeside.betamax.util.message
 
-import co.freeside.betamax.proxy.AbstractMessage
-import org.apache.commons.lang.StringUtils
-
-import static org.apache.http.HttpHeaders.*
+import co.freeside.betamax.message.AbstractMessage
 
 abstract class BasicMessage extends AbstractMessage {
 
@@ -50,25 +47,8 @@ abstract class BasicMessage extends AbstractMessage {
 		body
 	}
 
-	@Override
 	InputStream getBodyAsBinary() {
 		new ByteArrayInputStream(body)
 	}
 
-	@Override
-	String getContentType() {
-		StringUtils.substringBefore(getHeader(CONTENT_TYPE), ";")
-	}
-
-	@Override
-	String getCharset() {
-		getHeader(CONTENT_TYPE)?.find(/charset=(.*)/) { match, charset ->
-			charset
-		}
-	}
-
-	@Override
-	String getEncoding() {
-		getHeader(CONTENT_ENCODING)
-	}
 }

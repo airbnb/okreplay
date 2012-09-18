@@ -1,10 +1,13 @@
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.message.tape.RecordedRequest
 import co.freeside.betamax.util.message.BasicRequest
-import spock.lang.*
+import spock.lang.Issue
+import spock.lang.Specification
 
 import static co.freeside.betamax.MatchRule.*
-import static org.apache.http.HttpHeaders.*
+import static org.apache.http.HttpHeaders.ACCEPT_ENCODING
+import static org.apache.http.HttpHeaders.CACHE_CONTROL
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatcherSpec extends Specification {

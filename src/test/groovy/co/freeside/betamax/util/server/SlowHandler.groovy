@@ -3,12 +3,12 @@ package co.freeside.betamax.util.server
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import java.util.concurrent.CountDownLatch
 import java.util.logging.Logger
-import javax.servlet.http.*
 
 import static java.util.concurrent.TimeUnit.SECONDS
-
 /**
  * A very dumb handler that will simply sit on any requests until it is told to shut down (i.e. the server is shutting
  * down). This is used for testing timeout conditions on clients.

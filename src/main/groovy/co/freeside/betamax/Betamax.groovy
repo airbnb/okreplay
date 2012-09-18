@@ -16,8 +16,11 @@
 
 package co.freeside.betamax
 
-import java.lang.annotation.*
-import static co.freeside.betamax.MatchRule.*
+import java.lang.annotation.Retention
+import java.lang.annotation.Target
+
+import static co.freeside.betamax.MatchRule.method
+import static co.freeside.betamax.MatchRule.uri
 import static co.freeside.betamax.TapeMode.DEFAULT
 import static java.lang.annotation.ElementType.METHOD
 import static java.lang.annotation.RetentionPolicy.RUNTIME

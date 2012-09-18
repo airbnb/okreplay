@@ -1,15 +1,15 @@
 package co.freeside.betamax
 
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import groovyx.net.http.RESTClient
+import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-import spock.lang.*
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.net.HttpURLConnection.HTTP_OK
-import java.security.KeyStore
-import org.apache.http.conn.ssl.SSLSocketFactory
-import org.apache.http.conn.scheme.Scheme
-import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 
 class SmokeSpec extends Specification {
 

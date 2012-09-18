@@ -20,6 +20,8 @@ import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.proxy.ssl.DummyHostNameVerifier
 import co.freeside.betamax.proxy.ssl.DummyJVMSSLSocketFactory
 import co.freeside.betamax.tape.StorableTape
+import co.freeside.betamax.tape.Tape
+import co.freeside.betamax.tape.TapeLoader
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.ProxyOverrider
 import org.junit.rules.MethodRule

@@ -17,14 +17,20 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor
-import org.eclipse.jetty.server.handler.ConnectHandler
+import co.freeside.betamax.proxy.handler.ConnectingHandler
+import co.freeside.betamax.proxy.handler.HeaderFilter
+import co.freeside.betamax.proxy.handler.TapeReadingHandler
+import co.freeside.betamax.proxy.handler.TapeWritingHandler
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import org.apache.http.client.HttpClient
+import org.apache.http.conn.scheme.Scheme
+import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.params.HttpConnectionParams
+import org.eclipse.jetty.server.Connector
+import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
-
-import java.nio.channels.SocketChannel
-import javax.servlet.http.HttpServletRequest
-
-import org.eclipse.jetty.server.*
 
 import static co.freeside.betamax.Recorder.DEFAULT_PROXY_PORT
 
@@ -35,13 +41,28 @@ class ProxyServer extends SimpleServer {
 	}
 
 	void start(Recorder recorder) {
-		def handler = new ProxyHandler(recorder.sslSupport, recorder.proxyOverrider)
-		handler.interceptor = new RecordAndPlaybackProxyInterceptor(recorder)
-		handler.timeout = recorder.proxyTimeout
+		def handler = new BetamaxProxy()
+		handler <<
+				new TapeReadingHandler(recorder) <<
+				new TapeWritingHandler(recorder) <<
+				new HeaderFilter() <<
+				new ConnectingHandler(newHttpClient(recorder))
 
-		def connectHandler = new CustomConnectHandler(handler, port+1)
+		def connectHandler = new CustomConnectHandler(handler, port + 1)
 
 		super.start(connectHandler)
+	}
+
+	private HttpClient newHttpClient(Recorder recorder) {
+		def connectionManager = new ThreadSafeClientConnManager()
+		def httpClient = new DefaultHttpClient(connectionManager)
+		httpClient.routePlanner = new ProxySelectorRoutePlanner(httpClient.connectionManager.schemeRegistry, recorder.proxyOverrider.originalProxySelector)
+		if (recorder.sslSupport) {
+			connectionManager.schemeRegistry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
+		}
+		HttpConnectionParams.setConnectionTimeout(httpClient.params, recorder.proxyTimeout)
+		HttpConnectionParams.setSoTimeout(httpClient.params, recorder.proxyTimeout)
+		httpClient
 	}
 
 	@Override
@@ -61,19 +82,3 @@ class ProxyServer extends SimpleServer {
 	}
 }
 
-class CustomConnectHandler extends ConnectHandler {
-	int sslPort
-
-	public CustomConnectHandler(Handler handler, int sslPort) {
-		super(handler)
-		this.sslPort=sslPort
-	}
-
-	@Override
-	protected SocketChannel connect(HttpServletRequest request, String host, int port) throws IOException {
-		SocketChannel channel = SocketChannel.open()
-		channel.socket().setTcpNoDelay(true)
-		channel.socket().connect(new InetSocketAddress("127.0.0.1", sslPort), getConnectTimeout())
-		return channel
-	}
-}

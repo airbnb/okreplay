@@ -16,11 +16,16 @@
 
 package co.freeside.betamax.tape.yaml
 
+import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.Response
+import co.freeside.betamax.tape.MemoryTape
+import co.freeside.betamax.tape.StorableTape
+import co.freeside.betamax.tape.TapeLoadException
+import org.yaml.snakeyaml.DumperOptions
+import org.yaml.snakeyaml.TypeDescription
+import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
-import co.freeside.betamax.proxy.*
-import co.freeside.betamax.tape.*
-import org.yaml.snakeyaml.*
 
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 

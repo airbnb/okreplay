@@ -16,13 +16,13 @@
 
 package co.freeside.betamax.proxy.jetty
 
+import org.eclipse.jetty.server.Handler
+import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
 import org.eclipse.jetty.util.component.LifeCycle
 
 import java.util.concurrent.CountDownLatch
 import java.util.logging.Logger
-
-import org.eclipse.jetty.server.*
 
 class SimpleServer extends AbstractLifeCycleListener {
 

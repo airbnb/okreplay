@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.util.message
 
-import co.freeside.betamax.proxy.Response
+import co.freeside.betamax.message.Response
 
 class BasicResponse extends BasicMessage implements Response {
 
@@ -33,11 +33,6 @@ class BasicResponse extends BasicMessage implements Response {
 	void setError(int status, String reason) {
 		this.status = status
 		this.reason = reason
-	}
-
-	@Override
-	protected OutputStream initOutputStream() {
-		new MessageOutputStream(this)
 	}
 
 }

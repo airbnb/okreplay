@@ -16,15 +16,20 @@
 
 package co.freeside.betamax.tape.yaml
 
-import co.freeside.betamax.Tape
-import org.yaml.snakeyaml.representer.Represent
-import co.freeside.betamax.tape.*
-import org.yaml.snakeyaml.introspector.*
+import co.freeside.betamax.message.tape.RecordedRequest
+import co.freeside.betamax.message.tape.RecordedResponse
+import co.freeside.betamax.tape.RecordedInteraction
+import co.freeside.betamax.tape.Tape
+import org.yaml.snakeyaml.introspector.BeanAccess
+import org.yaml.snakeyaml.introspector.Property
+import org.yaml.snakeyaml.introspector.PropertyUtils
 import org.yaml.snakeyaml.nodes.*
+import org.yaml.snakeyaml.representer.Represent
 
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*
-import static org.yaml.snakeyaml.nodes.Tag.*
-
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.LITERAL
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN
+import static org.yaml.snakeyaml.nodes.Tag.NULL
+import static org.yaml.snakeyaml.nodes.Tag.STR
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
  */

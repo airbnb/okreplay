@@ -1,12 +1,16 @@
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.encoding.DeflateEncoder
+import co.freeside.betamax.encoding.GzipEncoder
 import co.freeside.betamax.tape.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
+@Unroll
 class ReadTapeFromYamlSpec extends Specification {
 
 	def "can load a valid tape with a single interaction"() {
@@ -138,6 +142,36 @@ interactions:
 		then:
 		def e = thrown(TapeLoadException)
 		e.cause instanceof ConstructorException
+	}
+
+	void 'encodes text response body if #encodingHeader content-encoding header is present'() {
+		given:
+		def bodyText = 'Aesthetic portland authentic, selvage vice raw denim 3 wolf moon letterpress brunch butcher typewriter bespoke.'
+		def yaml = """\
+!tape
+name: single_interaction_tape
+interactions:
+- recorded: 2012-09-17T20:48:00.000Z
+  request:
+    method: GET
+    uri: http://freeside.co/
+  response:
+    status: 200
+    headers: {Content-Type: text/plain; charset=UTF-8, Content-Language: en-GB, Content-Encoding: $encodingHeader}
+    body: $bodyText
+"""
+		when:
+		def tape = YamlTape.readFrom(new StringReader(yaml))
+
+		then:
+		encoder.decode(tape.interactions[0].response.bodyAsBinary, 'UTF-8') == bodyText
+
+		where:
+		encodingHeader | encoderType
+		'gzip'         | GzipEncoder
+		'deflate'      | DeflateEncoder
+
+		encoder = encoderType.newInstance()
 	}
 
 }

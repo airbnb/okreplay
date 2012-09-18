@@ -2,9 +2,12 @@ package co.freeside.betamax.util.servlet
 
 import org.apache.commons.collections.iterators.IteratorEnumeration
 
+import javax.servlet.RequestDispatcher
+import javax.servlet.ServletInputStream
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 import java.security.Principal
-import javax.servlet.*
-import javax.servlet.http.*
 
 class MockHttpServletRequest extends AbstractMockServletMessage implements HttpServletRequest {
 

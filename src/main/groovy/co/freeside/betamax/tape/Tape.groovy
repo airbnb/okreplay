@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax
+package co.freeside.betamax.tape
 
-import co.freeside.betamax.proxy.*
-
+import co.freeside.betamax.TapeMode
+import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.Response
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
@@ -56,12 +57,11 @@ interface Tape {
 	boolean seek(Request request)
 
 	/**
-	 * Plays back a previously recorded interaction to the supplied response. Status, headers and entities are copied
-	 * from the recorded interaction to `response`.
-	 * @param response the HTTP response to populate.
+	 * Retrieves a previously recorded response that matches the request.
+	 * @param request the HTTP request to match.
 	 * @throws IllegalStateException if no matching recorded interaction exists.
 	 */
-	void play(Request request, Response response)
+	Response play(Request request)
 
 	/**
 	 * Records a new interaction to the tape. If `request` matches an existing interaction this method will overwrite

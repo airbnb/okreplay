@@ -1,8 +1,12 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
-import spock.lang.*
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static co.freeside.betamax.Recorder.DEFAULT_PROXY_TIMEOUT
+import static co.freeside.betamax.Recorder.DEFAULT_TAPE_ROOT
 import static co.freeside.betamax.TapeMode.*
 
 class RecorderConfigurationSpec extends Specification {
@@ -14,7 +18,7 @@ class RecorderConfigurationSpec extends Specification {
 		def recorder = new Recorder()
 
 		expect:
-		recorder.tapeRoot == new File("src/test/resources/betamax/tapes")
+		recorder.tapeRoot == new File(DEFAULT_TAPE_ROOT)
 		recorder.proxyPort == 5555
 		recorder.defaultMode == READ_WRITE
 		recorder.proxyTimeout == DEFAULT_PROXY_TIMEOUT

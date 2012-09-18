@@ -16,8 +16,8 @@
 
 package co.freeside.betamax.tape.yaml
 
-import co.freeside.betamax.TapeLoader
 import co.freeside.betamax.tape.StorableTape
+import co.freeside.betamax.tape.TapeLoader
 
 import java.text.Normalizer
 import java.util.logging.Logger

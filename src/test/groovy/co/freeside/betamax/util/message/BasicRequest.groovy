@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.util.message
 
-import co.freeside.betamax.proxy.Request
+import co.freeside.betamax.message.Request
 
 class BasicRequest extends BasicMessage implements Request {
 
@@ -28,11 +28,6 @@ class BasicRequest extends BasicMessage implements Request {
 	BasicRequest(String method, String uri) {
 		this.method = method
 		this.uri = uri.toURI()
-	}
-
-	@Override
-	protected OutputStream initOutputStream() {
-		throw new UnsupportedOperationException()
 	}
 
 }

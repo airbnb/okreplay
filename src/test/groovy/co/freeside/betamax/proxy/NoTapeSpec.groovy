@@ -1,11 +1,16 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
+import groovyx.net.http.HttpResponseException
+import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import co.freeside.betamax.proxy.jetty.*
-import groovyx.net.http.*
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
 
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 

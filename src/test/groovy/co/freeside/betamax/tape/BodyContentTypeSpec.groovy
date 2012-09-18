@@ -1,7 +1,7 @@
 package co.freeside.betamax.tape
 
-import spock.lang.Specification
 import spock.lang.Issue
+import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll

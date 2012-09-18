@@ -2,7 +2,10 @@ package co.freeside.betamax.util.server
 
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-import javax.servlet.http.*
+
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
 import static java.net.HttpURLConnection.HTTP_OK
 
 class HelloHandler extends AbstractHandler {

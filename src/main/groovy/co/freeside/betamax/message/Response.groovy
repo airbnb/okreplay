@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax
+package co.freeside.betamax.message
 
-import co.freeside.betamax.tape.StorableTape
-
-/**
- * The interface for factories that load tapes from file storage.
- */
-public interface TapeLoader<T extends StorableTape> {
+interface Response extends Message {
 
 	/**
-	 * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
-	 * @param name the name of the tape.
-	 * @return a tape loaded from a file or a new blank tape.
+	 * @return the HTTP status code of the response.
 	 */
-	T loadTape(String name)
-
-	void writeTape(StorableTape tape)
+    int getStatus()
 
 	/**
-	 * @return an appropriate file for storing a tape with the supplied name.
+	 * @return the content MIME type of the response.
 	 */
-	File fileFor(String tapeName)
+    String getContentType()
 
 }

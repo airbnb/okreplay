@@ -16,7 +16,8 @@
 
 package co.freeside.betamax.encoding
 
-import java.util.zip.*
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 class GzipEncoder extends AbstractEncoder {
 

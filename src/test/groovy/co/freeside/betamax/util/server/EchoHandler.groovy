@@ -19,12 +19,15 @@ package co.freeside.betamax.util.server
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import java.util.logging.Logger
-import java.util.zip.*
-import javax.servlet.http.*
+import java.util.zip.DeflaterOutputStream
+import java.util.zip.GZIPOutputStream
 
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.eclipse.jetty.http.HttpHeaders.*
+import static org.eclipse.jetty.http.HttpHeaders.ACCEPT_ENCODING
+import static org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING
 
 class EchoHandler extends AbstractHandler {
 

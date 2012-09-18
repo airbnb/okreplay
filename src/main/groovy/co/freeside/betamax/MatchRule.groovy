@@ -16,7 +16,7 @@
 
 package co.freeside.betamax
 
-import co.freeside.betamax.proxy.Request
+import co.freeside.betamax.message.Request
 
 /**
  * Implements a request matching rule for finding recordings on a tape.

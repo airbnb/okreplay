@@ -16,14 +16,17 @@
 
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.*
-import co.freeside.betamax.proxy.*
+import co.freeside.betamax.TapeMode
+import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.Response
+import co.freeside.betamax.message.tape.RecordedRequest
+import co.freeside.betamax.message.tape.RecordedResponse
 import org.yaml.snakeyaml.reader.StreamReader
 
 import static TapeMode.READ_WRITE
-import static co.freeside.betamax.MatchRule.*
-import static co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
-import static org.apache.http.HttpHeaders.*
+import static co.freeside.betamax.MatchRule.method
+import static co.freeside.betamax.MatchRule.uri
+import static org.apache.http.HttpHeaders.VIA
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -63,28 +66,14 @@ class MemoryTape implements Tape {
 		}
 	}
 
-	void play(Request request, Response response) {
+	Response play(Request request) {
 		if (!mode.readable) throw new IllegalStateException("the tape is not readable")
 
 		int position = findMatch(request)
 		if (position < 0) {
 			throw new IllegalStateException("no matching recording found")
 		} else {
-			def interaction = interactions[position]
-			response.status = interaction.response.status
-			interaction.response.headers.each {
-				response.addHeader(it.key, it.value)
-			}
-			if (interaction.response.body instanceof String) {
-				response.writer.withWriter {
-					it << interaction.response.body
-				}
-			} else {
-				response.outputStream.withStream {
-					it << interaction.response.body
-				}
-			}
-			true
+			interactions[position].response
 		}
 	}
 
@@ -121,7 +110,7 @@ class MemoryTape implements Tape {
 				clone.headers[it.key] = it.value
 			}
 		}
-		clone.body = request.hasBody() ? request.bodyAsText.text : null // TODO: handle encoded request bodies
+		clone.body = request.hasBody() ? request.bodyAsText.text : null // TODO: handle encoded / binary request bodies
 		clone
 	}
 
@@ -129,7 +118,7 @@ class MemoryTape implements Tape {
 		def clone = new RecordedResponse()
 		clone.status = response.status
 		response.headers.each {
-			if (!(it.key in [VIA, X_BETAMAX])) {
+			if (!(it.key in [VIA, 'X-Betamax'])) {
 				clone.headers[it.key] = it.value
 			}
 		}
@@ -161,51 +150,4 @@ class RecordedInteraction {
 	RecordedResponse response
 }
 
-class RecordedRequest implements Request {
-	String method
-	URI uri
-	Map<String, String> headers = [:]
-	String body
 
-	String getHeader(String name) {
-		headers[name]
-	}
-
-	boolean hasBody() {
-		body
-	}
-
-	Reader getBodyAsText() {
-		new InputStreamReader(bodyAsBinary) // TODO: charset
-	}
-
-	InputStream getBodyAsBinary() {
-		new ByteArrayInputStream(body.bytes)
-	}
-}
-
-class RecordedResponse implements Response {
-	int status
-	Map<String, String> headers = [:]
-	def body
-
-	String getHeader(String name) {
-		headers[name]
-	}
-
-	boolean hasBody() {
-		body
-	}
-
-	Reader getBodyAsText() {
-		body instanceof String ? new StringReader(body) : new InputStreamReader(bodyAsBinary) // TODO: charset
-	}
-
-	InputStream getBodyAsBinary() {
-		body instanceof String ? new ByteArrayInputStream(body.bytes) : new ByteArrayInputStream(body)
-	}
-
-	String getContentType() {
-		headers[CONTENT_TYPE]
-	}
-}

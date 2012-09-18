@@ -1,7 +1,10 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
 
 class FilenameNormalizationSpec extends Specification {
 

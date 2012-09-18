@@ -1,12 +1,17 @@
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.encoding.DeflateEncoder
+import co.freeside.betamax.encoding.GzipEncoder
 import co.freeside.betamax.tape.yaml.YamlTape
-import co.freeside.betamax.encoding.*
-import co.freeside.betamax.util.message.*
-import spock.lang.*
+import co.freeside.betamax.util.message.BasicRequest
+import co.freeside.betamax.util.message.BasicResponse
+import spock.lang.Issue
+import spock.lang.Specification
+import spock.lang.Unroll
 
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.*
+import static org.apache.http.HttpHeaders.CONTENT_ENCODING
+import static org.apache.http.HttpHeaders.CONTENT_TYPE
 
 @Issue("https://github.com/robfletcher/betamax/issues/21")
 class ContentCharsetSpec extends Specification {
@@ -65,14 +70,13 @@ interactions:
 
 		and:
 		def request = new BasicRequest("GET", "http://freeside.co/betamax")
-		def response = new BasicResponse(HTTP_OK, "OK")
 
 		when:
-		tape.play(request, response)
+		def response = tape.play(request)
 
 		then:
 		def expected = encoder ? encoder.encode("\u00a3", charset) : "\u00a3".getBytes(charset)
-		response.body == expected
+		response.bodyAsBinary.bytes == expected
 
 		where:
 		charset      | encoding  | encoder

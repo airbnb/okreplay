@@ -1,14 +1,17 @@
 package co.freeside.betamax.proxy
 
+import co.freeside.betamax.Betamax
+import co.freeside.betamax.Recorder
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
+import groovyx.net.http.HttpURLClient
+import groovyx.net.http.RESTClient
+import org.apache.commons.httpclient.HttpClient
+import org.apache.commons.httpclient.ProxyHost
 import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-import co.freeside.betamax.*
-import groovyx.net.http.*
-import org.apache.commons.httpclient.*
 import spock.lang.*
 
 import static java.net.HttpURLConnection.HTTP_OK

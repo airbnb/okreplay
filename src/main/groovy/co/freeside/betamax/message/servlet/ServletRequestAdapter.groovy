@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy.servlet
+package co.freeside.betamax.message.servlet
+
+import co.freeside.betamax.message.AbstractMessage
+import co.freeside.betamax.message.Request
 
 import javax.servlet.http.HttpServletRequest
 
-import co.freeside.betamax.proxy.*
-
-class ServletRequestImpl extends AbstractMessage implements Request {
+class ServletRequestAdapter extends AbstractMessage implements Request {
 
 	private final HttpServletRequest delegate
-	private final Map<String, String> headers = [:]
 	private byte[] body
 
-	ServletRequestImpl(HttpServletRequest delegate) {
+	ServletRequestAdapter(HttpServletRequest delegate) {
 		this.delegate = delegate
 	}
 
 	String getMethod() {
 		delegate.method
-	}
-
-	@Override
-	String getContentType() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	URI getUri() {
@@ -50,26 +45,21 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 
 	@Override
 	String getCharset() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
-	}
-
-	@Override
-	String getEncoding() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		delegate.characterEncoding
 	}
 
 	Map<String, String> getHeaders() {
-		if (headers.isEmpty()) {
-			for (headerName in delegate.headerNames) {
-				headers[headerName] = delegate.getHeaders(headerName).toList().join(", ")
-			}
-		}
-		headers.asImmutable()
+		delegate.headerNames.toList().collectEntries {
+			[(it): getHeader(it)]
+		}.asImmutable()
 	}
 
-	@Override
-	protected OutputStream initOutputStream() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+	String getHeader(String name) {
+		delegate.getHeaders(name).toList().join(', ')
+	}
+
+	void addHeader(String name, String value) {
+		throw new UnsupportedOperationException()
 	}
 
 	boolean hasBody() {
@@ -81,6 +71,10 @@ class ServletRequestImpl extends AbstractMessage implements Request {
 			body = delegate.inputStream.bytes
 		}
 		new ByteArrayInputStream(body)
+	}
+
+	HttpServletRequest getOriginalRequest() {
+		delegate
 	}
 
 }

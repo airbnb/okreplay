@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy
+package co.freeside.betamax.message
 
-interface Response extends Message {
-
-	/**
-	 * @return the HTTP status code of the response.
-	 */
-    int getStatus()
+interface Request extends Message {
 
 	/**
-	 * @return the content MIME type of the response.
+	 * @return the request method.
 	 */
-    String getContentType()
+	String getMethod()
+
+	/**
+	 * @return the target URI of the request.
+	 */
+	URI getUri()
 
 }

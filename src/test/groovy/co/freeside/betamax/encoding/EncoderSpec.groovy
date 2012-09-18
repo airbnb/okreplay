@@ -1,6 +1,7 @@
 package co.freeside.betamax.encoding
 
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Unroll
 
 class EncoderSpec extends Specification {
 

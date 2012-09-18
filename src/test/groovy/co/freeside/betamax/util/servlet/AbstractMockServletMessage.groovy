@@ -1,6 +1,7 @@
 package co.freeside.betamax.util.servlet
 
-import org.apache.commons.collections.iterators.*
+import org.apache.commons.collections.iterators.EmptyIterator
+import org.apache.commons.collections.iterators.IteratorEnumeration
 
 abstract class AbstractMockServletMessage {
 

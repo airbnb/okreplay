@@ -1,14 +1,18 @@
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.Response
 import co.freeside.betamax.tape.yaml.YamlTape
+import co.freeside.betamax.util.message.BasicRequest
+import co.freeside.betamax.util.message.BasicResponse
 import org.apache.http.HttpEntity
 import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
-import co.freeside.betamax.proxy.*
-import co.freeside.betamax.util.message.*
-import spock.lang.*
+import spock.lang.Shared
+import spock.lang.Specification
 
-import static java.net.HttpURLConnection.*
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
 class WriteTapeToYamlSpec extends Specification {
@@ -42,7 +46,7 @@ class WriteTapeToYamlSpec extends Specification {
 		failureResponse.addHeader(CONTENT_ENCODING, "none")
 		failureResponse.body = "KTHXBYE!".getBytes("UTF-8")
 
-		image = new File("src/test/resources/image.png")
+		image = new File(Class.getResource("/image.png").toURI())
 		imageResponse = new BasicResponse(HTTP_OK, "OK")
 		imageResponse.addHeader(CONTENT_TYPE, "image/png")
 		imageResponse.body = image.bytes

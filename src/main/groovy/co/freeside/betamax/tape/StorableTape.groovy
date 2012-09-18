@@ -15,9 +15,6 @@
  */
 
 package co.freeside.betamax.tape
-
-import co.freeside.betamax.Tape
-
 /**
  * A `Tape` that can be read from an written to a backing store.
  */

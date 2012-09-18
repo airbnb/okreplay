@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy
+package co.freeside.betamax.message
 
 /**
  * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying implementation.
@@ -31,6 +31,12 @@ interface Message {
 	 * @return the comma-separated values for all HTTP headers with the specified name or `null` if there are no headers with that name.
 	 */
 	String getHeader(String name)
+
+	/**
+	 * @param name an HTTP header name.
+	 * @param value the header value that will be appended to any existing headers.
+	 */
+	void addHeader(String name, String value)
 
 	/**
 	 * @return `true` if the message currently contains a body, `false` otherwise.
@@ -53,4 +59,18 @@ interface Message {
 	 */
 	InputStream getBodyAsBinary()
 
+	/**
+	 * @return the MIME content type of the message not including any charset.
+	 */
+	String getContentType()
+
+	/**
+	 * @return the charset of the message if it is text.
+	 */
+	String getCharset()
+
+	/**
+	 * @return the content encoding of the message, e.g. _gzip_, _deflate_ or _none_.
+	 */
+	String getEncoding()
 }

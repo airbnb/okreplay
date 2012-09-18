@@ -1,14 +1,20 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
+import groovyx.net.http.HttpResponseException
+import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import co.freeside.betamax.proxy.jetty.*
-import groovyx.net.http.*
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
 
-import static co.freeside.betamax.TapeMode.*
-import static java.net.HttpURLConnection.*
+import static co.freeside.betamax.TapeMode.READ_ONLY
+import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static java.net.HttpURLConnection.HTTP_FORBIDDEN
+import static java.net.HttpURLConnection.HTTP_OK
 
 class TapeModeSpec extends Specification {
 

@@ -1,7 +1,8 @@
 package co.freeside.betamax.util.servlet
 
 import javax.servlet.ServletOutputStream
-import javax.servlet.http.*
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletResponse
 
 class MockHttpServletResponse extends AbstractMockServletMessage implements HttpServletResponse {
 
@@ -87,7 +88,6 @@ class MockHttpServletResponse extends AbstractMockServletMessage implements Http
 	}
 
 	void flushBuffer() {
-		throw new UnsupportedOperationException()
 	}
 
 	void resetBuffer() {

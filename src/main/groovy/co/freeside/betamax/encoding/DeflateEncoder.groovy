@@ -16,7 +16,8 @@
 
 package co.freeside.betamax.encoding
 
-import java.util.zip.*
+import java.util.zip.DeflaterOutputStream
+import java.util.zip.InflaterInputStream
 
 class DeflateEncoder extends AbstractEncoder {
 

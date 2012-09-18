@@ -2,8 +2,10 @@ package co.freeside.betamax.proxy.ssl
 
 import org.apache.http.conn.ssl.SSLSocketFactory
 
-import java.security.*
-import javax.net.ssl.*
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import java.security.KeyStore
+import java.security.SecureRandom
 
 class DummySSLSocketFactory extends SSLSocketFactory {
 

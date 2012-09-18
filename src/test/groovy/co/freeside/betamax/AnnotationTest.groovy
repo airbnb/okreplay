@@ -6,7 +6,6 @@ import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.*
 
-import static co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -58,7 +57,7 @@ class AnnotationTest {
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == "Betamax"
-		assert response.getFirstHeader(X_BETAMAX)?.value == "REC"
+		assert response.getFirstHeader('X-Betamax')?.value == "REC"
 	}
 
 	@Test
@@ -68,7 +67,7 @@ class AnnotationTest {
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == "Betamax"
-		assert response.getFirstHeader(X_BETAMAX)?.value == "PLAY"
+		assert response.getFirstHeader('X-Betamax')?.value == "PLAY"
 	}
 
 	@Test

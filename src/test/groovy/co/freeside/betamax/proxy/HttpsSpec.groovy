@@ -1,21 +1,29 @@
 package co.freeside.betamax.proxy
 
+import co.freeside.betamax.Betamax
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.TapeMode
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import co.freeside.betamax.util.server.EchoHandler
+import co.freeside.betamax.util.server.HelloHandler
 import groovy.transform.InheritConstructors
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
+import org.apache.http.conn.scheme.PlainSocketFactory
+import org.apache.http.conn.scheme.Scheme
+import org.apache.http.conn.scheme.SchemeRegistry
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.params.BasicHttpParams
+import org.apache.http.params.HttpProtocolParams
+import org.eclipse.jetty.server.Connector
+import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
 import org.junit.Rule
-import co.freeside.betamax.*
-import co.freeside.betamax.util.server.*
-import org.apache.http.conn.scheme.*
-import org.apache.http.params.*
-import org.eclipse.jetty.server.*
 import spock.lang.*
+
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.HttpVersion.HTTP_1_1

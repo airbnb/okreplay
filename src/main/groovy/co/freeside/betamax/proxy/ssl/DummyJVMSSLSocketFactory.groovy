@@ -2,7 +2,8 @@ package co.freeside.betamax.proxy.ssl
 
 import groovy.transform.InheritConstructors
 
-import javax.net.ssl.*
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
 
 @InheritConstructors
 class DummyJVMSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {

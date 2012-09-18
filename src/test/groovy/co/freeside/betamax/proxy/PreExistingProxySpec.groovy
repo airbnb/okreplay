@@ -1,14 +1,15 @@
 package co.freeside.betamax.proxy
 
+import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.HelloHandler
 import org.junit.Rule
 import spock.lang.*
+
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
-import co.freeside.betamax.Betamax
 
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {

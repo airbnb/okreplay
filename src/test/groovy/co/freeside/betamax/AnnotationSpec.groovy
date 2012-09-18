@@ -5,9 +5,11 @@ import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Stepwise
 
-import static co.freeside.betamax.proxy.RecordAndPlaybackProxyInterceptor.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -51,7 +53,7 @@ class AnnotationSpec extends Specification {
 		then:
 		response.status == HTTP_OK
 		response.getFirstHeader(VIA)?.value == "Betamax"
-		response.getFirstHeader(X_BETAMAX)?.value == "REC"
+		response.getFirstHeader('X-Betamax')?.value == "REC"
 	}
 
 	@Betamax(tape = "annotation_spec")
@@ -62,7 +64,7 @@ class AnnotationSpec extends Specification {
 		then:
 		response.status == HTTP_OK
 		response.getFirstHeader(VIA)?.value == "Betamax"
-		response.getFirstHeader(X_BETAMAX)?.value == "PLAY"
+		response.getFirstHeader('X-Betamax')?.value == "PLAY"
 	}
 
 	def "can make unproxied request after using annotation"() {

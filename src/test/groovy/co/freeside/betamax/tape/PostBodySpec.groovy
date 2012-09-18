@@ -1,8 +1,6 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.TapeMode
-import co.freeside.betamax.tape.yaml.YamlTape
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient

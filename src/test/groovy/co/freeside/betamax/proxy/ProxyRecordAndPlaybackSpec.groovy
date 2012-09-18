@@ -1,11 +1,12 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
-import co.freeside.betamax.proxy.jetty.*
 import spock.lang.*
 
 import static java.net.HttpURLConnection.HTTP_OK
