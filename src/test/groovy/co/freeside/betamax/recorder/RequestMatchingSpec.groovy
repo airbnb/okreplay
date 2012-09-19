@@ -1,8 +1,8 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import groovyx.net.http.RESTClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import spock.lang.*
 
 import static co.freeside.betamax.MatchRule.host
@@ -18,7 +18,7 @@ class RequestMatchingSpec extends Specification {
 	def setupSpec() {
 		tapeRoot.mkdirs()
 
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	@Unroll("#method request for #uri returns '#responseText'")

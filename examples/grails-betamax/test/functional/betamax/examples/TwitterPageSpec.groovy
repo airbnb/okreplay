@@ -1,5 +1,6 @@
 package betamax.examples
 
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import com.gargoylesoftware.htmlunit.ProxyConfig
 import geb.spock.GebSpec
 import grails.util.BuildSettingsHolder
@@ -16,7 +17,7 @@ class TwitterPageSpec extends GebSpec {
 
 	def setupSpec() {
 		def restClient = ApplicationHolder.application.mainContext.restClient
-		restClient.client.routePlanner = new ProxySelectorRoutePlanner(restClient.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(restClient.client)
 	}
 
 	def setup() {

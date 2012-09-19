@@ -2,6 +2,7 @@ package betamax.examples
 
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import grails.plugin.spock.UnitSpec
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient
@@ -25,7 +26,7 @@ class TwitterServiceSpec extends UnitSpec {
 
 	def setup() {
 		def restClient = new RESTClient()
-		restClient.client.routePlanner = new ProxySelectorRoutePlanner(restClient.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(restClient.client)
 		service.restClient = restClient
 	}
 

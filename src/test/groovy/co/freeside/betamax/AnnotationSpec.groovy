@@ -1,9 +1,9 @@
 package co.freeside.betamax
 
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import spock.lang.AutoCleanup
 import spock.lang.Shared
@@ -23,7 +23,7 @@ class AnnotationSpec extends Specification {
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	def "no tape is inserted if there is no annotation on the feature"() {

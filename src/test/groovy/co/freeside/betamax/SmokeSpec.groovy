@@ -1,10 +1,10 @@
 package co.freeside.betamax
 
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 import org.apache.http.conn.scheme.Scheme
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import spock.lang.Issue
 import spock.lang.Shared
@@ -20,7 +20,7 @@ class SmokeSpec extends Specification {
 	@Shared RESTClient http = new RESTClient()
 
 	void setupSpec() {
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	@Betamax(tape = "smoke spec")

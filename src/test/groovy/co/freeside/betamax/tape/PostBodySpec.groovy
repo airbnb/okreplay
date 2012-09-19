@@ -1,10 +1,10 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import org.yaml.snakeyaml.Yaml
 import spock.lang.AutoCleanup
@@ -23,10 +23,7 @@ class PostBodySpec extends Specification {
 	private DefaultHttpClient httpClient = new DefaultHttpClient()
 
 	void setup() {
-		httpClient.routePlanner = new ProxySelectorRoutePlanner(
-				httpClient.connectionManager.schemeRegistry,
-				ProxySelector.default
-		)
+		BetamaxRoutePlanner.configure(httpClient)
 	}
 
 	void 'post body is stored on tape when using UrlConnection'() {

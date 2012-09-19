@@ -2,6 +2,7 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.HttpURLClient
@@ -10,7 +11,6 @@ import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.ProxyHost
 import org.apache.commons.httpclient.methods.GetMethod
 import org.apache.http.HttpHost
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import spock.lang.*
 
@@ -48,8 +48,7 @@ class ProxyNetworkCommsSpec extends Specification {
     def "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
         given:
         def http = new RESTClient(endpoint.url)
-        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-        http.client.routePlanner = routePlanner
+		BetamaxRoutePlanner.configure(http.client)
 
         when:
         def response = http.get(path: "/")
@@ -112,8 +111,7 @@ class ProxyNetworkCommsSpec extends Specification {
     def "proxy handles all request methods"() {
         given:
         def http = new RESTClient(endpoint.url)
-        def routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
-        http.client.routePlanner = routePlanner
+		BetamaxRoutePlanner.configure(http.client)
 
         when:
         def response = http."$method"(path: "/")

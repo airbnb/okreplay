@@ -2,12 +2,12 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.SlowHandler
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
 import spock.lang.AutoCleanup
 import spock.lang.Issue
@@ -27,7 +27,7 @@ class ProxyTimeoutSpec extends Specification {
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 		http.client.httpRequestRetryHandler = new DefaultHttpRequestRetryHandler(0, false)
 	}
 

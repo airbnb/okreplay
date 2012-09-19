@@ -1,11 +1,11 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 
@@ -28,7 +28,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	def cleanupSpec() {

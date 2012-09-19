@@ -1,12 +1,12 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -30,7 +30,7 @@ class NoTapeSpec extends Specification {
 
 	def setup() {
 		http = new RESTClient(endpoint.url)
-		http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	def "an error is returned if the proxy intercepts a request when no tape is inserted"() {

@@ -3,6 +3,7 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.TapeMode
+import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.EchoHandler
@@ -14,7 +15,6 @@ import org.apache.http.conn.scheme.PlainSocketFactory
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.conn.scheme.SchemeRegistry
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.BasicHttpParams
 import org.apache.http.params.HttpProtocolParams
@@ -61,7 +61,7 @@ class HttpsSpec extends Specification {
 		def connectionManager = new ThreadSafeClientConnManager(params, registry)
 
 		http = new DefaultHttpClient(connectionManager, params)
-		http.routePlanner = new ProxySelectorRoutePlanner(http.connectionManager.schemeRegistry, ProxySelector.default)
+		BetamaxRoutePlanner.configure(http)
 	}
 
 	@Betamax(tape = "https spec")
