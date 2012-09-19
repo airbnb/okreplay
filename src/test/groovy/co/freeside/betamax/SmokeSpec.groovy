@@ -13,6 +13,7 @@ import spock.lang.Unroll
 
 import static java.net.HttpURLConnection.HTTP_OK
 
+@Unroll
 class SmokeSpec extends Specification {
 
 	@Rule Recorder recorder = new Recorder(sslSupport: true)
@@ -23,22 +24,21 @@ class SmokeSpec extends Specification {
 		BetamaxRoutePlanner.configure(http.client)
 	}
 
-	@Betamax(tape = "smoke spec")
-	@Unroll("#type response data")
-	void "various types of response data"() {
+	@Betamax(tape = 'smoke spec')
+	void '#type response data'() {
 		when:
-		def response = http.get(uri: uri)
+		HttpResponseDecorator response = http.get(uri: uri)
 
 		then:
 		response.status == HTTP_OK
 
 		where:
 		type   | uri
-		"html" | "http://grails.org/"
-		"json" | "http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true"
-		"xml"  | "http://feeds.feedburner.com/wondermark"
-		"png"  | "http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png"
-		"css"  | "http://d297h9he240fqh.cloudfront.net/cache-1633a825c/assets/views_one.css"
+		'html' | 'http://grails.org/'
+		'json' | 'http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true'
+		'xml'  | 'http://feeds.feedburner.com/wondermark'
+		'png'  | 'http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png'
+		'css'  | 'http://d297h9he240fqh.cloudfront.net/cache-1633a825c/assets/views_one.css'
 	}
 
 	@Betamax(tape = 'smoke spec')
@@ -47,7 +47,7 @@ class SmokeSpec extends Specification {
 		http.client.connectionManager.schemeRegistry.register(new Scheme('https', DummySSLSocketFactory.instance, 443))
 
 		when:
-		def response = http.get(uri: uri)
+		HttpResponseDecorator response = http.get(uri: uri)
 
 		then:
 		response.status == HTTP_OK
