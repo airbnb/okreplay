@@ -17,7 +17,8 @@
 package co.freeside.betamax.message
 
 /**
- * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying implementation.
+ * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying
+ * implementation.
  */
 interface Message {
 
@@ -28,7 +29,8 @@ interface Message {
 
 	/**
 	 * @param name an HTTP header name.
-	 * @return the comma-separated values for all HTTP headers with the specified name or `null` if there are no headers with that name.
+	 * @return the comma-separated values for all HTTP headers with the specified name or `null` if there are no headers
+	 * with that name.
 	 */
 	String getHeader(String name)
 

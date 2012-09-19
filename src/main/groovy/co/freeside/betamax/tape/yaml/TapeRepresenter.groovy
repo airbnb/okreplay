@@ -47,7 +47,7 @@ class TapeRepresenter extends GroovyRepresenter {
 			null
 		} else if (tuple.valueNode instanceof CollectionNode && tuple.valueNode.value.empty) {
 			null
-		} else if (property.name == "body") {
+		} else if (property.name == 'body') {
 			ScalarNode n = tuple.valueNode
 			if (n.style == PLAIN.char) {
 				tuple
@@ -77,20 +77,20 @@ class TapePropertyUtils extends PropertyUtils {
 		def properties = super.createPropertySet(type, bAccess)
 		switch (type) {
 			case Tape:
-				return sort(properties, ["name", "interactions"])
+				return sort(properties, ['name', 'interactions'])
 			case RecordedInteraction:
-				return sort(properties, ["recorded", "request", "response"])
+				return sort(properties, ['recorded', 'request', 'response'])
 			case RecordedRequest:
-				return sort(properties, ["method", "uri", "headers", "body"])
+				return sort(properties, ['method', 'uri', 'headers', 'body'])
 			case RecordedResponse:
-				return sort(properties, ["status", "headers", "body"])
+				return sort(properties, ['status', 'headers', 'body'])
 			default:
 				return properties
 		}
 	}
 
 	private Set<Property> sort(Set<Property> properties, List<String> names) {
-		return new LinkedHashSet(properties.sort(new OrderedPropertyComparator(names)))
+		new LinkedHashSet(properties.sort(new OrderedPropertyComparator(names)))
 	}
 }
 

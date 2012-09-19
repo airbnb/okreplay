@@ -25,7 +25,7 @@ abstract class HeaderFilteringMessage implements Message {
 	protected abstract Message getDelegate()
 
 	final Map<String, String> getHeaders() {
-		def headers = new HashMap(delegate.getHeaders())
+		def headers = new HashMap(delegate.headers)
 		for (headerName in NO_PASS_HEADERS) {
 			headers.remove(headerName)
 		}

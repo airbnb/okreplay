@@ -26,10 +26,13 @@ import org.yaml.snakeyaml.TypeDescription
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
+import org.yaml.snakeyaml.nodes.Tag
 
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 
 class YamlTape extends MemoryTape implements StorableTape {
+
+	public static final Tag TAPE_TAG = new Tag('!tape')
 
     private boolean dirty = false
 
@@ -37,7 +40,7 @@ class YamlTape extends MemoryTape implements StorableTape {
         try {
             yaml.loadAs(reader, YamlTape)
         } catch (YAMLException e) {
-            throw new TapeLoadException("Invalid tape", e)
+            throw new TapeLoadException('Invalid tape', e)
         }
     }
 
@@ -57,10 +60,10 @@ class YamlTape extends MemoryTape implements StorableTape {
 
     private static Yaml getYaml() {
         def representer = new TapeRepresenter()
-        representer.addClassTag(YamlTape, "!tape")
+		representer.addClassTag(YamlTape, TAPE_TAG)
 
         def constructor = new Constructor()
-        constructor.addTypeDescription(new TypeDescription(YamlTape, "!tape"))
+        constructor.addTypeDescription(new TypeDescription(YamlTape, TAPE_TAG))
 
         def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK, width: 256)
 

@@ -18,7 +18,7 @@ package co.freeside.betamax.tape
 /**
  * The interface for factories that load tapes from file storage.
  */
-public interface TapeLoader<T extends StorableTape> {
+interface TapeLoader<T extends StorableTape> {
 
 	/**
 	 * Loads the named tape or returns a new blank tape if an existing tape cannot be located.

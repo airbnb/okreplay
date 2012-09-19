@@ -7,59 +7,60 @@ import javax.net.ssl.TrustManager
 
 @InheritConstructors
 class DummyJVMSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
-	SSLContext sslContext = SSLContext.getInstance("TLS")
+
+	SSLContext sslContext = SSLContext.getInstance('TLS')
 	private javax.net.ssl.SSLSocketFactory factory
+
 	@Override
-	public Socket createSocket() throws IOException {
-		return factory.createSocket()
+	Socket createSocket() throws IOException {
+		factory.createSocket()
 	}
 
 	@Override
-	public Socket createSocket(InetAddress address, int port,
+	Socket createSocket(InetAddress address, int port,
 			InetAddress localAddress, int localPort) throws IOException {
-		return factory.createSocket(address, port, localAddress, localPort)
+		factory.createSocket(address, port, localAddress, localPort)
 	}
 
 	@Override
-	public Socket createSocket(InetAddress host, int port) throws IOException {
-		return factory.createSocket(host, port)
+	Socket createSocket(InetAddress host, int port) throws IOException {
+		factory.createSocket(host, port)
 	}
 
 	@Override
-	public Socket createSocket(Socket s, String host, int port,
+	Socket createSocket(Socket s, String host, int port,
 			boolean autoClose) throws IOException {
-		return factory.createSocket(s, host, port, autoClose)
+		factory.createSocket(s, host, port, autoClose)
 	}
 
 	@Override
-	public Socket createSocket(String host, int port, InetAddress localHost,
-			int localPort) throws IOException, UnknownHostException {
-		return factory.createSocket(host, port, localHost, localPort)
+	Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+		factory.createSocket(host, port, localHost, localPort)
 	}
 
 	@Override
-	public Socket createSocket(String host, int port) throws IOException,
+	Socket createSocket(String host, int port) throws IOException,
 			UnknownHostException {
-		return factory.createSocket(host, port)
+		factory.createSocket(host, port)
 	}
 
 	@Override
-	public String[] getDefaultCipherSuites() {
-		return factory.getDefaultCipherSuites()
+	String[] getDefaultCipherSuites() {
+		factory.defaultCipherSuites
 	}
 
 	@Override
-	public String[] getSupportedCipherSuites() {
-		return factory.getSupportedCipherSuites()
+	String[] getSupportedCipherSuites() {
+		factory.supportedCipherSuites
 	}
 
-	public DummyJVMSSLSocketFactory() {
+	DummyJVMSSLSocketFactory() {
 		sslContext.init(null, [new DummyX509TrustManager()] as TrustManager[], new java.security.SecureRandom())
 		factory = sslContext.socketFactory
 	}
 	
-	public static javax.net.ssl.SSLSocketFactory getDefault() {
-		return new DummyJVMSSLSocketFactory()
+	static javax.net.ssl.SSLSocketFactory getDefault() {
+		new DummyJVMSSLSocketFactory()
 	}
 
 

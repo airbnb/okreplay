@@ -25,7 +25,7 @@ import java.util.logging.Logger
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     final File tapeRoot
-    private final log = Logger.getLogger(YamlTapeLoader.name)
+    private static final log = Logger.getLogger(YamlTapeLoader.name)
 
     YamlTapeLoader(File tapeRoot) {
         this.tapeRoot = tapeRoot
@@ -56,7 +56,11 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
     }
 
     File fileFor(String tapeName) {
-        def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD).replaceAll(/\p{InCombiningDiacriticalMarks}+/, "").replaceAll(/[^\w\d]+/, "_").replaceFirst(/^_/, "").replaceFirst(/_$/, "")
+        def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD)
+				.replaceAll(/\p{InCombiningDiacriticalMarks}+/, '')
+				.replaceAll(/[^\w\d]+/, '_')
+				.replaceFirst(/^_/, '')
+				.replaceFirst(/_$/, '')
         new File(tapeRoot, "${normalizedName}.yaml")
     }
 }

@@ -16,7 +16,7 @@ class TapeReadingHandler extends ChainedHttpHandler {
 
 	private final Recorder recorder
 
-	private final Logger log = Logger.getLogger(TapeReadingHandler.name)
+	private static final Logger log = Logger.getLogger(TapeReadingHandler.name)
 
 	TapeReadingHandler(Recorder recorder) {
 		this.recorder = recorder

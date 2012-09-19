@@ -27,7 +27,7 @@ class GroovyRepresenter extends Representer {
 	protected Set<Property> getProperties(Class<? extends Object> type) {
 		def set = super.getProperties(type)
 		set.removeAll {
-			it.name == "metaClass"
+			it.name == 'metaClass'
 		}
 		set
 	}

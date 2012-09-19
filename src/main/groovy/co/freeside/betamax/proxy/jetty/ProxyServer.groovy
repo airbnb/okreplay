@@ -56,7 +56,10 @@ class ProxyServer extends SimpleServer {
 	private HttpClient newHttpClient(Recorder recorder) {
 		def connectionManager = new ThreadSafeClientConnManager()
 		def httpClient = new DefaultHttpClient(connectionManager)
-		httpClient.routePlanner = new ProxySelectorRoutePlanner(httpClient.connectionManager.schemeRegistry, recorder.proxyOverrider.originalProxySelector)
+		httpClient.routePlanner = new ProxySelectorRoutePlanner(
+				httpClient.connectionManager.schemeRegistry,
+				recorder.proxyOverrider.originalProxySelector
+		)
 		if (recorder.sslSupport) {
 			connectionManager.schemeRegistry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
 		}
@@ -73,12 +76,12 @@ class ProxyServer extends SimpleServer {
 	}
 
 	private Connector createSSLConnector(int port) {
-		def sslConnector = new SslSelectChannelConnector()
-		sslConnector.port = port // TODO: separate property
-		sslConnector.keystore = Class.getResource('/keystore')
-		sslConnector.password = "password"
-		sslConnector.keyPassword = "password"
-		return sslConnector
+		new SslSelectChannelConnector(
+				port: port, // TODO: separate property
+				keystore: Class.getResource('/keystore'),
+				password: 'password',
+				keyPassword: 'password'
+		)
 	}
 }
 

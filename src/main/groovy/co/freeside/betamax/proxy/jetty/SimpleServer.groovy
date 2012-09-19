@@ -33,7 +33,8 @@ class SimpleServer extends AbstractLifeCycleListener {
 	private Server server
 	private CountDownLatch startedLatch
 	private CountDownLatch stoppedLatch
-	private final log = Logger.getLogger(getClass().name)
+
+	private static final log = Logger.getLogger(getClass().name)
 
 	SimpleServer() {
 		this(DEFAULT_PORT)
@@ -83,7 +84,7 @@ class SimpleServer extends AbstractLifeCycleListener {
 
 	void setPort(int port) {
 		if (running) {
-			throw new IllegalStateException("Cannot set port once the server is already started")
+			throw new IllegalStateException('Cannot set port once the server is already started')
 		}
 		this.port = port
 	}
@@ -98,13 +99,13 @@ class SimpleServer extends AbstractLifeCycleListener {
 
 	@Override
 	void lifeCycleStarted(LifeCycle event) {
-		log.fine "started..."
+		log.fine 'started...'
 		startedLatch.countDown()
 	}
 
 	@Override
 	void lifeCycleStopped(LifeCycle event) {
-		log.fine "stopped..."
+		log.fine 'stopped...'
 		stoppedLatch.countDown()
 	}
 

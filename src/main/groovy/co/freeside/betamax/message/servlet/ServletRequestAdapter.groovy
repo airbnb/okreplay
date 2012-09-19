@@ -38,7 +38,7 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 		def uri = delegate.requestURL
 		def qs = delegate.queryString
 		if (qs) {
-			uri << "?" << qs
+			uri << '?' << qs
 		}
 		uri.toString().toURI()
 	}

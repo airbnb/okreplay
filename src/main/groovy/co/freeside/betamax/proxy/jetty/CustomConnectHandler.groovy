@@ -10,7 +10,7 @@ class CustomConnectHandler extends ConnectHandler {
 
 	int sslPort
 
-	public CustomConnectHandler(Handler handler, int sslPort) {
+	CustomConnectHandler(Handler handler, int sslPort) {
 		super(handler)
 		this.sslPort = sslPort
 	}

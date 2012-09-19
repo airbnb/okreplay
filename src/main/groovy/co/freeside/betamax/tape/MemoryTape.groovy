@@ -67,20 +67,25 @@ class MemoryTape implements Tape {
 	}
 
 	Response play(Request request) {
-		if (!mode.readable) throw new IllegalStateException("the tape is not readable")
+		if (!mode.readable) throw new IllegalStateException('the tape is not readable')
 
 		int position = findMatch(request)
 		if (position < 0) {
-			throw new IllegalStateException("no matching recording found")
+			throw new IllegalStateException('no matching recording found')
 		} else {
 			interactions[position].response
 		}
 	}
 
 	void record(Request request, Response response) {
-		if (!mode.writable) throw new IllegalStateException("the tape is not writable")
+		if (!mode.writable) throw new IllegalStateException('the tape is not writable')
 
-		def interaction = new RecordedInteraction(request: recordRequest(request), response: recordResponse(response), recorded: new Date())
+		def interaction = new RecordedInteraction(
+				request: recordRequest(request),
+				response: recordResponse(response),
+				recorded: new Date()
+		)
+
 		int position = findMatch(request)
 		if (position >= 0) {
 			interactions[position] = interaction

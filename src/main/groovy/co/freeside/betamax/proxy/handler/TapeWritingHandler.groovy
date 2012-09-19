@@ -13,14 +13,14 @@ class TapeWritingHandler extends ChainedHttpHandler {
 
 	private final Recorder recorder
 
-	private final Logger log = Logger.getLogger(TapeWritingHandler.name)
+	private static final Logger log = Logger.getLogger(TapeWritingHandler.name)
 
 	TapeWritingHandler(Recorder recorder) {
 		this.recorder = recorder
 	}
 
 	Response handle(Request request) {
-		def tape = recorder.getTape()
+		def tape = recorder.tape
 		if (!tape) {
 			throw new ProxyException(HTTP_FORBIDDEN, 'No tape')
 		} else if (!tape.writable) {

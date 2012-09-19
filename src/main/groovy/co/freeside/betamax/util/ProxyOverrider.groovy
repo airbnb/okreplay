@@ -8,7 +8,7 @@ import static java.net.Proxy.Type.HTTP
 class ProxyOverrider {
 
 	private final Map<String, InetSocketAddress> originalProxies = [:]
-	private final Collection<String> originalNonProxyHosts = new HashSet<String>()
+	private final Collection<String> originalNonProxyHosts = [] as Set
 
 	/**
 	 * Activates a proxy override for the given URI scheme.

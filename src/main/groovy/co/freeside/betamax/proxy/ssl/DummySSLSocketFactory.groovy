@@ -9,7 +9,7 @@ import java.security.SecureRandom
 
 class DummySSLSocketFactory extends SSLSocketFactory {
 
-	SSLContext sslContext = SSLContext.getInstance("TLS")
+	SSLContext sslContext = SSLContext.getInstance('TLS')
 
 	private javax.net.ssl.SSLSocketFactory factory
 
@@ -27,7 +27,7 @@ class DummySSLSocketFactory extends SSLSocketFactory {
 	}
 
 	static SSLSocketFactory getDefault() {
-		return new DummySSLSocketFactory()
+		new DummySSLSocketFactory()
 	}
 
 	@Override

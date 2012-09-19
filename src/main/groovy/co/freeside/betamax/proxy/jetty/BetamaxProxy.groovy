@@ -21,7 +21,7 @@ class BetamaxProxy extends AbstractHandler {
 
 	private HttpHandler handlerChain
 
-	private final Logger log = Logger.getLogger(BetamaxProxy.name)
+	private static final Logger log = Logger.getLogger(BetamaxProxy.name)
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		def betamaxRequest = new ServletRequestAdapter(request)
@@ -46,7 +46,7 @@ class BetamaxProxy extends AbstractHandler {
 
 	HttpHandler leftShift(HttpHandler httpHandler) {
 		handlerChain = httpHandler
-		return handlerChain
+		handlerChain
 	}
 
 	private void sendResponse(Response betamaxResponse, HttpServletResponse response) {

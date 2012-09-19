@@ -43,19 +43,19 @@ import static java.util.Collections.EMPTY_MAP
  */
 class Recorder implements MethodRule {
 
-	public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes"
+	public static final String DEFAULT_TAPE_ROOT = 'src/test/resources/betamax/tapes'
 	public static final int DEFAULT_PROXY_PORT = 5555
 	public static final int DEFAULT_PROXY_TIMEOUT = 5000
 
-	private final log = Logger.getLogger(Recorder.name)
+	private static final log = Logger.getLogger(Recorder.name)
 
 	Recorder() {
-		def configFile = getClass().classLoader.getResource("BetamaxConfig.groovy")
+		def configFile = getClass().classLoader.getResource('BetamaxConfig.groovy')
 		if (configFile) {
 			def config = new ConfigSlurper().parse(configFile)
 			configureFromConfig(config)
 		} else {
-			def propertiesFile = getClass().classLoader.getResource("betamax.properties")
+			def propertiesFile = getClass().classLoader.getResource('betamax.properties')
 			if (propertiesFile) {
 				def properties = new Properties()
 				propertiesFile.withReader { reader ->
@@ -91,13 +91,15 @@ class Recorder implements MethodRule {
 	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
 	/**
-	 * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be intercepted.
+	 * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be
+	 * intercepted.
 	 */
 	Collection<String> ignoreHosts = []
 
 	/**
 	 * If set to true all connections to localhost addresses are ignored.
-	 * This is equivalent to setting `ignoreHosts` to `["localhost", "127.0.0.1", InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]`.
+	 * This is equivalent to setting `ignoreHosts` to `['localhost', '127.0.0.1', InetAddress.localHost.hostName,
+	 * InetAddress.localHost.hostAddress]`.
 	 */
 	boolean ignoreLocalhost = false
 	
@@ -210,7 +212,7 @@ class Recorder implements MethodRule {
 			proxy.start(this)
 		}
 		if(sslSupport) {
-			Security.setProperty("ssl.SocketFactory.provider", DummyJVMSSLSocketFactory.name)
+			Security.setProperty('ssl.SocketFactory.provider', DummyJVMSSLSocketFactory.name)
 			DummyHostNameVerifier.useForHttpsURLConnection()
 		}
 		insertTape(tapeName, arguments)
@@ -228,13 +230,13 @@ class Recorder implements MethodRule {
 	}
 
 	private void configureFromProperties(Properties properties) {
-		tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT))
-		proxyPort = properties.getProperty("betamax.proxyPort")?.toInteger() ?: DEFAULT_PROXY_PORT
-		proxyTimeout = properties.getProperty("betamax.proxyTimeout")?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
-		def defaultModeValue = properties.getProperty("betamax.defaultMode")
+		tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
+		proxyPort = properties.getProperty('betamax.proxyPort')?.toInteger() ?: DEFAULT_PROXY_PORT
+		proxyTimeout = properties.getProperty('betamax.proxyTimeout')?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
+		def defaultModeValue = properties.getProperty('betamax.defaultMode')
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
-		ignoreHosts = properties.getProperty("betamax.ignoreHosts")?.tokenize(",") ?: []
-		ignoreLocalhost = properties.getProperty("betamax.ignoreLocalhost")?.toBoolean()
+		ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
+		ignoreLocalhost = properties.getProperty('betamax.ignoreLocalhost')?.toBoolean()
 	}
 
 	private void configureFromConfig(ConfigObject config) {
@@ -253,8 +255,8 @@ class Recorder implements MethodRule {
 			def local = InetAddress.localHost
 			nonProxyHosts << local.hostName
 			nonProxyHosts << local.hostAddress
-			nonProxyHosts << "localhost"
-			nonProxyHosts << "127.0.0.1"
+			nonProxyHosts << 'localhost'
+			nonProxyHosts << '127.0.0.1'
 		}
 		proxyOverrider.activate proxyHost, proxyPort, nonProxyHosts
 	}
