@@ -1,10 +1,12 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
+import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -52,6 +54,17 @@ class SmokeSpec extends Specification {
 
 		where:
 		uri = 'https://github.com/robfletcher/betamax/'
+	}
+
+	@Issue('https://github.com/robfletcher/betamax/issues/52')
+	@Betamax(tape = 'ocsp')
+	void 'OCSP messages'() {
+		when:
+		HttpResponseDecorator response = http.post(uri: 'http://ocsp.ocspservice.com/public/ocsp')
+
+		then:
+		response.status == HTTP_OK
+		response.data.bytes.length == 2529
 	}
 
 }
