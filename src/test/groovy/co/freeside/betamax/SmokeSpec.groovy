@@ -12,6 +12,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static java.net.HttpURLConnection.HTTP_OK
+import static org.apache.http.HttpHeaders.VIA
 
 @Unroll
 class SmokeSpec extends Specification {
@@ -67,4 +68,17 @@ class SmokeSpec extends Specification {
 		response.data.bytes.length == 2529
 	}
 
+	@Issue('https://github.com/robfletcher/betamax/issues/61')
+	@Betamax(tape = 'smoke spec')
+	void 'can cope with URLs that do not end in a slash'() {
+		given:
+		def uri = 'http://freeside.co'
+
+		when:
+		HttpResponseDecorator response = http.get(uri: uri)
+
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
+	}
 }
