@@ -12,13 +12,13 @@ import static java.util.logging.Level.INFO
  * Reads the tape to find a matching exchange, returning the response if found otherwise proceeding the request, storing
  * & returning the new response.
  */
-class TapeReadingHandler extends ChainedHttpHandler {
+class TapeReader extends ChainedHttpHandler {
 
 	private final Recorder recorder
 
-	private static final Logger log = Logger.getLogger(TapeReadingHandler.name)
+	private static final Logger log = Logger.getLogger(TapeReader.name)
 
-	TapeReadingHandler(Recorder recorder) {
+	TapeReader(Recorder recorder) {
 		this.recorder = recorder
 	}
 

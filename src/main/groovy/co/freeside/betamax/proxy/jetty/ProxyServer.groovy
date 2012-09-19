@@ -17,10 +17,10 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.proxy.handler.ConnectingHandler
 import co.freeside.betamax.proxy.handler.HeaderFilter
-import co.freeside.betamax.proxy.handler.TapeReadingHandler
-import co.freeside.betamax.proxy.handler.TapeWritingHandler
+import co.freeside.betamax.proxy.handler.TapeReader
+import co.freeside.betamax.proxy.handler.TapeWriter
+import co.freeside.betamax.proxy.handler.TargetConnector
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
@@ -43,10 +43,10 @@ class ProxyServer extends SimpleServer {
 	void start(Recorder recorder) {
 		def handler = new BetamaxProxy()
 		handler <<
-				new TapeReadingHandler(recorder) <<
-				new TapeWritingHandler(recorder) <<
+				new TapeReader(recorder) <<
+				new TapeWriter(recorder) <<
 				new HeaderFilter() <<
-				new ConnectingHandler(newHttpClient(recorder))
+				new TargetConnector(newHttpClient(recorder))
 
 		def connectHandler = new CustomConnectHandler(handler, port + 1)
 

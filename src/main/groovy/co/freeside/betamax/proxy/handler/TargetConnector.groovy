@@ -15,12 +15,12 @@ import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
 import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 import static org.apache.http.HttpHeaders.VIA
 
-class ConnectingHandler implements HttpHandler {
+class TargetConnector implements HttpHandler {
 
 	private final HttpClient httpClient
 	private final HttpRequestFactory httpRequestFactory = new DefaultHttpRequestFactory()
 
-	ConnectingHandler(HttpClient httpClient) {
+	TargetConnector(HttpClient httpClient) {
 		this.httpClient = httpClient
 	}
 

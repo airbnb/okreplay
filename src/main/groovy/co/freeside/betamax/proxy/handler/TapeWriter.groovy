@@ -9,13 +9,13 @@ import java.util.logging.Logger
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import static java.util.logging.Level.INFO
 
-class TapeWritingHandler extends ChainedHttpHandler {
+class TapeWriter extends ChainedHttpHandler {
 
 	private final Recorder recorder
 
-	private static final Logger log = Logger.getLogger(TapeWritingHandler.name)
+	private static final Logger log = Logger.getLogger(TapeWriter.name)
 
-	TapeWritingHandler(Recorder recorder) {
+	TapeWriter(Recorder recorder) {
 		this.recorder = recorder
 	}
 

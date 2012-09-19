@@ -10,10 +10,10 @@ import spock.lang.Specification
 
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
-class TapeReadingHandlerSpec extends Specification {
+class TapeReaderSpec extends Specification {
 
 	Recorder recorder = Mock(Recorder)
-	TapeReadingHandler handler = new TapeReadingHandler(recorder)
+	TapeReader handler = new TapeReader(recorder)
 	HttpHandler nextHandler = Mock(HttpHandler)
 	Request request = new BasicRequest()
 	Response response = new BasicResponse()

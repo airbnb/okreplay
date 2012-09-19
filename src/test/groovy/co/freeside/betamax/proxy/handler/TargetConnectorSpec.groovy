@@ -12,10 +12,10 @@ import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
 import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 
 @Unroll
-class ConnectingHandlerSpec extends Specification {
+class TargetConnectorSpec extends Specification {
 
 	HttpClient httpClient = Mock(HttpClient)
-	ConnectingHandler handler = new ConnectingHandler(httpClient)
+	TargetConnector handler = new TargetConnector(httpClient)
 
 	BasicRequest request = new BasicRequest('GET', 'http://freeside.co/')
 	HttpResponse okResponse = new BasicHttpResponse(HttpVersion.HTTP_1_1, 200, 'OK')
