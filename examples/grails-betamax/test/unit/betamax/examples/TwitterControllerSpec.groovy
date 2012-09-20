@@ -1,10 +1,12 @@
 package betamax.examples
 
-import grails.plugin.spock.*
-import spock.lang.*
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+
 import static javax.servlet.http.HttpServletResponse.SC_SERVICE_UNAVAILABLE
 
-class TwitterControllerSpec extends ControllerSpec {
+@TestFor(TwitterController)
+class TwitterControllerSpec extends Specification {
 
 	TwitterService twitterService = Mock(TwitterService)
 	
@@ -35,13 +37,13 @@ class TwitterControllerSpec extends ControllerSpec {
 	
 	def "handles twitter error"() {
 		given:
-		twitterService.tweetsByClient("#gr8conf") >> { throw new TwitterException() }
+		twitterService.tweetsByClient("#gr8conf") >> { throw new TwitterException('Fail Whale!') }
 		
 		when:
 		controller.clients()
 		
 		then:
-		renderArgs.status == SC_SERVICE_UNAVAILABLE
+		response.status == SC_SERVICE_UNAVAILABLE
 	}
 	
 }

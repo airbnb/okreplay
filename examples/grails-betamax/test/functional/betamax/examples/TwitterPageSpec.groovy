@@ -1,14 +1,14 @@
 package betamax.examples
 
+import co.freeside.betamax.Betamax
+import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import com.gargoylesoftware.htmlunit.ProxyConfig
 import geb.spock.GebSpec
 import grails.util.BuildSettingsHolder
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.junit.Rule
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import co.freeside.betamax.*
 
 class TwitterPageSpec extends GebSpec {
 

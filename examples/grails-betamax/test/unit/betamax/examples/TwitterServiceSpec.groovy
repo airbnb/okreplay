@@ -3,16 +3,17 @@ package betamax.examples
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
-import grails.plugin.spock.UnitSpec
+import grails.test.mixin.TestFor
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient
-import java.util.logging.ConsoleHandler
-import java.util.logging.Level
-import java.util.logging.Logger
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.Rule
+import spock.lang.Specification
 
-class TwitterServiceSpec extends UnitSpec {
+import java.util.logging.ConsoleHandler
+import java.util.logging.Logger
+
+@TestFor(TwitterService)
+class TwitterServiceSpec extends Specification {
 
 	File baseDir = BuildSettingsHolder.settings?.baseDir ?: new File("examples/grails-betamax")
 	@Rule Recorder recorder = new Recorder(tapeRoot: new File(baseDir, "test/resources/tapes"))
