@@ -78,7 +78,7 @@ class ProxyServer extends SimpleServer {
 	private Connector createSSLConnector(int port) {
 		new SslSelectChannelConnector(
 				port: port, // TODO: separate property
-				keystore: Class.getResource('/keystore'),
+				keystore: ProxyServer.getResource('/betamax.keystore'),
 				password: 'password',
 				keyPassword: 'password'
 		)
