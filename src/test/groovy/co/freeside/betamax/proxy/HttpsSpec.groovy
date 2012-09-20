@@ -126,7 +126,7 @@ class SimpleSecureServer extends SimpleServer {
 
 		def connector = new SslSelectChannelConnector()
 
-		def keystore = Class.getResource('/keystore')
+		def keystore = SimpleSecureServer.getResource('/betamax.keystore')
 
 		connector.port = port
 		connector.keystore = keystore
