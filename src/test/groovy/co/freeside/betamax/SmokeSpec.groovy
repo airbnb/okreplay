@@ -6,6 +6,7 @@ import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 import org.apache.http.conn.scheme.Scheme
 import org.junit.Rule
+import spock.lang.Ignore
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
@@ -68,7 +69,8 @@ class SmokeSpec extends Specification {
 		response.data.bytes.length == 2529
 	}
 
-	@Issue('https://github.com/robfletcher/betamax/issues/61')
+	@Issue(['https://github.com/robfletcher/betamax/issues/61', 'http://jira.codehaus.org/browse/JETTY-1533'])
+	@Ignore('Jetty issue is fixed but not yet in a release once it is it will solve this problem')
 	@Betamax(tape = 'smoke spec')
 	void 'can cope with URLs that do not end in a slash'() {
 		given:
