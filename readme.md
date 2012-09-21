@@ -1,4 +1,4 @@
-# Betamax
+# Betamax [![Build Status](https://secure.travis-ci.org/robfletcher/betamax.png)](http://travis-ci.org/robfletcher/betamax)
 
 A Groovy testing tool inspired by Ruby's [VCR][vcr]. Betamax can record and play back HTTP interactions made by your app
 so that your tests can run without any real HTTP traffic going to external URLs. The first time a test is run any HTTP
