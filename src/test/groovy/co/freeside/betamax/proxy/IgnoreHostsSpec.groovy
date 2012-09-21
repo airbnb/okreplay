@@ -11,6 +11,7 @@ import spock.lang.*
 import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/16')
+@Unroll
 class IgnoreHostsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
@@ -34,8 +35,7 @@ class IgnoreHostsSpec extends Specification {
 		recorder.restoreOriginalProxySettings()
 	}
 
-	@Unroll('does not proxy a request to #requestURI when ignoring #ignoreHosts')
-	void 'does not proxy requests to ignored hosts'() {
+	void 'does not proxy a request to #requestURI when ignoring #ignoreHosts'() {
 		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreHosts = [ignoreHosts]
 		proxy.start(recorder)
@@ -58,8 +58,7 @@ class IgnoreHostsSpec extends Specification {
 		endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
 	}
 
-	@Unroll('does not proxy a request to #requestURI when ignoreLocalhost is true')
-	void 'does not proxy request to localhost when ignored'() {
+	void 'does not proxy a request to #requestURI when ignoreLocalhost is true'() {
 		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreLocalhost = true
 		proxy.start(recorder)

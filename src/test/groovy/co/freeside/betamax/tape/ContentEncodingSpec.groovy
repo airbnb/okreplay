@@ -13,10 +13,10 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
 @Issue('https://github.com/robfletcher/betamax/issues/3')
+@Unroll
 class ContentEncodingSpec extends Specification {
 
-	@Unroll('a #encoding encoded response body is stored as plain text in a tape file')
-	void 'an encoded response body is stored as plain text in a tape file'() {
+	void 'a #encoding encoded response body is stored as plain text in a tape file'() {
 		given:
 		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
 		request.addHeader(ACCEPT_ENCODING, encoding)
@@ -44,8 +44,7 @@ class ContentEncodingSpec extends Specification {
 		'deflate' | new DeflateEncoder()
 	}
 
-	@Unroll('response body is encoded when played from tape and a #encoding content-encoding header is present')
-	void 'response body is encoded when played from tape and a content-encoding header is present'() {
+	void 'response body is encoded when played from tape and a #encoding content-encoding header is present'() {
 		given:
 		def yaml = """\
 !tape

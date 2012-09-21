@@ -14,10 +14,10 @@ import static org.apache.http.HttpHeaders.CONTENT_ENCODING
 import static org.apache.http.HttpHeaders.CONTENT_TYPE
 
 @Issue('https://github.com/robfletcher/betamax/issues/21')
+@Unroll
 class ContentCharsetSpec extends Specification {
 
-	@Unroll('a response with a #charset body is recorded correctly')
-	void "response body's charset is recorded correctly"() {
+	void 'a response with a #charset body is recorded correctly'() {
 		given:
 		def request = new BasicRequest()
 
@@ -48,8 +48,7 @@ class ContentCharsetSpec extends Specification {
 		'ISO-8859-1' | 'deflate' | new DeflateEncoder()
 	}
 
-	@Unroll('a response with a #charset body is played back correctly')
-	void "response body's charset is played back correctly"() {
+	void 'a response with a #charset body is played back correctly'() {
 		given:
 		def yaml = """\
 !tape

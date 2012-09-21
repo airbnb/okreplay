@@ -18,6 +18,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
+@Unroll
 class ProxyNetworkCommsSpec extends Specification {
 
     @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
@@ -107,8 +108,7 @@ class ProxyNetworkCommsSpec extends Specification {
 
     @Timeout(10)
 	@Betamax(tape = 'proxy network comms spec')
-    @Unroll('proxy handles #method requests')
-    void 'proxy handles all request methods'() {
+    void 'proxy handles #method requests'() {
         given:
         def http = new RESTClient(endpoint.url)
 		BetamaxRoutePlanner.configure(http.client)

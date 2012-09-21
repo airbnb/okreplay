@@ -3,10 +3,10 @@ package co.freeside.betamax.encoding
 import spock.lang.Specification
 import spock.lang.Unroll
 
+@Unroll
 class EncoderSpec extends Specification {
 
-	@Unroll('#encoderClass can decode what it has encoded')
-	void 'can decode what it has encoded'() {
+	void '#encoderClass can decode what it has encoded'() {
 		when:
 		def bytes = encoder.encode(text)
 

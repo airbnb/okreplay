@@ -29,6 +29,7 @@ import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.HttpVersion.HTTP_1_1
 
 @Issue('https://github.com/robfletcher/betamax/issues/34')
+@Unroll
 class HttpsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
@@ -65,8 +66,7 @@ class HttpsSpec extends Specification {
 	}
 
 	@Betamax(tape = 'https spec')
-	@Unroll('proxy is selected for #scheme URIs')
-	void 'proxy is selected for all URIs'() {
+	void 'proxy is selected for #scheme URIs'() {
 		given:
 		def proxySelector = ProxySelector.default
 
