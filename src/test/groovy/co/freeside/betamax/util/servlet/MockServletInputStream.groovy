@@ -10,7 +10,6 @@ class MockServletInputStream extends ServletInputStream {
 		this.delegate = delegate
 	}
 
-	@Override
 	int read() {
 		delegate.read()
 	}

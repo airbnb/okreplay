@@ -23,6 +23,7 @@ class BetamaxProxy extends AbstractHandler {
 
 	private static final Logger log = Logger.getLogger(BetamaxProxy.name)
 
+	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		def betamaxRequest = new ServletRequestAdapter(request)
 

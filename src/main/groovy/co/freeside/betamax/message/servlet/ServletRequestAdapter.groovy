@@ -30,10 +30,12 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 		this.delegate = delegate
 	}
 
+	@Override
 	String getMethod() {
 		delegate.method
 	}
 
+	@Override
 	URI getUri() {
 		def uri = delegate.requestURL
 		def qs = delegate.queryString
@@ -48,24 +50,29 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 		delegate.characterEncoding
 	}
 
+	@Override
 	Map<String, String> getHeaders() {
 		delegate.headerNames.toList().collectEntries {
 			[(it): getHeader(it)]
 		}.asImmutable()
 	}
 
+	@Override
 	String getHeader(String name) {
 		delegate.getHeaders(name).toList().join(', ')
 	}
 
+	@Override
 	void addHeader(String name, String value) {
 		throw new UnsupportedOperationException()
 	}
 
+	@Override
 	boolean hasBody() {
 		delegate.contentLength > 0
 	}
 
+	@Override
 	InputStream getBodyAsBinary() {
 		if (!body) {
 			body = delegate.inputStream.bytes

@@ -1,17 +1,12 @@
 package co.freeside.betamax.message.filtering
 
-import co.freeside.betamax.message.http.HttpResponseAdapter
-import co.freeside.betamax.message.servlet.ServletRequestAdapter
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.message.BasicResponse
-import co.freeside.betamax.util.servlet.MockHttpServletRequest
-import org.apache.http.message.BasicHttpResponse
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static co.freeside.betamax.message.filtering.HeaderFilteringMessage.NO_PASS_HEADERS
 import static org.apache.http.HttpHeaders.CONTENT_TYPE
-import static org.apache.http.HttpVersion.HTTP_1_1
 
 @Unroll
 class HeaderFilteringSpec extends Specification {

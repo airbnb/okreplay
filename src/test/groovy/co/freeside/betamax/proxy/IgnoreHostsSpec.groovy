@@ -10,68 +10,68 @@ import spock.lang.*
 
 import static org.apache.http.HttpHeaders.VIA
 
-@Issue("https://github.com/robfletcher/betamax/issues/16")
+@Issue('https://github.com/robfletcher/betamax/issues/16')
 class IgnoreHostsSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
-	@AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
 	RESTClient http
 
-	def setupSpec() {
+	void setupSpec() {
 		endpoint.start(EchoHandler)
 	}
 
-	def setup() {
+	void setup() {
 		http = new RESTClient()
 		BetamaxRoutePlanner.configure(http.client)
 
-		recorder.insertTape("ignore hosts spec")
+		recorder.insertTape('ignore hosts spec')
 	}
 
-	def cleanup() {
+	void cleanup() {
 		recorder.restoreOriginalProxySettings()
 	}
 
-	@Unroll("does not proxy a request to #requestURI when ignoring #ignoreHosts")
-	def "does not proxy requests to ignored hosts"() {
-		given: "proxy is configured to ignore local connections"
+	@Unroll('does not proxy a request to #requestURI when ignoring #ignoreHosts')
+	void 'does not proxy requests to ignored hosts'() {
+		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreHosts = [ignoreHosts]
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 
-		when: "a request is made"
+		when: 'a request is made'
 		def response = http.get(uri: requestURI)
 
-		then: "the request is not intercepted by the proxy"
+		then: 'the request is not intercepted by the proxy'
 		!response.headers[VIA]
 
-		and: "nothing is recorded to the tape"
+		and: 'nothing is recorded to the tape'
 		recorder.tape.size() == old(recorder.tape.size())
 
 		where:
 		ignoreHosts               | requestURI
 		endpoint.url.toURI().host | endpoint.url
-		"localhost"               | "http://localhost:${endpoint.url.toURI().port}"
-		"127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
+		'localhost'               | "http://localhost:${endpoint.url.toURI().port}"
+		'127.0.0.1'               | "http://localhost:${endpoint.url.toURI().port}"
 		endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
 	}
 
-	@Unroll("does not proxy a request to #requestURI when ignoreLocalhost is true")
-	def "does not proxy request to localhost when ignored"() {
-		given: "proxy is configured to ignore local connections"
+	@Unroll('does not proxy a request to #requestURI when ignoreLocalhost is true')
+	void 'does not proxy request to localhost when ignored'() {
+		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreLocalhost = true
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 
-		when: "a request is made"
+		when: 'a request is made'
 		def response = http.get(uri: requestURI)
 
-		then: "the request is not intercepted by the proxy"
+		then: 'the request is not intercepted by the proxy'
 		!response.headers[VIA]
 
-		and: "nothing is recorded to the tape"
+		and: 'nothing is recorded to the tape'
 		recorder.tape.size() == old(recorder.tape.size())
 
 		where:

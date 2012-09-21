@@ -28,20 +28,20 @@ import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.HttpVersion.HTTP_1_1
 
-@Issue("https://github.com/robfletcher/betamax/issues/34")
+@Issue('https://github.com/robfletcher/betamax/issues/34')
 class HttpsSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@Rule @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot, sslSupport: true)
-	@Shared @AutoCleanup("stop") SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
-	@Shared @AutoCleanup("stop") SimpleServer httpEndpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Rule @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot, sslSupport: true)
+	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
+	@Shared @AutoCleanup('stop') SimpleServer httpEndpoint = new SimpleServer()
 
 	@Shared URI httpUri
 	@Shared URI httpsUri
 
 	HttpClient http
 
-	def setupSpec() {
+	void setupSpec() {
 		httpEndpoint.start(EchoHandler)
 		httpsEndpoint.start(HelloHandler)
 
@@ -49,14 +49,14 @@ class HttpsSpec extends Specification {
 		httpsUri = httpsEndpoint.url.toURI()
 	}
 
-	def setup() {
+	void setup() {
 		def params = new BasicHttpParams()
 		HttpProtocolParams.setVersion(params, HTTP_1_1)
-		HttpProtocolParams.setContentCharset(params, "UTF-8")
+		HttpProtocolParams.setContentCharset(params, 'UTF-8')
 
 		def registry = new SchemeRegistry()
-		registry.register new Scheme("http", PlainSocketFactory.socketFactory, 80)
-		registry.register new Scheme("https", DummySSLSocketFactory.instance, 443)
+		registry.register new Scheme('http', PlainSocketFactory.socketFactory, 80)
+		registry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
 
 		def connectionManager = new ThreadSafeClientConnManager(params, registry)
 
@@ -64,9 +64,9 @@ class HttpsSpec extends Specification {
 		BetamaxRoutePlanner.configure(http)
 	}
 
-	@Betamax(tape = "https spec")
-	@Unroll("proxy is selected for #scheme URIs")
-	def "proxy is selected for all URIs"() {
+	@Betamax(tape = 'https spec')
+	@Unroll('proxy is selected for #scheme URIs')
+	void 'proxy is selected for all URIs'() {
 		given:
 		def proxySelector = ProxySelector.default
 
@@ -80,34 +80,34 @@ class HttpsSpec extends Specification {
 		scheme = uri.scheme
 	}
 
-	@Betamax(tape = "https spec", mode = TapeMode.WRITE_ONLY)
-	def "proxy can intercept HTTP requests"() {
-		when: "an HTTPS request is made"
+	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
+	void 'proxy can intercept HTTP requests'() {
+		when: 'an HTTPS request is made'
 		def response = http.execute(new HttpGet(httpEndpoint.url))
 
-		then: "it is intercepted by the proxy"
+		then: 'it is intercepted by the proxy'
 		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
+		response.getFirstHeader(VIA)?.value == 'Betamax'
 	}
 
-	@Betamax(tape = "https spec", mode = TapeMode.WRITE_ONLY)
-	def "proxy can intercept HTTPS requests"() {
-		when: "an HTTPS request is made"
+	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
+	void 'proxy can intercept HTTPS requests'() {
+		when: 'an HTTPS request is made'
 		def response = http.execute(new HttpGet(httpsEndpoint.url))
 		def responseBytes = new ByteArrayOutputStream()
 		response.entity.writeTo(responseBytes)
-		def responseString = responseBytes.toString("UTF-8")
+		def responseString = responseBytes.toString('UTF-8')
 
-		then: "it is intercepted by the proxy"
+		then: 'it is intercepted by the proxy'
 		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
+		response.getFirstHeader(VIA)?.value == 'Betamax'
 		responseString == 'Hello World!'
 	}
 
-	@Betamax(tape = "https spec", mode = TapeMode.WRITE_ONLY)
-	def "https request gets proxied"() {
+	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
+	void 'https request gets proxied'() {
 		expect:
-		httpsEndpoint.url.toURL().text == "Hello World!"
+		httpsEndpoint.url.toURL().text == 'Hello World!'
 	}
 }
 
@@ -130,8 +130,8 @@ class SimpleSecureServer extends SimpleServer {
 
 		connector.port = port
 		connector.keystore = keystore
-		connector.password = "password"
-		connector.keyPassword = "password"
+		connector.password = 'password'
+		connector.keyPassword = 'password'
 
 		server.connectors = [connector]as Connector[]
 

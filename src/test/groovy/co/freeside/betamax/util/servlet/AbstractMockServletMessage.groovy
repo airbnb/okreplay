@@ -13,11 +13,11 @@ abstract class AbstractMockServletMessage {
 	private final Map<String, List<String>> headers = [:]
 
 	final long getDateHeader(String name) {
-		return 0  //To change body of implemented methods use File | Settings | File Templates.
+		0L
 	}
 
 	final String getHeader(String name) {
-		headers[name]?.join(", ")
+		headers[name]?.join(', ')
 	}
 
 	final Enumeration getHeaders(String name) {
@@ -39,11 +39,9 @@ abstract class AbstractMockServletMessage {
 	}
 
 	final void setDateHeader(String name, long date) {
-		//To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	final void addDateHeader(String name, long date) {
-		//To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	final void setHeader(String name, String value) {

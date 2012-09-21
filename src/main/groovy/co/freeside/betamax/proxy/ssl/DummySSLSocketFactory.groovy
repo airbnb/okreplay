@@ -36,7 +36,7 @@ class DummySSLSocketFactory extends SSLSocketFactory {
 	}
 
 	@Override
-	Socket createSocket() throws IOException {
+	Socket createSocket() {
 		factory.createSocket()
 	}
 }

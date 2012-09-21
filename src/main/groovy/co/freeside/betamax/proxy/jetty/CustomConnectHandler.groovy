@@ -16,7 +16,7 @@ class CustomConnectHandler extends ConnectHandler {
 	}
 
 	@Override
-	protected SocketChannel connect(HttpServletRequest request, String host, int port) throws IOException {
+	protected SocketChannel connect(HttpServletRequest request, String host, int port) {
 		def channel = SocketChannel.open()
 		channel.socket().tcpNoDelay = true
 		channel.socket().connect(new InetSocketAddress('127.0.0.1', sslPort), connectTimeout)

@@ -6,12 +6,12 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+@Unroll
 class FilenameNormalizationSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 
-	@Unroll("a tape named '#tapeName' is written to a file called '#filename'")
-	def "tape filenames are normalized"() {
+	void "a tape named '#tapeName' is written to a file called '#filename'"() {
 		given:
 		def loader = new YamlTapeLoader(tapeRoot)
 		
@@ -20,11 +20,11 @@ class FilenameNormalizationSpec extends Specification {
 
 		where:
 		tapeName       | filename
-		"my_tape"      | "my_tape.yaml"
-		"my tape"      | "my_tape.yaml"
-		" my tape "    | "my_tape.yaml"
-		"@my tape@"    | "my_tape.yaml"
-		"my %) tape"   | "my_tape.yaml"
-		"my tap\u00eb" | "my_tape.yaml"
+		'my_tape'      | 'my_tape.yaml'
+		'my tape'      | 'my_tape.yaml'
+		' my tape '    | 'my_tape.yaml'
+		'@my tape@'    | 'my_tape.yaml'
+		'my %) tape'   | 'my_tape.yaml'
+		'my tap\u00eb' | 'my_tape.yaml'
 	}
 }

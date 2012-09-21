@@ -189,6 +189,7 @@ class Recorder implements MethodRule {
 		}
 	}
 
+	@Override
 	Statement apply(Statement statement, FrameworkMethod method, Object target) {
 		def annotation = method.getAnnotation(Betamax)
 		if (annotation) {

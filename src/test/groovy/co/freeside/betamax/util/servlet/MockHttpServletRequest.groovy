@@ -34,7 +34,7 @@ class MockHttpServletRequest extends AbstractMockServletMessage implements HttpS
 	private boolean read = false
 
 	StringBuffer getRequestURL() {
-		return null  //To change body of implemented methods use File | Settings | File Templates.
+		null
 	}
 
 	Object getAttribute(String name) {

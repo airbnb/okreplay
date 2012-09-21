@@ -1,14 +1,14 @@
 /*
  * Copyright 2011 Rob Fletcher
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -31,22 +31,22 @@ import static org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING
 
 class EchoHandler extends AbstractHandler {
 
-	private final log = Logger.getLogger(EchoHandler.name)
+	private static final log = Logger.getLogger(EchoHandler.name)
 
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.fine "received $request.method request for $target"
 		response.status = HTTP_OK
-		response.contentType = "text/plain"
+		response.contentType = 'text/plain'
 
 		getResponseWriter(request, response).withWriter { writer ->
-			writer << request.method << " " << request.requestURI
+			writer << request.method << ' ' << request.requestURI
 			if (request.queryString) {
-				writer << "?" << request.queryString
+				writer << '?' << request.queryString
 			}
-			writer << " " << request.protocol << "\n"
+			writer << ' ' << request.protocol << '\n'
 			for (headerName in request.headerNames) {
 				for (header in request.getHeaders(headerName)) {
-					writer << headerName << ": " << header << "\n"
+					writer << headerName << ': ' << header << '\n'
 				}
 			}
 			request.reader.withReader { reader ->
@@ -59,19 +59,19 @@ class EchoHandler extends AbstractHandler {
 
 	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
 		def out
-		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(",")
+		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(',')
 		log.fine "request accepts $acceptedEncodings"
-		if ("gzip" in acceptedEncodings) {
-			log.fine "gzipping..."
-			response.addHeader(CONTENT_ENCODING, "gzip")
+		if ('gzip' in acceptedEncodings) {
+			log.fine 'gzipping...'
+			response.addHeader(CONTENT_ENCODING, 'gzip')
 			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
-		} else if ("deflate" in acceptedEncodings) {
-			log.fine "deflating..."
-			response.addHeader(CONTENT_ENCODING, "deflate")
+		} else if ('deflate' in acceptedEncodings) {
+			log.fine 'deflating...'
+			response.addHeader(CONTENT_ENCODING, 'deflate')
 			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
 		} else {
-			log.fine "not encoding..."
-			response.addHeader(CONTENT_ENCODING, "none")
+			log.fine 'not encoding...'
+			response.addHeader(CONTENT_ENCODING, 'none')
 			out = response.writer
 		}
 		out

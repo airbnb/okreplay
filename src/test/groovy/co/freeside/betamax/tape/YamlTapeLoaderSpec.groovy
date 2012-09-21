@@ -8,16 +8,16 @@ import spock.lang.Specification
 
 class YamlTapeLoaderSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+    @Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 
-    def setupSpec() {
+    void setupSpec() {
         tapeRoot.mkdirs()
     }
 
-    @Issue("https://github.com/robfletcher/betamax/issues/12")
-    def "tape is not re-written if the content has not changed"() {
+    @Issue('https://github.com/robfletcher/betamax/issues/12')
+    void 'tape is not re-written if the content has not changed'() {
         given:
-        def tapeName = "yaml tape loader spec"
+        def tapeName = 'yaml tape loader spec'
         def loader = new YamlTapeLoader(tapeRoot)
         def tapeFile = loader.fileFor(tapeName)
 

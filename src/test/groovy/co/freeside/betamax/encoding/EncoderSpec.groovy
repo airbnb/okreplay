@@ -5,18 +5,19 @@ import spock.lang.Unroll
 
 class EncoderSpec extends Specification {
 
-	@Unroll("#encoderClass can decode what it has encoded")
-	def "can decode what it has encoded"() {
-		given:
-		def encoder = encoderClass.newInstance()
-		def bytes = encoder.encode("this is some text that gets encoded")
+	@Unroll('#encoderClass can decode what it has encoded')
+	void 'can decode what it has encoded'() {
+		when:
+		def bytes = encoder.encode(text)
 
-		expect:
-		new String(bytes) != "this is some text that gets encoded"
-		encoder.decode(new ByteArrayInputStream(bytes)) == "this is some text that gets encoded"
+		then:
+		new String(bytes) != text
+		encoder.decode(new ByteArrayInputStream(bytes)) == text
 
 		where:
 		encoderClass << [GzipEncoder, DeflateEncoder]
+		text = 'this is some text that gets encoded'
+		encoder = encoderClass.newInstance()
 	}
 
 }

@@ -18,60 +18,60 @@ import static java.net.HttpURLConnection.HTTP_OK
 
 class TapeModeSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
-	@Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
-	def setupSpec() {
+	void setupSpec() {
 		tapeRoot.mkdirs()
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 		endpoint.start(EchoHandler)
 	}
 
-	def setup() {
+	void setup() {
 		http = new RESTClient()
 		BetamaxRoutePlanner.configure(http.client)
 	}
 
-	def cleanup() {
+	void cleanup() {
 		recorder.ejectTape()
 	}
 
-	def cleanupSpec() {
+	void cleanupSpec() {
 		recorder.restoreOriginalProxySettings()
 	}
 
-	def "in read-only mode the proxy rejects a request if no recorded interaction exists"() {
-		given: "a read-only tape is inserted"
-		recorder.insertTape("read only tape", [mode: READ_ONLY])
+	void 'in read-only mode the proxy rejects a request if no recorded interaction exists'() {
+		given: 'a read-only tape is inserted'
+		recorder.insertTape('read only tape', [mode: READ_ONLY])
 
-		when: "a request is made that does not match anything recorded on the tape"
+		when: 'a request is made that does not match anything recorded on the tape'
 		http.get(uri: endpoint.url)
 
-		then: "the proxy rejects the request"
+		then: 'the proxy rejects the request'
 		def e = thrown(HttpResponseException)
 		e.statusCode == HTTP_FORBIDDEN
-		e.message == "Tape is read-only"
+		e.message == 'Tape is read-only'
 	}
 
-	def "in write-only mode the an interaction can be recorded"() {
-		given: "an empty write-only tape is inserted"
-		recorder.insertTape("blank write only tape", [mode: WRITE_ONLY])
+	void 'in write-only mode the an interaction can be recorded'() {
+		given: 'an empty write-only tape is inserted'
+		recorder.insertTape('blank write only tape', [mode: WRITE_ONLY])
 		def tape = recorder.tape
 
-		when: "a request is made"
+		when: 'a request is made'
 		http.get(uri: endpoint.url)
 
-		then: "the interaction is recorded"
+		then: 'the interaction is recorded'
 		tape.size() == old(tape.size()) + 1
 	}
 
-	def "in write-only mode the proxy overwrites a recorded interaction"() {
-		given: "an existing tape file is inserted in write-only mode"
-		def tapeFile = new File(tapeRoot, "write_only_tape.yaml")
+	void 'in write-only mode the proxy overwrites a recorded interaction'() {
+		given: 'an existing tape file is inserted in write-only mode'
+		def tapeFile = new File(tapeRoot, 'write_only_tape.yaml')
 		tapeFile.text = """\
 !tape
 name: write only tape
@@ -86,13 +86,13 @@ interactions:
     headers: {}
     body: Previous response made when endpoint was down.
 """
-		recorder.insertTape("write only tape", [mode: WRITE_ONLY])
+		recorder.insertTape('write only tape', [mode: WRITE_ONLY])
 		def tape = recorder.tape
 
-		when: "a request is made that matches a request already recorded on the tape"
+		when: 'a request is made that matches a request already recorded on the tape'
 		http.get(uri: endpoint.url)
 
-		then: "the previously recorded request is overwritten"
+		then: 'the previously recorded request is overwritten'
 		tape.size() == old(tape.size())
 		tape.interactions[-1].response.status == HTTP_OK
 		tape.interactions[-1].response.body

@@ -12,22 +12,22 @@ import spock.lang.Unroll
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
-@Issue("https://github.com/robfletcher/betamax/issues/3")
+@Issue('https://github.com/robfletcher/betamax/issues/3')
 class ContentEncodingSpec extends Specification {
 
-	@Unroll("a #encoding encoded response body is stored as plain text in a tape file")
-	def "an encoded response body is stored as plain text in a tape file"() {
+	@Unroll('a #encoding encoded response body is stored as plain text in a tape file')
+	void 'an encoded response body is stored as plain text in a tape file'() {
 		given:
-		def request = new BasicRequest("GET", "http://freeside.co/betamax")
+		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
-		def response = new BasicResponse(HTTP_OK, "OK")
-		response.addHeader(CONTENT_TYPE, "text/plain")
+		def response = new BasicResponse(HTTP_OK, 'OK')
+		response.addHeader(CONTENT_TYPE, 'text/plain')
 		response.addHeader(CONTENT_ENCODING, encoding)
-		response.body = encoder.encode("O HAI!")
+		response.body = encoder.encode('O HAI!')
 
 		and:
-		def tape = new YamlTape(name: "encoded response tape")
+		def tape = new YamlTape(name: 'encoded response tape')
 		tape.record(request, response)
 
 		when:
@@ -36,16 +36,16 @@ class ContentEncodingSpec extends Specification {
 
 		then:
 		def yaml = writer.toString()
-		yaml.contains("body: O HAI!")
+		yaml.contains('body: O HAI!')
 
 		where:
 		encoding  | encoder
-		"gzip"    | new GzipEncoder()
-		"deflate" | new DeflateEncoder()
+		'gzip'    | new GzipEncoder()
+		'deflate' | new DeflateEncoder()
 	}
 
-	@Unroll("response body is encoded when played from tape and a #encoding content-encoding header is present")
-	def "response body is encoded when played from tape and a content-encoding header is present"() {
+	@Unroll('response body is encoded when played from tape and a #encoding content-encoding header is present')
+	void 'response body is encoded when played from tape and a content-encoding header is present'() {
 		given:
 		def yaml = """\
 !tape
@@ -64,19 +64,19 @@ interactions:
 		def tape = YamlTape.readFrom(new StringReader(yaml))
 
 		and:
-		def request = new BasicRequest("GET", "http://freeside.co/betamax")
+		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
 
 		when:
 		def response = tape.play(request)
 
 		then:
 		response.getHeader(CONTENT_ENCODING) == encoding
-		encoder.decode(new ByteArrayInputStream(response.bodyAsBinary.bytes)) == "O HAI!"
+		encoder.decode(new ByteArrayInputStream(response.bodyAsBinary.bytes)) == 'O HAI!'
 
 		where:
 		encoding  | encoder
-		"gzip"    | new GzipEncoder()
-		"deflate" | new DeflateEncoder()
+		'gzip'    | new GzipEncoder()
+		'deflate' | new DeflateEncoder()
 	}
 
 }

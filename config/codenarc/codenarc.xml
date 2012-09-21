@@ -14,7 +14,20 @@
     <ruleset-ref path="rulesets/concurrency.xml"/>
     <ruleset-ref path="rulesets/convention.xml"/>
     <ruleset-ref path="rulesets/design.xml"/>
-    <ruleset-ref path="rulesets/dry.xml"/>
+    <ruleset-ref path="rulesets/dry.xml">
+        <rule-config name="DuplicateStringLiteral">
+            <property name="doNotApplyToClassNames" value="*Spec"/>
+        </rule-config>
+        <rule-config name="DuplicateNumberLiteral">
+            <property name="doNotApplyToClassNames" value="*Spec"/>
+        </rule-config>
+        <rule-config name="DuplicateMapLiteral">
+            <property name="doNotApplyToClassNames" value="*Spec"/>
+        </rule-config>
+        <rule-config name="DuplicateListLiteral">
+            <property name="doNotApplyToClassNames" value="*Spec"/>
+        </rule-config>
+    </ruleset-ref>
     <ruleset-ref path="rulesets/exceptions.xml"/>
     <ruleset-ref path="rulesets/formatting.xml"/>
     <ruleset-ref path="rulesets/generic.xml"/>
@@ -26,7 +39,14 @@
     <ruleset-ref path="rulesets/jdbc.xml"/>
     <ruleset-ref path="rulesets/junit.xml"/>
     <ruleset-ref path="rulesets/logging.xml"/>
-    <ruleset-ref path="rulesets/naming.xml"/>
+    <ruleset-ref path="rulesets/naming.xml">
+        <rule-config name="FieldName">
+            <property name="ignoreFieldNames" value="log"/>
+        </rule-config>
+        <rule-config name="MethodName">
+            <property name="doNotApplyToClassNames" value="*Spec"/>
+        </rule-config>
+    </ruleset-ref>
     <ruleset-ref path="rulesets/security.xml">
         <exclude name="JavaIoPackageAccess"/>
     </ruleset-ref>

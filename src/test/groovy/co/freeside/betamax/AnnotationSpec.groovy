@@ -16,63 +16,63 @@ import static org.apache.http.HttpHeaders.VIA
 @Stepwise
 class AnnotationSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
+	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
-	def setup() {
+	void setup() {
 		http = new RESTClient(endpoint.url)
 		BetamaxRoutePlanner.configure(http.client)
 	}
 
-	def "no tape is inserted if there is no annotation on the feature"() {
+	void 'no tape is inserted if there is no annotation on the feature'() {
 		expect:
 		recorder.tape == null
 	}
 
-	@Betamax(tape = "annotation_spec")
-	def "annotation on feature causes tape to be inserted"() {
+	@Betamax(tape = 'annotation_spec')
+	void 'annotation on feature causes tape to be inserted'() {
 		expect:
-		recorder.tape.name == "annotation_spec"
+		recorder.tape.name == 'annotation_spec'
 	}
 
-	def "tape is ejected after annotated feature completes"() {
+	void 'tape is ejected after annotated feature completes'() {
 		expect:
 		recorder.tape == null
 	}
 
-	@Betamax(tape = "annotation_spec")
-	def "annotated feature can record"() {
+	@Betamax(tape = 'annotation_spec')
+	void 'annotated feature can record'() {
 		given:
 		endpoint.start(EchoHandler)
 
 		when:
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
-		response.getFirstHeader('X-Betamax')?.value == "REC"
+		response.getFirstHeader(VIA)?.value == 'Betamax'
+		response.getFirstHeader('X-Betamax')?.value == 'REC'
 	}
 
-	@Betamax(tape = "annotation_spec")
-	def "annotated feature can play back"() {
+	@Betamax(tape = 'annotation_spec')
+	void 'annotated feature can play back'() {
 		when:
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == "Betamax"
-		response.getFirstHeader('X-Betamax')?.value == "PLAY"
+		response.getFirstHeader(VIA)?.value == 'Betamax'
+		response.getFirstHeader('X-Betamax')?.value == 'PLAY'
 	}
 
-	def "can make unproxied request after using annotation"() {
+	void 'can make unproxied request after using annotation'() {
 		given:
 		endpoint.start(EchoHandler)
 
 		when:
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK

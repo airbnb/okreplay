@@ -12,35 +12,32 @@ class DummyJVMSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
 	private javax.net.ssl.SSLSocketFactory factory
 
 	@Override
-	Socket createSocket() throws IOException {
+	Socket createSocket() {
 		factory.createSocket()
 	}
 
 	@Override
-	Socket createSocket(InetAddress address, int port,
-			InetAddress localAddress, int localPort) throws IOException {
+	Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) {
 		factory.createSocket(address, port, localAddress, localPort)
 	}
 
 	@Override
-	Socket createSocket(InetAddress host, int port) throws IOException {
+	Socket createSocket(InetAddress host, int port) {
 		factory.createSocket(host, port)
 	}
 
 	@Override
-	Socket createSocket(Socket s, String host, int port,
-			boolean autoClose) throws IOException {
+	Socket createSocket(Socket s, String host, int port, boolean autoClose) {
 		factory.createSocket(s, host, port, autoClose)
 	}
 
 	@Override
-	Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+	Socket createSocket(String host, int port, InetAddress localHost, int localPort) {
 		factory.createSocket(host, port, localHost, localPort)
 	}
 
 	@Override
-	Socket createSocket(String host, int port) throws IOException,
-			UnknownHostException {
+	Socket createSocket(String host, int port) {
 		factory.createSocket(host, port)
 	}
 

@@ -14,62 +14,62 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@Shared @AutoCleanup("ejectTape") Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup("stop") ProxyServer proxy = new ProxyServer()
-	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
-	def setupSpec() {
-		recorder.insertTape("proxy record and playback spec")
+	void setupSpec() {
+		recorder.insertTape('proxy record and playback spec')
 		proxy.start(recorder)
 		recorder.overrideProxySettings()
 	}
 
-	def setup() {
+	void setup() {
 		http = new RESTClient(endpoint.url)
 		BetamaxRoutePlanner.configure(http.client)
 	}
 
-	def cleanupSpec() {
+	void cleanupSpec() {
 		recorder.restoreOriginalProxySettings()
 	}
 
 	@Timeout(10)
-	def "proxy makes a real HTTP request the first time it gets a request for a URI"() {
+	void 'proxy makes a real HTTP request the first time it gets a request for a URI'() {
 		given:
 		endpoint.start(EchoHandler)
 
 		when:
-		http.get(path: "/")
+		http.get(path: '/')
 
 		then:
 		recorder.tape.size() == 1
 	}
 
 	@Timeout(10)
-	def "subsequent requests for the same URI are played back from tape"() {
+	void 'subsequent requests for the same URI are played back from tape'() {
 		when:
-		http.get(path: "/")
+		http.get(path: '/')
 
 		then:
 		recorder.tape.size() == 1
 	}
 
 	@Timeout(10)
-	def "subsequent requests with a different HTTP method are recorded separately"() {
+	void 'subsequent requests with a different HTTP method are recorded separately'() {
 		given:
 		endpoint.start(EchoHandler)
 
 		when:
-		http.head(path: "/")
+		http.head(path: '/')
 
 		then:
 		recorder.tape.size() == old(recorder.tape.size()) + 1
-		recorder.tape.interactions[-1].request.method == "HEAD"
+		recorder.tape.interactions[-1].request.method == 'HEAD'
 	}
 
-	def "when the tape is ejected the data is written to a file"() {
+	void 'when the tape is ejected the data is written to a file'() {
 		given:
 		proxy.stop()
 
@@ -77,22 +77,22 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 		recorder.ejectTape()
 
 		then:
-		def file = new File(recorder.tapeRoot, "proxy_record_and_playback_spec.yaml")
+		def file = new File(recorder.tapeRoot, 'proxy_record_and_playback_spec.yaml')
 		file.isFile()
 
 		and:
 		def yaml = file.withReader { reader ->
 			new Yaml().loadAs(reader, Map)
 		}
-		yaml.name == "proxy record and playback spec"
+		yaml.name == 'proxy record and playback spec'
 		yaml.size() == 2
 	}
 
-	def "can load an existing tape from a file"() {
+	void 'can load an existing tape from a file'() {
 		given:
-		def file = new File(recorder.tapeRoot, "existing_tape.yaml")
+		def file = new File(recorder.tapeRoot, 'existing_tape.yaml')
 		file.parentFile.mkdirs()
-		file.text = """\
+		file.text = '''\
 !tape
 name: existing_tape
 interactions:
@@ -105,25 +105,25 @@ interactions:
     status: 200
     headers: {Content-Type: text/plain, Content-Language: en-GB}
     body: O HAI!
-"""
+'''
 
 		when:
-		recorder.insertTape("existing_tape")
+		recorder.insertTape('existing_tape')
 		proxy.start(recorder)
 
 		then:
-		recorder.tape.name == "existing_tape"
+		recorder.tape.name == 'existing_tape'
 		recorder.tape.size() == 1
 	}
 
 	@Timeout(10)
-	def "can play back a loaded tape"() {
+	void 'can play back a loaded tape'() {
 		when:
-		def response = http.get(uri: "http://icanhascheezburger.com/")
+		def response = http.get(uri: 'http://icanhascheezburger.com/')
 
 		then:
 		response.statusLine.statusCode == HTTP_OK
-		response.data.text == "O HAI!"
+		response.data.text == 'O HAI!'
 	}
 
 }

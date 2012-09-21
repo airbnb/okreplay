@@ -21,17 +21,17 @@ class TapeSpec extends Specification {
 	Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: new GzipEncoder().encode('O HAI!', 'UTF-8'))
 	RequestMatcher requestMatcher = new RequestMatcher(getRequest)
 
-	def setup() {
+	void setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, 'text/plain;charset=UTF-8')
 		plainTextResponse.addHeader(CONTENT_LANGUAGE, 'en-GB')
 		plainTextResponse.addHeader(CONTENT_ENCODING, 'gzip')
 	}
 
-	def cleanup() {
+	void cleanup() {
 		tape.mode = READ_WRITE
 	}
 
-	def 'reading from an empty tape throws an exception'() {
+	void 'reading from an empty tape throws an exception'() {
 		when: 'an empty tape is played'
 		tape.play(getRequest)
 
@@ -39,7 +39,7 @@ class TapeSpec extends Specification {
 		thrown IllegalStateException
 	}
 
-	def 'can write an HTTP interaction to a tape'() {
+	void 'can write an HTTP interaction to a tape'() {
 		when: 'an HTTP interaction is recorded to tape'
 		tape.record(getRequest, plainTextResponse)
 
@@ -59,7 +59,7 @@ class TapeSpec extends Specification {
 		interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.getHeader(CONTENT_ENCODING)
 	}
 	
-	def 'can overwrite a recorded interaction'() {
+	void 'can overwrite a recorded interaction'() {
 		when: 'a recording is made'
 		tape.record(getRequest, plainTextResponse)
 
@@ -70,7 +70,7 @@ class TapeSpec extends Specification {
 		tape.interactions[-1].recorded > old(tape.interactions[-1].recorded)
 	}
 
-	def 'seek does not match a request for a different URI'() {
+	void 'seek does not match a request for a different URI'() {
 		given:
 		def request = new BasicRequest('GET', 'http://qwantz.com/')
 
@@ -78,12 +78,12 @@ class TapeSpec extends Specification {
 		!tape.seek(request)
 	}
 
-	def 'can seek for a previously recorded interaction'() {
+	void 'can seek for a previously recorded interaction'() {
 		expect:
 		tape.seek(getRequest)
 	}
 
-	def 'can read a stored interaction'() {
+	void 'can read a stored interaction'() {
 		when: 'the tape is played'
 		def response = tape.play(getRequest)
 
@@ -93,7 +93,7 @@ class TapeSpec extends Specification {
 		response.headers == plainTextResponse.headers
 	}
 
-	def 'can record post requests with a body'() {
+	void 'can record post requests with a body'() {
 		given: 'a request with some content'
 		def request = new BasicRequest('POST', 'http://github.com/')
 		request.body = 'q=1'.getBytes('UTF-8')
@@ -107,7 +107,7 @@ class TapeSpec extends Specification {
 		interaction.request.body == request.bodyAsText.text
 	}
 
-	def 'a write-only tape cannot be read from'() {
+	void 'a write-only tape cannot be read from'() {
 		given: 'the tape is put into write-only mode'
 		tape.mode = WRITE_ONLY
 
@@ -119,7 +119,7 @@ class TapeSpec extends Specification {
 		e.message == 'the tape is not readable'
 	}
 
-	def 'a read-only tape cannot be written to'() {
+	void 'a read-only tape cannot be written to'() {
 		given: 'the tape is put into read-only mode'
 		tape.mode = READ_ONLY
 

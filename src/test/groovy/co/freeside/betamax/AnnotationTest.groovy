@@ -11,7 +11,7 @@ import static org.apache.http.HttpHeaders.VIA
 
 class AnnotationTest {
 
-	static File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
+	static File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Rule public Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	SimpleServer endpoint = new SimpleServer()
 	RESTClient http
@@ -38,9 +38,9 @@ class AnnotationTest {
 	}
 
 	@Test
-	@Betamax(tape = "annotation_test")
+	@Betamax(tape = 'annotation_test')
 	void annotationOnTestCausesTapeToBeInserted() {
-		assert recorder.tape.name == "annotation_test"
+		assert recorder.tape.name == 'annotation_test'
 	}
 
 	@Test
@@ -49,32 +49,32 @@ class AnnotationTest {
 	}
 
 	@Test
-	@Betamax(tape = "annotation_test")
+	@Betamax(tape = 'annotation_test')
 	void annotatedTestCanRecord() {
 		endpoint.start(EchoHandler)
 
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		assert response.status == HTTP_OK
-		assert response.getFirstHeader(VIA)?.value == "Betamax"
-		assert response.getFirstHeader('X-Betamax')?.value == "REC"
+		assert response.getFirstHeader(VIA)?.value == 'Betamax'
+		assert response.getFirstHeader('X-Betamax')?.value == 'REC'
 	}
 
 	@Test
-	@Betamax(tape = "annotation_test")
+	@Betamax(tape = 'annotation_test')
 	void annotatedTestCanPlayBack() {
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		assert response.status == HTTP_OK
-		assert response.getFirstHeader(VIA)?.value == "Betamax"
-		assert response.getFirstHeader('X-Betamax')?.value == "PLAY"
+		assert response.getFirstHeader(VIA)?.value == 'Betamax'
+		assert response.getFirstHeader('X-Betamax')?.value == 'PLAY'
 	}
 
 	@Test
 	void canMakeUnproxiedRequestAfterUsingAnnotation() {
 		endpoint.start(EchoHandler)
 
-		def response = http.get(path: "/")
+		def response = http.get(path: '/')
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA) == null

@@ -16,28 +16,28 @@ import spock.lang.Specification
 
 import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 
-@Issue("https://github.com/robfletcher/betamax/issues/20")
+@Issue('https://github.com/robfletcher/betamax/issues/20')
 class ProxyTimeoutSpec extends Specification {
 
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxyTimeout: 100)
 
-	@Shared @AutoCleanup("deleteDir") File tapeRoot = new File(System.properties."java.io.tmpdir", "tapes")
-	@AutoCleanup("stop") SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
-	def setup() {
+	void setup() {
 		http = new RESTClient(endpoint.url)
 		BetamaxRoutePlanner.configure(http.client)
 		http.client.httpRequestRetryHandler = new DefaultHttpRequestRetryHandler(0, false)
 	}
 
-	@Betamax(tape = "proxy timeout spec")
-	def "proxy responds with 504 if target server takes too long to respond"() {
+	@Betamax(tape = 'proxy timeout spec')
+	void 'proxy responds with 504 if target server takes too long to respond'() {
 		given:
 		endpoint.start(SlowHandler)
 
 		when:
-		http.get(path: "/")
+		http.get(path: '/')
 
 		then:
 		def e = thrown(HttpResponseException)
