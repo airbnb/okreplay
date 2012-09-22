@@ -1,5 +1,5 @@
 language: groovy
 jdk:
   - oraclejdk7
-after_script:
-  - cat build/test-results/TEST-co.freeside.betamax.proxy.HttpsSpec.xml
+script:
+  - gradle check || cat build/test-results/TEST-co.freeside.betamax.proxy.HttpsSpec.xml
