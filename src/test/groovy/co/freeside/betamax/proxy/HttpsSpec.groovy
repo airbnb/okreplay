@@ -73,7 +73,11 @@ class HttpsSpec extends Specification {
 		expect:
 		def proxy = proxySelector.select(uri).first()
 		proxy.type() == Proxy.Type.HTTP
-		proxy.address().toString() == "$recorder.proxyHost:${scheme == 'https' ? recorder.httpsProxyPort : recorder.proxyPort}"
+
+		and:
+		def proxyURI = "${scheme}://${proxy.address()}".toURI()
+		InetAddress.getByName(proxyURI.host) == InetAddress.getByName(recorder.proxyHost)
+		proxyURI.port == scheme == 'https' ? recorder.httpsProxyPort : recorder.proxyPort
 
 		where:
 		uri << [httpUri, httpsUri]
