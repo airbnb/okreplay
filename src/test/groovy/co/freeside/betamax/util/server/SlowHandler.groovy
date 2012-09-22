@@ -20,6 +20,7 @@ class SlowHandler extends AbstractHandler {
 
 	private final CountDownLatch stopLatch = new CountDownLatch(1)
 
+	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.fine "received $request.method request for $target..."
 		stopLatch.await(30, SECONDS)

@@ -7,6 +7,7 @@ import spock.lang.Specification
 class ChainedHttpHandlerSpec extends Specification {
 
 	ChainedHttpHandler handler = new ChainedHttpHandler() {
+		@Override
 		Response handle(Request request) {
 			throw new UnsupportedOperationException()
 		}

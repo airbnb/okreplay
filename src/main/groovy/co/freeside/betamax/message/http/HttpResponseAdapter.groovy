@@ -41,7 +41,9 @@ class HttpResponseAdapter extends AbstractMessage implements Response {
 	}
 
 	InputStream getBodyAsBinary() {
-		if (body == null) throw new IllegalStateException('cannot read the body of a response that does not have one')
+		if (body == null) {
+			throw new IllegalStateException('cannot read the body of a response that does not have one')
+		}
 		new ByteArrayInputStream(body)
 	}
 

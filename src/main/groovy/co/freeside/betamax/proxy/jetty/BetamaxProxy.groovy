@@ -26,22 +26,15 @@ class BetamaxProxy extends AbstractHandler {
 	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		def betamaxRequest = new ServletRequestAdapter(request)
-
 		try {
-
 			def betamaxResponse = handlerChain.handle(betamaxRequest)
 			sendResponse(betamaxResponse, response)
-
 		} catch (ProxyException e) {
-
 			log.log SEVERE, 'exception in proxy processing', e
 			response.sendError(e.httpStatus, e.message)
-
 		} catch (Exception e) {
-
 			log.log SEVERE, 'error recording HTTP exchange', e
 			response.sendError(HTTP_INTERNAL_ERROR, e.message)
-
 		}
 	}
 

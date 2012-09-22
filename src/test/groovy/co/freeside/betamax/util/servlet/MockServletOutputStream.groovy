@@ -4,10 +4,10 @@ import javax.servlet.ServletOutputStream
 
 class MockServletOutputStream extends ServletOutputStream {
 
-	private final AbstractMockServletMessage delegate
+	private final MockHttpServletResponse delegate
 	private final ByteArrayOutputStream stream = new ByteArrayOutputStream()
 
-	MockServletOutputStream(AbstractMockServletMessage delegate) {
+	MockServletOutputStream(MockHttpServletResponse delegate) {
 		this.delegate = delegate
 	}
 

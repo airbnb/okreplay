@@ -28,7 +28,7 @@ class TapeReaderSpec extends Specification {
 		tape.seek(request) >> false
 
 		and:
-		recorder.getTape() >> tape
+		recorder.tape >> tape
 
 		when:
 		handler.handle(request)
@@ -41,7 +41,7 @@ class TapeReaderSpec extends Specification {
 		given:
 		def tape = Mock(Tape)
 		tape.isReadable() >> false
-		recorder.getTape() >> tape
+		recorder.tape >> tape
 
 		when:
 		handler.handle(request)
@@ -56,7 +56,7 @@ class TapeReaderSpec extends Specification {
 		def tape = Mock(Tape)
 		tape.isReadable() >> true
 		tape.seek(request) >> true
-		recorder.getTape() >> tape
+		recorder.tape >> tape
 
 		when:
 		def result = handler.handle(request)
@@ -73,7 +73,7 @@ class TapeReaderSpec extends Specification {
 
 	void 'throws an exception if there is no tape'() {
 		given:
-		recorder.getTape() >> null
+		recorder.tape >> null
 
 		when:
 		handler.handle(request)

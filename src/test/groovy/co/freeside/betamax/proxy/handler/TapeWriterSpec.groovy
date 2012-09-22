@@ -25,7 +25,7 @@ class TapeWriterSpec extends Specification {
 
 		and:
 		def tape = Mock(Tape)
-		recorder.getTape() >> tape
+		recorder.tape >> tape
 		tape.isWritable() >> true
 
 		when:
@@ -40,7 +40,7 @@ class TapeWriterSpec extends Specification {
 
 	void 'throws an exception if there is no tape inserted'() {
 		given:
-		recorder.getTape() >> null
+		recorder.tape >> null
 
 		when:
 		handler.handle(request)
@@ -53,7 +53,7 @@ class TapeWriterSpec extends Specification {
 	void 'throws an exception if the tape is not writable'() {
 		given:
 		def tape = Mock(Tape)
-		recorder.getTape() >> tape
+		recorder.tape >> tape
 		tape.isWritable() >> false
 
 		when:

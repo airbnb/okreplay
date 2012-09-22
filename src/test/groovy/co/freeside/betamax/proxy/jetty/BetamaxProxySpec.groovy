@@ -6,9 +6,10 @@ import co.freeside.betamax.message.servlet.ServletRequestAdapter
 import co.freeside.betamax.proxy.handler.HttpHandler
 import co.freeside.betamax.proxy.handler.ProxyException
 import co.freeside.betamax.util.message.BasicResponse
-import co.freeside.betamax.util.servlet.MockHttpServletRequest
 import co.freeside.betamax.util.servlet.MockHttpServletResponse
 import spock.lang.Specification
+
+import javax.servlet.http.HttpServletRequest
 
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import static org.apache.http.HttpHeaders.ETAG
@@ -18,7 +19,7 @@ class BetamaxProxySpec extends Specification {
 
 	BetamaxProxy proxy = new BetamaxProxy()
 
-	MockHttpServletRequest request = new MockHttpServletRequest()
+	HttpServletRequest request = [:] as HttpServletRequest
 	MockHttpServletResponse response = new MockHttpServletResponse()
 
 	Response betamaxResponse

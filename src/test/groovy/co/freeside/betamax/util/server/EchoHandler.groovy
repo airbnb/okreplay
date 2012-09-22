@@ -33,6 +33,7 @@ class EchoHandler extends AbstractHandler {
 
 	private static final log = Logger.getLogger(EchoHandler.name)
 
+	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.fine "received $request.method request for $target"
 		response.status = HTTP_OK

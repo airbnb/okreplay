@@ -29,11 +29,11 @@ class RecorderConfigurationSpec extends Specification {
 	void 'recorder configuration is overridden by map arguments'() {
 		given:
 		def recorder = new Recorder(
-				tapeRoot: new File(tmpdir, 'tapes'), 
-				proxyPort: 1337, 
-				defaultMode: READ_ONLY, 
-				proxyTimeout: 30000, 
-				ignoreHosts: ['localhost'], 
+				tapeRoot: new File(tmpdir, 'tapes'),
+				proxyPort: 1337,
+				defaultMode: READ_ONLY,
+				proxyTimeout: 30000,
+				ignoreHosts: ['localhost'],
 				ignoreLocalhost: true
 		)
 
@@ -153,11 +153,11 @@ class RecorderConfigurationSpec extends Specification {
 
 		and:
 		def recorder = new Recorder(
-				tapeRoot: new File('test/fixtures/tapes'), 
+				tapeRoot: new File('test/fixtures/tapes'),
 				proxyPort: 1234,
-				defaultMode: WRITE_ONLY, 
-				proxyTimeout: 10000, 
-				ignoreHosts: ['github.com'], 
+				defaultMode: WRITE_ONLY,
+				proxyTimeout: 10000,
+				ignoreHosts: ['github.com'],
 				ignoreLocalhost: false
 		)
 

@@ -18,8 +18,8 @@ class ServletRequestAdapterSpec extends Specification {
 
 	void 'request can read basic fields'() {
 		given:
-		servletRequest.getMethod() >> 'GET'
-		servletRequest.getRequestURL() >> new StringBuffer('http://freeside.co/betamax')
+		servletRequest.method >> 'GET'
+		servletRequest.requestURL >> new StringBuffer('http://freeside.co/betamax')
 
 		and:
 		def request = new ServletRequestAdapter(servletRequest)
@@ -31,8 +31,8 @@ class ServletRequestAdapterSpec extends Specification {
 
 	void 'request target includes query string'() {
 		given:
-		servletRequest.getRequestURL() >> new StringBuffer('http://freeside.co/betamax')
-		servletRequest.getQueryString() >> 'q=1'
+		servletRequest.requestURL >> new StringBuffer('http://freeside.co/betamax')
+		servletRequest.queryString >> 'q=1'
 
 		and:
 		def request = new ServletRequestAdapter(servletRequest)
@@ -43,7 +43,7 @@ class ServletRequestAdapterSpec extends Specification {
 
 	void 'request can read headers'() {
 		given:
-		servletRequest.getHeaderNames() >> new IteratorEnumeration([IF_NONE_MATCH, ACCEPT_ENCODING].iterator())
+		servletRequest.headerNames >> new IteratorEnumeration([IF_NONE_MATCH, ACCEPT_ENCODING].iterator())
 		servletRequest.getHeaders(IF_NONE_MATCH) >> new IteratorEnumeration(['abc123'].iterator())
 		servletRequest.getHeaders(ACCEPT_ENCODING) >> new IteratorEnumeration(['gzip', 'deflate'].iterator())
 
@@ -57,7 +57,7 @@ class ServletRequestAdapterSpec extends Specification {
 
 	void 'request headers are immutable'() {
 		given:
-		servletRequest.getHeaderNames() >> EMPTY_ENUMERATION
+		servletRequest.headerNames >> EMPTY_ENUMERATION
 		servletRequest.getHeaders(_) >> EMPTY_ENUMERATION
 
 		and:
@@ -74,11 +74,11 @@ class ServletRequestAdapterSpec extends Specification {
 		given:
 		def bodyText = 'value=\u00a31'
 		def bodyBytes = bodyText.getBytes('ISO-8859-1')
-		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream(bodyBytes))
-		servletRequest.getContentType() >> 'application/x-www-form-urlencoded; charset=ISO-8859-1'
-		servletRequest.getContentLength() >> 8
-		servletRequest.getCharacterEncoding() >> 'ISO-8859-1'
-		servletRequest.getHeaderNames() >> EMPTY_ENUMERATION
+		servletRequest.inputStream >> new MockServletInputStream(new ByteArrayInputStream(bodyBytes))
+		servletRequest.contentType >> 'application/x-www-form-urlencoded; charset=ISO-8859-1'
+		servletRequest.contentLength >> 8
+		servletRequest.characterEncoding >> 'ISO-8859-1'
+		servletRequest.headerNames >> EMPTY_ENUMERATION
 		servletRequest.getHeaders(_) >> EMPTY_ENUMERATION
 
 		and:
@@ -92,10 +92,10 @@ class ServletRequestAdapterSpec extends Specification {
 	void 'request body is readable as binary'() {
 		given:
 		def body = 'value=\u00a31'.getBytes('ISO-8859-1')
-		servletRequest.getInputStream() >> new MockServletInputStream(new ByteArrayInputStream(body))
-		servletRequest.getContentType() >> 'application/x-www-form-urlencoded; charset=ISO-8859-1'
-		servletRequest.getContentLength() >> 8
-		servletRequest.getCharacterEncoding() >> 'ISO-8859-1'
+		servletRequest.inputStream >> new MockServletInputStream(new ByteArrayInputStream(body))
+		servletRequest.contentType >> 'application/x-www-form-urlencoded; charset=ISO-8859-1'
+		servletRequest.contentLength >> 8
+		servletRequest.characterEncoding >> 'ISO-8859-1'
 
 		and:
 		def request = new ServletRequestAdapter(servletRequest)

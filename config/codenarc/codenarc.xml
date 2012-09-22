@@ -46,13 +46,16 @@
         <rule-config name="MethodName">
             <property name="doNotApplyToClassNames" value="*Spec"/>
         </rule-config>
+        <exclude name="FactoryMethodName"/>
     </ruleset-ref>
     <ruleset-ref path="rulesets/security.xml">
         <exclude name="JavaIoPackageAccess"/>
     </ruleset-ref>
     <ruleset-ref path="rulesets/serialization.xml"/>
     <ruleset-ref path="rulesets/size.xml"/>
-    <ruleset-ref path="rulesets/unnecessary.xml"/>
+    <ruleset-ref path="rulesets/unnecessary.xml">
+        <exclude name="UnnecessaryPackageReference"/>
+    </ruleset-ref>
     <ruleset-ref path="rulesets/unused.xml"/>
 
 </ruleset>

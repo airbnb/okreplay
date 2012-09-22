@@ -68,11 +68,17 @@ enum MatchRule implements Comparator<Request> {
 		@Override
 		int compare(Request a, Request b) {
 			def result = a.headers.size() <=> b.headers.size()
-			if (result != 0) return result
-			if (a.headers.keySet() != b.headers.keySet()) return -1 // wouldn't work if we cared about ordering...
+			if (result != 0) {
+				return result
+			}
+			if (a.headers.keySet() != b.headers.keySet()) {
+				return -1 // wouldn't work if we cared about ordering...
+			}
 			for (header in a.headers) {
 				result = header.value <=> b.headers[header.key]
-				if (result != 0) return result
+				if (result != 0) {
+					return result
+				}
 			}
 			0
 		}

@@ -24,7 +24,10 @@ import java.util.logging.Logger
 
 class YamlTapeLoader implements TapeLoader<YamlTape> {
 
-    final File tapeRoot
+	public static final String FILE_CHARSET = 'UTF-8'
+
+	final File tapeRoot
+
     private static final log = Logger.getLogger(YamlTapeLoader.name)
 
     YamlTapeLoader(File tapeRoot) {
@@ -34,7 +37,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
     YamlTape loadTape(String name) {
         def file = fileFor(name)
         if (file.isFile()) {
-            def tape = file.withReader('UTF-8') { reader ->
+            def tape = file.withReader(FILE_CHARSET) { reader ->
                 YamlTape.readFrom(reader)
             }
             log.info "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
@@ -48,7 +51,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
         def file = fileFor(tape.name)
         file.parentFile.mkdirs()
         if (tape.isDirty()) {
-            file.withWriter('UTF-8') { writer ->
+            file.withWriter(FILE_CHARSET) { writer ->
                 log.info "writing tape $tape to file $file.name..."
                 tape.writeTo(writer)
             }

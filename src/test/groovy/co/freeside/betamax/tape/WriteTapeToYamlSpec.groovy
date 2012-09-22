@@ -5,8 +5,6 @@ import co.freeside.betamax.message.Response
 import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.message.BasicResponse
-import org.apache.http.HttpEntity
-import org.apache.http.entity.ByteArrayEntity
 import org.yaml.snakeyaml.Yaml
 import spock.lang.Shared
 import spock.lang.Specification
@@ -181,13 +179,6 @@ class WriteTapeToYamlSpec extends Specification {
 
 		then:
 		writer.toString().contains('body: !!binary |-')
-	}
-
-	private HttpEntity createEntity(String text, String contentType, String encoding, String charset) {
-		def entity = new ByteArrayEntity(text.getBytes(charset))
-		entity.setContentEncoding(encoding)
-		entity.setContentType(contentType)
-		return entity
 	}
 
 }
