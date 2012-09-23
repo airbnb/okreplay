@@ -8,7 +8,7 @@ import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.EchoHandler
 import co.freeside.betamax.util.server.HelloHandler
-import groovy.transform.InheritConstructors
+import co.freeside.betamax.util.server.SimpleSecureServer
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.conn.scheme.PlainSocketFactory
@@ -18,9 +18,6 @@ import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.BasicHttpParams
 import org.apache.http.params.HttpProtocolParams
-import org.eclipse.jetty.server.Connector
-import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
 import org.junit.Rule
 import spock.lang.*
 
@@ -95,7 +92,7 @@ class HttpsSpec extends Specification {
 	}
 
 	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'proxy can intercept HTTPS requests'() {
+	void 'proxy can intercept HTTPS requests made with HttpClient'() {
 		when: 'an HTTPS request is made'
 		def response = http.execute(new HttpGet(httpsEndpoint.url))
 		def responseBytes = new ByteArrayOutputStream()
@@ -109,36 +106,15 @@ class HttpsSpec extends Specification {
 	}
 
 	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'https request gets proxied'() {
-		expect:
-		httpsEndpoint.url.toURL().text == 'Hello World!'
+	void 'proxy can intercept HTTPS requests made with UrlConnection'() {
+		when:
+		def connection = httpsEndpoint.url.toURL().openConnection()
+
+		then:
+		connection.responseCode == SC_OK
+		connection.getHeaderField(VIA) == 'Betamax'
+		connection.inputStream.text == 'Hello World!'
 	}
 }
 
 
-@InheritConstructors
-class SimpleSecureServer extends SimpleServer {
-
-	@Override
-	String getUrl() {
-		"https://$host:$port/"
-	}
-
-	@Override
-	protected Server createServer(int port) {
-		def server = super.createServer(port)
-
-		def connector = new SslSelectChannelConnector()
-
-		def keystore = SimpleSecureServer.getResource('/betamax.keystore')
-
-		connector.port = port
-		connector.keystore = keystore
-		connector.password = 'password'
-		connector.keyPassword = 'password'
-
-		server.connectors = [connector]as Connector[]
-
-		server
-	}
-}

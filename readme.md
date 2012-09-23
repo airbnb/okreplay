@@ -40,5 +40,5 @@ and include a `co.freeside.betamax.Recorder` Rule.
 
 ## Notes on running tests from inside IntelliJ IDEA
 
-Go to _Settings -> Compiler_ and ensure that `keystore` appears in the _Resource patterns_ otherwise IDEA will not make
-the SSL keystore available on the classpath when tests run.
+Go to _Settings -> Compiler_ and ensure that `*.keystore` appears in the _Resource patterns_ otherwise IDEA will not
+make the SSL keystore available on the classpath when tests run.
