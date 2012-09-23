@@ -3,6 +3,7 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.Betamax
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.TapeMode
+import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
@@ -11,19 +12,15 @@ import co.freeside.betamax.util.server.HelloHandler
 import co.freeside.betamax.util.server.SimpleSecureServer
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.conn.scheme.PlainSocketFactory
 import org.apache.http.conn.scheme.Scheme
-import org.apache.http.conn.scheme.SchemeRegistry
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
-import org.apache.http.params.BasicHttpParams
-import org.apache.http.params.HttpProtocolParams
+import org.apache.http.impl.conn.BasicClientConnectionManager
+import org.apache.http.impl.conn.SchemeRegistryFactory
 import org.junit.Rule
 import spock.lang.*
 
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
-import static org.apache.http.HttpVersion.HTTP_1_1
 
 @Issue('https://github.com/robfletcher/betamax/issues/34')
 @Unroll
@@ -48,17 +45,8 @@ class HttpsSpec extends Specification {
 	}
 
 	void setup() {
-		def params = new BasicHttpParams()
-		HttpProtocolParams.setVersion(params, HTTP_1_1)
-		HttpProtocolParams.setContentCharset(params, 'UTF-8')
-
-		def registry = new SchemeRegistry()
-		registry.register new Scheme('http', PlainSocketFactory.socketFactory, 80)
-		registry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
-
-		def connectionManager = new ThreadSafeClientConnManager(params, registry)
-
-		http = new DefaultHttpClient(connectionManager, params)
+		http = new DefaultHttpClient()
+		BetamaxHttpsSupport.configure(http)
 		BetamaxRoutePlanner.configure(http)
 	}
 

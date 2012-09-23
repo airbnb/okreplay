@@ -178,23 +178,6 @@ In such a case you can simply configure the `ignoreHosts` property of the `co.fr
 
 If you need to ignore connections to _localhost_ you can simply set the `ignoreLocalhost` property to `true`.
 
-### HTTPS support
-
-As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
-
-#### HTTPS with Apache HttpClient
-
-Apache _HttpClient_ needs to be configured to use Betamax's _DummySSLSocketFactory_
-
-	SchemeRegistry registry = new SchemeRegistry();
-	registry.register(new Scheme("http", PlainSocketFactory.socketFactory, 80);
-	registry.register(new Scheme("https", DummySSLSocketFactory.getInstance(), 443);
-
-	ConnectionManager connectionManager = new ThreadSafeClientConnManager(params, registry);
-
-	HttpClient client = new DefaultHttpClient(connectionManager, params);
-	BetamaxRoutePlanner.configure(client);
-
 ## Compatibility
 
 ### Apache HttpClient
@@ -230,6 +213,16 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 	HttpClient client = new HttpClient();
 	ProxyHost proxy = new ProxyHost("localhost", 5555);
 	client.getHostConfiguration().setProxyHost(proxy);
+
+## HTTPS
+
+As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
+
+### HTTPS with Apache HttpClient
+
+Apache _HttpClient_ needs to be configured to use Betamax's HTTPS support:
+
+	BetamaxHttpsSupport.configure(client);
 
 ## Configuration
 

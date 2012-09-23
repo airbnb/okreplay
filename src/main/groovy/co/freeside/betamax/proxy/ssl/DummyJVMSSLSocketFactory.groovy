@@ -3,10 +3,11 @@ package co.freeside.betamax.proxy.ssl
 import groovy.transform.InheritConstructors
 
 import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 
 @InheritConstructors
-class DummyJVMSSLSocketFactory extends javax.net.ssl.SSLSocketFactory {
+class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
 	SSLContext sslContext = SSLContext.getInstance('TLS')
 	private javax.net.ssl.SSLSocketFactory factory

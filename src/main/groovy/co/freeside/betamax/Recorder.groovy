@@ -102,21 +102,21 @@ class Recorder implements MethodRule {
 	 * InetAddress.localHost.hostAddress]`.
 	 */
 	boolean ignoreLocalhost = false
-	
+
 	/**
 	 * If set to true add support for proxying SSL (disable certificate checking)
 	 */
 	boolean sslSupport = false
-	
 
-    String getProxyHost() {
-        proxy.url.toURI().host
-    }
 
-    int getHttpsProxyPort() {
-        //proxyPort + 1
+	String getProxyHost() {
+		proxy.url.toURI().host
+	}
+
+	int getHttpsProxyPort() {
+		//proxyPort + 1
 		proxyPort
-    }
+	}
 
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
@@ -212,7 +212,7 @@ class Recorder implements MethodRule {
 			proxy.port = proxyPort
 			proxy.start(this)
 		}
-		if(sslSupport) {
+		if (sslSupport) {
 			Security.setProperty('ssl.SocketFactory.provider', DummyJVMSSLSocketFactory.name)
 			DummyHostNameVerifier.useForHttpsURLConnection()
 		}
