@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="no-js ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+	<head>
+
+	<meta charset="utf-8">
+	<title>Betamax - Record / playback testing proxy</title>
+	<meta name="description" content="A record and playback HTTP proxy for testing applications that connect to HTTP services">
+	<meta name="keywords" content="testing,http proxy,http stub,http mock,groovy,java,jvm,web services,rest">
+	<meta name="author" content="Rob Fletcher">
+	<script src="javascripts/modernizr.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Play&subset=latin,greek">
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+	<link rel="stylesheet" href="stylesheets/prettify.css">
+
+	<link rel="stylesheet/less" type="text/css" href="stylesheets/betamax.less">
+	<script src="javascripts/less.js" type="text/javascript"></script>
+
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+	<link rel="author" href="humans.txt">
+	</head>
+	<body>
+
+	<a href="http://git.io/betamax">
+		<img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" id="forkme">
+	</a>
+
+	<div class="container">
+
+		<header>
+			<div id="hero-unit" class="sixteen columns">
+				<h1>Betamax</h1>
+				<p>A record / playback proxy for testing JVM applications that connect to external HTTP services.</p>
+			</div>
+			<div class="one-third column teaser">
+				<h3>Record</h3>
+				<p>Just add a <code>@Betamax</code> annotation to your test or spec method. The first time it runs HTTP requests &amp; responses are recorded to <em>tape</em>.</p>
+			</div>
+			<div class="one-third column teaser">
+				<h3>Playback</h3>
+				<p>Future test runs play HTTP responses back from <em>tape</em>. Insert different <em>tapes</em> to stub different responses.</p>
+			</div>
+			<div class="one-third column teaser">
+				<h3>Customize</h3>
+				<p>Edit your <em>tape</em> files with any text editor. Commit them to source control to share with your team and use on your Continuous Integration server.</p>
+			</div>
+		</header>
+
+		<div class="three columns sidebar">
+			<nav>
+				<h2 id="logo">Betamax</h2>
+				<ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#versions">Versions</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="#compatibility">Compatibility</a></li>
+                    <li><a href="#configuration">Configuration</a></li>
+                    <li><a href="#caveats">Caveats</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#examples">Examples</a></li>
+				</ul>
+			</nav>
+			&nbsp;
+		</div>
+
+		<div class="twelve columns content offset-by-one">
+
+			{{ content }}
+
+		</div>
+
+		<footer>
+			<p>&copy; Rob Fletcher 2011</p>
+		</footer>
+
+	</div>
+
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script src="javascripts/prettify.js"></script>
+	<script src="javascripts/betamax.js"></script>
+	<script src="javascripts/tabs.js"></script>
+
+	<script>
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-26084649-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+	</body>
+</html>

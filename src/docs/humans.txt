@@ -1,0 +1,15 @@
+/* TEAM */
+Insomniac developer: Rob Fletcher
+Twitter: @rfletcherEW
+Location: London, UK
+
+/* THANKS */
+Name: Myron Marston
+Twitter: @myronmarston
+
+Name: Jim Newbery
+Twitter: @froots101
+
+/* SITE */
+Components: Skeleton, Modernizr, jQuery, Google Code Prettify
+Software: Jekyll
