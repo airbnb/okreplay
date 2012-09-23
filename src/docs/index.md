@@ -29,6 +29,8 @@ The current development version of Betamax is _{{ page.dev-version}}_.
 
 Stable versions of Betamax are available from the Maven central repository. Stable and development versions are available from the [Sonatype OSS Maven repository][sonatype]. To install with your favourite build system see below:
 
+Please note the Maven group changed between versions 1.0 and 1.1. Make sure you are specifying the group `co.freeside` when referencing Betamax in your build.
+
 ### Gradle
 
 To use Betamax in a project using [Gradle][gradle] add the following to your `build.gradle` file:
@@ -316,6 +318,8 @@ If your project gets dependencies from a [Maven][maven] repository these depende
 
 Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston. Porting VCR to Groovy was suggested to me by [Jim Newbery][jim].
 
+HTTPS support was largely the work of [Lari Hotari][lari].
+
 The documentation is built with [Jekyll][jekyll], [Skeleton][skeleton], [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The site header font is [Play][playfont] by Jonas Hecksher.
 
 ## Examples
@@ -341,6 +345,7 @@ Betamax's GitHub repository includes [an example Grails application][grailsexamp
 [jquery]:http://jquery.com/
 [jim]:http://tinnedfruit.com/
 [junit]:http://www.junit.org/
+[lari]:https://twitter.com/lhotari
 [less]:http://lesscss.org/
 [licence]:http://www.apache.org/licenses/LICENSE-2.0.html
 [maven]:http://maven.apache.org/
