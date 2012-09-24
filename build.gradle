@@ -1,6 +1,7 @@
 apply plugin: 'groovy'
 apply plugin: 'codenarc'
 apply plugin: 'nexus'
+apply plugin: 'github-pages'
 
 buildscript {
 	repositories {
@@ -8,6 +9,7 @@ buildscript {
 	}
 	dependencies {
 		classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
+		classpath 'org.ajoberstar:gradle-git:0.2.0'
 	}
 }
 
@@ -88,4 +90,12 @@ nexus {
 
 codenarc {
 	ignoreFailures = true
+}
+
+githubPages {
+	repoUri = 'git@github.com:robfletcher/betamax.git'
+	workingPath = "$buildDir/docs"
+	pages {
+		from 'src/docs'
+	}
 }
