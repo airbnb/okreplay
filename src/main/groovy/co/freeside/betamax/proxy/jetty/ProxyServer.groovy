@@ -17,21 +17,16 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.proxy.handler.HeaderFilter
-import co.freeside.betamax.proxy.handler.TapeReader
-import co.freeside.betamax.proxy.handler.TapeWriter
-import co.freeside.betamax.proxy.handler.TargetConnector
-import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import co.freeside.betamax.proxy.handler.*
+import co.freeside.betamax.ssl.DummySSLSocketFactory
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
-import org.eclipse.jetty.server.Connector
-import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
-
 import static co.freeside.betamax.Recorder.DEFAULT_PROXY_PORT
 
 class ProxyServer extends SimpleServer {

@@ -1,7 +1,7 @@
 package co.freeside.betamax.util
 
 import java.security.Security
-import co.freeside.betamax.proxy.ssl.*
+import co.freeside.betamax.ssl.*
 import spock.lang.Specification
 import static co.freeside.betamax.util.SSLOverrider.SSL_SOCKET_FACTORY_PROVIDER
 

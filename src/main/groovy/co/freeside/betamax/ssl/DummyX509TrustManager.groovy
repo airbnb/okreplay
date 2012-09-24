@@ -1,7 +1,7 @@
-package co.freeside.betamax.proxy.ssl
+package co.freeside.betamax.ssl
 
-import javax.net.ssl.X509TrustManager
 import java.security.cert.X509Certificate
+import javax.net.ssl.X509TrustManager
 
 class DummyX509TrustManager implements X509TrustManager {
 

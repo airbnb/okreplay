@@ -1,24 +1,14 @@
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.TapeMode
-import co.freeside.betamax.httpclient.BetamaxHttpsSupport
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
+import co.freeside.betamax.*
+import co.freeside.betamax.httpclient.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
-import co.freeside.betamax.util.server.EchoHandler
-import co.freeside.betamax.util.server.HelloHandler
-import co.freeside.betamax.util.server.SimpleSecureServer
+import co.freeside.betamax.util.server.*
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.BasicClientConnectionManager
-import org.apache.http.impl.conn.SchemeRegistryFactory
 import org.junit.Rule
 import spock.lang.*
-
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 

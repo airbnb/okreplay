@@ -1,11 +1,8 @@
-package co.freeside.betamax.proxy.ssl
+package co.freeside.betamax.ssl
 
+import java.security.*
+import javax.net.ssl.*
 import org.apache.http.conn.ssl.SSLSocketFactory
-
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import java.security.KeyStore
-import java.security.SecureRandom
 
 class DummySSLSocketFactory extends SSLSocketFactory {
 
@@ -24,10 +21,6 @@ class DummySSLSocketFactory extends SSLSocketFactory {
 		sslContext.init(null, [new DummyX509TrustManager()] as TrustManager[], new SecureRandom())
 		factory = sslContext.socketFactory
 		setHostnameVerifier(new DummyHostNameVerifier())
-	}
-
-	static SSLSocketFactory getDefault() {
-		new DummySSLSocketFactory()
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package co.freeside.betamax.util
 
 import java.security.Security
 import javax.net.ssl.HttpsURLConnection
-import co.freeside.betamax.proxy.ssl.*
+import co.freeside.betamax.ssl.*
 
 class SSLOverrider {
 
