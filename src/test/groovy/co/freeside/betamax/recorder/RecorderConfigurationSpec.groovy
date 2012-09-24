@@ -24,6 +24,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == DEFAULT_PROXY_TIMEOUT
 		recorder.ignoreHosts == []
 		!recorder.ignoreLocalhost
+		!recorder.sslSupport
 	}
 
 	void 'recorder configuration is overridden by map arguments'() {
@@ -34,7 +35,8 @@ class RecorderConfigurationSpec extends Specification {
 				defaultMode: READ_ONLY,
 				proxyTimeout: 30000,
 				ignoreHosts: ['localhost'],
-				ignoreLocalhost: true
+				ignoreLocalhost: true,
+				sslSupport: true
 		)
 
 		expect:
@@ -44,6 +46,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == 30000
 		recorder.ignoreHosts == ['localhost']
 		recorder.ignoreLocalhost
+		recorder.sslSupport
 	}
 
 	void 'recorder picks up configuration from properties'() {
@@ -55,6 +58,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty('betamax.proxyTimeout', '30000')
 		properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
 		properties.setProperty('betamax.ignoreLocalhost', 'true')
+		properties.setProperty('betamax.sslSupport', 'true')
 
 		and:
 		def recorder = new Recorder(properties)
@@ -66,6 +70,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == 30000
 		recorder.ignoreHosts == ['localhost', '127.0.0.1']
 		recorder.ignoreLocalhost
+		recorder.sslSupport
 	}
 
 	void 'recorder picks up configuration from properties file'() {
@@ -78,6 +83,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty('betamax.proxyTimeout', '30000')
 		properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
 		properties.setProperty('betamax.ignoreLocalhost', 'true')
+		properties.setProperty('betamax.sslSupport', 'true')
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -95,6 +101,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == 30000
 		recorder.ignoreHosts == ['localhost', '127.0.0.1']
 		recorder.ignoreLocalhost
+		recorder.sslSupport
 
 		cleanup:
 		propertiesFile.delete()
@@ -112,6 +119,7 @@ class RecorderConfigurationSpec extends Specification {
 					proxyTimeout = 30000
 					ignoreHosts = ['localhost', '127.0.0.1']
 					ignoreLocalhost = true
+					sslSupport = true
 				}
 			'''
 		}
@@ -129,6 +137,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == 30000
 		recorder.ignoreHosts == ['localhost', '127.0.0.1']
 		recorder.ignoreLocalhost
+		recorder.sslSupport
 
 		cleanup:
 		configFile.delete()
@@ -144,6 +153,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty('betamax.proxyTimeout', '30000')
 		properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
 		properties.setProperty('betamax.ignoreLocalhost', 'true')
+		properties.setProperty('betamax.sslSupport', 'true')
 		propertiesFile.withWriter { writer ->
 			properties.store(writer, null)
 		}
@@ -158,7 +168,8 @@ class RecorderConfigurationSpec extends Specification {
 				defaultMode: WRITE_ONLY,
 				proxyTimeout: 10000,
 				ignoreHosts: ['github.com'],
-				ignoreLocalhost: false
+				ignoreLocalhost: false,
+				sslSupport: false
 		)
 
 		expect:
@@ -168,6 +179,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.proxyTimeout == 10000
 		recorder.ignoreHosts == ['github.com']
 		!recorder.ignoreLocalhost
+		!recorder.sslSupport
 
 		cleanup:
 		propertiesFile.delete()

@@ -227,6 +227,7 @@ class Recorder implements MethodRule {
 		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
 		ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
 		ignoreLocalhost = properties.getProperty('betamax.ignoreLocalhost')?.toBoolean()
+		sslSupport = properties.getProperty('betamax.sslSupport')?.toBoolean()
 	}
 
 	private void configureFromConfig(ConfigObject config) {
@@ -236,6 +237,7 @@ class Recorder implements MethodRule {
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 		ignoreHosts = config.betamax.ignoreHosts ?: []
 		ignoreLocalhost = config.betamax.ignoreLocalhost
+		sslSupport = config.betamax.sslSupport
 	}
 
 	void overrideProxySettings() {
