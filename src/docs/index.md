@@ -220,6 +220,8 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 
 As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
 
+To enable HTTP support you simply need to set the `sslSupport` boolean property on the `Recorder` instance in your test or via Betamax configuration.
+
 ### HTTPS with Apache HttpClient
 
 Apache _HttpClient_ needs to be configured to use Betamax's HTTPS support:
@@ -248,6 +250,9 @@ The `Recorder` class has some configuration properties that you can override:
 `ignoreLocalhost`
 : if set to `true` the Betamax proxy will ignore connections to local addresses. This is equivalent to setting `ignoreHosts` to `["localhost", "127.0.0.1", InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]`.
 
+`sslSupport`
+: if set to `true` the Betamax proxy will also intercept HTTPS traffic.
+
 If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhere in your classpath it will be picked up by the `Recorder` class.
 
 ### Example _BetamaxConfig.groovy_ script
@@ -259,6 +264,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 	    defaultMode = TapeMode.READ_ONLY
 		ignoreHosts = ['localhost', '127.0.0.1']
 		ignoreLocalhost = true
+		sslSupport = true
 	}
 
 ### Example _betamax.properties_ file
@@ -269,6 +275,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 	betamax.defaultMode=READ_ONLY
 	betamax.ignoreHosts=localhost,127.0.0.1
 	betamax.ignoreLocalhost=true
+	betamax.sslSupport=true
 
 ## Caveats
 
