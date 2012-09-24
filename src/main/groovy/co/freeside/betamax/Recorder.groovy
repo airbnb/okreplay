@@ -16,26 +16,16 @@
 
 package co.freeside.betamax
 
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.ssl.DummyHostNameVerifier
-import co.freeside.betamax.proxy.ssl.DummyJVMSSLSocketFactory
-import co.freeside.betamax.tape.StorableTape
-import co.freeside.betamax.tape.Tape
-import co.freeside.betamax.tape.TapeLoader
-import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import co.freeside.betamax.util.ProxyOverrider
-import org.junit.rules.MethodRule
-import org.junit.runners.model.FrameworkMethod
-import org.junit.runners.model.Statement
-
-import java.security.Security
 import java.util.logging.Logger
-
+import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.tape.*
+import co.freeside.betamax.tape.yaml.YamlTapeLoader
+import co.freeside.betamax.util.*
+import org.junit.rules.MethodRule
+import org.junit.runners.model.*
 import static TapeMode.READ_WRITE
-import static co.freeside.betamax.MatchRule.method
-import static co.freeside.betamax.MatchRule.uri
+import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP
-
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
@@ -121,6 +111,7 @@ class Recorder implements MethodRule {
 	private StorableTape tape
 	private ProxyServer proxy = new ProxyServer()
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
+	private final SSLOverrider sslOverrider = new SSLOverrider()
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -212,16 +203,14 @@ class Recorder implements MethodRule {
 			proxy.port = proxyPort
 			proxy.start(this)
 		}
-		if (sslSupport) {
-			Security.setProperty('ssl.SocketFactory.provider', DummyJVMSSLSocketFactory.name)
-			DummyHostNameVerifier.useForHttpsURLConnection()
-		}
 		insertTape(tapeName, arguments)
 		overrideProxySettings()
+		overrideSSLSettings()
 	}
 
 	private void stopProxy() {
 		restoreOriginalProxySettings()
+		restoreOriginalSSLSettings()
 		proxy.stop()
 		ejectTape()
 	}
@@ -264,6 +253,18 @@ class Recorder implements MethodRule {
 
 	void restoreOriginalProxySettings() {
 		proxyOverrider.deactivateAll()
+	}
+
+	void overrideSSLSettings() {
+		if (sslSupport) {
+			sslOverrider.activate()
+		}
+	}
+
+	void restoreOriginalSSLSettings() {
+		if (sslSupport) {
+			sslOverrider.deactivate()
+		}
 	}
 
 }

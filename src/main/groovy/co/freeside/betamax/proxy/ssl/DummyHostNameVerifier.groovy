@@ -9,11 +9,6 @@ import java.security.cert.X509Certificate
 @SuppressWarnings('deprecation')
 class DummyHostNameVerifier implements X509HostnameVerifier, com.sun.net.ssl.HostnameVerifier {
 
-	static void useForHttpsURLConnection() {
-		def verifier = new DummyHostNameVerifier()
-		javax.net.ssl.HttpsURLConnection.defaultHostnameVerifier = verifier
-		com.sun.net.ssl.HttpsURLConnection.defaultHostnameVerifier = verifier
-	}
 
 	@Override
 	boolean verify(String hostname, SSLSession sslSession) {
