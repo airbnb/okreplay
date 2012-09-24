@@ -85,8 +85,6 @@ modifyPom {
 
 nexus {
 	sign = true
-	repositoryUrl = 'https://nexus.codehaus.org/service/local/staging/deploy/maven2/'
-	snapshotRepositoryUrl = 'https://nexus.codehaus.org/content/repositories/snapshots/'
 }
 
 codenarc {
