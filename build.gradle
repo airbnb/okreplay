@@ -17,7 +17,6 @@ archivesBaseName = 'betamax'
 
 repositories {
 	mavenCentral()
-	mavenRepo url: 'http://m2repo.spockframework.org/snapshots'
 	mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
 }
 

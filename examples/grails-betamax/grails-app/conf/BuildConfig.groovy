@@ -16,7 +16,6 @@ grails.project.dependency.resolution = {
 		mavenLocal()
 		mavenCentral()
 		mavenRepo "http://oss.sonatype.org/content/groups/public/"
-//		mavenRepo "http://m2repo.spockframework.org/snapshots/"
 	}
 	dependencies {
 		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
