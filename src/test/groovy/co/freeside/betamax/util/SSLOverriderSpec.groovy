@@ -16,7 +16,6 @@ class SSLOverriderSpec extends Specification {
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  DummyJVMSSLSocketFactory.name
 		javax.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof DummyHostNameVerifier
-		com.sun.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof DummyHostNameVerifier
 
 		cleanup:
 		sslOverrider.deactivate()
@@ -30,7 +29,6 @@ class SSLOverriderSpec extends Specification {
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  old(Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER))
 		!(javax.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof DummyHostNameVerifier)
-		!(com.sun.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof DummyHostNameVerifier)
 	}
 
 }
