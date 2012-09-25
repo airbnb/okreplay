@@ -27,7 +27,7 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE
 abstract class AbstractMessage implements Message {
 
 	public static final String DEFAULT_CONTENT_TYPE = 'application/octet-stream'
-	public static final String DEFAULT_CHARSET = 'ISO-8859-1'
+	public static final String DEFAULT_CHARSET = 'UTF-8'
 	public static final String DEFAULT_ENCODING = 'none'
 
 	String getContentType() {
