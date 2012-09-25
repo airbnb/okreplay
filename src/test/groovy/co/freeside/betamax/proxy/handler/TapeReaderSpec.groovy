@@ -26,6 +26,7 @@ class TapeReaderSpec extends Specification {
 		given:
 		def tape = Mock(Tape)
 		tape.seek(request) >> false
+		tape.isWritable() >> true
 
 		and:
 		recorder.tape >> tape
@@ -41,6 +42,7 @@ class TapeReaderSpec extends Specification {
 		given:
 		def tape = Mock(Tape)
 		tape.isReadable() >> false
+		tape.isWritable() >> true
 		recorder.tape >> tape
 
 		when:
@@ -74,6 +76,25 @@ class TapeReaderSpec extends Specification {
 	void 'throws an exception if there is no tape'() {
 		given:
 		recorder.tape >> null
+
+		when:
+		handler.handle(request)
+
+		then:
+		def e = thrown(ProxyException)
+		e.httpStatus == HTTP_FORBIDDEN
+
+		and:
+		0 * nextHandler._
+	}
+
+	void 'throws an exception if there is no matching entry and the tape is not writable'() {
+		given:
+		def tape = Mock(Tape)
+		tape.isReadable() >> true
+		tape.isWritable() >> false
+		tape.seek(request) >> false
+		recorder.tape >> tape
 
 		when:
 		handler.handle(request)

@@ -31,8 +31,10 @@ class TapeReader extends ChainedHttpHandler {
 			def response = tape.play(request)
 			response.addHeader('X-Betamax', 'PLAY')
 			response
-		} else {
+		} else if (tape.writable) {
 			chain(request)
+		} else {
+			throw new ProxyException(HTTP_FORBIDDEN, 'Tape is read-only')
 		}
 	}
 
