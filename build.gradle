@@ -25,29 +25,30 @@ repositories {
 dependencies {
 	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
 
-	compile 'junit:junit:4.8.2'
-	compile 'org.apache.httpcomponents:httpclient:4.2.1'
+	compile 'junit:junit:4.8.2',
+			'javax.servlet:servlet-api:2.5',
+			'org.yaml:snakeyaml:1.11-SNAPSHOT',
+			'org.apache.httpcomponents:httpclient:4.2.1',
+			'commons-lang:commons-lang:2.4'
 	compile('org.eclipse.jetty:jetty-server:7.6.7.v20120910') {
 		exclude module: 'javax.servlet'
 	}
-	compile 'org.eclipse.jetty.orbit:javax.servlet:2.5.0.v201103041518@jar'
-	compile 'org.yaml:snakeyaml:1.11-SNAPSHOT'
-	compile 'commons-lang:commons-lang:2.4'
 
 	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
 		exclude module: 'groovy'
 		exclude module: 'httpclient'
 	}
-	testCompile 'commons-httpclient:commons-httpclient:3.1'
 	testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
 		exclude module: 'groovy-all'
+		exclude module: 'junit-dep'
 	}
+	testCompile 'commons-httpclient:commons-httpclient:3.1'
 
 	testRuntime 'cglib:cglib-nodep:2.2.2'
 }
 
 modifyPom {
-	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
+	dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
 
 	project {
 		name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
