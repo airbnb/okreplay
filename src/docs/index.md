@@ -180,6 +180,10 @@ In such a case you can simply configure the `ignoreHosts` property of the `co.fr
 
 If you need to ignore connections to _localhost_ you can simply set the `ignoreLocalhost` property to `true`.
 
+### Editing tape files
+
+Tape files are stored as _YAML_ so that they should be reasonably easy to edit by hand. HTTP request and response bodies are stored as text for most common textual MIME types. Binary data for things like images is also stored but is not practical to edit by hand. In some cases where the text contains non-printable characters then text data will be stored as binary.
+
 ## Compatibility
 
 ### Apache HttpClient
@@ -293,9 +297,15 @@ Betamax is a JVM port of the [VCR][vcr] library for Ruby. It is named after _[Be
 
 [Apache Software Licence, Version 2.0][licence]
 
-### Authors
+### Author
 
 Rob Fletcher [github][github] [twitter][twitter] [ad-hockery][adhockery]
+
+### Contributors
+
+* [Marcin Erdmann](https://github.com/erdi)
+* [Lari Hotari](https://github.com/lhotari)
+* [Nobuhiro Sue](https://github.com/nobusue)
 
 ### Issues
 
