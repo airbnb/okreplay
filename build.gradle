@@ -26,13 +26,10 @@ dependencies {
 	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
 
 	compile 'junit:junit:4.8.2',
-			'javax.servlet:servlet-api:2.5',
 			'org.yaml:snakeyaml:1.11-SNAPSHOT',
 			'org.apache.httpcomponents:httpclient:4.2.1',
-			'commons-lang:commons-lang:2.4'
-	compile('org.eclipse.jetty:jetty-server:7.6.7.v20120910') {
-		exclude module: 'javax.servlet'
-	}
+			'commons-lang:commons-lang:2.4',
+			'org.eclipse.jetty:jetty-server:7.6.0.v20120127'
 
 	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
 		exclude module: 'groovy'
