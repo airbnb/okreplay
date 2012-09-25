@@ -87,6 +87,7 @@ nexus {
 }
 
 codenarc {
+	toolVersion = '0.17'
 	ignoreFailures = true
 }
 

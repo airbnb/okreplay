@@ -6,8 +6,8 @@ import groovy.transform.InheritConstructors
 @InheritConstructors
 class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
-	SSLContext sslContext = SSLContext.getInstance('TLS')
-	private javax.net.ssl.SSLSocketFactory factory
+	private final SSLContext sslContext = SSLContext.getInstance('TLS')
+	private final SSLSocketFactory factory
 
 	@Override
 	Socket createSocket() {

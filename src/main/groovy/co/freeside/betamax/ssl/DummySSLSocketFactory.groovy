@@ -6,9 +6,8 @@ import org.apache.http.conn.ssl.SSLSocketFactory
 
 class DummySSLSocketFactory extends SSLSocketFactory {
 
-	SSLContext sslContext = SSLContext.getInstance('TLS')
-
-	private javax.net.ssl.SSLSocketFactory factory
+	private final SSLContext sslContext = SSLContext.getInstance('TLS')
+	private final javax.net.ssl.SSLSocketFactory factory
 
 	static DummySSLSocketFactory getInstance() {
 		def trustStore = KeyStore.getInstance(KeyStore.defaultType)
