@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-	groovy 'org.codehaus.groovy:groovy-all:1.7.11'
+	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
 
 	compile 'junit:junit:4.8.2'
 	compile 'org.apache.httpcomponents:httpclient:4.2.1'
