@@ -60,10 +60,7 @@ class MemoryTape implements Tape {
 
 
 	boolean seek(Request request) {
-		def requestMatcher = new RequestMatcher(request, matchRules)
-		interactions.any {
-			requestMatcher.matches(it.request)
-		}
+		findMatch(request) >= 0
 	}
 
 	Response play(Request request) {
@@ -79,7 +76,7 @@ class MemoryTape implements Tape {
 		}
 	}
 
-	void record(Request request, Response response) {
+	synchronized void record(Request request, Response response) {
 		if (!mode.writable) {
 			throw new IllegalStateException('the tape is not writable')
 		}
@@ -103,7 +100,7 @@ class MemoryTape implements Tape {
 		"Tape[$name]"
 	}
 
-	private int findMatch(Request request) {
+	private synchronized int findMatch(Request request) {
 		def requestMatcher = new RequestMatcher(request, matchRules)
 		interactions.findIndexOf {
 			requestMatcher.matches(it.request)
