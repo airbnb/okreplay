@@ -6,7 +6,6 @@ import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.DefaultHttpClient
 import org.eclipse.jetty.server.Handler
 import org.junit.Rule
 import spock.lang.*
@@ -20,7 +19,7 @@ class BetamaxHttpClientSpec extends Specification {
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxy: Mock(HttpInterceptor))
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	def http = new BetamaxHttpClient(new DefaultHttpClient(), recorder)
+	def http = new BetamaxHttpClient(recorder)
 
 	@Betamax(tape = 'betamax http client')
 	void 'can use Betamax without starting the proxy'() {

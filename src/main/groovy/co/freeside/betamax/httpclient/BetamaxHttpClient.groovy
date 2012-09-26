@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.conn.ClientConnectionManager
 import org.apache.http.entity.*
 import org.apache.http.impl.EnglishReasonPhraseCatalog
+import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.message.BasicHttpResponse
 import org.apache.http.params.HttpParams
 import org.apache.http.protocol.HttpContext
@@ -20,6 +21,10 @@ class BetamaxHttpClient implements HttpClient {
 
 	private final HttpClient delegate
 	private final HttpHandler handlerChain
+
+	BetamaxHttpClient(Recorder recorder) {
+		this(new DefaultHttpClient(), recorder)
+	}
 
 	BetamaxHttpClient(HttpClient delegate, Recorder recorder) {
 		this.delegate = delegate
