@@ -23,6 +23,7 @@ import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.*
 import org.junit.rules.MethodRule
 import org.junit.runners.model.*
+import org.yaml.snakeyaml.introspector.PropertyUtils
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP
@@ -205,14 +206,15 @@ class Recorder implements MethodRule {
 	}
 
 	private void configureFromProperties(Properties properties) {
-		tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
-		proxyPort = properties.getProperty('betamax.proxyPort')?.toInteger() ?: DEFAULT_PROXY_PORT
-		proxyTimeout = properties.getProperty('betamax.proxyTimeout')?.toInteger() ?: DEFAULT_PROXY_TIMEOUT
-		def defaultModeValue = properties.getProperty('betamax.defaultMode')
-		defaultMode = defaultModeValue ? TapeMode.valueOf(defaultModeValue) : READ_WRITE
-		ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
-		ignoreLocalhost = properties.getProperty('betamax.ignoreLocalhost')?.toBoolean()
-		sslSupport = properties.getProperty('betamax.sslSupport')?.toBoolean()
+		use(PropertiesCategory) {
+			tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
+			proxyPort = properties.getInteger('betamax.proxyPort', DEFAULT_PROXY_PORT)
+			proxyTimeout = properties.getInteger('betamax.proxyTimeout', DEFAULT_PROXY_TIMEOUT)
+			defaultMode = properties.getEnum('betamax.defaultMode', READ_WRITE)
+			ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
+			ignoreLocalhost = properties.getBoolean('betamax.ignoreLocalhost')
+			sslSupport = properties.getBoolean('betamax.sslSupport')
+		}
 	}
 
 	private void configureFromConfig(ConfigObject config) {
