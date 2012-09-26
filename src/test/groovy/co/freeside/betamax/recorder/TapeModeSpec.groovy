@@ -20,14 +20,13 @@ class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	void setupSpec() {
 		tapeRoot.mkdirs()
-		proxy.start(recorder)
-		recorder.overrideProxySettings()
+		proxy.start()
 		endpoint.start(EchoHandler)
 	}
 
@@ -38,10 +37,6 @@ class TapeModeSpec extends Specification {
 
 	void cleanup() {
 		recorder.ejectTape()
-	}
-
-	void cleanupSpec() {
-		recorder.restoreOriginalProxySettings()
 	}
 
 	void 'in read-only mode the proxy rejects a request if no recorded interaction exists'() {

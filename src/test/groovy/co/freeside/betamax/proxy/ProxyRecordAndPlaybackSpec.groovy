@@ -16,23 +16,18 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Shared @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	void setupSpec() {
 		recorder.insertTape('proxy record and playback spec')
-		proxy.start(recorder)
-		recorder.overrideProxySettings()
+		proxy.start()
 	}
 
 	void setup() {
 		http = new RESTClient(endpoint.url)
 		BetamaxRoutePlanner.configure(http.client)
-	}
-
-	void cleanupSpec() {
-		recorder.restoreOriginalProxySettings()
 	}
 
 	@Timeout(10)
@@ -109,7 +104,7 @@ interactions:
 
 		when:
 		recorder.insertTape('existing_tape')
-		proxy.start(recorder)
+		proxy.start()
 
 		then:
 		recorder.tape.name == 'existing_tape'

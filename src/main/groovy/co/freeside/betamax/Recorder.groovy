@@ -109,9 +109,7 @@ class Recorder implements MethodRule {
 	}
 
 	private StorableTape tape
-	private ProxyServer proxy = new ProxyServer()
-	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
-	private final SSLOverrider sslOverrider = new SSLOverrider()
+	private final HttpInterceptor proxy = new ProxyServer(this)
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -130,15 +128,7 @@ class Recorder implements MethodRule {
 	 * @return the active _tape_.
 	 */
 	Tape getTape() {
-		// TODO: throw ISE if no tape
 		tape
-	}
-
-	/**
-	 * @return the proxy overrider used by this recorder.
-	 */
-	ProxyOverrider getProxyOverrider() {
-		proxyOverrider
 	}
 
 	/**
@@ -200,17 +190,12 @@ class Recorder implements MethodRule {
 
 	private void startProxy(String tapeName, Map arguments) {
 		if (!proxy.running) {
-			proxy.port = proxyPort
-			proxy.start(this)
+			proxy.start()
 		}
 		insertTape(tapeName, arguments)
-		overrideProxySettings()
-		overrideSSLSettings()
 	}
 
 	private void stopProxy() {
-		restoreOriginalProxySettings()
-		restoreOriginalSSLSettings()
 		proxy.stop()
 		ejectTape()
 	}
@@ -238,35 +223,6 @@ class Recorder implements MethodRule {
 		ignoreHosts = config.betamax.ignoreHosts ?: []
 		ignoreLocalhost = config.betamax.ignoreLocalhost
 		sslSupport = config.betamax.sslSupport
-	}
-
-	void overrideProxySettings() {
-		def proxyHost = InetAddress.localHost.hostAddress
-		def nonProxyHosts = ignoreHosts as Set
-		if (ignoreLocalhost) {
-			def local = InetAddress.localHost
-			nonProxyHosts << local.hostName
-			nonProxyHosts << local.hostAddress
-			nonProxyHosts << 'localhost'
-			nonProxyHosts << '127.0.0.1'
-		}
-		proxyOverrider.activate proxyHost, proxyPort, nonProxyHosts
-	}
-
-	void restoreOriginalProxySettings() {
-		proxyOverrider.deactivateAll()
-	}
-
-	void overrideSSLSettings() {
-		if (sslSupport) {
-			sslOverrider.activate()
-		}
-	}
-
-	void restoreOriginalSSLSettings() {
-		if (sslSupport) {
-			sslOverrider.deactivate()
-		}
 	}
 
 }

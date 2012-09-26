@@ -16,9 +16,10 @@
 
 package co.freeside.betamax.proxy.jetty
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.proxy.handler.*
 import co.freeside.betamax.ssl.DummySSLSocketFactory
+import co.freeside.betamax.util.*
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
@@ -29,13 +30,20 @@ import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
 import static co.freeside.betamax.Recorder.DEFAULT_PROXY_PORT
 
-class ProxyServer extends SimpleServer {
+class ProxyServer extends SimpleServer implements HttpInterceptor {
 
-	ProxyServer() {
+	private final Recorder recorder
+	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
+	private final SSLOverrider sslOverrider = new SSLOverrider()
+
+	ProxyServer(Recorder recorder) {
 		super(DEFAULT_PROXY_PORT)
+		this.recorder = recorder
 	}
 
-	void start(Recorder recorder) {
+	void start() {
+		port = recorder.proxyPort
+
 		def handler = new BetamaxProxy()
 		handler <<
 				new TapeReader(recorder) <<
@@ -46,14 +54,24 @@ class ProxyServer extends SimpleServer {
 		def connectHandler = new CustomConnectHandler(handler, port + 1)
 
 		super.start(connectHandler)
+
+		overrideProxySettings()
+		overrideSSLSettings()
+	}
+
+	@Override
+	void stop() {
+		restoreOriginalProxySettings()
+		restoreOriginalSSLSettings()
+		super.stop()
 	}
 
 	private HttpClient newHttpClient(Recorder recorder) {
-		def connectionManager = new ThreadSafeClientConnManager()
+		def connectionManager = new ThreadSafeClientConnManager() // TODO: use non-deprecated impl
 		def httpClient = new DefaultHttpClient(connectionManager)
 		httpClient.routePlanner = new ProxySelectorRoutePlanner(
 				httpClient.connectionManager.schemeRegistry,
-				recorder.proxyOverrider.originalProxySelector
+				proxyOverrider.originalProxySelector
 		)
 		if (recorder.sslSupport) {
 			connectionManager.schemeRegistry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
@@ -78,5 +96,35 @@ class ProxyServer extends SimpleServer {
 				keyPassword: 'password'
 		)
 	}
+
+	void overrideProxySettings() {
+		def proxyHost = InetAddress.localHost.hostAddress
+		def nonProxyHosts = recorder.ignoreHosts as Set
+		if (recorder.ignoreLocalhost) {
+			def local = InetAddress.localHost
+			nonProxyHosts << local.hostName
+			nonProxyHosts << local.hostAddress
+			nonProxyHosts << 'localhost'
+			nonProxyHosts << '127.0.0.1'
+		}
+		proxyOverrider.activate proxyHost, port, nonProxyHosts
+	}
+
+	void restoreOriginalProxySettings() {
+		proxyOverrider.deactivateAll()
+	}
+
+	void overrideSSLSettings() {
+		if (recorder.sslSupport) {
+			sslOverrider.activate()
+		}
+	}
+
+	void restoreOriginalSSLSettings() {
+		if (recorder.sslSupport) {
+			sslOverrider.deactivate()
+		}
+	}
+
 }
 

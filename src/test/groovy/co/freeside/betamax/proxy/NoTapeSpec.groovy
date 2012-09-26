@@ -17,14 +17,13 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 @Issue('https://github.com/robfletcher/betamax/issues/18')
 class NoTapeSpec extends Specification {
 
-	@Shared @AutoCleanup('restoreOriginalProxySettings') Recorder recorder = new Recorder()
-	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@Shared Recorder recorder = new Recorder()
+	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
 	void setupSpec() {
-		proxy.start(recorder)
-		recorder.overrideProxySettings()
+		proxy.start()
 		endpoint.start(EchoHandler)
 	}
 

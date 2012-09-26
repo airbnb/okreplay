@@ -17,7 +17,7 @@ class IgnoreHostsSpec extends Specification {
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer()
+	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	RESTClient http
 
 	void setupSpec() {
@@ -31,15 +31,10 @@ class IgnoreHostsSpec extends Specification {
 		recorder.insertTape('ignore hosts spec')
 	}
 
-	void cleanup() {
-		recorder.restoreOriginalProxySettings()
-	}
-
 	void 'does not proxy a request to #requestURI when ignoring #ignoreHosts'() {
 		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreHosts = [ignoreHosts]
-		proxy.start(recorder)
-		recorder.overrideProxySettings()
+		proxy.start()
 
 		when: 'a request is made'
 		def response = http.get(uri: requestURI)
@@ -61,8 +56,7 @@ class IgnoreHostsSpec extends Specification {
 	void 'does not proxy a request to #requestURI when ignoreLocalhost is true'() {
 		given: 'proxy is configured to ignore local connections'
 		recorder.ignoreLocalhost = true
-		proxy.start(recorder)
-		recorder.overrideProxySettings()
+		proxy.start()
 
 		when: 'a request is made'
 		def response = http.get(uri: requestURI)
