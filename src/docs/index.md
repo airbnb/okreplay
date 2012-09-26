@@ -7,15 +7,15 @@ dev-version: 1.1-SNAPSHOT
 
 ## Introduction
 
-Betamax is a record/playback proxy for testing JVM applications that access external HTTP resources such as [web services][webservices] and [REST][rest] APIs. The project was inspired by the [VCR][vcr] library for Ruby.
+Betamax is an HTTP interceptor that can record & replay HTTP traffic. You can use Betamax for testing JVM applications that access external HTTP resources such as [web services][webservices] and [REST][rest] APIs. The project was inspired by the [VCR][vcr] library for Ruby.
 
 Testing code that accesses HTTP services can be awkward. 3rd party downtime, network availability and resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) can affect the reliability of your tests. You can always write custom _stub_ web server code and configure the application to connect to a different URI when running tests but this requires some up front time and may mean reinventing the wheel the next time a similar situation is encountered.
 
-Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and returning _recorded_ responses.
+Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and replaying previously _recorded_ responses.
 
 The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
 
-Betamax works with JUnit and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language so long as HTTP connections are made in a way that respects Java's `http.proxyHost` and `http.proxyPort` system properties.
+Betamax works with JUnit and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language.
 
 Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's source control repository so they can be shared by other members of your team and used by your CI server. Different tests can use different tapes to simulate various response conditions. Each tape can hold multiple request/response interactions. An example tape file can be found [here][tapeexample].
 
@@ -24,6 +24,18 @@ Tapes are stored to disk as [YAML][yaml] files and can be modified (or even crea
 The current stable version of Betamax is _{{ page.version }}_.
 
 The current development version of Betamax is _{{ page.dev-version}}_.
+
+## Implementations
+
+Betamax comes in two flavors. The first is an HTTP and HTTPS proxy that can intercept traffic made in any way that respects Java's `http.proxyHost` and `http.proxyPort` system properties. The second is a simple wrapper for Apache _HttpClient_.
+
+### The Betamax proxy
+
+The proxy implementation can be used with HTTP traffic initiated from _java.net.URLConnection_, Apache _HttpClient_, etc. It runs an actual HTTP(S) proxy on Jetty and overrides the JVM proxy settings so that traffic is redirected via the proxy.
+
+### The Betamax HttpClient wrapper
+
+The _HttpClient_ wrapper is a simpler implementation but only works with _HttpClient_ (or things built on top of it such as the Groovy _Http Builder_). It is a good choice when you use _HttpClient_ instances that are injected in your classes to make external connections. In your tests you simply inject an instance of _BetamaxHttpClient_ instead.
 
 ## Installation
 
@@ -184,7 +196,7 @@ If you need to ignore connections to _localhost_ you can simply set the `ignoreL
 
 Tape files are stored as _YAML_ so that they should be reasonably easy to edit by hand. HTTP request and response bodies are stored as text for most common textual MIME types. Binary data for things like images is also stored but is not practical to edit by hand. In some cases where the text contains non-printable characters then text data will be stored as binary.
 
-## Compatibility
+## Proxy compatibility
 
 ### Apache HttpClient
 
@@ -220,7 +232,7 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 	ProxyHost proxy = new ProxyHost("localhost", 5555);
 	client.getHostConfiguration().setProxyHost(proxy);
 
-## HTTPS
+## HTTPS proxy
 
 As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
 

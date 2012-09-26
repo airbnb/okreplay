@@ -102,6 +102,6 @@ class BetamaxHttpClientSpec extends Specification {
 		0 * handler.handle(*_)
 	}
 
-	// TODO: what happens if you have the regular proxy configured as well?
-	
+	// TODO: support ignore hosts config
+
 }
