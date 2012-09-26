@@ -50,9 +50,9 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 
 	@Override
 	Map<String, String> getHeaders() {
-        	delegate.headerNames.toList().inject([:]) { map, header ->
-            		map << new MapEntry(header, getHeader(header))
-        	}.asImmutable()
+		delegate.headerNames.toList().inject([:]) { map, header ->
+			map << new MapEntry(header, getHeader(header))
+		}.asImmutable()
 	}
 
 	@Override

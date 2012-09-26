@@ -1,4 +1,4 @@
-package co.freeside.betamax.ssl
+package co.freeside.betamax.proxy.ssl
 
 import java.security.*
 import javax.net.ssl.*

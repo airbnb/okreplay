@@ -34,39 +34,39 @@ class YamlTape extends MemoryTape implements StorableTape {
 
 	public static final Tag TAPE_TAG = new Tag('!tape')
 
-    private boolean dirty = false
+	private boolean dirty = false
 
-    static YamlTape readFrom(Reader reader) {
-        try {
-            yaml.loadAs(reader, YamlTape)
-        } catch (YAMLException e) {
-            throw new TapeLoadException('Invalid tape', e)
-        }
-    }
+	static YamlTape readFrom(Reader reader) {
+		try {
+			yaml.loadAs(reader, YamlTape)
+		} catch (YAMLException e) {
+			throw new TapeLoadException('Invalid tape', e)
+		}
+	}
 
-    void writeTo(Writer writer) {
-        yaml.dump(this, writer)
-    }
+	void writeTo(Writer writer) {
+		yaml.dump(this, writer)
+	}
 
-    boolean isDirty() {
-        dirty
-    }
+	boolean isDirty() {
+		dirty
+	}
 
-    @Override
-    void record(Request request, Response response) {
-        super.record(request, response)
-        dirty = true
-    }
+	@Override
+	void record(Request request, Response response) {
+		super.record(request, response)
+		dirty = true
+	}
 
-    private static Yaml getYaml() {
-        def representer = new TapeRepresenter()
+	private static Yaml getYaml() {
+		def representer = new TapeRepresenter()
 		representer.addClassTag(YamlTape, TAPE_TAG)
 
-        def constructor = new Constructor()
-        constructor.addTypeDescription(new TypeDescription(YamlTape, TAPE_TAG))
+		def constructor = new Constructor()
+		constructor.addTypeDescription(new TypeDescription(YamlTape, TAPE_TAG))
 
-        def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK, width: 256)
+		def dumperOptions = new DumperOptions(defaultFlowStyle: BLOCK, width: 256)
 
-        new Yaml(constructor, representer, dumperOptions)
-    }
+		new Yaml(constructor, representer, dumperOptions)
+	}
 }

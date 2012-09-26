@@ -1,6 +1,6 @@
 package co.freeside.betamax.httpclient
 
-import co.freeside.betamax.ssl.DummySSLSocketFactory
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 

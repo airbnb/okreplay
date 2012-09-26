@@ -28,42 +28,42 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
 
 	final File tapeRoot
 
-    private static final log = Logger.getLogger(YamlTapeLoader.name)
+	private static final log = Logger.getLogger(YamlTapeLoader.name)
 
-    YamlTapeLoader(File tapeRoot) {
-        this.tapeRoot = tapeRoot
-    }
+	YamlTapeLoader(File tapeRoot) {
+		this.tapeRoot = tapeRoot
+	}
 
-    YamlTape loadTape(String name) {
-        def file = fileFor(name)
-        if (file.isFile()) {
-            def tape = file.withReader(FILE_CHARSET) { reader ->
-                YamlTape.readFrom(reader)
-            }
-            log.info "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
-            tape
-        } else {
-            new YamlTape(name: name)
-        }
-    }
+	YamlTape loadTape(String name) {
+		def file = fileFor(name)
+		if (file.isFile()) {
+			def tape = file.withReader(FILE_CHARSET) { reader ->
+				YamlTape.readFrom(reader)
+			}
+			log.info "loaded tape with ${tape.size()} recorded interactions from file $file.name..."
+			tape
+		} else {
+			new YamlTape(name: name)
+		}
+	}
 
-    void writeTape(StorableTape tape) {
-        def file = fileFor(tape.name)
-        file.parentFile.mkdirs()
-        if (tape.isDirty()) {
-            file.withWriter(FILE_CHARSET) { writer ->
-                log.info "writing tape $tape to file $file.name..."
-                tape.writeTo(writer)
-            }
-        }
-    }
+	void writeTape(StorableTape tape) {
+		def file = fileFor(tape.name)
+		file.parentFile.mkdirs()
+		if (tape.isDirty()) {
+			file.withWriter(FILE_CHARSET) { writer ->
+				log.info "writing tape $tape to file $file.name..."
+				tape.writeTo(writer)
+			}
+		}
+	}
 
-    File fileFor(String tapeName) {
-        def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD)
+	File fileFor(String tapeName) {
+		def normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD)
 				.replaceAll(/\p{InCombiningDiacriticalMarks}+/, '')
 				.replaceAll(/[^\w\d]+/, '_')
 				.replaceFirst(/^_/, '')
 				.replaceFirst(/_$/, '')
-        new File(tapeRoot, "${normalizedName}.yaml")
-    }
+		new File(tapeRoot, "${normalizedName}.yaml")
+	}
 }

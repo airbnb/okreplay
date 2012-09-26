@@ -1,4 +1,4 @@
-package co.freeside.betamax.ssl
+package co.freeside.betamax.proxy.ssl
 
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager

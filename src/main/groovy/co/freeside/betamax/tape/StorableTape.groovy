@@ -25,9 +25,9 @@ interface StorableTape extends Tape {
 	 */
 	void writeTo(Writer writer)
 
-    /**
-     * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
-     */
-    boolean isDirty()
+	/**
+	 * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
+	 */
+	boolean isDirty()
 
 }
