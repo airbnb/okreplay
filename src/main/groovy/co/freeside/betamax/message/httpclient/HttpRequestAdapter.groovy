@@ -1,14 +1,19 @@
 package co.freeside.betamax.message.httpclient
 
-import co.freeside.betamax.message.*
+import co.freeside.betamax.message.Request
 import org.apache.http.*
 
-class HttpRequestAdapter extends AbstractMessage implements Request {
+class HttpRequestAdapter extends HttpMessageAdapter<HttpRequest> implements Request {
 
 	private final HttpRequest delegate
 
 	HttpRequestAdapter(HttpRequest delegate) {
 		this.delegate = delegate
+	}
+
+	@Override
+	protected HttpRequest getDelegate() {
+		delegate
 	}
 
 	@Override
@@ -19,23 +24,6 @@ class HttpRequestAdapter extends AbstractMessage implements Request {
 	@Override
 	URI getUri() {
 		delegate.requestLine.uri.toURI()
-	}
-
-	@Override
-	Map<String, String> getHeaders() {
-		delegate.allHeaders.inject([:]) { map, header ->
-			map << new MapEntry(header.name, getHeader(header.name))
-		}
-	}
-
-	@Override
-	String getHeader(String name) {
-		delegate.getHeaders(name).value.join(', ')
-	}
-
-	@Override
-	void addHeader(String name, String value) {
-		delegate.addHeader(name, value)
 	}
 
 	@Override

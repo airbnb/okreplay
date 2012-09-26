@@ -16,10 +16,8 @@
 
 package co.freeside.betamax.message.servlet
 
-import co.freeside.betamax.message.AbstractMessage
-import co.freeside.betamax.message.Request
-
 import javax.servlet.http.HttpServletRequest
+import co.freeside.betamax.message.*
 
 class ServletRequestAdapter extends AbstractMessage implements Request {
 

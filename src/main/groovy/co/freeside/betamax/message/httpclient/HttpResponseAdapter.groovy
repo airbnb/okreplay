@@ -1,10 +1,9 @@
 package co.freeside.betamax.message.httpclient
 
-import co.freeside.betamax.message.AbstractMessage
 import co.freeside.betamax.message.Response
 import org.apache.http.HttpResponse
 
-class HttpResponseAdapter extends AbstractMessage implements Response {
+class HttpResponseAdapter extends HttpMessageAdapter<HttpResponse> implements Response {
 
 	private final HttpResponse delegate
 	private final byte[] body
@@ -17,29 +16,22 @@ class HttpResponseAdapter extends AbstractMessage implements Response {
 		}
 	}
 
+	@Override
+	protected HttpResponse getDelegate() {
+		delegate
+	}
+
+	@Override
 	int getStatus() {
 		delegate.statusLine.statusCode
 	}
 
-	Map<String, String> getHeaders() {
-		delegate.allHeaders.inject([:]) { map, header ->
-			map << new MapEntry(header.name, getHeader(header.name))
-		}
-	}
-
 	@Override
-	String getHeader(String name) {
-		delegate.getHeaders(name).value.join(', ')
-	}
-
-	void addHeader(String name, String value) {
-		delegate.addHeader(name, value)
-	}
-
 	boolean hasBody() {
 		body != null
 	}
 
+	@Override
 	InputStream getBodyAsBinary() {
 		if (body == null) {
 			throw new IllegalStateException('cannot read the body of a response that does not have one')
