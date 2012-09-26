@@ -55,7 +55,7 @@ class BetamaxHttpClient implements HttpClient {
 				response.addHeader(name, it.trim())
 			}
 		}
-		response.addHeader(VIA, BetamaxHttpClient.simpleName)
+		response.addHeader(VIA, 'Betamax')
 		if (responseWrapper.hasBody()) {
 			response.entity = new ByteArrayEntity(responseWrapper.bodyAsBinary.bytes, ContentType.create(responseWrapper.contentType))
 		}

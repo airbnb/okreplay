@@ -1,9 +1,7 @@
 package co.freeside.betamax.message.http
 
-import co.freeside.betamax.message.AbstractMessage
-import co.freeside.betamax.message.Request
-import org.apache.http.HttpEntityEnclosingRequest
-import org.apache.http.HttpRequest
+import co.freeside.betamax.message.*
+import org.apache.http.*
 
 class HttpRequestAdapter extends AbstractMessage implements Request {
 
@@ -28,6 +26,11 @@ class HttpRequestAdapter extends AbstractMessage implements Request {
 		delegate.allHeaders.inject([:]) { map, header ->
 			map << new MapEntry(header.name, getHeader(header.name))
 		}
+	}
+
+	@Override
+	String getHeader(String name) {
+		delegate.getHeaders(name).value.join(', ')
 	}
 
 	@Override
