@@ -1,5 +1,5 @@
 language: groovy
 jdk:
   - oraclejdk7
-before_script: gradle -q assemble
+install: gradle -q assemble
 script: gradle -q check
