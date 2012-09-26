@@ -1,4 +1,4 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.util.message.BasicRequest
 import org.apache.http.HttpResponse
@@ -94,7 +94,7 @@ class TargetConnectorSpec extends Specification {
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
+		def e = thrown(HandlerException)
 		e.httpStatus == httpStatus
 
 		where:

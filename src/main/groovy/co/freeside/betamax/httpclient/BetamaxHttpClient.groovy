@@ -2,7 +2,7 @@ package co.freeside.betamax.httpclient
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.httpclient.HttpRequestAdapter
-import co.freeside.betamax.proxy.handler.*
+import co.freeside.betamax.handler.*
 import org.apache.http.*
 import org.apache.http.client.*
 import org.apache.http.client.methods.HttpUriRequest

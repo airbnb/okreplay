@@ -1,4 +1,4 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.Request
@@ -46,7 +46,7 @@ class TapeWriterSpec extends Specification {
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
+		def e = thrown(HandlerException)
 		e.httpStatus == HTTP_FORBIDDEN
 	}
 
@@ -60,7 +60,7 @@ class TapeWriterSpec extends Specification {
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
+		def e = thrown(HandlerException)
 		e.httpStatus == HTTP_FORBIDDEN
 	}
 

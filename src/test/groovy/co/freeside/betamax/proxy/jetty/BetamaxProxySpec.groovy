@@ -3,8 +3,8 @@ package co.freeside.betamax.proxy.jetty
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
-import co.freeside.betamax.proxy.handler.HttpHandler
-import co.freeside.betamax.proxy.handler.ProxyException
+import co.freeside.betamax.handler.HttpHandler
+import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.util.message.BasicResponse
 import co.freeside.betamax.util.servlet.MockHttpServletResponse
 import spock.lang.Specification
@@ -66,7 +66,7 @@ class BetamaxProxySpec extends Specification {
 	void 'responds with the specified error status if the handler chain throws ProxyException'() {
 		given:
 		def handler = Mock(HttpHandler)
-		handler.handle(_) >> { throw new ProxyException(419, 'I\'m a teapot') }
+		handler.handle(_) >> { throw new HandlerException(419, 'I\'m a teapot') }
 		proxy << handler
 
 		when:

@@ -1,4 +1,4 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.Response
@@ -32,9 +32,9 @@ class TargetConnector implements HttpHandler {
 			def response = httpClient.execute(httpHost, outboundRequest)
 			new HttpResponseAdapter(response)
 		} catch (SocketTimeoutException e) {
-			throw new ProxyException(HTTP_GATEWAY_TIMEOUT, "Timed out connecting to $request.uri", e)
+			throw new HandlerException(HTTP_GATEWAY_TIMEOUT, "Timed out connecting to $request.uri", e)
 		} catch (IOException e) {
-			throw new ProxyException(HTTP_BAD_GATEWAY, "Problem connecting to $request.uri", e)
+			throw new HandlerException(HTTP_BAD_GATEWAY, "Problem connecting to $request.uri", e)
 		}
 	}
 

@@ -1,7 +1,7 @@
 package co.freeside.betamax.httpclient
 
 import co.freeside.betamax.*
-import co.freeside.betamax.proxy.handler.ProxyException
+import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.methods.*
@@ -95,7 +95,7 @@ class BetamaxHttpClientSpec extends Specification {
 		http.execute(new HttpGet(endpoint.url))
 
 		then:
-		def e = thrown(ProxyException)
+		def e = thrown(HandlerException)
 		e.message == 'No tape'
 
 		and:

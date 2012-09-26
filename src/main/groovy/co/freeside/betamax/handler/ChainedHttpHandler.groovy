@@ -1,4 +1,4 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.Response

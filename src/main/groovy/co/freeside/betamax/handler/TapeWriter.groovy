@@ -1,4 +1,4 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.Request
@@ -22,9 +22,9 @@ class TapeWriter extends ChainedHttpHandler {
 	Response handle(Request request) {
 		def tape = recorder.tape
 		if (!tape) {
-			throw new ProxyException(HTTP_FORBIDDEN, 'No tape')
+			throw new HandlerException(HTTP_FORBIDDEN, 'No tape')
 		} else if (!tape.writable) {
-			throw new ProxyException(HTTP_FORBIDDEN, 'Tape is read-only')
+			throw new HandlerException(HTTP_FORBIDDEN, 'Tape is read-only')
 		}
 
 		def response = chain(request)

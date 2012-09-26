@@ -2,8 +2,8 @@ package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
-import co.freeside.betamax.proxy.handler.HttpHandler
-import co.freeside.betamax.proxy.handler.ProxyException
+import co.freeside.betamax.handler.HttpHandler
+import co.freeside.betamax.handler.HandlerException
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 
@@ -29,7 +29,7 @@ class BetamaxProxy extends AbstractHandler {
 		try {
 			def betamaxResponse = handlerChain.handle(betamaxRequest)
 			sendResponse(betamaxResponse, response)
-		} catch (ProxyException e) {
+		} catch (HandlerException e) {
 			log.log SEVERE, 'exception in proxy processing', e
 			response.sendError(e.httpStatus, e.message)
 		} catch (Exception e) {
