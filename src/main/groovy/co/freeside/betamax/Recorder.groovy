@@ -110,7 +110,7 @@ class Recorder implements MethodRule {
 	}
 
 	private StorableTape tape
-	private final HttpInterceptor proxy = new ProxyServer(this)
+	HttpInterceptor proxy = new ProxyServer(this)
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.

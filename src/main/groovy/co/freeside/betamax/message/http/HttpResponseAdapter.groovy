@@ -22,9 +22,9 @@ class HttpResponseAdapter extends AbstractMessage implements Response {
 	}
 
 	Map<String, String> getHeaders() {
-        	delegate.allHeaders.inject([:]) { map, header ->
-            		map << new MapEntry(header.name, getHeader(header.name))
-        	}
+		delegate.allHeaders.inject([:]) { map, header ->
+			map << new MapEntry(header.name, getHeader(header.name))
+		}
 	}
 
 	@Override
