@@ -1,4 +1,4 @@
-package co.freeside.betamax.message.http
+package co.freeside.betamax.message.httpclient
 
 import co.freeside.betamax.message.*
 import org.apache.http.*

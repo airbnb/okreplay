@@ -2,7 +2,7 @@ package co.freeside.betamax.proxy.handler
 
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.Response
-import co.freeside.betamax.message.http.HttpResponseAdapter
+import co.freeside.betamax.message.httpclient.HttpResponseAdapter
 import org.apache.http.HttpHost
 import org.apache.http.HttpRequest
 import org.apache.http.HttpRequestFactory

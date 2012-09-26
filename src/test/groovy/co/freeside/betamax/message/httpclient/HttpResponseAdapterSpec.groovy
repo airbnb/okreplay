@@ -1,4 +1,4 @@
-package co.freeside.betamax.message.http
+package co.freeside.betamax.message.httpclient
 
 import org.apache.http.entity.BasicHttpEntity
 import org.apache.http.entity.ByteArrayEntity

@@ -17,13 +17,10 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 
 class BetamaxHttpClientSpec extends Specification {
 
-	@AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxy: Mock(HttpInterceptor))
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(new DefaultHttpClient(), recorder)
-
-	void setupSpec() {
-	}
 
 	@Betamax(tape = 'betamax http client')
 	void 'can use Betamax without starting the proxy'() {
@@ -59,14 +56,14 @@ class BetamaxHttpClientSpec extends Specification {
 
 		then:
 		response.statusLine.statusCode == HTTP_OK
-		response.entity.content.text.startsWith 'GET / HTTP/1.1'
+		response.entity.content.text == HELLO_WORLD
 
 		and:
 		response.getFirstHeader(VIA).value == 'Betamax'
 		response.getFirstHeader('X-Betamax').value == 'PLAY'
 
 		and:
-		0 * handler.handle(_, _, _, _)
+		0 * handler.handle(*_)
 	}
 
 	@Betamax(tape = 'betamax http client')
@@ -102,7 +99,7 @@ class BetamaxHttpClientSpec extends Specification {
 		e.message == 'No tape'
 
 		and:
-		0 * handler.handle(_, _, _, _)
+		0 * handler.handle(*_)
 	}
 
 	// TODO: what happens if you have the regular proxy configured as well?
