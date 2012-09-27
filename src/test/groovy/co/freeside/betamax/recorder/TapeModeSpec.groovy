@@ -49,7 +49,7 @@ class TapeModeSpec extends Specification {
 		then: 'the proxy rejects the request'
 		def e = thrown(HttpResponseException)
 		e.statusCode == HTTP_FORBIDDEN
-		e.message == 'Tape is read-only'
+		e.message == 'Tape is not writable'
 	}
 
 	void 'in write-only mode the an interaction can be recorded'() {

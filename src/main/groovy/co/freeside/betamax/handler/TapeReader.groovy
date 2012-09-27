@@ -25,7 +25,7 @@ class TapeReader extends ChainedHttpHandler {
 	Response handle(Request request) {
 		def tape = recorder.tape
 		if (!tape) {
-			throw new HandlerException(HTTP_FORBIDDEN, 'No tape')
+			throw new NoTapeException()
 		} else if (tape.readable && tape.seek(request)) {
 			log.log INFO, "Playing back from '$tape.name'"
 			def response = tape.play(request)
@@ -34,7 +34,7 @@ class TapeReader extends ChainedHttpHandler {
 		} else if (tape.writable) {
 			chain(request)
 		} else {
-			throw new HandlerException(HTTP_FORBIDDEN, 'Tape is read-only')
+			throw new NonWritableTapeException()
 		}
 	}
 

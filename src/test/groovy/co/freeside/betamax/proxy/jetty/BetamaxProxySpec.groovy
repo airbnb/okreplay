@@ -66,7 +66,7 @@ class BetamaxProxySpec extends Specification {
 	void 'responds with the specified error status if the handler chain throws ProxyException'() {
 		given:
 		def handler = Mock(HttpHandler)
-		handler.handle(_) >> { throw new HandlerException(419, 'I\'m a teapot') }
+		handler.handle(_) >> { throw [getHttpStatus: {-> 419}] as HandlerException }
 		proxy << handler
 
 		when:
