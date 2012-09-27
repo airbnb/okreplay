@@ -25,6 +25,7 @@ class BetamaxProxy extends AbstractHandler {
 
 	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
+		println "BetamaxProxy.handle ${request.getHeader('Host')}"
 		def betamaxRequest = new ServletRequestAdapter(request)
 		try {
 			def betamaxResponse = handlerChain.handle(betamaxRequest)
@@ -45,11 +46,14 @@ class BetamaxProxy extends AbstractHandler {
 
 	private void sendResponse(Response betamaxResponse, HttpServletResponse response) {
 		response.status = betamaxResponse.status
+		println "Betamax headers..."
 		betamaxResponse.headers.each { name, value ->
 			value.split(/,\s*/).each {
+				println "$name: $it"
 				response.addHeader(name, it)
 			}
 		}
+		println 'meh...'
 		response.addHeader(VIA, VIA_HEADER)
 		if (betamaxResponse.hasBody()) {
 			response.outputStream.withStream { stream ->
