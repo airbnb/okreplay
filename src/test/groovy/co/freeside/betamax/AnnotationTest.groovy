@@ -5,7 +5,7 @@ import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.junit.*
-
+import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -57,7 +57,7 @@ class AnnotationTest {
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == 'Betamax'
-		assert response.getFirstHeader('X-Betamax')?.value == 'REC'
+		assert response.getFirstHeader(X_BETAMAX)?.value == 'REC'
 	}
 
 	@Test
@@ -67,7 +67,7 @@ class AnnotationTest {
 
 		assert response.status == HTTP_OK
 		assert response.getFirstHeader(VIA)?.value == 'Betamax'
-		assert response.getFirstHeader('X-Betamax')?.value == 'PLAY'
+		assert response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
 	}
 
 	@Test

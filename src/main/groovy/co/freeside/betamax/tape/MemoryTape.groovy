@@ -17,17 +17,13 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.TapeMode
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.message.tape.RecordedRequest
-import co.freeside.betamax.message.tape.RecordedResponse
+import co.freeside.betamax.message.*
+import co.freeside.betamax.message.tape.*
 import org.yaml.snakeyaml.reader.StreamReader
-
 import static TapeMode.READ_WRITE
-import static co.freeside.betamax.MatchRule.method
-import static co.freeside.betamax.MatchRule.uri
+import static co.freeside.betamax.MatchRule.*
+import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static org.apache.http.HttpHeaders.VIA
-
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
@@ -124,7 +120,7 @@ class MemoryTape implements Tape {
 		def clone = new RecordedResponse()
 		clone.status = response.status
 		response.headers.each {
-			if (!(it.key in [VIA, 'X-Betamax'])) {
+			if (!(it.key in [VIA, X_BETAMAX])) {
 				clone.headers[it.key] = it.value
 			}
 		}
