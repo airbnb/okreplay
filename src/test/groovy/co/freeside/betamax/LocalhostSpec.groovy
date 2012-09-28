@@ -3,11 +3,11 @@ package co.freeside.betamax
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.HttpResponseDecorator
-import groovyx.net.http.RESTClient
+import groovyx.net.http.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -16,7 +16,7 @@ import static org.apache.http.HttpHeaders.VIA
 @Unroll
 class LocalhostSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()

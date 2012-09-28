@@ -2,19 +2,18 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import spock.lang.*
-
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/16')
 @Unroll
 class IgnoreHostsSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)

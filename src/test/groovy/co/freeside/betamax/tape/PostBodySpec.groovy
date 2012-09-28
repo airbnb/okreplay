@@ -7,17 +7,14 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
 import org.junit.Rule
 import org.yaml.snakeyaml.Yaml
-import spock.lang.AutoCleanup
-import spock.lang.Issue
-import spock.lang.Shared
-import spock.lang.Specification
-
+import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static co.freeside.betamax.util.FileUtils.newTempDir
 
 @Issue('https://github.com/robfletcher/betamax/issues/50')
 class PostBodySpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 
 	private DefaultHttpClient httpClient = new DefaultHttpClient()

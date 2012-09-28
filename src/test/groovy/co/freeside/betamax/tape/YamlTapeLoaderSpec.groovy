@@ -1,14 +1,12 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import spock.lang.AutoCleanup
-import spock.lang.Issue
-import spock.lang.Shared
-import spock.lang.Specification
+import spock.lang.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
 
 class YamlTapeLoaderSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+    @Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 
     void setupSpec() {
         tapeRoot.mkdirs()

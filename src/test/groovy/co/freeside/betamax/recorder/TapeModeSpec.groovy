@@ -2,23 +2,17 @@ package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.HttpResponseException
-import groovyx.net.http.RESTClient
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
-
-import static co.freeside.betamax.TapeMode.READ_ONLY
-import static co.freeside.betamax.TapeMode.WRITE_ONLY
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
-import static java.net.HttpURLConnection.HTTP_OK
+import groovyx.net.http.*
+import spock.lang.*
+import static co.freeside.betamax.TapeMode.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
+import static java.net.HttpURLConnection.*
 
 class TapeModeSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()

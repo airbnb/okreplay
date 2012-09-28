@@ -6,12 +6,13 @@ import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.HelloHandler
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.util.concurrent.TimeUnit.SECONDS
 
 class MultiThreadedTapeWritingSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
