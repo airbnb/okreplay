@@ -186,6 +186,10 @@ Tape files are stored as _YAML_ so that they should be reasonably easy to edit b
 
 ## Compatibility
 
+### Java 6
+
+Under Java 6 it is not possible to proxy connections to URLs whose host is `localhost` or `127.0.0.1`. The workaround is to use the hostname or public IP address of the machine instead. This is a [known issue](http://bugs.sun.com/view_bug.do?bug_id=6737819) that is fixed in Java 7.
+
 ### Apache HttpClient
 
 By default [Apache _HttpClient_][httpclient] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept traffic from HttpClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][proxyselector]. When Betamax is not active this will mean HttpClient traffic will be routed via the default proxy configured in Java (if any).

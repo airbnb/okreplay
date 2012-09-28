@@ -12,6 +12,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/62')
+@Issue('http://bugs.sun.com/view_bug.do?bug_id=6737819')
 @Unroll
 class LocalhostSpec extends Specification {
 
@@ -37,7 +38,7 @@ class LocalhostSpec extends Specification {
 		response.getFirstHeader(VIA)?.value == 'Betamax'
 
 		where:
-		uri << [endpoint.url, "http://localhost:$endpoint.port/"]
+		uri << [endpoint.url, "http://localhost:$endpoint.port/", "http://127.0.0.1:$endpoint.port/"]
 	}
 
 }
