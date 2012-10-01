@@ -5,6 +5,7 @@ import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.Rule
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
@@ -17,11 +18,7 @@ class PostBodySpec extends Specification {
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 
-	private DefaultHttpClient httpClient = new DefaultHttpClient()
-
-	void setup() {
-		BetamaxRoutePlanner.configure(httpClient)
-	}
+	private DefaultHttpClient httpClient = new SystemDefaultHttpClient()
 
 	void 'post body is stored on tape when using UrlConnection'() {
 		given:

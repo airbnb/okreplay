@@ -2,6 +2,7 @@ package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import groovyx.net.http.RESTClient
 import spock.lang.*
 import static co.freeside.betamax.MatchRule.host
@@ -13,12 +14,10 @@ class RequestMatchingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared RESTClient http = new RESTClient()
+	@Shared RESTClient http = new BetamaxRESTClient()
 
 	void setupSpec() {
 		tapeRoot.mkdirs()
-
-		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	@Unroll('#method request for #uri returns "#responseText"')

@@ -1,17 +1,11 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
-import co.freeside.betamax.proxy.jetty.ProxyServer
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.proxy.jetty.*
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.HttpResponseException
-import groovyx.net.http.RESTClient
-import spock.lang.AutoCleanup
-import spock.lang.Issue
-import spock.lang.Shared
-import spock.lang.Specification
-
+import groovyx.net.http.*
+import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
 @Issue('https://github.com/robfletcher/betamax/issues/18')
@@ -20,16 +14,11 @@ class NoTapeSpec extends Specification {
 	@Shared Recorder recorder = new Recorder()
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http
+	RESTClient http = new BetamaxRESTClient(endpoint.url)
 
 	void setupSpec() {
 		proxy.start()
 		endpoint.start(EchoHandler)
-	}
-
-	void setup() {
-		http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	void 'an error is returned if the proxy intercepts a request when no tape is inserted'() {

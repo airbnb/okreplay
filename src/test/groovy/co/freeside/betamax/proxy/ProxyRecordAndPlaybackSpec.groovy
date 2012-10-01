@@ -1,8 +1,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.*
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.yaml.snakeyaml.Yaml
@@ -17,16 +17,11 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 	@Shared @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http
+	RESTClient http = new BetamaxRESTClient(endpoint.url)
 
 	void setupSpec() {
 		recorder.insertTape('proxy record and playback spec')
 		proxy.start()
-	}
-
-	void setup() {
-		http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	@Timeout(10)

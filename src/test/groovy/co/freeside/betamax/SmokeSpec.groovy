@@ -1,12 +1,10 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
-import groovyx.net.http.HttpResponseDecorator
-import groovyx.net.http.RESTClient
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
+import groovyx.net.http.*
 import org.junit.Rule
 import spock.lang.*
-
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -15,11 +13,7 @@ class SmokeSpec extends Specification {
 
 	@Rule Recorder recorder = new Recorder(sslSupport: true)
 
-	@Shared RESTClient http = new RESTClient()
-
-	void setupSpec() {
-		BetamaxRoutePlanner.configure(http.client)
-	}
+	@Shared RESTClient http = new BetamaxRESTClient()
 
 	@Betamax(tape = 'smoke spec')
 	void '#type response data'() {

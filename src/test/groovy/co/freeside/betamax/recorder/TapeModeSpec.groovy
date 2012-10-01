@@ -3,6 +3,7 @@ package co.freeside.betamax.recorder
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.*
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*
 import spock.lang.*
@@ -16,17 +17,12 @@ class TapeModeSpec extends Specification {
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http
+	RESTClient http = new BetamaxRESTClient()
 
 	void setupSpec() {
 		tapeRoot.mkdirs()
 		proxy.start()
 		endpoint.start(EchoHandler)
-	}
-
-	void setup() {
-		http = new RESTClient()
-		BetamaxRoutePlanner.configure(http.client)
 	}
 
 	void cleanup() {

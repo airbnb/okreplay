@@ -1,7 +1,7 @@
 package co.freeside.betamax
 
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.junit.Rule
@@ -20,8 +20,7 @@ class AnnotationSpec extends Specification {
 	RESTClient http
 
 	void setup() {
-		http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
+		http = new BetamaxRESTClient(endpoint.url)
 	}
 
 	void 'no tape is inserted if there is no annotation on the feature'() {

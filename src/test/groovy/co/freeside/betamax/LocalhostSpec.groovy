@@ -1,7 +1,7 @@
 package co.freeside.betamax
 
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*
 import org.junit.Rule
@@ -21,10 +21,9 @@ class LocalhostSpec extends Specification {
 
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
-	@Shared RESTClient http = new RESTClient()
+	@Shared RESTClient http = new BetamaxRESTClient()
 
 	void setupSpec() {
-		BetamaxRoutePlanner.configure(http.client)
 		endpoint.start(EchoHandler)
 	}
 
