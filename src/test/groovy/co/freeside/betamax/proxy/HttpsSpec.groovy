@@ -1,12 +1,12 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.httpclient.*
+import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
@@ -36,9 +36,8 @@ class HttpsSpec extends Specification {
 	}
 
 	void setup() {
-		http = new DefaultHttpClient()
+		http = new SystemDefaultHttpClient()
 		BetamaxHttpsSupport.configure(http)
-		BetamaxRoutePlanner.configure(http)
 	}
 
 	@Betamax(tape = 'https spec')

@@ -1,8 +1,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.*
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import spock.lang.*
@@ -24,8 +24,7 @@ class IgnoreHostsSpec extends Specification {
 	}
 
 	void setup() {
-		http = new RESTClient()
-		BetamaxRoutePlanner.configure(http.client)
+		http = new BetamaxRESTClient()
 
 		recorder.insertTape('ignore hosts spec')
 	}

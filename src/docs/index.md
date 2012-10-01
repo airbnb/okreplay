@@ -192,11 +192,11 @@ Under Java 6 it is not possible to proxy connections to URLs whose host is `loca
 
 ### Apache HttpClient
 
-By default [Apache _HttpClient_][httpclient] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept traffic from HttpClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][proxyselector]. When Betamax is not active this will mean HttpClient traffic will be routed via the default proxy configured in Java (if any).
+The default implementations of [Apache _HttpClient_][httpclient] takes no notice of Java's HTTP proxy settings. The Betamax proxy can only intercept traffic from HttpClient if the client instance is set up to use a [`ProxySelectorRoutePlanner`][proxyselector]. When Betamax is not active this will mean HttpClient traffic will be routed via the default proxy configured in Java (if any).
 
 In a dependency injection context such as a [Grails][grails] app you can just inject a proxy-configured _HttpClient_ instance into your class-under-test.
 
-Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure your _HttpClient_ instance.
+The _HttpClient_ library provides an implementation called [SystemDefaultHttpClient](http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html) that _does_ use the JVM proxy settings. Ideally you can use that. In addition, Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure instances of other _HttpClient_ types.
 
 #### Configuring HttpClient
 

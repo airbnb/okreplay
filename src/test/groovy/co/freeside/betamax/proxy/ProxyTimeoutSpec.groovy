@@ -3,6 +3,7 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.SlowHandler
 import groovyx.net.http.*
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
@@ -18,11 +19,9 @@ class ProxyTimeoutSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http
+	RESTClient http = new BetamaxRESTClient(endpoint.url)
 
 	void setup() {
-		http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
 		http.client.httpRequestRetryHandler = new DefaultHttpRequestRetryHandler(0, false)
 	}
 

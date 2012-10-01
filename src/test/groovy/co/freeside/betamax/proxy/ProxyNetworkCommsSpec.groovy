@@ -1,8 +1,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*
 import org.apache.commons.httpclient.*
@@ -45,8 +45,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Betamax(tape = 'proxy network comms spec')
     void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
         given:
-        def http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
+        def http = new BetamaxRESTClient(endpoint.url)
 
         when:
         def response = http.get(path: '/')
@@ -107,8 +106,7 @@ class ProxyNetworkCommsSpec extends Specification {
 	@Betamax(tape = 'proxy network comms spec')
     void 'proxy handles #method requests'() {
         given:
-        def http = new RESTClient(endpoint.url)
-		BetamaxRoutePlanner.configure(http.client)
+        def http = new BetamaxRESTClient(endpoint.url)
 
         when:
         def response = http."$method"(path: '/')
