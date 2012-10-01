@@ -19,7 +19,7 @@ class DummySSLSocketFactory extends SSLSocketFactory {
 		super(trustStore)
 		sslContext.init(null, [new DummyX509TrustManager()] as TrustManager[], new SecureRandom())
 		factory = sslContext.socketFactory
-		setHostnameVerifier(new DummyHostNameVerifier())
+		setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER)
 	}
 
 	@Override

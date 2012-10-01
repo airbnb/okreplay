@@ -2,7 +2,8 @@ package co.freeside.betamax.util
 
 import java.security.Security
 import javax.net.ssl.HttpsURLConnection
-import co.freeside.betamax.ssl.*
+import co.freeside.betamax.ssl.DummyJVMSSLSocketFactory
+import static org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
 class SSLOverrider {
 
@@ -19,8 +20,7 @@ class SSLOverrider {
 
 			Security.setProperty(SSL_SOCKET_FACTORY_PROVIDER, DummyJVMSSLSocketFactory.name)
 
-			def verifier = new DummyHostNameVerifier()
-			HttpsURLConnection.defaultHostnameVerifier = verifier
+			HttpsURLConnection.defaultHostnameVerifier = ALLOW_ALL_HOSTNAME_VERIFIER
 		}
 
 		isActive = true
