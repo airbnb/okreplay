@@ -4,14 +4,14 @@ import co.freeside.betamax.Recorder
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import groovyx.net.http.RESTClient
 import spock.lang.*
-
 import static co.freeside.betamax.MatchRule.host
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')
 class RequestMatchingSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared RESTClient http = new RESTClient()
 

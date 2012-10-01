@@ -1,15 +1,13 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Unroll
+import spock.lang.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
 
 @Unroll
 class FilenameNormalizationSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 
 	void "a tape named '#tapeName' is written to a file called '#filename'"() {
 		given:

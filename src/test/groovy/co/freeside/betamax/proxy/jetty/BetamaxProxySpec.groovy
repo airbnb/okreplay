@@ -31,7 +31,7 @@ class BetamaxProxySpec extends Specification {
 		betamaxResponse.body = 'O HAI'.bytes
 	}
 
-	void 'passes the request to is handler chain'() {
+	void 'passes the request to its handler chain'() {
 		given:
 		def handler = Mock(HttpHandler)
 		proxy << handler

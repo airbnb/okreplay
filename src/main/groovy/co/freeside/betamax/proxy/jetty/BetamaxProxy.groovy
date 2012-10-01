@@ -1,22 +1,21 @@
 package co.freeside.betamax.proxy.jetty
 
+import java.util.logging.Logger
+import javax.servlet.http.*
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
 import co.freeside.betamax.handler.HttpHandler
 import co.freeside.betamax.handler.HandlerException
+import co.freeside.betamax.proxy.handler.*
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import java.util.logging.Logger
-
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import static java.util.logging.Level.SEVERE
 import static org.apache.http.HttpHeaders.VIA
 
 class BetamaxProxy extends AbstractHandler {
 
+	public static final String X_BETAMAX = 'X-Betamax'
 	public static final String VIA_HEADER = 'Betamax'
 
 	private HttpHandler handlerChain

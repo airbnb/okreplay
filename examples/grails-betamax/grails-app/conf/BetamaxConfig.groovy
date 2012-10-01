@@ -1,4 +1,4 @@
 betamax {
-	tapeRoot = new File("test/resources/tapes")
+	tapeRoot = new File('test/resources/tapes')
 	ignoreLocalhost = true
 }

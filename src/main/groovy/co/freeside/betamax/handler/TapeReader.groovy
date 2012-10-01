@@ -1,11 +1,9 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-
 import java.util.logging.Logger
-
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.message.*
+import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import static java.util.logging.Level.INFO
 /**
@@ -29,7 +27,7 @@ class TapeReader extends ChainedHttpHandler {
 		} else if (tape.readable && tape.seek(request)) {
 			log.log INFO, "Playing back from '$tape.name'"
 			def response = tape.play(request)
-			response.addHeader('X-Betamax', 'PLAY')
+			response.addHeader(X_BETAMAX, 'PLAY')
 			response
 		} else if (tape.writable) {
 			chain(request)

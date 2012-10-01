@@ -1,11 +1,9 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-
 import java.util.logging.Logger
-
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.message.*
+import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import static java.util.logging.Level.INFO
 
@@ -31,7 +29,7 @@ class TapeWriter extends ChainedHttpHandler {
 		log.log INFO, "Recording to '$tape.name'"
 		tape.record(request, response)
 
-		response.addHeader('X-Betamax', 'REC')
+		response.addHeader(X_BETAMAX, 'REC')
 
 		response
 	}

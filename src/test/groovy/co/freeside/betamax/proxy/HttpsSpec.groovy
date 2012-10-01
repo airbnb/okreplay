@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.DefaultHttpClient
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
@@ -16,7 +17,7 @@ import static org.apache.http.HttpStatus.SC_OK
 @Unroll
 class HttpsSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 	@Shared @AutoCleanup('stop') SimpleServer httpEndpoint = new SimpleServer()
