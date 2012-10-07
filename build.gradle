@@ -19,14 +19,13 @@ archivesBaseName = 'betamax'
 
 repositories {
 	mavenCentral()
-	mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
 }
 
 dependencies {
 	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
 
 	compile 'junit:junit:4.8.2',
-			'org.yaml:snakeyaml:1.11-SNAPSHOT',
+			'org.yaml:snakeyaml:1.10',
 			'org.apache.httpcomponents:httpclient:4.2.1',
 			'commons-lang:commons-lang:2.4',
 			'org.eclipse.jetty:jetty-server:7.6.0.v20120127'
