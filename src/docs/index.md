@@ -1,29 +1,27 @@
 ---
 title: Home
 layout: index
-version: 1.0
-dev-version: 1.1-SNAPSHOT
+version: 1.1
+dev-version: 1.2-SNAPSHOT
 ---
 
 ## Introduction
 
-Betamax is a record/playback proxy for testing JVM applications that access external HTTP resources such as [web services][webservices] and [REST][rest] APIs. The project was inspired by the [VCR][vcr] library for Ruby.
+Betamax is a tool for mocking external HTTP resources such as [web services][webservices] and [REST][rest] APIs in your tests. The project was inspired by the [VCR][vcr] library for Ruby.
 
-Testing code that accesses HTTP services can be awkward. 3rd party downtime, network availability and resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) can affect the reliability of your tests. You can always write custom _stub_ web server code and configure the application to connect to a different URI when running tests but this requires some up front time and may mean reinventing the wheel the next time a similar situation is encountered.
+You don't want 3rd party downtime, network issues or resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) to break your tests. Writing custom _stub_ web server code and configuring the application to connect to a different URI when under test is tedious and might not accurately simulate the real service.
 
 Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and returning _recorded_ responses.
 
-The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
+The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent test runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
 
-Betamax works with JUnit and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language so long as HTTP connections are made in a way that respects Java's `http.proxyHost` and `http.proxyPort` system properties.
+Betamax works with [JUnit][junit] and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language so long as HTTP connections are made in a way that respects Java's `http.proxyHost` and `http.proxyPort` system properties.
 
 Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's source control repository so they can be shared by other members of your team and used by your CI server. Different tests can use different tapes to simulate various response conditions. Each tape can hold multiple request/response interactions. An example tape file can be found [here][tapeexample].
 
 ## Versions
 
 The current stable version of Betamax is _{{ page.version }}_.
-
-The current development version of Betamax is _{{ page.dev-version}}_.
 
 ## Installation
 
@@ -33,62 +31,30 @@ Please note the Maven group changed between versions 1.0 and 1.1. Make sure you 
 
 ### Gradle
 
-To use Betamax in a project using [Gradle][gradle] add the following to your `build.gradle` file:
+To use Betamax in a project using [Gradle][gradle] add the following dependency to your `build.gradle` file:
 
-	repositories {
-	    ...
-	    mavenCentral()
-	    // only required for development versions of Betamax
-	    mavenRepo urls: ['http://oss.sonatype.org/content/groups/public/']
-	}
-	dependencies {
-	    ...
-	    testCompile 'co.freeside:betamax:{{ page.version }}'
-	}
-
+    testCompile 'co.freeside:betamax:{{ page.version }}'
 
 ### Grails
 
-To use Betamax in a [Grails][grails] app add the following to your `grails-app/conf/BuildConfig.groovy` file:
+To use Betamax in a [Grails][grails] app add the following to the `dependencies` block in your `grails-app/conf/BuildConfig.groovy` file:
 
-	repositories {
-	    ...
-	    mavenCentral()
-	    // only required for development versions of Betamax
-	    mavenRepo 'http://oss.sonatype.org/content/groups/public/'
-	}
-	dependencies {
-	    ...
-	    test 'co.freeside:betamax:{{ page.version }}'
-	}
+    test 'co.freeside:betamax:{{ page.version }}'
 
 ### Maven
 
-To use Betamax in a project using [Maven][maven] add the following to your `pom.xml` file:
+To use Betamax in a project using [Maven][maven] add the following dependency to your `pom.xml` file:
 
-	<repositories>
-	  ...
-	  <!-- only required for development versions of Betamax -->
-	  <repository>
-	    <id>sonatype</id>
-	    <name>Sonatype</name>
-	    <url>http://oss.sonatype.org/content/groups/public/</url>
-	  </repository>
-	</repositories>
-
-	<dependencies>
-	  ...
-	  <dependency>
-	    <scope>test</scope>
-	    <groupId>co.freeside</groupId>
-	    <artifactId>betamax</artifactId>
-	    <version>{{ page.version }}</version>
-	  </dependency>
-	</dependencies>
+    <dependency>
+      <scope>test</scope>
+      <groupId>co.freeside</groupId>
+      <artifactId>betamax</artifactId>
+      <version>{{ page.version }}</version>
+    </dependency>
 
 ## Usage
 
-To use Betamax you just need to annotate your JUnit test or [Spock][spock] specifications with `@Betamax(tape="tape_name")` and include a `co.freeside.betamax.Recorder` Rule.
+To use Betamax you just need to annotate your JUnit test or Spock specifications with `@Betamax(tape="tape_name")` and include a `Recorder` Rule.
 
 ### JUnit
 
@@ -301,27 +267,9 @@ Betamax is a JVM port of the [VCR][vcr] library for Ruby. It is named after _[Be
 
 [Apache Software Licence, Version 2.0][licence]
 
-### Author
-
-Rob Fletcher [github][github] [twitter][twitter] [ad-hockery][adhockery]
-
-### Contributors
-
-* [Marcin Erdmann](https://github.com/erdi)
-* [Lari Hotari](https://github.com/lhotari)
-* [Nobuhiro Sue](https://github.com/nobusue)
-
 ### Issues
 
 Please raise issues on Betamax's [GitHub issue tracker][issues]. Forks and pull requests are more than welcome.
-
-### Download
-
-You can download this project in either [zip](http://github.com/robfletcher/betamax/zipball/master) or [tar](http://github.com/robfletcher/betamax/tarball/master) formats.
-
-You can also clone the project with [Git][git] by running:
-
-	$ git clone git://github.com/robfletcher/betamax
 
 ### Dependencies
 
@@ -335,13 +283,23 @@ Betamax depends on the following libraries (you will need them available on your
 
 If your project gets dependencies from a [Maven][maven] repository these dependencies will be automatically included for you.
 
+### Author
+
+* [Rob Fletcher][github]
+
+### Contributors
+
+* [Marcin Erdmann](https://github.com/erdi)
+* [Lari Hotari](https://github.com/lhotari)
+* [Nobuhiro Sue](https://github.com/nobusue)
+
 ### Acknowledgements
 
 Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston. Porting VCR to Groovy was suggested to me by [Jim Newbery][jim].
 
 HTTPS support was largely the work of [Lari Hotari][lari].
 
-The documentation is built with [Jekyll][jekyll], [Skeleton][skeleton], [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The site header font is [Play][playfont] by Jonas Hecksher.
+The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Vollkorn_, _Bitter_ and _Source Code Pro_.
 
 ## Examples
 
@@ -371,7 +329,6 @@ Betamax's GitHub repository includes [an example Grails application][grailsexamp
 [licence]:http://www.apache.org/licenses/LICENSE-2.0.html
 [maven]:http://maven.apache.org/
 [modernizr]:http://www.modernizr.com/
-[playfont]:http://www.fontsquirrel.com/fonts/play
 [prettify]:http://code.google.com/p/google-code-prettify/
 [proxyselector]:http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/conn/ProxySelectorRoutePlanner.html
 [rest]:http://en.wikipedia.org/wiki/Representational_state_transfer

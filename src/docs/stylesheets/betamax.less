@@ -1,315 +1,383 @@
-@base-color: #8AB29F;
-@background-color: lighten(@base-color, 25%);
-@highlight-box-color: lighten(#F2E6CE, 5%);
-@inactive-tab-color: desaturate(@base-color, 15%);
-@keyline-color: #593325;
-@text-color: #1D1D1F;
-@heading-color: @text-color;
+@import "bootstrap/reset.less";
+@import "variables.less";
+@import "bootstrap/mixins.less";
+@import "bootstrap/scaffolding.less";
+@import "bootstrap/grid.less";
+@import "bootstrap/layouts.less";
+@import "bootstrap/type.less";
+@import "bootstrap/code.less";
+@import "bootstrap/forms.less";
+@import "bootstrap/tables.less";
+@import "fontawesome/font-awesome.less"; // replaces bootstrap/sprites.less
+@import "bootstrap/dropdowns.less";
+@import "bootstrap/wells.less";
+@import "bootstrap/component-animations.less";
+@import "bootstrap/close.less";
+@import "bootstrap/buttons.less";
+@import "bootstrap/button-groups.less";
+@import "bootstrap/alerts.less";
+@import "bootstrap/navs.less";
+@import "bootstrap/navbar.less";
+@import "bootstrap/breadcrumbs.less";
+@import "bootstrap/pagination.less";
+@import "bootstrap/pager.less";
+@import "bootstrap/modals.less";
+@import "bootstrap/tooltip.less";
+@import "bootstrap/popovers.less";
+@import "bootstrap/thumbnails.less";
+@import "bootstrap/labels-badges.less";
+@import "bootstrap/progress-bars.less";
+@import "bootstrap/accordion.less";
+@import "bootstrap/carousel.less";
+@import "bootstrap/hero-unit.less";
+@import "bootstrap/utilities.less";
 
-@font-stack: Verdana, Tahoma, "Trebuchet MS", "DejaVu Sans", "Bitstream Vera Sans", sans-serif;
-@title-font: 'Play', sans-serif;
-@code-font: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+@import "bootstrap/responsive-utilities.less";
+@import "bootstrap/responsive-768px-979px.less";
+@import "bootstrap/responsive-767px-max.less";
+@import "bootstrap/responsive-navbar.less";
 
-@spacing: 10px;
-@icon-size: 16px;
-@nav-width: 160px;
+// responsive breakpoints
+@phoneMax: 767px;
+@tabletMin: 768px;
+@tabletMax: 979px;
+@desktopMin: 980px;
 
-// cross-browser CSS3 mixins
-.box-sizing(@mode) {
-	   -moz-box-sizing: @mode;
-	-webkit-box-sizing: @mode;
-	        box-sizing: @mode;
+// apply a natural box layout model to all elements
+// http://paulirish.com/2012/box-sizing-border-box-ftw/
+* {
+  .box-sizing(border-box);
 }
 
-.background-size(@mode) {
-	     -o-background-size: @mode;
-	-webkit-background-size: @mode;
-	 -khtml-background-size: @mode;
-	        background-size: @mode;
-}
+/**
+ * Override some Bootstrap defaults
+ */
 
-.border-radius(@radius) {
-	-webkit-border-radius: @radius; 
-	   -moz-border-radius: @radius; 
-	        border-radius: @radius; 
-}
-
-.box-shadow(@radius, @color) {
-	-webkit-box-shadow: 0 0 @radius @color; 
-	   -moz-box-shadow: 0 0 @radius @color; 
-	        box-shadow: 0 0 @radius @color; 
-}
-
-.transition(@effect, @duration, @style) {
-	-webkit-transition: @effect @duration @style;  
-	   -moz-transition: @effect @duration @style;  
-	    -ms-transition: @effect @duration @style;  
-	     -o-transition: @effect @duration @style;  
-	        transition: @effect @duration @style;  
-}
-
-.text-shadow(@color: fadeout(@keyline-color,30%)) {
-//   	text-shadow: 1px 1px 2px @color;
-}
-
-// coloured boxes for header and code blocks
-.highlight-box {
-	@background: @highlight-box-color;
-	@border: @keyline-color;
-
-	background-color: @background;
-	border-width: 0;
-	.border-radius(6px);
-	.box-shadow(3px, @border);
-}
-
-.code-box {
-	@border: @keyline-color;
-	padding: @spacing;
-        white-space: pre-wrap;
-	.border-radius(6px);
-	.box-shadow(3px, @border);
-}
-
-// basic resets
 body {
-	background-color: @background-color;
-	color: @text-color;
-	font-family: @font-stack;
+  background-image: url('../images/noise-bg.png');
+  line-height: 1.5;
+  @media (max-width: @phoneMax) {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: @heading-color;
-    font-family: @font-stack;
-    .text-shadow;
+h3 {
+  font-size: 28px;
 }
 
-// layout
-.container {
-	margin-top: 4 * @spacing;
-}
-
-header {
-	overflow: hidden;
-	margin-bottom: 2 * @spacing;
-	padding: 2px 0;
-}
-
-// skeleton tabs
-ul.tabs {
-	border-color: @keyline-color;
-	
-	li a {
-		background-color: @inactive-tab-color;
-		border-color: @keyline-color;
-		
-		&.active {
-			background-color: @background-color;
-		}
-	}
-}
-
-// big title at top of page
-#hero-unit {
-    background-image: url(../images/stripes.png);
-    background-position: -40px 0;
-    background-repeat: no-repeat;
-	margin-bottom: 2 * @spacing;
-	padding: 4 * @spacing;
-	.background-size(contain);
-	.box-sizing(border-box);
-	.highlight-box;
-
-	h1 {
-		font-family: @title-font;
-		font-size: 72px;
-		margin: 0;
-		.text-shadow;
-	}
-
-	p {
-		margin: 0;
-		text-indent: 18px;
-		.text-shadow;
-	}
-
-	.teaser {
-		margin-bottom: 2 * @spacing;
-	}
-}
-
-// teaser boxes
-.teaser {
-	.highlight-box;
-	
-	h3 {
-		font-family: @title-font;
-		.text-shadow;
-	}
-
-	h3, p {
-	    margin: @spacing;
-	}
-}
-
-
-// nav sidebar
-nav {
-    width: @nav-width;
-
-	&.fix {
-		position: fixed;
-		top: 0;
-	}
-
-	h2 {
-	    border-bottom: 0;
-		font-family: @title-font;
-		.text-shadow;
-	}
-	
-	li {
-		text-align: right;
-	}
-}
-
-#logo {
-	text-align: right;
-}
-
-// main content section
-h2 {
-	border-bottom: 1px solid @keyline-color;
-	margin-bottom: @spacing;
-	margin-top: 4 * @spacing;
-	
-	&:first-child {
-		margin-top: 0;
-	}
-}
-
-// page footer
-footer {
-	border: none;
-	padding: @spacing;
-
-	p {
-	    margin-bottom: 0;
-	}
-}
-
-
-// code blocks
-pre {
-	margin-bottom: 2 * @spacing;
-	
-	&.prettyprint {
-		.code-box;
-	}
-	
-	code {
-		padding: 0;
-	}
+h4 {
+  font-size: 20px;
 }
 
 code {
-	background-color: transparent;
-	font-family: @code-font;
+  color: @gray;
+  padding: inherit;
+  border: none;
+  background-color: transparent;
 }
 
-// definition lists
+code, pre {
+  font-size: @baseFontSize - 1;
+}
+
+dt code {
+  font-size: @baseFontSize;
+  font-weight: 400;
+}
+
+pre.prettyprint, code.prettyprint {
+  background-image: url('../images/dirty_old_shirt.png');
+  background-color: @grayDarker;
+}
+
 dl {
-	margin-bottom: 2 * @spacing;
+  .dl-horizontal;
 }
 
-dt {
-	font-weight: bold;
-	margin-top: @spacing;
+.affix, .affix-bottom {
+  top: 15px;
+  width: inherit;
 }
 
-dd {
-	padding-left: @spacing;
+.affix-bottom {
+  position: fixed;
 }
 
-// GitHub ribbon
+// hide headings in tab panes
+.tab-pane h3 {
+  position: absolute;
+  left: -9999px;
+}
+
+.icon-rec:before {
+  content: "\26ab";
+  vertical-align: text-top;
+}
+
+/**
+ * Stylistic mixins
+ */
+
+.promo {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: darken(@bodyBackground, 5%);
+  .box-shadow(inset 0 1px 6px rgba(0, 0, 0, .75));
+  border: 3px solid @grayLighter;
+  .border-radius(6px);
+  .box-shadow(inset 0 1px 6px rgba(0, 0, 0, .75));
+  @media (max-width: @tabletMax) {
+    padding: 16px;
+  }
+  :first-child {
+    margin-top: 0;
+  }
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+/**
+ * Specific page sections
+ */
+
+// GitHub banner
 #forkme {
-    border: 0 none;
-    position: absolute;
-    right: 0;
-    top: 0;
-	z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
 }
 
+.documentation {
+  @media (max-width: @phoneMax) {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  h2, h3, h4 {
+    margin: 24px 0 12px;
+    line-height: 1.1;
+  }
 
-// icon links
-a.icon {
-	display: inline-block;
-	height: @icon-size;
-	text-indent: -9999px;
-	vertical-align: text-top;
-	width: @icon-size;
-
-	&.twitter {
-		background-image: url(../images/twitter.png);
-	}
-
-	&.github {
-		background-image: url(../images/github.png);
-	}
-
-	&.ad-hockery {
-		background-image: url(../images/rss.png);
-	}
-}
-
-// Mobile
-@media only screen and (max-width: 767px) {
-    header {
-    	padding: 2px;
+  /**
+   * Index aside with TOC
+   */
+  #doc-index {
+    @borderColor: @headingsColor;
+    min-height: 1px;
+    nav {
+      background-color: @white;
+      border: 2px solid @borderColor;
+      .border-radius(4px);
+      .rotate(1deg);
+      .backface-visibility(hidden);
+      text-transform: uppercase;
+      h2 {
+        background-color: @borderColor;
+        color: @grayLighter;
+        font-family: @logoFontFamily;
+        font-size: 30px;
+        margin-top: 0;
+        padding: 8px 12px;
+        @media (max-width: @tabletMax) {
+          font-size: 24px;
+        }
+      }
+      .nav-list {
+        text-transform: uppercase;
+        padding: 0;
+        margin: 15px;
+        @media (min-width: @desktopMin) {
+          list-style: decimal-leading-zero inside;
+        }
+        li {
+          border-bottom: 1px solid @tableBorder;
+        }
+        a {
+          color: @grayDarker;
+        }
+        a:hover {
+          background-color: lighten(gold, 20%);
+        }
+        > .active > a,
+        > .active > a:hover {
+          background-color: orange;
+        }
+      }
     }
-	#hero-unit {
-		.background-size(cover);
-		padding: 2 * @spacing;
-		margin-bottom: 0;
-		width: 296px;
+  }
 
-		h1 {
-			font-size: 64px;
-		}
-	}
-	.teaser {
-		display: none;
-	}
-	nav { 
-		position: relative; 
-	}
-	nav ul, #logo {
-		display: none;
-	}
+  /**
+   * Main documentation content
+   */
+
+  #doc-content {
+    background-color: rgba(255, 255, 255, 0.75);
+
+    > * {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    h2 {
+      background-image: url("../images/stripes-bg.png");
+      background-position: top right;
+      background-repeat: repeat-y;
+      border-bottom: 1px solid @headingsColor;
+      font-size: 48px;
+      text-transform: uppercase;
+      margin: 48px 0 24px;
+      padding-top: 9px; // I hate doing this but Vollkorn renders with a lot of space below the characters
+      text-indent: 20px;
+      &:first-child {
+        margin-top: 0;
+      }
+      @media (max-width: 499px) {
+        font-size: 28px;
+      }
+      @media (min-width: 500px) and (max-width: @phoneMax) {
+        font-size: 36px;
+      }
+    }
+
+    .navbar {
+      margin-bottom: 0;
+      .navbar-inner {
+        .border-radius(4px 4px 0 0);
+      }
+    }
+
+    .tab-content {
+      .well;
+      .border-radius(0 0 4px 4px);
+      border-top: none;
+    }
+
+    .tab-pane {
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ul, ol {
+      list-style-position: inside;
+    }
+
+  }
 }
 
-// Mobile (landscape)
-@media only screen and (min-width: 480px) and (max-width: 767px) {
-	#hero-unit {
-		width: 416px;
+header {
+  background-color: darken(antiquewhite, 5%);
+  background-image: url(../images/betamax.png);
+  background-position: center right;
+  background-repeat: no-repeat;
+  .background-size(contain);
+  .box-shadow(0 1px 4px rgba(0,0,0,.065));
+  padding: 30px 0;
 
-		h1 {
-			font-size: 72px;
-		}
-	}
+  @media (max-width: @phoneMax) {
+    background-image: url(../images/stripes-bg.png);
+    .background-size(inherit);
+    background-repeat: repeat-y;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+  }
+
+  h1, h3 {
+    font-family: @logoFontFamily;
+  }
+  h1 {
+    line-height: 1;
+    font-size: 46px;
+    text-transform: uppercase;
+    @media (min-width: 500px) and (max-width: @tabletMax) {
+      font-size: 72px;
+    }
+    @media (min-width: @desktopMin) {
+      font-size: 110px;
+    }
+  }
+  h3 {
+    font-size: 36px;
+    @media (min-width: @tabletMin) and (max-width: @tabletMax) {
+      font-size: 28px;
+    }
+  }
+
+  .hero-unit {
+    padding: 30px 450px 30px 48px;
+    @media (max-width: @tabletMax) {
+      .background-size(contain);
+      padding-right: 400px;
+    }
+    @media (max-width: @phoneMax) {
+      background-image: url(../images/stripes-bg.png);
+      .background-size(inherit);
+      background-repeat: repeat-y;
+      margin: 0;
+      padding: 20px 87px 20px 20px;
+    }
+    p {
+      line-height: 1.5;
+    }
+  }
+
+  .promos {
+    @media (max-width: @phoneMax) {
+      display: none;
+    }
+  }
 }
 
-// iPad Portrait/Browser
-@media only screen and (min-width: 768px) and (max-width: 959px) {
-	nav {
-		width: 124px;
-	}
+.social-bar {
+  text-align: center;
+  background-color: @headingsColor;
+  padding: 15px 0;
+  margin-bottom: 30px;
+  @media (max-width: @phoneMax) {
+    display: none;
+  }
+  .social-buttons {
+    margin-left: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    li {
+      display: inline-block;
+      .ie7-inline-block;
+      padding: 5px 8px;
+      line-height: 1;
+    }
+  }
+}
+
+footer {
+  margin-top: 24px;
+  padding-top: 12px;
+  font-size: 20px;
+
+  @media (max-width: @phoneMax) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  a {
+    color: inherit;
+    font-size: 24px;
+    margin-left: 6px;
+    .transition(all .2s linear);
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 // FOUC prevention
 body {
 	opacity: 0;
-	.transition(opacity, 0.2s, ease-out);
+	.transition(opacity 0.2s ease-out);
 }
 
 .no-js body, body.ready {

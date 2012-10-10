@@ -5,90 +5,110 @@
 <!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
 	<head>
 
-	<meta charset="utf-8">
-	<title>Betamax - Record / playback testing proxy</title>
-	<meta name="description" content="A record and playback HTTP proxy for testing applications that connect to HTTP services">
-	<meta name="keywords" content="testing,http proxy,http stub,http mock,groovy,java,jvm,web services,rest">
-	<meta name="author" content="Rob Fletcher">
-	<script src="javascripts/modernizr.js"></script>
+    	<meta charset="utf-8">
+    	<title>Betamax - Record &amp; replay HTTP traffic</title>
+    	<meta name="description" content="Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests">
+    	<meta name="keywords" content="testing,http proxy,http stub,http mock,groovy,java,jvm,web services,rest">
+    	<meta name="author" content="Rob Fletcher">
+    	<script src="javascripts/modernizr.js"></script>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Play&subset=latin,greek">
-	<link rel="stylesheet" href="stylesheets/base.css">
-	<link rel="stylesheet" href="stylesheets/skeleton.css">
-	<link rel="stylesheet" href="stylesheets/layout.css">
-	<link rel="stylesheet" href="stylesheets/prettify.css">
+        <link href='http://fonts.googleapis.com/css?family=Noticia+Text:400,400italic|Source+Code+Pro|Vollkorn:700|Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+    	<link rel="stylesheet" href="stylesheets/prettify.css">
 
-	<link rel="stylesheet/less" type="text/css" href="stylesheets/betamax.less">
-	<script src="javascripts/less.js" type="text/javascript"></script>
+    	<link rel="stylesheet" type="text/css" href="stylesheets/betamax.css">
 
-	<link rel="shortcut icon" href="images/favicon.ico">
-	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    	<link rel="shortcut icon" href="images/favicon.ico">
+    	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
-	<link rel="author" href="humans.txt">
+    	<link rel="author" href="humans.txt">
 	</head>
-	<body>
+	<body data-spy="scroll" data-target="#doc-index">
 
 	<a href="http://git.io/betamax">
-		<img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" id="forkme">
+		<img alt="Fork me on GitHub" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" id="forkme">
 	</a>
 
-	<div class="container">
+    <header class="jumbotron">
+        <div class="container">
+            <h1>Betamax</h1>
+            <p>Record &amp; replay HTTP traffic for simple, reliable tests.</p>
+            <!--
+            <div class="row promos">
+                <div class="span4 promo">
+                    <h3>Record</h3>
+                    <p>Annotate your test with <code>@Betamax</code>. The first time it runs HTTP traffic is recorded to <em>tape</em>.</p>
+                </div>
+                <div class="span4 promo">
+                    <h3>Playback</h3>
+                    <p>Future test runs replay responses from <em>tape</em>. Insert different <em>tapes</em> to stub different responses.</p>
+                </div>
+                <div class="span4 promo">
+                    <h3>Customize</h3>
+                    <p>Edit <em>tape</em> files with a text editor, commit to source control, share with your team &amp; use on <abbr title="continuous integration">CI</abbr>.</p>
+                </div>
+            </div>
+        -->
+        </div>
+    </header>
 
-		<header>
-			<div id="hero-unit" class="sixteen columns">
-				<h1>Betamax</h1>
-				<p>A record / playback proxy for testing JVM applications that connect to external HTTP services.</p>
-			</div>
-			<div class="one-third column teaser">
-				<h3>Record</h3>
-				<p>Just add a <code>@Betamax</code> annotation to your test or spec method. The first time it runs HTTP requests &amp; responses are recorded to <em>tape</em>.</p>
-			</div>
-			<div class="one-third column teaser">
-				<h3>Playback</h3>
-				<p>Future test runs replay HTTP responses from <em>tape</em>. Insert different <em>tapes</em> to stub different responses.</p>
-			</div>
-			<div class="one-third column teaser">
-				<h3>Customize</h3>
-				<p>Edit your <em>tape</em> files with any text editor. Commit them to source control to share with your team and use on your Continuous Integration server.</p>
-			</div>
-		</header>
+    <div class="social-bar">
+        <div class="container">
+            <ul class="social-buttons">
+                <li><iframe src="http://ghbtns.com/github-btn.html?user=robfletcher&repo=betamax&type=watch&count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="110px" height="20px"></iframe></li>
+                <li><iframe src="http://ghbtns.com/github-btn.html?user=robfletcher&repo=betamax&type=fork&count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="95px" height="20px"></iframe></li>
+                <li><a href="https://twitter.com/betamaxtest" class="twitter-follow-button" data-show-count="true">Follow @betamaxtest</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+                <li><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://freeside.co/betamax" data-text="Betamax: Record &amp; replay HTTP traffic for simple, reliable tests." data-via="betamaxtest" data-related="rfletcherEW">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></li>
+            </ul>
+        </div>
+    </div>
 
-		<div class="three columns sidebar">
-			<nav>
-				<h2 id="logo">Betamax</h2>
-				<ul>
-                    <li><a href="#introduction">Introduction</a></li>
-                    <li><a href="#versions">Versions</a></li>
-                    <li><a href="#installation">Installation</a></li>
-                    <li><a href="#usage">Usage</a></li>
-                    <li><a href="#compatibility">Compatibility</a></li>
-                    <li><a href="#configuration">Configuration</a></li>
-                    <li><a href="#https">HTTPS</a></li>
-                    <li><a href="#caveats">Caveats</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#examples">Examples</a></li>
-				</ul>
-			</nav>
-			&nbsp;
-		</div>
+    <div class="container">
+        <div class="documentation row">
+            <aside id="doc-index" class="span3">
+                <nav class="hidden-phone">
+                    <h2 id="logo">Betamax</h2>
+                    <ul class="nav nav-list">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#versions">Versions</a></li>
+                        <li><a href="#installation">Installation</a></li>
+                        <li><a href="#usage">Usage</a></li>
+                        <li><a href="#compatibility">Compatibility</a></li>
+                        <li><a href="#https">HTTPS</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#caveats">Caveats</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#examples">Examples</a></li>
+                    </ul>
+                </nav>
+            </aside>
 
-		<div class="twelve columns content offset-by-one">
-
-			{{ content }}
-
-		</div>
-
-		<footer>
-			<p>&copy; Rob Fletcher 2011</p>
-		</footer>
+            <section id="doc-content" class="span9">
+                {{ content }}
+            </section>
+        </div>
 
 	</div>
 
-	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <footer>
+        <div class="container">
+            <p>&copy; Rob Fletcher 2011
+                <a href="http://twitter.com/rfletcherEW" rel="external"><i class="icon-twitter"></i></a>
+                <a href="https://github.com/robfletcher" rel="external"><i class="icon-github"></i></a>
+                <a href="http://blog.freeside.co/" rel="external"><i class="icon-rss"></i></a>
+            </p>
+        </div>
+    </footer>
+
+	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+	<script src="javascripts/bootstrap.min.js"></script>
 	<script src="javascripts/prettify.js"></script>
 	<script src="javascripts/betamax.js"></script>
 	<script src="javascripts/tabs.js"></script>
