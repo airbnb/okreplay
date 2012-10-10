@@ -94,7 +94,10 @@ githubPages {
 	repoUri = 'git@github.com:robfletcher/betamax.git'
 	workingPath = "$buildDir/docs"
 	pages {
-		from 'src/docs'
+		exclude '**/_site/**'
+		from('src/docs') {
+			exclude '**/*.less'
+		}
 	}
 }
 
