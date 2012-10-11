@@ -43,6 +43,10 @@
 @tabletMax: 979px;
 @desktopMin: 980px;
 
+// additional colors
+@navHoverBackground: lighten(gold, 20%);
+@navActiveBackground: orange;
+
 // apply a natural box layout model to all elements
 // http://paulirish.com/2012/box-sizing-border-box-ftw/
 * {
@@ -193,11 +197,11 @@ dl {
           color: @grayDarker;
         }
         a:hover {
-          background-color: lighten(gold, 20%);
+          background-color: @navHoverBackground;
         }
         > .active > a,
         > .active > a:hover {
-          background-color: orange;
+          background-color: @navActiveBackground;
         }
       }
     }
@@ -236,23 +240,9 @@ dl {
       }
     }
 
-    .navbar {
-      margin-bottom: 0;
-      .navbar-inner {
-        .border-radius(4px 4px 0 0);
-      }
-    }
-
-    .tab-content {
-      .well;
-      .border-radius(0 0 4px 4px);
-      border-top: none;
-    }
-
-    .tab-pane {
-      > :last-child {
-        margin-bottom: 0;
-      }
+    .nav {
+      margin-top: 24px;
+      margin-bottom: 12px;
     }
 
     ul, ol {

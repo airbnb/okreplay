@@ -22,7 +22,7 @@ $(document).ready(function() {
 
 	// create a navbar for each tab container
 	$('.tab-content').each(function() {
-		var tabs = $('<ul class="nav"></ul>');
+		var tabs = $('<ul class="nav nav-pills"></ul>');
 		$(this).children().each(function() {
 			var tab = $('<li></li>');
 			tab.append($('<a></a>', {
@@ -36,8 +36,6 @@ $(document).ready(function() {
 			tabs.append(tab);
 		});
 		tabs.insertBefore(this)
-			.wrapAll('<div class="navbar"></div>')
-			.wrapAll('<div class="navbar-inner"></div>')
 			.find('li:first-child a').tab('show');
 	});
 
