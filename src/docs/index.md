@@ -58,37 +58,37 @@ To use Betamax you just need to annotate your JUnit test or Spock specifications
 
 ### JUnit
 
-	import co.freeside.betamax.Betamax;
-	import co.freeside.betamax.Recorder;
-	import org.junit.*;
+    import co.freeside.betamax.Betamax;
+    import co.freeside.betamax.Recorder;
+    import org.junit.*;
 
-	public class MyTest {
+    public class MyTest {
 
-	    @Rule public Recorder recorder = new Recorder();
+        @Rule public Recorder recorder = new Recorder();
 
-	    @Betamax(tape="my tape")
-	    @Test
-	    public void testMethodThatAccessesExternalWebService() {
+        @Betamax(tape="my tape")
+        @Test
+        public void testMethodThatAccessesExternalWebService() {
 
-	    }
-	}
+        }
+    }
 
 ### Spock
 
-	import co.freeside.betamax.Betamax
-	import co.freeside.betamax.Recorder
-	import org.junit.*
-	import spock.lang.*
+    import co.freeside.betamax.Betamax
+    import co.freeside.betamax.Recorder
+    import org.junit.*
+    import spock.lang.*
 
-	class MySpec extends Specification {
+    class MySpec extends Specification {
 
-	    @Rule Recorder recorder = new Recorder()
+        @Rule Recorder recorder = new Recorder()
 
-	    @Betamax(tape='my tape')
-	    void 'feature that accesses external web service'() {
+        @Betamax(tape='my tape')
+        void 'feature that accesses external web service'() {
 
-	    }
-	}
+        }
+    }
 
 ### Recording and playback
 
@@ -162,33 +162,27 @@ The default implementations of [Apache _HttpClient_][httpclient] takes no notice
 
 In a dependency injection context such as a [Grails][grails] app you can just inject a proxy-configured _HttpClient_ instance into your class-under-test.
 
-The _HttpClient_ library provides an implementation called [SystemDefaultHttpClient](http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html) that _does_ use the JVM proxy settings. Ideally you can use that. In addition, Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure instances of other _HttpClient_ types.
+The _HttpClient_ library provides an implementation called [SystemDefaultHttpClient](http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html) that _does_ use the JVM proxy settings. Ideally you can use that. In addition, Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure instances of other _HttpClient_ types. For example:
 
-#### Configuring HttpClient
-
-	DefaultHttpClient client = new DefaultHttpClient();
-	BetamaxRoutePlanner.configure(client);
+    DefaultHttpClient client = new DefaultHttpClient();
+    BetamaxRoutePlanner.configure(client);
 
 ### Groovy HTTPBuilder
 
-[Groovy _HTTPBuilder_][httpbuilder] and its [_RESTClient_][restclient] variant are wrappers around _HttpClient_ so the same proxy configuration needs to be applied.
+[Groovy _HTTPBuilder_][httpbuilder] and its [_RESTClient_][restclient] variant are wrappers around _HttpClient_ so the same proxy configuration needs to be applied. For example:
 
-#### Configuring HTTPBuilder
-
-	def http = new HTTPBuilder('http://groovy.codehaus.org')
-	BetamaxRoutePlanner.configure(http.client)
+    def http = new HTTPBuilder('http://groovy.codehaus.org')
+    BetamaxRoutePlanner.configure(http.client)
 
 _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs no special configuration as it uses a `java.net.URLConnection` rather than _HttpClient_.
 
 ### Apache HttpClient 3.x
 
-[_HttpClient_ 3.x][httpclient3] is no longer supported but still fairly widely used. It does not take any notice of Java's HTTP proxy settings and does not have the `HttpRoutePlanner` facility that _HttpClient_ 4.x does. This means Betamax cannot work as seamlessly. You must set the host and port of the Betamax proxy on the _HttpClient_ instance explicitly and Betamax's `ignoreHosts` and `ignoreLocalhost` configuration properties will be completely ignored.
+[_HttpClient_ 3.x][httpclient3] is no longer supported but still fairly widely used. It does not take any notice of Java's HTTP proxy settings and does not have the `HttpRoutePlanner` facility that _HttpClient_ 4.x does. This means Betamax cannot work as seamlessly. You must set the host and port of the Betamax proxy on the _HttpClient_ instance explicitly and Betamax's `ignoreHosts` and `ignoreLocalhost` configuration properties will be completely ignored. For example:
 
-#### Configuring HttpClient 3.x
-
-	HttpClient client = new HttpClient();
-	ProxyHost proxy = new ProxyHost("localhost", 5555);
-	client.getHostConfiguration().setProxyHost(proxy);
+    HttpClient client = new HttpClient();
+    ProxyHost proxy = new ProxyHost("localhost", recorder.getProxyPort());
+    client.getHostConfiguration().setProxyHost(proxy);
 
 ## HTTPS
 
@@ -200,7 +194,7 @@ To enable HTTP support you simply need to set the `sslSupport` boolean property 
 
 Apache _HttpClient_ needs to be configured to use Betamax's HTTPS support:
 
-	BetamaxHttpsSupport.configure(client);
+    BetamaxHttpsSupport.configure(client);
 
 ## Configuration
 
@@ -231,25 +225,25 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 
 ### Example _BetamaxConfig.groovy_ script
 
-	betamax {
-	    tapeRoot = new File('test/fixtures/tapes')
-	    proxyPort = 1337
-	    proxyTimeout = 30000
-	    defaultMode = TapeMode.READ_ONLY
-		ignoreHosts = ['localhost', '127.0.0.1']
-		ignoreLocalhost = true
-		sslSupport = true
-	}
+    betamax {
+        tapeRoot = new File('test/fixtures/tapes')
+        proxyPort = 1337
+        proxyTimeout = 30000
+        defaultMode = TapeMode.READ_ONLY
+        ignoreHosts = ['localhost', '127.0.0.1']
+        ignoreLocalhost = true
+        sslSupport = true
+    }
 
 ### Example _betamax.properties_ file
 
-	betamax.tapeRoot=test/fixtures/tapes
-	betamax.proxyPort=1337
+    betamax.tapeRoot=test/fixtures/tapes
+    betamax.proxyPort=1337
     betamax.proxyTimeout=30000
-	betamax.defaultMode=READ_ONLY
-	betamax.ignoreHosts=localhost,127.0.0.1
-	betamax.ignoreLocalhost=true
-	betamax.sslSupport=true
+    betamax.defaultMode=READ_ONLY
+    betamax.ignoreHosts=localhost,127.0.0.1
+    betamax.ignoreLocalhost=true
+    betamax.sslSupport=true
 
 ## Caveats
 

@@ -20,7 +20,7 @@ $(document).ready(function() {
 		$(this).nextUntil(':not(.tab-pane)').andSelf().wrapAll('<div class="tab-content"></div>');
 	});
 
-	// create a navbar for each tab container
+	// create nav pills for each tab container
 	$('.tab-content').each(function() {
 		var tabs = $('<ul class="nav nav-pills"></ul>');
 		$(this).children().each(function() {
