@@ -134,30 +134,6 @@ dl {
 }
 
 /**
- * Stylistic mixins
- */
-
-.promo {
-  min-height: 20px;
-  padding: 19px;
-  margin-bottom: 20px;
-  background-color: darken(@bodyBackground, 5%);
-  .box-shadow(inset 0 1px 6px rgba(0, 0, 0, .75));
-  border: 3px solid @grayLighter;
-  .border-radius(6px);
-  .box-shadow(inset 0 1px 6px rgba(0, 0, 0, .75));
-  @media (max-width: @tabletMax) {
-    padding: 16px;
-  }
-  :first-child {
-    margin-top: 0;
-  }
-  :last-child {
-    margin-bottom: 0;
-  }
-}
-
-/**
  * Specific page sections
  */
 
@@ -288,19 +264,20 @@ dl {
 
 header {
   background-color: darken(antiquewhite, 5%);
-  background-image: url(../images/betamax.png);
+  background-image: url(../images/stripes-bg.png);
   background-position: center right;
-  background-repeat: no-repeat;
-  .background-size(contain);
+  background-repeat: repeat-y;
+  .background-size(inherit);
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
-  padding: 30px 0;
+  margin-bottom: 30px;
+  padding: 10px 20px;
 
-  @media (max-width: @phoneMax) {
-    background-image: url(../images/stripes-bg.png);
-    .background-size(inherit);
-    background-repeat: repeat-y;
-    margin-bottom: 30px;
-    padding: 10px 20px;
+  @media (min-width: @tabletMin) {
+    background-image: url(../images/betamax.png);
+    background-repeat: no-repeat;
+    .background-size(contain);
+    margin-bottom: 0; // social bar appears below
+    padding: 30px 0;
   }
 
   h1, h3 {
@@ -327,30 +304,6 @@ header {
   p {
     @media (min-width: @desktopMin) {
       font-size: 22px;
-    }
-  }
-
-  .hero-unit {
-    padding: 30px 450px 30px 48px;
-    @media (max-width: @tabletMax) {
-      .background-size(contain);
-      padding-right: 400px;
-    }
-    @media (max-width: @phoneMax) {
-      background-image: url(../images/stripes-bg.png);
-      .background-size(inherit);
-      background-repeat: repeat-y;
-      margin: 0;
-      padding: 20px 87px 20px 20px;
-    }
-    p {
-      line-height: 1.5;
-    }
-  }
-
-  .promos {
-    @media (max-width: @phoneMax) {
-      display: none;
     }
   }
 }
