@@ -257,6 +257,10 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 
 Betamax is a testing tool and not a spec-compliant HTTP proxy. It ignores _any_ and _all_ headers that would normally be used to prevent a proxy caching or storing HTTP traffic. You should ensure that sensitive information such as authentication credentials is removed from recorded tapes before committing them to your app's source control repository.
 
+## Examples
+
+Betamax's GitHub repository includes [an example Grails application][grailsexample].
+
 ## About
 
 ### Why "Betamax"?
@@ -300,10 +304,6 @@ Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston.
 HTTPS support was largely the work of [Lari Hotari][lari].
 
 The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Vollkorn_, _Bitter_ and _Source Code Pro_.
-
-## Examples
-
-Betamax's GitHub repository includes [an example Grails application][grailsexample].
 
 [adhockery]:http://blog.freeside.co/ (Ad-Hockery)
 [betamax]:http://en.wikipedia.org/wiki/Betamax
