@@ -92,7 +92,25 @@ pre.prettyprint, code.prettyprint {
 }
 
 dl {
+  dt, dt code {
+    font-weight: bold;
+  }
   .dl-horizontal;
+  @media (max-width: @phoneMax) {
+    dt {
+      float: none;
+      clear: none;
+      width: auto;
+      text-align: left;
+      margin: 8px 0 4px;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    dd {
+      margin-left: 0;
+    }
+  }
 }
 
 .affix, .affix-bottom {
@@ -222,11 +240,8 @@ dl {
     }
 
     h2 {
-      background-image: url("../images/stripes-bg.png");
-      background-position: top right;
-      background-repeat: repeat-y;
       border-bottom: 1px solid @headingsColor;
-      font-size: 48px;
+      font-size: 28px;
       text-transform: uppercase;
       margin: 48px 0 24px;
       padding-top: 9px; // I hate doing this but Vollkorn renders with a lot of space below the characters
@@ -234,11 +249,14 @@ dl {
       &:first-child {
         margin-top: 0;
       }
-      @media (max-width: 499px) {
-        font-size: 28px;
-      }
       @media (min-width: 500px) and (max-width: @phoneMax) {
         font-size: 36px;
+      }
+      @media (min-width: @tabletMin) {
+        background-image: url("../images/stripes-bg.png");
+        background-position: top right;
+        background-repeat: repeat-y;
+        font-size: 48px;
       }
     }
 
@@ -303,6 +321,12 @@ header {
     font-size: 36px;
     @media (min-width: @tabletMin) and (max-width: @tabletMax) {
       font-size: 28px;
+    }
+  }
+
+  p {
+    @media (min-width: @desktopMin) {
+      font-size: 22px;
     }
   }
 
