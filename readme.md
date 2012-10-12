@@ -4,6 +4,8 @@ Betamax is a tool for mocking external HTTP resources such as web services and R
 
 Betamax is written in [Groovy](http://groovy.codehaus.org/) but is compatible with tests written using [JUnit](http://junit.org/) or [Spock][spock] for applications written in any JVM language.
 
+## Usage
+
 ### Record
 
 Add a `@Rule Recorder` property to your test and annotate test methods with `@Betamax`. The first time the test runs any HTTP traffic is recorded to _tape_.
