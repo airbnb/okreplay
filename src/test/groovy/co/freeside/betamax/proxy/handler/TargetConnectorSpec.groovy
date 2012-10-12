@@ -62,7 +62,7 @@ class TargetConnectorSpec extends Specification {
 
 		then:
 		1 * httpClient.execute(_, _) >> { httpHost, outboundRequest ->
-			request.headers.every { name, value ->
+			request.headers.each { name, value ->
 				assert outboundRequest.getFirstHeader(name).value == value
 			}
 			okResponse
