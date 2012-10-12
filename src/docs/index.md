@@ -186,12 +186,10 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 
 ### WSLite
 
-The [groovy-wslite][wslite] library is not aware of the default JVM proxy settings so the proxy needs to be explicitly configured.
+The [groovy-wslite][wslite] library is not aware of the default JVM proxy settings so the proxy needs to be explicitly configured with a `java.net.Proxy`. The `Recorder` class provides a convenience method for getting a `Proxy` instance. For example:
 
  	def client = new RESTClient(targetUrl)
- 	def proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', recorder.proxyPort))
-
- 	def response = client.get(path: '/', proxy: proxy)
+ 	def response = client.get(path: '/', proxy: recorder.proxy)
 
 ## HTTPS
 

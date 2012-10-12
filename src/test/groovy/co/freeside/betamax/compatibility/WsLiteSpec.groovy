@@ -33,10 +33,9 @@ class WsLiteSpec extends Specification {
 	void 'can record a connection made with WsLite'() {
 		given: 'a properly configured wslite instance'
 		def http = new RESTClient(endpoint.url)
-		def proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', recorder.proxyPort))
 
 		when: 'a request is made'
-		def response = http.get(path: '/', proxy: proxy)
+		def response = http.get(path: '/', proxy: recorder.proxy)
 
 		then: 'the request is intercepted'
 		response.statusCode == HTTP_OK
@@ -48,10 +47,9 @@ class WsLiteSpec extends Specification {
 	void 'proxy intercepts HTTPS requests'() {
 		given: 'a properly configured wslite instance'
 		def http = new RESTClient(httpsEndpoint.url)
-		def proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', recorder.proxyPort))
 
 		when: 'a request is made'
-		def response = http.get(path: '/', proxy: proxy)
+		def response = http.get(path: '/', proxy: recorder.proxy)
 
 		then: 'the request is intercepted'
 		response.statusCode == HTTP_OK
