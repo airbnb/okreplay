@@ -184,6 +184,15 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
     ProxyHost proxy = new ProxyHost("localhost", recorder.getProxyPort());
     client.getHostConfiguration().setProxyHost(proxy);
 
+### WSLite
+
+The [groovy-wslite][wslite] library is not aware of the default JVM proxy settings so the proxy needs to be explicitly configured.
+
+ 	def client = new RESTClient(targetUrl)
+ 	def proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress('localhost', recorder.proxyPort))
+
+ 	def response = client.get(path: '/', proxy: proxy)
+
 ## HTTPS
 
 As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
@@ -336,4 +345,5 @@ The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twi
 [twitterratelimit]:https://dev.twitter.com/docs/rate-limiting
 [webservices]:http://en.wikipedia.org/wiki/Web_service
 [vcr]:http://relishapp.com/myronmarston/vcr
+[wslite]:https://github.com/jwagenleitner/groovy-wslite
 [yaml]:http://yaml.org/
