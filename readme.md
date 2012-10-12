@@ -2,13 +2,15 @@
 
 Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests. The project was inspired by the [VCR](http://relishapp.com/myronmarston/vcr) library for Ruby.
 
+Betamax is written in [Groovy](http://groovy.codehaus.org/) but is compatible with tests written using [JUnit](http://junit.org/) or [Spock][spock] for applications written in any JVM language.
+
 ### Record
 
-Annotate your test with `@Betamax`. The first time it runs HTTP traffic is recorded to _tape_.
+Add a `@Rule Recorder` property to your test and annotate test methods with `@Betamax`. The first time the test runs any HTTP traffic is recorded to _tape_.
 
 ### Playback
 
-Future test runs replay responses from _tape_. Insert different _tapes_ to stub different responses.
+Future test runs replay responses from _tape_ without traffic going to the real target. No more 3rd party downtime or rate limits breaking your tests. You can even run your tests offline! Insert different _tapes_ to stub different responses.
 
 ### Customize
 _Tapes_ are just [YAML](http://www.yaml.org/) files so you can edit them with a text editor, commit to source control, share with your team & use on continuous integration.
@@ -26,11 +28,6 @@ Add `'co.freeside:betamax:1.1'` as a test dependency to your [Gradle](http://gra
 Development versions are available from [Sonatype][sonatype].
 
 Please get in touch if you have any  feedback. You can raise defects and feature requests via [GitHub issues][issues].
-
-## Usage
-
-To use Betamax you just need to annotate your JUnit test or [Spock][spock] specifications with `@Betamax(tape="tape name")`
-and include a `co.freeside.betamax.Recorder` Rule.
 
 [home]:http://freeside.co/betamax
 [issues]:http://github.com/robfletcher/betamax/issues
