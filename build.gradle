@@ -13,7 +13,7 @@ buildscript {
 	}
 }
 
-version = '1.1'
+version = '1.1.1'
 group = 'co.freeside'
 archivesBaseName = 'betamax'
 
