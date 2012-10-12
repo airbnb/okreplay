@@ -1,16 +1,17 @@
 # &beta;etamax [![Build Status](https://secure.travis-ci.org/robfletcher/betamax.png?branch=master)](http://travis-ci.org/robfletcher/betamax)
 
-A Groovy testing tool inspired by Ruby's [VCR][vcr]. Betamax can record and play back HTTP interactions made by your app
-so that your tests can run without any real HTTP traffic going to external URLs. The first time a test is run any HTTP
-traffic is recorded to a _tape_ and subsequent runs will play back the HTTP response without really connecting to the
-external endpoint.
+Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests. The project was inspired by the VCR library for Ruby.
 
-Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's
-source control repository so that other members of the team can use them when running tests. Different tests can use
-different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
-interactions but each must (currently) have a unique request method and URI.
+### Record
 
-An example tape file can be found [here][tape].
+Annotate your test with `@Betamax`. The first time it runs HTTP traffic is recorded to _tape_.
+
+### Playback
+
+Future test runs replay responses from _tape_. Insert different _tapes_ to stub different responses.
+
+### Customize
+Edit _tape_ files with a text editor, commit to source control, share with your team & use on continuous integration.
 
 ## Full documentation
 
@@ -18,7 +19,9 @@ Full documentation can be found on [Betamax's home page][home].
 
 ## Project status
 
-The current stable version of Betamax is 1.0 which is available from [Maven Central][maven].
+The current stable version of Betamax is 1.1 which is available from [Maven Central][maven].
+
+Add `'co.freeside:betamax:1.1'` as a test dependency to your [Gradle](http://gradle.org/), [Ivy](http://ant.apache.org/ivy/), [Grails](http://grails.org/) or [Maven](http://maven.apache.org/) project (or anything that can use Maven repositories).
 
 Development versions are available from [Sonatype][sonatype].
 
