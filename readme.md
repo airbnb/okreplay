@@ -11,7 +11,7 @@ Annotate your test with `@Betamax`. The first time it runs HTTP traffic is recor
 Future test runs replay responses from _tape_. Insert different _tapes_ to stub different responses.
 
 ### Customize
-Edit _tape_ files with a text editor, commit to source control, share with your team & use on continuous integration.
+_Tapes_ are just [YAML](http://www.yaml.org/) files so you can edit them with a text editor, commit to source control, share with your team & use on continuous integration.
 
 ## Full documentation
 
