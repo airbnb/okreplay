@@ -212,7 +212,10 @@ dl {
       text-transform: uppercase;
       margin: 48px 0 24px;
       text-indent: 20px;
-      padding-top: 6px;
+      .fontface & {
+        // slight tweak due to rendering of Kameron
+        padding-top: 6px;
+      }
       &:first-child {
         margin-top: 0;
       }
