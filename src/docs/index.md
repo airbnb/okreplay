@@ -304,7 +304,7 @@ Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston.
 
 HTTPS support was largely the work of [Lari Hotari][lari].
 
-The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Vollkorn_, _Bitter_ and _Source Code Pro_.
+The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Kameron_, _Bitter_ and _Source Code Pro_.
 
 [adhockery]:http://blog.freeside.co/ (Ad-Hockery)
 [betamax]:http://en.wikipedia.org/wiki/Betamax
