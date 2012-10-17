@@ -28,7 +28,7 @@ dependencies {
 			'org.yaml:snakeyaml:1.10',
 			'org.apache.httpcomponents:httpclient:4.2.1',
 			'commons-lang:commons-lang:2.4',
-			'org.eclipse.jetty:jetty-server:7.6.0.v20120127'
+			'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
 
 	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
 		exclude module: 'groovy'
