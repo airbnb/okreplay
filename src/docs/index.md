@@ -2,7 +2,7 @@
 title: Home
 layout: index
 version: 1.1.1
-dev-version: 1.2-SNAPSHOT
+dev-version: 1.1.2-SNAPSHOT
 ---
 
 ## Introduction
