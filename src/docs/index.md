@@ -2,7 +2,7 @@
 title: Home
 layout: index
 version: 1.1.2
-dev-version: 1.1.2-SNAPSHOT
+dev-version: 1.2-SNAPSHOT
 ---
 
 ## Introduction
@@ -11,7 +11,7 @@ Betamax is a tool for mocking external HTTP resources such as [web services][web
 
 You don't want 3rd party downtime, network issues or resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) to break your tests. Writing custom _stub_ web server code and configuring the application to connect to a different URI when under test is tedious and might not accurately simulate the real service.
 
-Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and returning _recorded_ responses.
+Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and replaying previously _recorded_ responses.
 
 The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent test runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
 
@@ -23,11 +23,15 @@ Tapes are stored to disk as [YAML][yaml] files and can be modified (or even crea
 
 The current stable version of Betamax is _{{ page.version }}_.
 
+The current development version of Betamax is _{{page.dev-version}}_.
+
 ## Installation
 
-Stable versions of Betamax are available from the Maven central repository. Stable and development versions are available from the [Sonatype OSS Maven repository][sonatype]. To install with your favourite build system see below:
+Stable versions of Betamax are available from the Maven central repository. Stable and development versions are available from the [Sonatype OSS Maven repository][sonatype]. To install with your favourite build system see below.
 
 Please note the Maven group changed between versions 1.0 and 1.1. Make sure you are specifying the group `co.freeside` when referencing Betamax in your build.
+
+If you are installing a development version you will need to add the repository `http://oss.sonatype.org/content/groups/public/` to your build.
 
 ### Gradle
 
