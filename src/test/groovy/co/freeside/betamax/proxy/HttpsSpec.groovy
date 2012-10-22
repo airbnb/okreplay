@@ -1,15 +1,19 @@
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.*
+import co.freeside.betamax.Betamax
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.TapeMode
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.util.server.*
+import co.freeside.betamax.util.server.HelloHandler
+import co.freeside.betamax.util.server.SimpleSecureServer
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
+import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
@@ -28,7 +32,7 @@ class HttpsSpec extends Specification {
 	HttpClient http
 
 	void setupSpec() {
-		httpEndpoint.start(EchoHandler)
+		httpEndpoint.start(HelloHandler)
 		httpsEndpoint.start(HelloHandler)
 
 		httpUri = httpEndpoint.url.toURI()
@@ -60,39 +64,23 @@ class HttpsSpec extends Specification {
 	}
 
 	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'proxy can intercept HTTP requests'() {
+	void 'proxy can intercept #scheme requests'() {
 		when: 'an HTTPS request is made'
-		def response = http.execute(new HttpGet(httpEndpoint.url))
+		def request = new HttpGet(httpEndpoint.url)
+		def response = http.execute(request)
 
 		then: 'it is intercepted by the proxy'
 		response.statusLine.statusCode == SC_OK
 		response.getFirstHeader(VIA)?.value == 'Betamax'
+
+		and: 'the response body is readable'
+		response.entity.content.text == HELLO_WORLD
+
+		where:
+		url << [httpEndpoint.url, httpsEndpoint.url]
+		scheme = url.toURI().scheme
 	}
 
-	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'proxy can intercept HTTPS requests made with HttpClient'() {
-		when: 'an HTTPS request is made'
-		def response = http.execute(new HttpGet(httpsEndpoint.url))
-		def responseBytes = new ByteArrayOutputStream()
-		response.entity.writeTo(responseBytes)
-		def responseString = responseBytes.toString('UTF-8')
-
-		then: 'it is intercepted by the proxy'
-		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-		responseString == 'Hello World!'
-	}
-
-	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'proxy can intercept HTTPS requests made with UrlConnection'() {
-		when:
-		def connection = httpsEndpoint.url.toURL().openConnection()
-
-		then:
-		connection.responseCode == SC_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text == 'Hello World!'
-	}
 }
 
 

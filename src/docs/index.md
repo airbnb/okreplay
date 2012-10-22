@@ -1,29 +1,27 @@
 ---
 title: Home
 layout: index
-version: 1.0
-dev-version: 1.1-SNAPSHOT
+version: 1.1.2
+dev-version: 1.1.2-SNAPSHOT
 ---
 
 ## Introduction
 
-Betamax is an HTTP interceptor that can record & replay HTTP traffic. You can use Betamax for testing JVM applications that access external HTTP resources such as [web services][webservices] and [REST][rest] APIs. The project was inspired by the [VCR][vcr] library for Ruby.
+Betamax is a tool for mocking external HTTP resources such as [web services][webservices] and [REST][rest] APIs in your tests. The project was inspired by the [VCR][vcr] library for Ruby.
 
-Testing code that accesses HTTP services can be awkward. 3rd party downtime, network availability and resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) can affect the reliability of your tests. You can always write custom _stub_ web server code and configure the application to connect to a different URI when running tests but this requires some up front time and may mean reinventing the wheel the next time a similar situation is encountered.
+You don't want 3rd party downtime, network issues or resource constraints (such as the Twitter API's [rate limit][twitterratelimit]) to break your tests. Writing custom _stub_ web server code and configuring the application to connect to a different URI when under test is tedious and might not accurately simulate the real service.
 
 Betamax aims to solve these problems by intercepting HTTP connections initiated by your application and replaying previously _recorded_ responses.
 
-The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
+The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent test runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
 
-Betamax works with JUnit and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language.
+Betamax works with [JUnit][junit] and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language so long as HTTP connections are made in a way that respects Java's `http.proxyHost` and `http.proxyPort` system properties.
 
 Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's source control repository so they can be shared by other members of your team and used by your CI server. Different tests can use different tapes to simulate various response conditions. Each tape can hold multiple request/response interactions. An example tape file can be found [here][tapeexample].
 
 ## Versions
 
 The current stable version of Betamax is _{{ page.version }}_.
-
-The current development version of Betamax is _{{ page.dev-version}}_.
 
 ## Implementations
 
@@ -45,96 +43,64 @@ Please note the Maven group changed between versions 1.0 and 1.1. Make sure you 
 
 ### Gradle
 
-To use Betamax in a project using [Gradle][gradle] add the following to your `build.gradle` file:
+To use Betamax in a project using [Gradle][gradle] add the following dependency to your `build.gradle` file:
 
-	repositories {
-	    ...
-	    mavenCentral()
-	    // only required for development versions of Betamax
-	    mavenRepo urls: ['http://oss.sonatype.org/content/groups/public/']
-	}
-	dependencies {
-	    ...
-	    testCompile 'co.freeside:betamax:{{ page.version }}'
-	}
-
+    testCompile 'co.freeside:betamax:{{ page.version }}'
 
 ### Grails
 
-To use Betamax in a [Grails][grails] app add the following to your `grails-app/conf/BuildConfig.groovy` file:
+To use Betamax in a [Grails][grails] app add the following to the `dependencies` block in your `grails-app/conf/BuildConfig.groovy` file:
 
-	repositories {
-	    ...
-	    mavenCentral()
-	    // only required for development versions of Betamax
-	    mavenRepo 'http://oss.sonatype.org/content/groups/public/'
-	}
-	dependencies {
-	    ...
-	    test 'co.freeside:betamax:{{ page.version }}'
-	}
+    test 'co.freeside:betamax:{{ page.version }}'
 
 ### Maven
 
-To use Betamax in a project using [Maven][maven] add the following to your `pom.xml` file:
+To use Betamax in a project using [Maven][maven] add the following dependency to your `pom.xml` file:
 
-	<repositories>
-	  ...
-	  <!-- only required for development versions of Betamax -->
-	  <repository>
-	    <id>sonatype</id>
-	    <name>Sonatype</name>
-	    <url>http://oss.sonatype.org/content/groups/public/</url>
-	  </repository>
-	</repositories>
-
-	<dependencies>
-	  ...
-	  <dependency>
-	    <scope>test</scope>
-	    <groupId>co.freeside</groupId>
-	    <artifactId>betamax</artifactId>
-	    <version>{{ page.version }}</version>
-	  </dependency>
-	</dependencies>
+    <dependency>
+      <scope>test</scope>
+      <groupId>co.freeside</groupId>
+      <artifactId>betamax</artifactId>
+      <version>{{ page.version }}</version>
+    </dependency>
 
 ## Usage
 
-To use Betamax you just need to annotate your JUnit test or [Spock][spock] specifications with `@Betamax(tape="tape_name")` and include a `co.freeside.betamax.Recorder` Rule.
+To use Betamax you just need to annotate your JUnit test or Spock specifications with `@Betamax(tape="tape_name")` and include a `Recorder` Rule.
 
 ### JUnit
 
-	import co.freeside.betamax.Betamax;
-	import co.freeside.betamax.Recorder;
-	import org.junit.*;
+    import co.freeside.betamax.Betamax;
+    import co.freeside.betamax.Recorder;
+    import org.junit.*;
 
-	public class MyTest {
+    public class MyTest {
 
-	    @Rule public Recorder recorder = new Recorder();
+        @Rule public Recorder recorder = new Recorder();
 
-	    @Betamax(tape="my tape")
-	    @Test
-	    public void testMethodThatAccessesExternalWebService() {
+        @Betamax(tape="my tape")
+        @Test
+        public void testMethodThatAccessesExternalWebService() {
 
-	    }
-	}
+        }
+    }
 
 ### Spock
 
-	import co.freeside.betamax.Betamax
-	import co.freeside.betamax.Recorder
-	import org.junit.*
-	import spock.lang.*
+    import co.freeside.betamax.Betamax
+    import co.freeside.betamax.Recorder
+    import org.junit.*
+    import spock.lang.*
 
-	class MySpec extends Specification {
+    class MySpec extends Specification {
 
-	    @Rule Recorder recorder = new Recorder()
+        @Rule Recorder recorder = new Recorder()
 
-	    @Betamax(tape='my tape')
-	    void 'feature that accesses external web service'() {
+        @Betamax(tape='my tape')
+        void 'feature that accesses external web service'() {
 
-	    }
-	}
+        }
+    }
 
 ### Recording and playback
 
@@ -208,35 +174,31 @@ The default implementations of [Apache _HttpClient_][httpclient] takes no notice
 
 In a dependency injection context such as a [Grails][grails] app you can just inject a proxy-configured _HttpClient_ instance into your class-under-test.
 
-The _HttpClient_ library provides an implementation called [SystemDefaultHttpClient](http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html) that _does_ use the JVM proxy settings. Ideally you can use that. In addition, Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure instances of other _HttpClient_ types.
+The _HttpClient_ library provides an implementation called [SystemDefaultHttpClient](http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html) that _does_ use the JVM proxy settings. Ideally you can use that. In addition, Betamax provides a convenient `HttpRoutePlanner` implementation that you can use to configure instances of other _HttpClient_ types. For example:
 
-#### Configuring HttpClient
-
-	DefaultHttpClient client = new DefaultHttpClient();
-	BetamaxRoutePlanner.configure(client);
+    DefaultHttpClient client = new DefaultHttpClient();
+    BetamaxRoutePlanner.configure(client);
 
 ### Groovy HTTPBuilder
 
-[Groovy _HTTPBuilder_][httpbuilder] and its [_RESTClient_][restclient] variant are wrappers around _HttpClient_ so the same proxy configuration needs to be applied.
+[Groovy _HTTPBuilder_][httpbuilder] and its [_RESTClient_][restclient] variant are wrappers around _HttpClient_ so the same proxy configuration needs to be applied. For example:
 
-#### Configuring HTTPBuilder
-
-	def http = new HTTPBuilder('http://groovy.codehaus.org')
-	BetamaxRoutePlanner.configure(http.client)
+    def http = new HTTPBuilder('http://groovy.codehaus.org')
+    BetamaxRoutePlanner.configure(http.client)
 
 _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs no special configuration as it uses a `java.net.URLConnection` rather than _HttpClient_.
 
 ### Apache HttpClient 3.x
 
-[_HttpClient_ 3.x][httpclient3] is no longer supported but still fairly widely used. It does not take any notice of Java's HTTP proxy settings and does not have the `HttpRoutePlanner` facility that _HttpClient_ 4.x does. This means Betamax cannot work as seamlessly. You must set the host and port of the Betamax proxy on the _HttpClient_ instance explicitly and Betamax's `ignoreHosts` and `ignoreLocalhost` configuration properties will be completely ignored.
+[_HttpClient_ 3.x][httpclient3] is no longer supported but still fairly widely used. It does not take any notice of Java's HTTP proxy settings and does not have the `HttpRoutePlanner` facility that _HttpClient_ 4.x does. This means Betamax cannot work as seamlessly. You must set the host and port of the Betamax proxy on the _HttpClient_ instance explicitly and Betamax's `ignoreHosts` and `ignoreLocalhost` configuration properties will be completely ignored. For example:
 
-#### Configuring HttpClient 3.x
+    HttpClient client = new HttpClient();
+    ProxyHost proxy = new ProxyHost("localhost", recorder.getProxyPort());
+    client.getHostConfiguration().setProxyHost(proxy);
 
-	HttpClient client = new HttpClient();
-	ProxyHost proxy = new ProxyHost("localhost", 5555);
-	client.getHostConfiguration().setProxyHost(proxy);
+### WSLite
 
-## HTTPS proxy
+## HTTPS
 
 As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
 
@@ -246,7 +208,7 @@ To enable HTTP support you simply need to set the `sslSupport` boolean property 
 
 Apache _HttpClient_ needs to be configured to use Betamax's HTTPS support:
 
-	BetamaxHttpsSupport.configure(client);
+    BetamaxHttpsSupport.configure(client);
 
 ## Configuration
 
@@ -277,31 +239,35 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 
 ### Example _BetamaxConfig.groovy_ script
 
-	betamax {
-	    tapeRoot = new File('test/fixtures/tapes')
-	    proxyPort = 1337
-	    proxyTimeout = 30000
-	    defaultMode = TapeMode.READ_ONLY
-		ignoreHosts = ['localhost', '127.0.0.1']
-		ignoreLocalhost = true
-		sslSupport = true
-	}
+    betamax {
+        tapeRoot = new File('test/fixtures/tapes')
+        proxyPort = 1337
+        proxyTimeout = 30000
+        defaultMode = TapeMode.READ_ONLY
+        ignoreHosts = ['localhost', '127.0.0.1']
+        ignoreLocalhost = true
+        sslSupport = true
+    }
 
 ### Example _betamax.properties_ file
 
-	betamax.tapeRoot=test/fixtures/tapes
-	betamax.proxyPort=1337
+    betamax.tapeRoot=test/fixtures/tapes
+    betamax.proxyPort=1337
     betamax.proxyTimeout=30000
-	betamax.defaultMode=READ_ONLY
-	betamax.ignoreHosts=localhost,127.0.0.1
-	betamax.ignoreLocalhost=true
-	betamax.sslSupport=true
+    betamax.defaultMode=READ_ONLY
+    betamax.ignoreHosts=localhost,127.0.0.1
+    betamax.ignoreLocalhost=true
+    betamax.sslSupport=true
 
 ## Caveats
 
 ### Security
 
 Betamax is a testing tool and not a spec-compliant HTTP proxy. It ignores _any_ and _all_ headers that would normally be used to prevent a proxy caching or storing HTTP traffic. You should ensure that sensitive information such as authentication credentials is removed from recorded tapes before committing them to your app's source control repository.
+
+## Examples
+
+Betamax's GitHub repository includes [an example Grails application][grailsexample].
 
 ## About
 
@@ -313,27 +279,9 @@ Betamax is a JVM port of the [VCR][vcr] library for Ruby. It is named after _[Be
 
 [Apache Software Licence, Version 2.0][licence]
 
-### Author
-
-Rob Fletcher [github][github] [twitter][twitter] [ad-hockery][adhockery]
-
-### Contributors
-
-* [Marcin Erdmann](https://github.com/erdi)
-* [Lari Hotari](https://github.com/lhotari)
-* [Nobuhiro Sue](https://github.com/nobusue)
-
 ### Issues
 
 Please raise issues on Betamax's [GitHub issue tracker][issues]. Forks and pull requests are more than welcome.
-
-### Download
-
-You can download this project in either [zip](http://github.com/robfletcher/betamax/zipball/master) or [tar](http://github.com/robfletcher/betamax/tarball/master) formats.
-
-You can also clone the project with [Git][git] by running:
-
-	$ git clone git://github.com/robfletcher/betamax
 
 ### Dependencies
 
@@ -347,17 +295,23 @@ Betamax depends on the following libraries (you will need them available on your
 
 If your project gets dependencies from a [Maven][maven] repository these dependencies will be automatically included for you.
 
+### Author
+
+* [Rob Fletcher][github]
+
+### Contributors
+
+* [Marcin Erdmann](https://github.com/erdi)
+* [Lari Hotari](https://github.com/lhotari)
+* [Nobuhiro Sue](https://github.com/nobusue)
+
 ### Acknowledgements
 
 Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston. Porting VCR to Groovy was suggested to me by [Jim Newbery][jim].
 
 HTTPS support was largely the work of [Lari Hotari][lari].
 
-The documentation is built with [Jekyll][jekyll], [Skeleton][skeleton], [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The site header font is [Play][playfont] by Jonas Hecksher.
-
-## Examples
-
-Betamax's GitHub repository includes [an example Grails application][grailsexample].
+The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Kameron_, _Bitter_ and _Source Code Pro_.
 
 [adhockery]:http://blog.freeside.co/ (Ad-Hockery)
 [betamax]:http://en.wikipedia.org/wiki/Betamax
@@ -383,7 +337,6 @@ Betamax's GitHub repository includes [an example Grails application][grailsexamp
 [licence]:http://www.apache.org/licenses/LICENSE-2.0.html
 [maven]:http://maven.apache.org/
 [modernizr]:http://www.modernizr.com/
-[playfont]:http://www.fontsquirrel.com/fonts/play
 [prettify]:http://code.google.com/p/google-code-prettify/
 [proxyselector]:http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/conn/ProxySelectorRoutePlanner.html
 [rest]:http://en.wikipedia.org/wiki/Representational_state_transfer
@@ -397,4 +350,5 @@ Betamax's GitHub repository includes [an example Grails application][grailsexamp
 [twitterratelimit]:https://dev.twitter.com/docs/rate-limiting
 [webservices]:http://en.wikipedia.org/wiki/Web_service
 [vcr]:http://relishapp.com/myronmarston/vcr
+[wslite]:https://github.com/jwagenleitner/groovy-wslite
 [yaml]:http://yaml.org/

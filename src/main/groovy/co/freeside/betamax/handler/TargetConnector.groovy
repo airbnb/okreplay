@@ -40,7 +40,7 @@ class TargetConnector implements HttpHandler {
 
 	private HttpRequest createOutboundRequest(Request request) {
 		def outboundRequest = httpRequestFactory.newHttpRequest(request.method, request.uri.toString())
-		request.headers.every { name, value ->
+		request.headers.each { name, value ->
 			outboundRequest.addHeader(name, value)
 		}
 		outboundRequest.addHeader(VIA, VIA_HEADER)

@@ -171,6 +171,10 @@ class Recorder implements MethodRule {
 		}
 	}
 
+	Proxy getProxy() {
+		new Proxy(Proxy.Type.HTTP, new InetSocketAddress(InetAddress.localHost.hostAddress, proxyPort))
+	}
+
 	@Override
 	Statement apply(Statement statement, FrameworkMethod method, Object target) {
 		def annotation = method.getAnnotation(Betamax)

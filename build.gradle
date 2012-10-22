@@ -13,23 +13,22 @@ buildscript {
 	}
 }
 
-version = '1.1-SNAPSHOT'
+version = '1.1.2'
 group = 'co.freeside'
 archivesBaseName = 'betamax'
 
 repositories {
 	mavenCentral()
-	mavenRepo url: 'http://oss.sonatype.org/content/groups/public/'
 }
 
 dependencies {
 	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
 
 	compile 'junit:junit:4.8.2',
-			'org.yaml:snakeyaml:1.11-SNAPSHOT',
+			'org.yaml:snakeyaml:1.10',
 			'org.apache.httpcomponents:httpclient:4.2.1',
 			'commons-lang:commons-lang:2.4',
-			'org.eclipse.jetty:jetty-server:7.6.0.v20120127'
+			'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
 
 	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
 		exclude module: 'groovy'
@@ -39,7 +38,8 @@ dependencies {
 		exclude module: 'groovy-all'
 		exclude module: 'junit-dep'
 	}
-	testCompile 'commons-httpclient:commons-httpclient:3.1'
+	testCompile 'commons-httpclient:commons-httpclient:3.1',
+				'com.github.groovy-wslite:groovy-wslite:0.7.1'
 
 	testRuntime 'cglib:cglib-nodep:2.2.2'
 }
@@ -95,7 +95,10 @@ githubPages {
 	repoUri = 'git@github.com:robfletcher/betamax.git'
 	workingPath = "$buildDir/docs"
 	pages {
-		from 'src/docs'
+		exclude '**/_site/**'
+		from('src/docs') {
+			exclude '**/*.less'
+		}
 	}
 }
 

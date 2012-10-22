@@ -1,16 +1,21 @@
 # &beta;etamax [![Build Status](https://secure.travis-ci.org/robfletcher/betamax.png?branch=master)](http://travis-ci.org/robfletcher/betamax)
 
-A Groovy testing tool inspired by Ruby's [VCR][vcr]. Betamax can record and play back HTTP interactions made by your app
-so that your tests can run without any real HTTP traffic going to external URLs. The first time a test is run any HTTP
-traffic is recorded to a _tape_ and subsequent runs will play back the HTTP response without really connecting to the
-external endpoint.
+Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests. The project was inspired by the [VCR][vcr] library for Ruby.
 
-Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's
-source control repository so that other members of the team can use them when running tests. Different tests can use
-different tapes to simulate varying responses from external endpoints. Each tape can hold multiple request/response
-interactions but each must (currently) have a unique request method and URI.
+Betamax is written in [Groovy][groovy] but is compatible with tests written using [JUnit][junit] or [Spock][spock] for applications written in any JVM language.
 
-An example tape file can be found [here][tape].
+## Usage
+
+### Record
+
+Add a `@Rule Recorder` property to your test and annotate test methods with `@Betamax`. The first time the test runs any HTTP traffic is recorded to _tape_.
+
+### Playback
+
+Future test runs replay responses from _tape_ without traffic going to the real target. No more 3rd party downtime or rate limits breaking your tests. You can even run your tests offline! Insert different _tapes_ to stub different responses.
+
+### Customize
+_Tapes_ are just [YAML][yaml] files so you can edit them with a text editor, commit to source control, share with your team & use on continuous integration.
 
 ## Full documentation
 
@@ -18,23 +23,28 @@ Full documentation can be found on [Betamax's home page][home].
 
 ## Project status
 
-The current stable version of Betamax is 1.0 which is available from [Maven Central][maven].
+The current stable version of Betamax is 1.1.1 which is available from [Maven Central][mavenrepo].
+
+Add `'co.freeside:betamax:1.1.1'` as a test dependency to your [Gradle][gradle], [Ivy][ivy], [Grails][grails] or [Maven][maven] project (or anything that can use Maven repositories).
 
 Development versions are available from [Sonatype][sonatype].
 
+Betamax's tests run on [Travis CI][travis].
+
 Please get in touch if you have any  feedback. You can raise defects and feature requests via [GitHub issues][issues].
 
-## Usage
-
-To use Betamax you just need to annotate your JUnit test or [Spock][spock] specifications with `@Betamax(tape="tape name")`
-and include a `co.freeside.betamax.Recorder` Rule.
-
+[gradle]:http://gradle.org/
+[grails]:http://grails.org/
+[groovy]:http://groovy.codehaus.org/
 [home]:http://freeside.co/betamax
 [issues]:http://github.com/robfletcher/betamax/issues
-[maven]:http://repo1.maven.org/maven2/com/github/robfletcher/betamax/
-[sonatype]:https://oss.sonatype.org/content/groups/public/com/github/robfletcher/betamax/
+[ivy]:http://ant.apache.org/ivy/
+[junit]:http://junit.org/
+[maven]:http://maven.apache.org/
+[mavenrepo]:http://repo1.maven.org/maven2/co/freeside/betamax/
+[sonatype]:https://oss.sonatype.org/content/groups/public/co/freeside/betamax/
 [spock]:http://spockframework.org/
-[tape]:https://github.com/robfletcher/betamax/blob/master/src/test/resources/betamax/tapes/smoke_spec.yaml
+[travis]:http://travis-ci.org/robfletcher/betamax
 [vcr]:http://relishapp.com/myronmarston/vcr
 [yaml]:http://yaml.org/
 
