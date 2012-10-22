@@ -1,12 +1,10 @@
 package co.freeside.betamax.util.server
 
+import javax.servlet.http.*
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-
-import static java.net.HttpURLConnection.HTTP_OK
+import static org.eclipse.jetty.http.HttpStatus.OK_200
+import static org.eclipse.jetty.http.MimeTypes.TEXT_PLAIN
 
 class HelloHandler extends AbstractHandler {
 
@@ -14,8 +12,8 @@ class HelloHandler extends AbstractHandler {
 
 	@Override
     void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-        response.status = HTTP_OK
-        response.contentType = 'text/plain'
+        response.status = OK_200
+        response.contentType = TEXT_PLAIN
         response.outputStream.withWriter { writer ->
             writer << HELLO_WORLD
         }

@@ -1,15 +1,11 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.util.message.BasicRequest
-import org.apache.http.HttpResponse
-import org.apache.http.HttpVersion
+import org.apache.http.*
 import org.apache.http.client.HttpClient
 import org.apache.http.message.BasicHttpResponse
-import spock.lang.Specification
-import spock.lang.Unroll
-
-import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
-import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
+import spock.lang.*
 
 @Unroll
 class TargetConnectorSpec extends Specification {
@@ -88,19 +84,18 @@ class TargetConnectorSpec extends Specification {
 
 	void 'throws an exception with HTTP status #httpStatus if outbound request #description'() {
 		given:
-		httpClient.execute(_, _) >> { throw exceptionClass.newInstance() }
+		httpClient.execute(_, _) >> { throw originalExceptionClass.newInstance() }
 
 		when:
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
-		e.httpStatus == httpStatus
+		thrown expectedExceptionClass
 
 		where:
-		exceptionClass         | httpStatus           | description
-		SocketTimeoutException | HTTP_GATEWAY_TIMEOUT | 'times out'
-		IOException            | HTTP_BAD_GATEWAY     | 'fails'
+		originalExceptionClass | expectedExceptionClass | description
+		SocketTimeoutException | TargetTimeoutException | 'times out'
+		IOException            | TargetErrorException   | 'fails'
 	}
 
 }

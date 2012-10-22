@@ -1,10 +1,10 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import java.util.logging.Logger
 import co.freeside.betamax.Recorder
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.*
 import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 import static java.util.logging.Level.INFO
 
 class TapeWriter extends ChainedHttpHandler {
@@ -20,9 +20,9 @@ class TapeWriter extends ChainedHttpHandler {
 	Response handle(Request request) {
 		def tape = recorder.tape
 		if (!tape) {
-			throw new ProxyException(HTTP_FORBIDDEN, 'No tape')
+			throw new NoTapeException()
 		} else if (!tape.writable) {
-			throw new ProxyException(HTTP_FORBIDDEN, 'Tape is read-only')
+			throw new NonWritableTapeException()
 		}
 
 		def response = chain(request)

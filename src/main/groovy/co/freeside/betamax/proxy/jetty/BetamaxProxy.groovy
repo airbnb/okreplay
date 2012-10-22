@@ -2,14 +2,17 @@ package co.freeside.betamax.proxy.jetty
 
 import java.util.logging.Logger
 import javax.servlet.http.*
+import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
-import co.freeside.betamax.proxy.handler.*
+import co.freeside.betamax.proxy.handler.HttpHandler
+import co.freeside.betamax.handler.HttpHandler
+import co.freeside.betamax.handler.HandlerException
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import static java.util.logging.Level.SEVERE
 import static org.apache.http.HttpHeaders.VIA
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 
 class BetamaxProxy extends AbstractHandler {
 
@@ -26,12 +29,12 @@ class BetamaxProxy extends AbstractHandler {
 		try {
 			def betamaxResponse = handlerChain.handle(betamaxRequest)
 			sendResponse(betamaxResponse, response)
-		} catch (ProxyException e) {
+		} catch (HandlerException e) {
 			log.log SEVERE, 'exception in proxy processing', e
 			response.sendError(e.httpStatus, e.message)
 		} catch (Exception e) {
 			log.log SEVERE, 'error recording HTTP exchange', e
-			response.sendError(HTTP_INTERNAL_ERROR, e.message)
+			response.sendError(SC_INTERNAL_SERVER_ERROR, e.message)
 		}
 	}
 

@@ -1,14 +1,11 @@
-package co.freeside.betamax.proxy.handler
+package co.freeside.betamax.handler
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import co.freeside.betamax.handler.*
+import co.freeside.betamax.message.*
 import co.freeside.betamax.tape.Tape
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
+import co.freeside.betamax.util.message.*
 import spock.lang.Specification
-
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
 class TapeReaderSpec extends Specification {
 
@@ -81,8 +78,7 @@ class TapeReaderSpec extends Specification {
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
-		e.httpStatus == HTTP_FORBIDDEN
+		thrown NoTapeException
 
 		and:
 		0 * nextHandler._
@@ -100,8 +96,7 @@ class TapeReaderSpec extends Specification {
 		handler.handle(request)
 
 		then:
-		def e = thrown(ProxyException)
-		e.httpStatus == HTTP_FORBIDDEN
+		thrown NonWritableTapeException
 
 		and:
 		0 * nextHandler._

@@ -17,7 +17,7 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.*
-import co.freeside.betamax.proxy.handler.*
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.*
 import org.apache.http.client.HttpClient

@@ -1,7 +1,6 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -11,6 +10,7 @@ import static co.freeside.betamax.TapeMode.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.*
 
+@Unroll
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
@@ -29,9 +29,9 @@ class TapeModeSpec extends Specification {
 		recorder.ejectTape()
 	}
 
-	void 'in read-only mode the proxy rejects a request if no recorded interaction exists'() {
+	void 'in #mode mode the proxy rejects a request if no recorded interaction exists'() {
 		given: 'a read-only tape is inserted'
-		recorder.insertTape('read only tape', [mode: READ_ONLY])
+		recorder.insertTape('read only tape', [mode: mode])
 
 		when: 'a request is made that does not match anything recorded on the tape'
 		http.get(uri: endpoint.url)
@@ -39,12 +39,15 @@ class TapeModeSpec extends Specification {
 		then: 'the proxy rejects the request'
 		def e = thrown(HttpResponseException)
 		e.statusCode == HTTP_FORBIDDEN
-		e.message == 'Tape is read-only'
+		e.message == 'Tape is not writable'
+
+		where:
+		mode << [READ_ONLY, READ_SEQUENTIAL]
 	}
 
-	void 'in write-only mode the an interaction can be recorded'() {
+	void 'in #mode mode a new interaction recorded'() {
 		given: 'an empty write-only tape is inserted'
-		recorder.insertTape('blank write only tape', [mode: WRITE_ONLY])
+		recorder.insertTape('blank tape', [mode: mode])
 		def tape = recorder.tape
 
 		when: 'a request is made'
@@ -52,9 +55,16 @@ class TapeModeSpec extends Specification {
 
 		then: 'the interaction is recorded'
 		tape.size() == old(tape.size()) + 1
+
+		cleanup:
+		recorder.ejectTape()
+		new File(tapeRoot, 'blank_tape.yaml').delete()
+
+		where:
+		mode << [READ_WRITE, WRITE_ONLY, WRITE_SEQUENTIAL]
 	}
 
-	void 'in write-only mode the proxy overwrites a recorded interaction'() {
+	void 'in write-only mode the proxy overwrites an existing matching interaction'() {
 		given: 'an existing tape file is inserted in write-only mode'
 		def tapeFile = new File(tapeRoot, 'write_only_tape.yaml')
 		tapeFile.text = """\
@@ -79,6 +89,37 @@ interactions:
 
 		then: 'the previously recorded request is overwritten'
 		tape.size() == old(tape.size())
+		tape.interactions[-1].response.status == HTTP_OK
+		tape.interactions[-1].response.body
+	}
+
+	@Issue('https://github.com/robfletcher/betamax/issues/7')
+	@Issue('https://github.com/robfletcher/betamax/pull/70')
+	void 'in write-sequential mode the proxy records additional interactions'() {
+		given: 'an existing tape file is inserted in write-sequential mode'
+		def tapeFile = new File(tapeRoot, 'write_sequential_tape.yaml')
+		tapeFile.text = """\
+!tape
+name: write sequential tape
+interactions:
+- recorded: 2011-08-26T21:46:52.000Z
+  request:
+    method: GET
+    uri: $endpoint.url
+    headers: {}
+  response:
+    status: 202
+    headers: {}
+    body: Previous response made when endpoint was down.
+"""
+		recorder.insertTape('write sequential tape', [mode: WRITE_SEQUENTIAL])
+		def tape = recorder.tape
+
+		when: 'a request is made that matches a request already recorded on the tape'
+		http.get(uri: endpoint.url)
+
+		then: 'the previously recorded request is overwritten'
+		tape.size() == old(tape.size()) + 1
 		tape.interactions[-1].response.status == HTTP_OK
 		tape.interactions[-1].response.body
 	}

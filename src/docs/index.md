@@ -127,7 +127,7 @@ By default recorded interactions are matched based on the _method_ and _URI_ of 
 
 ### Tape modes
 
-Betamax supports three different read/write modes for tapes. The tape mode is set by adding a `mode` argument to the `@Betamax` annotation.
+Betamax supports different read/write modes for tapes. The tape mode is set by adding a `mode` argument to the `@Betamax` annotation.
 
 `READ_WRITE`
 : This is the default mode. If the proxy intercepts a request that matches a recording on the tape then the recorded response is played back. Otherwise the request is forwarded to the target URI and the response recorded.
@@ -137,6 +137,12 @@ Betamax supports three different read/write modes for tapes. The tape mode is se
 
 `WRITE_ONLY`
 : The proxy will always forward the request to the target URI and record the response regardless of whether or not a matching request is already on the tape. Any existing recorded interactions will be overwritten.
+
+`READ_SEQUENTIAL`
+: The proxy will replay recordings from the tape in strict sequential order. If the current request does not match the next recorded request on the tape an error is raised. Likewise if a request arrives after all the recordings have already been played back an error is raised. This is primarily useful for testing stateful endpoints. Note that in this mode multiple recordings that match the current request may exist on the tape.
+
+`WRITE_SEQUENTIAL`
+: The proxy will behave as per `WRITE_ONLY` except that no matching on existing requests is done. All requests are recorded in sequence regardless of whether they match an existing recording or not. This mode is intended for preparing tapes for use with `READ_SEQUENTIAL` mode.
 
 ### Ignoring certain hosts
 
@@ -296,6 +302,7 @@ If your project gets dependencies from a [Maven][maven] repository these depende
 
 * [Marcin Erdmann](https://github.com/erdi)
 * [Lari Hotari](https://github.com/lhotari)
+* [Steve Ims](https://github.com/steveims)
 * [Nobuhiro Sue](https://github.com/nobusue)
 
 ### Acknowledgements

@@ -17,6 +17,7 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.TapeMode
+import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.Response
 /**
@@ -45,9 +46,20 @@ interface Tape {
 	boolean isWritable()
 
 	/**
+	 * @return `true` if access is sequential, `false` otherwise.
+	 */
+    boolean isSequential()
+
+	/**
 	 * @return the number of recorded HTTP interactions currently stored on the tape.
 	 */
 	int size()
+
+	/**
+	 * @return `true` if access is read-only, sequential and all interactions have been replayed already, `false`
+	 * otherwise.
+	 */
+	boolean isAtEnd()
 
 	/**
 	 * Attempts to find a recorded interaction on the tape that matches the supplied request.
@@ -61,7 +73,7 @@ interface Tape {
 	 * @param request the HTTP request to match.
 	 * @throws IllegalStateException if no matching recorded interaction exists.
 	 */
-	Response play(Request request)
+	Response play(Request request) throws HandlerException
 
 	/**
 	 * Records a new interaction to the tape. If `request` matches an existing interaction this method will overwrite

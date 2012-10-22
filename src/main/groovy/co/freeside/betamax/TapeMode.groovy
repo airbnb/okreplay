@@ -18,17 +18,21 @@ package co.freeside.betamax
 
 enum TapeMode {
 
-	READ_WRITE(true, true),
-	READ_ONLY(true, false),
-	WRITE_ONLY(false, true),
-	DEFAULT(false, false)
+	READ_WRITE(true, true, false),
+	READ_ONLY(true, false, false),
+	READ_SEQUENTIAL(true, false, true),
+	WRITE_ONLY(false, true, false),
+	WRITE_SEQUENTIAL(false, true, true),
+	DEFAULT(false, false, false)
 
 	final boolean readable
 	final boolean writable
+	final boolean sequential
 
-	private TapeMode(boolean readable, boolean writable) {
+	private TapeMode(boolean readable, boolean writable, boolean sequential) {
 		this.readable = readable
 		this.writable = writable
+		this.sequential = sequential
 	}
 
 	boolean asBoolean() {

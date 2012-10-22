@@ -1,0 +1,33 @@
+!tape
+name: sequential tape
+interactions:
+- recorded: 2012-10-21T12:52:39.797Z
+  request:
+    method: GET
+    uri: http://freeside.co/betamax
+    headers:
+      Accept: '*/*'
+      Accept-Encoding: gzip,deflate
+      Host: freeside.co
+      Proxy-Connection: Keep-Alive
+  response:
+    status: 200
+    headers:
+      Content-Type: text/plain
+      Server: Jetty(7.6.7.v20120910)
+    body: 'count: 1'
+- recorded: 2012-10-21T12:52:39.844Z
+  request:
+    method: GET
+    uri: http://freeside.co/betamax
+    headers:
+      Accept: '*/*'
+      Accept-Encoding: gzip,deflate
+      Host: freeside.co
+      Proxy-Connection: Keep-Alive
+  response:
+    status: 200
+    headers:
+      Content-Type: text/plain
+      Server: Jetty(7.6.7.v20120910)
+    body: 'count: 2'
