@@ -3,8 +3,7 @@ package co.freeside.betamax.handler
 import groovy.transform.InheritConstructors
 
 /**
- * Thrown to indicates an exception with some part of the handling chain. The HTTP status that should be returned to the
- * client is specified.
+ * Thrown to indicates an exception with some part of the handling chain.
  */
 @InheritConstructors
 abstract class HandlerException extends RuntimeException {

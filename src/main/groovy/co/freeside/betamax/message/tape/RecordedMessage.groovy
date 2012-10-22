@@ -27,12 +27,24 @@ abstract class RecordedMessage extends AbstractMessage implements Message {
 
 	@Override
 	final Reader getBodyAsText() {
-		def string = body instanceof String ? body : getEncoder().decode(bodyAsBinary, charset)
+		String string
+		if (body) {
+			string = body instanceof String ? body : getEncoder().decode(bodyAsBinary, charset)
+		} else {
+			string = ''
+		}
+
 		new StringReader(string)
 	}
 
 	final InputStream getBodyAsBinary() {
-		byte[] bytes = body instanceof String ? getEncoder().encode(body, charset) : body
+		byte [] bytes
+		if (body) {
+			bytes = body instanceof String ? getEncoder().encode(body, charset) : body
+		} else {
+			bytes = new byte [0]
+		}
+
 		new ByteArrayInputStream(bytes)
 	}
 

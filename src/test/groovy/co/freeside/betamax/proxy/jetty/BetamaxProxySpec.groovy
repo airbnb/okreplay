@@ -1,19 +1,16 @@
 package co.freeside.betamax.proxy.jetty
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import javax.servlet.http.HttpServletRequest
+import co.freeside.betamax.handler.HandlerException
+import co.freeside.betamax.message.*
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
 import co.freeside.betamax.handler.HttpHandler
 import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.util.message.BasicResponse
 import co.freeside.betamax.util.servlet.MockHttpServletResponse
 import spock.lang.Specification
-
-import javax.servlet.http.HttpServletRequest
-
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
-import static org.apache.http.HttpHeaders.ETAG
-import static org.apache.http.HttpHeaders.VIA
+import static org.apache.http.HttpHeaders.*
 
 class BetamaxProxySpec extends Specification {
 

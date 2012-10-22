@@ -2,7 +2,7 @@
 title: Home
 layout: index
 version: 1.1.2
-dev-version: 1.1.2-SNAPSHOT
+dev-version: 1.2-SNAPSHOT
 ---
 
 ## Introduction
@@ -23,6 +23,8 @@ Tapes are stored to disk as [YAML][yaml] files and can be modified (or even crea
 
 The current stable version of Betamax is _{{ page.version }}_.
 
+The current development version of Betamax is _{{page.dev-version}}_.
+
 ## Implementations
 
 Betamax comes in two flavors. The first is an HTTP and HTTPS proxy that can intercept traffic made in any way that respects Java's `http.proxyHost` and `http.proxyPort` system properties. The second is a simple wrapper for Apache _HttpClient_.
@@ -37,9 +39,11 @@ The _HttpClient_ wrapper is a simpler implementation but only works with _HttpCl
 
 ## Installation
 
-Stable versions of Betamax are available from the Maven central repository. Stable and development versions are available from the [Sonatype OSS Maven repository][sonatype]. To install with your favourite build system see below:
+Stable versions of Betamax are available from the Maven central repository. Stable and development versions are available from the [Sonatype OSS Maven repository][sonatype]. To install with your favourite build system see below.
 
 Please note the Maven group changed between versions 1.0 and 1.1. Make sure you are specifying the group `co.freeside` when referencing Betamax in your build.
+
+If you are installing a development version you will need to add the repository `http://oss.sonatype.org/content/groups/public/` to your build.
 
 ### Gradle
 
@@ -139,7 +143,7 @@ By default recorded interactions are matched based on the _method_ and _URI_ of 
 
 ### Tape modes
 
-Betamax supports three different read/write modes for tapes. The tape mode is set by adding a `mode` argument to the `@Betamax` annotation.
+Betamax supports different read/write modes for tapes. The tape mode is set by adding a `mode` argument to the `@Betamax` annotation.
 
 `READ_WRITE`
 : This is the default mode. If the proxy intercepts a request that matches a recording on the tape then the recorded response is played back. Otherwise the request is forwarded to the target URI and the response recorded.
@@ -149,6 +153,12 @@ Betamax supports three different read/write modes for tapes. The tape mode is se
 
 `WRITE_ONLY`
 : The proxy will always forward the request to the target URI and record the response regardless of whether or not a matching request is already on the tape. Any existing recorded interactions will be overwritten.
+
+`READ_SEQUENTIAL`
+: The proxy will replay recordings from the tape in strict sequential order. If the current request does not match the next recorded request on the tape an error is raised. Likewise if a request arrives after all the recordings have already been played back an error is raised. This is primarily useful for testing stateful endpoints. Note that in this mode multiple recordings that match the current request may exist on the tape.
+
+`WRITE_SEQUENTIAL`
+: The proxy will behave as per `WRITE_ONLY` except that no matching on existing requests is done. All requests are recorded in sequence regardless of whether they match an existing recording or not. This mode is intended for preparing tapes for use with `READ_SEQUENTIAL` mode.
 
 ### Ignoring certain hosts
 
@@ -303,6 +313,7 @@ If your project gets dependencies from a [Maven][maven] repository these depende
 
 * [Marcin Erdmann](https://github.com/erdi)
 * [Lari Hotari](https://github.com/lhotari)
+* [Steve Ims](https://github.com/steveims)
 * [Nobuhiro Sue](https://github.com/nobusue)
 
 ### Acknowledgements

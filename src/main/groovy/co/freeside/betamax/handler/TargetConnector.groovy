@@ -1,18 +1,12 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import co.freeside.betamax.message.*
 import co.freeside.betamax.message.httpclient.HttpResponseAdapter
-import org.apache.http.HttpHost
-import org.apache.http.HttpRequest
-import org.apache.http.HttpRequestFactory
+import org.apache.http.*
 import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.DefaultHttpRequestFactory
-
 import static co.freeside.betamax.proxy.jetty.BetamaxProxy.VIA_HEADER
-import static java.net.HttpURLConnection.HTTP_BAD_GATEWAY
-import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 import static org.apache.http.HttpHeaders.VIA
 
 class TargetConnector implements HttpHandler {

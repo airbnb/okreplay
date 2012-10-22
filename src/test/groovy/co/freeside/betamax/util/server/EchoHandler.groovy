@@ -16,18 +16,13 @@
 
 package co.freeside.betamax.util.server
 
+import java.util.logging.Logger
+import java.util.zip.*
+import javax.servlet.http.*
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import java.util.logging.Logger
-import java.util.zip.DeflaterOutputStream
-import java.util.zip.GZIPOutputStream
-
-import static java.net.HttpURLConnection.HTTP_OK
-import static org.eclipse.jetty.http.HttpHeaders.ACCEPT_ENCODING
-import static org.eclipse.jetty.http.HttpHeaders.CONTENT_ENCODING
+import static org.eclipse.jetty.http.HttpHeaders.*
+import static org.eclipse.jetty.http.HttpStatus.OK_200
 
 class EchoHandler extends AbstractHandler {
 
@@ -36,7 +31,7 @@ class EchoHandler extends AbstractHandler {
 	@Override
 	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		log.fine "received $request.method request for $target"
-		response.status = HTTP_OK
+		response.status = OK_200
 		response.contentType = 'text/plain'
 
 		getResponseWriter(request, response).withWriter { writer ->
