@@ -73,10 +73,6 @@ class MemoryTape implements Tape {
 		}
 	}
 
-	boolean isAtEnd() {
-		sequential && !writable && orderedIndex.get() >= interactions.size()
-	}
-
 	Response play(Request request) {
 		if (!mode.readable) {
 			throw new IllegalStateException('the tape is not readable')

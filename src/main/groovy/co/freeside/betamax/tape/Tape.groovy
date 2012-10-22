@@ -56,12 +56,6 @@ interface Tape {
 	int size()
 
 	/**
-	 * @return `true` if access is read-only, sequential and all interactions have been replayed already, `false`
-	 * otherwise.
-	 */
-	boolean isAtEnd()
-
-	/**
 	 * Attempts to find a recorded interaction on the tape that matches the supplied request.
 	 * @param request the HTTP request to match.
 	 * @return `true` if a matching recorded interaction was found, `false` otherwise.
