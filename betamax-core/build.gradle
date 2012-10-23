@@ -1,0 +1,13 @@
+dependencies {
+	groovy groovyDependency
+
+	compile httpClientDependency,
+			'commons-lang:commons-lang:2.4'
+}
+
+modifyPom {
+	project {
+		name 'Betamax Proxy'
+		description 'Betamax is a test tool that records and plays back HTTP traffic in tests. Inspired by Ruby\'s VCR.'
+	}
+}

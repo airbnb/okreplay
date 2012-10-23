@@ -8,48 +8,35 @@ buildscript {
 	}
 }
 
+allprojects {
+	version = '1.2-SNAPSHOT'
+	group = 'co.freeside'
+
+	ext {
+		groovyVersion = '1.7.8'
+		httpClientVersion = '4.2.1'
+		spockVersion = '0.6-groovy-1.7'
+
+		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
+		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
+		spockDependency = "org.spockframework:spock-core:$spockVersion"
+	}
+}
+
 subprojects {
 	apply plugin: 'groovy'
 	apply plugin: 'codenarc'
 	apply plugin: 'nexus'
 
-	version = '1.2-SNAPSHOT'
-	group = 'co.freeside'
-
 	repositories {
 		mavenCentral()
-	}
-
-	dependencies {
-		groovy 'org.codehaus.groovy:groovy-all:1.7.8'
-
-		compile 'junit:junit:4.8.2',
-				'org.yaml:snakeyaml:1.10',
-				'org.apache.httpcomponents:httpclient:4.2.1',
-				'commons-lang:commons-lang:2.4',
-				'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
-
-		testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
-			exclude module: 'groovy'
-			exclude module: 'httpclient'
-		}
-		testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
-			exclude module: 'groovy-all'
-			exclude module: 'junit-dep'
-		}
-		testCompile 'commons-httpclient:commons-httpclient:3.1',
-				'com.github.groovy-wslite:groovy-wslite:0.7.1'
-
-		testRuntime 'cglib:cglib-nodep:2.2.2'
 	}
 
 	modifyPom {
 		dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
 
 		project {
-			name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
 			packaging 'jar'
-			description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
 			url 'http://freeside.co/betamax'
 			inceptionYear '2011'
 
@@ -71,7 +58,7 @@ subprojects {
 				developer {
 					id 'robfletcher'
 					name 'Rob Fletcher'
-					url 'http://blog.freeside.co/'
+					url 'http://freeside.co/'
 					roles {
 						role 'Lead'
 						role 'Founder'
