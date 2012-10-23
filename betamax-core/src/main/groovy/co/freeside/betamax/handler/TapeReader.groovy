@@ -1,9 +1,8 @@
 package co.freeside.betamax.handler
 
 import java.util.logging.Logger
-import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.*
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
+import static co.freeside.betamax.Headers.X_BETAMAX
 
 /**
  * Reads the tape to find a matching exchange, returning the response if found otherwise proceeding the request, storing

@@ -13,9 +13,6 @@ import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 
 class BetamaxProxy extends AbstractHandler {
 
-	public static final String X_BETAMAX = 'X-Betamax'
-	public static final String VIA_HEADER = 'Betamax'
-
 	private HttpHandler handlerChain
 
 	private static final Logger log = Logger.getLogger(BetamaxProxy.name)

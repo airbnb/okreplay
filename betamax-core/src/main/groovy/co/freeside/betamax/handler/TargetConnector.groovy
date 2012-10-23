@@ -6,7 +6,7 @@ import org.apache.http.*
 import org.apache.http.client.HttpClient
 import org.apache.http.entity.ByteArrayEntity
 import org.apache.http.impl.DefaultHttpRequestFactory
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.VIA_HEADER
+import static co.freeside.betamax.Headers.VIA_HEADER
 import static org.apache.http.HttpHeaders.VIA
 
 class TargetConnector implements HttpHandler {

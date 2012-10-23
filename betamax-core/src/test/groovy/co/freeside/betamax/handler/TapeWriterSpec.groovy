@@ -1,8 +1,8 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.Recorder
+import Recorder
 import co.freeside.betamax.message.*
-import co.freeside.betamax.tape.Tape
+import Tape
 import co.freeside.betamax.util.message.*
 import spock.lang.Specification
 
