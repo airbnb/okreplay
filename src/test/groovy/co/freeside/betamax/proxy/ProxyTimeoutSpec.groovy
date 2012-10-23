@@ -1,7 +1,6 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.SlowHandler

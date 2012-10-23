@@ -1,7 +1,6 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import groovyx.net.http.RESTClient
 import spock.lang.*

@@ -1,22 +1,14 @@
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxHttpsSupport
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
+import co.freeside.betamax.*
+import co.freeside.betamax.httpclient.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.util.server.EchoHandler
-import co.freeside.betamax.util.server.HelloHandler
-import co.freeside.betamax.util.server.SimpleSecureServer
+import co.freeside.betamax.util.server.*
 import org.apache.http.HttpHost
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.client.SystemDefaultHttpClient
+import org.apache.http.impl.client.*
 import org.junit.Rule
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Timeout
+import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK

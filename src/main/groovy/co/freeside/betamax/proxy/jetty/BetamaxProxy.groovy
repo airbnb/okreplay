@@ -2,12 +2,9 @@ package co.freeside.betamax.proxy.jetty
 
 import java.util.logging.Logger
 import javax.servlet.http.*
-import co.freeside.betamax.handler.HandlerException
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
-import co.freeside.betamax.proxy.handler.HttpHandler
-import co.freeside.betamax.handler.HttpHandler
-import co.freeside.betamax.handler.HandlerException
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
 import static java.util.logging.Level.SEVERE

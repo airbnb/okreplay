@@ -16,18 +16,12 @@
 
 package co.freeside.betamax.tape.yaml
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.tape.MemoryTape
-import co.freeside.betamax.tape.StorableTape
-import co.freeside.betamax.tape.TapeLoadException
-import org.yaml.snakeyaml.DumperOptions
-import org.yaml.snakeyaml.TypeDescription
-import org.yaml.snakeyaml.Yaml
+import co.freeside.betamax.message.*
+import co.freeside.betamax.tape.*
+import org.yaml.snakeyaml.*
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.error.YAMLException
 import org.yaml.snakeyaml.nodes.Tag
-
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK
 
 class YamlTape extends MemoryTape implements StorableTape {

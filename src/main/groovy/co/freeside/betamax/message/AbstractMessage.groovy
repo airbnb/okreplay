@@ -16,13 +16,9 @@
 
 package co.freeside.betamax.message
 
+import java.util.zip.*
 import org.apache.commons.lang.StringUtils
-
-import java.util.zip.GZIPInputStream
-import java.util.zip.InflaterInputStream
-
-import static org.apache.http.HttpHeaders.CONTENT_ENCODING
-import static org.apache.http.HttpHeaders.CONTENT_TYPE
+import static org.apache.http.HttpHeaders.*
 
 abstract class AbstractMessage implements Message {
 

@@ -18,8 +18,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.TapeMode
 import co.freeside.betamax.handler.HandlerException
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import co.freeside.betamax.message.*
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */

@@ -1,6 +1,5 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.handler.*
 import co.freeside.betamax.util.message.BasicRequest
 import org.apache.http.*
 import org.apache.http.client.HttpClient

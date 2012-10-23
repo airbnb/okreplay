@@ -1,7 +1,6 @@
 package co.freeside.betamax.message.filtering
 
 import co.freeside.betamax.message.Message
-
 import static org.apache.http.HttpHeaders.*
 
 abstract class HeaderFilteringMessage implements Message {

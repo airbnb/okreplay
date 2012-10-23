@@ -1,14 +1,10 @@
 package co.freeside.betamax.message.servlet
 
-import co.freeside.betamax.util.servlet.MockServletInputStream
-import org.apache.commons.collections.iterators.EmptyIterator
-import org.apache.commons.collections.iterators.IteratorEnumeration
-import spock.lang.Specification
-
 import javax.servlet.http.HttpServletRequest
-
-import static org.apache.http.HttpHeaders.ACCEPT_ENCODING
-import static org.apache.http.HttpHeaders.IF_NONE_MATCH
+import co.freeside.betamax.util.servlet.MockServletInputStream
+import org.apache.commons.collections.iterators.*
+import spock.lang.Specification
+import static org.apache.http.HttpHeaders.*
 
 class ServletRequestAdapterSpec extends Specification {
 

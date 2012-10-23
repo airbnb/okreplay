@@ -1,11 +1,8 @@
 package co.freeside.betamax.util.servlet
 
-import org.apache.commons.collections.iterators.EmptyIterator
-import org.apache.commons.collections.iterators.IteratorEnumeration
-
 import javax.servlet.ServletOutputStream
-import javax.servlet.http.Cookie
-import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.*
+import org.apache.commons.collections.iterators.*
 
 class MockHttpServletResponse implements HttpServletResponse {
 

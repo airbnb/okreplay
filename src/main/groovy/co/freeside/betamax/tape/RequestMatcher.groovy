@@ -18,9 +18,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.message.tape.RecordedRequest
-
-import static co.freeside.betamax.MatchRule.method
-import static co.freeside.betamax.MatchRule.uri
+import static co.freeside.betamax.MatchRule.*
 
 class RequestMatcher {
 

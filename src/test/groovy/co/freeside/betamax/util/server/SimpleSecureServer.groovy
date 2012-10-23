@@ -2,8 +2,7 @@ package co.freeside.betamax.util.server
 
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import groovy.transform.InheritConstructors
-import org.eclipse.jetty.server.Connector
-import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
 
 @InheritConstructors

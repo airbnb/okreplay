@@ -1,14 +1,9 @@
 package co.freeside.betamax.message.httpclient
 
-import org.apache.http.entity.BasicHttpEntity
-import org.apache.http.entity.ByteArrayEntity
-import org.apache.http.entity.StringEntity
+import org.apache.http.entity.*
 import org.apache.http.message.BasicHttpResponse
-import spock.lang.Specification
-import spock.lang.Unroll
-
-import static co.freeside.betamax.message.AbstractMessage.DEFAULT_CHARSET
-import static co.freeside.betamax.message.AbstractMessage.DEFAULT_CONTENT_TYPE
+import spock.lang.*
+import static co.freeside.betamax.message.AbstractMessage.*
 import static org.apache.http.HttpHeaders.*
 import static org.apache.http.HttpVersion.HTTP_1_1
 

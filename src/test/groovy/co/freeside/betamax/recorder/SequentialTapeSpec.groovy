@@ -5,7 +5,7 @@ import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import groovyx.net.http.RESTClient
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.TapeMode.*
+import static co.freeside.betamax.TapeMode.READ_SEQUENTIAL
 import static org.apache.http.HttpStatus.*
 
 @Issue('https://github.com/robfletcher/betamax/issues/7')

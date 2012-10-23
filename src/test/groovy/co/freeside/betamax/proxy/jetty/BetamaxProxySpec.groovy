@@ -1,11 +1,9 @@
 package co.freeside.betamax.proxy.jetty
 
 import javax.servlet.http.HttpServletRequest
-import co.freeside.betamax.handler.HandlerException
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.*
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
-import co.freeside.betamax.handler.HttpHandler
-import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.util.message.BasicResponse
 import co.freeside.betamax.util.servlet.MockHttpServletResponse
 import spock.lang.Specification

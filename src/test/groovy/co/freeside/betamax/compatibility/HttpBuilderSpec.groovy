@@ -1,19 +1,14 @@
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.HttpURLClient
-import groovyx.net.http.RESTClient
+import groovyx.net.http.*
 import org.apache.http.HttpHost
 import org.junit.Rule
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Timeout
+import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA

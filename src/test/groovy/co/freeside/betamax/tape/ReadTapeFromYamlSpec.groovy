@@ -1,12 +1,9 @@
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
+import co.freeside.betamax.encoding.*
 import co.freeside.betamax.tape.yaml.YamlTape
 import org.yaml.snakeyaml.constructor.ConstructorException
-import spock.lang.Specification
-import spock.lang.Unroll
-
+import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 

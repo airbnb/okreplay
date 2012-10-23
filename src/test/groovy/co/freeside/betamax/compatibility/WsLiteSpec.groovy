@@ -1,15 +1,10 @@
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.util.server.EchoHandler
-import co.freeside.betamax.util.server.HelloHandler
-import co.freeside.betamax.util.server.SimpleSecureServer
+import co.freeside.betamax.util.server.*
 import org.junit.Rule
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
+import spock.lang.*
 import wslite.rest.RESTClient
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX

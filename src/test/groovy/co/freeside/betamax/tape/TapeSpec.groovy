@@ -1,14 +1,9 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.encoding.GzipEncoder
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
-import spock.lang.Shared
-import spock.lang.Specification
-import spock.lang.Stepwise
-
+import co.freeside.betamax.message.*
+import co.freeside.betamax.util.message.*
+import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
 import static groovyx.net.http.ContentType.URLENC
 import static org.apache.http.HttpHeaders.*

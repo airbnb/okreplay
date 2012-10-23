@@ -20,10 +20,9 @@ import java.util.logging.Logger
 import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.tape.*
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import co.freeside.betamax.util.*
+import co.freeside.betamax.util.PropertiesCategory
 import org.junit.rules.MethodRule
 import org.junit.runners.model.*
-import org.yaml.snakeyaml.introspector.PropertyUtils
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP

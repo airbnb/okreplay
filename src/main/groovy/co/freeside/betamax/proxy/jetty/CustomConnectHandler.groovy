@@ -1,10 +1,9 @@
 package co.freeside.betamax.proxy.jetty
 
+import java.nio.channels.SocketChannel
+import javax.servlet.http.HttpServletRequest
 import org.eclipse.jetty.server.Handler
 import org.eclipse.jetty.server.handler.ConnectHandler
-
-import javax.servlet.http.HttpServletRequest
-import java.nio.channels.SocketChannel
 
 class CustomConnectHandler extends ConnectHandler {
 

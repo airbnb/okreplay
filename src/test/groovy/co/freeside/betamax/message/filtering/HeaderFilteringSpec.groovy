@@ -1,10 +1,7 @@
 package co.freeside.betamax.message.filtering
 
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
-import spock.lang.Specification
-import spock.lang.Unroll
-
+import co.freeside.betamax.util.message.*
+import spock.lang.*
 import static co.freeside.betamax.message.filtering.HeaderFilteringMessage.NO_PASS_HEADERS
 import static org.apache.http.HttpHeaders.CONTENT_TYPE
 

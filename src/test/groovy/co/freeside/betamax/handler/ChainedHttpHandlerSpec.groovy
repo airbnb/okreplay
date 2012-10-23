@@ -1,7 +1,6 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import co.freeside.betamax.message.*
 import spock.lang.Specification
 
 class ChainedHttpHandlerSpec extends Specification {

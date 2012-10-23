@@ -1,7 +1,6 @@
 package co.freeside.betamax.message.filtering
 
-import co.freeside.betamax.message.Message
-import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.*
 
 class HeaderFilteringRequest extends HeaderFilteringMessage implements Request {
 

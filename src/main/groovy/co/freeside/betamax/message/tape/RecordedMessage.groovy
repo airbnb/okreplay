@@ -1,11 +1,7 @@
 package co.freeside.betamax.message.tape
 
-import co.freeside.betamax.encoding.AbstractEncoder
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
-import co.freeside.betamax.encoding.NoOpEncoder
-import co.freeside.betamax.message.AbstractMessage
-import co.freeside.betamax.message.Message
+import co.freeside.betamax.encoding.*
+import co.freeside.betamax.message.*
 import org.apache.http.HttpHeaders
 
 abstract class RecordedMessage extends AbstractMessage implements Message {

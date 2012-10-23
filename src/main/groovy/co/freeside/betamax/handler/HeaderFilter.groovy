@@ -1,9 +1,7 @@
 package co.freeside.betamax.handler
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.message.filtering.HeaderFilteringRequest
-import co.freeside.betamax.message.filtering.HeaderFilteringResponse
+import co.freeside.betamax.message.*
+import co.freeside.betamax.message.filtering.*
 
 class HeaderFilter extends ChainedHttpHandler {
 

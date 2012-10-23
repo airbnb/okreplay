@@ -1,11 +1,9 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.client.SystemDefaultHttpClient
+import org.apache.http.impl.client.*
 import org.junit.Rule
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*

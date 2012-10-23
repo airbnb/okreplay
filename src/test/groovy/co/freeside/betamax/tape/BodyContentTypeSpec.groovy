@@ -1,8 +1,6 @@
 package co.freeside.betamax.tape
 
-import spock.lang.Issue
-import spock.lang.Specification
-import spock.lang.Unroll
+import spock.lang.*
 
 @Unroll
 @Issue('https://github.com/robfletcher/betamax/issues/53')

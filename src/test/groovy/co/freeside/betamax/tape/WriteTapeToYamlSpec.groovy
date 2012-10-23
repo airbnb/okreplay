@@ -1,16 +1,11 @@
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.message.Response
+import co.freeside.betamax.message.*
 import co.freeside.betamax.tape.yaml.YamlTape
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
+import co.freeside.betamax.util.message.*
 import org.yaml.snakeyaml.Yaml
-import spock.lang.Shared
-import spock.lang.Specification
-
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import static java.net.HttpURLConnection.HTTP_OK
+import spock.lang.*
+import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 
 class WriteTapeToYamlSpec extends Specification {
