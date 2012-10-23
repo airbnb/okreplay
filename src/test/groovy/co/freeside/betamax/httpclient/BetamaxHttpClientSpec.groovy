@@ -5,8 +5,11 @@ import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.Network
 import co.freeside.betamax.util.server.*
+import groovyx.net.http.RESTClient
 import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.AbstractHttpClient
+import org.apache.http.params.HttpParams
 import org.eclipse.jetty.server.Handler
 import org.junit.Rule
 import spock.lang.*
@@ -148,6 +151,31 @@ class BetamaxHttpClientSpec extends Specification {
 		and:
 		!response.getFirstHeader(VIA)
 		!response.getFirstHeader('X-Betamax')
+	}
+
+	@Betamax(tape = 'betamax http client')
+	void 'can use with HttpBuilder'() {
+		given:
+		endpoint.start(HelloHandler)
+
+		and:
+		def restClient = new RESTClient(endpoint.url) {
+			@Override
+			protected AbstractHttpClient createClient(HttpParams params) {
+				new BetamaxHttpClient(recorder)
+			}
+		}
+
+		when:
+		def response = restClient.get(path: '/')
+
+		then:
+		response.status == HTTP_OK
+		response.data.text == HELLO_WORLD
+
+		and:
+		response.getFirstHeader(VIA).value == 'Betamax'
+		response.getFirstHeader('X-Betamax').value == 'PLAY'
 	}
 
 }
