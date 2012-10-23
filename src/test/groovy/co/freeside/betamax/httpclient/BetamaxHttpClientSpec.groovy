@@ -159,7 +159,7 @@ class BetamaxHttpClientSpec extends Specification {
 		endpoint.start(HelloHandler)
 
 		and:
-		def restClient = new RESTClient(endpoint.url) {
+		def restClient = new RESTClient() {
 			@Override
 			protected AbstractHttpClient createClient(HttpParams params) {
 				new BetamaxHttpClient(recorder)
@@ -167,7 +167,7 @@ class BetamaxHttpClientSpec extends Specification {
 		}
 
 		when:
-		def response = restClient.get(path: '/')
+		def response = restClient.get(uri: endpoint.url)
 
 		then:
 		response.status == HTTP_OK

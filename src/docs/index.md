@@ -15,7 +15,7 @@ Betamax aims to solve these problems by intercepting HTTP connections initiated 
 
 The first time a test annotated with `@Betamax` is run any HTTP traffic is recorded to a _tape_ and subsequent test runs will play back the recorded HTTP response from the tape without actually connecting to the external server.
 
-Betamax works with [JUnit][junit] and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language so long as HTTP connections are made in a way that respects Java's `http.proxyHost` and `http.proxyPort` system properties.
+Betamax works with [JUnit][junit] and [Spock][spock]. Although it is written in [Groovy][groovy] Betamax can be used to test applications written in any JVM language.
 
 Tapes are stored to disk as [YAML][yaml] files and can be modified (or even created) by hand and committed to your project's source control repository so they can be shared by other members of your team and used by your CI server. Different tests can use different tapes to simulate various response conditions. Each tape can hold multiple request/response interactions. An example tape file can be found [here][tapeexample].
 
@@ -33,9 +33,13 @@ Betamax comes in two flavors. The first is an HTTP and HTTPS proxy that can inte
 
 The proxy implementation can be used with HTTP traffic initiated from _java.net.URLConnection_, Apache _HttpClient_, etc. It runs an actual HTTP(S) proxy on Jetty and overrides the JVM proxy settings so that traffic is redirected via the proxy.
 
+By default the proxy is enabled.
+
 ### The Betamax HttpClient wrapper
 
 The _HttpClient_ wrapper is a simpler implementation but only works with _HttpClient_ (or things built on top of it such as the Groovy _Http Builder_). It is a good choice when you use _HttpClient_ instances that are injected in your classes to make external connections. In your tests you simply inject an instance of _BetamaxHttpClient_ instead.
+
+If you are using _BetamaxHttpClient_ you can simply set `useProxy` to `false` and the Betamax proxy will not run.
 
 ## Installation
 
@@ -141,6 +145,8 @@ By default recorded interactions are matched based on the _method_ and _URI_ of 
 `headers`
 : the request headers. If this rule is used then _all_ headers on the intercepted request must match those on the previously recorded request.
 
+Note that request matching is **not** done at all when using `READ_SEQUENTIAL` or `WRITE_SEQUENTIAL` tape modes.
+
 ### Tape modes
 
 Betamax supports different read/write modes for tapes. The tape mode is set by adding a `mode` argument to the `@Betamax` annotation.
@@ -173,6 +179,8 @@ If you need to ignore connections to _localhost_ you can simply set the `ignoreL
 Tape files are stored as _YAML_ so that they should be reasonably easy to edit by hand. HTTP request and response bodies are stored as text for most common textual MIME types. Binary data for things like images is also stored but is not practical to edit by hand. In some cases where the text contains non-printable characters then text data will be stored as binary.
 
 ## Proxy compatibility
+
+If you're using the Betamax proxy there are some compatibility issues you should be aware of:
 
 ### Java 6
 
@@ -208,11 +216,18 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 
 ### WSLite
 
+[_WSLite_][wslite] does not use the default JVM proxy settings at all. You will need to configure it to use the Betamax proxy. There is a `getProxy()` convenience method on `Recorder` that makes this very easy:
+
+    def http = new RESTClient('http://freeside.co/betamax')
+    def response = http.get(path: '/', proxy: recorder.proxy)
+
 ## HTTPS
 
-As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
+As of version 1.1 the Betamax proxy can handle HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
 
 To enable HTTP support you simply need to set the `sslSupport` boolean property on the `Recorder` instance in your test or via Betamax configuration.
+
+Note, this is not necessary if you are using the _BetamaxHttpClient_ wrapper class instead of the proxy. HTTPS is handled no differently to HTTP in that case.
 
 ### HTTPS with Apache HttpClient
 
