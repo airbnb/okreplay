@@ -226,6 +226,7 @@ class Recorder implements MethodRule {
 			ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
 			ignoreLocalhost = properties.getBoolean('betamax.ignoreLocalhost')
 			sslSupport = properties.getBoolean('betamax.sslSupport')
+			useProxy = properties.getBoolean('betamax.useProxy')
 		}
 	}
 
@@ -237,6 +238,7 @@ class Recorder implements MethodRule {
 		ignoreHosts = config.betamax.ignoreHosts ?: []
 		ignoreLocalhost = config.betamax.ignoreLocalhost
 		sslSupport = config.betamax.sslSupport
+		useProxy = config.betamax.useProxy
 	}
 
 }
