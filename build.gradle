@@ -1,8 +1,3 @@
-apply plugin: 'groovy'
-apply plugin: 'codenarc'
-apply plugin: 'nexus'
-apply plugin: 'github-pages'
-
 buildscript {
 	repositories {
 		mavenCentral()
@@ -13,83 +8,101 @@ buildscript {
 	}
 }
 
-version = '1.2-SNAPSHOT'
-group = 'co.freeside'
-archivesBaseName = 'betamax'
+subprojects {
+	apply plugin: 'groovy'
+	apply plugin: 'codenarc'
+	apply plugin: 'nexus'
 
-repositories {
-	mavenCentral()
-}
+	version = '1.2-SNAPSHOT'
+	group = 'co.freeside'
 
-dependencies {
-	groovy 'org.codehaus.groovy:groovy-all:1.7.8'
-
-	compile 'junit:junit:4.8.2',
-			'org.yaml:snakeyaml:1.10',
-			'org.apache.httpcomponents:httpclient:4.2.1',
-			'commons-lang:commons-lang:2.4',
-			'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
-
-	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
-		exclude module: 'groovy'
-		exclude module: 'httpclient'
+	repositories {
+		mavenCentral()
 	}
-	testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
-		exclude module: 'groovy-all'
-		exclude module: 'junit-dep'
-	}
-	testCompile 'commons-httpclient:commons-httpclient:3.1',
+
+	dependencies {
+		groovy 'org.codehaus.groovy:groovy-all:1.7.8'
+
+		compile 'junit:junit:4.8.2',
+				'org.yaml:snakeyaml:1.10',
+				'org.apache.httpcomponents:httpclient:4.2.1',
+				'commons-lang:commons-lang:2.4',
+				'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
+
+		testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
+			exclude module: 'groovy'
+			exclude module: 'httpclient'
+		}
+		testCompile('org.spockframework:spock-core:0.6-groovy-1.7') {
+			exclude module: 'groovy-all'
+			exclude module: 'junit-dep'
+		}
+		testCompile 'commons-httpclient:commons-httpclient:3.1',
 				'com.github.groovy-wslite:groovy-wslite:0.7.1'
 
-	testRuntime 'cglib:cglib-nodep:2.2.2'
-}
+		testRuntime 'cglib:cglib-nodep:2.2.2'
+	}
 
-modifyPom {
-	dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
+	modifyPom {
+		dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
 
-	project {
-		name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
-		packaging 'jar'
-		description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
-		url 'http://freeside.co/betamax'
-		inceptionYear '2011'
+		project {
+			name 'Betamax - An HTTP stubbing proxy for testing JVM applications.'
+			packaging 'jar'
+			description 'Betamax is a Groovy record/playback proxy for stubbing access to external HTTP resources when testing. Inspired by Ruby\'s VCR.'
+			url 'http://freeside.co/betamax'
+			inceptionYear '2011'
 
-		scm {
-			url 'scm:git@github.com:robfletcher/betamax.git'
-			connection 'scm:git@github.com:robfletcher/betamax.git'
-			developerConnection 'scm:git@github.com:robfletcher/betamax.git'
-		}
-
-		licenses {
-			license {
-				name 'The Apache Software License, Version 2.0'
-				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-				distribution 'repo'
+			scm {
+				url 'scm:git@github.com:robfletcher/betamax.git'
+				connection 'scm:git@github.com:robfletcher/betamax.git'
+				developerConnection 'scm:git@github.com:robfletcher/betamax.git'
 			}
-		}
 
-		developers {
-			developer {
-				id 'robfletcher'
-				name 'Rob Fletcher'
-				url 'http://blog.freeside.co/'
-				roles {
-					role 'Lead'
-					role 'Founder'
+			licenses {
+				license {
+					name 'The Apache Software License, Version 2.0'
+					url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					distribution 'repo'
+				}
+			}
+
+			developers {
+				developer {
+					id 'robfletcher'
+					name 'Rob Fletcher'
+					url 'http://blog.freeside.co/'
+					roles {
+						role 'Lead'
+						role 'Founder'
+					}
 				}
 			}
 		}
 	}
+
+	nexus {
+		sign = true
+	}
+
+	codenarc {
+		toolVersion = '0.17'
+		ignoreFailures = true
+	}
+
+	test {
+		testLogging {
+			quiet {
+				events 'failed'
+				exceptionFormat 'short'
+			}
+		}
+	}
 }
 
-nexus {
-	sign = true
-}
+apply plugin: 'github-pages'
 
-codenarc {
-	toolVersion = '0.17'
-	ignoreFailures = true
-}
+//archivesBaseName = 'betamax'
 
 githubPages {
 	repoUri = 'git@github.com:robfletcher/betamax.git'
@@ -98,15 +111,6 @@ githubPages {
 		exclude '**/_site/**'
 		from('src/docs') {
 			exclude '**/*.less'
-		}
-	}
-}
-
-test {
-	testLogging {
-		quiet {
-			events 'failed'
-			exceptionFormat 'short'
 		}
 	}
 }

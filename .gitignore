@@ -1,7 +1,7 @@
 /.idea
 /.gradle
 /gradle.properties
-/build
+build/
 /out
 /_site
 *.iml
