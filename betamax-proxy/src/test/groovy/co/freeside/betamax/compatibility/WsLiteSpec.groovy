@@ -6,8 +6,8 @@ import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
 import wslite.rest.RESTClient
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -15,7 +15,7 @@ import static org.apache.http.HttpHeaders.VIA
 class WsLiteSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 

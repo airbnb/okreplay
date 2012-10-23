@@ -23,6 +23,7 @@ import org.yaml.snakeyaml.nodes.*
 import org.yaml.snakeyaml.representer.Represent
 import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*
 import static org.yaml.snakeyaml.nodes.Tag.*
+
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
  */

@@ -7,8 +7,8 @@ import co.freeside.betamax.util.server.IncrementingHandler
 import groovyx.net.http.RESTClient
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.WRITE_SEQUENTIAL
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpStatus.SC_OK
 
@@ -17,7 +17,7 @@ import static org.apache.http.HttpStatus.SC_OK
 class SequentialTapeWritingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient(endpoint.url)
 

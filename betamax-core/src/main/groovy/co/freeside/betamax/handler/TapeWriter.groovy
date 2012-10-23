@@ -1,6 +1,7 @@
 package co.freeside.betamax.handler
 
 import java.util.logging.Logger
+import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static java.util.logging.Level.INFO

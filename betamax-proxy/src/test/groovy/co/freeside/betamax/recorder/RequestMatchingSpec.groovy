@@ -1,6 +1,6 @@
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import groovyx.net.http.RESTClient
 import spock.lang.*
@@ -12,7 +12,7 @@ import static org.apache.http.HttpHeaders.VIA
 class RequestMatchingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Shared Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@Shared RESTClient http = new BetamaxRESTClient()
 
 	void setupSpec() {

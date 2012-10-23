@@ -1,6 +1,6 @@
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -14,7 +14,7 @@ import static java.net.HttpURLConnection.*
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Shared Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient()

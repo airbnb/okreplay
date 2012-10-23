@@ -1,8 +1,9 @@
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import spock.lang.*
-import static co.freeside.betamax.Recorder.*
+import static co.freeside.betamax.BetamaxProxyRecorder.DEFAULT_PROXY_TIMEOUT
+import static co.freeside.betamax.Recorder.DEFAULT_TAPE_ROOT
 import static co.freeside.betamax.TapeMode.*
 
 class RecorderConfigurationSpec extends Specification {
@@ -11,7 +12,7 @@ class RecorderConfigurationSpec extends Specification {
 
 	void 'recorder gets default configuration if not overridden and no properties file exists'() {
 		given:
-		def recorder = new Recorder()
+		def recorder = new BetamaxProxyRecorder()
 
 		expect:
 		recorder.tapeRoot == new File(DEFAULT_TAPE_ROOT)
@@ -26,7 +27,7 @@ class RecorderConfigurationSpec extends Specification {
 
 	void 'recorder configuration is overridden by map arguments'() {
 		given:
-		def recorder = new Recorder(
+		def recorder = new BetamaxProxyRecorder(
 				tapeRoot: new File(tmpdir, 'tapes'),
 				proxyPort: 1337,
 				defaultMode: READ_ONLY,
@@ -61,7 +62,7 @@ class RecorderConfigurationSpec extends Specification {
 		properties.setProperty('betamax.useProxy', 'false')
 
 		and:
-		def recorder = new Recorder(properties)
+		def recorder = new BetamaxProxyRecorder(properties)
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, 'tapes')
@@ -94,7 +95,7 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder()
+		def recorder = new BetamaxProxyRecorder()
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, 'tapes')
@@ -132,7 +133,7 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder()
+		def recorder = new BetamaxProxyRecorder()
 
 		expect:
 		recorder.tapeRoot == new File(tmpdir, 'tapes')
@@ -168,7 +169,7 @@ class RecorderConfigurationSpec extends Specification {
 		Recorder.classLoader.addURL(new File(tmpdir).toURL())
 
 		and:
-		def recorder = new Recorder(
+		def recorder = new BetamaxProxyRecorder(
 				tapeRoot: new File('test/fixtures/tapes'),
 				proxyPort: 1234,
 				defaultMode: WRITE_ONLY,
@@ -196,7 +197,7 @@ class RecorderConfigurationSpec extends Specification {
 	@Issue('https://github.com/robfletcher/betamax/issues/56')
 	void 'default tape mode is set correctly on tape'() {
 		given:
-		def recorder = new Recorder(defaultMode: READ_ONLY)
+		def recorder = new BetamaxProxyRecorder(defaultMode: READ_ONLY)
 
 		when:
 		recorder.insertTape('foo', [mode: DEFAULT])

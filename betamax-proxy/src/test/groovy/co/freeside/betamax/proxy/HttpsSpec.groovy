@@ -19,7 +19,7 @@ import static org.apache.http.HttpStatus.SC_OK
 class HttpsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule @AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot, sslSupport: true)
+	@Rule @AutoCleanup('ejectTape') Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 	@Shared @AutoCleanup('stop') SimpleServer httpEndpoint = new SimpleServer()
 

@@ -23,7 +23,7 @@ import co.freeside.betamax.message.tape.*
 import org.yaml.snakeyaml.reader.StreamReader
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static org.apache.http.HttpHeaders.VIA
 
 /**

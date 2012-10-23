@@ -8,7 +8,7 @@ import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -17,7 +17,7 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationTest {
 
 	static File tapeRoot = newTempDir('tapes')
-	@Rule public Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule public Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

@@ -1,6 +1,6 @@
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -15,7 +15,7 @@ class IgnoreHostsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	@AutoCleanup('ejectTape') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@AutoCleanup('ejectTape') Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	RESTClient http
 

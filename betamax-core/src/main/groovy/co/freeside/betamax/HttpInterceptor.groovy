@@ -8,4 +8,8 @@ interface HttpInterceptor {
 
 	void stop()
 
+	String getHost()
+
+	int getPort()
+
 }

@@ -17,7 +17,6 @@
 package co.freeside.betamax
 
 import java.util.logging.Logger
-import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.tape.*
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.PropertiesCategory
@@ -35,10 +34,8 @@ import static java.util.Collections.EMPTY_MAP
 class Recorder implements MethodRule {
 
 	public static final String DEFAULT_TAPE_ROOT = 'src/test/resources/betamax/tapes'
-	public static final int DEFAULT_PROXY_PORT = 5555
-	public static final int DEFAULT_PROXY_TIMEOUT = 5000
 
-	private static final log = Logger.getLogger(Recorder.name)
+	protected final log = Logger.getLogger(getClass().name)
 
 	Recorder() {
 		def configFile = getClass().classLoader.getResource('BetamaxConfig.groovy')
@@ -62,11 +59,6 @@ class Recorder implements MethodRule {
 	}
 
 	/**
-	 * The port the Betamax proxy will listen on.
-	 */
-	int proxyPort = DEFAULT_PROXY_PORT
-
-	/**
 	 * The base directory where tape files are stored.
 	 */
 	File tapeRoot = new File(DEFAULT_TAPE_ROOT)
@@ -75,11 +67,6 @@ class Recorder implements MethodRule {
 	 * The default mode for an inserted tape.
 	 */
 	TapeMode defaultMode = READ_WRITE
-
-	/**
-	 * The time the proxy will wait before aborting a request in milliseconds.
-	 */
-	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
 
 	/**
 	 * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be
@@ -94,19 +81,9 @@ class Recorder implements MethodRule {
 	 */
 	boolean ignoreLocalhost = false
 
-	/**
-	 * If set to true add support for proxying SSL (disable certificate checking)
-	 */
-	boolean sslSupport = false
-
-	/**
-	 * If set to true the proxy is started before and stopped after each annotated test method.
-	 */
-	boolean useProxy = true
-
-
+	private final TapeLoader tapeLoader = new YamlTapeLoader(tapeRoot)
 	private StorableTape tape
-	private final ProxyServer interceptor = new ProxyServer(this)
+
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -185,60 +162,28 @@ class Recorder implements MethodRule {
 		}
 	}
 
-	/**
-	 * @return the hostname or address where the proxy will run.
-	 */
-	String getProxyHost() {
-		interceptor.host
-	}
-
-	/**
-	 * @return a `java.net.Proxy` instance configured to point to the Betamax proxy.
-	 */
-	Proxy getProxy() {
-		new Proxy(Proxy.Type.HTTP, new InetSocketAddress(interceptor.host, interceptor.port))
-	}
-
-	private void startProxy(String tapeName, Map arguments) {
-		if (useProxy && !interceptor.running) {
-			interceptor.start()
-		}
+	protected void startProxy(String tapeName, Map arguments) {
 		insertTape(tapeName, arguments)
 	}
 
-	private void stopProxy() {
-		if (useProxy) {
-			interceptor.stop()
-		}
+	protected void stopProxy() {
 		ejectTape()
 	}
 
-	private TapeLoader getTapeLoader() {
-		new YamlTapeLoader(tapeRoot)
-	}
-
-	private void configureFromProperties(Properties properties) {
+	protected void configureFromProperties(Properties properties) {
 		use(PropertiesCategory) {
 			tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
-			proxyPort = properties.getInteger('betamax.proxyPort', DEFAULT_PROXY_PORT)
-			proxyTimeout = properties.getInteger('betamax.proxyTimeout', DEFAULT_PROXY_TIMEOUT)
 			defaultMode = properties.getEnum('betamax.defaultMode', READ_WRITE)
 			ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
 			ignoreLocalhost = properties.getBoolean('betamax.ignoreLocalhost')
-			sslSupport = properties.getBoolean('betamax.sslSupport')
-			useProxy = properties.getBoolean('betamax.useProxy')
 		}
 	}
 
-	private void configureFromConfig(ConfigObject config) {
+	protected void configureFromConfig(ConfigObject config) {
 		tapeRoot = config.betamax.tapeRoot ?: DEFAULT_TAPE_ROOT
-		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
-		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 		ignoreHosts = config.betamax.ignoreHosts ?: []
 		ignoreLocalhost = config.betamax.ignoreLocalhost
-		sslSupport = config.betamax.sslSupport
-		useProxy = config.betamax.useProxy
 	}
 
 }

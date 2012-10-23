@@ -6,7 +6,7 @@ import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.RESTClient
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -15,7 +15,7 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

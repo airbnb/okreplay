@@ -1,6 +1,6 @@
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.*
@@ -14,7 +14,7 @@ import static co.freeside.betamax.util.FileUtils.newTempDir
 class PostBodySpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 
 	private DefaultHttpClient httpClient = new SystemDefaultHttpClient()
 

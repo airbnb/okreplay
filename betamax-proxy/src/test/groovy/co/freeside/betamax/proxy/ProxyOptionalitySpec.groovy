@@ -15,7 +15,7 @@ import static org.apache.http.HttpHeaders.VIA
 class ProxyOptionalitySpec extends Specification {
 
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	@Rule Recorder recorder = new Recorder(useProxy: false)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(useProxy: false)
 
 	void setupSpec() {
 		endpoint.start(HelloHandler)

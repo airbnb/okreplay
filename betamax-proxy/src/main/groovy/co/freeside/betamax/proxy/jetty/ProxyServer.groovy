@@ -28,7 +28,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
-import static co.freeside.betamax.Recorder.DEFAULT_PROXY_PORT
+import static co.freeside.betamax.BetamaxProxyRecorder.DEFAULT_PROXY_PORT
 
 class ProxyServer extends SimpleServer implements HttpInterceptor {
 

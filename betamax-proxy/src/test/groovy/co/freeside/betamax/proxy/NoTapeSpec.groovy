@@ -1,6 +1,6 @@
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -11,7 +11,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 @Issue('https://github.com/robfletcher/betamax/issues/18')
 class NoTapeSpec extends Specification {
 
-	@Shared Recorder recorder = new Recorder()
+	@Shared Recorder recorder = new BetamaxProxyRecorder()
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient(endpoint.url)

@@ -5,9 +5,9 @@ import org.apache.http.HttpHost
 import org.apache.http.auth.*
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.MatchRule.*
 import static co.freeside.betamax.TapeMode.*
-import static co.freeside.betamax.proxy.jetty.BetamaxProxy.X_BETAMAX
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.*
 
@@ -19,7 +19,7 @@ class BasicAuthSpec extends Specification {
 	@Shared targetHost = new HttpHost(endpoint.host, endpoint.port)
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	def http = new BetamaxRESTClient()
 
 	void setup() {
