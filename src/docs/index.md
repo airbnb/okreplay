@@ -227,6 +227,9 @@ The `Recorder` class has some configuration properties that you can override:
 `tapeRoot`
 : the base directory where tape files are stored. Defaults to `src/test/resources/betamax/tapes`.
 
+`useProxy`
+: if set to `true` the Betamax proxy will start before each annotated test and stop after it. If you're using the HTTPClient wrapper you can safely set this to `false` and avoid the overhead of running the proxy.
+
 `proxyPort`
 : the port the Betamax proxy listens on. Defaults to `5555`.
 
@@ -250,24 +253,26 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 ### Example _BetamaxConfig.groovy_ script
 
     betamax {
-        tapeRoot = new File('test/fixtures/tapes')
-        proxyPort = 1337
-        proxyTimeout = 30000
-        defaultMode = TapeMode.READ_ONLY
+        tapeRoot = new File('src/test/resources/betamax/tapes')
+        useProxy = true
+        proxyPort = 5555
+        proxyTimeout = 5000
+        defaultMode = TapeMode.READ_WRITE
         ignoreHosts = ['localhost', '127.0.0.1']
-        ignoreLocalhost = true
-        sslSupport = true
+        ignoreLocalhost = false
+        sslSupport = false
     }
 
 ### Example _betamax.properties_ file
 
-    betamax.tapeRoot=test/fixtures/tapes
-    betamax.proxyPort=1337
-    betamax.proxyTimeout=30000
-    betamax.defaultMode=READ_ONLY
+    betamax.tapeRoot=src/test/resources/betamax/tapes
+    betamax.useProxy=true
+    betamax.proxyPort=5555
+    betamax.proxyTimeout=5000
+    betamax.defaultMode=READ_WRITE
     betamax.ignoreHosts=localhost,127.0.0.1
-    betamax.ignoreLocalhost=true
-    betamax.sslSupport=true
+    betamax.ignoreLocalhost=false
+    betamax.sslSupport=false
 
 ## Caveats
 
