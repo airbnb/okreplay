@@ -10,14 +10,16 @@ import org.apache.http.entity.StringEntity
 import org.eclipse.jetty.server.Handler
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 
+@Issue('https://github.com/robfletcher/betamax/issues/40')
 class BetamaxHttpClientSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxy: Mock(HttpInterceptor))
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(recorder)
