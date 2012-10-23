@@ -101,11 +101,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		def proxyHost = InetAddress.localHost.hostAddress
 		def nonProxyHosts = recorder.ignoreHosts as Set
 		if (recorder.ignoreLocalhost) {
-			def local = InetAddress.localHost
-			nonProxyHosts << local.hostName
-			nonProxyHosts << local.hostAddress
-			nonProxyHosts << 'localhost'
-			nonProxyHosts << '127.0.0.1'
+			nonProxyHosts.addAll(Network.localAddresses)
 		}
 		proxyOverrider.activate proxyHost, port, nonProxyHosts
 	}

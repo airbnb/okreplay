@@ -3,6 +3,7 @@ package co.freeside.betamax.httpclient
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.Network
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
@@ -101,6 +102,50 @@ class BetamaxHttpClientSpec extends Specification {
 		0 * handler.handle(*_)
 	}
 
-	// TODO: support ignore hosts config
+	@Betamax(tape = 'betamax http client')
+	void 'can use ignoreLocalhost config setting'() {
+		given:
+		endpoint.start(HelloHandler)
+
+		and:
+		recorder.ignoreLocalhost = true
+
+		and:
+		def request = new HttpGet(endpoint.url)
+
+		when:
+		def response = http.execute(request)
+
+		then:
+		response.statusLine.statusCode == HTTP_OK
+		response.entity.content.text == HELLO_WORLD
+
+		and:
+		!response.getFirstHeader(VIA)
+		!response.getFirstHeader('X-Betamax')
+	}
+
+	@Betamax(tape = 'betamax http client')
+	void 'can use ignoreHosts config setting'() {
+		given:
+		endpoint.start(HelloHandler)
+
+		and:
+		recorder.ignoreHosts = Network.localAddresses
+
+		and:
+		def request = new HttpGet(endpoint.url)
+
+		when:
+		def response = http.execute(request)
+
+		then:
+		response.statusLine.statusCode == HTTP_OK
+		response.entity.content.text == HELLO_WORLD
+
+		and:
+		!response.getFirstHeader(VIA)
+		!response.getFirstHeader('X-Betamax')
+	}
 
 }
