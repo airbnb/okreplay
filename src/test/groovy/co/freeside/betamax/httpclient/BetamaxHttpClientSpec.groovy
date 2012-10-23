@@ -20,7 +20,7 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 class BetamaxHttpClientSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot, proxy: Mock(HttpInterceptor))
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(recorder)
 

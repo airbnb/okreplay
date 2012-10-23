@@ -97,7 +97,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		)
 	}
 
-	void overrideProxySettings() {
+	private void overrideProxySettings() {
 		def proxyHost = InetAddress.localHost.hostAddress
 		def nonProxyHosts = recorder.ignoreHosts as Set
 		if (recorder.ignoreLocalhost) {
@@ -106,17 +106,17 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		proxyOverrider.activate proxyHost, port, nonProxyHosts
 	}
 
-	void restoreOriginalProxySettings() {
+	private void restoreOriginalProxySettings() {
 		proxyOverrider.deactivateAll()
 	}
 
-	void overrideSSLSettings() {
+	private void overrideSSLSettings() {
 		if (recorder.sslSupport) {
 			sslOverrider.activate()
 		}
 	}
 
-	void restoreOriginalSSLSettings() {
+	private void restoreOriginalSSLSettings() {
 		if (recorder.sslSupport) {
 			sslOverrider.deactivate()
 		}

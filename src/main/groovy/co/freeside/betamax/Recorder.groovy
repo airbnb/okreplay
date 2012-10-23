@@ -26,6 +26,7 @@ import org.junit.runners.model.*
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP
+
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
@@ -98,18 +99,14 @@ class Recorder implements MethodRule {
 	 */
 	boolean sslSupport = false
 
+	/**
+	 * If set to true the proxy is started before and stopped after each annotated test method.
+	 */
+	boolean useProxy = true
 
-	String getProxyHost() {
-		proxy.url.toURI().host
-	}
-
-	int getHttpsProxyPort() {
-		//proxyPort + 1
-		proxyPort
-	}
 
 	private StorableTape tape
-	HttpInterceptor proxy = new ProxyServer(this)
+	private final ProxyServer interceptor = new ProxyServer(this)
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -170,10 +167,6 @@ class Recorder implements MethodRule {
 		}
 	}
 
-	Proxy getProxy() {
-		new Proxy(Proxy.Type.HTTP, new InetSocketAddress(InetAddress.localHost.hostAddress, proxyPort))
-	}
-
 	@Override
 	Statement apply(Statement statement, FrameworkMethod method, Object target) {
 		def annotation = method.getAnnotation(Betamax)
@@ -192,15 +185,31 @@ class Recorder implements MethodRule {
 		}
 	}
 
+	/**
+	 * @return the hostname or address where the proxy will run.
+	 */
+	String getProxyHost() {
+		interceptor.host
+	}
+
+	/**
+	 * @return a `java.net.Proxy` instance configured to point to the Betamax proxy.
+	 */
+	Proxy getProxy() {
+		new Proxy(Proxy.Type.HTTP, new InetSocketAddress(interceptor.host, interceptor.port))
+	}
+
 	private void startProxy(String tapeName, Map arguments) {
-		if (!proxy.running) {
-			proxy.start()
+		if (useProxy && !interceptor.running) {
+			interceptor.start()
 		}
 		insertTape(tapeName, arguments)
 	}
 
 	private void stopProxy() {
-		proxy.stop()
+		if (useProxy) {
+			interceptor.stop()
+		}
 		ejectTape()
 	}
 
