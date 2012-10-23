@@ -1,8 +1,8 @@
 dependencies {
-	groovy groovyDependency
-
 	compile httpClientDependency,
 			'commons-lang:commons-lang:2.4'
+
+	testCompile project(':betamax-test-support')
 }
 
 modifyPom {

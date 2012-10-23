@@ -1,5 +1,6 @@
 include 'betamax-core',
 		'betamax-proxy',
-		'betamax-httpclient'
+		'betamax-httpclient',
+		'betamax-test-support'
 
 rootProject.name = 'betamax'

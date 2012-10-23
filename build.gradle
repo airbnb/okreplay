@@ -20,56 +20,27 @@ allprojects {
 		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
 		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
 		spockDependency = "org.spockframework:spock-core:$spockVersion"
+
+		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient']
 	}
 }
 
 subprojects {
 	apply plugin: 'groovy'
 	apply plugin: 'codenarc'
-	apply plugin: 'nexus'
 
 	repositories {
 		mavenCentral()
 	}
 
-	modifyPom {
-		dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
+	dependencies {
+		groovy groovyDependency
 
-		project {
-			packaging 'jar'
-			url 'http://freeside.co/betamax'
-			inceptionYear '2011'
-
-			scm {
-				url 'scm:git@github.com:robfletcher/betamax.git'
-				connection 'scm:git@github.com:robfletcher/betamax.git'
-				developerConnection 'scm:git@github.com:robfletcher/betamax.git'
-			}
-
-			licenses {
-				license {
-					name 'The Apache Software License, Version 2.0'
-					url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					distribution 'repo'
-				}
-			}
-
-			developers {
-				developer {
-					id 'robfletcher'
-					name 'Rob Fletcher'
-					url 'http://freeside.co/'
-					roles {
-						role 'Lead'
-						role 'Founder'
-					}
-				}
-			}
+		testCompile 'junit:junit:4.8.2'
+		testCompile(spockDependency) {
+			exclude module: 'groovy-all'
+			exclude module: 'junit-dep'
 		}
-	}
-
-	nexus {
-		sign = true
 	}
 
 	codenarc {
@@ -83,6 +54,50 @@ subprojects {
 				events 'failed'
 				exceptionFormat 'short'
 			}
+		}
+	}
+
+	if (path in publishedModules) {
+		apply plugin: 'nexus'
+
+		modifyPom {
+			dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
+
+			project {
+				packaging 'jar'
+				url 'http://freeside.co/betamax'
+				inceptionYear '2011'
+
+				scm {
+					url 'scm:git@github.com:robfletcher/betamax.git'
+					connection 'scm:git@github.com:robfletcher/betamax.git'
+					developerConnection 'scm:git@github.com:robfletcher/betamax.git'
+				}
+
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution 'repo'
+					}
+				}
+
+				developers {
+					developer {
+						id 'robfletcher'
+						name 'Rob Fletcher'
+						url 'http://freeside.co/'
+						roles {
+							role 'Lead'
+							role 'Founder'
+						}
+					}
+				}
+			}
+		}
+
+		nexus {
+			sign = true
 		}
 	}
 }
