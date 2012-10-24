@@ -15,7 +15,7 @@ import static org.apache.http.HttpHeaders.VIA
 class WsLiteSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+	@Rule BetamaxProxyRecorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 

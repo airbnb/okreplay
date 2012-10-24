@@ -2,7 +2,6 @@ package co.freeside.betamax.proxy.jetty
 
 import java.util.logging.Logger
 import javax.servlet.http.*
-import co.freeside.betamax.Headers
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter

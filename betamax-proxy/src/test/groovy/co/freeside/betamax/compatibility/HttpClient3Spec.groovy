@@ -14,7 +14,7 @@ import static org.apache.http.HttpHeaders.VIA
 class HttpClient3Spec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule BetamaxProxyRecorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
 	void setupSpec() {
@@ -26,7 +26,7 @@ class HttpClient3Spec extends Specification {
 	void 'proxy intercepts HTTPClient 3.x connections'() {
 		given:
 		def client = new HttpClient()
-		client.hostConfiguration.proxyHost = new ProxyHost('localhost', 5555)
+		client.hostConfiguration.proxyHost = new ProxyHost(recorder.proxyHost, recorder.proxyPort)
 
 		and:
 		def request = new GetMethod(endpoint.url)

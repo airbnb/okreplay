@@ -22,8 +22,8 @@ import co.freeside.betamax.message.*
 import co.freeside.betamax.message.tape.*
 import org.yaml.snakeyaml.reader.StreamReader
 import static TapeMode.READ_WRITE
-import static co.freeside.betamax.MatchRule.*
 import static co.freeside.betamax.Headers.X_BETAMAX
+import static co.freeside.betamax.MatchRule.*
 import static org.apache.http.HttpHeaders.VIA
 
 /**
