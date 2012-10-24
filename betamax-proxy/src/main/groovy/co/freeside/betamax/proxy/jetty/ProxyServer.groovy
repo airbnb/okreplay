@@ -32,11 +32,11 @@ import static co.freeside.betamax.BetamaxProxyRecorder.DEFAULT_PROXY_PORT
 
 class ProxyServer extends SimpleServer implements HttpInterceptor {
 
-	private final Recorder recorder
+	private final BetamaxProxyRecorder recorder
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
 
-	ProxyServer(Recorder recorder) {
+	ProxyServer(BetamaxProxyRecorder recorder) {
 		super(DEFAULT_PROXY_PORT)
 		this.recorder = recorder
 	}
@@ -49,7 +49,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 				new TapeReader(recorder) <<
 				new TapeWriter(recorder) <<
 				new HeaderFilter() <<
-				new TargetConnector(newHttpClient(recorder))
+				new TargetConnector(newHttpClient())
 
 		def connectHandler = new CustomConnectHandler(handler, port + 1)
 
@@ -66,7 +66,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		super.stop()
 	}
 
-	private HttpClient newHttpClient(Recorder recorder) {
+	private HttpClient newHttpClient() {
 		def connectionManager = new ThreadSafeClientConnManager() // TODO: use non-deprecated impl
 		def httpClient = new DefaultHttpClient(connectionManager)
 		httpClient.routePlanner = new ProxySelectorRoutePlanner(

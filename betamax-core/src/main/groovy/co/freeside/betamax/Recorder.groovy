@@ -81,9 +81,7 @@ class Recorder implements MethodRule {
 	 */
 	boolean ignoreLocalhost = false
 
-	private final TapeLoader tapeLoader = new YamlTapeLoader(tapeRoot)
 	private StorableTape tape
-
 
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
@@ -186,4 +184,10 @@ class Recorder implements MethodRule {
 		ignoreLocalhost = config.betamax.ignoreLocalhost
 	}
 
+	/**
+	 * Not just a property as `tapeRoot` gets changed during constructor.
+	 */
+	protected TapeLoader getTapeLoader() {
+		new YamlTapeLoader(tapeRoot)
+	}
 }
