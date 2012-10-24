@@ -27,6 +27,7 @@ class LocalhostSpec extends Specification {
 		endpoint.start(EchoHandler)
 	}
 
+	@IgnoreIf({ javaVersion >= 6 && javaVersion < 7 })
 	@Betamax(tape = 'localhost', mode = WRITE_ONLY)
 	void 'can proxy requests to local endpoint at #uri'() {
 		when:
