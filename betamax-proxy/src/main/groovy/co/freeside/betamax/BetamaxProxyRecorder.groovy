@@ -2,7 +2,9 @@ package co.freeside.betamax
 
 import co.freeside.betamax.proxy.jetty.ProxyServer
 import co.freeside.betamax.util.PropertiesCategory
+import groovy.transform.InheritConstructors
 
+@InheritConstructors
 class BetamaxProxyRecorder extends Recorder {
 
 	public static final int DEFAULT_PROXY_PORT = 5555
