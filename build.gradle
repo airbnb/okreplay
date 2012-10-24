@@ -15,11 +15,13 @@ allprojects {
 	ext {
 		groovyVersion = '1.8.8'
 		httpClientVersion = '4.2.1'
-		spockVersion = '0.6-groovy-1.8'
+		junitVersion = '4.10'
+		spockVersion = '0.7-groovy-1.8'
 		jettyVersion = '7.3.1.v20110307'
 
 		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
 		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
+		junitDependency = "junit:junit:$junitVersion"
 		spockDependency = "org.spockframework:spock-core:$spockVersion"
 		jettyDependency = "org.eclipse.jetty:jetty-server:$jettyVersion"
 
@@ -38,7 +40,6 @@ subprojects {
 	dependencies {
 		groovy groovyDependency
 
-		testCompile 'junit:junit:4.8.2'
 		testCompile(spockDependency) {
 			exclude module: 'groovy-all'
 			exclude module: 'junit-dep'
