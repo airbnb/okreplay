@@ -22,8 +22,8 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 @Issue('https://github.com/robfletcher/betamax/issues/40')
 class BetamaxHttpClientSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, useProxy: false)
+	@Shared @AutoCleanup('deleteDir') File tapeRoot = co.freeside.betamax.util.FileUtils.newTempDir('tapes')
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(recorder)
 
