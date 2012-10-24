@@ -4,7 +4,6 @@ repositories {
 
 dependencies {
 	compile project(':betamax-core')
-	compile project(':betamax-jetty')
 
 	testCompile project(':betamax-test-support')
 	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
