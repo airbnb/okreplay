@@ -16,12 +16,14 @@ allprojects {
 		groovyVersion = '1.8.8'
 		httpClientVersion = '4.2.1'
 		spockVersion = '0.6-groovy-1.8'
+		jettyVersion = '7.3.1.v20110307'
 
 		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
 		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
 		spockDependency = "org.spockframework:spock-core:$spockVersion"
+		jettyDependency = "org.eclipse.jetty:jetty-server:$jettyVersion"
 
-		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient']
+		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient', ':betamax-jetty']
 	}
 }
 

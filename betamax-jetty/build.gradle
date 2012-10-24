@@ -1,0 +1,11 @@
+dependencies {
+	compile project(':betamax-core')
+	compile jettyDependency
+}
+
+modifyPom {
+	project {
+		name 'Betamax Jetty'
+		description 'The base Jetty support classes for Betamax.'
+	}
+}

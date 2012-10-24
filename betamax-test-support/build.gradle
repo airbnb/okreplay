@@ -1,0 +1,4 @@
+dependencies {
+	compile project(':betamax-core')
+	compile project(':betamax-jetty')
+}
