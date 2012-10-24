@@ -13,22 +13,22 @@ class BetamaxProxyRecorder extends Recorder {
 	/**
 	 * The port the Betamax proxy will listen on.
 	 */
-	int proxyPort = DEFAULT_PROXY_PORT
+	int proxyPort
 
 	/**
 	 * The time the proxy will wait before aborting a request in milliseconds.
 	 */
-	int proxyTimeout = DEFAULT_PROXY_TIMEOUT
+	int proxyTimeout
 
 	/**
 	 * If set to true the proxy is started before and stopped after each annotated test method.
 	 */
-	@Deprecated boolean useProxy = true
+	@Deprecated boolean useProxy
 
 	/**
 	 * If set to true add support for proxying SSL (disable certificate checking)
 	 */
-	boolean sslSupport = false
+	boolean sslSupport
 
 	private final ProxyServer interceptor = new ProxyServer(this)
 
@@ -46,6 +46,7 @@ class BetamaxProxyRecorder extends Recorder {
 		new Proxy(Proxy.Type.HTTP, new InetSocketAddress(interceptor.host, interceptor.port))
 	}
 
+	@Override
 	protected void startProxy(String tapeName, Map arguments) {
 		if (useProxy && !interceptor.running) {
 			interceptor.start()
@@ -53,6 +54,7 @@ class BetamaxProxyRecorder extends Recorder {
 		super.startProxy(tapeName, arguments)
 	}
 
+	@Override
 	protected void stopProxy() {
 		if (useProxy) {
 			interceptor.stop()
@@ -60,6 +62,7 @@ class BetamaxProxyRecorder extends Recorder {
 		super.stopProxy()
 	}
 
+	@Override
 	protected void configureFromProperties(Properties properties) {
 		super.configureFromProperties(properties)
 
@@ -71,6 +74,7 @@ class BetamaxProxyRecorder extends Recorder {
 		}
 	}
 
+	@Override
 	protected void configureFromConfig(ConfigObject config) {
 		super.configureFromConfig(config)
 
@@ -80,4 +84,13 @@ class BetamaxProxyRecorder extends Recorder {
 		useProxy = config.betamax.useProxy
 	}
 
+	@Override
+	protected void configureWithDefaults() {
+		super.configureWithDefaults()
+
+		proxyPort = DEFAULT_PROXY_PORT
+		proxyTimeout = DEFAULT_PROXY_TIMEOUT
+		sslSupport = false
+		useProxy = true
+	}
 }

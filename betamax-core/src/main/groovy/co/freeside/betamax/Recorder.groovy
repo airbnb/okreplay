@@ -39,18 +39,18 @@ class Recorder implements MethodRule {
 
 	Recorder() {
 		def configFile = getClass().classLoader.getResource('BetamaxConfig.groovy')
+		def propertiesFile = getClass().classLoader.getResource('betamax.properties')
 		if (configFile) {
 			def config = new ConfigSlurper().parse(configFile)
 			configureFromConfig(config)
-		} else {
-			def propertiesFile = getClass().classLoader.getResource('betamax.properties')
-			if (propertiesFile) {
-				def properties = new Properties()
-				propertiesFile.withReader { reader ->
-					properties.load(reader)
-				}
-				configureFromProperties(properties)
+		} else if (propertiesFile) {
+			def properties = new Properties()
+			propertiesFile.withReader { reader ->
+				properties.load(reader)
 			}
+			configureFromProperties(properties)
+		} else {
+			configureWithDefaults()
 		}
 	}
 
@@ -178,10 +178,17 @@ class Recorder implements MethodRule {
 	}
 
 	protected void configureFromConfig(ConfigObject config) {
-		tapeRoot = config.betamax.tapeRoot ?: DEFAULT_TAPE_ROOT
+		tapeRoot = config.betamax.tapeRoot ?: new File(DEFAULT_TAPE_ROOT)
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 		ignoreHosts = config.betamax.ignoreHosts ?: []
 		ignoreLocalhost = config.betamax.ignoreLocalhost
+	}
+
+	protected void configureWithDefaults() {
+		tapeRoot = new File(DEFAULT_TAPE_ROOT)
+		defaultMode = READ_WRITE
+		ignoreHosts = []
+		ignoreLocalhost = false
 	}
 
 	/**
