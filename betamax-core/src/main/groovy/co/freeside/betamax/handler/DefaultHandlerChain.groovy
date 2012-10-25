@@ -12,7 +12,8 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 class DefaultHandlerChain extends ChainedHttpHandler {
 
 	DefaultHandlerChain(Recorder recorder, HttpClient httpClient) {
-		this << new TapeReader(recorder) <<
+		this << new ViaSettingHandler() <<
+				new TapeReader(recorder) <<
 				new TapeWriter(recorder) <<
 				new HeaderFilter() <<
 				new TargetConnector(httpClient)

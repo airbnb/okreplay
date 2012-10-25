@@ -7,9 +7,7 @@ import co.freeside.betamax.message.Response
 import co.freeside.betamax.message.servlet.ServletRequestAdapter
 import org.eclipse.jetty.server.Request
 import org.eclipse.jetty.server.handler.AbstractHandler
-import static co.freeside.betamax.Headers.VIA_HEADER
 import static java.util.logging.Level.SEVERE
-import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 
 class BetamaxProxy extends AbstractHandler {
@@ -45,7 +43,6 @@ class BetamaxProxy extends AbstractHandler {
 				response.addHeader(name, it)
 			}
 		}
-		response.addHeader(VIA, VIA_HEADER)
 		if (betamaxResponse.hasBody()) {
 			response.outputStream.withStream { stream ->
 				stream << betamaxResponse.bodyAsBinary
