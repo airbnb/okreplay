@@ -1,10 +1,10 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.*
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
+import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.IncrementingHandler
-import groovyx.net.http.RESTClient
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
@@ -17,9 +17,9 @@ import static org.apache.http.HttpStatus.SC_OK
 class SequentialTapeWritingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http = new BetamaxRESTClient(endpoint.url)
+	HttpHandler handler = new DefaultHandlerChain(recorder)
 
 	void setupSpec() {
 		endpoint.start(IncrementingHandler)
@@ -30,7 +30,7 @@ class SequentialTapeWritingSpec extends Specification {
 		when: 'multiple requests are made to the same endpoint'
 		def responses = []
 		n.times {
-			responses << http.get(path: '/')
+			responses << handler.handle(request)
 		}
 
 		then: 'both successfully connect'
@@ -40,11 +40,11 @@ class SequentialTapeWritingSpec extends Specification {
 
 		and: 'they both get recorded'
 		responses.every {
-			it.getFirstHeader(X_BETAMAX).value == 'REC'
+			it.headers[X_BETAMAX] == 'REC'
 		}
 
 		and: 'each has different content'
-		responses.data.text == (1..n).collect {
+		responses.bodyAsText.text == (1..n).collect {
 			"count: $it"
 		}
 
@@ -53,6 +53,7 @@ class SequentialTapeWritingSpec extends Specification {
 
 		where:
 		n = 2
+		request = new BasicRequest('GET', endpoint.url)
 	}
 
 }
