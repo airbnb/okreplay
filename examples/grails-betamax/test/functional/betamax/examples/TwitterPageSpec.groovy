@@ -1,7 +1,6 @@
 package betamax.examples
 
-import co.freeside.betamax.Betamax
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import com.gargoylesoftware.htmlunit.ProxyConfig
 import geb.spock.GebSpec
@@ -9,11 +8,12 @@ import grails.util.BuildSettingsHolder
 import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.junit.Rule
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import static co.freeside.betamax.TapeMode.READ_ONLY
 
 class TwitterPageSpec extends GebSpec {
 
 	File baseDir = BuildSettingsHolder.settings?.baseDir ?: new File('examples/grails-betamax')
-	@Rule Recorder recorder = new Recorder(tapeRoot: new File(baseDir, 'test/resources/tapes'), ignoreLocalhost: true)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: new File(baseDir, 'test/resources/tapes'), ignoreLocalhost: true, defaultMode: READ_ONLY)
 
 	void setupSpec() {
 		def restClient = ApplicationHolder.application.mainContext.restClient

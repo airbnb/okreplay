@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
 		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
 			excludes "groovy", "xml-apis"
 		}
-		test 'co.freeside:betamax:1.1.2'
+		test 'co.freeside:betamax-proxy:1.2-SNAPSHOT'
 		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
 			exclude "xml-apis"
