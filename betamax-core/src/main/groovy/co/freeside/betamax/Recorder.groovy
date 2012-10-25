@@ -20,18 +20,18 @@ import java.util.logging.Logger
 import co.freeside.betamax.tape.*
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.PropertiesCategory
-import org.junit.rules.MethodRule
-import org.junit.runners.model.*
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP
-
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
  * run with the Betamax HTTP proxy in the background.
  */
-class Recorder implements MethodRule {
+class Recorder implements TestRule {
 
 	public static final String DEFAULT_TAPE_ROOT = 'src/test/resources/betamax/tapes'
 
@@ -151,10 +151,10 @@ class Recorder implements MethodRule {
 	}
 
 	@Override
-	Statement apply(Statement statement, FrameworkMethod method, Object target) {
-		def annotation = method.getAnnotation(Betamax)
+	Statement apply(Statement statement, Description description) {
+		def annotation = description.getAnnotation(Betamax)
 		if (annotation) {
-			log.fine "found @Betamax annotation on '$method.name'"
+			log.fine "found @Betamax annotation on '$description.displayName'"
 			new Statement() {
 				void evaluate() {
 					withTape(annotation.tape(), [mode: annotation.mode(), match: annotation.match()]) {
@@ -163,7 +163,7 @@ class Recorder implements MethodRule {
 				}
 			}
 		} else {
-			log.fine "no @Betamax annotation on '$method.name'"
+			log.fine "no @Betamax annotation on '$description.displayName'"
 			statement
 		}
 	}
