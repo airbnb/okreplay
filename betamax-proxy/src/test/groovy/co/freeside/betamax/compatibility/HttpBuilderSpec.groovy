@@ -17,7 +17,7 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 class HttpBuilderSpec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule BetamaxProxyRecorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
 	void setupSpec() {

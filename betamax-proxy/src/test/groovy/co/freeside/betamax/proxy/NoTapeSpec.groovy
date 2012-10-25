@@ -11,7 +11,7 @@ import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 @Issue('https://github.com/robfletcher/betamax/issues/18')
 class NoTapeSpec extends Specification {
 
-	@Shared Recorder recorder = new BetamaxProxyRecorder()
+	@Shared Recorder recorder = new ProxyRecorder()
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient(endpoint.url)

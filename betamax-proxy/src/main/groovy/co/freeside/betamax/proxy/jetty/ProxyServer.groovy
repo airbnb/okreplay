@@ -28,15 +28,15 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 import org.apache.http.params.HttpConnectionParams
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
-import static co.freeside.betamax.BetamaxProxyRecorder.DEFAULT_PROXY_PORT
+import static ProxyRecorder.DEFAULT_PROXY_PORT
 
 class ProxyServer extends SimpleServer implements HttpInterceptor {
 
-	private final BetamaxProxyRecorder recorder
+	private final ProxyRecorder recorder
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
 
-	ProxyServer(BetamaxProxyRecorder recorder) {
+	ProxyServer(ProxyRecorder recorder) {
 		super(DEFAULT_PROXY_PORT)
 		this.recorder = recorder
 	}

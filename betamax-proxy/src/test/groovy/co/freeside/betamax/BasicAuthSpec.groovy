@@ -19,7 +19,7 @@ class BasicAuthSpec extends Specification {
 	@Shared targetHost = new HttpHost(endpoint.host, endpoint.port)
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	def http = new BetamaxRESTClient()
 
 	void setup() {

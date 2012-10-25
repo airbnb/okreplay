@@ -14,7 +14,7 @@ import static org.apache.http.HttpStatus.SC_OK
 class HttpURLConnectionSpec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 

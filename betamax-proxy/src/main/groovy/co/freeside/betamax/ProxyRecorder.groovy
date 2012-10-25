@@ -5,7 +5,7 @@ import co.freeside.betamax.util.PropertiesCategory
 import groovy.transform.InheritConstructors
 
 @InheritConstructors
-class BetamaxProxyRecorder extends Recorder {
+class ProxyRecorder extends Recorder {
 
 	public static final int DEFAULT_PROXY_PORT = 5555
 	public static final int DEFAULT_PROXY_TIMEOUT = 5000

@@ -19,7 +19,7 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 class HttpClientSpec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule BetamaxProxyRecorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+	@Rule ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
 

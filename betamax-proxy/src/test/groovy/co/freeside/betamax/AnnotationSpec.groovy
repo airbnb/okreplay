@@ -15,7 +15,7 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

@@ -15,7 +15,7 @@ class IgnoreHostsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	@AutoCleanup('ejectTape') Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@AutoCleanup('ejectTape') Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	RESTClient http
 

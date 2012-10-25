@@ -17,7 +17,7 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationTest {
 
 	static File tapeRoot = newTempDir('tapes')
-	@Rule public Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 

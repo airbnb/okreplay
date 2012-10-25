@@ -17,7 +17,7 @@ import static org.apache.http.HttpStatus.SC_OK
 class SequentialTapeWritingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient(endpoint.url)
 

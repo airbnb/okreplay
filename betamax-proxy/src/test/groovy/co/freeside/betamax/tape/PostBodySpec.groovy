@@ -14,7 +14,7 @@ import static co.freeside.betamax.util.FileUtils.newTempDir
 class PostBodySpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 
 	private DefaultHttpClient httpClient = new SystemDefaultHttpClient()
 

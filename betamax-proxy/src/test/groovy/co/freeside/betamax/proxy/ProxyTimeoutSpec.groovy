@@ -14,7 +14,7 @@ import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 @Issue('https://github.com/robfletcher/betamax/issues/20')
 class ProxyTimeoutSpec extends Specification {
 
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot, proxyTimeout: 100)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, proxyTimeout: 100)
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()

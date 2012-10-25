@@ -14,7 +14,7 @@ import static java.net.HttpURLConnection.*
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Shared Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	RESTClient http = new BetamaxRESTClient()

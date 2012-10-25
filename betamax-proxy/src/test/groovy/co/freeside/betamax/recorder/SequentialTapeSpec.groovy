@@ -12,7 +12,7 @@ import static org.apache.http.HttpStatus.*
 @Issue('https://github.com/robfletcher/betamax/pull/70')
 class SequentialTapeSpec extends Specification {
 
-	@Rule Recorder recorder = new BetamaxProxyRecorder()
+	@Rule Recorder recorder = new ProxyRecorder()
 	RESTClient http = new BetamaxRESTClient('http://freeside.co/')
 
 	void setup() {

@@ -14,7 +14,7 @@ import static org.apache.http.HttpHeaders.VIA
 class PreExistingProxySpec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer proxyServer = new SimpleServer()
 
 	void setupSpec() {

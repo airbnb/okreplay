@@ -11,7 +11,7 @@ import static org.apache.http.HttpHeaders.VIA
 @Unroll
 class SmokeSpec extends Specification {
 
-	@Rule Recorder recorder = new BetamaxProxyRecorder(sslSupport: true)
+	@Rule Recorder recorder = new ProxyRecorder(sslSupport: true)
 
 	@Shared RESTClient http = new BetamaxRESTClient()
 

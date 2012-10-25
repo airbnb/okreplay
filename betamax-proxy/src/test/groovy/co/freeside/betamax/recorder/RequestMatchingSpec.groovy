@@ -12,7 +12,7 @@ import static org.apache.http.HttpHeaders.VIA
 class RequestMatchingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Shared Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared RESTClient http = new BetamaxRESTClient()
 
 	void setupSpec() {

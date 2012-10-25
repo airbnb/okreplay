@@ -14,7 +14,7 @@ import static org.apache.http.HttpHeaders.VIA
 class HttpClient3Spec extends Specification {
 
 	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule BetamaxProxyRecorder recorder = new BetamaxProxyRecorder(tapeRoot: tapeRoot)
+	@Rule ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
 	void setupSpec() {
