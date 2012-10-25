@@ -23,8 +23,7 @@ import co.freeside.betamax.util.*
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.impl.conn.*
 import org.apache.http.params.HttpConnectionParams
 import org.eclipse.jetty.server.*
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
@@ -63,7 +62,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 	}
 
 	private HttpClient newHttpClient() {
-		def connectionManager = new ThreadSafeClientConnManager() // TODO: use non-deprecated impl
+		def connectionManager = new PoolingClientConnectionManager()
 		def httpClient = new DefaultHttpClient(connectionManager)
 		httpClient.routePlanner = new ProxySelectorRoutePlanner(
 				httpClient.connectionManager.schemeRegistry,

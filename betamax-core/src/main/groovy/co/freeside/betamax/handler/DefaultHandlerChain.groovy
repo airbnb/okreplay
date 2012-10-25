@@ -4,7 +4,7 @@ import co.freeside.betamax.Recorder
 import co.freeside.betamax.message.*
 import org.apache.http.client.HttpClient
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import org.apache.http.impl.conn.PoolingClientConnectionManager
 
 /**
  * The default handler chain used by all Betamax implementations.
@@ -24,7 +24,7 @@ class DefaultHandlerChain extends ChainedHttpHandler {
 	}
 
 	private static DefaultHttpClient newHttpClient() {
-		def connectionManager = new ThreadSafeClientConnManager() // TODO: use non-deprecated impl
+		def connectionManager = new PoolingClientConnectionManager()
 		new DefaultHttpClient(connectionManager)
 	}
 
