@@ -17,7 +17,7 @@
 package co.freeside.betamax.proxy.jetty
 
 import co.freeside.betamax.*
-import co.freeside.betamax.handler.*
+import co.freeside.betamax.handler.DefaultHandlerChain
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.*
 import org.apache.http.client.HttpClient
@@ -45,11 +45,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		port = recorder.proxyPort
 
 		def handler = new BetamaxProxy()
-		handler <<
-				new TapeReader(recorder) <<
-				new TapeWriter(recorder) <<
-				new HeaderFilter() <<
-				new TargetConnector(newHttpClient())
+		handler << new DefaultHandlerChain(recorder, newHttpClient())
 
 		def connectHandler = new CustomConnectHandler(handler, port + 1)
 

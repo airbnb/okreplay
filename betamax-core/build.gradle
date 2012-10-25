@@ -4,6 +4,8 @@ dependencies {
 			'org.yaml:snakeyaml:1.10',
 			'commons-lang:commons-lang:2.4'
 
+	testCompile project(':betamax-test-support')
+
 	testRuntime 'cglib:cglib-nodep:2.2.2'
 }
 

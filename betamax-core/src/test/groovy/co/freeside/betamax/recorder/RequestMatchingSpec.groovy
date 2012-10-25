@@ -1,9 +1,11 @@
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import groovyx.net.http.RESTClient
+import co.freeside.betamax.Headers
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.handler.*
+import co.freeside.betamax.util.message.BasicRequest
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.MatchRule.host
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
@@ -12,8 +14,8 @@ import static org.apache.http.HttpHeaders.VIA
 class RequestMatchingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-	@Shared RESTClient http = new BetamaxRESTClient()
+	@AutoCleanup('stop') Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	HttpHandler handler = new DefaultHandlerChain(recorder)
 
 	void setupSpec() {
 		tapeRoot.mkdirs()
@@ -33,7 +35,7 @@ interactions:
   response:
     status: 200
     headers: {Content-Type: text/plain}
-    body: get method response from xkcd.com
+    body: GET method response from xkcd.com
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: POST
@@ -41,7 +43,7 @@ interactions:
   response:
     status: 200
     headers: {Content-Type: text/plain}
-    body: post method response from xkcd.com
+    body: POST method response from xkcd.com
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: GET
@@ -49,23 +51,26 @@ interactions:
   response:
     status: 200
     headers: {Content-Type: text/plain}
-    body: get method response from qwantz.com
+    body: GET method response from qwantz.com
 '''
+
+		and:
+		recorder.start('method and uri tape')
+
 		when:
-		def response = recorder.withTape('method and uri tape') {
-			http."$method"(uri: uri)
-		}
+		def response = handler.handle(request)
 
 		then:
-		response.data.text == responseText
+		response.bodyAsText.text == responseText
 
 		where:
 		method | uri
-		'get'  | 'http://xkcd.com/'
-		'post' | 'http://xkcd.com/'
-		'get'  | 'http://qwantz.com/'
+		'GET'  | 'http://xkcd.com/'
+		'POST' | 'http://xkcd.com/'
+		'GET'  | 'http://qwantz.com/'
 
 		responseText = "$method method response from ${uri.toURI().host}"
+		request = new BasicRequest(method, uri)
 	}
 
 	void 'can match based on host'() {
@@ -81,15 +86,19 @@ interactions:
   response:
     status: 200
     headers: {Content-Type: text/plain}
-    body: get method response from xkcd.com
+    body: GET method response from xkcd.com
 '''
+
+		and:
+		recorder.start('host match tape', [match: [host]])
+
 		when:
-		def response = recorder.withTape('host match tape', [match: [host]]) {
-			http.get(uri: 'http://xkcd.com/875/')
-		}
+		def request = new BasicRequest('GET', 'http://xkcd.com/875')
+		def response = handler.handle(request)
 
 		then:
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-		response.data.text == 'get method response from xkcd.com'
+		response.headers[VIA] == 'Betamax'
+		response.headers[X_BETAMAX] == 'PLAY'
+		response.bodyAsText.text == 'GET method response from xkcd.com'
 	}
 }

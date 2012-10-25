@@ -2,7 +2,9 @@ package co.freeside.betamax.tape
 
 import java.util.concurrent.CountDownLatch
 import co.freeside.betamax.*
+import co.freeside.betamax.handler.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.HelloHandler
 import org.junit.Rule
 import spock.lang.*
@@ -13,7 +15,9 @@ import static java.util.concurrent.TimeUnit.SECONDS
 class MultiThreadedTapeWritingSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+	HttpHandler handler = new DefaultHandlerChain(recorder)
+
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 
 	void setupSpec() {
@@ -28,7 +32,8 @@ class MultiThreadedTapeWritingSpec extends Specification {
 		threads.times { i ->
 			Thread.start {
 				try {
-					responses[i] = "$endpoint.url$i".toURL().text
+					def request = new BasicRequest('GET', "$endpoint.url$i")
+					responses[i] = handler.handle(request).bodyAsText.text
 				} catch (IOException e) {
 					responses[i] = 'FAIL!'
 				}

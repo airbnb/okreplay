@@ -5,8 +5,8 @@ import co.freeside.betamax.message.*
 import co.freeside.betamax.util.message.*
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
-import static groovyx.net.http.ContentType.URLENC
 import static org.apache.http.HttpHeaders.*
+import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 
 @Stepwise
 class TapeSpec extends Specification {
@@ -14,7 +14,6 @@ class TapeSpec extends Specification {
 	@Shared Tape tape = new MemoryTape(name: 'tape_spec')
 	Request getRequest = new BasicRequest('GET', 'http://icanhascheezburger.com/')
 	Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: new GzipEncoder().encode('O HAI!', 'UTF-8'))
-	RequestMatcher requestMatcher = new RequestMatcher(getRequest)
 
 	void setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, 'text/plain;charset=UTF-8')
@@ -92,7 +91,7 @@ class TapeSpec extends Specification {
 		given: 'a request with some content'
 		def request = new BasicRequest('POST', 'http://github.com/')
 		request.body = 'q=1'.getBytes('UTF-8')
-		request.addHeader(CONTENT_TYPE, URLENC.toString())
+		request.addHeader(CONTENT_TYPE, APPLICATION_FORM_URLENCODED.toString())
 
 		when: 'the request and its response are recorded'
 		tape.record(request, plainTextResponse)
