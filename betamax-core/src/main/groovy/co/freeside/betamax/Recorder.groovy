@@ -83,7 +83,7 @@ class Recorder implements TestRule {
 
 	private StorableTape tape
 
-	void start(String tapeName, Map arguments) {
+	void start(String tapeName, Map arguments = [:]) {
 		insertTape(tapeName, arguments)
 	}
 
