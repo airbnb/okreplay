@@ -25,11 +25,7 @@ class BetamaxRequestDirector implements RequestDirector {
 		this.delegate = delegate
 		this.recorder = recorder
 
-		handlerChain = new TapeReader(recorder)
-		handlerChain <<
-				new TapeWriter(recorder) <<
-				new HeaderFilter() <<
-				new TargetConnector(new DefaultHttpClient())
+		handlerChain = new DefaultHandlerChain(recorder)
 	}
 
 	@Override
