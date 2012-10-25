@@ -21,11 +21,6 @@ class BetamaxProxyRecorder extends Recorder {
 	int proxyTimeout
 
 	/**
-	 * If set to true the proxy is started before and stopped after each annotated test method.
-	 */
-	@Deprecated boolean useProxy
-
-	/**
 	 * If set to true add support for proxying SSL (disable certificate checking)
 	 */
 	boolean sslSupport
@@ -68,7 +63,6 @@ class BetamaxProxyRecorder extends Recorder {
 			proxyPort = properties.getInteger('betamax.proxyPort', DEFAULT_PROXY_PORT)
 			proxyTimeout = properties.getInteger('betamax.proxyTimeout', DEFAULT_PROXY_TIMEOUT)
 			sslSupport = properties.getBoolean('betamax.sslSupport')
-			useProxy = properties.getBoolean('betamax.useProxy')
 		}
 	}
 
@@ -79,7 +73,6 @@ class BetamaxProxyRecorder extends Recorder {
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		sslSupport = config.betamax.sslSupport
-		useProxy = config.betamax.useProxy
 	}
 
 	@Override
@@ -89,6 +82,5 @@ class BetamaxProxyRecorder extends Recorder {
 		proxyPort = DEFAULT_PROXY_PORT
 		proxyTimeout = DEFAULT_PROXY_TIMEOUT
 		sslSupport = false
-		useProxy = true
 	}
 }
