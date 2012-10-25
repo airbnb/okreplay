@@ -47,19 +47,17 @@ class BetamaxProxyRecorder extends Recorder {
 	}
 
 	@Override
-	protected void startProxy(String tapeName, Map arguments) {
-		if (useProxy && !interceptor.running) {
+	void start(String tapeName, Map arguments) {
+		if (!interceptor.running) {
 			interceptor.start()
 		}
-		super.startProxy(tapeName, arguments)
+		super.start(tapeName, arguments)
 	}
 
 	@Override
-	protected void stopProxy() {
-		if (useProxy) {
-			interceptor.stop()
-		}
-		super.stopProxy()
+	void stop() {
+		interceptor.stop()
+		super.stop()
 	}
 
 	@Override

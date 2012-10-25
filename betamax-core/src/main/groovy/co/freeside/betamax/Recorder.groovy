@@ -83,6 +83,14 @@ class Recorder implements MethodRule {
 
 	private StorableTape tape
 
+	void start(String tapeName, Map arguments) {
+		insertTape(tapeName, arguments)
+	}
+
+	void stop() {
+		ejectTape()
+	}
+
 	/**
 	 * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
 	 * @param name the name of the _tape_.
@@ -135,10 +143,10 @@ class Recorder implements MethodRule {
 	 */
 	def withTape(String tapeName, Map arguments, Closure closure) {
 		try {
-			startProxy(tapeName, arguments)
+			start(tapeName, arguments)
 			closure()
 		} finally {
-			stopProxy()
+			stop()
 		}
 	}
 
@@ -158,14 +166,6 @@ class Recorder implements MethodRule {
 			log.fine "no @Betamax annotation on '$method.name'"
 			statement
 		}
-	}
-
-	protected void startProxy(String tapeName, Map arguments) {
-		insertTape(tapeName, arguments)
-	}
-
-	protected void stopProxy() {
-		ejectTape()
 	}
 
 	protected void configureFromProperties(Properties properties) {
