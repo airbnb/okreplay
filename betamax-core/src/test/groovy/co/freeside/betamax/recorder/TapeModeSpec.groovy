@@ -1,27 +1,26 @@
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.*
-import co.freeside.betamax.proxy.jetty.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.handler.*
+import co.freeside.betamax.message.Request
+import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.*
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
-import static java.net.HttpURLConnection.*
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Unroll
 class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
+	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	RESTClient http = new BetamaxRESTClient()
+	HttpHandler handler = new DefaultHandlerChain(recorder)
+	Request request = new BasicRequest('GET', endpoint.url)
 
 	void setupSpec() {
-		tapeRoot.mkdirs()
-		proxy.start()
 		endpoint.start(EchoHandler)
 	}
 
@@ -34,15 +33,14 @@ class TapeModeSpec extends Specification {
 		recorder.insertTape('read only tape', [mode: mode])
 
 		when: 'a request is made that does not match anything recorded on the tape'
-		http.get(uri: endpoint.url)
+		handler.handle(request)
 
 		then: 'the proxy rejects the request'
-		def e = thrown(HttpResponseException)
-		e.statusCode == HTTP_FORBIDDEN
-		e.message == 'Tape is not writable'
+		thrown NonWritableTapeException
 
 		where:
 		mode << [READ_ONLY, READ_SEQUENTIAL]
+		request = new BasicRequest('GET', endpoint.url)
 	}
 
 	void 'in #mode mode a new interaction recorded'() {
@@ -51,7 +49,7 @@ class TapeModeSpec extends Specification {
 		def tape = recorder.tape
 
 		when: 'a request is made'
-		http.get(uri: endpoint.url)
+		handler.handle(request)
 
 		then: 'the interaction is recorded'
 		tape.size() == old(tape.size()) + 1
@@ -85,7 +83,7 @@ interactions:
 		def tape = recorder.tape
 
 		when: 'a request is made that matches a request already recorded on the tape'
-		http.get(uri: endpoint.url)
+		handler.handle(request)
 
 		then: 'the previously recorded request is overwritten'
 		tape.size() == old(tape.size())
@@ -116,7 +114,7 @@ interactions:
 		def tape = recorder.tape
 
 		when: 'a request is made that matches a request already recorded on the tape'
-		http.get(uri: endpoint.url)
+		handler.handle(request)
 
 		then: 'the previously recorded request is overwritten'
 		tape.size() == old(tape.size()) + 1
