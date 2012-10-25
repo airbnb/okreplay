@@ -1,9 +1,11 @@
 package co.freeside.betamax.recorder
 
+import co.freeside.betamax.Headers
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.util.message.BasicRequest
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.MatchRule.host
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
@@ -96,6 +98,7 @@ interactions:
 
 		then:
 		response.headers[VIA] == 'Betamax'
-		response.bodyAsText.text == 'get method response from xkcd.com'
+		response.headers[X_BETAMAX] == 'PLAY'
+		response.bodyAsText.text == 'GET method response from xkcd.com'
 	}
 }
