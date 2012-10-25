@@ -7,10 +7,6 @@ dependencies {
 	compile project(':betamax-jetty')
 
 	testCompile project(':betamax-test-support')
-	testCompile('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
-		exclude module: 'groovy'
-		exclude module: 'httpclient'
-	}
 	testCompile('commons-httpclient:commons-httpclient:3.1') {
 		exclude module: 'commons-codec'
 		exclude module: 'commons-logging'

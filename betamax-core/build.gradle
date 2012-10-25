@@ -1,3 +1,7 @@
+repositories {
+	mavenRepo url: 'http://repository.codehaus.org'
+}
+
 dependencies {
 	compile httpClientDependency,
 			junitDependency,
