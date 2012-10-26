@@ -14,7 +14,7 @@ allprojects {
 
 	ext {
 		groovyVersion = '1.8.8'
-		httpClientVersion = '4.2.1'
+		httpClientVersion = '4.2.2'
 		junitVersion = '4.10'
 		spockVersion = '0.7-groovy-1.8'
 		jettyVersion = '7.3.1.v20110307'
