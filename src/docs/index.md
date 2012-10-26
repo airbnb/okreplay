@@ -33,13 +33,9 @@ Betamax comes in two flavors. The first is an HTTP and HTTPS proxy that can inte
 
 The proxy implementation can be used with HTTP traffic initiated from _java.net.URLConnection_, Apache _HttpClient_, etc. It runs an actual HTTP(S) proxy on Jetty and overrides the JVM proxy settings so that traffic is redirected via the proxy.
 
-By default the proxy is enabled.
-
 ### The Betamax HttpClient wrapper
 
-The _HttpClient_ wrapper is a simpler implementation but only works with _HttpClient_ (or things built on top of it such as the Groovy _Http Builder_). It is a good choice when you use _HttpClient_ instances that are injected in your classes to make external connections. In your tests you simply inject an instance of _BetamaxHttpClient_ instead.
-
-If you are using _BetamaxHttpClient_ you can simply set `useProxy` to `false` and the Betamax proxy will not run.
+The _HttpClient_ wrapper is a simpler and faster implementation than the Betamax proxy but only works with _HttpClient_ (or things built on top of it such as the Groovy _Http Builder_). It is a good choice when you use _HttpClient_ instances that are injected into your classes. In your tests you simply inject an instance of _BetamaxHttpClient_ instead.
 
 ## Installation
 
@@ -51,24 +47,41 @@ If you are installing a development version you will need to add the repository 
 
 ### Gradle
 
-To use Betamax in a project using [Gradle][gradle] add the following dependency to your `build.gradle` file:
+To use the Betamax proxy in a project using [Gradle][gradle] add the following dependency to your `build.gradle` file:
 
-    testCompile 'co.freeside:betamax:{{ page.version }}'
+    testCompile 'co.freeside:betamax-proxy:{{ page.version }}'
+
+Or to use the _HttpClient_ wrapper add this:
+
+    testCompile 'co.freeside:betamax-httpclient:{{ page.version }}'
 
 ### Grails
 
-To use Betamax in a [Grails][grails] app add the following to the `dependencies` block in your `grails-app/conf/BuildConfig.groovy` file:
+To use the Betamax proxy in a [Grails][grails] app add the following to the `dependencies` block in your `grails-app/conf/BuildConfig.groovy` file:
 
-    test 'co.freeside:betamax:{{ page.version }}'
+    test 'co.freeside:betamax-proxy:{{ page.version }}'
+
+Or to use the _HttpClient_ wrapper add this:
+
+    test 'co.freeside:betamax-httpclient:{{ page.version }}'
 
 ### Maven
 
-To use Betamax in a project using [Maven][maven] add the following dependency to your `pom.xml` file:
+To use the Betamax proxy in a project using [Maven][maven] add the following dependency to your `pom.xml` file:
 
     <dependency>
       <scope>test</scope>
       <groupId>co.freeside</groupId>
-      <artifactId>betamax</artifactId>
+      <artifactId>betamax-proxy</artifactId>
+      <version>{{ page.version }}</version>
+    </dependency>
+
+Or to use the _HttpClient_ wrapper add this:
+
+    <dependency>
+      <scope>test</scope>
+      <groupId>co.freeside</groupId>
+      <artifactId>betamax-httpclient</artifactId>
       <version>{{ page.version }}</version>
     </dependency>
 
@@ -168,7 +181,7 @@ Betamax supports different read/write modes for tapes. The tape mode is set by a
 
 ### Ignoring certain hosts
 
-Sometimes you may need to have Betamax ignore traffic to certain hosts. A typical example would be if you are using Betamax when end-to-end testing a web application using something like _[HtmlUnit][htmlunit]_ - you would not want Betamax to intercept connections to _localhost_ as that would mean traffic between _HtmlUnit_ and your app was recorded and played back!
+Sometimes you may need to have Betamax ignore traffic to certain hosts. A typical example would be if you are using the Betamax proxy when end-to-end testing a web application using something like _[HtmlUnit][htmlunit]_ - you would not want Betamax to intercept connections to _localhost_ as that would mean traffic between _HtmlUnit_ and your app was recorded and played back!
 
 In such a case you can simply configure the `ignoreHosts` property of the `co.freeside.betamax.Recorder` object. The property accepts a list of hostnames or IP addresses. These can include wildcards at the start or end, for example `"*.mydomain.com"`.
 
@@ -242,15 +255,6 @@ The `Recorder` class has some configuration properties that you can override:
 `tapeRoot`
 : the base directory where tape files are stored. Defaults to `src/test/resources/betamax/tapes`.
 
-`useProxy`
-: if set to `true` the Betamax proxy will start before each annotated test and stop after it. If you're using the HTTPClient wrapper you can safely set this to `false` and avoid the overhead of running the proxy.
-
-`proxyPort`
-: the port the Betamax proxy listens on. Defaults to `5555`.
-
-`proxyTimeout`
-: the number of milliseconds before the proxy will give up on a connection to the target server. A value of zero means the proxy will wait indefinitely. Defaults to `5000`.
-
 `defaultMode`
 : the default _TapeMode_ applied to an inserted tape when the _mode_ argument is not present on the <code>@Betamax</code> annotation.
 
@@ -259,6 +263,14 @@ The `Recorder` class has some configuration properties that you can override:
 
 `ignoreLocalhost`
 : if set to `true` the Betamax proxy will ignore connections to local addresses. This is equivalent to setting `ignoreHosts` to `["localhost", "127.0.0.1", InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]`.
+
+When using the Betamax proxy these additional properties are available:
+
+`proxyPort`
+: the port the Betamax proxy listens on. Defaults to `5555`.
+
+`proxyTimeout`
+: the number of milliseconds before the proxy will give up on a connection to the target server. A value of zero means the proxy will wait indefinitely. Defaults to `5000`.
 
 `sslSupport`
 : if set to `true` the Betamax proxy will also intercept HTTPS traffic.
@@ -293,7 +305,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
 
 ### Security
 
-Betamax is a testing tool and not a spec-compliant HTTP proxy. It ignores _any_ and _all_ headers that would normally be used to prevent a proxy caching or storing HTTP traffic. You should ensure that sensitive information such as authentication credentials is removed from recorded tapes before committing them to your app's source control repository.
+The Betamax proxy is a testing tool and not a spec-compliant HTTP proxy. It ignores _any_ and _all_ headers that would normally be used to prevent a proxy caching or storing HTTP traffic. You should ensure that sensitive information such as authentication credentials is removed from recorded tapes before committing them to your app's source control repository.
 
 ## Examples
 
@@ -317,11 +329,14 @@ Please raise issues on Betamax's [GitHub issue tracker][issues]. Forks and pull 
 
 Betamax depends on the following libraries (you will need them available on your test classpath in order to use Betamax):
 
-* [Groovy 1.7+][groovy]
+* [Groovy 1.8+][groovy]
 * [Apache HttpClient][httpclient]
-* [Jetty 7][jetty]
 * [SnakeYAML][snakeyaml]
 * [JUnit 4][junit]
+
+In addition the Betamax proxy requires:
+
+* [Jetty 7][jetty]
 
 If your project gets dependencies from a [Maven][maven] repository these dependencies will be automatically included for you.
 
@@ -340,7 +355,7 @@ If your project gets dependencies from a [Maven][maven] repository these depende
 
 Betamax is inspired by the [VCR][vcr] library for Ruby written by Myron Marston. Porting VCR to Groovy was suggested to me by [Jim Newbery][jim].
 
-HTTPS support was largely the work of [Lari Hotari][lari].
+HTTPS proxy support was largely the work of [Lari Hotari][lari].
 
 The documentation is built with [Jekyll][jekyll], [Twitter Bootstrap](http://twitter.github.com/bootstrap), [LESS][less], [Modernizr][modernizr], [jQuery][jquery] & [Google Code Prettify][prettify]. The fonts are _Kameron_, _Bitter_ and _Source Code Pro_.
 

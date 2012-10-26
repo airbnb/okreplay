@@ -1,7 +1,6 @@
 /* TEAM */
 Insomniac developer: Rob Fletcher
 Twitter: @rfletcherEW
-Location: London, UK
 
 /* THANKS */
 Name: Myron Marston
@@ -10,6 +9,16 @@ Twitter: @myronmarston
 Name: Jim Newbery
 Twitter: @froots101
 
+Name: Marcin Erdmann
+Twitter: @marcinerdmann
+
+Name: Lari Hotari
+Twitter: @lhotari
+
+Name: Steve Ims
+
+Name: Nobohiro Sue
+
 /* SITE */
-Components: Skeleton, Modernizr, jQuery, Google Code Prettify
+Components: Twitter Bootstrap, LESS, Modernizr, jQuery, Google Code Prettify
 Software: Jekyll
