@@ -16,7 +16,7 @@ class ProxyRecorder extends Recorder {
 	int proxyPort
 
 	/**
-	 * The time the proxy will wait before aborting a request in milliseconds.
+	 * The time (in milliseconds) the proxy will wait before aborting a request.
 	 */
 	int proxyTimeout
 
