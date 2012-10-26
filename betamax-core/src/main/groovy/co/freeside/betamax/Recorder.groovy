@@ -38,24 +38,27 @@ class Recorder implements TestRule {
 	protected final log = Logger.getLogger(getClass().name)
 
 	Recorder() {
-		def configFile = getClass().classLoader.getResource('BetamaxConfig.groovy')
-		def propertiesFile = getClass().classLoader.getResource('betamax.properties')
+		def configFile = Recorder.getResource('/BetamaxConfig.groovy')
+		def propertiesFile = Recorder.getResource('/betamax.properties')
 		if (configFile) {
-			def config = new ConfigSlurper().parse(configFile)
-			configureFromConfig(config)
+			configureFrom new ConfigSlurper().parse(configFile)
 		} else if (propertiesFile) {
 			def properties = new Properties()
 			propertiesFile.withReader { reader ->
 				properties.load(reader)
 			}
-			configureFromProperties(properties)
+			configureFrom properties
 		} else {
 			configureWithDefaults()
 		}
 	}
 
 	Recorder(Properties properties) {
-		configureFromProperties(properties)
+		configureFrom properties
+	}
+
+	Recorder(ConfigObject config) {
+		configureFrom config
 	}
 
 	/**
@@ -168,7 +171,7 @@ class Recorder implements TestRule {
 		}
 	}
 
-	protected void configureFromProperties(Properties properties) {
+	protected void configureFrom(Properties properties) {
 		use(PropertiesCategory) {
 			tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
 			defaultMode = properties.getEnum('betamax.defaultMode', READ_WRITE)
@@ -177,7 +180,7 @@ class Recorder implements TestRule {
 		}
 	}
 
-	protected void configureFromConfig(ConfigObject config) {
+	protected void configureFrom(ConfigObject config) {
 		tapeRoot = config.betamax.tapeRoot ?: new File(DEFAULT_TAPE_ROOT)
 		defaultMode = config.betamax.defaultMode ?: READ_WRITE
 		ignoreHosts = config.betamax.ignoreHosts ?: []

@@ -56,8 +56,8 @@ class ProxyRecorder extends Recorder {
 	}
 
 	@Override
-	protected void configureFromProperties(Properties properties) {
-		super.configureFromProperties(properties)
+	protected void configureFrom(Properties properties) {
+		super.configureFrom(properties)
 
 		use(PropertiesCategory) {
 			proxyPort = properties.getInteger('betamax.proxyPort', DEFAULT_PROXY_PORT)
@@ -67,8 +67,8 @@ class ProxyRecorder extends Recorder {
 	}
 
 	@Override
-	protected void configureFromConfig(ConfigObject config) {
-		super.configureFromConfig(config)
+	protected void configureFrom(ConfigObject config) {
+		super.configureFrom(config)
 
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
