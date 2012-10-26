@@ -89,6 +89,8 @@ Or to use the _HttpClient_ wrapper add this:
 
 To use Betamax you just need to annotate your JUnit test or Spock specifications with `@Betamax(tape="tape_name")` and include a `Recorder` Rule.
 
+If you are using the Betamax proxy you need to use `ProxyRecorder` rule.
+
 ### JUnit
 
     import co.freeside.betamax.Betamax;
