@@ -23,9 +23,9 @@ Full documentation can be found on [Betamax's home page][home].
 
 ## Project status
 
-The current stable version of Betamax is 1.1.1 which is available from [Maven Central][mavenrepo].
+The current stable version of Betamax is 1.1.2 which is available from [Maven Central][mavenrepo].
 
-Add `'co.freeside:betamax:1.1.1'` as a test dependency to your [Gradle][gradle], [Ivy][ivy], [Grails][grails] or [Maven][maven] project (or anything that can use Maven repositories).
+Add `'co.freeside:betamax:1.1.2'` as a test dependency to your [Gradle][gradle], [Ivy][ivy], [Grails][grails] or [Maven][maven] project (or anything that can use Maven repositories).
 
 Development versions are available from [Sonatype][sonatype].
 
