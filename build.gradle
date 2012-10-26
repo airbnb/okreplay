@@ -27,7 +27,7 @@ dependencies {
 
 	compile 'junit:junit:4.8.2',
 			'org.yaml:snakeyaml:1.10',
-			'org.apache.httpcomponents:httpclient:4.2.1',
+			'org.apache.httpcomponents:httpclient:4.2.2',
 			'commons-lang:commons-lang:2.4',
 			'org.eclipse.jetty:jetty-server:7.3.1.v20110307'
 
@@ -92,13 +92,42 @@ codenarc {
 	ignoreFailures = true
 }
 
+groovydoc {
+	docTitle = "Betamax $version"
+	windowTitle = "Betamax $version"
+	footer = """<p style="text-align: center">API Documentation for Betamax $version - Licensed under the Apache License, Version 2.0 - <a href="http://freeside.co/betamax">http://freeside.co/betamax</a></p>"""
+
+	link 'http://download.oracle.com/javase/7/docs/api/',
+			'java.net',
+			'java.util',
+			'java.lang',
+			'java.io'
+
+	link 'http://groovy.codehaus.org/api/',
+			'groovy.lang'
+
+	link 'http://junit.sourceforge.net/javadoc/',
+			'org.junit',
+			'org.hamcrest'
+
+	link 'http://snakeyamlrepo.appspot.com/releases/1.10/site/apidocs/',
+			'org.yaml.snakeyaml'
+
+	link 'http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/',
+			'org.apache.http',
+			'org.apache.http'
+}
+
 githubPages {
 	repoUri = 'git@github.com:robfletcher/betamax.git'
-	workingPath = "$buildDir/docs"
+	workingPath = "$buildDir/public"
 	pages {
 		exclude '**/_site/**'
 		from('src/docs') {
 			exclude '**/*.less'
+		}
+		from(groovydoc.outputs.files) {
+			into 'api'
 		}
 	}
 }
