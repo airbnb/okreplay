@@ -97,25 +97,17 @@ groovydoc {
 	windowTitle = "Betamax $version"
 	footer = """<p style="text-align: center">API Documentation for Betamax $version - Licensed under the Apache License, Version 2.0 - <a href="http://freeside.co/betamax">http://freeside.co/betamax</a></p>"""
 
-	link 'http://download.oracle.com/javase/7/docs/api/',
-			'java.net',
-			'java.util',
-			'java.lang',
-			'java.io'
-
-	link 'http://groovy.codehaus.org/api/',
-			'groovy.lang'
-
-	link 'http://junit.sourceforge.net/javadoc/',
-			'org.junit',
-			'org.hamcrest'
-
-	link 'http://snakeyamlrepo.appspot.com/releases/1.10/site/apidocs/',
-			'org.yaml.snakeyaml'
-
-	link 'http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/',
-			'org.apache.http',
-			'org.apache.http'
+	def apiUrls = [
+			'http://download.oracle.com/javase/7/docs/api',
+			'http://groovy.codehaus.org/api',
+			'http://junit.sourceforge.net/javadoc',
+			'http://snakeyamlrepo.appspot.com/releases/1.10/site/apidocs',
+			'http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs'
+	]
+	apiUrls.each {
+		def packages = new URL("$it/package-list").text.tokenize('\n')
+		link(it, *packages)
+	}
 }
 
 githubPages {
