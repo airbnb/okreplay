@@ -1,14 +1,17 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.proxy.jetty.ProxyServer
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.PropertiesCategory
 import groovy.transform.InheritConstructors
+import org.apache.http.conn.ssl.SSLSocketFactory
 
 @InheritConstructors
 class ProxyRecorder extends Recorder {
 
 	public static final int DEFAULT_PROXY_PORT = 5555
 	public static final int DEFAULT_PROXY_TIMEOUT = 5000
+	public static final SSLSocketFactory DEFAULT_SSL_SOCKET_FACTORY = DummySSLSocketFactory.instance
 
 	/**
 	 * The port the Betamax proxy will listen on.
@@ -21,9 +24,14 @@ class ProxyRecorder extends Recorder {
 	int proxyTimeout
 
 	/**
-	 * If set to true add support for proxying SSL (disable certificate checking)
+	 * If set to true add support for proxying SSL (disable certificate checking).
 	 */
 	boolean sslSupport
+
+	/**
+	 * The factory that will be used to create SSL sockets for secure connections to the target.
+	 */
+	SSLSocketFactory sslSocketFactory
 
 	private final ProxyServer interceptor = new ProxyServer(this)
 
@@ -82,5 +90,6 @@ class ProxyRecorder extends Recorder {
 		proxyPort = DEFAULT_PROXY_PORT
 		proxyTimeout = DEFAULT_PROXY_TIMEOUT
 		sslSupport = false
+		sslSocketFactory = DEFAULT_SSL_SOCKET_FACTORY
 	}
 }

@@ -69,7 +69,7 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 				proxyOverrider.originalProxySelector
 		)
 		if (recorder.sslSupport) {
-			connectionManager.schemeRegistry.register new Scheme('https', DummySSLSocketFactory.instance, 443)
+			connectionManager.schemeRegistry.register new Scheme('https', recorder.sslSocketFactory, 443)
 		}
 		HttpConnectionParams.setConnectionTimeout(httpClient.params, recorder.proxyTimeout)
 		HttpConnectionParams.setSoTimeout(httpClient.params, recorder.proxyTimeout)
