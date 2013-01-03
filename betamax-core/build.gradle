@@ -5,7 +5,7 @@ repositories {
 dependencies {
 	compile httpClientDependency,
 			junitDependency,
-			'org.yaml:snakeyaml:1.10',
+			'org.yaml:snakeyaml:1.11',
 			'commons-lang:commons-lang:2.4'
 
 	testCompile project(':betamax-test-support')
