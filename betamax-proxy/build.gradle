@@ -12,6 +12,8 @@ dependencies {
 		exclude module: 'commons-logging'
 	}
 	testCompile 'com.github.groovy-wslite:groovy-wslite:0.7.1'
+
+	testRuntime 'cglib:cglib-nodep:2.2.2'
 }
 
 modifyPom {
