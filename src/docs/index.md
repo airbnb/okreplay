@@ -277,6 +277,9 @@ When using the Betamax proxy these additional properties are available:
 `sslSupport`
 : if set to `true` the Betamax proxy will also intercept HTTPS traffic.
 
+`sslSocketFactory`
+: the instance of `org.apache.http.conn.ssl.SSLSocketFactory` that the Betamax proxy will use to connect to the target when using HTTPS. By default Betamax will use its own socket factory with a self-signed certificate but if you are connecting to a server that has more stringent security requirements or needs SSL authentication you can override this. 
+
 If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhere in your classpath it will be picked up by the `Recorder` class.
 
 ### Example _BetamaxConfig.groovy_ script
@@ -290,6 +293,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
         ignoreHosts = ['localhost', '127.0.0.1']
         ignoreLocalhost = false
         sslSupport = false
+        sslSocketFactory = new SSLSocketFactory(myTrustStore)
     }
 
 ### Example _betamax.properties_ file
