@@ -81,6 +81,7 @@ class ProxyRecorder extends Recorder {
 		proxyPort = config.betamax.proxyPort ?: DEFAULT_PROXY_PORT
 		proxyTimeout = config.betamax.proxyTimeout ?: DEFAULT_PROXY_TIMEOUT
 		sslSupport = config.betamax.sslSupport
+		sslSocketFactory = config.betamax.sslSocketFactory ?: DEFAULT_SSL_SOCKET_FACTORY
 	}
 
 	@Override

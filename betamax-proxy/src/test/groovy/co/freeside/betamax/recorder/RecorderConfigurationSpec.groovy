@@ -1,6 +1,8 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.*
+import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+import org.apache.http.conn.ssl.SSLSocketFactory
 import spock.lang.*
 import static ProxyRecorder.DEFAULT_PROXY_TIMEOUT
 import static co.freeside.betamax.Recorder.DEFAULT_TAPE_ROOT
@@ -22,6 +24,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.ignoreHosts == []
 		!recorder.ignoreLocalhost
 		!recorder.sslSupport
+		recorder.sslSocketFactory instanceof DummySSLSocketFactory
 	}
 
 	void 'recorder configuration is overridden by map arguments'() {
@@ -33,7 +36,8 @@ class RecorderConfigurationSpec extends Specification {
 				proxyTimeout: 30000,
 				ignoreHosts: ['localhost'],
 				ignoreLocalhost: true,
-				sslSupport: true
+				sslSupport: true,
+				sslSocketFactory: new SSLSocketFactory(null)
 		)
 
 		expect:
@@ -44,6 +48,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.ignoreHosts == ['localhost']
 		recorder.ignoreLocalhost
 		recorder.sslSupport
+		recorder.sslSocketFactory instanceof SSLSocketFactory
 	}
 
 	void 'recorder picks up configuration from properties'() {
@@ -117,6 +122,7 @@ class RecorderConfigurationSpec extends Specification {
 					ignoreHosts = ['localhost', '127.0.0.1']
 					ignoreLocalhost = true
 					sslSupport = true
+					sslSocketFactory = new org.apache.http.conn.ssl.SSLSocketFactory(null)
 				}
 			'''
 		}
@@ -135,6 +141,7 @@ class RecorderConfigurationSpec extends Specification {
 		recorder.ignoreHosts == ['localhost', '127.0.0.1']
 		recorder.ignoreLocalhost
 		recorder.sslSupport
+		recorder.sslSocketFactory instanceof SSLSocketFactory
 
 		cleanup:
 		configFile.delete()
