@@ -1,6 +1,6 @@
 language: groovy
 jdk:
   - oraclejdk7
-install: gradle -q assemble
+install: ./gradlew -q assemble
 before_script: echo $TERM
-script: gradle -q check
+script: ./gradlew -q check
