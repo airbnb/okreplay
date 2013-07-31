@@ -6,7 +6,8 @@ class NettyServerSpec extends Specification {
 
 	void "can serve HTTP responses with Netty"() {
 		given:
-		def server = new NettyBetamaxServer(port, new EchoServerHandler())
+		def channelInitializer = new HttpChannelInitializer(0, new EchoServerHandler())
+		def server = new NettyBetamaxServer(port, channelInitializer)
 		server.run()
 
 		when:

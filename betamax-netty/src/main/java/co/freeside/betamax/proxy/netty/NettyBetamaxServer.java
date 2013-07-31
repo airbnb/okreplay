@@ -12,13 +12,13 @@ import io.netty.channel.socket.nio.*;
 public class NettyBetamaxServer {
 
     private final int port;
-    private final ChannelHandler handler;
+    private final ChannelInitializer channelInitializer;
     private EventLoopGroup group;
     private Channel channel;
 
-    public NettyBetamaxServer(int port, ChannelHandler handler) {
+    public NettyBetamaxServer(int port, ChannelInitializer channelInitializer) {
         this.port = port;
-        this.handler = handler;
+        this.channelInitializer = channelInitializer;
     }
 
     public InetSocketAddress run() throws Exception {
@@ -26,7 +26,7 @@ public class NettyBetamaxServer {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(group)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new HttpChannelInitializer(handler))
+                .childHandler(channelInitializer)
                 .option(ChannelOption.SO_BACKLOG, 128)
                 .childOption(ChannelOption.SO_KEEPALIVE, true);
 
