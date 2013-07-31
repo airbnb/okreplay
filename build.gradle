@@ -18,14 +18,17 @@ allprojects {
 		junitVersion = '4.10'
 		spockVersion = '0.7-groovy-1.8'
 		jettyVersion = '7.3.1.v20110307'
+		nettyVersion = '4.0.4.Final'
 
 		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
 		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
 		junitDependency = "junit:junit:$junitVersion"
 		spockDependency = "org.spockframework:spock-core:$spockVersion"
 		jettyDependency = "org.eclipse.jetty:jetty-server:$jettyVersion"
+		// TODO: not sure we need netty-all
+		nettyDependency = "io.netty:netty-all:$nettyVersion"
 
-		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient', ':betamax-jetty']
+		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient', ':betamax-jetty', ':betamax-netty']
 	}
 }
 

@@ -1,0 +1,11 @@
+dependencies {
+	compile project(':betamax-core')
+	compile nettyDependency
+}
+
+modifyPom {
+	project {
+		name 'Betamax Netty'
+		description 'The base Netty support classes for Betamax.'
+	}
+}
