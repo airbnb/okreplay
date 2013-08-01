@@ -1,8 +1,7 @@
-package co.freeside.betamax.message.servlet
+package co.freeside.betamax.proxy.netty
 
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
-import org.apache.commons.collections.iterators.*
 import spock.lang.*
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.handler.codec.http.HttpMethod.GET
@@ -10,8 +9,6 @@ import static io.netty.util.CharsetUtil.UTF_8
 
 @Unroll
 class NettyRequestAdapterSpec extends Specification {
-
-	private static final IteratorEnumeration EMPTY_ENUMERATION = new IteratorEnumeration(EmptyIterator.INSTANCE)
 
 	FullHttpRequest nettyRequest = Mock(FullHttpRequest)
 

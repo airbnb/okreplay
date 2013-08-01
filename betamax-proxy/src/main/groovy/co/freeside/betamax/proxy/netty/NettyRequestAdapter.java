@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.message.servlet;
+package co.freeside.betamax.proxy.netty;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import co.freeside.betamax.message.*;
 import com.google.common.base.*;
-import com.google.common.collect.*;
 import io.netty.handler.codec.http.*;
 
 public class NettyRequestAdapter extends AbstractMessage implements Request {

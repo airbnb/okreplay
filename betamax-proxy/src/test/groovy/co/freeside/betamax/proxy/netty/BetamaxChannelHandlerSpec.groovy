@@ -2,23 +2,29 @@ package co.freeside.betamax.proxy.netty
 
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.*
-import co.freeside.betamax.message.servlet.NettyRequestAdapter
 import co.freeside.betamax.util.message.BasicResponse
 import io.netty.buffer.Unpooled
-import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.*
 import io.netty.handler.codec.http.*
 import spock.lang.Specification
 import static io.netty.handler.codec.http.HttpHeaders.Names.ETAG
+import static io.netty.handler.codec.http.HttpMethod.GET
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import static io.netty.handler.codec.rtsp.RtspHeaders.Names.VIA
 
-class BetamaxProxySpec extends Specification {
+class BetamaxChannelHandlerSpec extends Specification {
 
 	BetamaxChannelHandler proxy = new BetamaxChannelHandler()
-
-	HttpRequest request = [:] as HttpRequest
-
+	FullHttpRequest request = new DefaultFullHttpRequest(HTTP_1_1, GET, "http://freeside.co/betamax/")
+	FullHttpResponse response = null
 	Response betamaxResponse
+	ChannelHandlerContext context = Stub(ChannelHandlerContext) {
+		writeAndFlush(_) >> {
+			response = it[0]
+			return new DefaultChannelPromise(context.channel())
+		}
+	}
 
 	void setup() {
 		betamaxResponse = new BasicResponse(200, 'OK')
@@ -31,9 +37,6 @@ class BetamaxProxySpec extends Specification {
 		given:
 		def handler = Mock(HttpHandler)
 		proxy << handler
-
-		and:
-		def context = Stub(ChannelHandlerContext)
 
 		when:
 		proxy.channelRead(context, request)
@@ -52,19 +55,14 @@ class BetamaxProxySpec extends Specification {
 		handler.handle(_) >> betamaxResponse
 		proxy << handler
 
-		and:
-		def context = Mock(ChannelHandlerContext)
-
 		when:
 		proxy.channelRead(context, request)
 
 		then:
-		1 * context.writeAndFlush(_) >> { FullHttpResponse response ->
-			response.status.code() == betamaxResponse.status
-			response.headers().get(ETAG) == betamaxResponse.getHeader(ETAG)
-			response.headers().getAll(VIA).containsAll(betamaxResponse.getHeader(VIA).split(/,\s*/))
-			response.content() == Unpooled.copiedBuffer(betamaxResponse.bodyAsBinary.bytes)
-		}
+		response.status.code() == betamaxResponse.status
+		response.headers().get(ETAG) == betamaxResponse.getHeader(ETAG)
+		response.headers().getAll(VIA).containsAll(betamaxResponse.getHeader(VIA).split(/,\s*/))
+		response.content() == Unpooled.copiedBuffer(betamaxResponse.bodyAsBinary.bytes)
 	}
 
 	void 'responds with the specified error status if the handler chain throws ProxyException'() {
@@ -73,16 +71,11 @@ class BetamaxProxySpec extends Specification {
 		handler.handle(_) >> { throw [getHttpStatus: {-> errorStatus}] as HandlerException }
 		proxy << handler
 
-		and:
-		def context = Mock(ChannelHandlerContext)
-
 		when:
 		proxy.channelRead(context, request)
 
 		then:
-		1 * context.writeAndFlush(_) >> { FullHttpResponse response ->
-			response.status.code() == errorStatus
-		}
+		response.status.code() == errorStatus
 
 		where:
 		errorStatus = 419
@@ -94,16 +87,11 @@ class BetamaxProxySpec extends Specification {
 		handler.handle(_) >> { throw new IllegalStateException() }
 		proxy << handler
 
-		and:
-		def context = Mock(ChannelHandlerContext)
-
 		when:
 		proxy.channelRead(context, request)
 
 		then:
-		1 * context.writeAndFlush(_) >> { FullHttpResponse response ->
-			response.status == INTERNAL_SERVER_ERROR
-		}
+		response.status == INTERNAL_SERVER_ERROR
 	}
 
 }

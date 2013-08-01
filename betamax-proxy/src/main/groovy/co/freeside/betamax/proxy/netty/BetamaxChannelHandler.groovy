@@ -19,7 +19,6 @@ package co.freeside.betamax.proxy.netty
 import java.util.logging.Logger
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.Response
-import co.freeside.betamax.message.servlet.NettyRequestAdapter
 import io.netty.buffer.Unpooled
 import io.netty.channel.*
 import io.netty.handler.codec.http.*
@@ -79,13 +78,13 @@ public class BetamaxChannelHandler extends ChannelInboundHandlerAdapter {
 		def content = betamaxResponse.hasBody() ? Unpooled.copiedBuffer(betamaxResponse.bodyAsBinary.bytes) : Unpooled.EMPTY_BUFFER
 		FullHttpResponse response = betamaxResponse.hasBody() ? new DefaultFullHttpResponse(HTTP_1_1, status, content) : new DefaultFullHttpResponse(HTTP_1_1, status)
 		for (Map.Entry<String, String> header : betamaxResponse.headers) {
-			response.headers().set(header.key, header.value.split(/,\s*/))
+			response.headers().set(header.key, header.value.split(/,\s*/).toList())
 		}
 		sendResponse(context, response)
 	}
 
 	private void sendError(ChannelHandlerContext context, HttpResponseStatus status, String message) {
-		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, Unpooled.copiedBuffer(message, CharsetUtil.UTF_8))
+		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, Unpooled.copiedBuffer(message ?: "", CharsetUtil.UTF_8))
 		response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8")
 		sendResponse(context, response)
 	}
