@@ -34,6 +34,7 @@ class HttpResponseAdapter extends HttpMessageAdapter<HttpResponse> implements Re
 	@Override
 	InputStream getBodyAsBinary() {
 		if (body == null) {
+			// TODO: this is inconsistent with RecordedResponse - interface should make it clear what should happen in this case
 			throw new IllegalStateException('cannot read the body of a response that does not have one')
 		}
 		new ByteArrayInputStream(body)

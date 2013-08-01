@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Rob Fletcher
+ * Copyright 2013 Rob Fletcher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 package co.freeside.betamax.message.servlet
 
-import javax.servlet.http.HttpServletRequest
 import co.freeside.betamax.message.*
+import io.netty.handler.codec.http.FullHttpRequest
 
-class ServletRequestAdapter extends AbstractMessage implements Request {
+class NettyRequestAdapter extends AbstractMessage implements Request {
 
-	private final HttpServletRequest delegate
+	private final FullHttpRequest delegate
 	private byte[] body
 
-	ServletRequestAdapter(HttpServletRequest delegate) {
+	NettyRequestAdapter(FullHttpRequest delegate) {
 		this.delegate = delegate
 	}
 
@@ -35,29 +35,19 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 
 	@Override
 	URI getUri() {
-		def uri = delegate.requestURL
-		def qs = delegate.queryString
-		if (qs) {
-			uri << '?' << qs
-		}
-		uri.toString().toURI()
-	}
-
-	@Override
-	String getCharset() {
-		delegate.characterEncoding
+		delegate.uri.toURI()
 	}
 
 	@Override
 	Map<String, String> getHeaders() {
-		delegate.headerNames.toList().inject([:]) { map, header ->
+		delegate.headers().names().inject([:]) { map, header ->
 			map << new MapEntry(header, getHeader(header))
 		}.asImmutable()
 	}
 
 	@Override
 	String getHeader(String name) {
-		delegate.getHeaders(name).toList().join(', ')
+		delegate.headers().getAll(name).join(", ")
 	}
 
 	@Override
@@ -67,18 +57,21 @@ class ServletRequestAdapter extends AbstractMessage implements Request {
 
 	@Override
 	boolean hasBody() {
-		delegate.contentLength > 0
+		delegate.content().readable
 	}
 
 	@Override
 	InputStream getBodyAsBinary() {
+		// TODO: can this be done without copying the entire byte array?
 		if (!body) {
-			body = delegate.inputStream.bytes
+			def stream = new ByteArrayOutputStream()
+			delegate.content().getBytes(0, stream, delegate.content().readableBytes())
+			body = stream.toByteArray()
 		}
 		new ByteArrayInputStream(body)
 	}
 
-	HttpServletRequest getOriginalRequest() {
+	final FullHttpRequest getOriginalRequest() {
 		delegate
 	}
 

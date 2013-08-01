@@ -4,6 +4,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.SchemeRegistry
 import org.apache.http.impl.client.AbstractHttpClient
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+
 /**
  * A convenience extension of ProxySelectorRoutePlanner that will configure proxy selection in a way that will work with
  * Betamax.

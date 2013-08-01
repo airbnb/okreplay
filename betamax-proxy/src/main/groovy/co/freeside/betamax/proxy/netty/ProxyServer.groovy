@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Rob Fletcher
+ * Copyright 2013 Rob Fletcher
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,41 +14,44 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy.jetty
+package co.freeside.betamax.proxy.netty
 
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.DefaultHandlerChain
-import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.*
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.*
 import org.apache.http.params.HttpConnectionParams
-import org.eclipse.jetty.server.*
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
-import static ProxyRecorder.DEFAULT_PROXY_PORT
 
-class ProxyServer extends SimpleServer implements HttpInterceptor {
+class ProxyServer implements HttpInterceptor {
 
+	private final NettyBetamaxServer proxyServer;
+	private final BetamaxChannelHandler proxyHandler;
 	private final ProxyRecorder recorder
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
 
 	ProxyServer(ProxyRecorder recorder) {
-		super(DEFAULT_PROXY_PORT)
 		this.recorder = recorder
+
+		proxyHandler = new BetamaxChannelHandler()
+		proxyHandler << new DefaultHandlerChain(recorder, newHttpClient())
+
+		def channel = new HttpChannelInitializer(0, proxyHandler); // TODO: correct worker threads? After all nothing in Betamax is actually async so we should probably not tie up the main thread
+		proxyServer = new NettyBetamaxServer(recorder.proxyPort, channel)
+	}
+
+	@Override
+	boolean isRunning() {
+		proxyHandler.active
 	}
 
 	void start() {
-		port = recorder.proxyPort
+//		def connectHandler = new CustomConnectHandler(handler, port + 1)
 
-		def handler = new BetamaxProxy()
-		handler << new DefaultHandlerChain(recorder, newHttpClient())
-
-		def connectHandler = new CustomConnectHandler(handler, port + 1)
-
-		super.start(connectHandler)
+		proxyServer.run()
 
 		overrideProxySettings()
 		overrideSSLSettings()
@@ -58,7 +61,18 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 	void stop() {
 		restoreOriginalProxySettings()
 		restoreOriginalSSLSettings()
-		super.stop()
+
+		proxyServer.shutdown()
+	}
+
+	@Override
+	String getHost() {
+		recorder.proxyHost // TODO: this should come from the Netty server instance
+	}
+
+	@Override
+	int getPort() {
+		recorder.proxyPort
 	}
 
 	private HttpClient newHttpClient() {
@@ -74,22 +88,6 @@ class ProxyServer extends SimpleServer implements HttpInterceptor {
 		HttpConnectionParams.setConnectionTimeout(httpClient.params, recorder.proxyTimeout)
 		HttpConnectionParams.setSoTimeout(httpClient.params, recorder.proxyTimeout)
 		httpClient
-	}
-
-	@Override
-	protected Server createServer(int port) {
-		def server = super.createServer(port)
-		server.addConnector(createSSLConnector(port + 1))
-		server
-	}
-
-	private Connector createSSLConnector(int port) {
-		new SslSelectChannelConnector(
-				port: port, // TODO: separate property
-				keystore: ProxyServer.getResource('/betamax.keystore'),
-				password: 'password',
-				keyPassword: 'password'
-		)
 	}
 
 	private void overrideProxySettings() {

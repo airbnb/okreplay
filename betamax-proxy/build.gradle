@@ -4,7 +4,7 @@ repositories {
 
 dependencies {
 	compile project(':betamax-core')
-	compile project(':betamax-jetty')
+	compile project(':betamax-netty')
 
 	testCompile project(':betamax-test-support')
 	testCompile('commons-httpclient:commons-httpclient:3.1') {
