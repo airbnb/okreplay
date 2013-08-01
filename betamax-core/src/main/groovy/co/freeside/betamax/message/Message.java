@@ -13,37 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package co.freeside.betamax.message;
 
-package co.freeside.betamax.message
+import java.io.*;
+import java.util.*;
 
 /**
  * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying
  * implementation.
  */
-interface Message {
+public interface Message {
 
 	/**
 	 * @return all HTTP headers attached to this message.
 	 */
-	Map<String, String> getHeaders()
+	Map<String, String> getHeaders();
 
 	/**
 	 * @param name an HTTP header name.
 	 * @return the comma-separated values for all HTTP headers with the specified name or `null` if there are no headers
 	 * with that name.
 	 */
-	String getHeader(String name)
+	String getHeader(String name);
 
 	/**
 	 * @param name an HTTP header name.
 	 * @param value the header value that will be appended to any existing headers.
 	 */
-	void addHeader(String name, String value)
+	void addHeader(String name, String value);
 
 	/**
 	 * @return `true` if the message currently contains a body, `false` otherwise.
 	 */
-	boolean hasBody()
+	boolean hasBody();
 
 	/**
 	 * Returns the message body as a string. If the message body is encoded then the implementation must decode it
@@ -51,7 +53,7 @@ interface Message {
 	 * @return the message body as a string.
 	 * @throws IllegalStateException if the message does not have a body.
 	 */
-	Reader getBodyAsText()
+	Reader getBodyAsText() throws IOException;
 
 	/**
 	 * Returns the message body in its raw binary form. If the body is encoded then the implementation should return the
@@ -59,20 +61,20 @@ interface Message {
 	 * @return the message body as binary data.
 	 * @throws IllegalStateException if the message does not have a body.
 	 */
-	InputStream getBodyAsBinary()
+	InputStream getBodyAsBinary();
 
 	/**
 	 * @return the MIME content type of the message not including any charset.
 	 */
-	String getContentType()
+	String getContentType();
 
 	/**
 	 * @return the charset of the message if it is text.
 	 */
-	String getCharset()
+	String getCharset();
 
 	/**
 	 * @return the content encoding of the message, e.g. _gzip_, _deflate_ or _none_.
 	 */
-	String getEncoding()
+	String getEncoding();
 }

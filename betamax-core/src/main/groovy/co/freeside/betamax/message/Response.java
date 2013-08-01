@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package co.freeside.betamax.message;
 
-package co.freeside.betamax
+public interface Response extends Message {
 
-enum TapeMode {
+	/**
+	 * @return the HTTP status code of the response.
+	 */
+    int getStatus();
 
-	READ_WRITE(true, true, false),
-	READ_ONLY(true, false, false),
-	READ_SEQUENTIAL(true, false, true),
-	WRITE_ONLY(false, true, false),
-	WRITE_SEQUENTIAL(false, true, true),
-	DEFAULT(false, false, false)
-
-	final boolean readable
-	final boolean writable
-	final boolean sequential
-
-	private TapeMode(boolean readable, boolean writable, boolean sequential) {
-		this.readable = readable
-		this.writable = writable
-		this.sequential = sequential
-	}
-
-	boolean asBoolean() {
-		readable || writable
-	}
+	/**
+	 * @return the content MIME type of the response.
+	 */
+    String getContentType();
 
 }

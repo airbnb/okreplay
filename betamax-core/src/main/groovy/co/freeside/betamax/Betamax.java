@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package co.freeside.betamax;
 
-package co.freeside.betamax
-
-import java.lang.annotation.*
-import static co.freeside.betamax.MatchRule.*
-import static co.freeside.betamax.TapeMode.DEFAULT
-import static java.lang.annotation.ElementType.METHOD
-import static java.lang.annotation.RetentionPolicy.RUNTIME
+import java.lang.annotation.*;
+import static co.freeside.betamax.MatchRule.*;
+import static co.freeside.betamax.TapeMode.DEFAULT;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Target(METHOD)
-@interface Betamax {
-	String tape()
-	TapeMode mode() default DEFAULT
-	MatchRule[] match() default [method, uri]
+public @interface Betamax {
+	String tape();
+	TapeMode mode() default DEFAULT;
+	MatchRule[] match() default {method, uri};
 }

@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package co.freeside.betamax.message;
 
-package co.freeside.betamax.message
+import java.net.*;
 
-interface Request extends Message {
+public interface Request extends Message {
 
 	/**
 	 * @return the request method.
 	 */
-	String getMethod()
+	String getMethod();
 
 	/**
 	 * @return the target URI of the request.
 	 */
-	URI getUri()
+	URI getUri();
 
 }
