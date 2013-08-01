@@ -61,7 +61,7 @@ public interface Message {
 	 * @return the message body as binary data.
 	 * @throws IllegalStateException if the message does not have a body.
 	 */
-	InputStream getBodyAsBinary();
+	InputStream getBodyAsBinary() throws IOException;
 
 	/**
 	 * @return the MIME content type of the message not including any charset.

@@ -14,65 +14,76 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.message.servlet
+package co.freeside.betamax.message.servlet;
 
-import co.freeside.betamax.message.*
-import io.netty.handler.codec.http.FullHttpRequest
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import co.freeside.betamax.message.*;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import io.netty.handler.codec.http.*;
 
-class NettyRequestAdapter extends AbstractMessage implements Request {
+public class NettyRequestAdapter extends AbstractMessage implements Request {
 
-	private final FullHttpRequest delegate
-	private byte[] body
+	private final FullHttpRequest delegate;
+	private byte[] body;
 
 	NettyRequestAdapter(FullHttpRequest delegate) {
-		this.delegate = delegate
+		this.delegate = delegate;
 	}
 
 	@Override
-	String getMethod() {
-		delegate.method
+	public String getMethod() {
+		return delegate.getMethod().name();
 	}
 
 	@Override
-	URI getUri() {
-		delegate.uri.toURI()
-	}
-
-	@Override
-	Map<String, String> getHeaders() {
-		delegate.headers().names().inject([:]) { map, header ->
-			map << new MapEntry(header, getHeader(header))
-		}.asImmutable()
-	}
-
-	@Override
-	String getHeader(String name) {
-		delegate.headers().getAll(name).join(", ")
-	}
-
-	@Override
-	void addHeader(String name, String value) {
-		throw new UnsupportedOperationException()
-	}
-
-	@Override
-	boolean hasBody() {
-		delegate.content().readable
-	}
-
-	@Override
-	InputStream getBodyAsBinary() {
-		// TODO: can this be done without copying the entire byte array?
-		if (!body) {
-			def stream = new ByteArrayOutputStream()
-			delegate.content().getBytes(0, stream, delegate.content().readableBytes())
-			body = stream.toByteArray()
+	public URI getUri() {
+		try {
+			return new URI(delegate.getUri());
+		} catch (URISyntaxException e) {
+			throw new IllegalStateException("Invalid URI in underlying request", e);
 		}
-		new ByteArrayInputStream(body)
 	}
 
-	final FullHttpRequest getOriginalRequest() {
-		delegate
+	@Override
+	public Map<String, String> getHeaders() {
+		Map<String, String> headers = new HashMap<String, String>();
+		for (String name : delegate.headers().names()) {
+			headers.put(name, getHeader(name));
+		}
+		return Collections.unmodifiableMap(headers);
+	}
+
+	@Override
+	public String getHeader(String name) {
+		return Joiner.on(", ").join(delegate.headers().getAll(name));
+	}
+
+	@Override
+	public void addHeader(String name, String value) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public boolean hasBody() {
+		return delegate.content() != null && delegate.content().isReadable();
+	}
+
+	@Override
+	public InputStream getBodyAsBinary() throws IOException {
+		// TODO: can this be done without copying the entire byte array?
+		if (body == null) {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			delegate.content().getBytes(0, stream, delegate.content().readableBytes());
+			body = stream.toByteArray();
+		}
+		return new ByteArrayInputStream(body);
+	}
+
+	public final FullHttpRequest getOriginalRequest() {
+		return delegate;
 	}
 
 }

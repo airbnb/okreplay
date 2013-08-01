@@ -42,6 +42,7 @@ subprojects {
 
 	dependencies {
 		compile groovyDependency
+		compile "com.google.guava:guava:14.0.1"
 
 		testCompile(spockDependency) {
 			exclude module: 'groovy-all'
