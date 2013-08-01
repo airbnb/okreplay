@@ -41,7 +41,7 @@ subprojects {
 	}
 
 	dependencies {
-		groovy groovyDependency
+		compile groovyDependency
 
 		testCompile(spockDependency) {
 			exclude module: 'groovy-all'
