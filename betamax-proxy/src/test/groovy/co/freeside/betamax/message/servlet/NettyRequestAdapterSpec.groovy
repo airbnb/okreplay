@@ -3,10 +3,12 @@ package co.freeside.betamax.message.servlet
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import org.apache.commons.collections.iterators.*
-import spock.lang.Specification
+import spock.lang.*
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.handler.codec.http.HttpMethod.GET
+import static io.netty.util.CharsetUtil.UTF_8
 
+@Unroll
 class NettyRequestAdapterSpec extends Specification {
 
 	private static final IteratorEnumeration EMPTY_ENUMERATION = new IteratorEnumeration(EmptyIterator.INSTANCE)
@@ -99,6 +101,26 @@ class NettyRequestAdapterSpec extends Specification {
 		expect:
 		request.hasBody()
 		request.bodyAsBinary.bytes == body
+	}
+
+	void "request #description if the content buffer is #contentDescription"() {
+		given:
+		nettyRequest.content() >> content
+
+		and:
+		def request = new NettyRequestAdapter(nettyRequest)
+
+		expect:
+		request.hasBody() == consideredToHaveBody
+
+		where:
+		content                               | consideredToHaveBody
+		Unpooled.copiedBuffer("O HAI", UTF_8) | true
+		Unpooled.EMPTY_BUFFER                 | false
+		null                                  | false
+
+		description = consideredToHaveBody ? "has a body" : "does not have a body"
+		contentDescription = content ? "${content.readableBytes()} bytes long" : "null"
 	}
 
 }
