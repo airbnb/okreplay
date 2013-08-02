@@ -1,8 +1,20 @@
-include 'betamax-core',
-		'betamax-proxy',
-		'betamax-httpclient',
-		'betamax-jetty',
-		'betamax-netty',
-		'betamax-test-support'
+include "betamax-core",
+		"betamax-proxy",
+		"betamax-httpclient",
+		"betamax-jetty",
+		"betamax-netty",
+		"betamax-test-support"
 
-rootProject.name = 'betamax'
+rootProject.name = "betamax"
+
+def setBuildFile(project) {
+	project.buildFileName = "${project.name}.gradle"
+	project.children.each {
+		setBuildFile(it)
+	}
+}
+
+setBuildFile(rootProject)
+rootProject.children.each {
+	setBuildFile(it)
+}
