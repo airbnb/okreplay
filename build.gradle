@@ -3,63 +3,62 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
-		classpath 'org.ajoberstar:gradle-git:0.2.0'
+		classpath "org.gradle.api.plugins:gradle-nexus-plugin:0.2"
+		classpath "org.ajoberstar:gradle-git:0.6.1"
 	}
 }
 
 allprojects {
-	version = '1.2-SNAPSHOT'
-	group = 'co.freeside'
+	version = "2.0-SNAPSHOT"
+	group = "co.freeside"
 
 	ext {
-		groovyVersion = '1.8.8'
-		httpClientVersion = '4.2.2'
-		junitVersion = '4.10'
-		spockVersion = '0.7-groovy-1.8'
-		jettyVersion = '7.3.1.v20110307'
-		nettyVersion = '4.0.4.Final'
-
-		groovyDependency = "org.codehaus.groovy:groovy-all:$groovyVersion"
-		httpClientDependency = "org.apache.httpcomponents:httpclient:$httpClientVersion"
-		junitDependency = "junit:junit:$junitVersion"
-		spockDependency = "org.spockframework:spock-core:$spockVersion"
-		jettyDependency = "org.eclipse.jetty:jetty-server:$jettyVersion"
-		// TODO: not sure we need netty-all
-		nettyDependency = "io.netty:netty-all:$nettyVersion"
+		commonDependencies = [
+			groovy: dependencies.create("org.codehaus.groovy:groovy-all:1.8.8"),
+			guava: dependencies.create("com.google.guava:guava:14.0.1"),
+			httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
+				exclude module: "groovy"
+				exclude module: "httpclient"
+			}),
+			httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.2.2"),
+			junit: dependencies.create("junit:junit:4.10"),
+			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-1.8", {
+				exclude module: 'groovy-all'
+				exclude module: 'junit-dep'
+			}),
+			jetty: dependencies.create("org.eclipse.jetty:jetty-server:7.3.1.v20110307"),
+			// TODO: not sure we need netty-all
+			netty: dependencies.create("io.netty:netty-all:4.0.4.Final")
+		]
 
 		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient', ':betamax-jetty', ':betamax-netty']
 	}
 }
 
 subprojects {
-	apply plugin: 'groovy'
-	apply plugin: 'codenarc'
+	apply plugin: "groovy"
+	apply plugin: "codenarc"
 
 	repositories {
 		mavenCentral()
 	}
 
 	dependencies {
-		compile groovyDependency
-		compile "com.google.guava:guava:14.0.1"
-
-		testCompile(spockDependency) {
-			exclude module: 'groovy-all'
-			exclude module: 'junit-dep'
-		}
+		compile commonDependencies.groovy
+		compile commonDependencies.guava
+		testCompile commonDependencies.spock
 	}
 
 	codenarc {
-		toolVersion = '0.17'
+		toolVersion = "0.17"
 		ignoreFailures = true
 	}
 
 	test {
 		testLogging {
 			quiet {
-				events 'failed'
-				exceptionFormat 'short'
+				events "failed"
+				exceptionFormat "short"
 			}
 		}
 	}
@@ -109,17 +108,17 @@ subprojects {
 	}
 }
 
-apply plugin: 'github-pages'
+apply plugin: "github-pages"
 
 //archivesBaseName = 'betamax'
 
 githubPages {
-	repoUri = 'git@github.com:robfletcher/betamax.git'
+	repoUri = "git@github.com:robfletcher/betamax.git"
 	workingPath = "$buildDir/docs"
 	pages {
-		exclude '**/_site/**'
-		from('src/docs') {
-			exclude '**/*.less'
+		exclude "**/_site/**"
+		from("src/docs") {
+			exclude "**/*.less"
 		}
 	}
 }

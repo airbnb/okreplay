@@ -1,6 +1,6 @@
 dependencies {
 	compile project(':betamax-core')
-	compile jettyDependency
+	compile commonDependencies.jetty
 }
 
 modifyPom {

@@ -1,16 +1,16 @@
 repositories {
-	mavenRepo url: 'http://repository.codehaus.org'
+	mavenRepo url: "http://repository.codehaus.org"
 }
 
 dependencies {
-	compile httpClientDependency,
-			junitDependency,
-			'org.yaml:snakeyaml:1.11',
-			'commons-lang:commons-lang:2.4'
+	compile commonDependencies.httpClient
+	compile commonDependencies.junit
+	compile "org.yaml:snakeyaml:1.11"
+	compile "commons-lang:commons-lang:2.4"
 
 	testCompile project(':betamax-test-support')
 
-	testRuntime 'cglib:cglib-nodep:2.2.2'
+	testRuntime "cglib:cglib-nodep:2.2.2"
 }
 
 modifyPom {
