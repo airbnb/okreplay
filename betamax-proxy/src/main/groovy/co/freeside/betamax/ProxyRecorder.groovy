@@ -33,7 +33,7 @@ class ProxyRecorder extends Recorder {
 	 */
 	SSLSocketFactory sslSocketFactory
 
-	private final ProxyServer interceptor = new ProxyServer(this)
+	private ProxyServer interceptor
 
 	/**
 	 * @return the hostname or address where the proxy will run.
@@ -51,6 +51,9 @@ class ProxyRecorder extends Recorder {
 
 	@Override
 	void start(String tapeName, Map arguments) {
+		if (!interceptor) {
+			interceptor = new ProxyServer(this)
+		}
 		if (!interceptor.running) {
 			interceptor.start()
 		}
