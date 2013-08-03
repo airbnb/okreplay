@@ -1,0 +1,41 @@
+apply plugin: "nexus"
+
+modifyPom {
+	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
+
+	project {
+		packaging "jar"
+		url "http://freeside.co/betamax"
+		inceptionYear "2011"
+
+		scm {
+			url "scm:git@github.com:robfletcher/betamax.git"
+			connection "scm:git@github.com:robfletcher/betamax.git"
+			developerConnection "scm:git@github.com:robfletcher/betamax.git"
+		}
+
+		licenses {
+			license {
+				name "The Apache Software License, Version 2.0"
+				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+				distribution "repo"
+			}
+		}
+
+		developers {
+			developer {
+				id "robfletcher"
+				name "Rob Fletcher"
+				url "http://freeside.co/"
+				roles {
+					role "Lead"
+					role "Founder"
+				}
+			}
+		}
+	}
+}
+
+nexus {
+	sign = true
+}

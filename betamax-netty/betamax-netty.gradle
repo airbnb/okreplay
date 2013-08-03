@@ -1,11 +1,14 @@
+apply from: "$rootDir/gradle/groovyModule.gradle"
+apply from: "$rootDir/gradle/publishedModule.gradle"
+
 dependencies {
-	compile project(':betamax-core')
+	compile project(":betamax-core")
 	compile commonDependencies.netty
 }
 
 modifyPom {
 	project {
-		name 'Betamax Netty'
-		description 'The base Netty support classes for Betamax.'
+		name "Betamax Netty"
+		description "The base Netty support classes for Betamax."
 	}
 }

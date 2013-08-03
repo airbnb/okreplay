@@ -24,99 +24,10 @@ allprojects {
 			junit: dependencies.create("junit:junit:4.10"),
 			netty: dependencies.create("io.netty:netty-all:4.0.4.Final"), // TODO: not sure we need netty-all
 			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-1.8", {
-				exclude module: 'groovy-all'
-				exclude module: 'junit-dep'
+				exclude module: "groovy-all"
+				exclude module: "junit-dep"
 			})
 		]
-
-		publishedModules = [':betamax-core', ':betamax-proxy', ':betamax-httpclient', ':betamax-jetty', ':betamax-netty']
 	}
 }
 
-subprojects {
-	apply plugin: "groovy"
-	apply plugin: "codenarc"
-
-	repositories {
-		mavenCentral()
-	}
-
-	dependencies {
-		compile commonDependencies.groovy
-		compile commonDependencies.guava
-		testCompile commonDependencies.spock
-	}
-
-	codenarc {
-		toolVersion = "0.17"
-		ignoreFailures = true
-	}
-
-	test {
-		testLogging {
-			quiet {
-				events "failed"
-				exceptionFormat "short"
-			}
-		}
-	}
-
-	if (path in publishedModules) {
-		apply plugin: 'nexus'
-
-		modifyPom {
-			dependencies.removeAll(dependencies.findAll { it.scope == 'test' })
-
-			project {
-				packaging 'jar'
-				url 'http://freeside.co/betamax'
-				inceptionYear '2011'
-
-				scm {
-					url 'scm:git@github.com:robfletcher/betamax.git'
-					connection 'scm:git@github.com:robfletcher/betamax.git'
-					developerConnection 'scm:git@github.com:robfletcher/betamax.git'
-				}
-
-				licenses {
-					license {
-						name 'The Apache Software License, Version 2.0'
-						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-						distribution 'repo'
-					}
-				}
-
-				developers {
-					developer {
-						id 'robfletcher'
-						name 'Rob Fletcher'
-						url 'http://freeside.co/'
-						roles {
-							role 'Lead'
-							role 'Founder'
-						}
-					}
-				}
-			}
-		}
-
-		nexus {
-			sign = true
-		}
-	}
-}
-
-apply plugin: "github-pages"
-
-//archivesBaseName = 'betamax'
-
-githubPages {
-	repoUri = "git@github.com:robfletcher/betamax.git"
-	workingPath = "$buildDir/docs"
-	pages {
-		exclude "**/_site/**"
-		from("src/docs") {
-			exclude "**/*.less"
-		}
-	}
-}

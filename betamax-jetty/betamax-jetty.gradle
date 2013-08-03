@@ -1,11 +1,14 @@
+apply from: "$rootDir/gradle/groovyModule.gradle"
+apply from: "$rootDir/gradle/publishedModule.gradle"
+
 dependencies {
-	compile project(':betamax-core')
+	compile project(":betamax-core")
 	compile commonDependencies.jetty
 }
 
 modifyPom {
 	project {
-		name 'Betamax Jetty'
-		description 'The base Jetty support classes for Betamax.'
+		name "Betamax Jetty"
+		description "The base Jetty support classes for Betamax."
 	}
 }

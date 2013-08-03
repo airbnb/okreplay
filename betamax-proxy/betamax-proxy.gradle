@@ -1,24 +1,27 @@
+apply from: "$rootDir/gradle/groovyModule.gradle"
+apply from: "$rootDir/gradle/publishedModule.gradle"
+
 repositories {
-	mavenRepo url: 'http://repository.codehaus.org'
+	mavenRepo url: "http://repository.codehaus.org"
 }
 
 dependencies {
-	compile project(':betamax-core')
-	compile project(':betamax-netty')
+	compile project(":betamax-core")
+	compile project(":betamax-netty")
 
-	testCompile project(':betamax-test-support')
-	testCompile('commons-httpclient:commons-httpclient:3.1') {
-		exclude module: 'commons-codec'
-		exclude module: 'commons-logging'
+	testCompile project(":betamax-test-support")
+	testCompile("commons-httpclient:commons-httpclient:3.1") {
+		exclude module: "commons-codec"
+		exclude module: "commons-logging"
 	}
-	testCompile 'com.github.groovy-wslite:groovy-wslite:0.7.1'
+	testCompile "com.github.groovy-wslite:groovy-wslite:0.7.1"
 
-	testRuntime 'cglib:cglib-nodep:2.2.2'
+	testRuntime "cglib:cglib-nodep:2.2.2"
 }
 
 modifyPom {
 	project {
-		name 'Betamax Proxy'
-		description 'The HTTP proxy implementation of Betamax.'
+		name "Betamax Proxy"
+		description "The HTTP proxy implementation of Betamax."
 	}
 }
