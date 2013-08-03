@@ -22,7 +22,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 
 		where:
 		type   | uri
@@ -41,7 +41,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 
 		where:
 		uri = 'http://httpbin.org/gzip'
@@ -54,7 +54,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 
 		where:
 		uri = 'http://httpbin.org/redirect/1'
@@ -70,7 +70,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 
 		where:
 		uri = 'https://httpbin.org/get'
@@ -84,7 +84,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 		response.data.bytes.length == 2529
 	}
 
@@ -96,7 +96,7 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == 'Betamax'
+		response.getFirstHeader(VIA).value == 'Betamax'
 
 		where:
 		uri = 'http://httpbin.org'
