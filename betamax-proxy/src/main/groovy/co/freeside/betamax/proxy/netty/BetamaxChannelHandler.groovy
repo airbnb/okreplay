@@ -32,7 +32,6 @@ import static java.util.logging.Level.SEVERE
 public class BetamaxChannelHandler extends ChannelInboundHandlerAdapter {
 
 	private HttpHandler handlerChain
-	private boolean active = false
 
 	private static final Logger log = Logger.getLogger(BetamaxChannelHandler.class.name)
 
@@ -50,22 +49,6 @@ public class BetamaxChannelHandler extends ChannelInboundHandlerAdapter {
 			log.log SEVERE, 'error recording HTTP exchange', e
 			sendError(context, INTERNAL_SERVER_ERROR, e.message)
 		}
-	}
-
-	@Override
-	void channelActive(ChannelHandlerContext context) throws Exception {
-		super.channelActive(context)
-		active = true
-	}
-
-	@Override
-	void channelInactive(ChannelHandlerContext context) throws Exception {
-		super.channelInactive(context)
-		active = false
-	}
-
-	boolean isActive() {
-		active
 	}
 
 	HttpHandler leftShift(HttpHandler httpHandler) {

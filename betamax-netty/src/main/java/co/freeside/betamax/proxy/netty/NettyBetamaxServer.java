@@ -37,6 +37,7 @@ public class NettyBetamaxServer {
     public void shutdown() throws InterruptedException {
         if (channel != null) channel.close().sync();
         if (group != null) group.shutdownGracefully();
+        if (group != null) group.shutdownGracefully().sync();
     }
 
 }

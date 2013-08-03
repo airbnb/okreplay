@@ -32,6 +32,7 @@ class ProxyServer implements HttpInterceptor {
 	private final ProxyRecorder recorder
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
+	private boolean running = false
 
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
@@ -45,13 +46,14 @@ class ProxyServer implements HttpInterceptor {
 
 	@Override
 	boolean isRunning() {
-		proxyHandler.active
+		running
 	}
 
 	void start() {
 //		def connectHandler = new CustomConnectHandler(handler, port + 1)
-
+		if (isRunning()) throw new IllegalStateException("Betamax proxy server is already running")
 		proxyServer.run()
+		running = true
 
 		overrideProxySettings()
 		overrideSSLSettings()
@@ -59,10 +61,12 @@ class ProxyServer implements HttpInterceptor {
 
 	@Override
 	void stop() {
+		if (!isRunning()) throw new IllegalStateException("Betamax proxy server is already stopped")
 		restoreOriginalProxySettings()
 		restoreOriginalSSLSettings()
 
 		proxyServer.shutdown()
+		running = false
 	}
 
 	@Override
