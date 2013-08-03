@@ -1,0 +1,339 @@
+@import "bootstrap/reset";
+@import "variables";
+@import "bootstrap/mixins";
+@import "bootstrap/scaffolding";
+@import "bootstrap/grid";
+@import "bootstrap/layouts";
+@import "bootstrap/type";
+@import "bootstrap/code";
+// @import "bootstrap/forms.less";
+// @import "bootstrap/tables.less";
+@import "fontawesome/font-awesome"; // replaces bootstrap/sprites.less
+// @import "bootstrap/dropdowns.less";
+@import "bootstrap/wells";
+@import "bootstrap/component-animations";
+// @import "bootstrap/close.less";
+// @import "bootstrap/buttons.less";
+// @import "bootstrap/button-groups.less";
+// @import "bootstrap/alerts.less";
+@import "bootstrap/navs";
+@import "bootstrap/navbar";
+// @import "bootstrap/breadcrumbs.less";
+// @import "bootstrap/pagination.less";
+// @import "bootstrap/pager.less";
+// @import "bootstrap/modals.less";
+// @import "bootstrap/tooltip.less";
+// @import "bootstrap/popovers.less";
+// @import "bootstrap/thumbnails.less";
+// @import "bootstrap/labels-badges.less";
+// @import "bootstrap/progress-bars.less";
+// @import "bootstrap/accordion.less";
+// @import "bootstrap/carousel.less";
+@import "bootstrap/hero-unit";
+@import "bootstrap/utilities";
+
+@import "bootstrap/responsive-utilities";
+@import "bootstrap/responsive-768px-979px";
+@import "bootstrap/responsive-767px-max";
+@import "bootstrap/responsive-navbar";
+
+// responsive breakpoints
+@phoneMax: 767px;
+@tabletMin: 768px;
+@tabletMax: 979px;
+@desktopMin: 980px;
+
+// additional colors
+@navHoverBackground: lighten(gold, 20%);
+@navActiveBackground: orange;
+
+// apply a natural box layout model to all elements
+// http://paulirish.com/2012/box-sizing-border-box-ftw/
+* {
+  .box-sizing(border-box);
+}
+
+/**
+ * Override some Bootstrap defaults
+ */
+
+body {
+  background-image: url('../images/noise-bg.png');
+  line-height: 1.5;
+  @media (max-width: @phoneMax) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+h3 {
+  font-size: 28px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+code {
+  color: @gray;
+  padding: inherit;
+  border: none;
+  background-color: transparent;
+}
+
+code, pre {
+  font-size: @baseFontSize - 1;
+}
+
+dt code {
+  font-size: @baseFontSize;
+  font-weight: 400;
+}
+
+pre.prettyprint, code.prettyprint {
+  background-image: url('../images/dirty_old_shirt.png');
+  background-color: @grayDarker;
+}
+
+dl {
+  dt, dt code {
+    font-weight: bold;
+  }
+  .dl-horizontal;
+  @media (max-width: @phoneMax) {
+    dt {
+      float: none;
+      clear: none;
+      width: auto;
+      text-align: left;
+      margin: 8px 0 4px;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    dd {
+      margin-left: 0;
+    }
+  }
+}
+
+.affix, .affix-bottom {
+  top: 15px;
+  width: inherit;
+}
+
+.affix-bottom {
+  position: fixed;
+}
+
+// hide headings in tab panes
+.tab-pane h3 {
+  position: absolute;
+  left: -9999px;
+}
+
+.icon-rec:before {
+  content: "\26ab";
+  vertical-align: text-top;
+}
+
+/**
+ * Specific page sections
+ */
+
+// GitHub banner
+#forkme {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+}
+
+.documentation {
+  @media (max-width: @phoneMax) {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  h2, h3, h4 {
+    margin: 24px 0 12px;
+    line-height: 1.1;
+  }
+
+  /**
+   * Index aside with TOC
+   */
+  #doc-index {
+    @borderColor: @headingsColor;
+    min-height: 1px;
+    nav {
+      background-color: @white;
+      border: 2px solid @borderColor;
+      .border-radius(4px);
+      .rotate(1deg);
+      .backface-visibility(hidden);
+      text-transform: uppercase;
+      h2 {
+        background-color: @borderColor;
+        color: @grayLighter;
+        font-family: @logoFontFamily;
+        font-size: 30px;
+        margin-top: 0;
+        padding: 8px 12px;
+        @media (max-width: @tabletMax) {
+          font-size: 24px;
+        }
+      }
+      .nav-list {
+        text-transform: uppercase;
+        padding: 0;
+        margin: 15px;
+        li {
+          border-bottom: 1px solid @tableBorder;
+        }
+      }
+    }
+  }
+
+  /**
+   * Main documentation content
+   */
+
+  #doc-content {
+    background-color: rgba(255, 255, 255, 0.75);
+
+    > * {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    h2 {
+      border-bottom: 1px solid @headingsColor;
+      font-size: 28px;
+      text-transform: uppercase;
+      margin: 48px 0 24px;
+      text-indent: 20px;
+      .fontface & {
+        // slight tweak due to rendering of Domine
+        padding-top: 0.125em;
+      }
+      &:first-child {
+        margin-top: 0;
+      }
+      @media (min-width: 500px) and (max-width: @phoneMax) {
+        font-size: 36px;
+      }
+      @media (min-width: @tabletMin) {
+        background-image: url("../images/stripes-bg.png");
+        background-position: top right;
+        background-repeat: repeat-y;
+        font-size: 48px;
+      }
+    }
+
+    .nav {
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    ul, ol {
+      list-style-position: inside;
+    }
+
+  }
+}
+
+header {
+  background-color: darken(antiquewhite, 5%);
+  background-image: url(../images/stripes-bg.png);
+  background-position: center right;
+  background-repeat: repeat-y;
+  .background-size(inherit);
+  .box-shadow(0 1px 4px rgba(0,0,0,.065));
+  margin-bottom: 30px;
+  padding: 10px 20px;
+
+  @media (min-width: @tabletMin) {
+    background-image: url(../images/betamax.png);
+    background-repeat: no-repeat;
+    .background-size(contain);
+    margin-bottom: 0; // social bar appears below
+    padding: 30px 0;
+  }
+
+  h1 {
+    line-height: 1;
+    font-size: 46px;
+    text-transform: uppercase;
+    @media (min-width: 500px) and (max-width: @tabletMax) {
+      font-size: 72px;
+    }
+    @media (min-width: @desktopMin) {
+      font-size: 110px;
+    }
+  }
+  h3 {
+    font-size: 36px;
+    @media (min-width: @tabletMin) and (max-width: @tabletMax) {
+      font-size: 28px;
+    }
+  }
+
+  p {
+    @media (min-width: @desktopMin) {
+      font-size: 22px;
+    }
+  }
+}
+
+.social-bar {
+  text-align: center;
+  background-color: @headingsColor;
+  padding: 15px 0;
+  margin-bottom: 30px;
+  @media (max-width: @phoneMax) {
+    display: none;
+  }
+  .social-buttons {
+    margin-left: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    li {
+      display: inline-block;
+      .ie7-inline-block;
+      padding: 5px 8px;
+      line-height: 1;
+    }
+  }
+}
+
+footer {
+  margin-top: 24px;
+  padding-top: 12px;
+  font-size: 20px;
+
+  @media (max-width: @phoneMax) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  a {
+    color: inherit;
+    font-size: 24px;
+    margin-left: 6px;
+    .transition(all .2s linear);
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+// FOUC prevention
+body {
+	opacity: 0;
+	.transition(opacity 0.2s ease-out);
+}
+
+.no-js body, body.ready {
+	opacity: 1;
+}
