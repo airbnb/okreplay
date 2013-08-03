@@ -22,14 +22,42 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
 
 		where:
 		type   | uri
-		'html' | 'http://grails.org/'
-		'json' | 'http://api.twitter.com/1/statuses/public_timeline.json?count=3&include_entities=true'
-		'xml'  | 'http://feeds.feedburner.com/wondermark'
-		'png'  | 'http://media.xircles.codehaus.org/_projects/groovy/_logos/small.png'
-		'css'  | 'http://d297h9he240fqh.cloudfront.net/cache-1633a825c/assets/views_one.css'
+		'txt'  | 'http://httpbin.org/robots.txt'
+		'html' | 'http://httpbin.org/html'
+		'json' | 'http://httpbin.org/get'
+//		'xml'  | 'http://blog.freeside.co/rss'
+//		'png'  | 'https://si0.twimg.com/profile_images/1665962331/220px-Betamax_Logo_normal.png'
+		'css'  | 'http://freeside.co/betamax/stylesheets/betamax.css'
+	}
+
+	@Betamax(tape = 'smoke spec')
+	void 'gzipped response data'() {
+		when:
+		HttpResponseDecorator response = http.get(uri: uri)
+
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
+
+		where:
+		uri = 'http://httpbin.org/gzip'
+	}
+
+	@Betamax(tape = 'smoke spec')
+	void 'redirects are followed'() {
+		when:
+		HttpResponseDecorator response = http.get(uri: uri)
+
+		then:
+		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
+
+		where:
+		uri = 'http://httpbin.org/redirect/1'
 	}
 
 	@Betamax(tape = 'smoke spec')
@@ -42,9 +70,10 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
 
 		where:
-		uri = 'https://github.com/robfletcher/betamax/'
+		uri = 'https://httpbin.org/get'
 	}
 
 	@Issue('https://github.com/robfletcher/betamax/issues/52')
@@ -55,21 +84,21 @@ class SmokeSpec extends Specification {
 
 		then:
 		response.status == HTTP_OK
+		response.getFirstHeader(VIA) == 'Betamax'
 		response.data.bytes.length == 2529
 	}
 
 	@Issue(['https://github.com/robfletcher/betamax/issues/61', 'http://jira.codehaus.org/browse/JETTY-1533'])
-	@Ignore('Jetty issue is fixed but not yet in a release once it is it will solve this problem')
 	@Betamax(tape = 'smoke spec')
 	void 'can cope with URLs that do not end in a slash'() {
-		given:
-		def uri = 'http://freeside.co'
-
 		when:
 		HttpResponseDecorator response = http.get(uri: uri)
 
 		then:
 		response.status == HTTP_OK
 		response.getFirstHeader(VIA) == 'Betamax'
+
+		where:
+		uri = 'http://httpbin.org'
 	}
 }
