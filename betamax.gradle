@@ -24,7 +24,7 @@ allprojects {
 			httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.2.2"),
 			jetty: dependencies.create("org.eclipse.jetty:jetty-server:7.3.1.v20110307"),
 			junit: dependencies.create("junit:junit:4.10"),
-			netty: dependencies.create("io.netty:netty-all:4.0.4.Final"), // TODO: not sure we need netty-all
+			netty: dependencies.create("io.netty:netty-all:4.0.6.Final"), // TODO: not sure we need netty-all
 			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-1.8", {
 				exclude module: "groovy-all"
 				exclude module: "junit-dep"
