@@ -39,15 +39,18 @@ public class BetamaxChannelHandler extends ChannelInboundHandlerAdapter {
 	void channelRead(ChannelHandlerContext context, Object message) {
 		FullHttpRequest request = (FullHttpRequest) message
 		def betamaxRequest = new NettyRequestAdapter(request)
-		try {
-			def betamaxResponse = handlerChain.handle(betamaxRequest)
-			sendSuccess(context, betamaxResponse)
-		} catch (HandlerException e) {
-			log.log SEVERE, 'exception in proxy processing', e
-			sendError(context, HttpResponseStatus.valueOf(e.httpStatus), e.message)
-		} catch (Exception e) {
-			log.log SEVERE, 'error recording HTTP exchange', e
-			sendError(context, INTERNAL_SERVER_ERROR, e.message)
+		def betamaxResponse = handlerChain.handle(betamaxRequest)
+		sendSuccess(context, betamaxResponse)
+	}
+
+	@Override
+	void exceptionCaught(ChannelHandlerContext context, Throwable cause) throws Exception {
+		if (cause instanceof HandlerException) {
+			log.log SEVERE, "${cause.getClass().simpleName} in proxy processing", cause.message
+			sendError context, new HttpResponseStatus(cause.httpStatus, cause.message), cause.message
+		} else {
+			log.log SEVERE, "error recording HTTP exchange", cause
+			sendError context, INTERNAL_SERVER_ERROR, cause.message
 		}
 	}
 

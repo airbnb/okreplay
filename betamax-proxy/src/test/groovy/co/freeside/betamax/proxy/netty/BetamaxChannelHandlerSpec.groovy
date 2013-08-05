@@ -66,29 +66,24 @@ class BetamaxChannelHandlerSpec extends Specification {
 	}
 
 	void 'responds with the specified error status if the handler chain throws ProxyException'() {
-		given:
-		def handler = Mock(HttpHandler)
-		handler.handle(_) >> { throw [getHttpStatus: {-> errorStatus}] as HandlerException }
-		proxy << handler
-
 		when:
-		proxy.channelRead(context, request)
+		proxy.exceptionCaught context, [
+				getHttpStatus: {-> errorStatus},
+				getMessage: {-> errorMessage}
+		] as HandlerException
 
 		then:
 		response.status.code() == errorStatus
+		response.status.reasonPhrase() == errorMessage
 
 		where:
 		errorStatus = 419
+		errorMessage = "the error message"
 	}
 
 	void 'responds with HTTP 500 if the handler chain throws any other exception'() {
-		given:
-		def handler = Mock(HttpHandler)
-		handler.handle(_) >> { throw new IllegalStateException() }
-		proxy << handler
-
 		when:
-		proxy.channelRead(context, request)
+		proxy.exceptionCaught context, new IllegalStateException()
 
 		then:
 		response.status == INTERNAL_SERVER_ERROR
