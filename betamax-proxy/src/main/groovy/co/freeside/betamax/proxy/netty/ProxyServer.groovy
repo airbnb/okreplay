@@ -33,6 +33,7 @@ class ProxyServer implements HttpInterceptor {
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
 	private boolean running = false
+	private InetSocketAddress address
 
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
@@ -52,7 +53,7 @@ class ProxyServer implements HttpInterceptor {
 	void start() {
 //		def connectHandler = new CustomConnectHandler(handler, port + 1)
 		if (isRunning()) throw new IllegalStateException("Betamax proxy server is already running")
-		proxyServer.run()
+		address = proxyServer.run()
 		running = true
 
 		overrideProxySettings()
@@ -71,12 +72,12 @@ class ProxyServer implements HttpInterceptor {
 
 	@Override
 	String getHost() {
-		recorder.proxyHost // TODO: this should come from the Netty server instance
+		address.hostName
 	}
 
 	@Override
 	int getPort() {
-		recorder.proxyPort
+		address.port
 	}
 
 	private HttpClient newHttpClient() {
