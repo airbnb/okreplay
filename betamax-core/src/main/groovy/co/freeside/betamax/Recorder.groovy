@@ -26,6 +26,7 @@ import org.junit.runners.model.Statement
 import static TapeMode.READ_WRITE
 import static co.freeside.betamax.MatchRule.*
 import static java.util.Collections.EMPTY_MAP
+import static java.util.logging.Level.SEVERE
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
  * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
@@ -148,6 +149,8 @@ class Recorder implements TestRule {
 		try {
 			start(tapeName, arguments)
 			closure()
+		} catch (Exception e) {
+			log.log SEVERE, "Caught exception starting Betamax", e
 		} finally {
 			stop()
 		}
