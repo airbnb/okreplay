@@ -13,3 +13,5 @@ build/
 /.gradletasknamecache
 /src/docs/_site/
 .DS_Store
+
+/.java-version
