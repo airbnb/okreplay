@@ -10,9 +10,23 @@ import static co.freeside.betamax.MatchRule.*
 import static co.freeside.betamax.TapeMode.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.*
+import static java.util.concurrent.TimeUnit.SECONDS
 
 @Unroll
 @Stepwise
+@IgnoreIf({
+	def url = "http://httpbin.org/".toURL()
+	try {
+		HttpURLConnection connection = url.openConnection()
+		connection.requestMethod = "HEAD"
+		connection.connectTimeout = SECONDS.toMillis(2)
+		connection.connect()
+		return connection.responseCode >= 400
+	} catch (IOException e) {
+		System.err.println "Skipping spec as $url is not available"
+		return true
+	}
+})
 class BasicAuthSpec extends Specification {
 
 	@Shared endpoint = 'http://httpbin.org/basic-auth/user/passwd'.toURL()
