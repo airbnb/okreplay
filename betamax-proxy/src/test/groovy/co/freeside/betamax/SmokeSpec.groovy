@@ -60,6 +60,7 @@ class SmokeSpec extends Specification {
 		uri = 'http://httpbin.org/redirect/1'
 	}
 
+	@Ignore("until HTTPS support implemented")
 	@Betamax(tape = 'smoke spec')
 	void 'https proxying'() {
 		setup:
