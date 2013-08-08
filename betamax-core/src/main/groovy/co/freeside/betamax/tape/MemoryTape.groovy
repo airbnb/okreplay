@@ -188,10 +188,4 @@ class MemoryTape implements Tape {
 
 }
 
-class RecordedInteraction {
-	Date recorded
-	RecordedRequest request
-	RecordedResponse response
-}
-
 
