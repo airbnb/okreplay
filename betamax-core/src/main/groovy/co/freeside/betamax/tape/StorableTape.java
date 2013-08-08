@@ -1,6 +1,8 @@
 /*
  * Copyright 2011 Rob Fletcher
  *
+ * Converted from Groovy to Java by Sean Freitag
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,20 +16,21 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package co.freeside.betamax.tape;
+
+import java.io.Writer;
+
 /**
  * A `Tape` that can be read from an written to a backing store.
  */
-interface StorableTape extends Tape {
+public interface StorableTape extends Tape {
+    /**
+     * Writes the current state of the tape to `writer`.
+     */
+    public void writeTo(Writer writer);
 
-	/**
-	 * Writes the current state of the tape to `writer`.
-	 */
-	void writeTo(Writer writer)
-
-	/**
-	 * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
-	 */
-	boolean isDirty()
-
+    /**
+     * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
+     */
+    public boolean isDirty();
 }
