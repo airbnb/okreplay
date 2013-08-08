@@ -9,8 +9,22 @@ import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.util.FileUtils.newTempDir
+import static java.util.concurrent.TimeUnit.SECONDS
 
 @Issue('https://github.com/robfletcher/betamax/issues/50')
+@IgnoreIf({
+	def url = "http://httpbin.org/".toURL()
+	try {
+		HttpURLConnection connection = url.openConnection()
+		connection.requestMethod = "HEAD"
+		connection.connectTimeout = SECONDS.toMillis(2)
+		connection.connect()
+		return connection.responseCode >= 400
+	} catch (IOException e) {
+		System.err.println "Skipping spec as $url is not available"
+		return true
+	}
+})
 class PostBodySpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
