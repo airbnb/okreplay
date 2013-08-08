@@ -1,6 +1,8 @@
 /*
  * Copyright 2011 Rob Fletcher
  *
+ * Converted from Groovy to Java by Sean Freitag
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,59 +16,60 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package co.freeside.betamax.tape;
 
-import co.freeside.betamax.TapeMode
-import co.freeside.betamax.handler.HandlerException
-import co.freeside.betamax.message.*
+import co.freeside.betamax.TapeMode;
+import co.freeside.betamax.handler.HandlerException;
+import co.freeside.betamax.message.*;
+
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
-interface Tape {
+public interface Tape {
 
 	/**
 	 * @return The name of the tape.
 	 */
-	String getName()
+	String getName();
 
 	/**
 	 * @param mode the new record mode of the tape.
 	 */
-	void setMode(TapeMode mode)
+	void setMode(TapeMode mode);
 
 	/**
 	 * @return `true` if the tape is readable, `false` otherwise.
 	 */
-	boolean isReadable()
+	boolean isReadable();
 
 	/**
 	 * @return `true` if the tape is writable, `false` otherwise.
 	 */
-	boolean isWritable()
+	boolean isWritable();
 
 	/**
 	 * @return `true` if access is sequential, `false` otherwise.
 	 */
-    boolean isSequential()
+    boolean isSequential();
 
 	/**
 	 * @return the number of recorded HTTP interactions currently stored on the tape.
 	 */
-	int size()
+	int size();
 
 	/**
 	 * Attempts to find a recorded interaction on the tape that matches the supplied request.
 	 * @param request the HTTP request to match.
 	 * @return `true` if a matching recorded interaction was found, `false` otherwise.
 	 */
-	boolean seek(Request request)
+	boolean seek(Request request);
 
 	/**
 	 * Retrieves a previously recorded response that matches the request.
 	 * @param request the HTTP request to match.
 	 * @throws IllegalStateException if no matching recorded interaction exists.
 	 */
-	Response play(Request request) throws HandlerException
+	Response play(Request request) throws HandlerException;
 
 	/**
 	 * Records a new interaction to the tape. If `request` matches an existing interaction this method will overwrite
@@ -75,5 +78,5 @@ interface Tape {
 	 * @param response the response to record.
 	 * @throws UnsupportedOperationException if this `Tape` implementation is not writable.
 	 */
-	void record(Request request, Response response)
+	void record(Request request, Response response);
 }
