@@ -1,6 +1,8 @@
 /*
  * Copyright 2011 Rob Fletcher
  *
+ * Converted from Groovy to Java by Sean Freitag
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,24 +16,26 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package co.freeside.betamax.tape;
+
+import java.io.File;
+
 /**
  * The interface for factories that load tapes from file storage.
  */
-interface TapeLoader<T extends StorableTape> {
+public interface TapeLoader<T extends StorableTape> {
+    /**
+     * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
+     *
+     * @param name the name of the tape.
+     * @return a tape loaded from a file or a new blank tape.
+     */
+    public T loadTape(String name);
 
-	/**
-	 * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
-	 * @param name the name of the tape.
-	 * @return a tape loaded from a file or a new blank tape.
-	 */
-	T loadTape(String name)
+    public void writeTape(StorableTape tape);
 
-	void writeTape(StorableTape tape)
-
-	/**
-	 * @return an appropriate file for storing a tape with the supplied name.
-	 */
-	File fileFor(String tapeName)
-
+    /**
+     * @return an appropriate file for storing a tape with the supplied name.
+     */
+    public File fileFor(String tapeName);
 }
