@@ -35,7 +35,12 @@ public abstract class ChainedHttpHandler implements HttpHandler {
 
     public final HttpHandler leftShift(HttpHandler next) {
         setNext(next);
-        return this.next;
+        return next;
+    }
+
+    public final ChainedHttpHandler leftShift(ChainedHttpHandler next) {
+        setNext(next);
+        return next;
     }
 
     private HttpHandler next;
