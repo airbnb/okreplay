@@ -1,6 +1,8 @@
 /*
  * Copyright 2011 Rob Fletcher
  *
+ * Converted from Groovy to Java by Sean Freitag
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,20 +16,22 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.encoding
+package co.freeside.betamax.encoding;
 
-import java.util.zip.*
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
 
-class DeflateEncoder extends AbstractEncoder {
+public class DeflateEncoder extends AbstractEncoder {
+    @Override
+    protected InputStream getDecodingInputStream(InputStream input) {
+        return new InflaterInputStream(input);
+    }
 
-	@Override
-	protected InputStream getDecodingInputStream(InputStream input) {
-		new InflaterInputStream(input)
-	}
-
-	@Override
-	protected OutputStream getEncodingOutputStream(OutputStream output) {
-		new DeflaterOutputStream(output)
-	}
+    @Override
+    protected OutputStream getEncodingOutputStream(OutputStream output) {
+        return new DeflaterOutputStream(output);
+    }
 
 }
