@@ -1,5 +1,4 @@
 apply plugin: "groovy"
-apply plugin: "codenarc"
 
 repositories {
 	mavenCentral()
@@ -9,11 +8,6 @@ dependencies {
 	compile commonDependencies.groovy
 	compile commonDependencies.guava
 	testCompile commonDependencies.spock
-}
-
-codenarc {
-	toolVersion = "0.17"
-	ignoreFailures = true
 }
 
 test {
