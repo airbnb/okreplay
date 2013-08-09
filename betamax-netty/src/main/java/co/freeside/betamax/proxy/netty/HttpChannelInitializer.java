@@ -1,12 +1,9 @@
 package co.freeside.betamax.proxy.netty;
 
-import javax.net.ssl.*;
-import co.freeside.betamax.proxy.netty.ssl.*;
 import io.netty.channel.*;
 import io.netty.channel.nio.*;
 import io.netty.channel.socket.*;
 import io.netty.handler.codec.http.*;
-import io.netty.handler.ssl.*;
 import io.netty.handler.stream.*;
 
 /**
