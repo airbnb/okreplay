@@ -19,7 +19,6 @@ package co.freeside.betamax
 import java.util.logging.Logger
 import co.freeside.betamax.tape.*
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import co.freeside.betamax.util.PropertiesCategory
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -174,13 +173,26 @@ class Recorder implements TestRule {
 		}
 	}
 
+    static boolean getBoolean(Properties properties, String key, boolean defaultValue = false) {
+        def value = properties.getProperty(key)
+        value ? value.toBoolean() : defaultValue
+    }
+
+    static int getInteger(Properties properties, String key, int defaultValue = 0) {
+        def value = properties.getProperty(key)
+        value ? value.toInteger() : defaultValue
+    }
+
+    static public <T> T getEnum(Properties properties, String key, T defaultValue) {
+        def value = properties.getProperty(key)
+        value ? Enum.valueOf(defaultValue.getClass(), value) : defaultValue
+    }
+
 	protected void configureFrom(Properties properties) {
-		use(PropertiesCategory) {
-			tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
-			defaultMode = properties.getEnum('betamax.defaultMode', READ_WRITE)
-			ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
-			ignoreLocalhost = properties.getBoolean('betamax.ignoreLocalhost')
-		}
+        tapeRoot = new File(properties.getProperty('betamax.tapeRoot', DEFAULT_TAPE_ROOT))
+        defaultMode = getEnum(properties, 'betamax.defaultMode', READ_WRITE)
+        ignoreHosts = properties.getProperty('betamax.ignoreHosts')?.tokenize(',') ?: []
+        ignoreLocalhost = getBoolean(properties, 'betamax.ignoreLocalhost')
 	}
 
 	protected void configureFrom(ConfigObject config) {
