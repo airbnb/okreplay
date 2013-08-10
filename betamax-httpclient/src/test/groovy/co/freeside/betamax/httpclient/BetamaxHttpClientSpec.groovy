@@ -27,7 +27,7 @@ class BetamaxHttpClientSpec extends Specification {
 	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(recorder)
 
-	@Betamax(tape = 'betamax http client')
+	@Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
 	void 'can use Betamax without starting the proxy'() {
 		given:
 		endpoint.start(HelloHandler)
@@ -47,7 +47,7 @@ class BetamaxHttpClientSpec extends Specification {
 		response.getFirstHeader('X-Betamax').value == 'REC'
 	}
 
-	@Betamax(tape = 'betamax http client')
+	@Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
 	void 'can play back from tape'() {
 		given:
 		def handler = Mock(Handler)
@@ -71,7 +71,7 @@ class BetamaxHttpClientSpec extends Specification {
 		0 * handler.handle(*_)
 	}
 
-	@Betamax(tape = 'betamax http client')
+	@Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
 	void 'can send a request with a body'() {
 		given:
 		endpoint.start(EchoHandler)
@@ -153,7 +153,7 @@ class BetamaxHttpClientSpec extends Specification {
 		!response.getFirstHeader('X-Betamax')
 	}
 
-	@Betamax(tape = 'betamax http client')
+	@Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
 	void 'can use with HttpBuilder'() {
 		given:
 		endpoint.start(HelloHandler)

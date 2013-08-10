@@ -188,18 +188,4 @@ class RecorderConfigurationSpec extends Specification {
 		cleanup:
 		propertiesFile.delete()
 	}
-
-	@Issue('https://github.com/robfletcher/betamax/issues/56')
-	void 'default tape mode is set correctly on tape'() {
-		given:
-		def recorder = new ProxyRecorder(defaultMode: READ_ONLY)
-
-		when:
-		recorder.insertTape('foo', [mode: DEFAULT])
-
-		then:
-		recorder.tape.isReadable()
-		!recorder.tape.isWritable()
-	}
-
 }

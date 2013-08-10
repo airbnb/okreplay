@@ -24,7 +24,7 @@ class ProxyTimeoutSpec extends Specification {
 		http.client.httpRequestRetryHandler = new DefaultHttpRequestRetryHandler(0, false)
 	}
 
-	@Betamax(tape = 'proxy timeout spec')
+	@Betamax(tape = 'proxy timeout spec', mode = TapeMode.READ_WRITE)
 	void 'proxy responds with 504 if target server takes too long to respond'() {
 		given:
 		endpoint.start(SlowHandler)

@@ -24,7 +24,7 @@ class WsLiteSpec extends Specification {
 		httpsEndpoint.start(HelloHandler)
 	}
 
-	@Betamax(tape = 'wslite spec')
+	@Betamax(tape = 'wslite spec', mode = TapeMode.READ_WRITE)
 	void 'can record a connection made with WsLite'() {
 		given: 'a properly configured wslite instance'
 		def http = new RESTClient(endpoint.url)

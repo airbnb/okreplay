@@ -24,7 +24,7 @@ class HttpURLConnectionSpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http url connection spec')
+	@Betamax(tape = 'http url connection spec', mode = TapeMode.READ_WRITE)
 	void 'proxy intercepts URL connections'() {
 		given:
 		HttpURLConnection connection = new URL(endpoint.url).openConnection()
