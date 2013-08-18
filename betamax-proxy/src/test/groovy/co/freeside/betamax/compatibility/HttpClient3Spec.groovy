@@ -22,7 +22,7 @@ class HttpClient3Spec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http client 3 spec')
+	@Betamax(tape = 'http client 3 spec', mode = TapeMode.READ_WRITE)
 	void 'proxy intercepts HTTPClient 3.x connections'() {
 		given:
 		def client = new HttpClient()

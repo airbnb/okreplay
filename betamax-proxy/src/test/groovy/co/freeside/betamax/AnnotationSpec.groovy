@@ -39,7 +39,7 @@ class AnnotationSpec extends Specification {
 		recorder.tape == null
 	}
 
-	@Betamax(tape = 'annotation_spec')
+	@Betamax(tape = 'annotation_spec', mode = TapeMode.READ_WRITE)
 	void 'annotated feature can record'() {
 		given:
 		endpoint.start(EchoHandler)

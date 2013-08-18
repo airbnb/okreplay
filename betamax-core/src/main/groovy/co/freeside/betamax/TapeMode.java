@@ -21,8 +21,7 @@ public enum TapeMode {
 	READ_ONLY(true, false, false),
 	READ_SEQUENTIAL(true, false, true),
 	WRITE_ONLY(false, true, false),
-	WRITE_SEQUENTIAL(false, true, true),
-	DEFAULT(false, false, false);
+	WRITE_SEQUENTIAL(false, true, true);
 
     private final boolean readable;
     private final boolean writable;

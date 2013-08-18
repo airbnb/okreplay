@@ -31,7 +31,7 @@ class PreExistingProxySpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'existing proxy spec')
+	@Betamax(tape = 'existing proxy spec', mode = TapeMode.READ_WRITE)
 	void 'pre-existing proxy settings are used for the outbound request from the Betamax proxy'() {
 		given:
 		HttpURLConnection connection = new URL('http://freeside.co/betamax').openConnection()

@@ -25,7 +25,7 @@ class HttpBuilderSpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http builder spec')
+	@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
 	void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
 		given:
 		def http = new RESTClient(endpoint.url)
@@ -40,7 +40,7 @@ class HttpBuilderSpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http builder spec')
+	@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
 	void 'proxy intercepts HTTPClient connections when explicitly told to'() {
 		given:
 		def http = new RESTClient(endpoint.url)
@@ -55,7 +55,7 @@ class HttpBuilderSpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http builder spec')
+	@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
 	void 'proxy intercepts HttpURLClient connections'() {
 		given:
 		def http = new HttpURLClient(url: endpoint.url)
@@ -69,7 +69,7 @@ class HttpBuilderSpec extends Specification {
 	}
 
 	@Timeout(10)
-	@Betamax(tape = 'http builder spec')
+	@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
 	void 'proxy automatically intercepts connections when the underlying client is a SystemDefaultHttpClient'() {
 		given:
 		def http = new BetamaxRESTClient(endpoint.url)

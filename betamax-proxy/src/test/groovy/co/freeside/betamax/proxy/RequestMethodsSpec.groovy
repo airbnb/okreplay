@@ -22,7 +22,7 @@ class RequestMethodsSpec extends Specification {
     }
 
     @Timeout(10)
-	@Betamax(tape = 'proxy network comms spec')
+	@Betamax(tape = 'proxy network comms spec', mode = TapeMode.READ_WRITE)
     void 'proxy handles #method requests'() {
         given:
         def http = new BetamaxRESTClient(endpoint.url)

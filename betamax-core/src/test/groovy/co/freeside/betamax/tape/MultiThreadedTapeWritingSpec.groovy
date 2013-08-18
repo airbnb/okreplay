@@ -24,7 +24,7 @@ class MultiThreadedTapeWritingSpec extends Specification {
 		endpoint.start(HelloHandler)
 	}
 
-	@Betamax(tape = 'multi_threaded_tape_writing_spec')
+	@Betamax(tape = 'multi_threaded_tape_writing_spec', mode = TapeMode.READ_WRITE)
 	void 'the tape can cope with concurrent reading and writing'() {
 		when: 'requests are fired concurrently'
 		def finished = new CountDownLatch(threads)
