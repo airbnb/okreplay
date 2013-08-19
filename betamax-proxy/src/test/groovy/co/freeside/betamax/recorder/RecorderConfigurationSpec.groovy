@@ -109,44 +109,6 @@ class RecorderConfigurationSpec extends Specification {
 		propertiesFile.delete()
 	}
 
-	void 'recorder picks up configuration from groovy config script'() {
-		given:
-		def configFile = new File(tmpdir, 'BetamaxConfig.groovy')
-		configFile.withWriter { writer ->
-			writer << '''\
-				betamax {
-					tapeRoot = new File(System.properties.'java.io.tmpdir', 'tapes')
-					proxyPort = 1337
-					defaultMode = co.freeside.betamax.TapeMode.READ_ONLY
-					proxyTimeout = 30000
-					ignoreHosts = ['localhost', '127.0.0.1']
-					ignoreLocalhost = true
-					sslSupport = true
-					sslSocketFactory = new org.apache.http.conn.ssl.SSLSocketFactory(null)
-				}
-			'''
-		}
-
-		and:
-		Recorder.classLoader.addURL(new File(tmpdir).toURL())
-
-		and:
-		def recorder = new ProxyRecorder()
-
-		expect:
-		recorder.tapeRoot == new File(tmpdir, 'tapes')
-		recorder.proxyPort == 1337
-		recorder.defaultMode == READ_ONLY
-		recorder.proxyTimeout == 30000
-		recorder.ignoreHosts == ['localhost', '127.0.0.1']
-		recorder.ignoreLocalhost
-		recorder.sslSupport
-		recorder.sslSocketFactory instanceof SSLSocketFactory
-
-		cleanup:
-		configFile.delete()
-	}
-
 	void 'constructor arguments take precendence over a properties file'() {
 		given:
 		def propertiesFile = new File(tmpdir, 'betamax.properties')
