@@ -66,7 +66,7 @@ public enum MatchRule implements Comparator<Request> {
             stringObjectTreeMap.putAll(a.getHeaders());
 
             SortedMapDifference<String, Object> difference = Maps.difference(stringObjectTreeMap, b.getHeaders());
-            
+
             return difference.areEqual() ? 0 : -1;
         }
 
