@@ -122,7 +122,7 @@ public class Recorder implements TestRule {
                 public void evaluate() throws Throwable {
                     LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>(2);
                     map.put("mode", annotation.mode());
-                    map.put("match", annotation.match());
+                    map.put("match", new ArrayList<Comparator<Request>>(Arrays.asList(annotation.match())));
                     try {
                         start(annotation.tape(), map);
                         statement.evaluate();
