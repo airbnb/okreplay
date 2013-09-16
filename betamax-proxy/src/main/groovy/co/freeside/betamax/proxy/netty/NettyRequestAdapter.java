@@ -23,10 +23,7 @@ import co.freeside.betamax.message.*;
 import com.google.common.base.*;
 import io.netty.handler.codec.http.*;
 
-public class NettyRequestAdapter extends AbstractMessage implements Request {
-
-	private final FullHttpRequest delegate;
-	private byte[] body;
+public class NettyRequestAdapter extends NettyMessageAdapter<FullHttpRequest> implements Request {
 
     public static Request wrap(HttpObject message) {
         if (message instanceof FullHttpRequest) {
@@ -37,7 +34,7 @@ public class NettyRequestAdapter extends AbstractMessage implements Request {
     }
 
 	NettyRequestAdapter(FullHttpRequest delegate) {
-		this.delegate = delegate;
+		super(delegate);
 	}
 
 	@Override
@@ -54,42 +51,7 @@ public class NettyRequestAdapter extends AbstractMessage implements Request {
 		}
 	}
 
-	@Override
-	public Map<String, String> getHeaders() {
-		Map<String, String> headers = new HashMap<String, String>();
-		for (String name : delegate.headers().names()) {
-			headers.put(name, getHeader(name));
-		}
-		return Collections.unmodifiableMap(headers);
-	}
-
-	@Override
-	public String getHeader(String name) {
-		return Joiner.on(", ").join(delegate.headers().getAll(name));
-	}
-
-	@Override
-	public void addHeader(String name, String value) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean hasBody() {
-		return delegate.content() != null && delegate.content().isReadable();
-	}
-
-	@Override
-	public InputStream getBodyAsBinary() throws IOException {
-		// TODO: can this be done without copying the entire byte array?
-		if (body == null) {
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			delegate.content().getBytes(0, stream, delegate.content().readableBytes());
-			body = stream.toByteArray();
-		}
-		return new ByteArrayInputStream(body);
-	}
-
-	public final FullHttpRequest getOriginalRequest() {
+    public final FullHttpRequest getOriginalRequest() {
 		return delegate;
 	}
 

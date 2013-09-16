@@ -19,6 +19,7 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.DefaultHandlerChain
 import co.freeside.betamax.util.*
+import io.netty.handler.codec.http.HttpRequest
 import org.apache.http.client.HttpClient
 import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
@@ -40,13 +41,18 @@ class ProxyServer implements HttpInterceptor {
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
 
-		def handlerChain = new DefaultHandlerChain(recorder, newHttpClient())
+//		def handlerChain = new DefaultHandlerChain(recorder, newHttpClient())
 		address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
 		println "created address, $address"
 		proxyServerBootstrap = DefaultHttpProxyServer
 				.bootstrap()
 				.withAddress(address)
-				.withFiltersSource(new BetamaxFiltersSource())
+				.withFiltersSource(new HttpFiltersSourceAdapter() {
+			@Override
+			HttpFilters filterRequest(HttpRequest originalRequest) {
+				return new BetamaxFilters(originalRequest, recorder.tape)
+			}
+		})
 	}
 
 	@Override
