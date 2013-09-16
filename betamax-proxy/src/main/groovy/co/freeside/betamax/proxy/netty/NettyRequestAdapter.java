@@ -16,24 +16,21 @@
 
 package co.freeside.betamax.proxy.netty;
 
-import java.io.*;
 import java.net.*;
-import java.util.*;
 import co.freeside.betamax.message.*;
-import com.google.common.base.*;
 import io.netty.handler.codec.http.*;
 
-public class NettyRequestAdapter extends NettyMessageAdapter<FullHttpRequest> implements Request {
+public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implements Request {
 
     public static Request wrap(HttpObject message) {
-        if (message instanceof FullHttpRequest) {
-            return new NettyRequestAdapter((FullHttpRequest) message);
+        if (message instanceof HttpRequest) {
+            return new NettyRequestAdapter((HttpRequest) message);
         } else {
             throw new IllegalArgumentException(String.format("%s is not an instance of %s", message.getClass().getName(), FullHttpRequest.class.getName()));
         }
     }
 
-	NettyRequestAdapter(FullHttpRequest delegate) {
+	NettyRequestAdapter(HttpRequest delegate) {
 		super(delegate);
 	}
 
@@ -51,7 +48,7 @@ public class NettyRequestAdapter extends NettyMessageAdapter<FullHttpRequest> im
 		}
 	}
 
-    public final FullHttpRequest getOriginalRequest() {
+    public final HttpRequest getOriginalRequest() {
 		return delegate;
 	}
 

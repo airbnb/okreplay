@@ -17,16 +17,10 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.handler.DefaultHandlerChain
 import co.freeside.betamax.util.*
 import io.netty.handler.codec.http.HttpRequest
-import org.apache.http.client.HttpClient
-import org.apache.http.conn.scheme.Scheme
-import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.impl.conn.*
-import org.apache.http.params.HttpConnectionParams
 import org.littleshoot.proxy.*
-import org.littleshoot.proxy.impl.*
+import org.littleshoot.proxy.impl.DefaultHttpProxyServer
 
 class ProxyServer implements HttpInterceptor {
 
@@ -41,8 +35,8 @@ class ProxyServer implements HttpInterceptor {
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
 
-//		def handlerChain = new DefaultHandlerChain(recorder, newHttpClient())
-		address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
+		address = new InetSocketAddress(InetAddress.getLocalHost(), recorder.getProxyPort());
+//		address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
 		println "created address, $address"
 		proxyServerBootstrap = DefaultHttpProxyServer
 				.bootstrap()
@@ -87,21 +81,6 @@ class ProxyServer implements HttpInterceptor {
 	@Override
 	int getPort() {
 		address.port
-	}
-
-	private HttpClient newHttpClient() {
-		def connectionManager = new PoolingClientConnectionManager()
-		def httpClient = new DefaultHttpClient(connectionManager)
-		httpClient.routePlanner = new ProxySelectorRoutePlanner(
-				httpClient.connectionManager.schemeRegistry,
-				proxyOverrider.originalProxySelector
-		)
-		if (recorder.sslSupport) {
-			connectionManager.schemeRegistry.register new Scheme('https', recorder.sslSocketFactory, 443)
-		}
-		HttpConnectionParams.setConnectionTimeout(httpClient.params, recorder.proxyTimeout)
-		HttpConnectionParams.setSoTimeout(httpClient.params, recorder.proxyTimeout)
-		httpClient
 	}
 
 	private void overrideProxySettings() {

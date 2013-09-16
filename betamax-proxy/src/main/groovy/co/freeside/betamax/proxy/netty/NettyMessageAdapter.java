@@ -6,13 +6,19 @@ import co.freeside.betamax.message.*;
 import com.google.common.base.*;
 import io.netty.handler.codec.http.*;
 
-public abstract class NettyMessageAdapter<T extends FullHttpMessage> extends AbstractMessage {
+public abstract class NettyMessageAdapter<T extends HttpMessage> extends AbstractMessage {
 
     protected final T delegate;
-    private byte[] body;
+    private final ByteArrayOutputStream body = new ByteArrayOutputStream();
 
     protected NettyMessageAdapter(T delegate) {
         this.delegate = delegate;
+    }
+
+    public void append(HttpObject chunk) throws IOException {
+        if (chunk instanceof HttpContent) {
+            body.write(((HttpContent) chunk).content().array()); // TODO: this only works for some impls
+        }
     }
 
     @Override
@@ -36,17 +42,12 @@ public abstract class NettyMessageAdapter<T extends FullHttpMessage> extends Abs
 
     @Override
     public boolean hasBody() {
-        return delegate.content() != null && delegate.content().isReadable();
+        return body.size() > 0;
     }
 
     @Override
     public InputStream getBodyAsBinary() throws IOException {
         // TODO: can this be done without copying the entire byte array?
-        if (body == null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            delegate.content().getBytes(0, stream, delegate.content().readableBytes());
-            body = stream.toByteArray();
-        }
-        return new ByteArrayInputStream(body);
+        return new ByteArrayInputStream(body.toByteArray());
     }
 }

@@ -2,10 +2,10 @@ package co.freeside.betamax.proxy.netty
 
 import io.netty.handler.codec.http.*
 
-class NettyResponseAdapterSpec extends NettyMessageAdapterSpec<FullHttpResponse, NettyResponseAdapter> {
+class NettyResponseAdapterSpec extends NettyMessageAdapterSpec<HttpResponse, NettyResponseAdapter> {
 
 	void setup() {
-		nettyMessage = Mock(FullHttpResponse)
+		nettyMessage = Mock(HttpResponse)
 		adapter = new NettyResponseAdapter(nettyMessage)
 	}
 

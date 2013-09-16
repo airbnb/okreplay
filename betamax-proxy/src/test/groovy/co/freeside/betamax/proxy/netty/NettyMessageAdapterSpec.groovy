@@ -7,7 +7,7 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.util.CharsetUtil.UTF_8
 
 @Unroll
-abstract class NettyMessageAdapterSpec<T extends FullHttpMessage, A extends NettyMessageAdapter<T>> extends Specification {
+abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMessageAdapter<T>> extends Specification {
 
 	@Subject A adapter
 	T nettyMessage
@@ -37,11 +37,13 @@ abstract class NettyMessageAdapterSpec<T extends FullHttpMessage, A extends Nett
 
 	void 'body is readable as text'() {
 		given:
-		def bodyBytes = bodyText.getBytes('ISO-8859-1')
-		nettyMessage.content() >> Unpooled.copiedBuffer(bodyBytes)
 		def headers = new DefaultHttpHeaders()
 		headers.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
 		nettyMessage.headers() >> headers
+
+		and:
+		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes('ISO-8859-1')))
+		adapter.append chunk
 
 		expect:
 		adapter.hasBody()
@@ -53,20 +55,26 @@ abstract class NettyMessageAdapterSpec<T extends FullHttpMessage, A extends Nett
 
 	void 'body is readable as binary'() {
 		given:
-		def body = 'value=\u00a31'.getBytes('ISO-8859-1')
-		nettyMessage.content() >> Unpooled.copiedBuffer(body)
 		def headers = new DefaultHttpHeaders()
 		headers.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
 		nettyMessage.headers() >> headers
 
+		and:
+		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(body))
+		adapter.append chunk
+
 		expect:
 		adapter.hasBody()
 		adapter.bodyAsBinary.bytes == body
+
+		where:
+		body = 'value=\u00a31'.getBytes('ISO-8859-1')
 	}
 
 	void "#description if the content buffer is #contentDescription"() {
 		given:
-		nettyMessage.content() >> content
+		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(content))
+		adapter.append chunk
 
 		expect:
 		adapter.hasBody() == consideredToHaveBody
@@ -75,7 +83,6 @@ abstract class NettyMessageAdapterSpec<T extends FullHttpMessage, A extends Nett
 		content                               | consideredToHaveBody
 		Unpooled.copiedBuffer("O HAI", UTF_8) | true
 		Unpooled.EMPTY_BUFFER                 | false
-		null                                  | false
 
 		description = consideredToHaveBody ? "has a body" : "does not have a body"
 		contentDescription = content ? "${content.readableBytes()} bytes long" : "null"
