@@ -77,6 +77,7 @@ class SmokeSpec extends Specification {
 		uri = 'https://httpbin.org/get'
 	}
 
+	@Ignore("site is no longer there")
 	@Issue('https://github.com/robfletcher/betamax/issues/52')
 	@Betamax(tape = 'ocsp')
 	void 'OCSP messages'() {

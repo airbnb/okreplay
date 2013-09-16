@@ -28,6 +28,14 @@ public class NettyRequestAdapter extends AbstractMessage implements Request {
 	private final FullHttpRequest delegate;
 	private byte[] body;
 
+    public static Request wrap(HttpObject message) {
+        if (message instanceof FullHttpRequest) {
+            return new NettyRequestAdapter((FullHttpRequest) message);
+        } else {
+            throw new IllegalArgumentException(String.format("%s is not an instance of %s", message.getClass().getName(), FullHttpRequest.class.getName()));
+        }
+    }
+
 	NettyRequestAdapter(FullHttpRequest delegate) {
 		this.delegate = delegate;
 	}

@@ -7,7 +7,7 @@ repositories {
 
 dependencies {
 	compile project(":betamax-core")
-	compile project(":betamax-netty")
+	compile "org.littleshoot:littleproxy:1.0.0-beta1"
 
 	testCompile project(":betamax-test-support")
 	testCompile("commons-httpclient:commons-httpclient:3.1") {

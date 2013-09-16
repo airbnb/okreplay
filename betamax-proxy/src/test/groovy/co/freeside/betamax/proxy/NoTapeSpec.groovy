@@ -2,7 +2,6 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.proxy.jetty.*
-import co.freeside.betamax.proxy.netty.ProxyServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*

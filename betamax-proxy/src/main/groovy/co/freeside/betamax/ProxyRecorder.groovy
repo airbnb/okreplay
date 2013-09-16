@@ -1,6 +1,6 @@
 package co.freeside.betamax
 
-import co.freeside.betamax.proxy.netty.ProxyServer
+import co.freeside.betamax.proxy.ProxyServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.PropertiesCategory
 import groovy.transform.InheritConstructors

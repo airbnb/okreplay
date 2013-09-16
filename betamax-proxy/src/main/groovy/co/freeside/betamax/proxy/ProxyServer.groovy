@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy.netty
+package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.DefaultHandlerChain
@@ -24,25 +24,29 @@ import org.apache.http.conn.scheme.Scheme
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.*
 import org.apache.http.params.HttpConnectionParams
+import org.littleshoot.proxy.*
+import org.littleshoot.proxy.impl.*
 
 class ProxyServer implements HttpInterceptor {
 
-	private final NettyBetamaxServer proxyServer;
-	private final BetamaxChannelHandler proxyHandler;
+	private final HttpProxyServerBootstrap proxyServerBootstrap;
 	private final ProxyRecorder recorder
 	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
 	private final SSLOverrider sslOverrider = new SSLOverrider()
+	private HttpProxyServer proxyServer;
 	private boolean running = false
-	private InetSocketAddress address
+	private final InetSocketAddress address
 
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
 
-		proxyHandler = new BetamaxChannelHandler()
-		proxyHandler << new DefaultHandlerChain(recorder, newHttpClient())
-
-		def channel = new HttpChannelInitializer(0, proxyHandler); // TODO: correct worker threads? After all nothing in Betamax is actually async so we should probably not tie up the main thread
-		proxyServer = new NettyBetamaxServer(recorder.proxyPort, channel)
+		def handlerChain = new DefaultHandlerChain(recorder, newHttpClient())
+		address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
+		println "created address, $address"
+		proxyServerBootstrap = DefaultHttpProxyServer
+				.bootstrap()
+				.withAddress(address)
+				.withFiltersSource(new BetamaxFiltersSource())
 	}
 
 	@Override
@@ -51,12 +55,11 @@ class ProxyServer implements HttpInterceptor {
 	}
 
 	void start() {
-//		def connectHandler = new CustomConnectHandler(handler, port + 1)
 		if (isRunning()) throw new IllegalStateException("Betamax proxy server is already running")
-		address = proxyServer.run()
+		proxyServer = proxyServerBootstrap.start()
 		running = true
 
-		overrideProxySettings address
+		overrideProxySettings()
 		overrideSSLSettings()
 	}
 
@@ -66,7 +69,7 @@ class ProxyServer implements HttpInterceptor {
 		restoreOriginalProxySettings()
 		restoreOriginalSSLSettings()
 
-		proxyServer.shutdown()
+		proxyServer.stop()
 		running = false
 	}
 
@@ -95,7 +98,7 @@ class ProxyServer implements HttpInterceptor {
 		httpClient
 	}
 
-	private void overrideProxySettings(InetSocketAddress address) {
+	private void overrideProxySettings() {
 		def nonProxyHosts = recorder.ignoreHosts as Set
 		if (recorder.ignoreLocalhost) {
 			nonProxyHosts.addAll(Network.localAddresses)
