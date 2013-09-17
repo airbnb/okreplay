@@ -34,6 +34,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 	private final Request request
 	private NettyResponseAdapter upstreamResponse
 	private final Tape tape
+
 	private static final Logger log = Logger.getLogger(BetamaxFilters.class.getName());
 
 	BetamaxFilters(HttpRequest originalRequest, Tape tape) {
@@ -44,12 +45,12 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	@Override
 	HttpResponse requestPre(HttpObject httpObject) {
-		println "requestPre ${httpObject.getClass().name}"
+		log.info "requestPre ${httpObject.getClass().simpleName}"
 
 		FullHttpResponse response = null
 
 		if (httpObject instanceof HttpRequest) {
-			log.info "checking tape..., $request.method, $request.uri on $tape.name ${tape.size()}"
+			log.info "intercepted request $httpObject.method $httpObject.uri"
 			if (tape.isReadable() && tape.seek(request)) {
 				log.info("Playing back from '" + tape.getName() + "'");
 				def recordedResponse = tape.play(request)
@@ -72,9 +73,10 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	@Override
 	HttpResponse requestPost(HttpObject httpObject) {
-		println "requestPost ${httpObject.getClass().name}"
+		log.info "requestPost ${httpObject.getClass().simpleName}"
 
 		if (httpObject instanceof HttpRequest) {
+			log.info "proceeding request $httpObject.method $httpObject.uri"
 			((HttpRequest) httpObject).headers().set(VIA, "Betamax")
 		}
 
@@ -83,9 +85,10 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	@Override
 	void responsePre(HttpObject httpObject) {
-		println "responsePre ${httpObject.getClass().name}"
+		log.info "responsePre ${httpObject.getClass().simpleName} $httpObject"
 
 		if (httpObject instanceof HttpResponse) {
+			log.info "intercepted response $httpObject.status"
 			upstreamResponse = NettyResponseAdapter.wrap(httpObject)
 
 			// TODO: prevent this from getting written to tape
@@ -108,8 +111,9 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	@Override
 	void responsePost(HttpObject httpObject) {
-		println "responsePost ${httpObject.getClass().name}"
+		log.info "responsePost ${httpObject.getClass().simpleName} $httpObject"
 		if (httpObject instanceof HttpResponse) {
+			log.info "proceeding response $httpObject.status"
 			def response = (HttpResponse) httpObject
 			response.headers().set(VIA, VIA_HEADER)
 		}
