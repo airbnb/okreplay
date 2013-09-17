@@ -62,8 +62,8 @@ class HttpsSpec extends Specification {
 
 	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
 	void 'proxy can intercept #scheme requests'() {
-		when: 'an HTTPS request is made'
-		def request = new HttpGet(httpEndpoint.url)
+		when: 'a request is made'
+		def request = new HttpGet(url)
 		def response = http.execute(request)
 
 		then: 'it is intercepted by the proxy'
