@@ -60,6 +60,7 @@ class HttpsSpec extends Specification {
 		scheme = uri.scheme
 	}
 
+	@Ignore("awaiting HTTPS support")
 	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
 	void 'proxy can intercept #scheme requests'() {
 		when: 'a request is made'
