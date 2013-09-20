@@ -46,7 +46,7 @@ class TapeModeSpec extends Specification {
 	void 'in #mode mode a new interaction recorded'() {
 		given: 'an empty write-only tape is inserted'
         new File(tapeRoot, 'blank_tape_' + mode + '.yaml').delete()
-		recorder.insertTape('blank tape ' + mode, [mode: mode])
+        recorder.insertTape('blank tape ' + mode, [mode: mode])
 		def tape = recorder.tape
 
 		when: 'a request is made'
