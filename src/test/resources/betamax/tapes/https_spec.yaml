@@ -1,0 +1,33 @@
+!tape
+interactions:
+- recorded: 2013-09-24T15:02:59.294Z
+  request:
+    method: GET
+    uri: https://192.168.0.7:5000/
+    headers:
+      Host: 192.168.0.7:5000
+      User-Agent: Apache-HttpClient/4.2.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Content-Type: text/plain
+      Date: Tue, 24 Sep 2013 15:02:44 GMT
+      Server: Jetty(7.3.1.v20110307)
+      Transfer-Encoding: chunked
+    body: Hello World!
+- recorded: 2013-09-24T18:35:19.492Z
+  request:
+    method: GET
+    uri: https://192.168.0.7:5001/
+    headers:
+      Host: 192.168.0.7:5001
+      User-Agent: Apache-HttpClient/4.2.2 (java 1.5)
+  response:
+    status: 200
+    headers:
+      Content-Type: text/plain
+      Date: Tue, 24 Sep 2013 18:35:19 GMT
+      Server: Jetty(7.3.1.v20110307)
+      Transfer-Encoding: chunked
+    body: Hello World!
+name: https spec
