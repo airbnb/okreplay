@@ -61,9 +61,6 @@ class SmokeSpec extends Specification {
 
 	@Betamax(tape = 'smoke spec')
 	void 'https proxying'() {
-//		setup:
-//		BetamaxHttpsSupport.configure(http.client)
-
 		when:
 		HttpsURLConnection connection = uri.toURL().openConnection()
 
@@ -78,9 +75,6 @@ class SmokeSpec extends Specification {
 
 	@Betamax(tape = 'smoke spec')
 	void 'can POST to https'() {
-//		setup:
-//		BetamaxHttpsSupport.configure(http.client)
-
 		when:
 		HttpsURLConnection connection = uri.toURL().openConnection()
 		connection.requestMethod = "POST"
