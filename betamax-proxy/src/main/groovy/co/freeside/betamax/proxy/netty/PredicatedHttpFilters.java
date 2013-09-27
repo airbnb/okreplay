@@ -6,6 +6,15 @@ import org.littleshoot.proxy.*;
 
 public class PredicatedHttpFilters extends HttpFiltersAdapter {
 
+	public static Predicate<HttpRequest> httpMethodPredicate(final HttpMethod method) {
+		return new Predicate<HttpRequest>() {
+			@Override
+			public boolean apply(HttpRequest input) {
+				return method.equals(input.getMethod());
+			}
+		};
+	}
+
 	private final HttpFilters delegate;
 	private final Predicate<HttpRequest> predicate;
 

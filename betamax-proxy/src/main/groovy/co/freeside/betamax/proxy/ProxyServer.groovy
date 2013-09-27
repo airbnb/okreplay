@@ -17,10 +17,16 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
+import co.freeside.betamax.proxy.netty.PredicatedHttpFilters
 import co.freeside.betamax.util.*
+import com.google.common.base.Predicate
 import io.netty.handler.codec.http.HttpRequest
 import org.littleshoot.proxy.*
+import org.littleshoot.proxy.extras.SelfSignedMitmManager
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer
+import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.httpMethodPredicate
+import static com.google.common.base.Predicates.not
+import static io.netty.handler.codec.http.HttpMethod.CONNECT
 
 class ProxyServer implements HttpInterceptor {
 
@@ -32,6 +38,8 @@ class ProxyServer implements HttpInterceptor {
 	private boolean running = false
 	private final InetSocketAddress address
 
+	private static final Predicate<HttpRequest> NOT_CONNECT = not(httpMethodPredicate(CONNECT))
+
 	ProxyServer(ProxyRecorder recorder) {
 		this.recorder = recorder
 
@@ -41,10 +49,12 @@ class ProxyServer implements HttpInterceptor {
 		proxyServerBootstrap = DefaultHttpProxyServer
 				.bootstrap()
 				.withAddress(address)
+				.withManInTheMiddle(new SelfSignedMitmManager())
 				.withFiltersSource(new HttpFiltersSourceAdapter() {
 			@Override
 			HttpFilters filterRequest(HttpRequest originalRequest) {
-				return new BetamaxFilters(originalRequest, recorder.tape)
+				def filters = new BetamaxFilters(originalRequest, recorder.tape)
+				return new PredicatedHttpFilters(filters, NOT_CONNECT, originalRequest);
 			}
 		})
 	}

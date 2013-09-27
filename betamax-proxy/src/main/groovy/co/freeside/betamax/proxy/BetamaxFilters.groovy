@@ -27,11 +27,10 @@ import org.littleshoot.proxy.HttpFiltersAdapter
 import static co.freeside.betamax.Headers.*
 import static io.netty.handler.codec.http.HttpHeaders.Names.VIA
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
-import static java.util.logging.Level.INFO
 
 class BetamaxFilters extends HttpFiltersAdapter {
 
-	private final Request request
+	private Request request
 	private NettyResponseAdapter upstreamResponse
 	private final Tape tape
 
@@ -39,7 +38,8 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	BetamaxFilters(HttpRequest originalRequest, Tape tape) {
 		super(originalRequest)
-		this.request = NettyRequestAdapter.wrap(originalRequest)
+		log.info "BetamaxFilters $originalRequest.uri"
+		request = NettyRequestAdapter.wrap(originalRequest)
 		this.tape = tape
 	}
 
@@ -47,25 +47,11 @@ class BetamaxFilters extends HttpFiltersAdapter {
 	HttpResponse requestPre(HttpObject httpObject) {
 		log.info "requestPre ${httpObject.getClass().simpleName}"
 
-		FullHttpResponse response = null
+		HttpResponse response = null
 
 		if (httpObject instanceof HttpRequest) {
-			log.info "intercepted request $httpObject.method $httpObject.uri"
-			if (tape.isReadable() && tape.seek(request)) {
-				log.info("Playing back from '" + tape.getName() + "'");
-				def recordedResponse = tape.play(request)
-				def status = HttpResponseStatus.valueOf(recordedResponse.status)
-				def content = recordedResponse.hasBody() ? Unpooled.copiedBuffer(recordedResponse.bodyAsBinary.bytes) : Unpooled.EMPTY_BUFFER
-				response = recordedResponse.hasBody() ? new DefaultFullHttpResponse(HTTP_1_1, status, content) : new DefaultFullHttpResponse(HTTP_1_1, status)
-				for (Map.Entry<String, String> header : recordedResponse.headers) {
-					response.headers().set(header.key, header.value.split(/,\s*/).toList())
-				}
-
-				response.headers().add(VIA, "Betamax")
-				response.headers().add(X_BETAMAX, "PLAY")
-			} else {
-				log.warning "not found"
-			}
+			log.info "requestPre $httpObject.uri"
+			response = onRequestIntercepted(httpObject)
 		}
 
 		return response
@@ -76,7 +62,6 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		log.info "requestPost ${httpObject.getClass().simpleName}"
 
 		if (httpObject instanceof HttpRequest) {
-			log.info "proceeding request $httpObject.method $httpObject.uri"
 			((HttpRequest) httpObject).headers().set(VIA, "Betamax")
 		}
 
@@ -85,10 +70,9 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	@Override
 	void responsePre(HttpObject httpObject) {
-		log.info "responsePre ${httpObject.getClass().simpleName} $httpObject"
+		log.info "responsePre ${httpObject.getClass().simpleName}"
 
 		if (httpObject instanceof HttpResponse) {
-			log.info "intercepted response $httpObject.status"
 			upstreamResponse = NettyResponseAdapter.wrap(httpObject)
 
 			// TODO: prevent this from getting written to tape
@@ -104,18 +88,40 @@ class BetamaxFilters extends HttpFiltersAdapter {
 				throw new NonWritableTapeException();
 			}
 
-			log.log(INFO, "Recording to '" + tape.getName() + "'");
 			tape.record(request, upstreamResponse);
 		}
 	}
 
 	@Override
 	void responsePost(HttpObject httpObject) {
-		log.info "responsePost ${httpObject.getClass().simpleName} $httpObject"
+		log.info "responsePost ${httpObject.getClass().simpleName}"
 		if (httpObject instanceof HttpResponse) {
-			log.info "proceeding response $httpObject.status"
 			def response = (HttpResponse) httpObject
 			response.headers().set(VIA, VIA_HEADER)
 		}
 	}
+
+	private DefaultFullHttpResponse onRequestIntercepted(HttpRequest httpObject) {
+		FullHttpResponse response = null
+		if (tape.isReadable() && tape.seek(request)) {
+			def recordedResponse = tape.play(request)
+			def status = HttpResponseStatus.valueOf(recordedResponse.status)
+			if (recordedResponse.hasBody()) {
+				def content = Unpooled.copiedBuffer(recordedResponse.bodyAsBinary.bytes)
+				response = new DefaultFullHttpResponse(HTTP_1_1, status, content)
+			} else {
+				response = new DefaultFullHttpResponse(HTTP_1_1, status)
+			}
+			for (Map.Entry<String, String> header : recordedResponse.headers) {
+				response.headers().set(header.key, header.value.split(/,\s*/).toList())
+			}
+
+			response.headers().add(VIA, "Betamax")
+			response.headers().add(X_BETAMAX, "PLAY")
+		} else {
+			log.warning "not found"
+		}
+		response
+	}
+
 }
