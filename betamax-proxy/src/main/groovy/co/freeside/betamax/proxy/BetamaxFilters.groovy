@@ -17,10 +17,10 @@
 package co.freeside.betamax.proxy
 
 import java.util.logging.Logger
-import co.freeside.betamax.handler.NonWritableTapeException
-import co.freeside.betamax.message.Request
+import co.freeside.betamax.message.*
 import co.freeside.betamax.proxy.netty.*
 import co.freeside.betamax.tape.Tape
+import com.google.common.base.Optional
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import org.littleshoot.proxy.HttpFiltersAdapter
@@ -38,7 +38,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 
 	BetamaxFilters(HttpRequest originalRequest, Tape tape) {
 		super(originalRequest)
-		log.info "BetamaxFilters $originalRequest.uri"
+		log.info "Created filter for $originalRequest.method $originalRequest.uri"
 		request = NettyRequestAdapter.wrap(originalRequest)
 		this.tape = tape
 	}
@@ -50,8 +50,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		HttpResponse response = null
 
 		if (httpObject instanceof HttpRequest) {
-			log.info "requestPre $httpObject.uri"
-			response = onRequestIntercepted(httpObject)
+			response = onRequestIntercepted(httpObject).orNull()
 		}
 
 		return response
@@ -62,7 +61,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		log.info "requestPost ${httpObject.getClass().simpleName}"
 
 		if (httpObject instanceof HttpRequest) {
-			((HttpRequest) httpObject).headers().set(VIA, "Betamax")
+			setViaHeader(httpObject)
 		}
 
 		return null;
@@ -76,7 +75,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 			upstreamResponse = NettyResponseAdapter.wrap(httpObject)
 
 			// TODO: prevent this from getting written to tape
-			((HttpResponse) httpObject).headers().add(X_BETAMAX, "REC");
+			setBetamaxHeader(httpObject, "REC");
 		}
 
 		if (httpObject instanceof HttpContent) {
@@ -84,11 +83,8 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		}
 
 		if (httpObject instanceof LastHttpContent) {
-			if (!tape.isWritable()) {
-				throw new NonWritableTapeException();
-			}
-
-			tape.record(request, upstreamResponse);
+			log.warning("Recording to tape ${tape.name}")
+			tape.record(request, upstreamResponse)
 		}
 	}
 
@@ -96,32 +92,43 @@ class BetamaxFilters extends HttpFiltersAdapter {
 	void responsePost(HttpObject httpObject) {
 		log.info "responsePost ${httpObject.getClass().simpleName}"
 		if (httpObject instanceof HttpResponse) {
-			def response = (HttpResponse) httpObject
-			response.headers().set(VIA, VIA_HEADER)
+			setViaHeader(httpObject)
 		}
 	}
 
-	private DefaultFullHttpResponse onRequestIntercepted(HttpRequest httpObject) {
-		FullHttpResponse response = null
+	private Optional<DefaultFullHttpResponse> onRequestIntercepted(HttpRequest httpObject) {
 		if (tape.isReadable() && tape.seek(request)) {
 			def recordedResponse = tape.play(request)
-			def status = HttpResponseStatus.valueOf(recordedResponse.status)
-			if (recordedResponse.hasBody()) {
-				def content = Unpooled.copiedBuffer(recordedResponse.bodyAsBinary.bytes)
-				response = new DefaultFullHttpResponse(HTTP_1_1, status, content)
-			} else {
-				response = new DefaultFullHttpResponse(HTTP_1_1, status)
-			}
-			for (Map.Entry<String, String> header : recordedResponse.headers) {
-				response.headers().set(header.key, header.value.split(/,\s*/).toList())
-			}
-
-			response.headers().add(VIA, "Betamax")
-			response.headers().add(X_BETAMAX, "PLAY")
+			FullHttpResponse response = playRecordedResponse(recordedResponse)
+			setViaHeader(response)
+			setBetamaxHeader(response, "PLAY")
+			return Optional.of(response)
 		} else {
-			log.warning "not found"
+			log.warning "no matching request found on $tape.name"
+			return Optional.absent()
+		}
+	}
+
+	private DefaultFullHttpResponse playRecordedResponse(Response recordedResponse) {
+		DefaultFullHttpResponse response
+		def status = HttpResponseStatus.valueOf(recordedResponse.status)
+		if (recordedResponse.hasBody()) {
+			def content = Unpooled.copiedBuffer(recordedResponse.bodyAsBinary.bytes)
+			response = new DefaultFullHttpResponse(HTTP_1_1, status, content)
+		} else {
+			response = new DefaultFullHttpResponse(HTTP_1_1, status)
+		}
+		for (Map.Entry<String, String> header : recordedResponse.headers) {
+			response.headers().set(header.key, header.value.split(/,\s*/).toList())
 		}
 		response
 	}
 
+	private HttpHeaders setViaHeader(HttpMessage httpMessage) {
+		httpMessage.headers().set(VIA, VIA_HEADER)
+	}
+
+	private HttpHeaders setBetamaxHeader(HttpResponse response, String value) {
+		response.headers().add(X_BETAMAX, value)
+	}
 }
