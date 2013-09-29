@@ -15,7 +15,7 @@ allprojects {
 
 	ext {
 		commonDependencies = [
-			groovy: dependencies.create("org.codehaus.groovy:groovy-all:1.8.8"),
+			groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.1.7"),
 			guava: dependencies.create("com.google.guava:guava:14.0.1"),
 			httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
 				exclude module: "groovy"
@@ -25,7 +25,7 @@ allprojects {
 			jetty: dependencies.create("org.eclipse.jetty:jetty-server:7.3.1.v20110307"),
 			junit: dependencies.create("junit:junit:4.10"),
 			netty: dependencies.create("io.netty:netty-all:4.0.6.Final"), // TODO: not sure we need netty-all
-			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-1.8", {
+			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0", {
 				exclude module: "groovy-all"
 				exclude module: "junit-dep"
 			})
