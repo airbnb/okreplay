@@ -30,7 +30,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
 class BetamaxFilters extends HttpFiltersAdapter {
 
-	private Request request
+	private NettyRequestAdapter request
 	private NettyResponseAdapter upstreamResponse
 	private final Tape tape
 
@@ -59,6 +59,10 @@ class BetamaxFilters extends HttpFiltersAdapter {
 	@Override
 	HttpResponse requestPost(HttpObject httpObject) {
 		log.info "requestPost ${httpObject.getClass().simpleName}"
+
+		if (httpObject instanceof HttpContent) {
+			request.append(httpObject)
+		}
 
 		if (httpObject instanceof HttpRequest) {
 			setViaHeader(httpObject)

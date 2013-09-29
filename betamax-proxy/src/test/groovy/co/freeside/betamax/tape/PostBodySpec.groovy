@@ -47,7 +47,7 @@ class PostBodySpec extends Specification {
 		connection.outputStream.withStream { stream ->
 			stream << postBody.getBytes('UTF-8')
 		}
-		println connection.inputStream.text
+		println connection.inputStream.text // response body must be consumed
 
 		and:
 		recorder.stop()
