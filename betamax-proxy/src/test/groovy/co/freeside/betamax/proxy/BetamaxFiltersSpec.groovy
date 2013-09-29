@@ -5,6 +5,9 @@ import co.freeside.betamax.handler.NonWritableTapeException
 import co.freeside.betamax.message.*
 import co.freeside.betamax.tape.Tape
 import co.freeside.betamax.util.message.BasicResponse
+import com.google.common.io.ByteStreams
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import spock.lang.*
@@ -77,20 +80,6 @@ class BetamaxFiltersSpec extends Specification {
 		request.headers().get(VIA) == "Betamax"
 	}
 
-	void "responsePre throws an exception if the tape is not writable"() {
-		given:
-		def response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.copiedBuffer("response body", Charset.forName("utf-8")))
-
-		and:
-		tape.isWritable() >> false
-
-		when:
-		filters.responsePre(response)
-
-		then:
-		thrown NonWritableTapeException
-	}
-
 	void "responsePre records the exchange to tape"() {
 		given:
 		def response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.copiedBuffer("response body", Charset.forName("utf-8")))
@@ -119,8 +108,11 @@ class BetamaxFiltersSpec extends Specification {
 	}
 
 	private static byte[] readContent(FullHttpMessage message) {
+		ByteBuf buffer = message.content()
 		def stream = new ByteArrayOutputStream()
-		message.content().getBytes(0, stream, message.content().readableBytes())
+		new ByteBufInputStream(buffer).withStream {
+			ByteStreams.copy(it, stream)
+		}
 		stream.toByteArray()
 	}
 }
