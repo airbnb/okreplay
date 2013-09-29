@@ -49,7 +49,7 @@ class HttpClientSpec extends Specification {
 	void 'proxy intercepts HTTPClient connections when explicitly told to'() {
 		given:
 		def http = new DefaultHttpClient()
-		http.params.setParameter(DEFAULT_PROXY, new HttpHost('localhost', recorder.proxyPort, 'http'))
+		http.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
 
 		when:
 		def request = new HttpGet(endpoint.url)

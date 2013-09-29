@@ -32,7 +32,7 @@ class HttpBuilderSpec extends Specification {
 		BetamaxRoutePlanner.configure(http.client)
 
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
@@ -44,10 +44,10 @@ class HttpBuilderSpec extends Specification {
 	void 'proxy intercepts HTTPClient connections when explicitly told to'() {
 		given:
 		def http = new RESTClient(endpoint.url)
-		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost('localhost', recorder.proxyPort, 'http'))
+		http.client.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
 
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
@@ -75,7 +75,7 @@ class HttpBuilderSpec extends Specification {
 		def http = new BetamaxRESTClient(endpoint.url)
 
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
