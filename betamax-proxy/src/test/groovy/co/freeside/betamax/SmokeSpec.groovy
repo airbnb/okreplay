@@ -39,7 +39,7 @@ class SmokeSpec extends Specification {
 		then:
 		connection.responseCode == HTTP_OK
 		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text.contains("foo")
+		connection.inputStream.text.contains('"gzipped": true')
 
 		where:
 		uri = 'http://httpbin.org/gzip'
