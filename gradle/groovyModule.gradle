@@ -10,6 +10,8 @@ dependencies {
 	testCompile commonDependencies.spock
 }
 
+apply from: "$rootDir/gradle/checkstyle.gradle"
+
 test {
 	testLogging {
 		quiet {

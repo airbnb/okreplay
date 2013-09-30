@@ -1,0 +1,8 @@
+apply plugin: "checkstyle"
+
+def checkstyleConfigDir = new File(buildscript.sourceFile.parentFile, "checkstyle")
+
+checkstyle {
+	configFile = new File(checkstyleConfigDir, "checkstyle.xml")
+	configProperties.checkstyleConfigDir = checkstyleConfigDir
+}
