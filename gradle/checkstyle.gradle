@@ -17,3 +17,9 @@ plugins.withType(GroovyBasePlugin) {
         }
     }
 }
+
+def checkstyleTasks = tasks.withType(Checkstyle)
+
+task checkstyle(dependsOn: checkstyleTasks)
+
+check.dependsOn checkstyleTasks
