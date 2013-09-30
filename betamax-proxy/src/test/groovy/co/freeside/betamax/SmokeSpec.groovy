@@ -1,6 +1,7 @@
 package co.freeside.betamax
 
 import javax.net.ssl.HttpsURLConnection
+import co.freeside.betamax.encoding.GzipEncoder
 import org.junit.Rule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
@@ -24,10 +25,10 @@ class SmokeSpec extends Specification {
 		connection.inputStream.text.contains(expectedContent)
 
 		where:
-		type   | uri                                                  | expectedContent
-		'txt'  | 'http://httpbin.org/robots.txt'                      | 'User-agent: *'
-		'html' | 'http://httpbin.org/html'                            | '<!DOCTYPE html>'
-		'json' | 'http://httpbin.org/get'                             | '"url": "http://httpbin.org/get"'
+		type   | uri                             | expectedContent
+		'txt'  | 'http://httpbin.org/robots.txt' | 'User-agent: *'
+		'html' | 'http://httpbin.org/html'       | '<!DOCTYPE html>'
+		'json' | 'http://httpbin.org/get'        | '"url": "http://httpbin.org/get"'
 	}
 
 	@Betamax(tape = 'smoke spec')
@@ -39,10 +40,11 @@ class SmokeSpec extends Specification {
 		then:
 		connection.responseCode == HTTP_OK
 		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text.contains('"gzipped": true')
+		encoder.decode(connection.inputStream).contains('"gzipped": true')
 
 		where:
 		uri = 'http://httpbin.org/gzip'
+		encoder = new GzipEncoder()
 	}
 
 	@Betamax(tape = 'smoke spec')

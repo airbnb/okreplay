@@ -1,22 +1,21 @@
 package co.freeside.betamax.proxy
 
 import java.nio.charset.Charset
-import co.freeside.betamax.handler.NonWritableTapeException
+import co.freeside.betamax.encoding.*
 import co.freeside.betamax.message.*
 import co.freeside.betamax.tape.Tape
 import co.freeside.betamax.util.message.BasicResponse
 import com.google.common.io.ByteStreams
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufInputStream
-import io.netty.buffer.Unpooled
+import io.netty.buffer.*
 import io.netty.handler.codec.http.*
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
-import static io.netty.handler.codec.http.HttpHeaders.Names.VIA
+import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.handler.codec.http.HttpMethod.GET
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
+@Unroll
 class BetamaxFiltersSpec extends Specification {
 
 	@Subject
@@ -70,6 +69,37 @@ class BetamaxFiltersSpec extends Specification {
 
 		and:
 		response.headers().get(X_BETAMAX) == "PLAY"
+	}
+
+	void "requestPre encodes the response if the original response was encoded with #encoding"() {
+		given:
+		def recordedResponse = new BasicResponse(200, "OK")
+		recordedResponse.addHeader CONTENT_ENCODING, encoding
+		recordedResponse.body = responseBody.bytes
+
+		and:
+		tape.isReadable() >> true
+		tape.seek(_) >> true
+		tape.play(_) >> recordedResponse
+
+		expect:
+		FullHttpResponse response = filters.requestPre(request)
+		response != null
+		response.status.code() == 200
+		response.status.reasonPhrase() == "OK"
+		readContent(response) == encodedBody
+
+		and:
+		response.headers().get(X_BETAMAX) == "PLAY"
+
+		where:
+		encoding  | encoder
+		"gzip"    | new GzipEncoder()
+		"deflate" | new DeflateEncoder()
+		"none"    | new NoOpEncoder()
+
+		responseBody = "message body"
+		encodedBody = encoder.encode(responseBody)
 	}
 
 	void "requestPost adds headers to outgoing request"() {

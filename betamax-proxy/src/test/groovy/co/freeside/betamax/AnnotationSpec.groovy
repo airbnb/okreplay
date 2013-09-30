@@ -3,10 +3,11 @@ package co.freeside.betamax
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.RESTClient
+import groovyx.net.http.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -28,7 +29,7 @@ class AnnotationSpec extends Specification {
 		recorder.tape == null
 	}
 
-	@Betamax(tape = 'annotation_spec')
+	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
 	void 'annotation on feature causes tape to be inserted'() {
 		expect:
 		recorder.tape.name == 'annotation_spec'
@@ -39,13 +40,13 @@ class AnnotationSpec extends Specification {
 		recorder.tape == null
 	}
 
-	@Betamax(tape = 'annotation_spec', mode = TapeMode.READ_WRITE)
+	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
 	void 'annotated feature can record'() {
 		given:
 		endpoint.start(EchoHandler)
 
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
@@ -53,10 +54,10 @@ class AnnotationSpec extends Specification {
 		response.getFirstHeader(X_BETAMAX)?.value == 'REC'
 	}
 
-	@Betamax(tape = 'annotation_spec')
+	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
 	void 'annotated feature can play back'() {
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK
@@ -69,7 +70,7 @@ class AnnotationSpec extends Specification {
 		endpoint.start(EchoHandler)
 
 		when:
-		def response = http.get(path: '/')
+		HttpResponseDecorator response = http.get(path: '/')
 
 		then:
 		response.status == HTTP_OK

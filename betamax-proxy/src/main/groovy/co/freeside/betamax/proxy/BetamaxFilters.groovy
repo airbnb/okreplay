@@ -17,14 +17,19 @@
 package co.freeside.betamax.proxy
 
 import java.util.logging.Logger
+import java.util.zip.GZIPInputStream
+import co.freeside.betamax.encoding.DeflateEncoder
+import co.freeside.betamax.encoding.GzipEncoder
 import co.freeside.betamax.message.*
 import co.freeside.betamax.proxy.netty.*
 import co.freeside.betamax.tape.Tape
 import com.google.common.base.Optional
+import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import org.littleshoot.proxy.HttpFiltersAdapter
 import static co.freeside.betamax.Headers.*
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_ENCODING
 import static io.netty.handler.codec.http.HttpHeaders.Names.VIA
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
@@ -117,7 +122,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		DefaultFullHttpResponse response
 		def status = HttpResponseStatus.valueOf(recordedResponse.status)
 		if (recordedResponse.hasBody()) {
-			def content = Unpooled.copiedBuffer(recordedResponse.bodyAsBinary.bytes)
+			def content = getEncodedContent(recordedResponse)
 			response = new DefaultFullHttpResponse(HTTP_1_1, status, content)
 		} else {
 			response = new DefaultFullHttpResponse(HTTP_1_1, status)
@@ -126,6 +131,21 @@ class BetamaxFilters extends HttpFiltersAdapter {
 			response.headers().set(header.key, header.value.split(/,\s*/).toList())
 		}
 		response
+	}
+
+	private ByteBuf getEncodedContent(Response recordedResponse) {
+		byte[] stream
+		switch (recordedResponse.getHeader(CONTENT_ENCODING)) {
+			case "gzip":
+				stream = new GzipEncoder().encode(recordedResponse.bodyAsBinary.bytes)
+				break
+			case "deflate":
+				stream = new DeflateEncoder().encode(recordedResponse.bodyAsBinary.bytes)
+				break
+			default:
+				stream = recordedResponse.bodyAsBinary.bytes
+		}
+		Unpooled.wrappedBuffer(stream)
 	}
 
 	private HttpHeaders setViaHeader(HttpMessage httpMessage) {

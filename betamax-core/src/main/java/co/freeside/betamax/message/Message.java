@@ -48,16 +48,15 @@ public interface Message {
 	boolean hasBody();
 
 	/**
-	 * Returns the message body as a string. If the message body is encoded then the implementation must decode it
-	 * before converting it to a string.
+	 * Returns the message body as a string.
 	 * @return the message body as a string.
 	 * @throws IllegalStateException if the message does not have a body.
 	 */
 	Reader getBodyAsText() throws IOException;
 
 	/**
-	 * Returns the message body in its raw binary form. If the body is encoded then the implementation should return the
-	 * encoded data _without_ decoding it first.
+	 * Returns the decoded message body. If the implementation stores the message body in an encoded form (e.g. gzipped) then it <em>must</em> be decoded
+	 * before being returned by this method
 	 * @return the message body as binary data.
 	 * @throws IllegalStateException if the message does not have a body.
 	 */

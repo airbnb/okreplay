@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import co.freeside.betamax.encoding.*;
 import co.freeside.betamax.message.*;
-import co.freeside.betamax.tape.*;
 import com.google.common.io.*;
 import org.apache.http.*;
 
@@ -22,14 +21,10 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
 	}
 
 	@Override
-	public final Reader getBodyAsText() {
+	public final Reader getBodyAsText() throws IOException {
 		String string;
 		if (hasBody()) {
-			try {
-				string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
-			} catch (IOException e) {
-				throw new TapeReadException("Exception reading tape body", e);
-			}
+			string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
 		} else {
 			string = "";
 		}
@@ -37,14 +32,10 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
 		return new StringReader(string);
 	}
 
-	public final InputStream getBodyAsBinary() {
+	public final InputStream getBodyAsBinary() throws UnsupportedEncodingException {
 		byte[] bytes;
 		if (hasBody()) {
-			try {
-				bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;
-			} catch (UnsupportedEncodingException e) {
-				throw new TapeReadException("Exception reading tape body", e);
-			}
+			bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;
 		} else {
 			bytes = new byte[0];
 		}

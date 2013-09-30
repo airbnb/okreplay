@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
 import static co.freeside.betamax.Headers.X_BETAMAX
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -17,7 +18,7 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationTest {
 
 	static File tapeRoot = newTempDir('tapes')
-	@Rule public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+	@Rule public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
 	SimpleServer endpoint = new SimpleServer()
 	RESTClient http
 
@@ -42,7 +43,7 @@ class AnnotationTest {
 	}
 
 	@Test
-	@Betamax(tape = 'annotation_test')
+	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
 	void annotationOnTestCausesTapeToBeInserted() {
 		assert recorder.tape.name == 'annotation_test'
 	}
@@ -53,7 +54,7 @@ class AnnotationTest {
 	}
 
 	@Test
-	@Betamax(tape = 'annotation_test')
+	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
 	void annotatedTestCanRecord() {
 		endpoint.start(EchoHandler)
 
@@ -65,7 +66,7 @@ class AnnotationTest {
 	}
 
 	@Test
-	@Betamax(tape = 'annotation_test')
+	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
 	void annotatedTestCanPlayBack() {
 		def response = http.get(path: '/')
 

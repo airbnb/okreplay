@@ -39,7 +39,7 @@ class ContentEncodingSpec extends Specification {
 		'deflate' | new DeflateEncoder()
 	}
 
-	void 'response body is encoded when played from tape and a #encoding content-encoding header is present'() {
+	void 'response body is not encoded when played from tape and a #encoding content-encoding header is present'() {
 		given:
 		def yaml = """\
 !tape
@@ -65,12 +65,10 @@ interactions:
 
 		then:
 		response.getHeader(CONTENT_ENCODING) == encoding
-		encoder.decode(new ByteArrayInputStream(response.bodyAsBinary.bytes)) == 'O HAI!'
+		response.bodyAsText.text == 'O HAI!'
 
 		where:
-		encoding  | encoder
-		'gzip'    | new GzipEncoder()
-		'deflate' | new DeflateEncoder()
+		encoding << ["gzip", "deflate"]
 	}
 
 }
