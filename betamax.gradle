@@ -12,6 +12,8 @@ apply from: "gradle/idea/idea.gradle"
 allprojects {
 	version = "2.0-SNAPSHOT"
 	group = "co.freeside"
+	sourceCompatibility = "1.6"
+	targetCompatibility = "1.6"
 
 	ext {
 		commonDependencies = [
