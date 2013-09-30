@@ -17,6 +17,9 @@
         "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
         "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="${checkstyleConfigDir}/suppressions.xml"/>
+    </module>
     <module name="TreeWalker">
         <module name="Indentation"/>
 
@@ -100,11 +103,9 @@
         <!-- to enable SuppressionCommentFilter -->
         <module name="FileContentsHolder"/>
     </module>
-<!--
     <module name="RegexpHeader">
         <property name="headerFile" value="${checkstyleConfigDir}/required-header.txt"/>
     </module>
--->
     <module name="FileTabCharacter"/>
     <module name="RegexpSingleline">
         <property name="format" value="File \| Settings \| File Templates"/>
