@@ -17,14 +17,14 @@ package co.freeside.betamax.message;
 
 public interface Response extends Message {
 
-	/**
-	 * @return the HTTP status code of the response.
-	 */
+    /**
+     * @return the HTTP status code of the response.
+     */
     int getStatus();
 
-	/**
-	 * @return the content MIME type of the response.
-	 */
+    /**
+     * @return the content MIME type of the response.
+     */
     String getContentType();
 
 }

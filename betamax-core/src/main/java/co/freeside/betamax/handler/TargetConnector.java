@@ -1,21 +1,17 @@
 package co.freeside.betamax.handler;
 
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import co.freeside.betamax.message.httpclient.HttpResponseAdapter;
-import com.google.common.io.ByteStreams;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.message.httpclient.*;
+import com.google.common.io.*;
 import org.apache.http.*;
-import org.apache.http.client.HttpClient;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.DefaultHttpRequestFactory;
-import org.apache.http.message.BasicHttpResponse;
-
-import static co.freeside.betamax.Headers.VIA_HEADER;
-import static org.apache.http.HttpHeaders.VIA;
-
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.Map;
+import org.apache.http.client.*;
+import org.apache.http.entity.*;
+import org.apache.http.impl.*;
+import static co.freeside.betamax.Headers.*;
+import static org.apache.http.HttpHeaders.*;
 
 public class TargetConnector implements HttpHandler {
     public TargetConnector(HttpClient httpClient) {
@@ -41,13 +37,15 @@ public class TargetConnector implements HttpHandler {
         try {
             outboundRequest = httpRequestFactory.newHttpRequest(request.getMethod(), request.getUri().toString());
 
-            for (Map.Entry<String, String> header : request.getHeaders().entrySet())
+            for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
                 outboundRequest.addHeader(header.getKey(), header.getValue());
+            }
 
             outboundRequest.addHeader(VIA, VIA_HEADER);
 
-            if (outboundRequest instanceof HttpEntityEnclosingRequest && request.hasBody())
-                ((HttpEntityEnclosingRequest)(outboundRequest)).setEntity(new ByteArrayEntity(ByteStreams.toByteArray(request.getBodyAsBinary())));
+            if (outboundRequest instanceof HttpEntityEnclosingRequest && request.hasBody()) {
+                ((HttpEntityEnclosingRequest) outboundRequest).setEntity(new ByteArrayEntity(ByteStreams.toByteArray(request.getBodyAsBinary())));
+            }
 
             return outboundRequest;
         } catch (MethodNotSupportedException e) {

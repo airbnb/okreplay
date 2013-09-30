@@ -2,14 +2,14 @@ package co.freeside.betamax;
 
 public interface HttpInterceptor {
 
-	boolean isRunning();
+    boolean isRunning();
 
-	void start();
+    void start();
 
-	void stop();
+    void stop();
 
-	String getHost();
+    String getHost();
 
-	int getPort();
+    int getPort();
 
 }

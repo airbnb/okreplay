@@ -18,24 +18,17 @@
 
 package co.freeside.betamax.tape.yaml;
 
-import co.freeside.betamax.message.tape.RecordedRequest;
-import co.freeside.betamax.message.tape.RecordedResponse;
-import co.freeside.betamax.tape.RecordedInteraction;
-import co.freeside.betamax.tape.Tape;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.introspector.BeanAccess;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.*;
-import org.yaml.snakeyaml.representer.Represent;
-import org.yaml.snakeyaml.representer.Representer;
-
-import java.beans.IntrospectionException;
-import java.net.URI;
+import java.beans.*;
+import java.net.*;
 import java.util.*;
+import co.freeside.betamax.message.tape.*;
+import co.freeside.betamax.tape.*;
+import com.google.common.collect.*;
+import com.google.common.primitives.*;
+import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.introspector.*;
+import org.yaml.snakeyaml.nodes.*;
+import org.yaml.snakeyaml.representer.*;
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
@@ -49,19 +42,23 @@ public class TapeRepresenter extends GroovyRepresenter {
     @Override
     protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag customTag) {
         NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
-        if (tuple.getValueNode().getTag().equals(Tag.NULL))
+        if (tuple.getValueNode().getTag().equals(Tag.NULL)) {
             return null;
+        }
 
-        if (tuple.getValueNode() instanceof SequenceNode && ((SequenceNode)(tuple.getValueNode())).getValue().isEmpty())
+        if (tuple.getValueNode() instanceof SequenceNode && ((SequenceNode) (tuple.getValueNode())).getValue().isEmpty()) {
             return null;
+        }
 
-        if (tuple.getValueNode() instanceof MappingNode  && ((MappingNode) (tuple.getValueNode())).getValue().isEmpty())
+        if (tuple.getValueNode() instanceof MappingNode && ((MappingNode) (tuple.getValueNode())).getValue().isEmpty()) {
             return null;
+        }
 
         if (property.getName().equals("body")) {
             ScalarNode n = (ScalarNode) tuple.getValueNode();
-            if (n.getStyle() == DumperOptions.ScalarStyle.PLAIN.getChar())
+            if (n.getStyle() == DumperOptions.ScalarStyle.PLAIN.getChar()) {
                 return tuple;
+            }
 
             return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n.getStartMark(), n.getEndMark(), DumperOptions.ScalarStyle.LITERAL.getChar()));
         }

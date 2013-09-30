@@ -1,26 +1,21 @@
 package co.freeside.betamax.tape;
 
-import co.freeside.betamax.TapeMode;
-import co.freeside.betamax.handler.NonWritableTapeException;
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import co.freeside.betamax.message.tape.RecordedRequest;
-import co.freeside.betamax.message.tape.RecordedResponse;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
-import org.yaml.snakeyaml.reader.StreamReader;
-
-import static co.freeside.betamax.TapeMode.READ_WRITE;
-import static co.freeside.betamax.Headers.X_BETAMAX;
-import static co.freeside.betamax.MatchRule.*;
-import static org.apache.http.HttpHeaders.VIA;
-
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
+import java.util.concurrent.atomic.*;
+import java.util.regex.*;
+import co.freeside.betamax.*;
+import co.freeside.betamax.handler.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.message.tape.*;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import com.google.common.io.*;
+import org.yaml.snakeyaml.reader.*;
+import static co.freeside.betamax.Headers.*;
+import static co.freeside.betamax.MatchRule.*;
+import static co.freeside.betamax.TapeMode.*;
+import static org.apache.http.HttpHeaders.*;
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -56,7 +51,7 @@ public class MemoryTape implements Tape {
                 // TODO: it's a complete waste of time using an AtomicInteger when this method is called before play in a non-transactional way
                 Integer index = orderedIndex.get();
                 RecordedInteraction interaction = interactions.get(index);
-                RecordedRequest nextRequest = (interaction == null ? null : interaction.getRequest());
+                RecordedRequest nextRequest = interaction == null ? null : interaction.getRequest();
                 RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
                 return nextRequest != null && requestMatcher.matches(nextRequest);
             } catch (IndexOutOfBoundsException e) {
@@ -78,11 +73,13 @@ public class MemoryTape implements Tape {
             RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
             Integer nextIndex = orderedIndex.getAndIncrement();
             final RecordedInteraction nextInteraction = interactions.get(nextIndex);
-            if (nextInteraction == null)
+            if (nextInteraction == null) {
                 throw new IllegalStateException("No recording found at position " + String.valueOf(nextIndex));
+            }
 
-            if (!requestMatcher.matches(nextInteraction.getRequest()))
+            if (!requestMatcher.matches(nextInteraction.getRequest())) {
                 throw new IllegalStateException("Request " + stringify(request) + " does not match recorded request " + stringify(nextInteraction.getRequest()));
+            }
 
             return nextInteraction.getResponse();
         } else {
@@ -99,18 +96,19 @@ public class MemoryTape implements Tape {
 
     private String stringify(Request request) {
         try {
-            return "method: "  + request.getMethod()  + ", " +
-                   "uri: "     + request.getUri()     + ", " +
-                   "headers: " + request.getHeaders() + ", " +
-                   "body: "    + CharStreams.toString(request.getBodyAsText());
+            return "method: " + request.getMethod() + ", "
+                    + "uri: " + request.getUri() + ", "
+                    + "headers: " + request.getHeaders() + ", "
+                    + "body: " + CharStreams.toString(request.getBodyAsText());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public synchronized void record(Request request, Response response) {
-        if (!mode.isWritable())
+        if (!mode.isWritable()) {
             throw new IllegalStateException("the tape is not writable");
+        }
 
         RecordedInteraction interaction = new RecordedInteraction();
         interaction.setRequest(recordRequest(request));
@@ -121,10 +119,11 @@ public class MemoryTape implements Tape {
             interactions.add(interaction);
         } else {
             int position = findMatch(request);
-            if (position >= 0)
+            if (position >= 0) {
                 interactions.set(position, interaction);
-            else
+            } else {
                 interactions.add(interaction);
+            }
         }
     }
 
@@ -151,8 +150,9 @@ public class MemoryTape implements Tape {
             clone.setUri(request.getUri());
 
             for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
-                if (!header.getKey().equals(VIA))
+                if (!header.getKey().equals(VIA)) {
                     clone.getHeaders().put(header.getKey(), header.getValue());
+                }
             }
 
             clone.setBody(request.hasBody() ? CharStreams.toString(request.getBodyAsText()) : null);
@@ -163,31 +163,15 @@ public class MemoryTape implements Tape {
         }
     }
 
-    /*
-    private static RecordedResponse recordResponse(Response response) {
-		def clone = new RecordedResponse()
-		clone.status = response.status
-		response.headers.each {
-			if (!(it.key in [VIA, X_BETAMAX])) {
-				clone.headers[it.key] = it.value
-			}
-		}
-		if (response.hasBody()) {
-			boolean representAsText = isTextContentType(response.contentType) && isPrintable(response.bodyAsText.text)
-			clone.body = representAsText ? response.bodyAsText.text : response.bodyAsBinary.bytes
-		}
-		clone
-	}
-     */
-
     private static RecordedResponse recordResponse(Response response) {
         try {
             RecordedResponse clone = new RecordedResponse();
             clone.setStatus(response.getStatus());
 
             for (Map.Entry<String, String> header : response.getHeaders().entrySet()) {
-                if (!header.getKey().equals(VIA) && !header.getKey().equals(X_BETAMAX))
+                if (!header.getKey().equals(VIA) && !header.getKey().equals(X_BETAMAX)) {
                     clone.getHeaders().put(header.getKey(), header.getValue());
+                }
             }
 
             if (response.hasBody()) {
@@ -233,10 +217,5 @@ public class MemoryTape implements Tape {
     private AtomicInteger orderedIndex = new AtomicInteger();
 
     @SuppressWarnings({"unchecked"})
-    private Comparator<Request>[] matchRules = new Comparator[]{method, uri};
-
-    private static <K, V, Value extends V> Value putAt0(Map<K, V> propOwner, K key, Value value) {
-        propOwner.put(key, value);
-        return value;
-    }
+    private Comparator<Request>[] matchRules = new Comparator[] {method, uri};
 }

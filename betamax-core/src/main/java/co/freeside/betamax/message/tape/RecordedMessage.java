@@ -8,71 +8,71 @@ import com.google.common.io.*;
 import org.apache.http.*;
 
 public abstract class RecordedMessage extends AbstractMessage implements Message {
-	public final void addHeader(final String name, String value) {
-		if (headers.get(name) != null) {
-			headers.put(name, headers.get(name) + ", " + value);
-		} else {
-			headers.put(name, value);
-		}
-	}
+    public final void addHeader(final String name, String value) {
+        if (headers.get(name) != null) {
+            headers.put(name, headers.get(name) + ", " + value);
+        } else {
+            headers.put(name, value);
+        }
+    }
 
-	public final boolean hasBody() {
-		return body != null;
-	}
+    public final boolean hasBody() {
+        return body != null;
+    }
 
-	@Override
-	public final Reader getBodyAsText() throws IOException {
-		String string;
-		if (hasBody()) {
-			string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
-		} else {
-			string = "";
-		}
+    @Override
+    public final Reader getBodyAsText() throws IOException {
+        String string;
+        if (hasBody()) {
+            string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
+        } else {
+            string = "";
+        }
 
-		return new StringReader(string);
-	}
+        return new StringReader(string);
+    }
 
-	public final InputStream getBodyAsBinary() throws UnsupportedEncodingException {
-		byte[] bytes;
-		if (hasBody()) {
-			bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;
-		} else {
-			bytes = new byte[0];
-		}
+    public final InputStream getBodyAsBinary() throws UnsupportedEncodingException {
+        byte[] bytes;
+        if (hasBody()) {
+            bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;
+        } else {
+            bytes = new byte[0];
+        }
 
-		return new ByteArrayInputStream(bytes);
-	}
+        return new ByteArrayInputStream(bytes);
+    }
 
-	private AbstractEncoder getEncoder() {
-		String contentEncoding = getHeader(HttpHeaders.CONTENT_ENCODING);
+    private AbstractEncoder getEncoder() {
+        String contentEncoding = getHeader(HttpHeaders.CONTENT_ENCODING);
 
-		if ("gzip".equals(contentEncoding)) {
-			return new GzipEncoder();
-		}
+        if ("gzip".equals(contentEncoding)) {
+            return new GzipEncoder();
+        }
 
-		if ("deflate".equals(contentEncoding)) {
-			return new DeflateEncoder();
-		}
+        if ("deflate".equals(contentEncoding)) {
+            return new DeflateEncoder();
+        }
 
-		return new NoOpEncoder();
-	}
+        return new NoOpEncoder();
+    }
 
-	public LinkedHashMap<String, String> getHeaders() {
-		return headers;
-	}
+    public LinkedHashMap<String, String> getHeaders() {
+        return headers;
+    }
 
-	public void setHeaders(LinkedHashMap<String, String> headers) {
-		this.headers = headers;
-	}
+    public void setHeaders(LinkedHashMap<String, String> headers) {
+        this.headers = headers;
+    }
 
-	public Object getBody() {
-		return body;
-	}
+    public Object getBody() {
+        return body;
+    }
 
-	public void setBody(Object body) {
-		this.body = body;
-	}
+    public void setBody(Object body) {
+        this.body = body;
+    }
 
-	private LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
-	private Object body;
+    private LinkedHashMap<String, String> headers = new LinkedHashMap<String, String>();
+    private Object body;
 }

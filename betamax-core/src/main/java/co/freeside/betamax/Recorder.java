@@ -1,27 +1,20 @@
 package co.freeside.betamax;
 
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.tape.MemoryTape;
-import co.freeside.betamax.tape.StorableTape;
-import co.freeside.betamax.tape.Tape;
-import co.freeside.betamax.tape.TapeLoader;
-import co.freeside.betamax.tape.yaml.YamlTape;
-import co.freeside.betamax.tape.yaml.YamlTapeLoader;
-import static co.freeside.betamax.MatchRule.*;
-import static java.util.logging.Level.SEVERE;
-import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.net.*;
 import java.util.*;
-import java.util.logging.Logger;
+import java.util.logging.*;
+import co.freeside.betamax.message.Request;
+import co.freeside.betamax.tape.*;
+import co.freeside.betamax.tape.yaml.*;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import com.google.common.io.*;
+import org.junit.rules.*;
+import org.junit.runner.*;
+import org.junit.runners.model.*;
+import static co.freeside.betamax.MatchRule.*;
+import static java.util.logging.Level.*;
 
 /**
  * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
@@ -85,7 +78,7 @@ public class Recorder implements TestRule {
     /**
      * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
      *
-     * @param name      the name of the _tape_.
+     * @param name the name of the _tape_.
      */
     public void insertTape(String name) {
         insertTape(name, new LinkedHashMap<Object, Object>());
@@ -160,7 +153,7 @@ public class Recorder implements TestRule {
 
     public static <T extends Enum<T>> T getEnum(Properties properties, String key, T defaultValue) {
         String value = properties.getProperty(key);
-        T anEnum = Enum.valueOf((Class<T>)defaultValue.getClass(), value);
+        T anEnum = Enum.valueOf((Class<T>) defaultValue.getClass(), value);
         return value != null ? anEnum : defaultValue;
     }
 
@@ -223,25 +216,31 @@ public class Recorder implements TestRule {
     }
 
     public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes";
+    
     protected final Logger log = Logger.getLogger(getClass().getName());
+
     /**
      * The base directory where tape files are stored.
      */
     private File tapeRoot = new File(DEFAULT_TAPE_ROOT);
+
     /**
      * The default mode for an inserted tape.
      */
     private TapeMode defaultMode = TapeMode.READ_ONLY;
+
     /**
      * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be
      * intercepted.
      */
     private Collection<String> ignoreHosts = new ArrayList<String>();
+
     /**
      * If set to true all connections to localhost addresses are ignored.
      * This is equivalent to setting `ignoreHosts` to `['localhost', '127.0.0.1', InetAddress.localHost.hostName,
      * InetAddress.localHost.hostAddress]`.
      */
-    private boolean ignoreLocalhost = false;
+    private boolean ignoreLocalhost;
+
     private StorableTape tape;
 }

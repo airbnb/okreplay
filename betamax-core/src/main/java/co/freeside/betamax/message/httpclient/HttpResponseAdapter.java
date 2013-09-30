@@ -18,19 +18,19 @@
 
 package co.freeside.betamax.message.httpclient;
 
-import co.freeside.betamax.message.Response;
-import com.google.common.io.ByteStreams;
-import org.apache.http.HttpResponse;
-
 import java.io.*;
+import co.freeside.betamax.message.*;
+import com.google.common.io.*;
+import org.apache.http.*;
 
 public class HttpResponseAdapter extends HttpMessageAdapter<HttpResponse> implements Response {
     public HttpResponseAdapter(HttpResponse delegate) {
         try {
             this.delegate = delegate;
 
-            if (delegate.getEntity() != null)
+            if (delegate.getEntity() != null) {
                 body = ByteStreams.toByteArray(delegate.getEntity().getContent());
+            }
 
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -18,14 +18,12 @@
 
 package co.freeside.betamax.handler;
 
-import co.freeside.betamax.Recorder;
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import co.freeside.betamax.tape.Tape;
-import static co.freeside.betamax.Headers.X_BETAMAX;
-
-import java.util.logging.Logger;
-import static java.util.logging.Level.INFO;
+import java.util.logging.*;
+import co.freeside.betamax.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.tape.*;
+import static co.freeside.betamax.Headers.*;
+import static java.util.logging.Level.*;
 
 public class TapeWriter extends ChainedHttpHandler {
     public TapeWriter(Recorder recorder) {
@@ -35,14 +33,16 @@ public class TapeWriter extends ChainedHttpHandler {
     public Response handle(Request request) {
         Tape tape = recorder.getTape();
 
-        if (tape == null)
+        if (tape == null) {
             throw new NoTapeException();
+        }
 
-        if (!tape.isWritable())
+        if (!tape.isWritable()) {
             throw new NonWritableTapeException();
+        }
 
         Response response = chain(request);
-        log.log(INFO, "Recording to '" + tape.getName() + "'");
+        LOG.log(INFO, "Recording to '" + tape.getName() + "'");
         tape.record(request, response);
         response.addHeader(X_BETAMAX, "REC");
 
@@ -50,5 +50,5 @@ public class TapeWriter extends ChainedHttpHandler {
     }
 
     private final Recorder recorder;
-    private static final Logger log = Logger.getLogger(TapeWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(TapeWriter.class.getName());
 }

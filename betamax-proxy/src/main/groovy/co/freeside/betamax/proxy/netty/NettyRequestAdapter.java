@@ -30,26 +30,26 @@ public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implem
         }
     }
 
-	NettyRequestAdapter(HttpRequest delegate) {
-		super(delegate);
-	}
+    NettyRequestAdapter(HttpRequest delegate) {
+        super(delegate);
+    }
 
-	@Override
-	public String getMethod() {
-		return delegate.getMethod().name();
-	}
+    @Override
+    public String getMethod() {
+        return delegate.getMethod().name();
+    }
 
-	@Override
-	public URI getUri() {
-		try {
-			return new URI(delegate.getUri());
-		} catch (URISyntaxException e) {
-			throw new IllegalStateException("Invalid URI in underlying request", e);
-		}
-	}
+    @Override
+    public URI getUri() {
+        try {
+            return new URI(delegate.getUri());
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException("Invalid URI in underlying request", e);
+        }
+    }
 
     public final HttpRequest getOriginalRequest() {
-		return delegate;
-	}
+        return delegate;
+    }
 
 }

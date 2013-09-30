@@ -18,12 +18,10 @@
 
 package co.freeside.betamax.util.message;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
-
-import co.freeside.betamax.message.AbstractMessage;
-import com.google.common.base.Joiner;
+import co.freeside.betamax.message.*;
+import com.google.common.base.*;
 
 public abstract class BasicMessage extends AbstractMessage {
     public void addHeader(String name, String value) {
@@ -42,9 +40,10 @@ public abstract class BasicMessage extends AbstractMessage {
     }
 
     public Map<String, String> getHeaders() {
-        LinkedHashMap<String,String> map = new LinkedHashMap<String, String>();
-        for (Map.Entry<String,List<String>> header : headers.entrySet())
+        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        for (Map.Entry<String, List<String>> header : headers.entrySet()) {
             map.put(header.getKey(), Joiner.on(", ").join(header.getValue()));
+        }
 
         return map;
     }

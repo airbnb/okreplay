@@ -19,14 +19,14 @@ import java.net.*;
 
 public interface Request extends Message {
 
-	/**
-	 * @return the request method.
-	 */
-	String getMethod();
+    /**
+     * @return the request method.
+     */
+    String getMethod();
 
-	/**
-	 * @return the target URI of the request.
-	 */
-	URI getUri();
+    /**
+     * @return the target URI of the request.
+     */
+    URI getUri();
 
 }

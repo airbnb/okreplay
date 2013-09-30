@@ -6,53 +6,53 @@ import org.littleshoot.proxy.*;
 
 public class PredicatedHttpFilters extends HttpFiltersAdapter {
 
-	public static Predicate<HttpRequest> httpMethodPredicate(final HttpMethod method) {
-		return new Predicate<HttpRequest>() {
-			@Override
-			public boolean apply(HttpRequest input) {
-				return method.equals(input.getMethod());
-			}
-		};
-	}
+    public static Predicate<HttpRequest> httpMethodPredicate(final HttpMethod method) {
+        return new Predicate<HttpRequest>() {
+            @Override
+            public boolean apply(HttpRequest input) {
+                return method.equals(input.getMethod());
+            }
+        };
+    }
 
-	private final HttpFilters delegate;
-	private final Predicate<HttpRequest> predicate;
+    private final HttpFilters delegate;
+    private final Predicate<HttpRequest> predicate;
 
-	public PredicatedHttpFilters(HttpFilters delegate, Predicate<HttpRequest> predicate, HttpRequest originalRequest) {
-		super(originalRequest);
-		this.delegate = delegate;
-		this.predicate = predicate;
-	}
+    public PredicatedHttpFilters(HttpFilters delegate, Predicate<HttpRequest> predicate, HttpRequest originalRequest) {
+        super(originalRequest);
+        this.delegate = delegate;
+        this.predicate = predicate;
+    }
 
-	@Override
-	public HttpResponse requestPre(HttpObject httpObject) {
-		if (predicate.apply(originalRequest)) {
-			return delegate.requestPre(httpObject);
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public HttpResponse requestPre(HttpObject httpObject) {
+        if (predicate.apply(originalRequest)) {
+            return delegate.requestPre(httpObject);
+        } else {
+            return null;
+        }
+    }
 
-	@Override
-	public HttpResponse requestPost(HttpObject httpObject) {
-		if (predicate.apply(originalRequest)) {
-			return delegate.requestPost(httpObject);
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public HttpResponse requestPost(HttpObject httpObject) {
+        if (predicate.apply(originalRequest)) {
+            return delegate.requestPost(httpObject);
+        } else {
+            return null;
+        }
+    }
 
-	@Override
-	public void responsePre(HttpObject httpObject) {
-		if (predicate.apply(originalRequest)) {
-			delegate.responsePre(httpObject);
-		}
-	}
+    @Override
+    public void responsePre(HttpObject httpObject) {
+        if (predicate.apply(originalRequest)) {
+            delegate.responsePre(httpObject);
+        }
+    }
 
-	@Override
-	public void responsePost(HttpObject httpObject) {
-		if (predicate.apply(originalRequest)) {
-			delegate.responsePost(httpObject);
-		}
-	}
+    @Override
+    public void responsePost(HttpObject httpObject) {
+        if (predicate.apply(originalRequest)) {
+            delegate.responsePost(httpObject);
+        }
+    }
 }

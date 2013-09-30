@@ -17,14 +17,16 @@ package co.freeside.betamax;
 
 import java.lang.annotation.*;
 import static co.freeside.betamax.MatchRule.*;
-import static co.freeside.betamax.TapeMode.READ_ONLY;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static co.freeside.betamax.TapeMode.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface Betamax {
-	String tape();
-	TapeMode mode() default READ_ONLY;
-	MatchRule[] match() default {method, uri};
+    String tape();
+
+    TapeMode mode() default READ_ONLY;
+
+    MatchRule[] match() default {method, uri};
 }

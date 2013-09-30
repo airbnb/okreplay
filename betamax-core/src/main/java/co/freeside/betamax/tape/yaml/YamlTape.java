@@ -18,26 +18,19 @@
 
 package co.freeside.betamax.tape.yaml;
 
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import co.freeside.betamax.tape.MemoryTape;
-import co.freeside.betamax.tape.StorableTape;
-import co.freeside.betamax.tape.TapeLoadException;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.TypeDescription;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.nodes.Tag;
-
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.tape.*;
+import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.constructor.*;
+import org.yaml.snakeyaml.error.*;
+import org.yaml.snakeyaml.nodes.*;
 
 public class YamlTape extends MemoryTape implements StorableTape {
 
     public static final Tag TAPE_TAG = new Tag("!tape");
 
-    private boolean dirty = false;
+    private boolean dirty;
 
     public static YamlTape readFrom(Reader reader) {
         try {
@@ -45,7 +38,6 @@ public class YamlTape extends MemoryTape implements StorableTape {
         } catch (YAMLException e) {
             throw new TapeLoadException("Invalid tape", e);
         }
-
     }
 
     public void writeTo(Writer writer) {

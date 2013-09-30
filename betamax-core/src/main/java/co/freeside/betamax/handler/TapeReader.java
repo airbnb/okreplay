@@ -18,13 +18,11 @@
 
 package co.freeside.betamax.handler;
 
-import co.freeside.betamax.Recorder;
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import co.freeside.betamax.tape.Tape;
-import static co.freeside.betamax.Headers.X_BETAMAX;
-
-import java.util.logging.Logger;
+import java.util.logging.*;
+import co.freeside.betamax.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.tape.*;
+import static co.freeside.betamax.Headers.*;
 
 /**
  * Reads the tape to find a matching exchange, returning the response if found otherwise proceeding the request, storing
@@ -38,22 +36,24 @@ public class TapeReader extends ChainedHttpHandler {
     public Response handle(Request request) {
         Tape tape = recorder.getTape();
 
-        if (tape == null)
+        if (tape == null) {
             throw new NoTapeException();
+        }
 
         if (tape.isReadable() && tape.seek(request)) {
-            log.info("Playing back from '" + tape.getName() + "'");
+            LOG.info("Playing back from '" + tape.getName() + "'");
             Response response = tape.play(request);
             response.addHeader(X_BETAMAX, "PLAY");
             return response;
         }
 
-        if (tape.isWritable())
+        if (tape.isWritable()) {
             return chain(request);
+        }
 
         throw new NonWritableTapeException();
     }
 
     private final Recorder recorder;
-    private static final Logger log = Logger.getLogger(TapeReader.class.getName());
+    private static final Logger LOG = Logger.getLogger(TapeReader.class.getName());
 }

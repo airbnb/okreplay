@@ -1,9 +1,8 @@
 package co.freeside.betamax.message.filtering;
 
-import co.freeside.betamax.message.Message;
-import static org.apache.http.HttpHeaders.*;
-
 import java.util.*;
+import co.freeside.betamax.message.*;
+import static org.apache.http.HttpHeaders.*;
 
 public abstract class HeaderFilteringMessage implements Message {
     protected abstract Message getDelegate();
@@ -14,8 +13,9 @@ public abstract class HeaderFilteringMessage implements Message {
 
     public final Map<String, String> getHeaders() {
         HashMap<String, String> headers = new HashMap<String, String>(getDelegate().getHeaders());
-        for (String headerName : NO_PASS_HEADERS)
+        for (String headerName : NO_PASS_HEADERS) {
             headers.remove(headerName);
+        }
 
         return headers;
     }

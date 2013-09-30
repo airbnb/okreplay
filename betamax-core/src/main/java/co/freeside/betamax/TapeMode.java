@@ -17,21 +17,21 @@ package co.freeside.betamax;
 
 public enum TapeMode {
 
-	READ_WRITE(true, true, false),
-	READ_ONLY(true, false, false),
-	READ_SEQUENTIAL(true, false, true),
-	WRITE_ONLY(false, true, false),
-	WRITE_SEQUENTIAL(false, true, true);
+    READ_WRITE(true, true, false),
+    READ_ONLY(true, false, false),
+    READ_SEQUENTIAL(true, false, true),
+    WRITE_ONLY(false, true, false),
+    WRITE_SEQUENTIAL(false, true, true);
 
     private final boolean readable;
     private final boolean writable;
     private final boolean sequential;
 
-	private TapeMode(boolean readable, boolean writable, boolean sequential) {
-		this.readable = readable;
-		this.writable = writable;
-		this.sequential = sequential;
-	}
+    private TapeMode(boolean readable, boolean writable, boolean sequential) {
+        this.readable = readable;
+        this.writable = writable;
+        this.sequential = sequential;
+    }
 
     public boolean isReadable() {
         return readable;
@@ -49,7 +49,7 @@ public enum TapeMode {
      * For compatibility with Groovy truth.
      */
     public boolean asBoolean() {
-		return readable || writable;
-	}
+        return readable || writable;
+    }
 
 }

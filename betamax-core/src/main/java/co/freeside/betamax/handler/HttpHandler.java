@@ -4,6 +4,6 @@ import co.freeside.betamax.message.*;
 
 public interface HttpHandler {
 
-	Response handle(Request request);
+    Response handle(Request request);
 
 }

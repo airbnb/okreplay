@@ -18,21 +18,21 @@
 
 package co.freeside.betamax.tape;
 
-import java.util.Comparator;
-
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.tape.RecordedRequest;
+import java.util.*;
+import co.freeside.betamax.message.*;
+import co.freeside.betamax.message.tape.*;
 
 public class RequestMatcher {
-    
+
     @SuppressWarnings("unchecked")
     public RequestMatcher(Request request) {
         this(request, new Comparator<Request>() {
             @Override
             public int compare(Request o1, Request o2) {
                 int result = o1.getMethod().compareTo(o2.getMethod());
-                if (result != 0)
+                if (result != 0) {
                     return result;
+                }
                 return o1.getUri().compareTo(o2.getUri());
             }
         });
@@ -45,8 +45,9 @@ public class RequestMatcher {
 
     public boolean matches(final RecordedRequest recordedRequest) {
         for (Comparator<Request> comparator : rules) {
-            if (comparator.compare(request, recordedRequest) != 0)
+            if (comparator.compare(request, recordedRequest) != 0) {
                 return false;
+            }
         }
 
         return true;
