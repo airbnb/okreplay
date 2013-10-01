@@ -215,7 +215,6 @@ ruleset {
     DuplicateImport
     ImportFromSamePackage
     ImportFromSunPackages
-    MisorderedStaticImports
     UnnecessaryGroovyImport
     UnusedImport
 
@@ -326,7 +325,6 @@ ruleset {
     UnnecessaryElseStatement
     UnnecessaryFinalOnPrivateMethod
     UnnecessaryFloatInstantiation
-    UnnecessaryGString
     UnnecessaryGetter
     UnnecessaryIfStatement
     UnnecessaryInstanceOfCheck
