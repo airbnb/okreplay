@@ -21,7 +21,13 @@ import io.netty.handler.codec.http.*
 class NettyResponseAdapterSpec extends NettyMessageAdapterSpec<HttpResponse, NettyResponseAdapter> {
 
 	void setup() {
-		nettyMessage = Mock(HttpResponse)
+		nettyMessage = Mock(HttpResponse) {
+            headers() >> nettyMessageHeaders
+        }
+    }
+
+    @Override
+    void createAdapter() {
 		adapter = new NettyResponseAdapter(nettyMessage)
 	}
 
@@ -29,7 +35,10 @@ class NettyResponseAdapterSpec extends NettyMessageAdapterSpec<HttpResponse, Net
 		given:
 		nettyMessage.status >> HttpResponseStatus.CREATED
 
-		expect:
+        and:
+        createAdapter()
+
+        expect:
 		adapter.status == HttpResponseStatus.CREATED.code()
 	}
 

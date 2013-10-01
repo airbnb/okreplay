@@ -21,15 +21,24 @@ import static io.netty.handler.codec.http.HttpMethod.GET
 
 class NettyRequestAdapterSpec extends NettyMessageAdapterSpec<HttpRequest, NettyRequestAdapter> {
 
-	void setup() {
-		nettyMessage = Mock(HttpRequest)
-		adapter = new NettyRequestAdapter(nettyMessage)
-	}
+    void setup() {
+        nettyMessage = Mock(HttpRequest) {
+            headers() >> nettyMessageHeaders
+        }
+    }
+
+    @Override
+    void createAdapter() {
+        adapter = new NettyRequestAdapter(nettyMessage)
+    }
 
 	void 'can read basic fields'() {
 		given:
 		nettyMessage.method >> GET
 		nettyMessage.uri >> 'http://freeside.co/betamax'
+
+        and:
+        createAdapter()
 
 		expect:
 		adapter.method == 'GET'
@@ -40,7 +49,10 @@ class NettyRequestAdapterSpec extends NettyMessageAdapterSpec<HttpRequest, Netty
 		given:
 		nettyMessage.uri >> 'http://freeside.co/betamax?q=1'
 
-		expect:
+        and:
+        createAdapter()
+
+        expect:
 		adapter.uri == new URI('http://freeside.co/betamax?q=1')
 	}
 }

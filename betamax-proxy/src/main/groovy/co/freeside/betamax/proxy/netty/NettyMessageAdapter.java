@@ -20,6 +20,7 @@ import java.io.*;
 import java.util.*;
 import co.freeside.betamax.message.*;
 import com.google.common.base.*;
+import com.google.common.collect.*;
 import com.google.common.io.*;
 import io.netty.buffer.*;
 import io.netty.handler.codec.http.*;
@@ -27,10 +28,26 @@ import io.netty.handler.codec.http.*;
 public abstract class NettyMessageAdapter<T extends HttpMessage> extends AbstractMessage {
 
     protected final T delegate;
+    private final Multimap<String, String> additionalHeaders = LinkedHashMultimap.create();
     private final ByteArrayOutputStream body = new ByteArrayOutputStream();
 
     protected NettyMessageAdapter(T delegate) {
         this.delegate = delegate;
+        copyHeaders(delegate);
+    }
+
+    /**
+     * LittleProxy will use multiple request / response objects and sometimes
+     * subsequent ones will contain additional headers.
+     */
+    public void copyHeaders(HttpMessage httpMessage) {
+        for (String name : httpMessage.headers().names()) {
+            for (String value : httpMessage.headers().getAll(name)) {
+                if (!additionalHeaders.containsEntry(name, value)) {
+                    additionalHeaders.put(name, value);
+                }
+            }
+        }
     }
 
     public void append(HttpContent chunk) throws IOException {
@@ -46,21 +63,21 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
 
     @Override
     public Map<String, String> getHeaders() {
-        Map<String, String> headers = new HashMap<String, String>();
-        for (String name : delegate.headers().names()) {
-            headers.put(name, getHeader(name));
+        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+        for (String name : additionalHeaders.keySet()) {
+            builder.put(name, getHeader(name));
         }
-        return Collections.unmodifiableMap(headers);
+        return builder.build();
     }
 
     @Override
     public String getHeader(String name) {
-        return Joiner.on(", ").join(delegate.headers().getAll(name));
+        return Joiner.on(", ").join(additionalHeaders.get(name));
     }
 
     @Override
     public void addHeader(String name, String value) {
-        throw new UnsupportedOperationException();
+        additionalHeaders.put(name, value);
     }
 
     @Override

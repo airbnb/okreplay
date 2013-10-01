@@ -51,6 +51,7 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		HttpResponse response = null
 
 		if (httpObject instanceof HttpRequest) {
+            request.copyHeaders(httpObject)
 			response = onRequestIntercepted(httpObject).orNull()
 		}
 

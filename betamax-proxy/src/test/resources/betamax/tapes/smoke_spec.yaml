@@ -1,31 +1,45 @@
 !tape
 interactions:
-- recorded: 2013-09-27T05:09:54.152Z
+- recorded: 2013-10-01T21:53:48.227Z
   request:
     method: GET
     uri: http://httpbin.org/robots.txt
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '30'
       Content-Type: text/plain
-      Date: Fri, 27 Sep 2013 05:09:49 GMT
+      Date: Tue, 01 Oct 2013 21:53:47 GMT
       Server: gunicorn/0.17.4
     body: |
       User-agent: *
       Disallow: /deny
-- recorded: 2013-09-27T05:09:56.847Z
+- recorded: 2013-10-01T21:53:50.934Z
   request:
     method: GET
     uri: http://httpbin.org/html
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '3741'
       Content-Type: text/html; charset=utf-8
-      Date: Fri, 27 Sep 2013 05:09:52 GMT
+      Date: Tue, 01 Oct 2013 21:53:49 GMT
       Server: gunicorn/0.17.4
     body: |-
       <!DOCTYPE html>
@@ -42,42 +56,88 @@ interactions:
             </div>
         </body>
       </html>
-- recorded: 2013-09-27T05:10:09.054Z
+- recorded: 2013-10-01T21:53:59.023Z
   request:
     method: GET
     uri: http://httpbin.org/get
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '279'
       Content-Type: application/json
-      Date: Fri, 27 Sep 2013 05:10:04 GMT
+      Date: Tue, 01 Oct 2013 21:53:58 GMT
       Server: gunicorn/0.17.4
     body: |-
       {
-        "args": {},
         "url": "http://httpbin.org/get",
         "headers": {
-          "User-Agent": "Java/1.7.0_05",
-          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
           "Host": "httpbin.org",
-          "Via": "Betamax",
-          "Connection": "close"
+          "User-Agent": "Java/1.7.0_05",
+          "Connection": "close",
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "Via": "Betamax"
         },
-        "origin": "90.197.88.40"
+        "origin": "90.197.88.40",
+        "args": {}
       }
-- recorded: 2013-09-27T05:10:07.326Z
+- recorded: 2013-10-01T21:53:56.133Z
+  request:
+    method: GET
+    uri: http://httpbin.org/gzip
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Encoding: gzip
+      Content-Length: '225'
+      Content-Type: application/json
+      Date: Tue, 01 Oct 2013 21:53:55 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "gzipped": true,
+        "headers": {
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Host": "httpbin.org",
+          "Accept-Encoding": "gzip",
+          "User-Agent": "Java/1.7.0_05"
+        },
+        "origin": "90.197.88.40",
+        "method": "GET"
+      }
+- recorded: 2013-10-01T21:53:58.731Z
   request:
     method: GET
     uri: http://httpbin.org/redirect/1
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
   response:
     status: 302
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '215'
       Content-Type: text/html; charset=utf-8
-      Date: Fri, 27 Sep 2013 05:10:03 GMT
+      Date: Tue, 01 Oct 2013 21:53:57 GMT
       Location: /get
       Server: gunicorn/0.17.4
     body: |-
@@ -85,21 +145,26 @@ interactions:
       <title>Redirecting...</title>
       <h1>Redirecting...</h1>
       <p>You should be redirected automatically to target URL: <a href="/get">/get</a>.  If not click the link.
-- recorded: 2013-09-27T05:10:12.346Z
+- recorded: 2013-10-01T21:54:02.428Z
   request:
     method: GET
     uri: /get
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Connection: keep-alive
+      Host: httpbin.org
+      User-Agent: Java/1.7.0_05
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '279'
       Content-Type: application/json
-      Date: Fri, 27 Sep 2013 05:10:08 GMT
+      Date: Tue, 01 Oct 2013 21:54:01 GMT
       Server: gunicorn/0.17.4
     body: |-
       {
-        "url": "http://httpbin.org/get",
         "headers": {
           "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
           "User-Agent": "Java/1.7.0_05",
@@ -107,53 +172,70 @@ interactions:
           "Via": "Betamax",
           "Host": "httpbin.org"
         },
-        "origin": "90.197.88.40",
-        "args": {}
+        "args": {},
+        "url": "http://httpbin.org/get",
+        "origin": "90.197.88.40"
       }
-- recorded: 2013-09-27T05:10:15.261Z
+- recorded: 2013-10-01T21:54:05.424Z
   request:
     method: POST
     uri: /post
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Connection: close
+      Content-Length: '13'
+      Content-type: application/x-www-form-urlencoded
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+    body: message=O HAI
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '450'
       Content-Type: application/json
-      Date: Fri, 27 Sep 2013 05:10:11 GMT
+      Date: Tue, 01 Oct 2013 21:54:04 GMT
       Server: gunicorn/0.17.4
     body: |-
       {
-        "url": "http://httpbin.org/post",
-        "json": null,
+        "files": {},
         "data": "",
+        "url": "http://httpbin.org/post",
+        "args": {},
+        "origin": "90.197.88.40",
         "form": {
           "message": "O HAI"
         },
-        "origin": "90.197.88.40",
         "headers": {
-          "User-Agent": "Java/1.7.0_05",
           "Content-Type": "application/x-www-form-urlencoded",
-          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
           "Connection": "close",
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
           "Content-Length": "13",
           "Via": "Betamax",
-          "Host": "httpbin.org"
+          "Host": "httpbin.org",
+          "User-Agent": "Java/1.7.0_05"
         },
-        "files": {},
-        "args": {}
+        "json": null
       }
-- recorded: 2013-09-27T05:10:17.867Z
+- recorded: 2013-10-01T21:54:08.105Z
   request:
     method: GET
     uri: http://httpbin.org
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
   response:
     status: 200
     headers:
       Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
       Content-Length: '7641'
       Content-Type: text/html; charset=utf-8
-      Date: Fri, 27 Sep 2013 05:10:13 GMT
+      Date: Tue, 01 Oct 2013 21:54:07 GMT
       Server: gunicorn/0.17.4
     body: |-
       <!DOCTYPE html>
@@ -324,31 +406,4 @@ interactions:
 
       </body>
       </html>
-- recorded: 2013-09-27T05:10:03.243Z
-  request:
-    method: GET
-    uri: http://httpbin.org/gzip
-  response:
-    status: 200
-    headers:
-      Access-Control-Allow-Origin: '*'
-      Content-Encoding: gzip
-      Content-Length: '220'
-      Content-Type: application/json
-      Date: Fri, 27 Sep 2013 05:09:59 GMT
-      Server: gunicorn/0.17.4
-    body: |-
-      {
-        "origin": "90.197.88.40",
-        "method": "GET",
-        "gzipped": true,
-        "headers": {
-          "User-Agent": "Java/1.7.0_05",
-          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
-          "Accept-Encoding": "gzip",
-          "Connection": "close",
-          "Via": "Betamax",
-          "Host": "httpbin.org"
-        }
-      }
 name: smoke spec

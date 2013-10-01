@@ -26,14 +26,18 @@ import static io.netty.util.CharsetUtil.UTF_8
 abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMessageAdapter<T>> extends Specification {
 
 	@Subject A adapter
+    HttpHeaders nettyMessageHeaders = new DefaultHttpHeaders()
 	T nettyMessage
+
+    abstract void createAdapter()
 
 	void 'can read headers'() {
 		given:
-		def headers = new DefaultHttpHeaders()
-		headers.add(IF_NONE_MATCH, "abc123")
-		headers.add(ACCEPT_ENCODING, ["gzip", "deflate"])
-		nettyMessage.headers() >> headers
+        nettyMessageHeaders.add(IF_NONE_MATCH, "abc123")
+        nettyMessageHeaders.add(ACCEPT_ENCODING, ["gzip", "deflate"])
+
+        and:
+        createAdapter()
 
 		expect:
 		adapter.getHeader(IF_NONE_MATCH) == 'abc123'
@@ -42,7 +46,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
 	void 'headers are immutable'() {
 		given:
-		nettyMessage.headers() >> HttpHeaders.EMPTY_HEADERS
+        createAdapter()
 
 		when:
 		adapter.headers[IF_NONE_MATCH] = ['abc123']
@@ -53,9 +57,10 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
 	void 'body is readable as text'() {
 		given:
-		def headers = new DefaultHttpHeaders()
-		headers.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
-		nettyMessage.headers() >> headers
+        nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
+
+        and:
+        createAdapter()
 
 		and:
 		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes('ISO-8859-1')))
@@ -71,9 +76,10 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
 	void 'body is readable as binary'() {
 		given:
-		def headers = new DefaultHttpHeaders()
-		headers.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
-		nettyMessage.headers() >> headers
+        nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
+
+        and:
+        createAdapter()
 
 		and:
 		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(body))
@@ -87,8 +93,33 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 		body = 'value=\u00a31'.getBytes('ISO-8859-1')
 	}
 
+    void "headers can be appended after the adapter is created"() {
+        given:
+        nettyMessageHeaders.add(ACCEPT_ENCODING, "gzip")
+
+        and:
+        createAdapter()
+
+        when:
+        def laterHeaders = new DefaultHttpHeaders()
+        laterHeaders.add(IF_NONE_MATCH, "abc123")
+        laterHeaders.add(ACCEPT_ENCODING, "gzip") // duplicate should get discarded
+        laterHeaders.add(ACCEPT_ENCODING, "deflate")
+        def message = Stub(HttpMessage) {
+            headers() >> laterHeaders
+        }
+        adapter.copyHeaders(message)
+
+        then:
+        adapter.getHeader(IF_NONE_MATCH) == 'abc123'
+        adapter.getHeader(ACCEPT_ENCODING) == 'gzip, deflate'
+    }
+
 	void "#description if the content buffer is #contentDescription"() {
-		given:
+        given:
+        createAdapter()
+
+        and:
 		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(content))
 		adapter.append chunk
 
