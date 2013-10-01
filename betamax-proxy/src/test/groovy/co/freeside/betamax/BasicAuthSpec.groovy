@@ -17,6 +17,7 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
+import groovyx.net.http.HttpResponseDecorator
 import org.apache.http.HttpHost
 import org.apache.http.auth.*
 import org.junit.Rule
@@ -62,7 +63,7 @@ class BasicAuthSpec extends Specification {
 		http.client.credentialsProvider.setCredentials(new AuthScope(targetHost), credentials)
 
 		when:
-		def response = http.get(uri: endpoint)
+		HttpResponseDecorator response = http.get(uri: endpoint)
 
 		then:
 		response.status == status
@@ -82,7 +83,7 @@ class BasicAuthSpec extends Specification {
 		http.client.credentialsProvider.setCredentials(new AuthScope(targetHost), credentials)
 
 		when:
-		def response = http.get(uri: endpoint)
+        HttpResponseDecorator response = http.get(uri: endpoint)
 
 		then:
 		response.status == status
