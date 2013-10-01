@@ -54,6 +54,7 @@ public interface Message {
      * @return the message body as a string.
      * @throws IllegalStateException if the message does not have a body.
      */
+    @Deprecated
     Reader getBodyAsText() throws IOException;
 
     /**
@@ -63,6 +64,7 @@ public interface Message {
      * @return the message body as binary data.
      * @throws IllegalStateException if the message does not have a body.
      */
+    @Deprecated
     InputStream getBodyAsBinary() throws IOException;
 
     InputSupplier<InputStream> getBodySource();
