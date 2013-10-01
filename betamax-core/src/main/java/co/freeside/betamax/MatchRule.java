@@ -16,89 +16,69 @@
 
 package co.freeside.betamax;
 
-import co.freeside.betamax.message.Request;
-import com.google.common.collect.Maps;
-import com.google.common.collect.SortedMapDifference;
-import com.google.common.io.CharStreams;
-import com.google.common.primitives.Ints;
-
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.TreeMap;
+import java.io.*;
+import co.freeside.betamax.message.*;
+import com.google.common.io.*;
 
 /**
  * Implements a request matching rule for finding recordings on a tape.
  */
-public enum MatchRule implements Comparator<Request> {
+public enum MatchRule {
     method {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getMethod().compareTo(b.getMethod());
+        public boolean isMatch(Request a, Request b) {
+            return a.getMethod().equalsIgnoreCase(b.getMethod());
         }
     }, uri {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getUri().compareTo(b.getUri());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().equals(b.getUri());
         }
     }, host {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getUri().getHost().compareTo(b.getUri().getHost());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().getHost().equals(b.getUri().getHost());
         }
     }, path {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getUri().getPath().compareTo(b.getUri().getPath());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().getPath().equals(b.getUri().getPath());
         }
     }, port {
         @Override
-        public int compare(Request a, Request b) {
-            return Ints.compare(a.getUri().getPort(), b.getUri().getPort());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().getPort() == b.getUri().getPort();
         }
     }, query {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getUri().getQuery().compareTo(b.getUri().getQuery());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().getQuery().equals(b.getUri().getQuery());
         }
     }, fragment {
         @Override
-        public int compare(Request a, Request b) {
-            return a.getUri().getFragment().compareTo(b.getUri().getFragment());
+        public boolean isMatch(Request a, Request b) {
+            return a.getUri().getFragment().equals(b.getUri().getFragment());
         }
     }, headers {
         @Override
-        public int compare(Request a, Request b) {
-            Integer result = Ints.compare(a.getHeaders().size(), b.getHeaders().size());
-            if (result != 0) {
-                return result;
-            }
-
-            TreeMap<String, Object> stringObjectTreeMap = Maps.newTreeMap(new Comparator<String>() {
-                @Override
-                public int compare(String o1, String o2) {
-                    return o1.compareTo(o2);
-                }
-            });
-            stringObjectTreeMap.putAll(a.getHeaders());
-
-            SortedMapDifference<String, Object> difference = Maps.difference(stringObjectTreeMap, b.getHeaders());
-
-            return difference.areEqual() ? 0 : -1;
+        public boolean isMatch(Request a, Request b) {
+            return a.getHeaders().equals(b.getHeaders());
         }
 
 
     }, body {
         @Override
-        public int compare(Request a, Request b) {
+        public boolean isMatch(Request a, Request b) {
             try {
-                return CharStreams.toString(a.getBodyAsText()).compareTo(CharStreams.toString(b.getBodyAsText()));
+                return ByteStreams.equal(a.getBodySource(), b.getBodySource());
             } catch (IOException e) {
+                // TODO: better exception type
                 throw new RuntimeException(e);
             }
         }
     };
 
-    public int compare(Request a, Request b) {
+    public boolean isMatch(Request a, Request b) {
         throw new UnsupportedOperationException();
     }
 

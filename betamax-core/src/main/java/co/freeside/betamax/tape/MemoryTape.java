@@ -41,7 +41,7 @@ public class MemoryTape implements Tape {
         this.mode = mode;
     }
 
-    public void setMatchRules(Comparator<Request>[] matchRules) {
+    public void setMatchRules(MatchRule[] matchRules) {
         this.matchRules = matchRules;
     }
 
@@ -232,6 +232,5 @@ public class MemoryTape implements Tape {
     private TapeMode mode = READ_WRITE;
     private AtomicInteger orderedIndex = new AtomicInteger();
 
-    @SuppressWarnings({"unchecked"})
-    private Comparator<Request>[] matchRules = new Comparator[] {method, uri};
+    private MatchRule[] matchRules = new MatchRule[] {method, uri};
 }

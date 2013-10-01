@@ -16,8 +16,10 @@
 
 package co.freeside.betamax.message.filtering;
 
+import java.io.*;
 import java.util.*;
 import co.freeside.betamax.message.*;
+import com.google.common.io.*;
 import static org.apache.http.HttpHeaders.*;
 
 public abstract class HeaderFilteringMessage implements Message {
@@ -39,4 +41,45 @@ public abstract class HeaderFilteringMessage implements Message {
     public final String getHeader(String name) {
         return NO_PASS_HEADERS.contains(name) ? null : getDelegate().getHeader(name);
     }
+
+    @Override
+    public void addHeader(String name, String value) {
+        getDelegate().addHeader(name, value);
+    }
+
+    @Override
+    public boolean hasBody() {
+        return getDelegate().hasBody();
+    }
+
+    @Override
+    public Reader getBodyAsText() throws IOException {
+        return getDelegate().getBodyAsText();
+    }
+
+    @Override
+    public InputStream getBodyAsBinary() throws IOException {
+        return getDelegate().getBodyAsBinary();
+    }
+
+    @Override
+    public InputSupplier<InputStream> getBodySource() {
+        return getDelegate().getBodySource();
+    }
+
+    @Override
+    public String getContentType() {
+        return getDelegate().getContentType();
+    }
+
+    @Override
+    public String getCharset() {
+        return getDelegate().getCharset();
+    }
+
+    @Override
+    public String getEncoding() {
+        return getDelegate().getEncoding();
+    }
+
 }

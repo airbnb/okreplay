@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.tape;
 
-import java.util.*;
+import co.freeside.betamax.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.tape.*;
 
@@ -24,26 +24,17 @@ public class RequestMatcher {
 
     @SuppressWarnings("unchecked")
     public RequestMatcher(Request request) {
-        this(request, new Comparator<Request>() {
-            @Override
-            public int compare(Request o1, Request o2) {
-                int result = o1.getMethod().compareTo(o2.getMethod());
-                if (result != 0) {
-                    return result;
-                }
-                return o1.getUri().compareTo(o2.getUri());
-            }
-        });
+        this(request, MatchRule.method, MatchRule.uri);
     }
 
-    public RequestMatcher(Request request, Comparator<Request>... rules) {
+    public RequestMatcher(Request request, MatchRule... rules) {
         this.request = request;
         this.rules = rules;
     }
 
     public boolean matches(final RecordedRequest recordedRequest) {
-        for (Comparator<Request> comparator : rules) {
-            if (comparator.compare(request, recordedRequest) != 0) {
+        for (MatchRule rule : rules) {
+            if (!rule.isMatch(request, recordedRequest)) {
                 return false;
             }
         }
@@ -51,6 +42,6 @@ public class RequestMatcher {
         return true;
     }
 
-    private final Comparator<Request>[] rules;
+    private final MatchRule[] rules;
     private final Request request;
 }

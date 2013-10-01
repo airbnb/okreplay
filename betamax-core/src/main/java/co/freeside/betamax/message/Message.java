@@ -17,6 +17,7 @@ package co.freeside.betamax.message;
 
 import java.io.*;
 import java.util.*;
+import com.google.common.io.*;
 
 /**
  * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying
@@ -63,6 +64,8 @@ public interface Message {
      * @throws IllegalStateException if the message does not have a body.
      */
     InputStream getBodyAsBinary() throws IOException;
+
+    InputSupplier<InputStream> getBodySource();
 
     /**
      * @return the MIME content type of the message not including any charset.

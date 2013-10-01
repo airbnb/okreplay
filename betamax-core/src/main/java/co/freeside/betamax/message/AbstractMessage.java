@@ -19,6 +19,7 @@ package co.freeside.betamax.message;
 import java.io.*;
 import java.util.regex.*;
 import java.util.zip.*;
+import com.google.common.io.*;
 import org.apache.commons.lang.*;
 import static org.apache.http.HttpHeaders.*;
 
@@ -73,6 +74,16 @@ public abstract class AbstractMessage implements Message {
             stream = getBodyAsBinary();
         }
         return new InputStreamReader(stream, getCharset());
+    }
+
+    @Override
+    public InputSupplier<InputStream> getBodySource() {
+        return new InputSupplier<InputStream>() {
+            @Override
+            public InputStream getInput() throws IOException {
+                return getBodyAsBinary();
+            }
+        };
     }
 
     private String defaultIfNullOrEmpty(String string, String defaultValue) {

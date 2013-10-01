@@ -86,8 +86,8 @@ public class Recorder implements TestRule {
 
             List<Comparator<Request>> match = (List<Comparator<Request>>) arguments.get("match");
             Object[] array = match != null ? match.toArray() : null;
-            Comparator[] matchArray = array != null ? Arrays.copyOf(array, array.length, Comparator[].class) : null;
-            memoryTape.setMatchRules(matchArray != null ? matchArray : (Comparator[]) Arrays.asList(method, uri).toArray());
+            MatchRule[] matchArray = array != null ? Arrays.copyOf(array, array.length, MatchRule[].class) : null;
+            memoryTape.setMatchRules(matchArray != null ? matchArray : (MatchRule[]) Arrays.asList(method, uri).toArray());
         }
     }
 
@@ -131,7 +131,7 @@ public class Recorder implements TestRule {
                 public void evaluate() throws Throwable {
                     LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>(2);
                     map.put("mode", annotation.mode());
-                    map.put("match", new ArrayList<Comparator<Request>>(Arrays.asList(annotation.match())));
+                    map.put("match", new ArrayList<MatchRule>(Arrays.asList(annotation.match())));
                     try {
                         start(annotation.tape(), map);
                         statement.evaluate();

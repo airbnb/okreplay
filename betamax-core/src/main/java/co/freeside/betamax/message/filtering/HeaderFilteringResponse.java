@@ -16,12 +16,7 @@
 
 package co.freeside.betamax.message.filtering;
 
-import co.freeside.betamax.message.Message;
-import co.freeside.betamax.message.Response;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import co.freeside.betamax.message.*;
 
 public class HeaderFilteringResponse extends HeaderFilteringMessage implements Response {
     public HeaderFilteringResponse(Response response) {
@@ -34,42 +29,6 @@ public class HeaderFilteringResponse extends HeaderFilteringMessage implements R
 
     public int getStatus() {
         return response.getStatus();
-    }
-
-    public String getContentType() {
-        return response.getContentType();
-    }
-
-    public void addHeader(String name, String value) {
-        response.addHeader(name, value);
-    }
-
-    public boolean hasBody() {
-        return response.hasBody();
-    }
-
-    public Reader getBodyAsText() {
-        try {
-            return response.getBodyAsText();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public InputStream getBodyAsBinary() {
-        try {
-            return response.getBodyAsBinary();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String getCharset() {
-        return response.getCharset();
-    }
-
-    public String getEncoding() {
-        return response.getEncoding();
     }
 
     private final Response response;
