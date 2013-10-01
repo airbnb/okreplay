@@ -17,20 +17,16 @@
 package co.freeside.betamax.proxy
 
 import java.util.logging.Logger
-import java.util.zip.GZIPInputStream
-import co.freeside.betamax.encoding.DeflateEncoder
-import co.freeside.betamax.encoding.GzipEncoder
-import co.freeside.betamax.message.*
+import co.freeside.betamax.encoding.*
+import co.freeside.betamax.message.Response
 import co.freeside.betamax.proxy.netty.*
 import co.freeside.betamax.tape.Tape
 import com.google.common.base.Optional
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.Unpooled
+import io.netty.buffer.*
 import io.netty.handler.codec.http.*
 import org.littleshoot.proxy.HttpFiltersAdapter
 import static co.freeside.betamax.Headers.*
-import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_ENCODING
-import static io.netty.handler.codec.http.HttpHeaders.Names.VIA
+import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
 class BetamaxFilters extends HttpFiltersAdapter {
@@ -105,8 +101,10 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		}
 	}
 
-	private Optional<DefaultFullHttpResponse> onRequestIntercepted(HttpRequest httpObject) {
-		if (tape.isReadable() && tape.seek(request)) {
+	private Optional<FullHttpResponse> onRequestIntercepted(HttpRequest httpObject) {
+        if (!tape) {
+            return Optional.of(new DefaultFullHttpResponse(HTTP_1_1, new HttpResponseStatus(403, "No tape")))
+        } else if (tape.isReadable() && tape.seek(request)) {
 			def recordedResponse = tape.play(request)
 			FullHttpResponse response = playRecordedResponse(recordedResponse)
 			setViaHeader(response)
