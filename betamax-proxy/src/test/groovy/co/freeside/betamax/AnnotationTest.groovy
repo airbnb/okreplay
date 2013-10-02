@@ -33,73 +33,74 @@ import static org.apache.http.HttpHeaders.VIA
 @RunWith(OrderedRunner)
 class AnnotationTest {
 
-	static File tapeRoot = newTempDir('tapes')
-	@Rule public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
-	SimpleServer endpoint = new SimpleServer()
-	RESTClient http
+    static File tapeRoot = newTempDir('tapes')
+    @Rule
+    public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
+    SimpleServer endpoint = new SimpleServer()
+    RESTClient http
 
-	@Before
-	void initRestClient() {
-		http = new BetamaxRESTClient(endpoint.url)
-	}
+    @Before
+    void initRestClient() {
+        http = new BetamaxRESTClient(endpoint.url)
+    }
 
-	@After
-	void ensureEndpointIsStopped() {
-		endpoint.stop()
-	}
+    @After
+    void ensureEndpointIsStopped() {
+        endpoint.stop()
+    }
 
-	@AfterClass
-	static void cleanUpTapeFiles() {
-		tapeRoot.deleteDir()
-	}
+    @AfterClass
+    static void cleanUpTapeFiles() {
+        tapeRoot.deleteDir()
+    }
 
-	@Test
-	void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
-		assert recorder.tape == null
-	}
+    @Test
+    void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
+        assert recorder.tape == null
+    }
 
-	@Test
-	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
-	void annotationOnTestCausesTapeToBeInserted() {
-		assert recorder.tape.name == 'annotation_test'
-	}
+    @Test
+    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+    void annotationOnTestCausesTapeToBeInserted() {
+        assert recorder.tape.name == 'annotation_test'
+    }
 
-	@Test
-	void tapeIsEjectedAfterAnnotatedTestCompletes() {
-		assert recorder.tape == null
-	}
+    @Test
+    void tapeIsEjectedAfterAnnotatedTestCompletes() {
+        assert recorder.tape == null
+    }
 
-	@Test
-	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
-	void annotatedTestCanRecord() {
-		endpoint.start(EchoHandler)
+    @Test
+    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+    void annotatedTestCanRecord() {
+        endpoint.start(EchoHandler)
 
-		def response = http.get(path: '/')
+        def response = http.get(path: '/')
 
-		assert response.status == HTTP_OK
-		assert response.getFirstHeader(VIA)?.value == 'Betamax'
-		assert response.getFirstHeader(X_BETAMAX)?.value == 'REC'
-	}
+        assert response.status == HTTP_OK
+        assert response.getFirstHeader(VIA)?.value == 'Betamax'
+        assert response.getFirstHeader(X_BETAMAX)?.value == 'REC'
+    }
 
-	@Test
-	@Betamax(tape = 'annotation_test', mode = READ_WRITE)
-	void annotatedTestCanPlayBack() {
-		def response = http.get(path: '/')
+    @Test
+    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+    void annotatedTestCanPlayBack() {
+        def response = http.get(path: '/')
 
-		assert response.status == HTTP_OK
-		assert response.getFirstHeader(VIA)?.value == 'Betamax'
-		assert response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
-	}
+        assert response.status == HTTP_OK
+        assert response.getFirstHeader(VIA)?.value == 'Betamax'
+        assert response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
+    }
 
-	@Test
-	void canMakeUnproxiedRequestAfterUsingAnnotation() {
-		endpoint.start(EchoHandler)
+    @Test
+    void canMakeUnproxiedRequestAfterUsingAnnotation() {
+        endpoint.start(EchoHandler)
 
-		def response = http.get(path: '/')
+        def response = http.get(path: '/')
 
-		assert response.status == HTTP_OK
-		assert response.getFirstHeader(VIA) == null
-	}
+        assert response.status == HTTP_OK
+        assert response.getFirstHeader(VIA) == null
+    }
 
 }
 
@@ -110,23 +111,23 @@ class AnnotationTest {
  */
 class OrderedRunner extends BlockJUnit4ClassRunner {
 
-	private static final ORDER = [
-			'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
-			'annotationOnTestCausesTapeToBeInserted',
-			'tapeIsEjectedAfterAnnotatedTestCompletes',
-			'annotatedTestCanRecord',
-			'annotatedTestCanPlayBack',
-			'canMakeUnproxiedRequestAfterUsingAnnotation'
-	]
+    private static final ORDER = [
+            'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
+            'annotationOnTestCausesTapeToBeInserted',
+            'tapeIsEjectedAfterAnnotatedTestCompletes',
+            'annotatedTestCanRecord',
+            'annotatedTestCanPlayBack',
+            'canMakeUnproxiedRequestAfterUsingAnnotation'
+    ]
 
-	OrderedRunner(Class testClass) {
-		super(testClass)
-	}
+    OrderedRunner(Class testClass) {
+        super(testClass)
+    }
 
-	@Override
-	protected List<FrameworkMethod> computeTestMethods() {
-		super.computeTestMethods().sort {FrameworkMethod o1, FrameworkMethod o2 ->
-			ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
-		}
-	}
+    @Override
+    protected List<FrameworkMethod> computeTestMethods() {
+        super.computeTestMethods().sort { FrameworkMethod o1, FrameworkMethod o2 ->
+            ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
+        }
+    }
 }

@@ -34,14 +34,12 @@ class PreExistingProxySpec extends Specification {
 	@Shared @AutoCleanup('stop') SimpleServer proxyServer = new SimpleServer()
 
 	void setupSpec() {
-		println 'setupSpec'
 		proxyServer.start(HelloHandler)
 		System.properties.'http.proxyHost' = InetAddress.localHost.hostAddress
 		System.properties.'http.proxyPort' = proxyServer.port.toString()
 	}
 
 	void cleanupSpec() {
-		println 'cleanupSpec'
 		System.clearProperty 'http.proxyHost'
 		System.clearProperty 'http.proxyPort'
 	}

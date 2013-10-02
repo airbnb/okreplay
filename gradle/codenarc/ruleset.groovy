@@ -115,10 +115,18 @@ ruleset {
     StatelessSingleton
 
     // rulesets/dry.xml
-    DuplicateListLiteral
-    DuplicateMapLiteral
-    DuplicateNumberLiteral
-    DuplicateStringLiteral
+    DuplicateListLiteral {
+        doNotApplyToClassNames = "*Spec"
+    }
+    DuplicateMapLiteral {
+        doNotApplyToClassNames = "*Spec"
+    }
+    DuplicateNumberLiteral {
+        doNotApplyToClassNames = "*Spec"
+    }
+    DuplicateStringLiteral {
+        doNotApplyToClassNames = "*Spec"
+    }
 
     // rulesets/enhanced.xml
     CloneWithoutCloneable
@@ -279,7 +287,9 @@ ruleset {
     // rulesets/security.xml
     FileCreateTempFile
     InsecureRandom
-    JavaIoPackageAccess
+    JavaIoPackageAccess {
+        doNotApplyToClassNames = "*Spec"
+    }
     NonFinalPublicField
     NonFinalSubclassOfSensitiveInterface
     ObjectFinalize
