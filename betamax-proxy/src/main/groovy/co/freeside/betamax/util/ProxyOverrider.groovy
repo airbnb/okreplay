@@ -98,6 +98,9 @@ class ProxyOverrider implements ChainedProxyManager {
         }
     }
 
+    /**
+     * Used by LittleProxy to connect to a downstream proxy if there is one.
+     */
     @Override
     void lookupChainedProxies(HttpRequest request, Queue<ChainedProxy> chainedProxies) {
         final InetSocketAddress originalProxy = originalProxies[request.uri.toURI().scheme]

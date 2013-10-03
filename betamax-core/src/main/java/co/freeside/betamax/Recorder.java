@@ -82,7 +82,7 @@ public class Recorder implements TestRule {
             MemoryTape memoryTape = (MemoryTape) tape;
 
             TapeMode mode = (TapeMode) arguments.get("mode");
-            memoryTape.setMode(mode != null ? mode : defaultMode);
+            memoryTape.setMode(mode == null ? defaultMode : mode);
 
             List<Comparator<Request>> match = (List<Comparator<Request>>) arguments.get("match");
             Object[] array = match != null ? match.toArray() : null;
