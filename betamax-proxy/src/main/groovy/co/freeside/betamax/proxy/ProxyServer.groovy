@@ -27,95 +27,103 @@ import org.littleshoot.proxy.impl.DefaultHttpProxyServer
 import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.httpMethodPredicate
 import static com.google.common.base.Predicates.not
 import static io.netty.handler.codec.http.HttpMethod.CONNECT
+import static java.util.concurrent.TimeUnit.MILLISECONDS
 
 class ProxyServer implements HttpInterceptor {
 
-	private final HttpProxyServerBootstrap proxyServerBootstrap;
-	private final ProxyRecorder recorder
-	private final ProxyOverrider proxyOverrider = new ProxyOverrider()
-	private final SSLOverrider sslOverrider = new SSLOverrider()
-	private HttpProxyServer proxyServer;
-	private boolean running = false
-	private final InetSocketAddress address
+    private final HttpProxyServerBootstrap proxyServerBootstrap;
+    private final ProxyRecorder recorder
+    private final ProxyOverrider proxyOverrider = new ProxyOverrider()
+    private final SSLOverrider sslOverrider = new SSLOverrider()
+    private HttpProxyServer proxyServer;
+    private boolean running = false
+    private final InetSocketAddress address
 
-	private static final Predicate<HttpRequest> NOT_CONNECT = not(httpMethodPredicate(CONNECT))
+    private static final Predicate<HttpRequest> NOT_CONNECT = not(httpMethodPredicate(CONNECT))
 
-	ProxyServer(ProxyRecorder recorder) {
-		this.recorder = recorder
+    ProxyServer(ProxyRecorder recorder) {
+        this.recorder = recorder
 
-		address = new InetSocketAddress(InetAddress.getLocalHost(), recorder.getProxyPort());
+        address = new InetSocketAddress(InetAddress.getLocalHost(), recorder.getProxyPort());
 //		address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
-		println "created address, $address"
-		proxyServerBootstrap = DefaultHttpProxyServer
-				.bootstrap()
-				.withAddress(address)
-				.withManInTheMiddle(new SelfSignedMitmManager())
-				.withFiltersSource(new HttpFiltersSourceAdapter() {
-			@Override
-			HttpFilters filterRequest(HttpRequest originalRequest) {
-				def filters = new BetamaxFilters(originalRequest, recorder.tape)
-				return new PredicatedHttpFilters(filters, NOT_CONNECT, originalRequest);
-			}
-		})
-	}
+        println "created address, $address"
+        proxyServerBootstrap = DefaultHttpProxyServer
+                .bootstrap()
+                .withIdleConnectionTimeout(MILLISECONDS.toSeconds(recorder.proxyTimeout) as int)
+                .withAddress(address)
 
-	@Override
-	boolean isRunning() {
-		running
-	}
+        if (recorder.sslSupport) {
+            proxyServerBootstrap.withManInTheMiddle(new SelfSignedMitmManager())
+        } else {
+            proxyServerBootstrap.withChainProxyManager(proxyOverrider)
+        }
 
-	void start() {
-		if (isRunning()) throw new IllegalStateException("Betamax proxy server is already running")
-		proxyServer = proxyServerBootstrap.start()
-		running = true
+        proxyServerBootstrap.withFiltersSource(new HttpFiltersSourceAdapter() {
+            @Override
+            HttpFilters filterRequest(HttpRequest originalRequest) {
+                def filters = new BetamaxFilters(originalRequest, recorder.tape)
+                return new PredicatedHttpFilters(filters, NOT_CONNECT, originalRequest);
+            }
+        })
+    }
 
-		overrideProxySettings()
-		overrideSSLSettings()
-	}
+    @Override
+    boolean isRunning() {
+        running
+    }
 
-	@Override
-	void stop() {
-		if (!isRunning()) throw new IllegalStateException("Betamax proxy server is already stopped")
-		restoreOriginalProxySettings()
-		restoreOriginalSSLSettings()
+    void start() {
+        if (isRunning()) throw new IllegalStateException("Betamax proxy server is already running")
+        proxyServer = proxyServerBootstrap.start()
+        running = true
 
-		proxyServer.stop()
-		running = false
-	}
+        overrideProxySettings()
+        overrideSSLSettings()
+    }
 
-	@Override
-	String getHost() {
-		address.hostName
-	}
+    @Override
+    void stop() {
+        if (!isRunning()) throw new IllegalStateException("Betamax proxy server is already stopped")
+        restoreOriginalProxySettings()
+        restoreOriginalSSLSettings()
 
-	@Override
-	int getPort() {
-		address.port
-	}
+        proxyServer.stop()
+        running = false
+    }
 
-	private void overrideProxySettings() {
-		def nonProxyHosts = recorder.ignoreHosts as Set
-		if (recorder.ignoreLocalhost) {
-			nonProxyHosts.addAll(Network.localAddresses)
-		}
-		proxyOverrider.activate address.hostName, address.port, nonProxyHosts
-	}
+    @Override
+    String getHost() {
+        address.hostName
+    }
 
-	private void restoreOriginalProxySettings() {
-		proxyOverrider.deactivateAll()
-	}
+    @Override
+    int getPort() {
+        address.port
+    }
 
-	private void overrideSSLSettings() {
-		if (recorder.sslSupport) {
-			sslOverrider.activate()
-		}
-	}
+    private void overrideProxySettings() {
+        def nonProxyHosts = recorder.ignoreHosts as Set
+        if (recorder.ignoreLocalhost) {
+            nonProxyHosts.addAll(Network.localAddresses)
+        }
+        proxyOverrider.activate address.hostName, address.port, nonProxyHosts
+    }
 
-	private void restoreOriginalSSLSettings() {
-		if (recorder.sslSupport) {
-			sslOverrider.deactivate()
-		}
-	}
+    private void restoreOriginalProxySettings() {
+        proxyOverrider.deactivateAll()
+    }
+
+    private void overrideSSLSettings() {
+        if (recorder.sslSupport) {
+            sslOverrider.activate()
+        }
+    }
+
+    private void restoreOriginalSSLSettings() {
+        if (recorder.sslSupport) {
+            sslOverrider.deactivate()
+        }
+    }
 
 }
 
