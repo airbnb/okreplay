@@ -75,13 +75,15 @@ class RecorderConfigurationSpec extends Specification {
     void 'recorder picks up configuration from properties'() {
         given:
         def properties = new Properties()
-        properties.setProperty('betamax.tapeRoot', "$tmpdir/tapes")
-        properties.setProperty('betamax.proxyPort', '1337')
-        properties.setProperty('betamax.defaultMode', 'READ_ONLY')
-        properties.setProperty('betamax.proxyTimeout', '30000')
-        properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
-        properties.setProperty('betamax.ignoreLocalhost', 'true')
-        properties.setProperty('betamax.sslSupport', 'true')
+        properties.with {
+            setProperty('betamax.tapeRoot', "${this.tmpdir}tapes".toString())
+            setProperty('betamax.proxyPort', '1337')
+            setProperty('betamax.defaultMode', 'READ_ONLY')
+            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
+            setProperty('betamax.ignoreLocalhost', 'true')
+            setProperty('betamax.sslSupport', 'true')
+        }
 
         and:
         def recorder = new ProxyRecorder(properties)
@@ -102,13 +104,15 @@ class RecorderConfigurationSpec extends Specification {
         given:
         def propertiesFile = new File(tmpdir, 'betamax.properties')
         def properties = new Properties()
-        properties.setProperty('betamax.tapeRoot', "$tmpdir/tapes")
-        properties.setProperty('betamax.proxyPort', '1337')
-        properties.setProperty('betamax.defaultMode', 'READ_ONLY')
-        properties.setProperty('betamax.proxyTimeout', '30000')
-        properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
-        properties.setProperty('betamax.ignoreLocalhost', 'true')
-        properties.setProperty('betamax.sslSupport', 'true')
+        properties.with {
+            setProperty('betamax.tapeRoot', "${this.tmpdir}/tapes".toString())
+            setProperty('betamax.proxyPort', '1337')
+            setProperty('betamax.defaultMode', 'READ_ONLY')
+            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
+            setProperty('betamax.ignoreLocalhost', 'true')
+            setProperty('betamax.sslSupport', 'true')
+        }
         propertiesFile.withWriter { writer ->
             properties.store(writer, null)
         }
@@ -138,13 +142,15 @@ class RecorderConfigurationSpec extends Specification {
         given:
         def propertiesFile = new File(tmpdir, 'betamax.properties')
         def properties = new Properties()
-        properties.setProperty('betamax.tapeRoot', "$tmpdir/tapes")
-        properties.setProperty('betamax.proxyPort', '1337')
-        properties.setProperty('betamax.defaultMode', 'READ_ONLY')
-        properties.setProperty('betamax.proxyTimeout', '30000')
-        properties.setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
-        properties.setProperty('betamax.ignoreLocalhost', 'true')
-        properties.setProperty('betamax.sslSupport', 'true')
+        properties.with {
+            setProperty('betamax.tapeRoot', "${this.tmpdir}/tapes".toString())
+            setProperty('betamax.proxyPort', '1337')
+            setProperty('betamax.defaultMode', 'READ_ONLY')
+            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
+            setProperty('betamax.ignoreLocalhost', 'true')
+            setProperty('betamax.sslSupport', 'true')
+        }
         propertiesFile.withWriter { writer ->
             properties.store(writer, null)
         }
