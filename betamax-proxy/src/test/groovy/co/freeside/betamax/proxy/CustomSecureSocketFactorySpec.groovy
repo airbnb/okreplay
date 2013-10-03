@@ -56,7 +56,6 @@ class CustomSecureSocketFactorySpec extends Specification {
 		BetamaxHttpsSupport.configure(http)
 	}
 
-	@Ignore("until HTTPS support implemented")
 	void 'proxy can use a custom SSL socket factory'() {
 
 		given: 'a recorder configured with a custom SSL socket factory'

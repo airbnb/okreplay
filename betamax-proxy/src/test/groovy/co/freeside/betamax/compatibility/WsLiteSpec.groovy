@@ -54,7 +54,6 @@ class WsLiteSpec extends Specification {
 		response.headers[X_BETAMAX] == 'REC'
 	}
 
-	@Ignore("until HTTPS support implemented")
 //	@IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
 	@Betamax(tape = 'wslite spec')
 	void 'proxy intercepts HTTPS requests'() {

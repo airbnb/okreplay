@@ -91,7 +91,6 @@ class HttpClientSpec extends Specification {
 		response.getFirstHeader(VIA)?.value == 'Betamax'
 	}
 
-	@Ignore("until HTTPS support implemented")
 	@Betamax(tape = 'http client spec')
 	void 'proxy can intercept HTTPS requests'() {
 		given:
