@@ -23,6 +23,7 @@ import org.junit.Rule
 import spock.lang.*
 import wslite.rest.RESTClient
 import static co.freeside.betamax.Headers.X_BETAMAX
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
@@ -40,7 +41,7 @@ class WsLiteSpec extends Specification {
 		httpsEndpoint.start(HelloHandler)
 	}
 
-	@Betamax(tape = 'wslite spec', mode = TapeMode.READ_WRITE)
+	@Betamax(tape = 'wslite spec', mode = READ_WRITE)
 	void 'can record a connection made with WsLite'() {
 		given: 'a properly configured wslite instance'
 		def http = new RESTClient(endpoint.url)
@@ -54,8 +55,7 @@ class WsLiteSpec extends Specification {
 		response.headers[X_BETAMAX] == 'REC'
 	}
 
-//	@IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
-	@Betamax(tape = 'wslite spec')
+	@Betamax(tape = 'wslite spec', mode = READ_WRITE)
 	void 'proxy intercepts HTTPS requests'() {
 		given: 'a properly configured wslite instance'
 		def http = new RESTClient(httpsEndpoint.url)
