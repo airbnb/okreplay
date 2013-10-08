@@ -93,7 +93,6 @@ class ProxyRecorder extends Recorder {
 		}
 	}
 
-	@Override
 	protected void configureFrom(ConfigObject config) {
 		super.configureFrom(config)
 

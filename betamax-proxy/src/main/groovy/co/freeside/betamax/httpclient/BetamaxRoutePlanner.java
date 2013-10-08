@@ -14,29 +14,31 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.httpclient
+package co.freeside.betamax.httpclient;
 
-import org.apache.http.client.HttpClient
-import org.apache.http.conn.scheme.SchemeRegistry
-import org.apache.http.impl.client.AbstractHttpClient
-import org.apache.http.impl.conn.ProxySelectorRoutePlanner
+import java.net.*;
+import org.apache.http.client.*;
+import org.apache.http.conn.routing.*;
+import org.apache.http.conn.scheme.*;
+import org.apache.http.impl.client.*;
+import org.apache.http.impl.conn.*;
 
 /**
  * A convenience extension of ProxySelectorRoutePlanner that will configure proxy selection in a way that will work with
  * Betamax.
  */
-class BetamaxRoutePlanner extends ProxySelectorRoutePlanner {
+public class BetamaxRoutePlanner extends ProxySelectorRoutePlanner {
 
-    static void configure(AbstractHttpClient httpClient) {
-        def routePlanner = new BetamaxRoutePlanner(httpClient)
-		httpClient.routePlanner = routePlanner
+    public static void configure(AbstractHttpClient httpClient) {
+        HttpRoutePlanner routePlanner = new BetamaxRoutePlanner(httpClient);
+        httpClient.setRoutePlanner(routePlanner);
     }
 
-    BetamaxRoutePlanner(HttpClient httpClient) {
-        this(httpClient.connectionManager.schemeRegistry)
+    public BetamaxRoutePlanner(HttpClient httpClient) {
+        this(httpClient.getConnectionManager().getSchemeRegistry());
     }
 
-    BetamaxRoutePlanner(SchemeRegistry schemeRegistry) {
-        super(schemeRegistry, ProxySelector.default)
+    public BetamaxRoutePlanner(SchemeRegistry schemeRegistry) {
+        super(schemeRegistry, ProxySelector.getDefault());
     }
 }

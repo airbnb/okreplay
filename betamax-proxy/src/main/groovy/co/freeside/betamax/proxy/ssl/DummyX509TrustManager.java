@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy.ssl
+package co.freeside.betamax.proxy.ssl;
 
-import java.security.cert.X509Certificate
-import javax.net.ssl.X509TrustManager
+import java.security.cert.*;
+import javax.net.ssl.*;
 
-class DummyX509TrustManager implements X509TrustManager {
+public class DummyX509TrustManager implements X509TrustManager {
 
-	@Override
-	void checkClientTrusted(X509Certificate[] chain, String authType) { }
+    @Override
+    public void checkClientTrusted(X509Certificate[] chain, String authType) {
+    }
 
-	@Override
-	void checkServerTrusted(X509Certificate[] chain, String authType) { }
+    @Override
+    public void checkServerTrusted(X509Certificate[] chain, String authType) {
+    }
 
-	@Override
-	X509Certificate[] getAcceptedIssuers() {
-		null
-	}
+    @Override
+    public X509Certificate[] getAcceptedIssuers() {
+        return null;
+    }
 }
 
 

@@ -22,7 +22,7 @@ import io.netty.handler.codec.http.*;
 
 public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implements Request {
 
-    public static Request wrap(HttpObject message) {
+    public static NettyRequestAdapter wrap(HttpObject message) {
         if (message instanceof HttpRequest) {
             return new NettyRequestAdapter((HttpRequest) message);
         } else {
