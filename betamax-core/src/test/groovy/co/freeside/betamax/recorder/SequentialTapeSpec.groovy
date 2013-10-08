@@ -48,7 +48,7 @@ class SequentialTapeSpec extends Specification {
 		}
 
 		and: 'each has different content'
-		responses.bodyAsText.text == (1..n).collect {
+		responses.bodyAsText.input.text == (1..n).collect {
 			"count: $it"
 		}
 
@@ -93,7 +93,7 @@ class SequentialTapeSpec extends Specification {
 		responses.status == [SC_NOT_FOUND, SC_CREATED, SC_OK]
 
 		and:
-		new JsonSlurper().parseText(responses[2].bodyAsText.text).name == 'foo'
+		new JsonSlurper().parseText(responses[2].bodyAsText.input.text).name == 'foo'
 
 		where:
 		url = 'http://freeside.co/thing/1'

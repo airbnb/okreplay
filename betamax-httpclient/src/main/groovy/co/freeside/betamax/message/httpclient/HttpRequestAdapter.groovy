@@ -48,7 +48,7 @@ class HttpRequestAdapter extends HttpMessageAdapter<HttpRequest> implements Requ
 	}
 
 	@Override
-	InputStream getBodyAsBinary() {
+	protected InputStream getBodyAsStream() {
 		if (delegate instanceof HttpEntityEnclosingRequest) {
 			delegate.entity.content
 		} else {

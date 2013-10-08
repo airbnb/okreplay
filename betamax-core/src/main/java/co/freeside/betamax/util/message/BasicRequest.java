@@ -22,6 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class BasicRequest extends BasicMessage implements Request {
+
     public BasicRequest() { }
 
     public BasicRequest(String method, String uri) {
@@ -33,6 +34,7 @@ public class BasicRequest extends BasicMessage implements Request {
         }
     }
 
+    @Override
     public String getMethod() {
         return method;
     }
@@ -41,6 +43,7 @@ public class BasicRequest extends BasicMessage implements Request {
         this.method = method;
     }
 
+    @Override
     public URI getUri() {
         return uri;
     }

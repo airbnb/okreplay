@@ -53,18 +53,13 @@ public abstract class HeaderFilteringMessage implements Message {
     }
 
     @Override
-    public Reader getBodyAsText() throws IOException {
+    public InputSupplier<Reader> getBodyAsText() {
         return getDelegate().getBodyAsText();
     }
 
     @Override
-    public InputStream getBodyAsBinary() throws IOException {
+    public InputSupplier<InputStream> getBodyAsBinary() {
         return getDelegate().getBodyAsBinary();
-    }
-
-    @Override
-    public InputSupplier<InputStream> getBodySource() {
-        return getDelegate().getBodySource();
     }
 
     @Override

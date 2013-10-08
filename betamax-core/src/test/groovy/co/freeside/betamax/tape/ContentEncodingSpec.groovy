@@ -27,6 +27,11 @@ import static org.apache.http.HttpHeaders.*
 @Unroll
 class ContentEncodingSpec extends Specification {
 
+    /**
+     * This is really just testing that the tape doesn't do anything silly
+     * in the presence of a Content-Encoding header. It is the responsibility
+     * of the Response implementation to decode the downstream content.
+     */
 	void 'a #encoding encoded response body is stored as plain text in a tape file'() {
 		given:
 		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
@@ -35,7 +40,7 @@ class ContentEncodingSpec extends Specification {
 		def response = new BasicResponse(HTTP_OK, 'OK')
 		response.addHeader(CONTENT_TYPE, 'text/plain')
 		response.addHeader(CONTENT_ENCODING, encoding)
-		response.body = encoder.encode('O HAI!')
+		response.body = 'O HAI!'.bytes
 
 		and:
 		def tape = new YamlTape(name: 'encoded response tape')
@@ -50,9 +55,7 @@ class ContentEncodingSpec extends Specification {
 		yaml.contains('body: O HAI!')
 
 		where:
-		encoding  | encoder
-		'gzip'    | new GzipEncoder()
-		'deflate' | new DeflateEncoder()
+		encoding << ['gzip', 'deflate', 'none']
 	}
 
 	void 'response body is not encoded when played from tape and a #encoding content-encoding header is present'() {
@@ -81,7 +84,7 @@ interactions:
 
 		then:
 		response.getHeader(CONTENT_ENCODING) == encoding
-		response.bodyAsText.text == 'O HAI!'
+		response.bodyAsText.input.text == 'O HAI!'
 
 		where:
 		encoding << ["gzip", "deflate"]

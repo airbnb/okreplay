@@ -19,6 +19,7 @@ package co.freeside.betamax.util.message;
 import co.freeside.betamax.message.Response;
 
 public class BasicResponse extends BasicMessage implements Response {
+
     public BasicResponse() { }
 
     public BasicResponse(int status, String reason) {
@@ -31,6 +32,7 @@ public class BasicResponse extends BasicMessage implements Response {
         this.reason = reason;
     }
 
+    @Override
     public int getStatus() {
         return status;
     }

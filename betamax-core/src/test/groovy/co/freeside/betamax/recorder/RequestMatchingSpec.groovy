@@ -79,7 +79,7 @@ interactions:
         def response = handler.handle(request)
 
         then:
-        response.bodyAsText.text == responseText
+        response.bodyAsText.input.text == responseText
 
         where:
         method | uri
@@ -117,7 +117,7 @@ interactions:
         then:
         response.headers[VIA] == 'Betamax'
         response.headers[X_BETAMAX] == 'PLAY'
-        response.bodyAsText.text == 'GET method response from xkcd.com'
+        response.bodyAsText.input.text == 'GET method response from xkcd.com'
     }
 
     @Unroll('request with Accept: #acceptHeader returns "#responseText"')
@@ -164,7 +164,7 @@ interactions:
         response.headers[VIA] == 'Betamax'
         response.headers[X_BETAMAX] == 'PLAY'
         response.headers[CONTENT_TYPE] == acceptHeader
-        response.bodyAsText.text == responseText
+        response.bodyAsText.input.text == responseText
 
         where:
         acceptHeader       | responseText

@@ -78,7 +78,7 @@ interactions:
 
 		then:
 		def expected = '\u00a3'.getBytes(charset)
-		response.bodyAsBinary.bytes == expected
+		response.bodyAsBinary.input.bytes == expected
 
 		where:
 		charset << ['UTF-8', 'ISO-8859-1']

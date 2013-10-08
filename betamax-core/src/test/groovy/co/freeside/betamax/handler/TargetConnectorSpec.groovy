@@ -92,7 +92,7 @@ class TargetConnectorSpec extends Specification {
 		then:
 		1 * httpClient.execute(_, _) >> { httpHost, outboundRequest ->
 			def entity = outboundRequest.entity
-			assert entity.content.text == request.bodyAsText.text
+			assert entity.content.text == request.bodyAsText.input.text
 			okResponse
 		}
 	}

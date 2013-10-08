@@ -37,7 +37,7 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
     }
 
     @Override
-    public final Reader getBodyAsText() throws IOException {
+    protected final Reader getBodyAsReader() throws IOException {
         String string;
         if (hasBody()) {
             string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
@@ -48,7 +48,7 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
         return new StringReader(string);
     }
 
-    public final InputStream getBodyAsBinary() throws UnsupportedEncodingException {
+    public final InputStream getBodyAsStream() throws UnsupportedEncodingException {
         byte[] bytes;
         if (hasBody()) {
             bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;

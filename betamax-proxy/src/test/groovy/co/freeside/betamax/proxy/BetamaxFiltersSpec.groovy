@@ -145,7 +145,7 @@ class BetamaxFiltersSpec extends Specification {
 
 			with(recordedResponse) {
 				status == response.status.code()
-				bodyAsBinary.bytes == readContent(response)
+				bodyAsBinary.input.bytes == readContent(response)
 			}
 		}
 

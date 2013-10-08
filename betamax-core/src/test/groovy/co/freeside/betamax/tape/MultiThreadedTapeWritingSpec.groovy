@@ -49,7 +49,7 @@ class MultiThreadedTapeWritingSpec extends Specification {
 			Thread.start {
 				try {
 					def request = new BasicRequest('GET', "$endpoint.url$i")
-					responses[i] = handler.handle(request).bodyAsText.text
+					responses[i] = handler.handle(request).bodyAsText.input.text
 				} catch (IOException e) {
 					responses[i] = 'FAIL!'
 				}

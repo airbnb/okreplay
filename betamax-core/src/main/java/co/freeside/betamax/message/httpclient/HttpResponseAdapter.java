@@ -51,7 +51,7 @@ public class HttpResponseAdapter extends HttpMessageAdapter<HttpResponse> implem
     }
 
     @Override
-    public InputStream getBodyAsBinary() {
+    protected InputStream getBodyAsStream() {
         if (body == null) {
             // TODO: this is inconsistent with RecordedResponse - interface should make it clear what should happen in this case
             throw new IllegalStateException("cannot read the body of a response that does not have one");
@@ -61,9 +61,9 @@ public class HttpResponseAdapter extends HttpMessageAdapter<HttpResponse> implem
     }
 
     @Override
-    public Reader getBodyAsText() {
+    protected Reader getBodyAsReader() {
         try {
-            return new InputStreamReader(getBodyAsBinary(), getCharset());
+            return new InputStreamReader(getBodyAsStream(), getCharset());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

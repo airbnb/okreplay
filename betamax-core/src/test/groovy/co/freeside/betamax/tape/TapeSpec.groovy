@@ -16,7 +16,6 @@
 
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.encoding.GzipEncoder
 import co.freeside.betamax.message.*
 import co.freeside.betamax.util.message.*
 import spock.lang.*
@@ -29,7 +28,7 @@ class TapeSpec extends Specification {
 
 	@Shared Tape tape = new MemoryTape(name: 'tape_spec')
 	Request getRequest = new BasicRequest('GET', 'http://icanhascheezburger.com/')
-	Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: new GzipEncoder().encode('O HAI!', 'UTF-8'))
+	Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: 'O HAI!'.bytes)
 
 	void setup() {
 		plainTextResponse.addHeader(CONTENT_TYPE, 'text/plain;charset=UTF-8')
@@ -99,7 +98,7 @@ class TapeSpec extends Specification {
 
 		then: 'the recorded response data is copied onto the response'
 		response.status == plainTextResponse.status
-		response.bodyAsText.text == 'O HAI!'
+		response.bodyAsText.input.text == 'O HAI!'
 		response.headers == plainTextResponse.headers
 	}
 
@@ -114,7 +113,7 @@ class TapeSpec extends Specification {
 
 		then: 'the request body is stored on the tape'
 		def interaction = tape.interactions[-1]
-		interaction.request.body == request.bodyAsText.text
+		interaction.request.body == request.bodyAsText.input.text
 	}
 
 	void 'a write-only tape cannot be read from'() {

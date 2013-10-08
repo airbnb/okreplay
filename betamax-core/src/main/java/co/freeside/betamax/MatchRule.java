@@ -70,7 +70,7 @@ public enum MatchRule {
         @Override
         public boolean isMatch(Request a, Request b) {
             try {
-                return ByteStreams.equal(a.getBodySource(), b.getBodySource());
+                return ByteStreams.equal(a.getBodyAsBinary(), b.getBodyAsBinary());
             } catch (IOException e) {
                 // TODO: better exception type
                 throw new RuntimeException(e);

@@ -66,7 +66,7 @@ class BetamaxRequestDirector implements RequestDirector {
 			}
 		}
 		if (responseWrapper.hasBody()) {
-			response.entity = new ByteArrayEntity(responseWrapper.bodyAsBinary.bytes, ContentType.create(responseWrapper.contentType))
+			response.entity = new ByteArrayEntity(responseWrapper.bodyAsBinary.input.bytes, ContentType.create(responseWrapper.contentType))
 		}
 		response
 	}

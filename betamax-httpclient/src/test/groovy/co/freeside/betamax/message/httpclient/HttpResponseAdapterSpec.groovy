@@ -90,7 +90,7 @@ class HttpResponseAdapterSpec extends Specification {
 		def responseAdapter = new HttpResponseAdapter(response)
 
 		expect:
-		responseAdapter.bodyAsText.text == body
+		responseAdapter.bodyAsText.input.text == body
 
 		where:
 		contentTypeHeader             | charset
@@ -114,10 +114,10 @@ class HttpResponseAdapterSpec extends Specification {
 		def responseAdapter = new HttpResponseAdapter(response)
 
 		expect: 'the response body can be read'
-		responseAdapter.bodyAsBinary.bytes == body
+		responseAdapter.bodyAsBinary.input.bytes == body
 
 		and: 'read again'
-		responseAdapter.bodyAsBinary.bytes == body
+		responseAdapter.bodyAsBinary.input.bytes == body
 	}
 
 	void 'cannot get the body of a response that does not have one'() {
@@ -128,7 +128,7 @@ class HttpResponseAdapterSpec extends Specification {
 		def responseAdapter = new HttpResponseAdapter(response)
 
 		when:
-		responseAdapter.bodyAsBinary
+		responseAdapter.bodyAsBinary.input
 
 		then:
 		thrown IllegalStateException

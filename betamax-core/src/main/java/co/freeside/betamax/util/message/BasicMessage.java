@@ -22,6 +22,8 @@ import co.freeside.betamax.message.*;
 import com.google.common.base.*;
 
 public abstract class BasicMessage extends AbstractMessage {
+
+    @Override
     public void addHeader(String name, String value) {
         if (headers.containsKey(name)) {
             List<String> values = headers.get(name);
@@ -37,6 +39,7 @@ public abstract class BasicMessage extends AbstractMessage {
         this.headers = headers;
     }
 
+    @Override
     public Map<String, String> getHeaders() {
         LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
         for (Map.Entry<String, List<String>> header : headers.entrySet()) {
@@ -46,11 +49,13 @@ public abstract class BasicMessage extends AbstractMessage {
         return map;
     }
 
+    @Override
     public final boolean hasBody() {
         return body != null && body.length > 0;
     }
 
-    public InputStream getBodyAsBinary() {
+    @Override
+    protected InputStream getBodyAsStream() {
         return new ByteArrayInputStream(body);
     }
 

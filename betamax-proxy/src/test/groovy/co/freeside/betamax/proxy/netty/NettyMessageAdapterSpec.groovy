@@ -68,7 +68,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
 		expect:
 		adapter.hasBody()
-		adapter.bodyAsText.text == bodyText
+		adapter.bodyAsText.input.text == bodyText
 
 		where:
 		bodyText = "value=\u00a31"
@@ -87,7 +87,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
 		expect:
 		adapter.hasBody()
-		adapter.bodyAsBinary.bytes == body
+		adapter.bodyAsBinary.input.bytes == body
 
 		where:
 		body = 'value=\u00a31'.getBytes('ISO-8859-1')

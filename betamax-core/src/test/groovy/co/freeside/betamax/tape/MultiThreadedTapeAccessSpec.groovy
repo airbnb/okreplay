@@ -48,7 +48,7 @@ class MultiThreadedTapeAccessSpec extends Specification {
 		requests.eachWithIndex { request, i ->
 			Thread.start {
 				def response = tape.play(request)
-				responses[requests[i].getHeader('X-Thread')] = response.bodyAsText.text
+				responses[requests[i].getHeader('X-Thread')] = response.bodyAsText.input.text
 				finished.countDown()
 			}
 		}
@@ -89,7 +89,7 @@ class MultiThreadedTapeAccessSpec extends Specification {
 		requests.eachWithIndex { request, i ->
 			Thread.start {
 				def response = tape.play(request)
-				responses << response.bodyAsText.text
+				responses << response.bodyAsText.input.text
 				finished.countDown()
 			}
 		}

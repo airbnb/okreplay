@@ -136,13 +136,13 @@ class BetamaxFilters extends HttpFiltersAdapter {
 		byte[] stream
 		switch (recordedResponse.getHeader(CONTENT_ENCODING)) {
 			case "gzip":
-				stream = new GzipEncoder().encode(recordedResponse.bodyAsBinary.bytes)
+				stream = new GzipEncoder().encode(recordedResponse.bodyAsBinary.input.bytes)
 				break
 			case "deflate":
-				stream = new DeflateEncoder().encode(recordedResponse.bodyAsBinary.bytes)
+				stream = new DeflateEncoder().encode(recordedResponse.bodyAsBinary.input.bytes)
 				break
 			default:
-				stream = recordedResponse.bodyAsBinary.bytes
+				stream = recordedResponse.bodyAsBinary.input.bytes
 		}
 		Unpooled.wrappedBuffer(stream)
 	}

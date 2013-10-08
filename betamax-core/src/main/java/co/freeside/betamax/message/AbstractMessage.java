@@ -29,6 +29,7 @@ public abstract class AbstractMessage implements Message {
     public static final String DEFAULT_CHARSET = "UTF-8";
     public static final String DEFAULT_ENCODING = "none";
 
+    @Override
     public String getContentType() {
         String contentTypeHeader = getHeader(CONTENT_TYPE);
         if (!StringUtils.isBlank(contentTypeHeader)) {
@@ -38,6 +39,7 @@ public abstract class AbstractMessage implements Message {
         }
     }
 
+    @Override
     public String getCharset() {
         String declaredCharset = null;
         String header = getHeader(CONTENT_TYPE);
@@ -50,41 +52,47 @@ public abstract class AbstractMessage implements Message {
         return defaultIfNullOrEmpty(declaredCharset, DEFAULT_CHARSET);
     }
 
+    @Override
     public String getEncoding() {
         String header = getHeader(CONTENT_ENCODING);
         return defaultIfNullOrEmpty(header, DEFAULT_ENCODING);
     }
 
+    @Override
     public String getHeader(String name) {
         return getHeaders().get(name);
     }
+
+    @Override
+    public final InputSupplier<InputStream> getBodyAsBinary() {
+        return new InputSupplier<InputStream>() {
+            @Override
+            public InputStream getInput() throws IOException {
+                return getBodyAsStream();
+            }
+        };
+    }
+
+    @Override
+    public final InputSupplier<Reader> getBodyAsText() {
+        return new InputSupplier<Reader>() {
+            @Override
+            public Reader getInput() throws IOException {
+                return getBodyAsReader();
+            }
+        };
+    }
+
+    protected abstract InputStream getBodyAsStream() throws IOException;
 
     /**
      * A default implementation that decodes the byte stream from `getBodyAsBinary`. Implementations can override this
      * if they have a simpler way of doing it.
      */
-    public Reader getBodyAsText() throws IOException {
-        InputStream stream;
-        String encoding = getEncoding();
-        if ("gzip".equals(encoding)) {
-            stream = new GZIPInputStream(getBodyAsBinary());
-        } else if ("deflate".equals(encoding)) {
-            stream = new InflaterInputStream(getBodyAsBinary());
-        } else {
-            stream = getBodyAsBinary();
-        }
-        return new InputStreamReader(stream, getCharset());
+    protected Reader getBodyAsReader() throws IOException {
+        return new InputStreamReader(getBodyAsBinary().getInput(), getCharset());
     }
 
-    @Override
-    public InputSupplier<InputStream> getBodySource() {
-        return new InputSupplier<InputStream>() {
-            @Override
-            public InputStream getInput() throws IOException {
-                return getBodyAsBinary();
-            }
-        };
-    }
 
     private String defaultIfNullOrEmpty(String string, String defaultValue) {
         return StringUtils.isBlank(string) ? defaultValue : string;

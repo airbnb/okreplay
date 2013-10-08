@@ -86,7 +86,7 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
-    public InputStream getBodyAsBinary() throws IOException {
+    protected InputStream getBodyAsStream() throws IOException {
         // TODO: can this be done without copying the entire byte array?
         return new ByteArrayInputStream(body.toByteArray());
     }
