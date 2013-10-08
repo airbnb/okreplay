@@ -144,7 +144,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             response = new DefaultFullHttpResponse(HTTP_1_1, status);
         }
         for (Map.Entry<String, String> header : recordedResponse.getHeaders().entrySet()) {
-            response.headers().set(header.getKey(), Arrays.asList(header.getValue().split(",\\s*")));
+            response.headers().set(header.getKey(), Splitter.onPattern(",\\s*").split(header.getValue()));
         }
         return response;
     }

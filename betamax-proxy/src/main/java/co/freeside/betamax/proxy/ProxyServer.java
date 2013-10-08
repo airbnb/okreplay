@@ -57,7 +57,7 @@ public class ProxyServer implements HttpInterceptor {
                 .withIdleConnectionTimeout((int) MILLISECONDS.toSeconds(recorder.getProxyTimeout()))
                 .withAddress(address);
 
-        if (recorder.getSslSupport()) {
+        if (recorder.isSslSupport()) {
             proxyServerBootstrap.withManInTheMiddle(new SelfSignedMitmManager());
         } else {
             proxyServerBootstrap.withChainProxyManager(proxyOverrider);
@@ -123,13 +123,13 @@ public class ProxyServer implements HttpInterceptor {
     }
 
     private void overrideSSLSettings() {
-        if (recorder.getSslSupport()) {
+        if (recorder.isSslSupport()) {
             sslOverrider.activate();
         }
     }
 
     private void restoreOriginalSSLSettings() {
-        if (recorder.getSslSupport()) {
+        if (recorder.isSslSupport()) {
             sslOverrider.deactivate();
         }
     }

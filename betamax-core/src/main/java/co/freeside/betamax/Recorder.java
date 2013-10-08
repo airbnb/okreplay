@@ -149,6 +149,7 @@ public class Recorder implements TestRule {
 
     }
 
+    // TODO: move these to a utility class
     public static boolean getBoolean(Properties properties, String key, boolean defaultValue) {
         String value = properties.getProperty(key);
         return value != null ? Boolean.valueOf(value) : defaultValue;
@@ -160,7 +161,7 @@ public class Recorder implements TestRule {
 
     public static int getInteger(Properties properties, String key, int defaultValue) {
         String value = properties.getProperty(key);
-        return value != null ? Integer.getInteger(value) : defaultValue;
+        return value != null ? Integer.parseInt(value) : defaultValue;
     }
 
     public static int getInteger(Properties properties, String key) {
