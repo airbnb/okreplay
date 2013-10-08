@@ -20,9 +20,7 @@ import java.io.*;
 import java.net.*;
 import java.security.*;
 import javax.net.ssl.*;
-import groovy.transform.*;
 
-@InheritConstructors
 public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
     private final SSLSocketFactory factory;
@@ -72,6 +70,5 @@ public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
         sslContext.init(null, new TrustManager[] {new DummyX509TrustManager()}, new java.security.SecureRandom());
         factory = sslContext.getSocketFactory();
     }
-
 
 }

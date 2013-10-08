@@ -1,0 +1,23 @@
+apply plugin: "groovy"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile commonDependencies.guava
+    testCompile commonDependencies.groovy
+    testCompile commonDependencies.spock
+}
+
+apply from: "$rootDir/gradle/checkstyle.gradle"
+apply from: "$rootDir/gradle/codenarc.gradle"
+
+test {
+    testLogging {
+        quiet {
+            events "failed"
+            exceptionFormat "short"
+        }
+    }
+}

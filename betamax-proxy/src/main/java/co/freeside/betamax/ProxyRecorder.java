@@ -22,7 +22,6 @@ import java.security.*;
 import java.util.*;
 import co.freeside.betamax.proxy.*;
 import co.freeside.betamax.proxy.ssl.*;
-import groovy.transform.*;
 import org.apache.http.conn.ssl.*;
 
 public class ProxyRecorder extends Recorder {
