@@ -20,7 +20,6 @@
 
 * No Groovy
 * No Apache commons
-* Probably pull in Guava to make writing Java code tolerable
 * Maybe Guice or Dagger if really justified
 
 ## Docs
