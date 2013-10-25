@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.MatchRule
+import co.freeside.betamax.MatchRules
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.util.message.BasicRequest
@@ -108,7 +108,7 @@ interactions:
 '''
 
         and:
-        recorder.start('host match tape', [match: [MatchRule.host]])
+        recorder.start('host match tape', [match: [MatchRules.host]])
 
         when:
         def request = new BasicRequest('GET', 'http://xkcd.com/875')
@@ -153,7 +153,7 @@ interactions:
 '''
 
         and:
-        recorder.start('headers match tape', [match: [MatchRule.method, MatchRule.uri, MatchRule.headers]])
+        recorder.start('headers match tape', [match: [MatchRules.method, MatchRules.uri, MatchRules.headers]])
 
         when:
         def request = new BasicRequest('GET', 'http://httpbin.org/get')

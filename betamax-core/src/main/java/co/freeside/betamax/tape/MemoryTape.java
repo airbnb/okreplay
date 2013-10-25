@@ -29,7 +29,7 @@ import com.google.common.collect.*;
 import com.google.common.io.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
-import static co.freeside.betamax.MatchRule.*;
+import static co.freeside.betamax.MatchRules.*;
 import static co.freeside.betamax.TapeMode.*;
 import static org.apache.http.HttpHeaders.*;
 

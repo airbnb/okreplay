@@ -19,7 +19,7 @@ package co.freeside.betamax.tape
 import co.freeside.betamax.message.tape.RecordedRequest
 import co.freeside.betamax.util.message.BasicRequest
 import spock.lang.*
-import static co.freeside.betamax.MatchRule.*
+import static co.freeside.betamax.MatchRules.*
 import static org.apache.http.HttpHeaders.*
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')

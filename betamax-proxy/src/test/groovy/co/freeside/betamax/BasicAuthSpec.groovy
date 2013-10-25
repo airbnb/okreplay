@@ -23,7 +23,7 @@ import org.apache.http.auth.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
-import static co.freeside.betamax.MatchRule.*
+import static co.freeside.betamax.MatchRules.*
 import static co.freeside.betamax.TapeMode.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.*

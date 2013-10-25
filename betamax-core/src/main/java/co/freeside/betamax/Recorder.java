@@ -29,7 +29,7 @@ import com.google.common.io.*;
 import org.junit.rules.*;
 import org.junit.runner.*;
 import org.junit.runners.model.*;
-import static co.freeside.betamax.MatchRule.*;
+import static co.freeside.betamax.MatchRules.*;
 import static java.util.logging.Level.*;
 
 /**
@@ -129,9 +129,9 @@ public class Recorder implements TestRule {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>(2);
+                    Map<String, Object> map = new LinkedHashMap<String, Object>(2);
                     map.put("mode", annotation.mode());
-                    map.put("match", new ArrayList<MatchRule>(Arrays.asList(annotation.match())));
+                    map.put("match", Arrays.asList(annotation.match()));
                     try {
                         start(annotation.tape(), map);
                         statement.evaluate();

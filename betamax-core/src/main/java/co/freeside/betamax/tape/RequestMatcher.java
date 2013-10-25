@@ -24,7 +24,7 @@ public class RequestMatcher {
 
     @SuppressWarnings("unchecked")
     public RequestMatcher(Request request) {
-        this(request, MatchRule.method, MatchRule.uri);
+        this(request, MatchRules.method, MatchRules.uri);
     }
 
     public RequestMatcher(Request request, MatchRule... rules) {
