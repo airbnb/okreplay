@@ -20,24 +20,21 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
-import co.freeside.betamax.message.Request;
+import co.freeside.betamax.message.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.tape.yaml.*;
+import co.freeside.betamax.util.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.*;
-import org.junit.rules.*;
-import org.junit.runner.*;
-import org.junit.runners.model.*;
 import static co.freeside.betamax.MatchRules.*;
-import static java.util.logging.Level.*;
 
 /**
- * This is the main interface to the Betamax proxy. It allows control of Betamax configuration and inserting and
- * ejecting `Tape` instances. The class can also be used as a _JUnit @Rule_ allowing tests annotated with `@Betamax` to
- * run with the Betamax HTTP proxy in the background.
+ * This class is the main interface to Betamax. It allows control of Betamax configuration, inserting and
+ * ejecting `Tape` instances and starting and stopping recording sessions.
  */
-public class Recorder implements TestRule {
+public class Recorder {
+
     public Recorder() {
         try {
             URL propertiesFile = Recorder.class.getResource("/betamax.properties");
@@ -121,65 +118,12 @@ public class Recorder implements TestRule {
 
     }
 
-    @Override
-    public Statement apply(final Statement statement, Description description) {
-        final Betamax annotation = description.getAnnotation(Betamax.class);
-        if (annotation != null) {
-            log.fine("found @Betamax annotation on '" + description.getDisplayName() + "'");
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    Map<String, Object> map = new LinkedHashMap<String, Object>(2);
-                    map.put("mode", annotation.mode());
-                    map.put("match", Arrays.asList(annotation.match()));
-                    try {
-                        start(annotation.tape(), map);
-                        statement.evaluate();
-                    } catch (Exception e) {
-                        log.log(SEVERE, "Caught exception starting Betamax", e);
-                    } finally {
-                        stop();
-                    }
-                }
-            };
-        } else {
-            log.fine("no @Betamax annotation on '" + description.getDisplayName() + "'");
-            return statement;
-        }
-
-    }
-
-    // TODO: move these to a utility class
-    public static boolean getBoolean(Properties properties, String key, boolean defaultValue) {
-        String value = properties.getProperty(key);
-        return value != null ? Boolean.valueOf(value) : defaultValue;
-    }
-
-    public static boolean getBoolean(Properties properties, String key) {
-        return Recorder.getBoolean(properties, key, false);
-    }
-
-    public static int getInteger(Properties properties, String key, int defaultValue) {
-        String value = properties.getProperty(key);
-        return value != null ? Integer.parseInt(value) : defaultValue;
-    }
-
-    public static int getInteger(Properties properties, String key) {
-        return Recorder.getInteger(properties, key, 0);
-    }
-
-    public static <T extends Enum<T>> T getEnum(Properties properties, String key, T defaultValue) {
-        String value = properties.getProperty(key);
-        T anEnum = Enum.valueOf((Class<T>) defaultValue.getClass(), value);
-        return value != null ? anEnum : defaultValue;
-    }
-
     protected void configureFrom(Properties properties) {
         tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT));
-        defaultMode = getEnum(properties, "betamax.defaultMode", TapeMode.READ_WRITE);
+        defaultMode = TypedProperties.getEnum(properties, "betamax.defaultMode", TapeMode.READ_WRITE);
         final List<String> tokenize = Lists.newArrayList(Splitter.on(",").split((String) properties.getProperty("betamax.ignoreHosts")));
         ignoreHosts = tokenize != null ? tokenize : new ArrayList<String>();
-        ignoreLocalhost = getBoolean(properties, "betamax.ignoreLocalhost");
+        ignoreLocalhost = TypedProperties.getBoolean(properties, "betamax.ignoreLocalhost");
     }
 
     protected void configureWithDefaults() {

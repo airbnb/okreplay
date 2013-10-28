@@ -16,6 +16,8 @@
 
 package co.freeside.betamax
 
+import co.freeside.betamax.junit.Betamax
+import co.freeside.betamax.junit.RecorderRule
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import groovyx.net.http.HttpResponseDecorator
 import org.apache.http.HttpHost
@@ -54,10 +56,11 @@ class BasicAuthSpec extends Specification {
 
     @Shared
     @AutoCleanup('deleteDir')
-    File tapeRoot = newTempDir('tapes')
+    def tapeRoot = newTempDir('tapes')
 
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule
-    Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    RecorderRule recorderRule = new RecorderRule(recorder)
 
     def http = new BetamaxRESTClient()
 

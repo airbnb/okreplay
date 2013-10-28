@@ -18,9 +18,12 @@ package co.freeside.betamax.httpclient
 
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.HandlerException
+import co.freeside.betamax.junit.Betamax
+import co.freeside.betamax.junit.RecorderRule
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.Network
 import co.freeside.betamax.util.server.*
+import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 import org.apache.http.client.methods.*
 import org.apache.http.entity.StringEntity
@@ -29,7 +32,6 @@ import org.apache.http.params.HttpParams
 import org.eclipse.jetty.server.Handler
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -38,9 +40,10 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 @Issue('https://github.com/robfletcher/betamax/issues/40')
 class BetamaxHttpClientSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = co.freeside.betamax.util.FileUtils.newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = co.freeside.betamax.util.FileUtils.newTempDir('tapes')
+	def recorder = new Recorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @AutoCleanup('stop') def endpoint = new SimpleServer()
 	def http = new BetamaxHttpClient(recorder)
 
 	@Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
@@ -183,7 +186,7 @@ class BetamaxHttpClientSpec extends Specification {
 		}
 
 		when:
-		def response = restClient.get(uri: endpoint.url)
+		HttpResponseDecorator response = restClient.get(uri: endpoint.url)
 
 		then:
 		response.status == HTTP_OK

@@ -18,6 +18,7 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.HttpClient
@@ -34,10 +35,11 @@ import static org.apache.http.HttpStatus.SC_OK
 @Unroll
 class HttpsSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule @AutoCleanup('ejectTape') ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
-	@Shared @AutoCleanup('stop') SimpleServer httpEndpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('ejectTape') def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
+	@Shared @AutoCleanup('stop') def httpEndpoint = new SimpleServer()
 
 	@Shared URI httpUri
 	@Shared URI httpsUri

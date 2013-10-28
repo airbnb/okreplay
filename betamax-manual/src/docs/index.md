@@ -93,13 +93,14 @@ If you are using the Betamax proxy you need to use `ProxyRecorder` rule.
 
 ### JUnit
 
-    import co.freeside.betamax.Betamax;
+    import co.freeside.betamax.junit.Betamax;
+    import co.freeside.betamax.junit.RecorderRule;
     import co.freeside.betamax.Recorder;
     import org.junit.*;
 
     public class MyTest {
 
-        @Rule public Recorder recorder = new Recorder();
+        @Rule public RecorderRule recorder = new RecorderRule(new Recorder());
 
         @Betamax(tape="my tape")
         @Test
@@ -110,14 +111,15 @@ If you are using the Betamax proxy you need to use `ProxyRecorder` rule.
 
 ### Spock
 
-    import co.freeside.betamax.Betamax
+    import co.freeside.betamax.junit.Betamax
+    import co.freeside.betamax.junit.RecorderRule
     import co.freeside.betamax.Recorder
     import org.junit.*
     import spock.lang.*
 
     class MySpec extends Specification {
 
-        @Rule Recorder recorder = new Recorder()
+        @Rule RecorderRule recorder = new RecorderRule(new Recorder())
 
         @Betamax(tape='my tape')
         void 'feature that accesses external web service'() {

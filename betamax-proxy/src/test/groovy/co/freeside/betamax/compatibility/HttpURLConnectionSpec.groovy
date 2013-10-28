@@ -17,6 +17,7 @@
 package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.junit.Rule
@@ -29,10 +30,11 @@ import static org.apache.http.HttpStatus.SC_OK
 
 class HttpURLConnectionSpec extends Specification {
 
-	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
+	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
 
 	void setupSpec() {
 		endpoint.start(EchoHandler)

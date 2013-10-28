@@ -23,6 +23,7 @@ import java.util.*;
 import co.freeside.betamax.proxy.*;
 import co.freeside.betamax.proxy.ssl.*;
 import org.apache.http.conn.ssl.*;
+import static co.freeside.betamax.util.TypedProperties.*;
 
 public class ProxyRecorder extends Recorder {
 

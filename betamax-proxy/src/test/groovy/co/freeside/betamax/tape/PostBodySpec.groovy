@@ -16,7 +16,8 @@
 
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.junit.RecorderRule
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.*
@@ -43,8 +44,9 @@ import static java.util.concurrent.TimeUnit.SECONDS
 })
 class PostBodySpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
 	private DefaultHttpClient httpClient = new SystemDefaultHttpClient()
 

@@ -19,6 +19,8 @@ package co.freeside.betamax.tape
 import java.util.concurrent.CountDownLatch
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.*
+import co.freeside.betamax.junit.Betamax
+import co.freeside.betamax.junit.RecorderRule
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.HelloHandler
@@ -30,9 +32,10 @@ import static java.util.concurrent.TimeUnit.SECONDS
 
 class MultiThreadedTapeWritingSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	HttpHandler handler = new DefaultHandlerChain(recorder)
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+	def recorder = new Recorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	def handler = new DefaultHandlerChain(recorder)
 
 	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
 

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package co.freeside.betamax;
+package co.freeside.betamax.junit;
 
 import java.lang.annotation.*;
+import co.freeside.betamax.*;
 import static co.freeside.betamax.MatchRules.*;
 import static co.freeside.betamax.TapeMode.*;
 import static java.lang.annotation.ElementType.*;

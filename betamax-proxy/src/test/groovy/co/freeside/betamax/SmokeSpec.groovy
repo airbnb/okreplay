@@ -18,6 +18,8 @@ package co.freeside.betamax
 
 import javax.net.ssl.HttpsURLConnection
 import co.freeside.betamax.encoding.GzipEncoder
+import co.freeside.betamax.junit.Betamax
+import co.freeside.betamax.junit.RecorderRule
 import org.junit.Rule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
@@ -26,8 +28,8 @@ import static org.apache.http.HttpHeaders.VIA
 @Unroll
 class SmokeSpec extends Specification {
 
-	@Rule
-	Recorder recorder = new ProxyRecorder(sslSupport: true)
+    Recorder recorder = new ProxyRecorder(sslSupport: true)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
 	@Betamax(tape = 'smoke spec')
 	void '#type response data'() {

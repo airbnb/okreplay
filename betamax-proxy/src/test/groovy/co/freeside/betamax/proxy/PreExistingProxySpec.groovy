@@ -17,6 +17,7 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.HelloHandler
 import org.junit.Rule
@@ -29,9 +30,10 @@ import static org.apache.http.HttpHeaders.VIA
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {
 
-	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') SimpleServer proxyServer = new SimpleServer()
+	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	@Shared @AutoCleanup('stop') def proxyServer = new SimpleServer()
 
 	void setupSpec() {
 		proxyServer.start(HelloHandler)

@@ -16,6 +16,7 @@
 
 package co.freeside.betamax
 
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -34,8 +35,8 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationTest {
 
     static File tapeRoot = newTempDir('tapes')
-    @Rule
-    public Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
+    Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
+    @Rule public RecorderRule recorderRule = new RecorderRule(recorder)
     SimpleServer endpoint = new SimpleServer()
     RESTClient http
 

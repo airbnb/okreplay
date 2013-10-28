@@ -18,6 +18,7 @@ package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxRoutePlanner
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -32,9 +33,10 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
 class HttpBuilderSpec extends Specification {
 
-	@AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
 
 	void setupSpec() {
 		endpoint.start(EchoHandler)

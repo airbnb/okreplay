@@ -16,6 +16,8 @@
 
 package co.freeside.betamax
 
+import co.freeside.betamax.junit.Betamax
+import co.freeside.betamax.junit.RecorderRule
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -32,12 +34,13 @@ import static org.apache.http.HttpHeaders.VIA
 @Unroll
 class LocalhostSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
 
-	@Shared RESTClient http = new BetamaxRESTClient()
+	@Shared def http = new BetamaxRESTClient()
 
 	void setupSpec() {
 		endpoint.start(EchoHandler)

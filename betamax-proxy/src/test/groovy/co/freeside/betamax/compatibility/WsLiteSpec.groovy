@@ -16,25 +16,26 @@
 
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
 import wslite.rest.RESTClient
 import static co.freeside.betamax.Headers.X_BETAMAX
-import static co.freeside.betamax.TapeMode.READ_WRITE
-import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static co.freeside.betamax.TapeMode.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 class WsLiteSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
-	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
 
 	void setupSpec() {
 		endpoint.start(EchoHandler)

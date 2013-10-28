@@ -16,6 +16,7 @@
 
 package co.freeside.betamax
 
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
@@ -31,9 +32,10 @@ import static org.apache.http.HttpHeaders.VIA
 @Stepwise
 class AnnotationSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Rule Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-	@AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+	def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @AutoCleanup('stop') def endpoint = new SimpleServer()
 	RESTClient http
 
 	void setup() {

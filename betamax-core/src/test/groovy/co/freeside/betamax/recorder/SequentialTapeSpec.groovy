@@ -16,8 +16,10 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.*
+import co.freeside.betamax.Recorder
 import co.freeside.betamax.handler.*
+import co.freeside.betamax.junit.*
+import co.freeside.betamax.message.Response
 import co.freeside.betamax.util.message.BasicRequest
 import groovy.json.JsonSlurper
 import org.junit.Rule
@@ -31,13 +33,14 @@ import static org.apache.http.entity.ContentType.APPLICATION_JSON
 @Issue('https://github.com/robfletcher/betamax/pull/70')
 class SequentialTapeSpec extends Specification {
 
-	@Rule Recorder recorder = new Recorder()
-	HttpHandler handler = new DefaultHandlerChain(recorder)
+    def recorder = new Recorder()
+	@Rule RecorderRule recorderRule = new RecorderRule(recorder)
+	def handler = new DefaultHandlerChain(recorder)
 
 	@Betamax(tape = 'sequential tape', mode = READ_SEQUENTIAL)
 	void 'read sequential tapes play back recordings in correct sequence'() {
 		when: 'multiple requests are made to the same endpoint'
-		def responses = []
+		List<Response> responses = []
 		n.times {
 			responses << handler.handle(request)
 		}
@@ -84,7 +87,7 @@ class SequentialTapeSpec extends Specification {
 		postRequest.body = '{"name":"foo"}'.bytes
 
 		when: 'multiple requests are made to the same endpoint'
-		def responses = []
+        List<Response> responses = []
 		responses << handler.handle(getRequest)
 		responses << handler.handle(postRequest)
 		responses << handler.handle(getRequest)

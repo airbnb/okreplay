@@ -21,7 +21,7 @@ import co.freeside.betamax.message.*;
 import com.google.common.io.*;
 
 /**
- * Implements a request matching rule for finding recordings on a tape.
+ * Standard {@link MatchRule} implementations.
  */
 public enum MatchRules implements MatchRule {
     method {
