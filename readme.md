@@ -2,13 +2,13 @@
 
 Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests. The project was inspired by the [VCR][vcr] library for Ruby.
 
-Betamax is written in [Groovy][groovy] but is compatible with tests written using [JUnit][junit] or [Spock][spock] for applications written in any JVM language.
+Betamax is written in Java and is compatible with tests written using [JUnit][junit] or [Spock][spock] for applications written in any JVM language.
 
 ## Usage
 
 ### Record
 
-Add a `@Rule Recorder` property to your test and annotate test methods with `@Betamax`. The first time the test runs any HTTP traffic is recorded to _tape_.
+Add a `@Rule RecorderRule` property to your test and annotate test methods with `@Betamax`. The first time the test runs any HTTP traffic is recorded to _tape_.
 
 ### Playback
 
@@ -35,7 +35,6 @@ Please get in touch if you have any  feedback. You can raise defects and feature
 
 [gradle]:http://gradle.org/
 [grails]:http://grails.org/
-[groovy]:http://groovy.codehaus.org/
 [home]:http://freeside.co/betamax
 [issues]:http://github.com/robfletcher/betamax/issues
 [ivy]:http://ant.apache.org/ivy/
