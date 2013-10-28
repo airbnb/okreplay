@@ -67,7 +67,7 @@ public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
     public DummyJVMSSLSocketFactory() throws GeneralSecurityException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, new TrustManager[] {new DummyX509TrustManager()}, new java.security.SecureRandom());
+        sslContext.init(null, new TrustManager[] {new DummyX509TrustManager()}, new SecureRandom());
         factory = sslContext.getSocketFactory();
     }
 
