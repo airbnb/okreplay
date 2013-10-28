@@ -17,10 +17,9 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.proxy.jetty.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.RESTClient
+import co.freeside.betamax.util.server.*
+import groovyx.net.http.*
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.VIA
@@ -30,13 +29,13 @@ import static org.apache.http.HttpHeaders.VIA
 class IgnoreHostsSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(EchoHandler)
 	@AutoCleanup('ejectTape') Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
 	@AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
 	RESTClient http
 
 	void setupSpec() {
-		endpoint.start(EchoHandler)
+		endpoint.start()
 	}
 
 	void setup() {
@@ -51,7 +50,7 @@ class IgnoreHostsSpec extends Specification {
 		proxy.start()
 
 		when: 'a request is made'
-		def response = http.get(uri: requestURI)
+		HttpResponseDecorator response = http.get(uri: requestURI)
 
 		then: 'the request is not intercepted by the proxy'
 		!response.headers[VIA]
@@ -73,7 +72,7 @@ class IgnoreHostsSpec extends Specification {
 		proxy.start()
 
 		when: 'a request is made'
-		def response = http.get(uri: requestURI)
+		HttpResponseDecorator response = http.get(uri: requestURI)
 
 		then: 'the request is not intercepted by the proxy'
 		!response.headers[VIA]

@@ -18,7 +18,7 @@ package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.server.SimpleServer
 import co.freeside.betamax.util.server.EchoHandler
 import org.apache.commons.httpclient.*
 import org.apache.commons.httpclient.methods.GetMethod
@@ -33,10 +33,10 @@ class HttpClient3Spec extends Specification {
 	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
 	void setupSpec() {
-		endpoint.start(EchoHandler)
+		endpoint.start()
 	}
 
 	@Timeout(10)

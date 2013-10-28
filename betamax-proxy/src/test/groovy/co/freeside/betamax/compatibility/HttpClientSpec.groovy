@@ -19,7 +19,6 @@ package co.freeside.betamax.compatibility
 import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.HttpHost
 import org.apache.http.client.methods.HttpGet
@@ -35,85 +34,90 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
 class HttpClientSpec extends Specification {
 
-	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
-	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
-	void setupSpec() {
-		endpoint.start(EchoHandler)
-		httpsEndpoint.start(HelloHandler)
-	}
+    void setupSpec() {
+        endpoint.start()
+        httpsEndpoint.start()
+    }
 
-	@Timeout(10)
-	@Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
-	void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
-		given:
-		def http = new DefaultHttpClient()
-		BetamaxRoutePlanner.configure(http)
+    @Timeout(10)
+    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
+    void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
+        given:
+        def http = new DefaultHttpClient()
+        BetamaxRoutePlanner.configure(http)
 
-		when:
-		def request = new HttpGet(endpoint.url)
-		def response = http.execute(request)
+        when:
+        def request = new HttpGet(endpoint.url)
 
-		then:
-		response.statusLine.statusCode == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-	}
+        def response = http.execute(request)
 
-	@Timeout(10)
-	@Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
-	void 'proxy intercepts HTTPClient connections when explicitly told to'() {
-		given:
-		def http = new DefaultHttpClient()
-		http.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
+        then:
+        response.statusLine.statusCode == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+    }
 
-		when:
-		def request = new HttpGet(endpoint.url)
-		def response = http.execute(request)
+    @Timeout(10)
+    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
+    void 'proxy intercepts HTTPClient connections when explicitly told to'() {
+        given:
+        def http = new DefaultHttpClient()
+        http.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
 
-		then:
-		response.statusLine.statusCode == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-	}
+        when:
+        def request = new HttpGet(endpoint.url)
+        def response = http.execute(request)
 
-	@Timeout(10)
-	@Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
-	void 'proxy automatically intercepts SystemDefaultHttpClient connections'() {
-		given:
-		def http = new SystemDefaultHttpClient()
+        then:
+        response.statusLine.statusCode == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+    }
 
-		when:
-		def request = new HttpGet(endpoint.url)
-		def response = http.execute(request)
+    @Timeout(10)
+    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
+    void 'proxy automatically intercepts SystemDefaultHttpClient connections'() {
+        given:
+        def http = new SystemDefaultHttpClient()
 
-		then:
-		response.statusLine.statusCode == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-	}
+        when:
+        def request = new HttpGet(endpoint.url)
+        def response = http.execute(request)
 
-	@Betamax(tape = 'http client spec')
-	void 'proxy can intercept HTTPS requests'() {
-		given:
-		def http = new DefaultHttpClient()
-		BetamaxRoutePlanner.configure(http)
-		BetamaxHttpsSupport.configure(http)
+        then:
+        response.statusLine.statusCode == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+    }
 
-		when: 'an HTTPS request is made'
-		def request = new HttpGet(httpsEndpoint.url)
-		def response = http.execute(request)
+    @Betamax(tape = 'http client spec')
+    void 'proxy can intercept HTTPS requests'() {
+        given:
+        def http = new DefaultHttpClient()
+        BetamaxRoutePlanner.configure(http)
+        BetamaxHttpsSupport.configure(http)
 
-		and: 'we read the response body'
-		def responseBytes = new ByteArrayOutputStream()
-		response.entity.writeTo(responseBytes)
-		def responseString = responseBytes.toString('UTF-8')
+        when:
+        'an HTTPS request is made'
+        def request = new HttpGet(httpsEndpoint.url)
+        def response = http.execute(request)
 
-		then: 'the request is intercepted by the proxy'
-		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
+        and:
+        'we read the response body'
+        def responseBytes = new ByteArrayOutputStream()
+        response.entity.writeTo(responseBytes)
+        def responseString = responseBytes.toString('UTF-8')
 
-		and: 'the response is decoded'
-		responseString == 'Hello World!'
-	}
+        then:
+        'the request is intercepted by the proxy'
+        response.statusLine.statusCode == SC_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+
+        and:
+        'the response is decoded'
+        responseString == 'Hello World!'
+    }
 }

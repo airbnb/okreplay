@@ -18,7 +18,7 @@ package co.freeside.betamax
 
 import co.freeside.betamax.junit.Betamax
 import co.freeside.betamax.junit.RecorderRule
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.server.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*
@@ -38,12 +38,12 @@ class LocalhostSpec extends Specification {
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
 	@Shared def http = new BetamaxRESTClient()
 
 	void setupSpec() {
-		endpoint.start(EchoHandler)
+		endpoint.start()
 	}
 
 	@IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })

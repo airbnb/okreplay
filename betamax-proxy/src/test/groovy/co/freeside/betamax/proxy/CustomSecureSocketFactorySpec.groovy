@@ -19,7 +19,6 @@ package co.freeside.betamax.proxy
 import java.security.KeyStore
 import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.HttpClient
@@ -34,8 +33,8 @@ import static org.apache.http.HttpStatus.SC_OK
 @Issue('https://github.com/robfletcher/betamax/issues/72')
 class CustomSecureSocketFactorySpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
-	@Shared @AutoCleanup('stop') SimpleServer httpsEndpoint = new SimpleSecureServer(5001)
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 	@Shared KeyStore trustStore
 
 	@Shared URI httpsUri
@@ -43,7 +42,7 @@ class CustomSecureSocketFactorySpec extends Specification {
 	HttpClient http
 
 	void setupSpec() {
-		httpsEndpoint.start(HelloHandler)
+		httpsEndpoint.start()
 
 		httpsUri = httpsEndpoint.url.toURI()
 

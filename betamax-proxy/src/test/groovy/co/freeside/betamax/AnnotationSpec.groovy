@@ -17,7 +17,7 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.server.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.EchoHandler
 import groovyx.net.http.*
@@ -35,7 +35,7 @@ class AnnotationSpec extends Specification {
 	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
 	def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-    @AutoCleanup('stop') def endpoint = new SimpleServer()
+    @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 	RESTClient http
 
 	void setup() {
@@ -61,7 +61,7 @@ class AnnotationSpec extends Specification {
 	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
 	void 'annotated feature can record'() {
 		given:
-		endpoint.start(EchoHandler)
+		endpoint.start()
 
 		when:
 		HttpResponseDecorator response = http.get(path: '/')
@@ -85,7 +85,7 @@ class AnnotationSpec extends Specification {
 
 	void 'can make unproxied request after using annotation'() {
 		given:
-		endpoint.start(EchoHandler)
+		endpoint.start()
 
 		when:
 		HttpResponseDecorator response = http.get(path: '/')

@@ -18,12 +18,10 @@ package co.freeside.betamax.tape
 
 import java.util.concurrent.CountDownLatch
 import co.freeside.betamax.*
-import co.freeside.betamax.handler.*
-import co.freeside.betamax.junit.Betamax
-import co.freeside.betamax.junit.RecorderRule
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.handler.DefaultHandlerChain
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.server.HelloHandler
+import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
@@ -37,10 +35,10 @@ class MultiThreadedTapeWritingSpec extends Specification {
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 	def handler = new DefaultHandlerChain(recorder)
 
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
 
 	void setupSpec() {
-		endpoint.start(HelloHandler)
+		endpoint.start()
 	}
 
 	@Betamax(tape = 'multi_threaded_tape_writing_spec', mode = TapeMode.READ_WRITE)

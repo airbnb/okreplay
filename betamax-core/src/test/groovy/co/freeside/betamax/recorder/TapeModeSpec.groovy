@@ -19,7 +19,8 @@ package co.freeside.betamax.recorder
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.Request
-import co.freeside.betamax.proxy.jetty.SimpleServer
+import co.freeside.betamax.util.server.HelloHandler
+import co.freeside.betamax.util.server.SimpleServer
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.EchoHandler
 import spock.lang.*
@@ -32,12 +33,12 @@ class TapeModeSpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
 	@Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
 	HttpHandler handler = new DefaultHandlerChain(recorder)
 	Request request = new BasicRequest('GET', endpoint.url)
 
 	void setupSpec() {
-		endpoint.start(EchoHandler)
+		endpoint.start()
 	}
 
 	void cleanup() {

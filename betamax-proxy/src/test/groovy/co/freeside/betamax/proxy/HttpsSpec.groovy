@@ -19,7 +19,6 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
@@ -35,66 +34,69 @@ import static org.apache.http.HttpStatus.SC_OK
 @Unroll
 class HttpsSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     @AutoCleanup('ejectTape') def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
-	@Shared @AutoCleanup('stop') def httpEndpoint = new SimpleServer()
+    @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
+    @Shared @AutoCleanup('stop') def httpEndpoint = new SimpleServer(HelloHandler)
 
-	@Shared URI httpUri
-	@Shared URI httpsUri
+    @Shared URI httpUri
+    @Shared URI httpsUri
 
-	HttpClient http
+    HttpClient http
 
-	void setupSpec() {
-		httpEndpoint.start(HelloHandler)
-		httpsEndpoint.start(HelloHandler)
+    void setupSpec() {
+        httpEndpoint.start()
+        httpsEndpoint.start()
 
-		httpUri = httpEndpoint.url.toURI()
-		httpsUri = httpsEndpoint.url.toURI()
-	}
+        httpUri = httpEndpoint.url.toURI()
+        httpsUri = httpsEndpoint.url.toURI()
+    }
 
-	void setup() {
-		http = new SystemDefaultHttpClient()
-		BetamaxHttpsSupport.configure(http)
-	}
+    void setup() {
+        http = new SystemDefaultHttpClient()
+        BetamaxHttpsSupport.configure(http)
+    }
 
-	@Betamax(tape = 'https spec')
-	void 'proxy is selected for #scheme URIs'() {
-		given:
-		def proxySelector = ProxySelector.default
+    @Betamax(tape = 'https spec')
+    void 'proxy is selected for #scheme URIs'() {
+        given:
+        def proxySelector = ProxySelector.default
 
-		expect:
-		def proxy = proxySelector.select(uri).first()
-		proxy.type() == Proxy.Type.HTTP
+        expect:
+        def proxy = proxySelector.select(uri).first()
+        proxy.type() == Proxy.Type.HTTP
 
-		and:
-		def proxyURI = "${scheme}://${proxy.address()}".toURI()
-		InetAddress.getByName(proxyURI.host) == InetAddress.getByName(recorder.proxyHost)
-		proxyURI.port == recorder.proxyPort
+        and:
+        def proxyURI = "${scheme}://${proxy.address()}".toURI()
+        InetAddress.getByName(proxyURI.host) == InetAddress.getByName(recorder.proxyHost)
+        proxyURI.port == recorder.proxyPort
 
-		where:
-		uri << [httpUri, httpsUri]
-		scheme = uri.scheme
-	}
+        where:
+        uri << [httpUri, httpsUri]
+        scheme = uri.scheme
+    }
 
-	@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
-	void 'proxy can intercept #scheme requests'() {
-		when: 'a request is made'
-		def request = new HttpGet(url)
-		def response = http.execute(request)
+    @Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
+    void 'proxy can intercept #scheme requests'() {
+        when:
+        'a request is made'
+        def request = new HttpGet(url)
+        def response = http.execute(request)
 
-		then: 'it is intercepted by the proxy'
-		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
+        then:
+        'it is intercepted by the proxy'
+        response.statusLine.statusCode == SC_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
 
-		and: 'the response body is readable'
-		response.entity.content.text == HELLO_WORLD
+        and:
+        'the response body is readable'
+        response.entity.content.text == HELLO_WORLD
 
-		where:
-		url << [httpEndpoint.url, httpsEndpoint.url]
-		scheme = url.toURI().scheme
-	}
+        where:
+        url << [httpEndpoint.url, httpsEndpoint.url]
+        scheme = url.toURI().scheme
+    }
 
 }
 

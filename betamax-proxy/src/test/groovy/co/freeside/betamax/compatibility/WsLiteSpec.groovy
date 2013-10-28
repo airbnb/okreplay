@@ -18,7 +18,6 @@ package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
@@ -31,46 +30,53 @@ import static org.apache.http.HttpHeaders.VIA
 
 class WsLiteSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
-	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
-	void setupSpec() {
-		endpoint.start(EchoHandler)
-		httpsEndpoint.start(HelloHandler)
-	}
+    void setupSpec() {
+        endpoint.start()
+        httpsEndpoint.start()
+    }
 
-	@Betamax(tape = 'wslite spec', mode = READ_WRITE)
-	void 'can record a connection made with WsLite'() {
-		given: 'a properly configured wslite instance'
-		def http = new RESTClient(endpoint.url)
+    @Betamax(tape = 'wslite spec', mode = READ_WRITE)
+    void 'can record a connection made with WsLite'() {
+        given:
+        'a properly configured wslite instance'
+        def http = new RESTClient(endpoint.url)
 
-		when: 'a request is made'
-		def response = http.get(path: '/', proxy: recorder.proxy)
+        when:
+        'a request is made'
+        def response = http.get(path: '/', proxy: recorder.proxy)
 
-		then: 'the request is intercepted'
-		response.statusCode == HTTP_OK
-		response.headers[VIA] == 'Betamax'
-		response.headers[X_BETAMAX] == 'REC'
-	}
+        then:
+        'the request is intercepted'
+        response.statusCode == HTTP_OK
+        response.headers[VIA] == 'Betamax'
+        response.headers[X_BETAMAX] == 'REC'
+    }
 
-	@Betamax(tape = 'wslite spec', mode = READ_WRITE)
-	void 'proxy intercepts HTTPS requests'() {
-		given: 'a properly configured wslite instance'
-		def http = new RESTClient(httpsEndpoint.url)
+    @Betamax(tape = 'wslite spec', mode = READ_WRITE)
+    void 'proxy intercepts HTTPS requests'() {
+        given:
+        'a properly configured wslite instance'
+        def http = new RESTClient(httpsEndpoint.url)
 
-		when: 'a request is made'
-		def response = http.get(path: '/', proxy: recorder.proxy)
+        when:
+        'a request is made'
+        def response = http.get(path: '/', proxy: recorder.proxy)
 
-		then: 'the request is intercepted'
-		response.statusCode == HTTP_OK
-		response.headers[VIA] == 'Betamax'
-		response.headers[X_BETAMAX] == 'REC'
+        then:
+        'the request is intercepted'
+        response.statusCode == HTTP_OK
+        response.headers[VIA] == 'Betamax'
+        response.headers[X_BETAMAX] == 'REC'
 
-		and: 'the response body is decoded'
-		response.contentAsString == 'Hello World!'
-	}
+        and:
+        'the response body is decoded'
+        response.contentAsString == 'Hello World!'
+    }
 
 }

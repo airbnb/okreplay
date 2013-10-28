@@ -18,8 +18,7 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
-import co.freeside.betamax.util.server.HelloHandler
+import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
@@ -30,36 +29,36 @@ import static org.apache.http.HttpHeaders.VIA
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {
 
-	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def proxyServer = new SimpleServer()
+    @Shared @AutoCleanup('stop') def proxyServer = new SimpleServer(HelloHandler)
 
-	void setupSpec() {
-		proxyServer.start(HelloHandler)
-		System.properties.'http.proxyHost' = InetAddress.localHost.hostAddress
-		System.properties.'http.proxyPort' = proxyServer.port.toString()
-	}
+    void setupSpec() {
+        proxyServer.start()
+        System.properties.'http.proxyHost' = "localhost"
+        System.properties.'http.proxyPort' = proxyServer.port.toString()
+    }
 
-	void cleanupSpec() {
-		System.clearProperty 'http.proxyHost'
-		System.clearProperty 'http.proxyPort'
-	}
+    void cleanupSpec() {
+        System.clearProperty 'http.proxyHost'
+        System.clearProperty 'http.proxyPort'
+    }
 
-	@Timeout(10)
-	@Betamax(tape = 'existing proxy spec', mode = TapeMode.READ_WRITE)
-	void 'pre-existing proxy settings are used for the outbound request from the Betamax proxy'() {
-		given:
-		HttpURLConnection connection = new URL('http://freeside.co/betamax').openConnection()
-		connection.connect()
+    @Timeout(10)
+    @Betamax(tape = 'existing proxy spec', mode = TapeMode.READ_WRITE)
+    void 'pre-existing proxy settings are used for the outbound request from the Betamax proxy'() {
+        given:
+        HttpURLConnection connection = new URL('http://freeside.co/betamax').openConnection()
+        connection.connect()
 
-		expect:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text == HELLO_WORLD
+        expect:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == 'Betamax'
+        connection.inputStream.text == HELLO_WORLD
 
-		cleanup:
-		connection.disconnect()
-	}
+        cleanup:
+        connection.disconnect()
+    }
 
 }

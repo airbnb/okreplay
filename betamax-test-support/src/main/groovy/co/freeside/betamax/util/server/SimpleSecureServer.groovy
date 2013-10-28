@@ -16,34 +16,25 @@
 
 package co.freeside.betamax.util.server
 
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import groovy.transform.InheritConstructors
-import org.eclipse.jetty.server.*
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector
+import io.netty.channel.*
 
 @InheritConstructors
 class SimpleSecureServer extends SimpleServer {
 
-	@Override
-	String getUrl() {
-		"https://$host:$port/"
-	}
+    public static SimpleSecureServer start(Class<? extends ChannelHandler> handlerType) throws Exception {
+        SimpleSecureServer server = new SimpleSecureServer(handlerType);
+        server.start();
+        return server;
+    }
 
-	@Override
-	protected Server createServer(int port) {
-		def server = super.createServer(port)
+    @Override
+    protected ChannelInitializer createChannelInitializer(ChannelHandler handler) {
+        return new HttpsChannelInitializer(0, handler)
+    }
 
-		def connector = new SslSelectChannelConnector()
+    protected String getUrlScheme() {
+        return "https";
+    }
 
-		def keystore = SimpleSecureServer.getResource('/betamax.keystore')
-
-		connector.port = port
-		connector.keystore = keystore
-		connector.password = 'password'
-		connector.keyPassword = 'password'
-
-		server.connectors = [connector]as Connector[]
-
-		server
-	}
 }

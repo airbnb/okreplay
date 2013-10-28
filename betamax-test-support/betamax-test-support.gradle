@@ -6,6 +6,6 @@ repositories {
 
 dependencies {
 	compile project(":betamax-core")
-	compile project(":betamax-jetty")
+    compile commonDependencies.netty
 	compile commonDependencies.httpBuilder
 }

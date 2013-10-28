@@ -18,9 +18,8 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.EchoHandler
+import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.util.FileUtils.newTempDir
@@ -34,14 +33,14 @@ class RequestMethodsSpec extends Specification {
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
-        endpoint.start(EchoHandler)
+        endpoint.start()
     }
 
     @Timeout(10)
-	@Betamax(tape = 'proxy network comms spec', mode = TapeMode.READ_WRITE)
+    @Betamax(tape = 'proxy network comms spec', mode = TapeMode.READ_WRITE)
     void 'proxy handles #method requests'() {
         given:
         def http = new BetamaxRESTClient(endpoint.url)

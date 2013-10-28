@@ -18,7 +18,6 @@ package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.server.*
 import org.junit.Rule
 import spock.lang.*
@@ -30,40 +29,40 @@ import static org.apache.http.HttpStatus.SC_OK
 
 class HttpURLConnectionSpec extends Specification {
 
-	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer()
-	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001)
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
-	void setupSpec() {
-		endpoint.start(EchoHandler)
-		httpsEndpoint.start(HelloHandler)
-	}
+    void setupSpec() {
+        endpoint.start()
+        httpsEndpoint.start()
+    }
 
-	@Timeout(10)
-	@Betamax(tape = 'http url connection spec', mode = TapeMode.READ_WRITE)
-	void 'proxy intercepts URL connections'() {
-		given:
-		HttpURLConnection connection = new URL(endpoint.url).openConnection()
-		connection.connect()
+    @Timeout(10)
+    @Betamax(tape = 'http url connection spec', mode = TapeMode.READ_WRITE)
+    void 'proxy intercepts URL connections'() {
+        given:
+        HttpURLConnection connection = new URL(endpoint.url).openConnection()
+        connection.connect()
 
-		expect:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
+        expect:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == 'Betamax'
 
-		cleanup:
-		connection.disconnect()
-	}
+        cleanup:
+        connection.disconnect()
+    }
 
-	@Betamax(tape = 'http url connection spec', mode = WRITE_ONLY)
-	void 'proxy intercepts HTTPS requests'() {
-		when:
-		HttpURLConnection connection = httpsEndpoint.url.toURL().openConnection()
+    @Betamax(tape = 'http url connection spec', mode = WRITE_ONLY)
+    void 'proxy intercepts HTTPS requests'() {
+        when:
+        HttpURLConnection connection = httpsEndpoint.url.toURL().openConnection()
 
-		then:
-		connection.responseCode == SC_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text == 'Hello World!'
-	}
+        then:
+        connection.responseCode == SC_OK
+        connection.getHeaderField(VIA) == 'Betamax'
+        connection.inputStream.text == 'Hello World!'
+    }
 }

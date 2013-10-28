@@ -17,9 +17,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.ProxyRecorder
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.HelloHandler
+import co.freeside.betamax.util.server.*
 import groovyx.net.http.*
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
@@ -33,7 +32,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
     @Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
     @Shared @AutoCleanup('ejectTape') ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
-    @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer()
+    @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
     RESTClient http = new BetamaxRESTClient(endpoint.url)
 
     void setupSpec() {
@@ -44,7 +43,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
     @Timeout(10)
     void 'proxy makes a real HTTP request the first time it gets a request for a URI'() {
         given:
-        endpoint.start(HelloHandler)
+        endpoint.start()
 
         when:
         HttpResponseDecorator response = http.get(path: '/')
@@ -73,7 +72,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
     @Timeout(10)
     void 'subsequent requests with a different HTTP method are recorded separately'() {
         given:
-        endpoint.start(HelloHandler)
+        endpoint.start()
 
         when:
         HttpResponseDecorator response = http.post(path: '/')
@@ -137,7 +136,7 @@ interactions:
     @Timeout(10)
     void 'can play back a loaded tape'() {
         when:
-        def response = http.get(uri: 'http://icanhascheezburger.com/')
+        HttpResponseDecorator response = http.get(uri: 'http://icanhascheezburger.com/')
 
         then:
         response.statusLine.statusCode == HTTP_OK

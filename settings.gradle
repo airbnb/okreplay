@@ -3,7 +3,6 @@ include "betamax-core",
 		"betamax-jetty",
 		"betamax-proxy",
 		"betamax-manual",
-		"betamax-netty",
 		"betamax-test-support"
 
 rootProject.name = "betamax"

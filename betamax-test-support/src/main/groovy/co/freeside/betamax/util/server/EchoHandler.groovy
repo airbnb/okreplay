@@ -17,60 +17,41 @@
 package co.freeside.betamax.util.server
 
 import java.util.logging.Logger
-import java.util.zip.*
-import javax.servlet.http.*
-import org.eclipse.jetty.server.Request
-import org.eclipse.jetty.server.handler.AbstractHandler
-import static org.eclipse.jetty.http.HttpHeaders.*
-import static org.eclipse.jetty.http.HttpStatus.OK_200
+import io.netty.buffer.Unpooled
+import io.netty.channel.*
+import io.netty.handler.codec.http.*
+import io.netty.util.CharsetUtil
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
+import static io.netty.handler.codec.http.HttpResponseStatus.OK
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-class EchoHandler extends AbstractHandler {
+@ChannelHandler.Sharable
+class EchoHandler extends ChannelInboundHandlerAdapter {
 
 	private static final log = Logger.getLogger(EchoHandler.name)
 
-	@Override
-	void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-		log.fine "received $request.method request for $target"
-		response.status = OK_200
-		response.contentType = 'text/plain'
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        FullHttpRequest request = (FullHttpRequest) msg;
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HTTP_1_1,
+                OK,
+                request.content()
+        );
+        response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
 
-		getResponseWriter(request, response).withWriter { writer ->
-			writer << request.method << ' ' << request.requestURI
-			if (request.queryString) {
-				writer << '?' << request.queryString
-			}
-			writer << ' ' << request.protocol << '\n'
-			for (headerName in request.headerNames) {
-				for (header in request.getHeaders(headerName)) {
-					writer << headerName << ': ' << header << '\n'
-				}
-			}
-			request.reader.withReader { reader ->
-				while (reader.ready()) {
-					writer << (char) reader.read()
-				}
-			}
-		}
-	}
-
-	private Writer getResponseWriter(HttpServletRequest request, HttpServletResponse response) {
-		def out
-		def acceptedEncodings = request.getHeader(ACCEPT_ENCODING)?.tokenize(',')
-		log.fine "request accepts $acceptedEncodings"
-		if ('gzip' in acceptedEncodings) {
-			log.fine 'gzipping...'
-			response.addHeader(CONTENT_ENCODING, 'gzip')
-			out = new OutputStreamWriter(new GZIPOutputStream(response.outputStream))
-		} else if ('deflate' in acceptedEncodings) {
-			log.fine 'deflating...'
-			response.addHeader(CONTENT_ENCODING, 'deflate')
-			out = new OutputStreamWriter(new DeflaterOutputStream(response.outputStream))
-		} else {
-			log.fine 'not encoding...'
-			response.addHeader(CONTENT_ENCODING, 'none')
-			out = response.writer
-		}
-		out
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HTTP_1_1,
+                OK,
+                Unpooled.copiedBuffer(cause.getClass().getSimpleName() + ": " + cause.getMessage(), CharsetUtil.UTF_8)
+        );
+        response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
+        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+    }
 
 }

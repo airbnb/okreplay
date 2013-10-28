@@ -17,10 +17,9 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.proxy.jetty.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.RESTClient
+import co.freeside.betamax.util.server.*
+import groovyx.net.http.*
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
@@ -37,7 +36,7 @@ class AnnotationTest {
     static File tapeRoot = newTempDir('tapes')
     Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
     @Rule public RecorderRule recorderRule = new RecorderRule(recorder)
-    SimpleServer endpoint = new SimpleServer()
+    SimpleServer endpoint = new SimpleServer(EchoHandler)
     RESTClient http
 
     @Before
@@ -74,9 +73,9 @@ class AnnotationTest {
     @Test
     @Betamax(tape = 'annotation_test', mode = READ_WRITE)
     void annotatedTestCanRecord() {
-        endpoint.start(EchoHandler)
+        endpoint.start()
 
-        def response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: '/')
 
         assert response.status == HTTP_OK
         assert response.getFirstHeader(VIA)?.value == 'Betamax'
@@ -86,7 +85,7 @@ class AnnotationTest {
     @Test
     @Betamax(tape = 'annotation_test', mode = READ_WRITE)
     void annotatedTestCanPlayBack() {
-        def response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: '/')
 
         assert response.status == HTTP_OK
         assert response.getFirstHeader(VIA)?.value == 'Betamax'
@@ -95,9 +94,9 @@ class AnnotationTest {
 
     @Test
     void canMakeUnproxiedRequestAfterUsingAnnotation() {
-        endpoint.start(EchoHandler)
+        endpoint.start()
 
-        def response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: '/')
 
         assert response.status == HTTP_OK
         assert response.getFirstHeader(VIA) == null

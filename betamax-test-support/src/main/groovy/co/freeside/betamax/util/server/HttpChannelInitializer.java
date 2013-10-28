@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.proxy.netty;
+package co.freeside.betamax.util.server;
 
 import io.netty.channel.*;
 import io.netty.channel.nio.*;
@@ -45,19 +45,14 @@ public class HttpChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     public void initChannel(SocketChannel channel) throws Exception {
         ChannelPipeline pipeline = channel.pipeline();
-
-//        SSLEngine engine = SslContextFactory.getServerContext().createSSLEngine();
-//        engine.setUseClientMode(false);
-
-//        pipeline.addLast("ssl", new SslHandler(engine));
         pipeline.addLast("decoder", new HttpRequestDecoder());
         pipeline.addLast("aggregator", new HttpObjectAggregator(MAX_CONTENT_LENGTH));
         pipeline.addLast("encoder", new HttpResponseEncoder());
         pipeline.addLast("chunkedWriter", new ChunkedWriteHandler());
         if (workerGroup == null) {
-            pipeline.addLast("betamaxHandler", handler);
+            pipeline.addLast("handler", handler);
         } else {
-            pipeline.addLast(workerGroup, "betamaxHandler", handler);
+            pipeline.addLast(workerGroup, "handler", handler);
         }
     }
 }

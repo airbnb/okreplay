@@ -16,15 +16,15 @@
 
 package co.freeside.betamax.proxy.netty
 
+import co.freeside.betamax.util.server.*
 import spock.lang.Specification
 
 class NettyServerSpec extends Specification {
 
 	void "can serve HTTP responses with Netty"() {
 		given:
-		def channelInitializer = new HttpChannelInitializer(0, new EchoServerHandler())
-		def server = new NettyBetamaxServer(port, channelInitializer)
-		server.run()
+		def server = new SimpleServer(port, EchoHandler)
+		server.start()
 
 		when:
 		HttpURLConnection connection = new URL("http://localhost:$port/").openConnection()
@@ -40,7 +40,7 @@ class NettyServerSpec extends Specification {
 		connection.inputStream.getText("UTF-8") == message
 
 		cleanup:
-		server.shutdown()
+		server.stop()
 
 		where:
 		port = 5000
