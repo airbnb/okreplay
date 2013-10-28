@@ -42,7 +42,7 @@ public class RecorderRule implements TestRule {
     public Statement apply(final Statement statement, Description description) {
         final Betamax annotation = description.getAnnotation(Betamax.class);
         if (annotation != null) {
-            log.fine("found @Betamax annotation on '" + description.getDisplayName() + "'");
+            log.fine(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {

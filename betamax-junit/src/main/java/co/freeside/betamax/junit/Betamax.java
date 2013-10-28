@@ -23,7 +23,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 @Retention(RUNTIME)
-@Target(METHOD)
+@Target({METHOD, TYPE})
 public @interface Betamax {
     String tape();
 
