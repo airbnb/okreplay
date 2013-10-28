@@ -1,6 +1,5 @@
 include "betamax-core",
 		"betamax-httpclient",
-		"betamax-jetty",
 		"betamax-proxy",
 		"betamax-manual",
 		"betamax-test-support"
