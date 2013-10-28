@@ -8,6 +8,7 @@ dependencies {
 	compile commonDependencies.groovy
 	compile commonDependencies.guava
 	testCompile commonDependencies.spock
+	testCompile commonDependencies.junit
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
