@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.util.server
+package co.freeside.betamax.util.server.internal
 
-import co.freeside.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
+import io.netty.buffer.Unpooled
 import io.netty.channel.*
 import io.netty.handler.codec.http.*
-import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
-import static io.netty.handler.codec.http.HttpResponseStatus.OK
-import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import io.netty.util.CharsetUtil
 
-@ChannelHandler.Sharable
-class EchoHandler extends ExceptionHandlingHandlerAdapter {
+abstract class ExceptionHandlingHandlerAdapter extends ChannelInboundHandlerAdapter {
 
     @Override
-    void channelRead(ChannelHandlerContext ctx, Object msg) {
-        def response = new DefaultFullHttpResponse(
-                HTTP_1_1,
-                OK,
-                ((FullHttpRequest) msg).content()
+    final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace()
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1,
+                HttpResponseStatus.INTERNAL_SERVER_ERROR,
+                Unpooled.copiedBuffer("${cause.getClass().simpleName}: $cause.message", CharsetUtil.UTF_8)
         )
-        response.headers().set(CONTENT_TYPE, "text/plain charset=UTF-8")
+        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain charset=UTF-8")
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
     }
-
-
 }

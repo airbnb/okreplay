@@ -16,38 +16,22 @@
 
 package co.freeside.betamax.util.server
 
-import java.util.logging.Logger
-import io.netty.buffer.Unpooled
+import co.freeside.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
+import groovy.util.logging.Log
 import io.netty.channel.*
-import io.netty.handler.codec.http.*
-import io.netty.util.CharsetUtil
-import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
-import static io.netty.handler.codec.http.HttpResponseStatus.OK
-import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import io.netty.handler.codec.http.HttpRequest
+
 /**
  * A very dumb handler that will simply sit on any requests until it is told to shut down (i.e. the server is shutting
  * down). This is used for testing timeout conditions on clients.
  */
+@Log
 @ChannelHandler.Sharable
-class SlowHandler extends ChannelInboundHandlerAdapter {
-
-    private static final log = Logger.getLogger(SlowHandler.name)
+class SlowHandler extends ExceptionHandlingHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         log.fine "received ${((HttpRequest) msg).method} request..."
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        FullHttpResponse response = new DefaultFullHttpResponse(
-                HTTP_1_1,
-                OK,
-                Unpooled.copiedBuffer(cause.getClass().getSimpleName() + ": " + cause.getMessage(), CharsetUtil.UTF_8)
-        );
-        response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
 }

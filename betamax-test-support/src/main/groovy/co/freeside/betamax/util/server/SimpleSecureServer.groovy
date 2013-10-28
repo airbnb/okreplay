@@ -16,25 +16,32 @@
 
 package co.freeside.betamax.util.server
 
-import groovy.transform.InheritConstructors
+import co.freeside.betamax.util.server.internal.HttpsChannelInitializer
+import groovy.transform.*
 import io.netty.channel.*
 
 @InheritConstructors
 class SimpleSecureServer extends SimpleServer {
 
-    public static SimpleSecureServer start(Class<? extends ChannelHandler> handlerType) throws Exception {
-        SimpleSecureServer server = new SimpleSecureServer(handlerType);
-        server.start();
-        return server;
+    static SimpleSecureServer start(Class<? extends ChannelHandler> handlerType) {
+        def server = new SimpleSecureServer(handlerType)
+        server.start()
+        return server
+    }
+
+    static SimpleSecureServer start(ChannelHandler handler) {
+        def server = new SimpleSecureServer(handler)
+        server.start()
+        return server
     }
 
     @Override
     protected ChannelInitializer createChannelInitializer(ChannelHandler handler) {
-        return new HttpsChannelInitializer(0, handler)
+        new HttpsChannelInitializer(0, handler)
     }
 
     protected String getUrlScheme() {
-        return "https";
+        "https"
     }
 
 }
