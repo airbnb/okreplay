@@ -22,24 +22,25 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.apache.commons.httpclient.*
 import org.apache.commons.httpclient.methods.GetMethod
-import org.junit.Rule
+import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
+@Betamax(tape = 'http client 3 spec', mode = TapeMode.READ_WRITE)
+@Timeout(10)
 class HttpClient3Spec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
         endpoint.start()
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http client 3 spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HTTPClient 3.x connections'() {
         given:
         def client = new HttpClient()

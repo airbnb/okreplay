@@ -24,7 +24,7 @@ import com.google.common.io.Files
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.SystemDefaultHttpClient
-import org.junit.Rule
+import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
@@ -32,11 +32,13 @@ import static org.apache.http.HttpStatus.SC_OK
 
 @Issue('https://github.com/robfletcher/betamax/issues/34')
 @Unroll
+@Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
 class HttpsSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    @AutoCleanup('ejectTape') def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('ejectTape') def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+
     @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
     @Shared @AutoCleanup('stop') def httpEndpoint = new SimpleServer(HelloHandler)
 
@@ -58,7 +60,6 @@ class HttpsSpec extends Specification {
         BetamaxHttpsSupport.configure(http)
     }
 
-    @Betamax(tape = 'https spec')
     void 'proxy is selected for #scheme URIs'() {
         given:
         def proxySelector = ProxySelector.default
@@ -77,7 +78,6 @@ class HttpsSpec extends Specification {
         scheme = uri.scheme
     }
 
-    @Betamax(tape = 'https spec', mode = TapeMode.WRITE_ONLY)
     void 'proxy can intercept #scheme requests'() {
         when:
         'a request is made'

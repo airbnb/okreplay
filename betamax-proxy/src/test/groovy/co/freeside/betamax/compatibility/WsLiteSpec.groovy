@@ -20,6 +20,7 @@ import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
+import org.junit.ClassRule
 import org.junit.Rule
 import spock.lang.*
 import wslite.rest.RESTClient
@@ -28,11 +29,13 @@ import static co.freeside.betamax.TapeMode.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
+@Betamax(tape = 'wslite spec', mode = READ_WRITE)
 class WsLiteSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
     @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
@@ -41,7 +44,6 @@ class WsLiteSpec extends Specification {
         httpsEndpoint.start()
     }
 
-    @Betamax(tape = 'wslite spec', mode = READ_WRITE)
     void 'can record a connection made with WsLite'() {
         given:
         'a properly configured wslite instance'
@@ -58,7 +60,6 @@ class WsLiteSpec extends Specification {
         response.headers[X_BETAMAX] == 'REC'
     }
 
-    @Betamax(tape = 'wslite spec', mode = READ_WRITE)
     void 'proxy intercepts HTTPS requests'() {
         given:
         'a properly configured wslite instance'

@@ -24,6 +24,7 @@ import com.google.common.io.Files
 import org.apache.http.HttpHost
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.*
+import org.junit.ClassRule
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
@@ -32,11 +33,14 @@ import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
+@Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
+@Timeout(10)
 class HttpClientSpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
     @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
@@ -45,8 +49,6 @@ class HttpClientSpec extends Specification {
         httpsEndpoint.start()
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
         given:
         def http = new DefaultHttpClient()
@@ -62,8 +64,6 @@ class HttpClientSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HTTPClient connections when explicitly told to'() {
         given:
         def http = new DefaultHttpClient()
@@ -78,8 +78,6 @@ class HttpClientSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http client spec', mode = TapeMode.READ_WRITE)
     void 'proxy automatically intercepts SystemDefaultHttpClient connections'() {
         given:
         def http = new SystemDefaultHttpClient()
@@ -93,7 +91,6 @@ class HttpClientSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Betamax(tape = 'http client spec')
     void 'proxy can intercept HTTPS requests'() {
         given:
         def http = new DefaultHttpClient()

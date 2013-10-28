@@ -27,6 +27,7 @@ import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 
 @Stepwise
+@Timeout(10)
 class ProxyRecordAndPlaybackSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') File tapeRoot = Files.createTempDir()
@@ -40,7 +41,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         proxy.start()
     }
 
-    @Timeout(10)
     void 'proxy makes a real HTTP request the first time it gets a request for a URI'() {
         given:
         endpoint.start()
@@ -56,7 +56,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         recorder.tape.size() == 1
     }
 
-    @Timeout(10)
     void 'subsequent requests for the same URI are played back from tape'() {
         when:
         HttpResponseDecorator response = http.get(path: '/')
@@ -69,7 +68,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         recorder.tape.size() == 1
     }
 
-    @Timeout(10)
     void 'subsequent requests with a different HTTP method are recorded separately'() {
         given:
         endpoint.start()
@@ -133,7 +131,6 @@ interactions:
         recorder.tape.size() == 1
     }
 
-    @Timeout(10)
     void 'can play back a loaded tape'() {
         when:
         HttpResponseDecorator response = http.get(uri: 'http://icanhascheezburger.com/')

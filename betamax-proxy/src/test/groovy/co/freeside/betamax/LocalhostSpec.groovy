@@ -21,7 +21,7 @@ import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import groovyx.net.http.HttpResponseDecorator
-import org.junit.Rule
+import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static java.net.HttpURLConnection.HTTP_OK
@@ -29,12 +29,13 @@ import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/62')
 @Issue('http://bugs.sun.com/view_bug.do?bug_id=6737819')
+@Betamax(tape = 'localhost', mode = WRITE_ONLY)
 @Unroll
 class LocalhostSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
@@ -45,7 +46,6 @@ class LocalhostSpec extends Specification {
     }
 
     @IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
-    @Betamax(tape = 'localhost', mode = WRITE_ONLY)
     void 'can proxy requests to local endpoint at #uri'() {
         when:
         HttpResponseDecorator response = http.get(uri: uri)

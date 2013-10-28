@@ -47,19 +47,13 @@ import static java.util.concurrent.TimeUnit.SECONDS
 })
 class BasicAuthSpec extends Specification {
 
-    @Shared
-    private endpoint = 'http://httpbin.org/basic-auth/user/passwd'.toURL()
+    @Shared private endpoint = 'http://httpbin.org/basic-auth/user/passwd'.toURL()
 
-    @Shared
-    private targetHost = new HttpHost(endpoint.host, endpoint.port)
+    @Shared private targetHost = new HttpHost(endpoint.host, endpoint.port)
 
-    @Shared
-    @AutoCleanup('deleteDir')
-    def tapeRoot = Files.createTempDir()
-
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule
-    RecorderRule recorderRule = new RecorderRule(recorder)
+    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
     def http = new BetamaxRESTClient()
 

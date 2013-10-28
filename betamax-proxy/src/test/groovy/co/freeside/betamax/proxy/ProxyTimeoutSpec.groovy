@@ -34,7 +34,7 @@ class ProxyTimeoutSpec extends Specification {
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot, proxyTimeout: 100)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @AutoCleanup('stop') def endpoint = new SimpleServer()
+    @AutoCleanup('stop') def endpoint = new SimpleServer(SlowHandler)
     def http = new BetamaxRESTClient(endpoint.url)
 
     void setup() {
@@ -46,7 +46,7 @@ class ProxyTimeoutSpec extends Specification {
     @Ignore("pending LittleProxy fix")
     void 'proxy responds with 504 if target server takes too long to respond'() {
         given:
-        endpoint.start(SlowHandler)
+        endpoint.start()
 
         when:
         http.get(path: '/')

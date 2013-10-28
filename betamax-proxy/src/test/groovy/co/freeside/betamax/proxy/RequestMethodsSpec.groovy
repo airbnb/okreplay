@@ -21,17 +21,19 @@ import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import org.junit.Rule
+import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
+@Betamax(tape = 'request methods spec', mode = TapeMode.READ_WRITE)
 @Unroll
+@Timeout(10)
 class RequestMethodsSpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
@@ -39,8 +41,6 @@ class RequestMethodsSpec extends Specification {
         endpoint.start()
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'proxy network comms spec', mode = TapeMode.READ_WRITE)
     void 'proxy handles #method requests'() {
         given:
         def http = new BetamaxRESTClient(endpoint.url)

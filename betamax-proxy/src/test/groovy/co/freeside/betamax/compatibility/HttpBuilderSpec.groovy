@@ -24,25 +24,26 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import groovyx.net.http.*
 import org.apache.http.HttpHost
-import org.junit.Rule
+import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
+@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
+@Timeout(10)
 class HttpBuilderSpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
         endpoint.start()
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
         given:
         def http = new RESTClient(endpoint.url)
@@ -56,8 +57,6 @@ class HttpBuilderSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HTTPClient connections when explicitly told to'() {
         given:
         def http = new RESTClient(endpoint.url)
@@ -71,8 +70,6 @@ class HttpBuilderSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
     void 'proxy intercepts HttpURLClient connections'() {
         given:
         def http = new HttpURLClient(url: endpoint.url)
@@ -85,8 +82,6 @@ class HttpBuilderSpec extends Specification {
         response.getFirstHeader(VIA)?.value == 'Betamax'
     }
 
-    @Timeout(10)
-    @Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
     void 'proxy automatically intercepts connections when the underlying client is a SystemDefaultHttpClient'() {
         given:
         def http = new BetamaxRESTClient(endpoint.url)

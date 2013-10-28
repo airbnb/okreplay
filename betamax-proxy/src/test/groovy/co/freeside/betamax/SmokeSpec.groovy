@@ -18,20 +18,19 @@ package co.freeside.betamax
 
 import javax.net.ssl.HttpsURLConnection
 import co.freeside.betamax.encoding.GzipEncoder
-import co.freeside.betamax.junit.Betamax
-import co.freeside.betamax.junit.RecorderRule
-import org.junit.Rule
+import co.freeside.betamax.junit.*
+import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @Unroll
+@Betamax(tape = 'smoke spec')
 class SmokeSpec extends Specification {
 
-    Recorder recorder = new ProxyRecorder(sslSupport: true)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-	@Betamax(tape = 'smoke spec')
 	void '#type response data'() {
 		when:
 		HttpURLConnection connection = uri.toURL().openConnection()
@@ -49,7 +48,6 @@ class SmokeSpec extends Specification {
 		'json' | 'http://httpbin.org/get'        | '"url": "http://httpbin.org/get"'
 	}
 
-	@Betamax(tape = 'smoke spec')
 	void 'gzipped response data'() {
 		when:
 		HttpURLConnection connection = uri.toURL().openConnection()
@@ -65,7 +63,6 @@ class SmokeSpec extends Specification {
 		encoder = new GzipEncoder()
 	}
 
-	@Betamax(tape = 'smoke spec')
 	void 'redirects are followed'() {
 		when:
 		HttpURLConnection connection = uri.toURL().openConnection()
@@ -79,7 +76,6 @@ class SmokeSpec extends Specification {
 		uri = 'http://httpbin.org/redirect/1'
 	}
 
-	@Betamax(tape = 'smoke spec')
 	void 'https proxying'() {
 		when:
 		HttpsURLConnection connection = uri.toURL().openConnection()
@@ -93,7 +89,6 @@ class SmokeSpec extends Specification {
 		uri = 'https://httpbin.org/get'
 	}
 
-	@Betamax(tape = 'smoke spec')
 	void 'can POST to https'() {
 		when:
 		HttpsURLConnection connection = uri.toURL().openConnection()
@@ -112,25 +107,7 @@ class SmokeSpec extends Specification {
 		uri = 'https://httpbin.org/post'
 	}
 
-	@Ignore("site is no longer there")
-	@Issue('https://github.com/robfletcher/betamax/issues/52')
-	@Betamax(tape = 'ocsp')
-	void 'OCSP messages'() {
-		when:
-		HttpURLConnection connection = uri.toURL().openConnection()
-		connection.requestMethod = "POST"
-
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.bytes.length == 2529
-
-		where:
-		uri = 'http://ocsp.ocspservice.com/public/ocsp'
-	}
-
 	@Issue(['https://github.com/robfletcher/betamax/issues/61', 'http://jira.codehaus.org/browse/JETTY-1533'])
-	@Betamax(tape = 'smoke spec')
 	void 'can cope with URLs that do not end in a slash'() {
 		when:
 		HttpURLConnection connection = uri.toURL().openConnection()
