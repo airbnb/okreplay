@@ -28,7 +28,8 @@ allprojects {
 			}),
 			httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.2.2"),
 			junit: dependencies.create("junit:junit:4.10"),
-			netty: dependencies.create("io.netty:netty-all:4.0.7.Final"),
+			netty: dependencies.create("io.netty:netty-all:4.0.11.Final"),
+            littleProxy: dependencies.create("org.littleshoot:littleproxy:1.0.0-beta3"),
 			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0", {
 				exclude module: "groovy-all"
 				exclude module: "junit-dep"
