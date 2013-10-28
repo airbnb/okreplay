@@ -23,38 +23,37 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import groovyx.net.http.HttpResponseException
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler
+import org.junit.ClassRule
 import org.junit.Rule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
 
-@Issue('https://github.com/robfletcher/betamax/issues/20')
+@Issue("https://github.com/robfletcher/betamax/issues/20")
+@Issue("https://github.com/adamfisk/LittleProxy/issues/96")
+@Betamax(tape = "proxy timeout spec", mode = TapeMode.READ_WRITE)
 class ProxyTimeoutSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot, proxyTimeout: 100)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, proxyTimeoutSeconds: 1)
+    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @AutoCleanup('stop') def endpoint = new SimpleServer(SlowHandler)
+    @AutoCleanup("stop") def endpoint = new SimpleServer(SlowHandler)
     def http = new BetamaxRESTClient(endpoint.url)
 
     void setup() {
         http.client.httpRequestRetryHandler = new DefaultHttpRequestRetryHandler(0, false)
     }
 
-    @Betamax(tape = 'proxy timeout spec', mode = TapeMode.READ_WRITE)
-    @Issue("https://github.com/adamfisk/LittleProxy/issues/96")
-    @Ignore("pending LittleProxy fix")
-    void 'proxy responds with 504 if target server takes too long to respond'() {
+    void "proxy responds with 504 if target server takes too long to respond"() {
         given:
         endpoint.start()
 
         when:
-        http.get(path: '/')
+        http.get(path: "/")
 
         then:
         def e = thrown(HttpResponseException)
         e.statusCode == HTTP_GATEWAY_TIMEOUT
-        e.message == "Timed out connecting to $endpoint.url"
     }
 
 }

@@ -30,7 +30,6 @@ import org.littleshoot.proxy.impl.*;
 import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.*;
 import static com.google.common.base.Predicates.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
-import static java.util.concurrent.TimeUnit.*;
 
 public class ProxyServer implements HttpInterceptor {
 
@@ -54,7 +53,7 @@ public class ProxyServer implements HttpInterceptor {
         LOG.info(String.format("created address, %s", address));
         proxyServerBootstrap = DefaultHttpProxyServer
                 .bootstrap()
-                .withIdleConnectionTimeout((int) MILLISECONDS.toSeconds(recorder.getProxyTimeout()))
+                .withIdleConnectionTimeout(recorder.getProxyTimeoutSeconds())
                 .withAddress(address);
 
         if (recorder.isSslSupport()) {

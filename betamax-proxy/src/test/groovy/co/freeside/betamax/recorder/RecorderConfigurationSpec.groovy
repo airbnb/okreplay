@@ -38,7 +38,7 @@ class RecorderConfigurationSpec extends Specification {
             tapeRoot == new File(DEFAULT_TAPE_ROOT)
             proxyPort == 5555
             defaultMode == READ_WRITE
-            proxyTimeout == DEFAULT_PROXY_TIMEOUT
+            proxyTimeoutSeconds == DEFAULT_PROXY_TIMEOUT
             ignoreHosts == []
             !ignoreLocalhost
             !sslSupport
@@ -52,7 +52,7 @@ class RecorderConfigurationSpec extends Specification {
                 tapeRoot: new File(tmpdir, 'tapes'),
                 proxyPort: 1337,
                 defaultMode: READ_ONLY,
-                proxyTimeout: 30000,
+                proxyTimeoutSeconds: 30,
                 ignoreHosts: ['localhost'],
                 ignoreLocalhost: true,
                 sslSupport: true,
@@ -64,7 +64,7 @@ class RecorderConfigurationSpec extends Specification {
             tapeRoot == new File(tmpdir, 'tapes')
             proxyPort == 1337
             defaultMode == READ_ONLY
-            proxyTimeout == 30000
+            proxyTimeoutSeconds == 30
             ignoreHosts == ['localhost']
             ignoreLocalhost
             sslSupport
@@ -79,7 +79,7 @@ class RecorderConfigurationSpec extends Specification {
             setProperty('betamax.tapeRoot', "${this.tmpdir}tapes".toString())
             setProperty('betamax.proxyPort', '1337')
             setProperty('betamax.defaultMode', 'READ_ONLY')
-            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.proxyTimeout', '30')
             setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
             setProperty('betamax.ignoreLocalhost', 'true')
             setProperty('betamax.sslSupport', 'true')
@@ -93,7 +93,7 @@ class RecorderConfigurationSpec extends Specification {
             tapeRoot == new File(tmpdir, 'tapes')
             proxyPort == 1337
             defaultMode == READ_ONLY
-            proxyTimeout == 30000
+            proxyTimeoutSeconds == 30
             ignoreHosts == ['localhost', '127.0.0.1']
             ignoreLocalhost
             sslSupport
@@ -108,7 +108,7 @@ class RecorderConfigurationSpec extends Specification {
             setProperty('betamax.tapeRoot', "${this.tmpdir}/tapes".toString())
             setProperty('betamax.proxyPort', '1337')
             setProperty('betamax.defaultMode', 'READ_ONLY')
-            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.proxyTimeout', '30')
             setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
             setProperty('betamax.ignoreLocalhost', 'true')
             setProperty('betamax.sslSupport', 'true')
@@ -128,7 +128,7 @@ class RecorderConfigurationSpec extends Specification {
             tapeRoot == new File(tmpdir, 'tapes')
             proxyPort == 1337
             defaultMode == READ_ONLY
-            proxyTimeout == 30000
+            proxyTimeoutSeconds == 30
             ignoreHosts == ['localhost', '127.0.0.1']
             ignoreLocalhost
             sslSupport
@@ -146,7 +146,7 @@ class RecorderConfigurationSpec extends Specification {
             setProperty('betamax.tapeRoot', "${this.tmpdir}/tapes".toString())
             setProperty('betamax.proxyPort', '1337')
             setProperty('betamax.defaultMode', 'READ_ONLY')
-            setProperty('betamax.proxyTimeout', '30000')
+            setProperty('betamax.proxyTimeout', '30')
             setProperty('betamax.ignoreHosts', 'localhost,127.0.0.1')
             setProperty('betamax.ignoreLocalhost', 'true')
             setProperty('betamax.sslSupport', 'true')
@@ -163,7 +163,7 @@ class RecorderConfigurationSpec extends Specification {
                 tapeRoot: new File('test/fixtures/tapes'),
                 proxyPort: 1234,
                 defaultMode: WRITE_ONLY,
-                proxyTimeout: 10000,
+                proxyTimeoutSeconds: 10,
                 ignoreHosts: ['github.com'],
                 ignoreLocalhost: false,
                 sslSupport: false
@@ -174,7 +174,7 @@ class RecorderConfigurationSpec extends Specification {
             tapeRoot == new File('test/fixtures/tapes')
             proxyPort == 1234
             defaultMode == WRITE_ONLY
-            proxyTimeout == 10000
+            proxyTimeoutSeconds == 10
             ignoreHosts == ['github.com']
             !ignoreLocalhost
             !sslSupport

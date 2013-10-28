@@ -28,7 +28,7 @@ import static co.freeside.betamax.util.TypedProperties.*;
 public class ProxyRecorder extends Recorder {
 
     public static final int DEFAULT_PROXY_PORT = 5555;
-    public static final int DEFAULT_PROXY_TIMEOUT = 5000;
+    public static final int DEFAULT_PROXY_TIMEOUT = 5;
     public static final SSLSocketFactory DEFAULT_SSL_SOCKET_FACTORY;
 
     static {
@@ -47,9 +47,9 @@ public class ProxyRecorder extends Recorder {
     private int proxyPort;
 
     /**
-     * The time (in milliseconds) the proxy will wait before aborting a request.
+     * The time (in seconds) the proxy will wait before aborting a request.
      */
-    private int proxyTimeout;
+    private int proxyTimeoutSeconds;
 
     /**
      * If set to true add support for proxying SSL (disable certificate checking).
@@ -111,7 +111,7 @@ public class ProxyRecorder extends Recorder {
         super.configureFrom(properties);
 
         proxyPort = getInteger(properties, "betamax.proxyPort", DEFAULT_PROXY_PORT);
-        proxyTimeout = getInteger(properties, "betamax.proxyTimeout", DEFAULT_PROXY_TIMEOUT);
+        proxyTimeoutSeconds = getInteger(properties, "betamax.proxyTimeout", DEFAULT_PROXY_TIMEOUT);
         sslSupport = getBoolean(properties, "betamax.sslSupport");
     }
 
@@ -120,7 +120,7 @@ public class ProxyRecorder extends Recorder {
         super.configureWithDefaults();
 
         proxyPort = DEFAULT_PROXY_PORT;
-        proxyTimeout = DEFAULT_PROXY_TIMEOUT;
+        proxyTimeoutSeconds = DEFAULT_PROXY_TIMEOUT;
         sslSupport = false;
         sslSocketFactory = DEFAULT_SSL_SOCKET_FACTORY;
     }
@@ -133,12 +133,12 @@ public class ProxyRecorder extends Recorder {
         this.proxyPort = proxyPort;
     }
 
-    public int getProxyTimeout() {
-        return proxyTimeout;
+    public int getProxyTimeoutSeconds() {
+        return proxyTimeoutSeconds;
     }
 
-    public void setProxyTimeout(int proxyTimeout) {
-        this.proxyTimeout = proxyTimeout;
+    public void setProxyTimeoutSeconds(int proxyTimeoutSeconds) {
+        this.proxyTimeoutSeconds = proxyTimeoutSeconds;
     }
 
     public boolean isSslSupport() {
