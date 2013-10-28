@@ -19,17 +19,17 @@ package co.freeside.betamax.compatibility
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
 class HttpURLConnectionSpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)

@@ -16,9 +16,9 @@
 
 package co.freeside.betamax
 
-import co.freeside.betamax.junit.Betamax
-import co.freeside.betamax.junit.RecorderRule
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
+import com.google.common.io.Files
 import groovyx.net.http.HttpResponseDecorator
 import org.apache.http.HttpHost
 import org.apache.http.auth.*
@@ -27,7 +27,6 @@ import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.MatchRules.*
 import static co.freeside.betamax.TapeMode.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.*
 import static java.util.concurrent.TimeUnit.SECONDS
 
@@ -56,7 +55,7 @@ class BasicAuthSpec extends Specification {
 
     @Shared
     @AutoCleanup('deleteDir')
-    def tapeRoot = newTempDir('tapes')
+    def tapeRoot = Files.createTempDir()
 
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule

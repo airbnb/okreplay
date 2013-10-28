@@ -16,16 +16,14 @@
 
 package co.freeside.betamax
 
-import co.freeside.betamax.junit.Betamax
-import co.freeside.betamax.junit.RecorderRule
-import co.freeside.betamax.util.server.SimpleServer
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.EchoHandler
-import groovyx.net.http.*
+import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
+import groovyx.net.http.HttpResponseDecorator
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -34,30 +32,30 @@ import static org.apache.http.HttpHeaders.VIA
 @Unroll
 class LocalhostSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
-	@Shared def http = new BetamaxRESTClient()
+    @Shared def http = new BetamaxRESTClient()
 
-	void setupSpec() {
-		endpoint.start()
-	}
+    void setupSpec() {
+        endpoint.start()
+    }
 
-	@IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
-	@Betamax(tape = 'localhost', mode = WRITE_ONLY)
-	void 'can proxy requests to local endpoint at #uri'() {
-		when:
-		HttpResponseDecorator response = http.get(uri: uri)
+    @IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
+    @Betamax(tape = 'localhost', mode = WRITE_ONLY)
+    void 'can proxy requests to local endpoint at #uri'() {
+        when:
+        HttpResponseDecorator response = http.get(uri: uri)
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
 
-		where:
-		uri << [endpoint.url, "http://localhost:$endpoint.port/", "http://127.0.0.1:$endpoint.port/"]
-	}
+        where:
+        uri << [endpoint.url, "http://localhost:$endpoint.port/", "http://127.0.0.1:$endpoint.port/"]
+    }
 
 }

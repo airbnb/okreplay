@@ -19,9 +19,9 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -29,7 +29,7 @@ import static org.apache.http.HttpHeaders.VIA
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @Shared @AutoCleanup('stop') def proxyServer = new SimpleServer(HelloHandler)

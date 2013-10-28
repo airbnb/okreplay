@@ -16,13 +16,12 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.MatchRules
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.util.message.BasicRequest
+import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static org.apache.http.HttpHeaders.*
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')
@@ -30,10 +29,11 @@ class RequestMatchingSpec extends Specification {
 
     @Shared
     @AutoCleanup('deleteDir')
-    File tapeRoot = newTempDir('tapes')
+    def tapeRoot = Files.createTempDir()
+
     @AutoCleanup('stop')
-    Recorder recorder = new Recorder(tapeRoot: tapeRoot)
-    HttpHandler handler = new DefaultHandlerChain(recorder)
+    def recorder = new Recorder(tapeRoot: tapeRoot)
+    def handler = new DefaultHandlerChain(recorder)
 
     void setupSpec() {
         tapeRoot.mkdirs()

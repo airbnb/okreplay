@@ -18,43 +18,42 @@ package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.server.SimpleServer
-import co.freeside.betamax.util.server.EchoHandler
+import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.apache.commons.httpclient.*
 import org.apache.commons.httpclient.methods.GetMethod
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 class HttpClient3Spec extends Specification {
 
-	@AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
-	@Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
-	void setupSpec() {
-		endpoint.start()
-	}
+    void setupSpec() {
+        endpoint.start()
+    }
 
-	@Timeout(10)
-	@Betamax(tape = 'http client 3 spec', mode = TapeMode.READ_WRITE)
-	void 'proxy intercepts HTTPClient 3.x connections'() {
-		given:
-		def client = new HttpClient()
-		client.hostConfiguration.proxyHost = new ProxyHost(recorder.proxyHost, recorder.proxyPort)
+    @Timeout(10)
+    @Betamax(tape = 'http client 3 spec', mode = TapeMode.READ_WRITE)
+    void 'proxy intercepts HTTPClient 3.x connections'() {
+        given:
+        def client = new HttpClient()
+        client.hostConfiguration.proxyHost = new ProxyHost(recorder.proxyHost, recorder.proxyPort)
 
-		and:
-		def request = new GetMethod(endpoint.url)
+        and:
+        def request = new GetMethod(endpoint.url)
 
-		when:
-		def status = client.executeMethod(request)
+        when:
+        def status = client.executeMethod(request)
 
-		then:
-		status == HTTP_OK
-		request.getResponseHeader(VIA)?.value == 'Betamax'
-	}
+        then:
+        status == HTTP_OK
+        request.getResponseHeader(VIA)?.value == 'Betamax'
+    }
 
 }

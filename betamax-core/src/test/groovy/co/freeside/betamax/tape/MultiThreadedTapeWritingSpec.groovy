@@ -22,15 +22,15 @@ import co.freeside.betamax.handler.DefaultHandlerChain
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.util.concurrent.TimeUnit.SECONDS
 
 class MultiThreadedTapeWritingSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
 	def recorder = new Recorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 	def handler = new DefaultHandlerChain(recorder)

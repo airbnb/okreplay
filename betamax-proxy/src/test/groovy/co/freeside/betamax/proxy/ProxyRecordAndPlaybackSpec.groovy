@@ -19,17 +19,17 @@ package co.freeside.betamax.proxy
 import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import groovyx.net.http.*
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 
 @Stepwise
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') File tapeRoot = newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') File tapeRoot = Files.createTempDir()
     @Shared @AutoCleanup('ejectTape') ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
     @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)

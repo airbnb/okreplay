@@ -19,6 +19,7 @@ package co.freeside.betamax
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import groovyx.net.http.*
 import org.junit.*
 import org.junit.runner.RunWith
@@ -26,14 +27,13 @@ import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.READ_WRITE
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @RunWith(OrderedRunner)
 class AnnotationTest {
 
-    static File tapeRoot = newTempDir('tapes')
+    static File tapeRoot = Files.createTempDir()
     Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
     @Rule public RecorderRule recorderRule = new RecorderRule(recorder)
     SimpleServer endpoint = new SimpleServer(EchoHandler)

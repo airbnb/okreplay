@@ -19,8 +19,9 @@ package co.freeside.betamax.httpclient
 import co.freeside.betamax.*
 import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.*
+import co.freeside.betamax.util.Network
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import groovyx.net.http.*
 import io.netty.channel.ChannelInboundHandler
 import org.apache.http.client.methods.*
@@ -37,7 +38,7 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 @Issue('https://github.com/robfletcher/betamax/issues/40')
 class BetamaxHttpClientSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = FileUtils.newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new Recorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @AutoCleanup('stop') def endpoint

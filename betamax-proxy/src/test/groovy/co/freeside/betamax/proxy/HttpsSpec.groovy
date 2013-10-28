@@ -20,12 +20,12 @@ import co.freeside.betamax.*
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
@@ -34,7 +34,7 @@ import static org.apache.http.HttpStatus.SC_OK
 @Unroll
 class HttpsSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     @AutoCleanup('ejectTape') def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)

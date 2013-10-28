@@ -21,11 +21,11 @@ import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.SystemDefaultHttpClient
 import spock.lang.*
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
@@ -33,7 +33,7 @@ import static org.apache.http.HttpStatus.SC_OK
 @Issue('https://github.com/robfletcher/betamax/issues/72')
 class CustomSecureSocketFactorySpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
+	@Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
 	@Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 	@Shared KeyStore trustStore
 

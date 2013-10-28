@@ -17,82 +17,81 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.server.SimpleServer
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import co.freeside.betamax.util.server.EchoHandler
+import co.freeside.betamax.util.server.*
+import com.google.common.io.Files
 import groovyx.net.http.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.READ_WRITE
-import static co.freeside.betamax.util.FileUtils.newTempDir
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @Stepwise
 class AnnotationSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = newTempDir('tapes')
-	def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
-	RESTClient http
+    RESTClient http
 
-	void setup() {
-		http = new BetamaxRESTClient(endpoint.url)
-	}
+    void setup() {
+        http = new BetamaxRESTClient(endpoint.url)
+    }
 
-	void 'no tape is inserted if there is no annotation on the feature'() {
-		expect:
-		recorder.tape == null
-	}
+    void 'no tape is inserted if there is no annotation on the feature'() {
+        expect:
+        recorder.tape == null
+    }
 
-	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
-	void 'annotation on feature causes tape to be inserted'() {
-		expect:
-		recorder.tape.name == 'annotation_spec'
-	}
+    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+    void 'annotation on feature causes tape to be inserted'() {
+        expect:
+        recorder.tape.name == 'annotation_spec'
+    }
 
-	void 'tape is ejected after annotated feature completes'() {
-		expect:
-		recorder.tape == null
-	}
+    void 'tape is ejected after annotated feature completes'() {
+        expect:
+        recorder.tape == null
+    }
 
-	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
-	void 'annotated feature can record'() {
-		given:
-		endpoint.start()
+    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+    void 'annotated feature can record'() {
+        given:
+        endpoint.start()
 
-		when:
-		HttpResponseDecorator response = http.get(path: '/')
+        when:
+        HttpResponseDecorator response = http.get(path: '/')
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-		response.getFirstHeader(X_BETAMAX)?.value == 'REC'
-	}
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(X_BETAMAX)?.value == 'REC'
+    }
 
-	@Betamax(tape = 'annotation_spec', mode = READ_WRITE)
-	void 'annotated feature can play back'() {
-		when:
-		HttpResponseDecorator response = http.get(path: '/')
+    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+    void 'annotated feature can play back'() {
+        when:
+        HttpResponseDecorator response = http.get(path: '/')
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
-		response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
-	}
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
+    }
 
-	void 'can make unproxied request after using annotation'() {
-		given:
-		endpoint.start()
+    void 'can make unproxied request after using annotation'() {
+        given:
+        endpoint.start()
 
-		when:
-		HttpResponseDecorator response = http.get(path: '/')
+        when:
+        HttpResponseDecorator response = http.get(path: '/')
 
-		then:
-		response.status == HTTP_OK
-		response.getFirstHeader(VIA) == null
-	}
+        then:
+        response.status == HTTP_OK
+        response.getFirstHeader(VIA) == null
+    }
 
 }
