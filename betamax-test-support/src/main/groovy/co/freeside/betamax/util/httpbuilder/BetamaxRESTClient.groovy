@@ -16,11 +16,12 @@
 
 package co.freeside.betamax.util.httpbuilder
 
-import groovy.transform.InheritConstructors
+import groovy.transform.*
 import groovyx.net.http.RESTClient
 import org.apache.http.impl.client.*
 import org.apache.http.params.HttpParams
 
+@CompileStatic
 @InheritConstructors
 class BetamaxRESTClient extends RESTClient {
 
