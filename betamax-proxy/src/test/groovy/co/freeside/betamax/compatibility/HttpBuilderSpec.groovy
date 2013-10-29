@@ -17,17 +17,13 @@
 package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
-import co.freeside.betamax.httpclient.BetamaxRoutePlanner
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import groovyx.net.http.*
 import org.apache.http.HttpHost
-import org.apache.http.impl.client.AbstractHttpClient
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.impl.conn.SystemDefaultRoutePlanner
-import org.apache.http.params.HttpParams
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
@@ -51,7 +47,7 @@ class HttpBuilderSpec extends Specification {
     void "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
         given:
         def http = new RESTClient(endpoint.url)
-        BetamaxRoutePlanner.configure(http.client)
+        http.client.routePlanner = new ProxySelectorRoutePlanner(http.client.connectionManager.schemeRegistry, ProxySelector.getDefault())
 
         when:
         HttpResponseDecorator response = http.get(path: "/")

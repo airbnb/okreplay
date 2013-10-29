@@ -78,7 +78,7 @@ class HttpClientSpec extends Specification {
 
     void "proxy automatically intercepts SystemDefaultHttpClient connections"() {
         given:
-        def http = HttpClients.custom().useSystemProperties().build()
+        def http = HttpClients.createSystem()
 
         when:
         def request = new HttpGet(httpEndpoint.url)

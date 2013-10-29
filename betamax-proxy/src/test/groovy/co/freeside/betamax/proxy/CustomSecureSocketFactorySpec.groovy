@@ -17,14 +17,11 @@
 package co.freeside.betamax.proxy
 
 import java.security.KeyStore
+import javax.net.ssl.HttpsURLConnection
 import co.freeside.betamax.ProxyRecorder
-import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.SystemDefaultHttpClient
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
@@ -40,8 +37,6 @@ class CustomSecureSocketFactorySpec extends Specification {
 
 	@Shared URI httpsUri
 
-	HttpClient http
-
 	void setupSpec() {
 		httpsEndpoint.start()
 
@@ -49,11 +44,6 @@ class CustomSecureSocketFactorySpec extends Specification {
 
 		trustStore = KeyStore.getInstance(KeyStore.defaultType)
 		trustStore.load(null, null)
-	}
-
-	void setup() {
-		http = new SystemDefaultHttpClient()
-		BetamaxHttpsSupport.configure(http)
 	}
 
 	void 'proxy can use a custom SSL socket factory'() {
@@ -64,15 +54,14 @@ class CustomSecureSocketFactorySpec extends Specification {
 		recorder.start 'custom secure socket factory spec'
 
 		when: 'an HTTPS request is made'
-		def request = new HttpGet(httpsEndpoint.url)
-		def response = http.execute(request)
+        HttpsURLConnection connection = httpsEndpoint.url.toURL().openConnection()
 
 		then: 'it is intercepted by the proxy'
-		response.statusLine.statusCode == SC_OK
-		response.getFirstHeader(VIA)?.value == 'Betamax'
+		connection.responseCode == SC_OK
+		connection.getHeaderField(VIA) == 'Betamax'
 
 		and: 'the response body is readable'
-		response.entity.content.text == HELLO_WORLD
+		connection.inputStream.text == HELLO_WORLD
 
 		and: 'the custom ssl socket factory was used'
 		(1.._) * sslSocketFactory._
