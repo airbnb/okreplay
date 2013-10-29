@@ -17,11 +17,7 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
-import com.google.common.io.Files
-import groovyx.net.http.HttpResponseDecorator
-import org.apache.http.HttpHost
-import org.apache.http.auth.*
+import com.google.common.io.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
@@ -49,56 +45,44 @@ class BasicAuthSpec extends Specification {
 
     @Shared private endpoint = 'http://httpbin.org/basic-auth/user/passwd'.toURL()
 
-    @Shared private targetHost = new HttpHost(endpoint.host, endpoint.port)
-
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    def http = new BetamaxRESTClient()
-
-    void setup() {
-        http.handler[HTTP_UNAUTHORIZED] = { resp -> resp }
-    }
-
     @Betamax(tape = 'basic auth', mode = WRITE_ONLY, match = [method, uri, headers])
     void 'can record #status response from authenticated endpoint'() {
-        given:
-        http.client.credentialsProvider.setCredentials(new AuthScope(targetHost), credentials)
-
         when:
-        HttpResponseDecorator response = http.get(uri: endpoint)
+        HttpURLConnection connection = endpoint.openConnection()
+        connection.setRequestProperty("Authorization", "Basic $credentials");
 
         then:
-        response.status == status
-        response.getFirstHeader(X_BETAMAX).value == 'REC'
+        connection.responseCode == status
+        connection.getHeaderField(X_BETAMAX) == 'REC'
 
         where:
         password    | status
         'passwd'    | HTTP_OK
         'INCORRECT' | HTTP_UNAUTHORIZED
 
-        credentials = new UsernamePasswordCredentials('user', password)
+        credentials = BaseEncoding.base64().encode("user:$password".bytes)
     }
 
     @Betamax(tape = 'basic auth', mode = READ_ONLY, match = [method, uri, headers])
     void 'can play back #status response from authenticated endpoint'() {
-        given:
-        http.client.credentialsProvider.setCredentials(new AuthScope(targetHost), credentials)
-
         when:
-        HttpResponseDecorator response = http.get(uri: endpoint)
+        HttpURLConnection connection = endpoint.openConnection()
+        connection.setRequestProperty("Authorization", "Basic $credentials");
 
         then:
-        response.status == status
-        response.getFirstHeader(X_BETAMAX).value == 'PLAY'
+        connection.responseCode == status
+        connection.getHeaderField(X_BETAMAX) == 'PLAY'
 
         where:
         password    | status
         'passwd'    | HTTP_OK
         'INCORRECT' | HTTP_UNAUTHORIZED
 
-        credentials = new UsernamePasswordCredentials('user', password)
+        credentials = BaseEncoding.base64().encode("user:$password".bytes)
     }
 
 }

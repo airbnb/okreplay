@@ -17,10 +17,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import groovyx.net.http.*
 import spock.lang.*
 import static org.apache.http.HttpHeaders.VIA
 
@@ -32,34 +30,27 @@ class IgnoreHostsSpec extends Specification {
     @Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(EchoHandler)
     @AutoCleanup('ejectTape') Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
-    RESTClient http
 
     void setupSpec() {
         endpoint.start()
     }
 
     void setup() {
-        http = new BetamaxRESTClient()
-
         recorder.insertTape('ignore hosts spec')
     }
 
     void 'does not proxy a request to #requestURI when ignoring #ignoreHosts'() {
-        given:
-        'proxy is configured to ignore local connections'
+        given: 'proxy is configured to ignore local connections'
         recorder.ignoreHosts = [ignoreHosts]
         proxy.start()
 
-        when:
-        'a request is made'
-        HttpResponseDecorator response = http.get(uri: requestURI)
+        when: 'a request is made'
+        HttpURLConnection connection = requestURI.toURL().openConnection()
 
-        then:
-        'the request is not intercepted by the proxy'
-        !response.headers[VIA]
+        then: 'the request is not intercepted by the proxy'
+        connection.getHeaderField(VIA) == null
 
-        and:
-        'nothing is recorded to the tape'
+        and: 'nothing is recorded to the tape'
         recorder.tape.size() == old(recorder.tape.size())
 
         where:
@@ -71,21 +62,17 @@ class IgnoreHostsSpec extends Specification {
     }
 
     void 'does not proxy a request to #requestURI when ignoreLocalhost is true'() {
-        given:
-        'proxy is configured to ignore local connections'
+        given: 'proxy is configured to ignore local connections'
         recorder.ignoreLocalhost = true
         proxy.start()
 
-        when:
-        'a request is made'
-        HttpResponseDecorator response = http.get(uri: requestURI)
+        when: 'a request is made'
+        HttpURLConnection connection = requestURI.toURL().openConnection()
 
-        then:
-        'the request is not intercepted by the proxy'
-        !response.headers[VIA]
+        then: 'the request is not intercepted by the proxy'
+        connection.getHeaderField(VIA) == null
 
-        and:
-        'nothing is recorded to the tape'
+        and: 'nothing is recorded to the tape'
         recorder.tape.size() == old(recorder.tape.size())
 
         where:

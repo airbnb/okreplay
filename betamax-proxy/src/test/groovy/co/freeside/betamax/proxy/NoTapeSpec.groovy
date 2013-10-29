@@ -17,32 +17,28 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.ProxyRecorder
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
-import groovyx.net.http.HttpResponseException
 import spock.lang.*
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN
 
-@Issue('https://github.com/robfletcher/betamax/issues/18')
+@Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
 
     @Shared def recorder = new ProxyRecorder()
-    @Shared @AutoCleanup('stop') def proxy = new ProxyServer(recorder)
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
-    def http = new BetamaxRESTClient(endpoint.url)
+    @Shared @AutoCleanup("stop") def proxy = new ProxyServer(recorder)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
         proxy.start()
         endpoint.start()
     }
 
-    void 'an error is returned if the proxy intercepts a request when no tape is inserted'() {
+    void "an error is returned if the proxy intercepts a request when no tape is inserted"() {
         when:
-        http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+        connection.inputStream.text
 
         then:
-        def e = thrown(HttpResponseException)
-        e.statusCode == HTTP_FORBIDDEN
-        e.message == 'No tape'
+        def e = thrown(IOException)
+        e.message == "Server returned HTTP response code: 403 for URL: http://localhost:5000/"
     }
 }

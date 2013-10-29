@@ -17,10 +17,8 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import groovyx.net.http.HttpResponseDecorator
 import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
@@ -39,8 +37,6 @@ class LocalhostSpec extends Specification {
 
     @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
-    @Shared def http = new BetamaxRESTClient()
-
     void setupSpec() {
         endpoint.start()
     }
@@ -48,11 +44,11 @@ class LocalhostSpec extends Specification {
     @IgnoreIf({ javaVersion >= 1.6 && javaVersion < 1.7 })
     void 'can proxy requests to local endpoint at #uri'() {
         when:
-        HttpResponseDecorator response = http.get(uri: uri)
+        HttpURLConnection connection = uri.toURL().openConnection()
 
         then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == 'Betamax'
 
         where:
         uri << [endpoint.url, "http://localhost:$endpoint.port/", "http://127.0.0.1:$endpoint.port/"]

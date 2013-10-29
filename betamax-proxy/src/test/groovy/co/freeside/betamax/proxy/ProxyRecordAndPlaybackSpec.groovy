@@ -17,10 +17,8 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.ProxyRecorder
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import groovyx.net.http.*
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
@@ -34,7 +32,6 @@ class ProxyRecordAndPlaybackSpec extends Specification {
     @Shared @AutoCleanup('ejectTape') ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
     @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
-    RESTClient http = new BetamaxRESTClient(endpoint.url)
 
     void setupSpec() {
         recorder.insertTape('proxy record and playback spec')
@@ -46,11 +43,11 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         endpoint.start()
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
         then:
-        response.status == 200
-        response.data.text == HELLO_WORLD
+        connection.responseCode == HTTP_OK
+        connection.inputStream.text == HELLO_WORLD
 
         and:
         recorder.tape.size() == 1
@@ -58,11 +55,11 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
     void 'subsequent requests for the same URI are played back from tape'() {
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
         then:
-        response.status == 200
-        response.data.text == HELLO_WORLD
+        connection.responseCode == HTTP_OK
+        connection.inputStream.text == HELLO_WORLD
 
         and:
         recorder.tape.size() == 1
@@ -73,11 +70,12 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         endpoint.start()
 
         when:
-        HttpResponseDecorator response = http.post(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+        connection.requestMethod = "POST"
 
         then:
-        response.status == 200
-        response.data.text == HELLO_WORLD
+        connection.responseCode == HTTP_OK
+        connection.inputStream.text == HELLO_WORLD
 
         and:
         recorder.tape.size() == 2
@@ -133,11 +131,11 @@ interactions:
 
     void 'can play back a loaded tape'() {
         when:
-        HttpResponseDecorator response = http.get(uri: 'http://icanhascheezburger.com/')
+        HttpURLConnection connection = "http://icanhascheezburger.com/".toURL().openConnection()
 
         then:
-        response.statusLine.statusCode == HTTP_OK
-        response.data.text == 'O HAI!'
+        connection.responseCode == HTTP_OK
+        connection.inputStream.text == 'O HAI!'
     }
 
 }

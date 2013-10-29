@@ -17,10 +17,8 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import groovyx.net.http.*
 import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
@@ -35,11 +33,6 @@ class AnnotationSpec extends Specification {
     def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
     @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
-    RESTClient http
-
-    void setup() {
-        http = new BetamaxRESTClient(endpoint.url)
-    }
 
     void 'no tape is inserted if there is no annotation on the feature'() {
         expect:
@@ -63,23 +56,23 @@ class AnnotationSpec extends Specification {
         endpoint.start()
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
         then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
-        response.getFirstHeader(X_BETAMAX)?.value == 'REC'
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == 'Betamax'
+        connection.getHeaderField(X_BETAMAX) == 'REC'
     }
 
     @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
     void 'annotated feature can play back'() {
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
         then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
-        response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == 'Betamax'
+        connection.getHeaderField(X_BETAMAX) == 'PLAY'
     }
 
     void 'can make unproxied request after using annotation'() {
@@ -87,11 +80,11 @@ class AnnotationSpec extends Specification {
         endpoint.start()
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
         then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA) == null
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == null
     }
 
 }

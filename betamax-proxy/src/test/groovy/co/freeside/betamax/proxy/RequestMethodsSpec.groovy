@@ -18,7 +18,6 @@ package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
@@ -26,37 +25,32 @@ import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
-@Betamax(tape = 'request methods spec', mode = TapeMode.READ_WRITE)
+@Betamax(tape = "request methods spec", mode = TapeMode.READ_WRITE)
 @Unroll
 @Timeout(10)
 class RequestMethodsSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
         endpoint.start()
     }
 
-    void 'proxy handles #method requests'() {
-        given:
-        def http = new BetamaxRESTClient(endpoint.url)
-
+    void "proxy handles #method requests"() {
         when:
-        def response = http."$method"(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+        connection.requestMethod = method
 
         then:
-        response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
-
-        cleanup:
-        http.shutdown()
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
 
         where:
-        method << ['get', 'post', 'put', 'head', 'delete', 'options']
+        method << ["GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS"]
     }
 
 }

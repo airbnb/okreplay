@@ -17,10 +17,8 @@
 package co.freeside.betamax
 
 import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import groovyx.net.http.*
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
@@ -37,12 +35,6 @@ class AnnotationTest {
     Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
     @Rule public RecorderRule recorderRule = new RecorderRule(recorder)
     SimpleServer endpoint = new SimpleServer(EchoHandler)
-    RESTClient http
-
-    @Before
-    void initRestClient() {
-        http = new BetamaxRESTClient(endpoint.url)
-    }
 
     @After
     void ensureEndpointIsStopped() {
@@ -75,31 +67,31 @@ class AnnotationTest {
     void annotatedTestCanRecord() {
         endpoint.start()
 
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        assert response.status == HTTP_OK
-        assert response.getFirstHeader(VIA)?.value == 'Betamax'
-        assert response.getFirstHeader(X_BETAMAX)?.value == 'REC'
+        assert connection.responseCode == HTTP_OK
+        assert connection.getHeaderField(VIA) == 'Betamax'
+        assert connection.getHeaderField(X_BETAMAX) == 'REC'
     }
 
     @Test
     @Betamax(tape = 'annotation_test', mode = READ_WRITE)
     void annotatedTestCanPlayBack() {
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        assert response.status == HTTP_OK
-        assert response.getFirstHeader(VIA)?.value == 'Betamax'
-        assert response.getFirstHeader(X_BETAMAX)?.value == 'PLAY'
+        assert connection.responseCode == HTTP_OK
+        assert connection.getHeaderField(VIA) == 'Betamax'
+        assert connection.getHeaderField(X_BETAMAX) == 'PLAY'
     }
 
     @Test
     void canMakeUnproxiedRequestAfterUsingAnnotation() {
         endpoint.start()
 
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        assert response.status == HTTP_OK
-        assert response.getFirstHeader(VIA) == null
+        assert connection.responseCode == HTTP_OK
+        assert connection.getHeaderField(VIA) == null
     }
 
 }
