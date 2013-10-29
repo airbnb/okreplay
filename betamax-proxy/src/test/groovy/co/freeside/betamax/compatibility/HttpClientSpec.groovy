@@ -17,20 +17,20 @@
 package co.freeside.betamax.compatibility
 
 import co.freeside.betamax.*
-import co.freeside.betamax.httpclient.*
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.apache.http.HttpHost
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.*
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner
 import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
-import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
+import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
 @Betamax(tape = "http client spec", mode = TapeMode.READ_WRITE)
 @Timeout(10)
@@ -50,8 +50,7 @@ class HttpClientSpec extends Specification {
 
     void "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
         given:
-        def http = new DefaultHttpClient()
-        BetamaxRoutePlanner.configure(http)
+        def http = HttpClients.custom().setRoutePlanner(new SystemDefaultRoutePlanner(null)).build()
 
         when:
         def request = new HttpGet(httpEndpoint.url)
@@ -65,8 +64,8 @@ class HttpClientSpec extends Specification {
 
     void "proxy intercepts HTTPClient connections when explicitly told to"() {
         given:
-        def http = new DefaultHttpClient()
-        http.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
+        def proxyHost = new HttpHost(recorder.proxyHost, recorder.proxyPort, "http")
+        def http = HttpClients.custom().setProxy(proxyHost).build()
 
         when:
         def request = new HttpGet(httpEndpoint.url)
@@ -79,7 +78,7 @@ class HttpClientSpec extends Specification {
 
     void "proxy automatically intercepts SystemDefaultHttpClient connections"() {
         given:
-        def http = new SystemDefaultHttpClient()
+        def http = HttpClients.custom().useSystemProperties().build()
 
         when:
         def request = new HttpGet(httpEndpoint.url)
@@ -92,9 +91,7 @@ class HttpClientSpec extends Specification {
 
     void "proxy can intercept HTTPS requests"() {
         given:
-        def http = new DefaultHttpClient()
-        BetamaxRoutePlanner.configure(http)
-        BetamaxHttpsSupport.configure(http)
+        def http = HttpClients.custom().useSystemProperties().setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER).build()
 
         when: "an HTTPS request is made"
         def request = new HttpGet(httpsEndpoint.url)
