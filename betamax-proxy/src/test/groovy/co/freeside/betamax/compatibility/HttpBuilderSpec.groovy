@@ -30,68 +30,68 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
-@Betamax(tape = 'http builder spec', mode = TapeMode.READ_WRITE)
+@Betamax(tape = "http builder spec", mode = TapeMode.READ_WRITE)
 @Timeout(10)
 class HttpBuilderSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {
         endpoint.start()
     }
 
-    void 'proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner'() {
+    void "proxy intercepts HTTPClient connections when using ProxySelectorRoutePlanner"() {
         given:
         def http = new RESTClient(endpoint.url)
         BetamaxRoutePlanner.configure(http.client)
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(VIA)?.value == "Betamax"
     }
 
-    void 'proxy intercepts HTTPClient connections when explicitly told to'() {
+    void "proxy intercepts HTTPClient connections when explicitly told to"() {
         given:
         def http = new RESTClient(endpoint.url)
-        http.client.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, 'http'))
+        http.client.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, "http"))
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(VIA)?.value == "Betamax"
     }
 
-    void 'proxy intercepts HttpURLClient connections'() {
+    void "proxy intercepts HttpURLClient connections"() {
         given:
         def http = new HttpURLClient(url: endpoint.url)
 
         when:
-        def response = http.request(path: '/')
+        def response = http.request(path: "/")
 
         then:
         response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(VIA)?.value == "Betamax"
     }
 
-    void 'proxy automatically intercepts connections when the underlying client is a SystemDefaultHttpClient'() {
+    void "proxy automatically intercepts connections when the underlying client is a SystemDefaultHttpClient"() {
         given:
         def http = new BetamaxRESTClient(endpoint.url)
 
         when:
-        HttpResponseDecorator response = http.get(path: '/')
+        HttpResponseDecorator response = http.get(path: "/")
 
         then:
         response.status == HTTP_OK
-        response.getFirstHeader(VIA)?.value == 'Betamax'
+        response.getFirstHeader(VIA)?.value == "Betamax"
     }
 
 }

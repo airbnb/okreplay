@@ -16,53 +16,51 @@
 
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyRecorder
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
 import spock.lang.*
-import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static co.freeside.betamax.Headers.X_BETAMAX
+import static co.freeside.betamax.TapeMode.READ_WRITE
+import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
-import static org.apache.http.HttpStatus.SC_OK
 
-@Betamax(tape = 'http url connection spec', mode = TapeMode.READ_WRITE)
+@Betamax(tape = "http url connection spec", mode = READ_WRITE)
 @Timeout(10)
+@Unroll
 class HttpURLConnectionSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: WRITE_ONLY, sslSupport: true)
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
-    @Shared @AutoCleanup('stop') def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
+    @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)
+    @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
 
     void setupSpec() {
-        endpoint.start()
+        httpEndpoint.start()
         httpsEndpoint.start()
     }
 
-    void 'proxy intercepts URL connections'() {
+    void "proxy intercepts #scheme URL connections"() {
         given:
-        HttpURLConnection connection = new URL(endpoint.url).openConnection()
+        HttpURLConnection connection = url.toURL().openConnection()
         connection.connect()
 
         expect:
         connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == 'Betamax'
+        connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "REC"
+        connection.inputStream.text == HELLO_WORLD
 
         cleanup:
         connection.disconnect()
-    }
 
-    void 'proxy intercepts HTTPS requests'() {
-        when:
-        HttpURLConnection connection = httpsEndpoint.url.toURL().openConnection()
-
-        then:
-        connection.responseCode == SC_OK
-        connection.getHeaderField(VIA) == 'Betamax'
-        connection.inputStream.text == 'Hello World!'
+        where:
+        url << [httpEndpoint.url, httpsEndpoint.url]
+        scheme = url.toURI().scheme
     }
 }

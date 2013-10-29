@@ -24,12 +24,14 @@ import com.mashape.unirest.http.Unirest
 import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
 @Betamax(tape = "unirest spec", mode = TapeMode.READ_WRITE)
 @Timeout(10)
+@Unroll
 class UnirestSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
@@ -46,16 +48,18 @@ class UnirestSpec extends Specification {
         Unirest.httpClient = new SystemDefaultHttpClient()
     }
 
-    void "proxy intercepts Unirest"() {
+    void "proxy intercepts #scheme request using Unirest"() {
         given:
-        def response = Unirest.get(httpEndpoint.url).asString()
+        def response = Unirest.get(url).asString()
 
         expect:
         response.code == SC_OK
         response.headers[VIA.toLowerCase()] == "Betamax"
+        response.headers[X_BETAMAX.toLowerCase()] == "REC"
         response.body == HELLO_WORLD
 
         where:
         url << [httpEndpoint.url, httpsEndpoint.url]
+        scheme = url.toURI().scheme
     }
 }
