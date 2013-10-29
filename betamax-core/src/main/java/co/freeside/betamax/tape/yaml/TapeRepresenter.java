@@ -65,7 +65,7 @@ public class TapeRepresenter extends GroovyRepresenter {
     }
 
     @Override
-    protected Node representMapping(Tag tag, Map<?, Object> mapping, Boolean flowStyle) {
+    protected Node representMapping(Tag tag, Map<?, ?> mapping, Boolean flowStyle) {
         return super.representMapping(tag, sort(mapping), flowStyle);
     }
 

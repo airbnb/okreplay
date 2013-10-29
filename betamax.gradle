@@ -1,40 +1,41 @@
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.gradle.api.plugins:gradle-nexus-plugin:0.2"
-	}
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.gradle.api.plugins:gradle-nexus-plugin:0.2"
+    }
 }
 
 apply from: "gradle/idea/idea.gradle"
 
 allprojects {
-	version = "2.0-SNAPSHOT"
-	group = "co.freeside"
+    version = "2.0-SNAPSHOT"
+    group = "co.freeside"
 
-	plugins.withType(JavaPlugin) {
-		sourceCompatibility = "1.6"
-		targetCompatibility = "1.6"
-	}
+    plugins.withType(JavaPlugin) {
+        sourceCompatibility = "1.6"
+        targetCompatibility = "1.6"
+    }
 
-	ext {
-		commonDependencies = [
-			groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.1.8"),
-			guava: dependencies.create("com.google.guava:guava:15.0"),
-			httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
-				exclude module: "groovy"
-				exclude module: "httpclient"
-			}),
-			httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.3.1"),
-			junit: dependencies.create("junit:junit:4.10"),
-			netty: dependencies.create("io.netty:netty-all:4.0.11.Final"),
+    ext {
+        commonDependencies = [
+            groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.1.8"),
+            guava: dependencies.create("com.google.guava:guava:15.0"),
+            httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
+                exclude module: "groovy"
+                exclude module: "httpclient"
+            }),
+            httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.3.1"),
+            junit: dependencies.create("junit:junit:4.10"),
+            netty: dependencies.create("io.netty:netty-all:4.0.11.Final"),
             littleProxy: dependencies.create("org.littleshoot:littleproxy:1.0.0-beta3"),
-			spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0", {
-				exclude module: "groovy-all"
-				exclude module: "junit-dep"
-			})
-		]
-	}
+            snakeYaml: dependencies.create("org.yaml:snakeyaml:1.13"),
+            spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0", {
+                exclude module: "groovy-all"
+                exclude module: "junit-dep"
+            })
+        ]
+    }
 }
 

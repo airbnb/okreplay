@@ -2,23 +2,23 @@ apply from: "$rootDir/gradle/javaModule.gradle"
 apply from: "$rootDir/gradle/publishedModule.gradle"
 
 repositories {
-	mavenRepo url: "http://repository.codehaus.org"
+    mavenRepo url: "http://repository.codehaus.org"
 }
 
 dependencies {
-	compile commonDependencies.httpClient
-	compile "org.yaml:snakeyaml:1.11"
-	compile "commons-lang:commons-lang:2.4"
+    compile commonDependencies.httpClient
+    compile commonDependencies.snakeYaml
+    compile "commons-lang:commons-lang:2.4"
 
     testCompile project(":betamax-junit")
     testCompile project(":betamax-test-support")
 
-	testRuntime "cglib:cglib-nodep:2.2.2"
+    testRuntime "cglib:cglib-nodep:2.2.2"
 }
 
 modifyPom {
-	project {
-		name "Betamax Core"
-		description "The Core Betamax API."
-	}
+    project {
+        name "Betamax Core"
+        description "The Core Betamax API."
+    }
 }

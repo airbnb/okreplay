@@ -1,21 +1,21 @@
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.ajoberstar:gradle-git:0.6.1"
-	}
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.ajoberstar:gradle-git:0.6.1"
+    }
 }
 
 apply plugin: "github-pages"
 
 githubPages {
-	repoUri = "git@github.com:robfletcher/betamax.git"
-	workingPath = "$buildDir/docs"
-	pages {
-		exclude "**/_site/**"
-		from("src/docs") {
-			exclude "**/*.less"
-		}
-	}
+    repoUri = "git@github.com:robfletcher/betamax.git"
+    workingPath = "$buildDir/docs"
+    pages {
+        exclude "**/_site/**"
+        from("src/docs") {
+            exclude "**/*.less"
+        }
+    }
 }
