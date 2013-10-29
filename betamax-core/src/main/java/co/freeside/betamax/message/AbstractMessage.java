@@ -18,9 +18,8 @@ package co.freeside.betamax.message;
 
 import java.io.*;
 import java.util.regex.*;
-import java.util.zip.*;
+import com.google.common.base.*;
 import com.google.common.io.*;
-import org.apache.commons.lang.*;
 import static org.apache.http.HttpHeaders.*;
 
 public abstract class AbstractMessage implements Message {
@@ -32,8 +31,8 @@ public abstract class AbstractMessage implements Message {
     @Override
     public String getContentType() {
         String contentTypeHeader = getHeader(CONTENT_TYPE);
-        if (!StringUtils.isBlank(contentTypeHeader)) {
-            return StringUtils.substringBefore(contentTypeHeader, ";");
+        if (!Strings.isNullOrEmpty(contentTypeHeader)) {
+            return Splitter.on(';').splitToList(contentTypeHeader).get(0);
         } else {
             return DEFAULT_CONTENT_TYPE;
         }
@@ -43,7 +42,7 @@ public abstract class AbstractMessage implements Message {
     public String getCharset() {
         String declaredCharset = null;
         String header = getHeader(CONTENT_TYPE);
-        if (!StringUtils.isBlank(header)) {
+        if (!Strings.isNullOrEmpty(header)) {
             Matcher matcher = Pattern.compile("charset=(.*)").matcher(header);
             if (matcher.find()) {
                 declaredCharset = matcher.group(1);
@@ -95,7 +94,7 @@ public abstract class AbstractMessage implements Message {
 
 
     private String defaultIfNullOrEmpty(String string, String defaultValue) {
-        return StringUtils.isBlank(string) ? defaultValue : string;
+        return Strings.isNullOrEmpty(string) ? defaultValue : string;
     }
 
 }

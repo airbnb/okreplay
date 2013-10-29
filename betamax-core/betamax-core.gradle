@@ -8,7 +8,6 @@ repositories {
 dependencies {
     compile commonDependencies.httpClient
     compile commonDependencies.snakeYaml
-    compile "commons-lang:commons-lang:2.4"
 
     testCompile project(":betamax-junit")
     testCompile project(":betamax-test-support")
