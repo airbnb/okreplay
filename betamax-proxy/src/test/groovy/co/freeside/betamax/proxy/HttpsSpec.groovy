@@ -17,18 +17,18 @@
 package co.freeside.betamax.proxy
 
 import co.freeside.betamax.*
+import co.freeside.betamax.httpclient.BetamaxHttpsSupport
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
-import org.apache.http.impl.client.HttpClients
+import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
-import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
 @Issue("https://github.com/robfletcher/betamax/issues/34")
 @Unroll
@@ -56,7 +56,8 @@ class HttpsSpec extends Specification {
     }
 
     void setup() {
-        http = HttpClients.custom().useSystemProperties().setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER).build()
+        http = new SystemDefaultHttpClient()
+        BetamaxHttpsSupport.configure(http)
     }
 
     void "proxy is selected for #scheme URIs"() {

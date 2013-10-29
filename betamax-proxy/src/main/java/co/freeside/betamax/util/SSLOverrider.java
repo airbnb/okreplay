@@ -19,7 +19,7 @@ package co.freeside.betamax.util;
 import java.security.*;
 import javax.net.ssl.*;
 import co.freeside.betamax.proxy.ssl.*;
-import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.*;
+import static org.apache.http.conn.ssl.SSLSocketFactory.*;
 
 public class SSLOverrider {
 
@@ -35,7 +35,6 @@ public class SSLOverrider {
             originalHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
 
             Security.setProperty(SSL_SOCKET_FACTORY_PROVIDER, DummyJVMSSLSocketFactory.class.getName());
-
             HttpsURLConnection.setDefaultHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER);
         }
 

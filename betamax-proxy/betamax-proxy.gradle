@@ -19,8 +19,8 @@ dependencies {
 	}
 	testCompile "com.github.groovy-wslite:groovy-wslite:0.7.1"
 
-    testCompile "com.mashape.unirest:unirest-java:1.2.8",
-                "org.apache.httpcomponents:httpasyncclient:4.0"
+//    testCompile "com.mashape.unirest:unirest-java:1.2.8",
+//                "org.apache.httpcomponents:httpasyncclient:4.0"
 
 	testRuntime "cglib:cglib-nodep:2.2.2"
 }

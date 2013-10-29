@@ -24,10 +24,6 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import groovyx.net.http.*
 import org.apache.http.HttpHost
-import org.apache.http.impl.client.AbstractHttpClient
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.impl.conn.SystemDefaultRoutePlanner
-import org.apache.http.params.HttpParams
 import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK

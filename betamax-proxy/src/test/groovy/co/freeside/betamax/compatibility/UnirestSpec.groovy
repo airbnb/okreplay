@@ -20,15 +20,8 @@ import co.freeside.betamax.*
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import com.mashape.unirest.http.Unirest
-import org.apache.http.impl.client.HttpClients
 import org.junit.ClassRule
 import spock.lang.*
-import static co.freeside.betamax.Headers.X_BETAMAX
-import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
-import static org.apache.http.HttpHeaders.VIA
-import static org.apache.http.HttpStatus.SC_OK
-import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
 @Betamax(tape = "unirest spec", mode = TapeMode.READ_WRITE)
 @Timeout(10)
@@ -46,21 +39,21 @@ class UnirestSpec extends Specification {
         httpEndpoint.start()
         httpsEndpoint.start()
 
-        Unirest.httpClient = HttpClients.custom().useSystemProperties().setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER).build()
+//        Unirest.httpClient = HttpClients.custom().useSystemProperties().setHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER).build()
     }
 
-    void "proxy intercepts #scheme request using Unirest"() {
-        given:
-        def response = Unirest.get(url).asString()
-
-        expect:
-        response.code == SC_OK
-        response.headers[VIA.toLowerCase()] == "Betamax"
-        response.headers[X_BETAMAX.toLowerCase()] == "REC"
-        response.body == HELLO_WORLD
-
-        where:
-        url << [httpEndpoint.url, httpsEndpoint.url]
-        scheme = url.toURI().scheme
-    }
+//    void "proxy intercepts #scheme request using Unirest"() {
+//        given:
+//        def response = Unirest.get(url).asString()
+//
+//        expect:
+//        response.code == SC_OK
+//        response.headers[VIA.toLowerCase()] == "Betamax"
+//        response.headers[X_BETAMAX.toLowerCase()] == "REC"
+//        response.body == HELLO_WORLD
+//
+//        where:
+//        url << [httpEndpoint.url, httpsEndpoint.url]
+//        scheme = url.toURI().scheme
+//    }
 }
