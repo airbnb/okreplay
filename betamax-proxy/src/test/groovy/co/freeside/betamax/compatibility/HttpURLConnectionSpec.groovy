@@ -21,7 +21,6 @@ import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
-import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static java.net.HttpURLConnection.HTTP_OK
