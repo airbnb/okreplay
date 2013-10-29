@@ -26,3 +26,5 @@
 
 * Port to Sass
 * Use Prism instead of Prettify
+* Cover use of `@ClassRule`
+* Links to all compatibility tests for examples of how to use with various clients.
