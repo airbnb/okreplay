@@ -22,6 +22,7 @@ import co.freeside.betamax.proxy.ssl.*;
 import org.apache.http.client.*;
 import org.apache.http.conn.scheme.*;
 
+@Deprecated
 public class BetamaxHttpsSupport {
 
     public static void configure(HttpClient httpClient) throws GeneralSecurityException, IOException {

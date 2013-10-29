@@ -25,98 +25,98 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @Unroll
-@Betamax(tape = 'smoke spec')
+@Betamax(tape = "smoke spec")
 class SmokeSpec extends Specification {
 
     @Shared Recorder recorder = new ProxyRecorder(sslSupport: true)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
-	void '#type response data'() {
-		when:
-		HttpURLConnection connection = uri.toURL().openConnection()
-		connection.setRequestProperty("Accept-Encoding", "gzip")
+    void "#type response data"() {
+        when:
+        HttpURLConnection connection = uri.toURL().openConnection()
+        connection.setRequestProperty("Accept-Encoding", "gzip")
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == "Betamax"
-		connection.inputStream.text.contains(expectedContent)
+        then:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
+        connection.inputStream.text.contains(expectedContent)
 
-		where:
-		type   | uri                             | expectedContent
-		'txt'  | 'http://httpbin.org/robots.txt' | 'User-agent: *'
-		'html' | 'http://httpbin.org/html'       | '<!DOCTYPE html>'
-		'json' | 'http://httpbin.org/get'        | '"url": "http://httpbin.org/get"'
-	}
+        where:
+        type   | uri                             | expectedContent
+        "txt"  | "http://httpbin.org/robots.txt" | "User-agent: *"
+        "html" | "http://httpbin.org/html"       | "<!DOCTYPE html>"
+        "json" | "http://httpbin.org/get"        | '"url": "http://httpbin.org/get"'
+    }
 
-	void 'gzipped response data'() {
-		when:
-		HttpURLConnection connection = uri.toURL().openConnection()
-		connection.setRequestProperty("Accept-Encoding", "gzip")
+    void "gzipped response data"() {
+        when:
+        HttpURLConnection connection = uri.toURL().openConnection()
+        connection.setRequestProperty("Accept-Encoding", "gzip")
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		encoder.decode(connection.inputStream).contains('"gzipped": true')
+        then:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
+        encoder.decode(connection.inputStream).contains('"gzipped": true')
 
-		where:
-		uri = 'http://httpbin.org/gzip'
-		encoder = new GzipEncoder()
-	}
+        where:
+        uri = "http://httpbin.org/gzip"
+        encoder = new GzipEncoder()
+    }
 
-	void 'redirects are followed'() {
-		when:
-		HttpURLConnection connection = uri.toURL().openConnection()
+    void "redirects are followed"() {
+        when:
+        HttpURLConnection connection = uri.toURL().openConnection()
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
+        then:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
+        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
 
-		where:
-		uri = 'http://httpbin.org/redirect/1'
-	}
+        where:
+        uri = "http://httpbin.org/redirect/1"
+    }
 
-	void 'https proxying'() {
-		when:
-		HttpsURLConnection connection = uri.toURL().openConnection()
+    void "https proxying"() {
+        when:
+        HttpsURLConnection connection = uri.toURL().openConnection()
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
-		connection.getHeaderField(VIA) == 'Betamax'
+        then:
+        connection.responseCode == HTTP_OK
+        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
+        connection.getHeaderField(VIA) == "Betamax"
 
-		where:
-		uri = 'https://httpbin.org/get'
-	}
+        where:
+        uri = "https://httpbin.org/get"
+    }
 
-	void 'can POST to https'() {
-		when:
-		HttpsURLConnection connection = uri.toURL().openConnection()
-		connection.requestMethod = "POST"
-		connection.doOutput = true
-		connection.outputStream.withStream {
-			it << 'message=O HAI'
-		}
+    void "can POST to https"() {
+        when:
+        HttpsURLConnection connection = uri.toURL().openConnection()
+        connection.requestMethod = "POST"
+        connection.doOutput = true
+        connection.outputStream.withStream {
+            it << "message=O HAI"
+        }
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
-		connection.inputStream.text.contains('"message": "O HAI"')
+        then:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
+        connection.inputStream.text.contains('"message": "O HAI"')
 
-		where:
-		uri = 'https://httpbin.org/post'
-	}
+        where:
+        uri = "https://httpbin.org/post"
+    }
 
-	@Issue(['https://github.com/robfletcher/betamax/issues/61', 'http://jira.codehaus.org/browse/JETTY-1533'])
-	void 'can cope with URLs that do not end in a slash'() {
-		when:
-		HttpURLConnection connection = uri.toURL().openConnection()
+    @Issue(["https://github.com/robfletcher/betamax/issues/61", "http://jira.codehaus.org/browse/JETTY-1533"])
+    void "can cope with URLs that do not end in a slash"() {
+        when:
+        HttpURLConnection connection = uri.toURL().openConnection()
 
-		then:
-		connection.responseCode == HTTP_OK
-		connection.getHeaderField(VIA) == 'Betamax'
+        then:
+        connection.responseCode == HTTP_OK
+        connection.getHeaderField(VIA) == "Betamax"
 
-		where:
-		uri = 'http://httpbin.org'
-	}
+        where:
+        uri = "http://httpbin.org"
+    }
 }

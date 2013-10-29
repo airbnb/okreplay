@@ -31,6 +31,7 @@ import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
 @Issue('https://github.com/robfletcher/betamax/issues/72')
+@Ignore
 class CustomSecureSocketFactorySpec extends Specification {
 
 	@Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()

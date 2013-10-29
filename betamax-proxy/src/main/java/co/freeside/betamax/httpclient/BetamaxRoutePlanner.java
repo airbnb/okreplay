@@ -24,9 +24,19 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 
 /**
- * A convenience extension of ProxySelectorRoutePlanner that will configure proxy selection in a way that will work with
- * Betamax.
+ * A convenience extension of ProxySelectorRoutePlanner that will configure
+ * proxy selection in a way that will work with Betamax.
+ *
+ * @deprecated This is for older versions of HttpClient. When using HttpClient
+ * 4.3+ you can simply use {@link org.apache.http.impl.client.HttpClientBuilder}
+ * in one of these ways:
+ * <ul>
+ *     <li><code>.setRoutePlanner(new SystemDefaultRoutePlanner(null))</code></li>
+ *     <li><code>.setProxy(new HttpHost(recorder.proxyHost, recorder.proxyPort, "http"))</code></li>
+ *     <li><code>.useSystemProperties()</code></li>
+ * </ul>
  */
+@Deprecated
 public class BetamaxRoutePlanner extends ProxySelectorRoutePlanner {
 
     public static void configure(AbstractHttpClient httpClient) {

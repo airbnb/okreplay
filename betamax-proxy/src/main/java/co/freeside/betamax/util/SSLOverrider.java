@@ -19,7 +19,7 @@ package co.freeside.betamax.util;
 import java.security.*;
 import javax.net.ssl.*;
 import co.freeside.betamax.proxy.ssl.*;
-import static org.apache.http.conn.ssl.SSLSocketFactory.*;
+import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.*;
 
 public class SSLOverrider {
 
