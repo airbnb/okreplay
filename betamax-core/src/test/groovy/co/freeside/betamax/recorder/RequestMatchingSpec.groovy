@@ -16,34 +16,20 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.*
-import co.freeside.betamax.handler.*
+import co.freeside.betamax.MatchRules
+import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.BasicRequest
-import com.google.common.io.Files
+import com.google.common.collect.ImmutableList
 import spock.lang.*
-import static co.freeside.betamax.Headers.X_BETAMAX
 import static org.apache.http.HttpHeaders.*
 
-@Issue('https://github.com/robfletcher/betamax/issues/9')
+@Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
 
-    @Shared
-    @AutoCleanup('deleteDir')
-    def tapeRoot = Files.createTempDir()
-
-    @AutoCleanup('stop')
-    def recorder = new Recorder(tapeRoot: tapeRoot)
-
-    def handler = new DefaultHandlerChain(recorder)
-
-    void setupSpec() {
-        tapeRoot.mkdirs()
-    }
-
     @Unroll('#method request for #uri returns "#responseText"')
-    void 'default match is method and uri'() {
+    void "default match is method and uri"() {
         given:
-        new File(tapeRoot, 'method_and_uri_tape.yaml').text = '''\
+        def yaml = """\
 !tape
 name: method and uri tape
 interactions:
@@ -71,30 +57,30 @@ interactions:
     status: 200
     headers: {Content-Type: text/plain}
     body: GET method response from qwantz.com
-'''
+"""
 
         and:
-        recorder.start('method and uri tape')
+        def tape = YamlTape.readFrom(new StringReader(yaml))
 
         when:
-        def response = handler.handle(request)
+        def response = tape.play(request)
 
         then:
         response.bodyAsText.input.text == responseText
 
         where:
         method | uri
-        'GET'  | 'http://xkcd.com/'
-        'POST' | 'http://xkcd.com/'
-        'GET'  | 'http://qwantz.com/'
+        "GET"  | "http://xkcd.com/"
+        "POST" | "http://xkcd.com/"
+        "GET"  | "http://qwantz.com/"
 
         responseText = "$method method response from ${uri.toURI().host}"
         request = new BasicRequest(method, uri)
     }
 
-    void 'can match based on host'() {
+    void "can match based on host"() {
         given:
-        new File(tapeRoot, 'host_match_tape.yaml').text = '''\
+        def yaml = """\
 !tape
 name: host match tape
 interactions:
@@ -106,25 +92,24 @@ interactions:
     status: 200
     headers: {Content-Type: text/plain}
     body: GET method response from xkcd.com
-'''
+"""
 
         and:
-        recorder.start('host match tape', [match: [MatchRules.host]])
+        def tape = YamlTape.readFrom(new StringReader(yaml))
+        tape.matchRules = ImmutableList.of(MatchRules.host)
 
         when:
-        def request = new BasicRequest('GET', 'http://xkcd.com/875')
-        def response = handler.handle(request)
+        def request = new BasicRequest("GET", "http://xkcd.com/875")
+        def response = tape.play(request)
 
         then:
-        response.headers[VIA] == 'Betamax'
-        response.headers[X_BETAMAX] == 'PLAY'
-        response.bodyAsText.input.text == 'GET method response from xkcd.com'
+        response.bodyAsText.input.text == "GET method response from xkcd.com"
     }
 
     @Unroll('request with Accept: #acceptHeader returns "#responseText"')
-    void 'can match based on headers'() {
+    void "can match based on headers"() {
         given:
-        new File(tapeRoot, 'headers_match_tape.yaml').text = '''\
+        def yaml = """\
 !tape
 name: headers match tape
 interactions:
@@ -151,19 +136,18 @@ interactions:
     headers:
       Content-Type: text/plain
     body: Plain text data
-'''
+"""
 
         and:
-        recorder.start('headers match tape', [match: [MatchRules.method, MatchRules.uri, MatchRules.headers]])
+        def tape = YamlTape.readFrom(new StringReader(yaml))
+        tape.matchRules = ImmutableList.of(MatchRules.method, MatchRules.uri, MatchRules.headers)
 
         when:
-        def request = new BasicRequest('GET', 'http://httpbin.org/get')
+        def request = new BasicRequest("GET", "http://httpbin.org/get")
         request.addHeader(ACCEPT, acceptHeader)
-        def response = handler.handle(request)
+        def response = tape.play(request)
 
         then:
-        response.headers[VIA] == 'Betamax'
-        response.headers[X_BETAMAX] == 'PLAY'
         response.headers[CONTENT_TYPE] == acceptHeader
         response.bodyAsText.input.text == responseText
 
