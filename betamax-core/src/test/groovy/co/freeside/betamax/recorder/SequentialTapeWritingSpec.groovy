@@ -29,16 +29,16 @@ import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.WRITE_SEQUENTIAL
 import static org.apache.http.HttpStatus.SC_OK
 
-@Issue('https://github.com/robfletcher/betamax/issues/7')
-@Issue('https://github.com/robfletcher/betamax/pull/70')
+@Issue("https://github.com/robfletcher/betamax/issues/7")
+@Issue("https://github.com/robfletcher/betamax/pull/70")
 class SequentialTapeWritingSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
 
     def recorder = new Recorder(tapeRoot: tapeRoot)
     @Rule RecorderRule recorderRule = new RecorderRule(recorder)
 
-    @Shared @AutoCleanup('stop') def endpoint = new SimpleServer(IncrementingHandler)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(IncrementingHandler)
 
     def handler = new DefaultHandlerChain(recorder)
 
@@ -46,40 +46,40 @@ class SequentialTapeWritingSpec extends Specification {
         endpoint.start()
     }
 
-    @Betamax(tape = 'sequential tape', mode = WRITE_SEQUENTIAL)
-    void 'write sequential tapes record multiple matching responses'() {
+    @Betamax(tape = "sequential tape", mode = WRITE_SEQUENTIAL)
+    void "write sequential tapes record multiple matching responses"() {
         when:
-        'multiple requests are made to the same endpoint'
+        "multiple requests are made to the same endpoint"
         List<Response> responses = []
         n.times {
             responses << handler.handle(request)
         }
 
         then:
-        'both successfully connect'
+        "both successfully connect"
         responses.every {
             it.status == SC_OK
         }
 
         and:
-        'they both get recorded'
+        "they both get recorded"
         responses.every {
-            it.headers[X_BETAMAX] == 'REC'
+            it.headers[X_BETAMAX] == "REC"
         }
 
         and:
-        'each has different content'
+        "each has different content"
         responses.bodyAsText.input.text == (1..n).collect {
             "count: $it"
         }
 
         and:
-        'multiple recordings are added to the tape'
+        "multiple recordings are added to the tape"
         recorder.tape.size() == old(recorder.tape.size()) + n
 
         where:
         n = 2
-        request = new BasicRequest('GET', endpoint.url)
+        request = new BasicRequest("GET", endpoint.url)
     }
 
 }
