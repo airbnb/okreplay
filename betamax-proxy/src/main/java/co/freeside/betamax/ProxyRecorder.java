@@ -61,7 +61,7 @@ public class ProxyRecorder extends Recorder {
      */
     private SSLSocketFactory sslSocketFactory;
 
-    private ProxyServer interceptor;
+    private ProxyServer proxyServer;
 
     public ProxyRecorder() {
         super();
@@ -75,34 +75,34 @@ public class ProxyRecorder extends Recorder {
      * @return the hostname or address where the proxy will run.
      */
     public String getProxyHost() {
-        return interceptor.getHost();
+        return proxyServer.getHost();
     }
 
     /**
      * @return a `java.net.Proxy` instance configured to point to the Betamax proxy.
      */
     public Proxy getProxy() {
-        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(interceptor.getHost(), interceptor.getPort()));
+        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyServer.getHost(), proxyServer.getPort()));
     }
 
     @Override
     public void start(String tapeName, Map arguments) {
-        if (interceptor == null) {
+        if (proxyServer == null) {
             try {
-                interceptor = new ProxyServer(this);
+                proxyServer = new ProxyServer(this);
             } catch (UnknownHostException e) {
                 throw new RuntimeException("Unable to start proxy", e);
             }
         }
-        if (!interceptor.isRunning()) {
-            interceptor.start();
+        if (!proxyServer.isRunning()) {
+            proxyServer.start();
         }
         super.start(tapeName, arguments);
     }
 
     @Override
     public void stop() {
-        interceptor.stop();
+        proxyServer.stop();
         super.stop();
     }
 

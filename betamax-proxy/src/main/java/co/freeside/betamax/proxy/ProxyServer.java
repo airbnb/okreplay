@@ -31,7 +31,7 @@ import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.*;
 import static com.google.common.base.Predicates.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
 
-public class ProxyServer implements HttpInterceptor {
+public class ProxyServer {
 
     private final HttpProxyServerBootstrap proxyServerBootstrap;
     private final ProxyRecorder recorder;
@@ -71,7 +71,6 @@ public class ProxyServer implements HttpInterceptor {
         });
     }
 
-    @Override
     public boolean isRunning() {
         return running;
     }
@@ -87,7 +86,6 @@ public class ProxyServer implements HttpInterceptor {
         overrideSSLSettings();
     }
 
-    @Override
     public void stop() {
         if (!isRunning()) {
             throw new IllegalStateException("Betamax proxy server is already stopped");
@@ -99,12 +97,10 @@ public class ProxyServer implements HttpInterceptor {
         running = false;
     }
 
-    @Override
     public String getHost() {
         return address.getHostName();
     }
 
-    @Override
     public int getPort() {
         return address.getPort();
     }
