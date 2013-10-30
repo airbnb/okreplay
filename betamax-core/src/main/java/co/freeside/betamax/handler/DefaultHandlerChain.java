@@ -16,32 +16,29 @@
 
 package co.freeside.betamax.handler;
 
-import co.freeside.betamax.Recorder;
-import co.freeside.betamax.message.Request;
-import co.freeside.betamax.message.Response;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import co.freeside.betamax.*;
+import co.freeside.betamax.message.*;
+import org.apache.http.client.*;
+import org.apache.http.impl.client.*;
 
 /**
  * The default handler chain used by all Betamax implementations.
  */
 public class DefaultHandlerChain extends ChainedHttpHandler {
     public DefaultHandlerChain(Recorder recorder, HttpClient httpClient) {
-        this.leftShift(new ViaSettingHandler())
-            .leftShift(new TapeReader(recorder))
-            .leftShift(new TapeWriter(recorder))
-            .leftShift(new HeaderFilter())
-            .leftShift(new TargetConnector(httpClient));
+        this.add(new ViaSettingHandler())
+            .add(new TapeReader(recorder))
+            .add(new TapeWriter(recorder))
+            .add(new HeaderFilter())
+            .add(new TargetConnector(httpClient));
     }
 
     public DefaultHandlerChain(Recorder recorder) {
         this(recorder, newHttpClient());
     }
 
-    private static DefaultHttpClient newHttpClient() {
-        PoolingClientConnectionManager connectionManager = new PoolingClientConnectionManager();
-        return new DefaultHttpClient(connectionManager);
+    private static HttpClient newHttpClient() {
+        return HttpClients.createMinimal();
     }
 
     @Override
