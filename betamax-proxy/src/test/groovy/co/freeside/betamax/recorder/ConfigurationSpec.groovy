@@ -17,13 +17,13 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.ProxyConfiguration
+import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
 
 class ConfigurationSpec extends Specification {
 
-    @Shared
-    String tmpdir = System.properties."java.io.tmpdir"
+    @Shared @AutoCleanup("deleteDir") def tempDir = Files.createTempDir()
 
     void "uses default configuration if not overridden and no properties file exists"() {
         given:
@@ -44,7 +44,7 @@ class ConfigurationSpec extends Specification {
     void "configuration is overridden by builder methods"() {
         given:
         def configuration = ProxyConfiguration.builder()
-                .tapeRoot(new File(tmpdir, "tapes"))
+                .tapeRoot(tempDir)
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
                 .proxyTimeoutSeconds(30)
@@ -56,7 +56,7 @@ class ConfigurationSpec extends Specification {
 
         expect:
         with(configuration) {
-            tapeRoot == new File(tmpdir, "tapes")
+            tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_ONLY
             proxyTimeoutSeconds == 30
@@ -70,7 +70,7 @@ class ConfigurationSpec extends Specification {
         given:
         def properties = new Properties()
         properties.with {
-            setProperty("betamax.tapeRoot", "${this.tmpdir}tapes".toString())
+            setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.proxyTimeoutSeconds", "30")
@@ -84,7 +84,7 @@ class ConfigurationSpec extends Specification {
 
         expect:
         with(configuration) {
-            tapeRoot == new File(tmpdir, "tapes")
+            tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
             proxyTimeoutSeconds == 30
@@ -97,10 +97,10 @@ class ConfigurationSpec extends Specification {
 
     void "default properties file is used if it exists"() {
         given:
-        def propertiesFile = new File(tmpdir, "betamax.properties")
+        def propertiesFile = new File(tempDir, "betamax.properties")
         def properties = new Properties()
         properties.with {
-            setProperty("betamax.tapeRoot", "${this.tmpdir}/tapes".toString())
+            setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.proxyTimeoutSeconds", "30")
@@ -113,14 +113,14 @@ class ConfigurationSpec extends Specification {
         }
 
         and:
-        ProxyConfiguration.classLoader.addURL(new File(tmpdir).toURL())
+        ProxyConfiguration.classLoader.addURL(tempDir.toURL())
 
         and:
         def configuration = ProxyConfiguration.builder().build()
 
         expect:
         with(configuration) {
-            tapeRoot == new File(tmpdir, "tapes")
+            tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
             proxyTimeoutSeconds == 30
@@ -136,10 +136,10 @@ class ConfigurationSpec extends Specification {
 
     void "builder methods override properties file"() {
         given:
-        def propertiesFile = new File(tmpdir, "betamax.properties")
+        def propertiesFile = new File(tempDir, "betamax.properties")
         def properties = new Properties()
         properties.with {
-            setProperty("betamax.tapeRoot", "${this.tmpdir}/tapes".toString())
+            setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.proxyTimeoutSeconds", "30")
@@ -152,7 +152,7 @@ class ConfigurationSpec extends Specification {
         }
 
         and:
-        ProxyConfiguration.classLoader.addURL(new File(tmpdir).toURL())
+        ProxyConfiguration.classLoader.addURL(tempDir.toURL())
 
         and:
         def configuration = ProxyConfiguration.builder()
