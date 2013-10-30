@@ -35,18 +35,18 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 
-@Issue('https://github.com/robfletcher/betamax/issues/40')
+@Issue("https://github.com/robfletcher/betamax/issues/40")
 class BetamaxHttpClientSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot)])
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-    @AutoCleanup('stop') def endpoint
+    @AutoCleanup("stop") def endpoint
     def http = new BetamaxHttpClient(configuration, recorder)
 
-    @Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
-    void 'can use Betamax without starting the proxy'() {
+    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    void "can use Betamax without starting the proxy"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)
 
@@ -61,12 +61,12 @@ class BetamaxHttpClientSpec extends Specification {
         response.entity.content.text == HELLO_WORLD
 
         and:
-        response.getFirstHeader(VIA).value == 'Betamax'
-        response.getFirstHeader('X-Betamax').value == 'REC'
+        response.getFirstHeader(VIA).value == "Betamax"
+        response.getFirstHeader("X-Betamax").value == "REC"
     }
 
-    @Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
-    void 'can play back from tape'() {
+    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    void "can play back from tape"() {
         given:
         def handler = Mock(ChannelInboundHandler)
         endpoint = SimpleServer.start(handler)
@@ -82,34 +82,34 @@ class BetamaxHttpClientSpec extends Specification {
         response.entity.content.text == HELLO_WORLD
 
         and:
-        response.getFirstHeader(VIA).value == 'Betamax'
-        response.getFirstHeader('X-Betamax').value == 'PLAY'
+        response.getFirstHeader(VIA).value == "Betamax"
+        response.getFirstHeader("X-Betamax").value == "PLAY"
 
         and:
         0 * handler.channelRead(* _)
     }
 
-    @Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
-    void 'can send a request with a body'() {
+    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    void "can send a request with a body"() {
         given:
         endpoint = SimpleServer.start(EchoHandler)
 
         and:
         def request = new HttpPost(endpoint.url)
-        request.entity = new StringEntity('message=O HAI', APPLICATION_FORM_URLENCODED)
+        request.entity = new StringEntity("message=O HAI", APPLICATION_FORM_URLENCODED)
 
         when:
         def response = http.execute(request)
 
         then:
         response.statusLine.statusCode == HTTP_OK
-        response.entity.content.text.endsWith 'message=O HAI'
+        response.entity.content.text.endsWith "message=O HAI"
 
         and:
-        response.getFirstHeader(VIA).value == 'Betamax'
+        response.getFirstHeader(VIA).value == "Betamax"
     }
 
-    void 'fails in non-annotated spec'() {
+    void "fails in non-annotated spec"() {
         given:
         def handler = Mock(ChannelInboundHandler)
         endpoint = SimpleServer.start(handler)
@@ -119,14 +119,14 @@ class BetamaxHttpClientSpec extends Specification {
 
         then:
         def e = thrown(HandlerException)
-        e.message == 'No tape'
+        e.message == "No tape"
 
         and:
         0 * handler.channelRead(* _)
     }
 
-    @Betamax(tape = 'betamax http client')
-    void 'can use ignoreLocalhost config setting'() {
+    @Betamax(tape = "betamax http client")
+    void "can use ignoreLocalhost config setting"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)
 
@@ -145,11 +145,11 @@ class BetamaxHttpClientSpec extends Specification {
 
         and:
         !response.getFirstHeader(VIA)
-        !response.getFirstHeader('X-Betamax')
+        !response.getFirstHeader("X-Betamax")
     }
 
-    @Betamax(tape = 'betamax http client')
-    void 'can use ignoreHosts config setting'() {
+    @Betamax(tape = "betamax http client")
+    void "can use ignoreHosts config setting"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)
 
@@ -168,11 +168,11 @@ class BetamaxHttpClientSpec extends Specification {
 
         and:
         !response.getFirstHeader(VIA)
-        !response.getFirstHeader('X-Betamax')
+        !response.getFirstHeader("X-Betamax")
     }
 
-    @Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
-    void 'can use with HttpBuilder'() {
+    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    void "can use with HttpBuilder"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)
 
@@ -192,8 +192,8 @@ class BetamaxHttpClientSpec extends Specification {
         response.data.text == HELLO_WORLD
 
         and:
-        response.getFirstHeader(VIA).value == 'Betamax'
-        response.getFirstHeader('X-Betamax').value == 'PLAY'
+        response.getFirstHeader(VIA).value == "Betamax"
+        response.getFirstHeader("X-Betamax").value == "PLAY"
     }
 
 }

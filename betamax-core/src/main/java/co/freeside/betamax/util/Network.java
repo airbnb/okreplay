@@ -22,12 +22,13 @@ package co.freeside.betamax.util;
 
 import java.net.*;
 import java.util.*;
+import com.google.common.collect.*;
 
 public class Network {
     public static Collection<String> getLocalAddresses() {
         try {
             InetAddress local = InetAddress.getLocalHost();
-            return Arrays.asList(local.getHostName(), local.getHostAddress(), "localhost", "127.0.0.1");
+            return ImmutableList.of(local.getHostName(), local.getHostAddress(), "localhost", "127.0.0.1");
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

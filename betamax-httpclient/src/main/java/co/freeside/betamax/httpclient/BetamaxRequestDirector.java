@@ -22,8 +22,6 @@ import co.freeside.betamax.*;
 import co.freeside.betamax.handler.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.httpclient.*;
-import co.freeside.betamax.util.*;
-import com.google.common.collect.*;
 import com.google.common.io.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
@@ -77,10 +75,6 @@ class BetamaxRequestDirector implements RequestDirector {
     }
 
     private boolean shouldIgnore(HttpHost target) {
-        Collection<String> ignoredHosts = Lists.newArrayList(configuration.getIgnoreHosts());
-        if (configuration.isIgnoreLocalhost()) {
-            ignoredHosts.addAll(Network.getLocalAddresses());
-        }
-        return ignoredHosts.contains(target.getHostName());
+        return configuration.getIgnoreHosts().contains(target.getHostName());
     }
 }

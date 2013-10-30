@@ -17,12 +17,10 @@
 package co.freeside.betamax;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import co.freeside.betamax.internal.*;
-import com.google.common.base.*;
+import co.freeside.betamax.util.*;
 import com.google.common.collect.*;
-import com.google.common.io.*;
 
 /**
  * The configuration used by Betamax.
@@ -79,7 +77,14 @@ public class Configuration {
      * intercepted.
      */
     public Collection<String> getIgnoreHosts() {
-        return ignoreHosts;
+        if (isIgnoreLocalhost()) {
+            return new ImmutableSet.Builder<String>()
+                    .addAll(ignoreHosts)
+                    .addAll(Network.getLocalAddresses())
+                    .build();
+        } else {
+            return ignoreHosts;
+        }
     }
 
     /**
@@ -100,7 +105,8 @@ public class Configuration {
      *
      * You should **not** call this method yourself.
      */
-    public void registerListeners(Collection<RecorderListener> listeners) {}
+    public void registerListeners(Collection<RecorderListener> listeners) {
+    }
 
     private static class Builder extends ConfigurationBuilder<Builder> {
         @Override

@@ -48,7 +48,7 @@ class ConfigurationSpec extends Specification {
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
                 .proxyTimeoutSeconds(30)
-                .ignoreHosts(["localhost"])
+                .ignoreHosts(["freeside.co"])
                 .ignoreLocalhost(true)
                 .sslEnabled(true)
                 .build()
@@ -60,7 +60,7 @@ class ConfigurationSpec extends Specification {
             proxyPort == 1337
             defaultMode == READ_ONLY
             proxyTimeoutSeconds == 30
-            ignoreHosts == ["localhost"]
+            ignoreHosts.contains("freeside.co")
             ignoreLocalhost
             sslEnabled
         }
@@ -74,7 +74,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.proxyTimeoutSeconds", "30")
-            setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
+            setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
             setProperty("betamax.sslEnabled", "true")
         }
@@ -88,7 +88,8 @@ class ConfigurationSpec extends Specification {
             proxyPort == 1337
             defaultMode == READ_WRITE
             proxyTimeoutSeconds == 30
-            ignoreHosts == ["localhost", "127.0.0.1"]
+            ignoreHosts.contains("freeside.co")
+            ignoreHosts.contains("energizedwork.com")
             ignoreLocalhost
             sslEnabled
         }
@@ -103,7 +104,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.proxyTimeoutSeconds", "30")
-            setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
+            setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
             setProperty("betamax.sslEnabled", "true")
         }
@@ -123,7 +124,8 @@ class ConfigurationSpec extends Specification {
             proxyPort == 1337
             defaultMode == READ_WRITE
             proxyTimeoutSeconds == 30
-            ignoreHosts == ["localhost", "127.0.0.1"]
+            ignoreHosts.contains("freeside.co")
+            ignoreHosts.contains("energizedwork.com")
             ignoreLocalhost
             sslEnabled
         }

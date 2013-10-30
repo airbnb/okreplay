@@ -17,7 +17,6 @@
 package co.freeside.betamax.proxy;
 
 import java.net.*;
-import java.util.*;
 import java.util.logging.*;
 import co.freeside.betamax.*;
 import co.freeside.betamax.internal.*;
@@ -25,7 +24,6 @@ import co.freeside.betamax.proxy.netty.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.util.*;
 import com.google.common.base.*;
-import com.google.common.collect.*;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.extras.*;
@@ -114,11 +112,7 @@ public class ProxyServer implements RecorderListener {
     }
 
     private void overrideProxySettings() {
-        Collection<String> nonProxyHosts = Lists.newArrayList(configuration.getIgnoreHosts());
-        if (configuration.isIgnoreLocalhost()) {
-            nonProxyHosts.addAll(Network.getLocalAddresses());
-        }
-        proxyOverrider.activate(configuration.getProxyHost(), configuration.getProxyPort(), nonProxyHosts);
+        proxyOverrider.activate(configuration.getProxyHost(), configuration.getProxyPort(), configuration.getIgnoreHosts());
     }
 
     private void restoreOriginalProxySettings() {
