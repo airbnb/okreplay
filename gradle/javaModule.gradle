@@ -1,4 +1,8 @@
-apply plugin: "groovy"
+apply plugin: "java"
+
+configurations {
+    pegdownDoclet
+}
 
 repositories {
     mavenCentral()
@@ -8,6 +12,7 @@ dependencies {
     compile commonDependencies.guava
     testCompile commonDependencies.groovy
     testCompile commonDependencies.spock
+    pegdownDoclet "ch.raffael.pegdown-doclet:pegdown-doclet:1.1.1"
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
@@ -19,4 +24,9 @@ test {
             exceptionFormat "short"
         }
     }
+}
+
+javadoc {
+    options.docletpath = configurations.pegdownDoclet.files.asType(List)
+    options.doclet = "ch.raffael.doclets.pegdown.PegdownDoclet"
 }
