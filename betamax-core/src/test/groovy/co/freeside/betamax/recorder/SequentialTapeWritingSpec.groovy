@@ -16,7 +16,8 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.Configuration
+
 import co.freeside.betamax.handler.DefaultHandlerChain
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.message.Response
@@ -35,8 +36,8 @@ class SequentialTapeWritingSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
 
-    def recorder = new Recorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+    @Rule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(IncrementingHandler)
 

@@ -39,10 +39,11 @@ import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
 class BetamaxHttpClientSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new Recorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot)])
+    @Rule RecorderRule recorder = new RecorderRule(configuration)
+
     @AutoCleanup('stop') def endpoint
-    def http = new BetamaxHttpClient(recorder)
+    def http = new BetamaxHttpClient(configuration, recorder)
 
     @Betamax(tape = 'betamax http client', mode = TapeMode.READ_WRITE)
     void 'can use Betamax without starting the proxy'() {
@@ -130,7 +131,7 @@ class BetamaxHttpClientSpec extends Specification {
         endpoint = SimpleServer.start(HelloHandler)
 
         and:
-        recorder.ignoreLocalhost = true
+        configuration.isIgnoreLocalhost() >> true
 
         and:
         def request = new HttpGet(endpoint.url)
@@ -153,7 +154,7 @@ class BetamaxHttpClientSpec extends Specification {
         endpoint = SimpleServer.start(HelloHandler)
 
         and:
-        recorder.ignoreHosts = Network.localAddresses
+        configuration.getIgnoreHosts() >> Network.localAddresses
 
         and:
         def request = new HttpGet(endpoint.url)
@@ -179,7 +180,7 @@ class BetamaxHttpClientSpec extends Specification {
         def restClient = new RESTClient() {
             @Override
             protected AbstractHttpClient createClient(HttpParams params) {
-                new BetamaxHttpClient(recorder)
+                new BetamaxHttpClient(configuration, recorder)
             }
         }
 

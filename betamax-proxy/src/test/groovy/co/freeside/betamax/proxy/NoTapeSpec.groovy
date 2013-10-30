@@ -16,15 +16,16 @@
 
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.*
 import co.freeside.betamax.util.server.*
 import spock.lang.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
 
-    @Shared def recorder = new ProxyRecorder()
-    @Shared @AutoCleanup("stop") def proxy = new ProxyServer(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().build()
+    @Shared def recorder = new Recorder(configuration)
+    @Shared @AutoCleanup("stop") def proxy = new ProxyServer(configuration)
     @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
 
     void setupSpec() {

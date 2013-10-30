@@ -21,6 +21,7 @@ import co.freeside.betamax.encoding.GzipEncoder
 import co.freeside.betamax.junit.*
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.Headers.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
@@ -29,8 +30,8 @@ import static org.apache.http.HttpHeaders.VIA
 class SmokeSpec extends Specification {
 
     static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true, tapeRoot: TAPE_ROOT)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().sslEnabled(true).tapeRoot(TAPE_ROOT).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     void "#type response data"() {
         when:
@@ -40,6 +41,7 @@ class SmokeSpec extends Specification {
         then:
         connection.responseCode == HTTP_OK
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
         connection.inputStream.text.contains(expectedContent)
 
         where:
@@ -57,6 +59,7 @@ class SmokeSpec extends Specification {
         then:
         connection.responseCode == HTTP_OK
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
         encoder.decode(connection.inputStream).contains('"gzipped": true')
 
         where:
@@ -71,6 +74,7 @@ class SmokeSpec extends Specification {
         then:
         connection.responseCode == HTTP_OK
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
         connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
 
         where:
@@ -83,8 +87,9 @@ class SmokeSpec extends Specification {
 
         then:
         connection.responseCode == HTTP_OK
-        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
+        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
 
         where:
         uri = "https://httpbin.org/get"
@@ -102,6 +107,7 @@ class SmokeSpec extends Specification {
         then:
         connection.responseCode == HTTP_OK
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
         connection.inputStream.text.contains('"message": "O HAI"')
 
         where:
@@ -116,6 +122,7 @@ class SmokeSpec extends Specification {
         then:
         connection.responseCode == HTTP_OK
         connection.getHeaderField(VIA) == "Betamax"
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
 
         where:
         uri = "http://httpbin.org"

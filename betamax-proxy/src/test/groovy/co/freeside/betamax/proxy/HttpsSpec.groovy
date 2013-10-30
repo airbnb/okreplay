@@ -36,8 +36,8 @@ import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOST
 class HttpsSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared @AutoCleanup("ejectTape") def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().sslEnabled(true).tapeRoot(tapeRoot).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)
@@ -69,8 +69,8 @@ class HttpsSpec extends Specification {
 
         and:
         def proxyURI = "${scheme}://${proxy.address()}".toURI()
-        InetAddress.getByName(proxyURI.host) == InetAddress.getByName(recorder.proxyHost)
-        proxyURI.port == recorder.proxyPort
+        InetAddress.getByName(proxyURI.host) == InetAddress.getByName(configuration.proxyHost)
+        proxyURI.port == configuration.proxyPort
 
         where:
         uri << [httpUri, httpsUri]

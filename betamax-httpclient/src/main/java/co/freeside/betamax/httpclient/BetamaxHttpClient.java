@@ -27,9 +27,11 @@ import org.apache.http.protocol.*;
 
 public class BetamaxHttpClient extends DefaultHttpClient {
 
+    private final Configuration configuration;
     private final Recorder recorder;
 
-    public BetamaxHttpClient(Recorder recorder) {
+    public BetamaxHttpClient(Configuration configuration, Recorder recorder) {
+        this.configuration = configuration;
         this.recorder = recorder;
     }
 
@@ -48,7 +50,7 @@ public class BetamaxHttpClient extends DefaultHttpClient {
             UserTokenHandler userTokenHandler,
             HttpParams params) {
         RequestDirector director = super.createClientRequestDirector(requestExec, conman, reustrat, kastrat, rouplan, httpProcessor, retryHandler, redirectStrategy, targetAuthStrategy, proxyAuthStrategy, userTokenHandler, params);
-        return new BetamaxRequestDirector(director, recorder);
+        return new BetamaxRequestDirector(director, configuration, recorder);
     }
 
 }

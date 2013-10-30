@@ -31,10 +31,11 @@ import static org.apache.http.HttpHeaders.VIA
 @RunWith(OrderedRunner)
 class AnnotationTest {
 
-    static File tapeRoot = Files.createTempDir()
-    Recorder recorder = new ProxyRecorder(tapeRoot: tapeRoot, defaultMode: READ_WRITE)
-    @Rule public RecorderRule recorderRule = new RecorderRule(recorder)
-    SimpleServer endpoint = new SimpleServer(EchoHandler)
+    static def TAPE_ROOT = Files.createTempDir()
+    def configuration = ProxyConfiguration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
+    @Rule public RecorderRule recorder = new RecorderRule(configuration)
+
+    def endpoint = new SimpleServer(EchoHandler)
 
     @After
     void ensureEndpointIsStopped() {
@@ -43,7 +44,7 @@ class AnnotationTest {
 
     @AfterClass
     static void cleanUpTapeFiles() {
-        tapeRoot.deleteDir()
+        TAPE_ROOT.deleteDir()
     }
 
     @Test

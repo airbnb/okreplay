@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
@@ -34,8 +34,8 @@ import static org.apache.http.HttpHeaders.VIA
 class HttpURLConnectionSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)
     @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)

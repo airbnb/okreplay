@@ -30,7 +30,7 @@ public abstract class BasicMessage extends AbstractMessage {
             values.add(value);
             headers.put(name, values);
         } else {
-            headers.put(name, new ArrayList<String>(Arrays.asList(value)));
+            headers.put(name, Arrays.asList(value));
         }
 
     }

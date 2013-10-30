@@ -29,9 +29,10 @@ import static org.apache.http.HttpHeaders.VIA
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {
 
-    @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Rule RecorderRule recorder = new RecorderRule(configuration)
+
     @Shared @AutoCleanup('stop') def proxyServer = new SimpleServer(HelloHandler)
 
     void setupSpec() {

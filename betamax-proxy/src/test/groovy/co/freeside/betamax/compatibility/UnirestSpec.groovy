@@ -36,8 +36,8 @@ import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOST
 class UnirestSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)
     @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)

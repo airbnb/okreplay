@@ -18,7 +18,8 @@ package co.freeside.betamax.proxy
 
 import java.security.KeyStore
 import javax.net.ssl.HttpsURLConnection
-import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.ProxyConfiguration
+import co.freeside.betamax.Recorder
 import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
@@ -50,7 +51,8 @@ class CustomSecureSocketFactorySpec extends Specification {
 
 		given: 'a recorder configured with a custom SSL socket factory'
 		def sslSocketFactory = Spy(DummySSLSocketFactory, constructorArgs: [trustStore])
-		def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true, sslSocketFactory: sslSocketFactory)
+        def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+        def recorder = new Recorder(configuration)
 		recorder.start 'custom secure socket factory spec'
 
 		when: 'an HTTPS request is made'

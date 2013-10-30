@@ -35,8 +35,8 @@ import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 class HttpBuilderSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
 
@@ -60,7 +60,7 @@ class HttpBuilderSpec extends Specification {
     void "proxy intercepts HTTPClient connections when explicitly told to"() {
         given:
         def http = new RESTClient(endpoint.url)
-        http.client.params.setParameter(DEFAULT_PROXY, new HttpHost(recorder.proxyHost, recorder.proxyPort, "http"))
+        http.client.params.setParameter(DEFAULT_PROXY, new HttpHost(configuration.proxyHost, configuration.proxyPort, "http"))
 
         when:
         HttpResponseDecorator response = http.get(path: "/")

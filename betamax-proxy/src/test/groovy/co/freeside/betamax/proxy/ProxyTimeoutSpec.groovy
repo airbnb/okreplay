@@ -29,8 +29,8 @@ import spock.lang.*
 class ProxyTimeoutSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, proxyTimeoutSeconds: 1)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().proxyTimeoutSeconds(1).tapeRoot(tapeRoot).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @AutoCleanup("stop") def endpoint = new SimpleServer(SlowHandler)
 

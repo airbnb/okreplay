@@ -30,7 +30,7 @@ import com.google.common.io.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
 import static co.freeside.betamax.TapeMode.*;
-import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.*;
 import static org.apache.http.HttpHeaders.*;
 
 /**
@@ -225,7 +225,7 @@ public class MemoryTape implements Tape {
     }
 
     private String name;
-    private List<RecordedInteraction> interactions = new ArrayList<RecordedInteraction>();
+    private List<RecordedInteraction> interactions = Lists.newArrayList();
     private TapeMode mode = READ_WRITE;
     private AtomicInteger orderedIndex = new AtomicInteger();
     private Iterable<? extends MatchRule> matchRules = RequestMatcher.DEFAULT_RULES;

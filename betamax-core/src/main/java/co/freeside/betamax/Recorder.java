@@ -16,68 +16,62 @@
 
 package co.freeside.betamax;
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
-import java.util.logging.*;
+import co.freeside.betamax.internal.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.tape.yaml.*;
-import co.freeside.betamax.util.*;
-import com.google.common.base.*;
 import com.google.common.collect.*;
-import com.google.common.io.*;
 
 /**
- * This class is the main interface to Betamax. It allows control of Betamax configuration, inserting and
- * ejecting `Tape` instances and starting and stopping recording sessions.
+ * This class is the main interface to Betamax. It controls the Betamax lifecycle, inserting and
+ * ejecting {@link Tape} instances and starting and stopping recording sessions.
  */
 public class Recorder {
 
+    private final Configuration configuration;
+    private final Collection<RecorderListener> listeners = Lists.newArrayList();
+
     public Recorder() {
-        try {
-            URL propertiesFile = Recorder.class.getResource("/betamax.properties");
-            if (propertiesFile != null) {
-                Properties properties = new Properties();
-                properties.load(Files.newReader(new File(propertiesFile.getFile()), Charsets.UTF_8));
-                configureFrom(properties);
-            } else {
-                configureWithDefaults();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        this(Configuration.builder().build());
+    }
+
+    public Recorder(Configuration configuration) {
+        this.configuration = configuration;
+        configuration.registerListeners(listeners);
+    }
+
+    public final void start(String tapeName, Map arguments) {
+        insertTape(tapeName, arguments);
+        for (RecorderListener listener : listeners) {
+            listener.onRecorderStart(tape);
         }
     }
 
-    public Recorder(Properties properties) {
-        configureFrom(properties);
+    public final void start(String tapeName) {
+        start(tapeName, Collections.emptyMap());
     }
 
-    public void start(String tapeName, Map arguments) {
-        insertTape(tapeName, arguments);
-    }
-
-    public void start(String tapeName) {
-        start(tapeName, new LinkedHashMap<Object, Object>());
-    }
-
-    public void stop() {
+    public final void stop() {
+        for (RecorderListener listener : listeners) {
+            listener.onRecorderStop();
+        }
         ejectTape();
     }
 
     /**
-     * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
+     * Inserts a tape either creating a new one or loading an existing file.
      *
      * @param name      the name of the _tape_.
      * @param arguments customize the behaviour of the tape.
      */
     @SuppressWarnings("unchecked")
-    public void insertTape(String name, Map arguments) {
+    public final void insertTape(String name, Map arguments) {
         tape = getTapeLoader().loadTape(name);
 
         if (arguments.containsKey("mode")) {
             tape.setMode((TapeMode) arguments.get("mode"));
         } else {
-            tape.setMode(defaultMode);
+            tape.setMode(configuration.getDefaultMode());
         }
 
         if (arguments.containsKey("match")) {
@@ -86,11 +80,11 @@ public class Recorder {
     }
 
     /**
-     * Inserts a tape either creating a new one or loading an existing file from `tapeRoot`.
+     * Inserts a tape either creating a new one or loading an existing file.
      *
      * @param name the name of the _tape_.
      */
-    public void insertTape(String name) {
+    public final void insertTape(String name) {
         insertTape(name, new LinkedHashMap<Object, Object>());
     }
 
@@ -101,104 +95,25 @@ public class Recorder {
      */
     public Tape getTape() {
         return tape;
-    }
+    }// TODO: this should be final but a couple of tests mock it
 
     /**
      * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
      * will no longer record or play back any HTTP traffic until another tape is inserted.
      */
-    public void ejectTape() {
+    public final void ejectTape() {
         if (tape != null) {
             getTapeLoader().writeTape(tape);
             tape = null;
         }
-
-    }
-
-    protected void configureFrom(Properties properties) {
-        tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT));
-        defaultMode = TypedProperties.getEnum(properties, "betamax.defaultMode", TapeMode.READ_WRITE);
-        final List<String> tokenize = Lists.newArrayList(Splitter.on(",").split(properties.getProperty("betamax.ignoreHosts")));
-        ignoreHosts = tokenize != null ? tokenize : new ArrayList<String>();
-        ignoreLocalhost = TypedProperties.getBoolean(properties, "betamax.ignoreLocalhost");
-    }
-
-    protected void configureWithDefaults() {
-        tapeRoot = new File(DEFAULT_TAPE_ROOT);
-        defaultMode = TapeMode.READ_WRITE;
-        ignoreHosts = new ArrayList<String>();
-        ignoreLocalhost = false;
     }
 
     /**
      * Not just a property as `tapeRoot` gets changed during constructor.
      */
-    protected TapeLoader getTapeLoader() {
-        return new YamlTapeLoader(tapeRoot);
+    private TapeLoader getTapeLoader() {
+        return new YamlTapeLoader(configuration.getTapeRoot());
     }
-
-    public File getTapeRoot() {
-        return tapeRoot;
-    }
-
-    public void setTapeRoot(File tapeRoot) {
-        this.tapeRoot = tapeRoot;
-    }
-
-    public TapeMode getDefaultMode() {
-        return defaultMode;
-    }
-
-    public void setDefaultMode(TapeMode defaultMode) {
-        this.defaultMode = defaultMode;
-    }
-
-    public Collection<String> getIgnoreHosts() {
-        return ignoreHosts;
-    }
-
-    public void setIgnoreHosts(Collection<String> ignoreHosts) {
-        this.ignoreHosts = ignoreHosts;
-    }
-
-    public boolean getIgnoreLocalhost() {
-        return ignoreLocalhost;
-    }
-
-    public boolean isIgnoreLocalhost() {
-        return ignoreLocalhost;
-    }
-
-    public void setIgnoreLocalhost(boolean ignoreLocalhost) {
-        this.ignoreLocalhost = ignoreLocalhost;
-    }
-
-    public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes";
-
-    protected final Logger log = Logger.getLogger(getClass().getName());
-
-    /**
-     * The base directory where tape files are stored.
-     */
-    private File tapeRoot = new File(DEFAULT_TAPE_ROOT);
-
-    /**
-     * The default mode for an inserted tape.
-     */
-    private TapeMode defaultMode = TapeMode.READ_ONLY;
-
-    /**
-     * Hosts that are ignored by the proxy. Any connections made will be allowed to proceed normally and not be
-     * intercepted.
-     */
-    private Collection<String> ignoreHosts = new ArrayList<String>();
-
-    /**
-     * If set to true all connections to localhost addresses are ignored.
-     * This is equivalent to setting `ignoreHosts` to `['localhost', '127.0.0.1', InetAddress.localHost.hostName,
-     * InetAddress.localHost.hostAddress]`.
-     */
-    private boolean ignoreLocalhost;
 
     private StorableTape tape;
 }

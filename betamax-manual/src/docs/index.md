@@ -242,7 +242,7 @@ _HTTPBuilder_ also includes a [_HttpURLClient_][httpurlclient] class which needs
 
 As of version 1.1 the Betamax proxy can handle HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.
 
-To enable HTTP support you simply need to set the `sslSupport` boolean property on the `Recorder` instance in your test or via Betamax configuration.
+To enable HTTP support you simply need to set the `sslEnabled` boolean property on the `Recorder` instance in your test or via Betamax configuration.
 
 Note, this is not necessary if you are using the _BetamaxHttpClient_ wrapper class instead of the proxy. HTTPS is handled no differently to HTTP in that case.
 
@@ -260,7 +260,7 @@ The `Recorder` class has some configuration properties that you can override:
 : the base directory where tape files are stored. Defaults to `src/test/resources/betamax/tapes`.
 
 `defaultMode`
-: the default _TapeMode_ applied to an inserted tape when the _mode_ argument is not present on the <code>@Betamax</code> annotation.
+: the default _TapeMode_ applied to an inserted tape when the _mode_ argument is not present on the `@Betamax` annotation.
 
 `ignoreHosts`
 : a list of hosts that will be ignored by the Betamax proxy. Any requests made to these hosts will proceed normally.
@@ -276,7 +276,7 @@ When using the Betamax proxy these additional properties are available:
 `proxyTimeout`
 : the number of milliseconds before the proxy will give up on a connection to the target server. A value of zero means the proxy will wait indefinitely. Defaults to `5000`.
 
-`sslSupport`
+`sslEnabled`
 : if set to `true` the Betamax proxy will also intercept HTTPS traffic.
 
 `sslSocketFactory`
@@ -294,7 +294,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
         defaultMode = TapeMode.READ_WRITE
         ignoreHosts = ['localhost', '127.0.0.1']
         ignoreLocalhost = false
-        sslSupport = false
+        sslEnabled = false
         sslSocketFactory = new SSLSocketFactory(myTrustStore)
     }
 
@@ -307,7 +307,7 @@ If you have a file called `BetamaxConfig.groovy` or `betamax.properties` somewhe
     betamax.defaultMode=READ_WRITE
     betamax.ignoreHosts=localhost,127.0.0.1
     betamax.ignoreLocalhost=false
-    betamax.sslSupport=false
+    betamax.sslEnabled=false
 
 ## Caveats
 

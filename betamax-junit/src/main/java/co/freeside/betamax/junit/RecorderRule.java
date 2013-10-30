@@ -26,17 +26,16 @@ import org.junit.runners.model.*;
 import static java.util.logging.Level.*;
 
 /**
- * This is a wrapper for the Betamax {@link co.freeside.betamax.Recorder} that can be used as a
- * _JUnit @Rule_ allowing tests annotated with `@Betamax` to run with the
- * Betamax HTTP proxy in the background.
+ * This is an extension of {@link Recorder} that can be used as a
+ * _JUnit @Rule_ allowing tests annotated with `@Betamax` to automatically activate
+ * Betamax recording.
  */
-public class RecorderRule implements TestRule {
+public class RecorderRule extends Recorder implements TestRule {
 
-    private final Recorder recorder;
     private final Logger log = Logger.getLogger(RecorderRule.class.getName());
 
-    public RecorderRule(Recorder recorder) {
-        this.recorder = recorder;
+    public RecorderRule(Configuration configuration) {
+        super(configuration);
     }
 
     @Override
@@ -51,12 +50,13 @@ public class RecorderRule implements TestRule {
                     map.put("mode", annotation.mode());
                     map.put("match", ImmutableList.copyOf(annotation.match()));
                     try {
-                        recorder.start(annotation.tape(), map);
+                        start(annotation.tape(), map);
                         statement.evaluate();
                     } catch (Exception e) {
                         log.log(SEVERE, "Caught exception starting Betamax", e);
+                        throw e;
                     } finally {
-                        recorder.stop();
+                        stop();
                     }
                 }
             };

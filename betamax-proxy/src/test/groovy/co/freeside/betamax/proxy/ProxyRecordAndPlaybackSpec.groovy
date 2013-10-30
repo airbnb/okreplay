@@ -16,11 +16,14 @@
 
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.ProxyRecorder
+import co.freeside.betamax.ProxyConfiguration
+import co.freeside.betamax.Recorder
+import co.freeside.betamax.TapeMode
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 
@@ -28,14 +31,15 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Timeout(10)
 class ProxyRecordAndPlaybackSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') File tapeRoot = Files.createTempDir()
-    @Shared @AutoCleanup('ejectTape') ProxyRecorder recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Shared @AutoCleanup('stop') ProxyServer proxy = new ProxyServer(recorder)
-    @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
+    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE).build()
+    @Shared @AutoCleanup("ejectTape") def recorder = new Recorder(configuration)
+    @Shared @AutoCleanup('stop') def proxy = new ProxyServer(configuration)
+    @AutoCleanup('stop') def endpoint = new SimpleServer(HelloHandler)
 
     void setupSpec() {
         recorder.insertTape('proxy record and playback spec')
-        proxy.start()
+        proxy.start(recorder.tape)
     }
 
     void 'proxy makes a real HTTP request the first time it gets a request for a URI'() {
@@ -90,7 +94,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
         recorder.ejectTape()
 
         then:
-        def file = new File(recorder.tapeRoot, 'proxy_record_and_playback_spec.yaml')
+        def file = new File(tapeRoot, 'proxy_record_and_playback_spec.yaml')
         file.isFile()
 
         and:
@@ -103,7 +107,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
     void 'can load an existing tape from a file'() {
         given:
-        def file = new File(recorder.tapeRoot, 'existing_tape.yaml')
+        def file = new File(tapeRoot, 'existing_tape.yaml')
         file.parentFile.mkdirs()
         file.text = '''\
 !tape
@@ -122,7 +126,7 @@ interactions:
 
         when:
         recorder.insertTape('existing_tape')
-        proxy.start()
+        proxy.start(recorder.tape)
 
         then:
         recorder.tape.name == 'existing_tape'

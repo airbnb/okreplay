@@ -12,7 +12,7 @@ dependencies {
     testCompile project(":betamax-junit")
     testCompile project(":betamax-test-support")
 
-    testRuntime "cglib:cglib-nodep:2.2.2"
+    testRuntime commonDependencies.cglib
 }
 
 modifyPom {

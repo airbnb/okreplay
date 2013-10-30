@@ -72,6 +72,10 @@ class SimpleServer {
         "$urlScheme://localhost:$port/"
     }
 
+    int getPort() {
+        port
+    }
+
     InetSocketAddress start() {
         group = new NioEventLoopGroup()
         def bootstrap = new ServerBootstrap()

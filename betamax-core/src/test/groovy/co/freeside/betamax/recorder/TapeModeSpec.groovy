@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Recorder
+import co.freeside.betamax.*
 import co.freeside.betamax.handler.*
 import co.freeside.betamax.message.Request
 import co.freeside.betamax.util.message.BasicRequest
@@ -30,7 +30,8 @@ import static java.net.HttpURLConnection.HTTP_OK
 class TapeModeSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-    @Shared Recorder recorder = new Recorder(tapeRoot: tapeRoot)
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+    @Shared Recorder recorder = new Recorder(configuration)
 
     @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(HelloHandler)
 

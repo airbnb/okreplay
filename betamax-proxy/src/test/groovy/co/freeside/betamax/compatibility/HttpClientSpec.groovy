@@ -37,8 +37,8 @@ import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOST
 class HttpClientSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def recorder = new ProxyRecorder(tapeRoot: tapeRoot, sslSupport: true)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(EchoHandler)
     @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
@@ -64,7 +64,7 @@ class HttpClientSpec extends Specification {
 
     void "proxy intercepts HTTPClient connections when explicitly told to"() {
         given:
-        def proxyHost = new HttpHost(recorder.proxyHost, recorder.proxyPort, "http")
+        def proxyHost = new HttpHost(configuration.proxyHost, configuration.proxyPort, "http")
         def http = HttpClients.custom().setProxy(proxyHost).build()
 
         when:

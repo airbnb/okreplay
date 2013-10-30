@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-/*
- * Converted from Groovy to Java by Sean Freitag
- */
+package co.freeside.betamax.internal;
 
-package co.freeside.betamax.util;
+import co.freeside.betamax.tape.*;
 
-import java.net.*;
-import java.util.*;
+public interface RecorderListener {
 
-public class Network {
-    public static Collection<String> getLocalAddresses() {
-        try {
-            InetAddress local = InetAddress.getLocalHost();
-            return Arrays.asList(local.getHostName(), local.getHostAddress(), "localhost", "127.0.0.1");
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    void onRecorderStart(Tape tape);
+
+    void onRecorderStop();
+
 }

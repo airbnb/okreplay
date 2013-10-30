@@ -30,8 +30,9 @@ import static org.apache.http.HttpHeaders.VIA
 class AnnotationSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    def recorder = new ProxyRecorder(tapeRoot: tapeRoot)
-    @Rule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Rule RecorderRule recorder = new RecorderRule(configuration)
+
     @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
     void 'no tape is inserted if there is no annotation on the feature'() {

@@ -11,6 +11,8 @@ dependencies {
     testCompile project(":betamax-junit")
     testCompile project(":betamax-test-support")
     testCompile commonDependencies.httpBuilder
+
+    testRuntime commonDependencies.cglib
 }
 
 modifyPom {

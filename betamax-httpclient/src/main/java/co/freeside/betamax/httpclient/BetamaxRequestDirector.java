@@ -23,6 +23,7 @@ import co.freeside.betamax.handler.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.httpclient.*;
 import co.freeside.betamax.util.*;
+import com.google.common.collect.*;
 import com.google.common.io.*;
 import org.apache.http.*;
 import org.apache.http.client.*;
@@ -36,12 +37,12 @@ import static org.apache.http.HttpVersion.*;
 class BetamaxRequestDirector implements RequestDirector {
 
     private final RequestDirector delegate;
-    private final Recorder recorder;
+    private final Configuration configuration;
     private final HttpHandler handlerChain;
 
-    public BetamaxRequestDirector(RequestDirector delegate, Recorder recorder) {
+    public BetamaxRequestDirector(RequestDirector delegate, Configuration configuration, Recorder recorder) {
         this.delegate = delegate;
-        this.recorder = recorder;
+        this.configuration = configuration;
 
         handlerChain = new DefaultHandlerChain(recorder);
     }
@@ -76,8 +77,8 @@ class BetamaxRequestDirector implements RequestDirector {
     }
 
     private boolean shouldIgnore(HttpHost target) {
-        Collection<String> ignoredHosts = recorder.getIgnoreHosts();
-        if (recorder.getIgnoreLocalhost()) {
+        Collection<String> ignoredHosts = Lists.newArrayList(configuration.getIgnoreHosts());
+        if (configuration.isIgnoreLocalhost()) {
             ignoredHosts.addAll(Network.getLocalAddresses());
         }
         return ignoredHosts.contains(target.getHostName());

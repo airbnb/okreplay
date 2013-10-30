@@ -23,7 +23,7 @@ import spock.lang.Specification
 
 class TapeReaderSpec extends Specification {
 
-    def recorder = Mock(Recorder)
+    def recorder = Stub(Recorder)
     def handler = new TapeReader(recorder)
     def nextHandler = Mock(HttpHandler)
     def request = new BasicRequest()
@@ -35,11 +35,10 @@ class TapeReaderSpec extends Specification {
 
     void "chains if there is no matching tape entry"() {
         given:
-        def tape = Mock(Tape)
-        tape.seek(request) >> false
-        tape.isWritable() >> true
-
-        and:
+        def tape = Stub(Tape) {
+            seek(request) >> false
+            isWritable() >> true
+        }
         recorder.tape >> tape
 
         when:
@@ -51,9 +50,10 @@ class TapeReaderSpec extends Specification {
 
     void "chains if there is a matching tape entry if the tape is not readable"() {
         given:
-        def tape = Mock(Tape)
-        tape.isReadable() >> false
-        tape.isWritable() >> true
+        def tape = Mock(Tape) {
+            isReadable() >> false
+            isWritable() >> true
+        }
         recorder.tape >> tape
 
         when:
@@ -66,9 +66,10 @@ class TapeReaderSpec extends Specification {
 
     void "succeeds if there is a matching tape entry"() {
         given:
-        def tape = Mock(Tape)
-        tape.isReadable() >> true
-        tape.seek(request) >> true
+        def tape = Mock(Tape) {
+            isReadable() >> true
+            seek(request) >> true
+        }
         recorder.tape >> tape
 
         when:
@@ -100,10 +101,11 @@ class TapeReaderSpec extends Specification {
 
     void "throws an exception if there is no matching entry and the tape is not writable"() {
         given:
-        def tape = Mock(Tape)
-        tape.isReadable() >> true
-        tape.isWritable() >> false
-        tape.seek(request) >> false
+        def tape = Stub(Tape) {
+            isReadable() >> true
+            isWritable() >> false
+            seek(request) >> false
+        }
         recorder.tape >> tape
 
         when:

@@ -1,4 +1,4 @@
-apply plugin: "java"
+apply plugin: "groovy" // TODO: this should be Java but Spock tests don't run
 
 configurations {
     pegdownDoclet

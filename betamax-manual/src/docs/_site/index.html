@@ -280,7 +280,7 @@ def response = client.get(path: &#39;/&#39;, proxy: recorder.proxy)</code></pre>
 
 <p>As of version 1.1 Betamax can proxy HTTPS traffic as well as HTTP. Because Betamax needs to be able to read the content of the request and response it is not actually a valid secure proxy. Betamax will only work if the certificate chain is broken.</p>
 
-<p>To enable HTTP support you simply need to set the <code>sslSupport</code> boolean property on the <code>Recorder</code> instance in your test or via Betamax configuration.</p>
+<p>To enable HTTP support you simply need to set the <code>sslEnabled</code> boolean property on the <code>Recorder</code> instance in your test or via Betamax configuration.</p>
 
 <h3 id='https_with_apache_httpclient'>HTTPS with Apache HttpClient</h3>
 
@@ -317,7 +317,7 @@ def response = client.get(path: &#39;/&#39;, proxy: recorder.proxy)</code></pre>
 
 <dd>if set to <code>true</code> the Betamax proxy will ignore connections to local addresses. This is equivalent to setting <code>ignoreHosts</code> to <code>[&quot;localhost&quot;, &quot;127.0.0.1&quot;, InetAddress.localHost.hostName, InetAddress.localHost.hostAddress]</code>.</dd>
 
-<dt><code>sslSupport</code></dt>
+<dt><code>sslEnabled</code></dt>
 
 <dd>if set to <code>true</code> the Betamax proxy will also intercept HTTPS traffic.</dd>
 </dl>
@@ -333,7 +333,7 @@ def response = client.get(path: &#39;/&#39;, proxy: recorder.proxy)</code></pre>
     defaultMode = TapeMode.READ_ONLY
     ignoreHosts = [&#39;localhost&#39;, &#39;127.0.0.1&#39;]
     ignoreLocalhost = true
-    sslSupport = true
+    sslEnabled = true
 }</code></pre>
 
 <h3 id='example_betamaxproperties_file'>Example <em>betamax.properties</em> file</h3>
@@ -344,7 +344,7 @@ betamax.proxyTimeout=30000
 betamax.defaultMode=READ_ONLY
 betamax.ignoreHosts=localhost,127.0.0.1
 betamax.ignoreLocalhost=true
-betamax.sslSupport=true</code></pre>
+betamax.sslEnabled=true</code></pre>
 
 <h2 id='caveats'>Caveats</h2>
 

@@ -20,9 +20,12 @@ import java.net.*;
 import java.util.*;
 import java.util.logging.*;
 import co.freeside.betamax.*;
+import co.freeside.betamax.internal.*;
 import co.freeside.betamax.proxy.netty.*;
+import co.freeside.betamax.tape.*;
 import co.freeside.betamax.util.*;
 import com.google.common.base.*;
+import com.google.common.collect.*;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.extras.*;
@@ -31,32 +34,54 @@ import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.*;
 import static com.google.common.base.Predicates.*;
 import static io.netty.handler.codec.http.HttpMethod.*;
 
-public class ProxyServer {
+public class ProxyServer implements RecorderListener {
 
-    private final HttpProxyServerBootstrap proxyServerBootstrap;
-    private final ProxyRecorder recorder;
+    private final ProxyConfiguration configuration;
     private final ProxyOverrider proxyOverrider = new ProxyOverrider();
     private final SSLOverrider sslOverrider = new SSLOverrider();
     private HttpProxyServer proxyServer;
     private boolean running;
-    private final InetSocketAddress address;
 
     private static final Predicate<HttpRequest> NOT_CONNECT = not(httpMethodPredicate(CONNECT));
 
     private static final Logger LOG = Logger.getLogger(ProxyServer.class.getName());
 
-    public ProxyServer(final ProxyRecorder recorder) throws UnknownHostException {
-        this.recorder = recorder;
+    public ProxyServer(ProxyConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
-        address = new InetSocketAddress(InetAddress.getLocalHost(), recorder.getProxyPort());
+    @Override
+    public void onRecorderStart(Tape tape) {
+        if (!isRunning()) {
+            start(tape);
+        }
+    }
+
+    @Override
+    public void onRecorderStop() {
+        if (isRunning()) {
+            stop();
+        }
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void start(final Tape tape) {
+        if (isRunning()) {
+            throw new IllegalStateException("Betamax proxy server is already running");
+        }
+
+        InetSocketAddress address = new InetSocketAddress(configuration.getProxyHost(), configuration.getProxyPort());
 //        address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
         LOG.info(String.format("created address, %s", address));
-        proxyServerBootstrap = DefaultHttpProxyServer
+        HttpProxyServerBootstrap proxyServerBootstrap = DefaultHttpProxyServer
                 .bootstrap()
-                .withIdleConnectionTimeout(recorder.getProxyTimeoutSeconds())
+                .withIdleConnectionTimeout(configuration.getProxyTimeoutSeconds())
                 .withAddress(address);
 
-        if (recorder.isSslSupport()) {
+        if (configuration.isSslEnabled()) {
             proxyServerBootstrap.withManInTheMiddle(new SelfSignedMitmManager());
         } else {
             proxyServerBootstrap.withChainProxyManager(proxyOverrider);
@@ -65,20 +90,11 @@ public class ProxyServer {
         proxyServerBootstrap.withFiltersSource(new HttpFiltersSourceAdapter() {
             @Override
             public HttpFilters filterRequest(HttpRequest originalRequest) {
-                HttpFilters filters = new BetamaxFilters(originalRequest, recorder.getTape());
+                HttpFilters filters = new BetamaxFilters(originalRequest, tape);
                 return new PredicatedHttpFilters(filters, NOT_CONNECT, originalRequest);
             }
         });
-    }
 
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void start() {
-        if (isRunning()) {
-            throw new IllegalStateException("Betamax proxy server is already running");
-        }
         proxyServer = proxyServerBootstrap.start();
         running = true;
 
@@ -97,20 +113,12 @@ public class ProxyServer {
         running = false;
     }
 
-    public String getHost() {
-        return address.getHostName();
-    }
-
-    public int getPort() {
-        return address.getPort();
-    }
-
     private void overrideProxySettings() {
-        Collection<String> nonProxyHosts = recorder.getIgnoreHosts();
-        if (recorder.getIgnoreLocalhost()) {
+        Collection<String> nonProxyHosts = Lists.newArrayList(configuration.getIgnoreHosts());
+        if (configuration.isIgnoreLocalhost()) {
             nonProxyHosts.addAll(Network.getLocalAddresses());
         }
-        proxyOverrider.activate(address.getHostName(), address.getPort(), nonProxyHosts);
+        proxyOverrider.activate(configuration.getProxyHost(), configuration.getProxyPort(), nonProxyHosts);
     }
 
     private void restoreOriginalProxySettings() {
@@ -118,13 +126,13 @@ public class ProxyServer {
     }
 
     private void overrideSSLSettings() {
-        if (recorder.isSslSupport()) {
+        if (configuration.isSslEnabled()) {
             sslOverrider.activate();
         }
     }
 
     private void restoreOriginalSSLSettings() {
-        if (recorder.isSslSupport()) {
+        if (configuration.isSslEnabled()) {
             sslOverrider.deactivate();
         }
     }

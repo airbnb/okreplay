@@ -27,8 +27,8 @@ import static org.apache.http.HttpHeaders.VIA
 class OCSPSpec extends Specification {
 
     static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true, tapeRoot: TAPE_ROOT)
-    @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
+    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(TAPE_ROOT).build()
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     void "OCSP messages"() {
         when:
