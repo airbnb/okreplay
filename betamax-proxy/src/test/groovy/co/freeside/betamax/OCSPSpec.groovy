@@ -22,12 +22,12 @@ import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
-@Ignore("site is no longer there")
 @Issue("https://github.com/robfletcher/betamax/issues/52")
 @Betamax(tape = "ocsp")
 class OCSPSpec extends Specification {
 
-    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true)
+    static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
+    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true, tapeRoot: TAPE_ROOT)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
     void "OCSP messages"() {

@@ -28,7 +28,8 @@ import static org.apache.http.HttpHeaders.VIA
 @Betamax(tape = "smoke spec")
 class SmokeSpec extends Specification {
 
-    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true)
+    static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
+    @Shared Recorder recorder = new ProxyRecorder(sslSupport: true, tapeRoot: TAPE_ROOT)
     @Shared @ClassRule RecorderRule recorderRule = new RecorderRule(recorder)
 
     void "#type response data"() {
