@@ -29,20 +29,21 @@ import com.google.common.collect.*;
 import com.google.common.io.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
-import static co.freeside.betamax.MatchRules.*;
 import static co.freeside.betamax.TapeMode.*;
+import static java.util.Collections.unmodifiableList;
 import static org.apache.http.HttpHeaders.*;
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
 public class MemoryTape implements Tape {
+
     public void setMode(TapeMode mode) {
         this.mode = mode;
     }
 
-    public void setMatchRules(MatchRule[] matchRules) {
-        this.matchRules = matchRules;
+    public void setMatchRules(Iterable<MatchRule> matchRules) {
+        this.matchRules = ImmutableList.copyOf(matchRules);
     }
 
     public boolean isReadable() {
@@ -76,7 +77,6 @@ public class MemoryTape implements Tape {
         } else {
             return findMatch(request) >= 0;
         }
-
     }
 
     public Response play(final Request request) {
@@ -84,17 +84,16 @@ public class MemoryTape implements Tape {
             throw new IllegalStateException("the tape is not readable");
         }
 
-
         if (mode.isSequential()) {
             RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
             Integer nextIndex = orderedIndex.getAndIncrement();
             final RecordedInteraction nextInteraction = interactions.get(nextIndex);
             if (nextInteraction == null) {
-                throw new IllegalStateException("No recording found at position " + String.valueOf(nextIndex));
+                throw new IllegalStateException(String.format("No recording found at position %s", nextIndex));
             }
 
             if (!requestMatcher.matches(nextInteraction.getRequest())) {
-                throw new IllegalStateException("Request " + stringify(request) + " does not match recorded request " + stringify(nextInteraction.getRequest()));
+                throw new IllegalStateException(String.format("Request %s does not match recorded request %s", stringify(request), stringify(nextInteraction.getRequest())));
             }
 
             return nextInteraction.getResponse();
@@ -105,9 +104,7 @@ public class MemoryTape implements Tape {
             } else {
                 return interactions.get(position).getResponse();
             }
-
         }
-
     }
 
     private String stringify(Request request) {
@@ -145,7 +142,7 @@ public class MemoryTape implements Tape {
 
     @Override
     public String toString() {
-        return "Tape[" + name + "]";
+        return String.format("Tape[%s]", name);
     }
 
     private synchronized int findMatch(Request request) {
@@ -219,8 +216,8 @@ public class MemoryTape implements Tape {
         this.name = name;
     }
 
-    public ArrayList<RecordedInteraction> getInteractions() {
-        return interactions;
+    public List<RecordedInteraction> getInteractions() {
+        return unmodifiableList(interactions);
     }
 
     public void setInteractions(List<RecordedInteraction> interactions) {
@@ -228,9 +225,8 @@ public class MemoryTape implements Tape {
     }
 
     private String name;
-    public ArrayList<RecordedInteraction> interactions = new ArrayList<RecordedInteraction>();
+    private List<RecordedInteraction> interactions = new ArrayList<RecordedInteraction>();
     private TapeMode mode = READ_WRITE;
     private AtomicInteger orderedIndex = new AtomicInteger();
-
-    private MatchRule[] matchRules = new MatchRule[] {method, uri};
+    private Iterable<? extends MatchRule> matchRules = RequestMatcher.DEFAULT_RULES;
 }

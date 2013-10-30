@@ -33,6 +33,7 @@ class RequestMatchingSpec extends Specification {
 
     @AutoCleanup('stop')
     def recorder = new Recorder(tapeRoot: tapeRoot)
+
     def handler = new DefaultHandlerChain(recorder)
 
     void setupSpec() {

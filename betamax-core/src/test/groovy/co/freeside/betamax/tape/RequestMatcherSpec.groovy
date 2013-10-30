@@ -18,6 +18,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.message.tape.RecordedRequest
 import co.freeside.betamax.util.message.BasicRequest
+import com.google.common.collect.ImmutableList
 import spock.lang.*
 import static co.freeside.betamax.MatchRules.*
 import static org.apache.http.HttpHeaders.*
@@ -50,7 +51,7 @@ class RequestMatcherSpec extends Specification {
 
 		and:
 		def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
-		def requestMatcher = new RequestMatcher(request, host)
+		def requestMatcher = new RequestMatcher(request, ImmutableList.of(host))
 
 		expect:
 		requestMatcher.matches(request1)
@@ -68,7 +69,7 @@ class RequestMatcherSpec extends Specification {
 
 		and:
 		def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
-		def requestMatcher = new RequestMatcher(request, path)
+		def requestMatcher = new RequestMatcher(request, ImmutableList.of(path))
 
 		expect:
 		requestMatcher.matches(request1)
@@ -86,7 +87,7 @@ class RequestMatcherSpec extends Specification {
 
 		and:
 		def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(ACCEPT_ENCODING): ['gzip', 'deflate']])
-		def requestMatcher = new RequestMatcher(request, headers)
+		def requestMatcher = new RequestMatcher(request, ImmutableList.of(headers))
 
 		expect:
 		requestMatcher.matches(request1)
@@ -103,7 +104,7 @@ class RequestMatcherSpec extends Specification {
 
 		and:
 		def request = new BasicRequest(method: 'POST', uri: 'http://freeside.co/betamax'.toURI(), body: 'q=1')
-		def requestMatcher = new RequestMatcher(request, body)
+		def requestMatcher = new RequestMatcher(request, ImmutableList.of(body))
 
 		expect:
 		requestMatcher.matches(request1)

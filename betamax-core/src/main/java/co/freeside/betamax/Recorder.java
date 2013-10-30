@@ -20,14 +20,12 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
-import co.freeside.betamax.message.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.tape.yaml.*;
 import co.freeside.betamax.util.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.*;
-import static co.freeside.betamax.MatchRules.*;
 
 /**
  * This class is the main interface to Betamax. It allows control of Betamax configuration, inserting and
@@ -75,16 +73,15 @@ public class Recorder {
     @SuppressWarnings("unchecked")
     public void insertTape(String name, Map arguments) {
         tape = getTapeLoader().loadTape(name);
-        if (tape instanceof MemoryTape) {
-            MemoryTape memoryTape = (MemoryTape) tape;
 
-            TapeMode mode = (TapeMode) arguments.get("mode");
-            memoryTape.setMode(mode == null ? defaultMode : mode);
+        if (arguments.containsKey("mode")) {
+            tape.setMode((TapeMode) arguments.get("mode"));
+        } else {
+            tape.setMode(defaultMode);
+        }
 
-            List<Comparator<Request>> match = (List<Comparator<Request>>) arguments.get("match");
-            Object[] array = match != null ? match.toArray() : null;
-            MatchRule[] matchArray = array != null ? Arrays.copyOf(array, array.length, MatchRule[].class) : null;
-            memoryTape.setMatchRules(matchArray != null ? matchArray : (MatchRule[]) Arrays.asList(method, uri).toArray());
+        if (arguments.containsKey("match")) {
+            tape.setMatchRules((List<MatchRule>) arguments.get("match"));
         }
     }
 
@@ -121,7 +118,7 @@ public class Recorder {
     protected void configureFrom(Properties properties) {
         tapeRoot = new File(properties.getProperty("betamax.tapeRoot", DEFAULT_TAPE_ROOT));
         defaultMode = TypedProperties.getEnum(properties, "betamax.defaultMode", TapeMode.READ_WRITE);
-        final List<String> tokenize = Lists.newArrayList(Splitter.on(",").split((String) properties.getProperty("betamax.ignoreHosts")));
+        final List<String> tokenize = Lists.newArrayList(Splitter.on(",").split(properties.getProperty("betamax.ignoreHosts")));
         ignoreHosts = tokenize != null ? tokenize : new ArrayList<String>();
         ignoreLocalhost = TypedProperties.getBoolean(properties, "betamax.ignoreLocalhost");
     }

@@ -19,6 +19,7 @@ package co.freeside.betamax.junit;
 import java.util.*;
 import java.util.logging.*;
 import co.freeside.betamax.*;
+import com.google.common.collect.*;
 import org.junit.rules.*;
 import org.junit.runner.*;
 import org.junit.runners.model.*;
@@ -48,7 +49,7 @@ public class RecorderRule implements TestRule {
                 public void evaluate() throws Throwable {
                     Map<String, Object> map = new LinkedHashMap<String, Object>(2);
                     map.put("mode", annotation.mode());
-                    map.put("match", Arrays.asList(annotation.match()));
+                    map.put("match", ImmutableList.copyOf(annotation.match()));
                     try {
                         recorder.start(annotation.tape(), map);
                         statement.evaluate();
