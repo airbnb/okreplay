@@ -68,26 +68,6 @@ public class Recorder {
     }
 
     /**
-     * Inserts a tape either creating a new one or loading an existing file.
-     *
-     * @param name      the name of the _tape_.
-     */
-    public void insertTape(String name, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
-        tape = getTapeLoader().loadTape(name);
-        tape.setMode(mode == null ? configuration.getDefaultMode() : mode);
-        tape.setMatchRules(matchRules == null ? RequestMatcher.DEFAULT_RULES : matchRules);
-    }
-
-    /**
-     * Inserts a tape either creating a new one or loading an existing file.
-     *
-     * @param name the name of the _tape_.
-     */
-    public void insertTape(String name) {
-        insertTape(name, null, null);
-    }
-
-    /**
      * Gets the current active _tape_.
      *
      * @return the active _tape_.
@@ -97,10 +77,21 @@ public class Recorder {
     }
 
     /**
+     * Inserts a tape either creating a new one or loading an existing file.
+     *
+     * @param name      the name of the _tape_.
+     */
+    private void insertTape(String name, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
+        tape = getTapeLoader().loadTape(name);
+        tape.setMode(mode == null ? configuration.getDefaultMode() : mode);
+        tape.setMatchRules(matchRules == null ? RequestMatcher.DEFAULT_RULES : matchRules);
+    }
+
+    /**
      * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
      * will no longer record or play back any HTTP traffic until another tape is inserted.
      */
-    public void ejectTape() {
+    private void ejectTape() {
         if (tape != null) {
             getTapeLoader().writeTape(tape);
             tape = null;

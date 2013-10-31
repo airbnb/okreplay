@@ -74,9 +74,6 @@ class TapeModeSpec extends Specification {
         then: "the interaction is recorded"
         tape.size() == old(tape.size()) + 1
 
-        cleanup:
-        recorder.ejectTape()
-
         where:
         mode << [READ_WRITE, WRITE_ONLY, WRITE_SEQUENTIAL]
     }

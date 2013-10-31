@@ -29,9 +29,7 @@ class IgnoreHostsSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
     def configuration = Spy(ProxyConfiguration, constructorArgs: [ProxyConfiguration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
-    @AutoCleanup("ejectTape") Recorder recorder = new Recorder(configuration)
-
-    @AutoCleanup("stop") ProxyServer proxy = new ProxyServer(configuration)
+    @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
 
     @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
 
@@ -39,14 +37,10 @@ class IgnoreHostsSpec extends Specification {
         endpoint.start()
     }
 
-    void setup() {
-        recorder.insertTape("ignore hosts spec")
-    }
-
     void "does not proxy a request to #requestURI when ignoring #ignoreHosts"() {
         given: "proxy is configured to ignore local connections"
         configuration.getIgnoreHosts() >> [ignoreHosts]
-        proxy.start(recorder.tape)
+        recorder.start("ignore hosts spec")
 
         when: "a request is made"
         HttpURLConnection connection = requestURI.toURL().openConnection()
@@ -68,7 +62,7 @@ class IgnoreHostsSpec extends Specification {
     void "does not proxy a request to #requestURI when ignoreLocalhost is true"() {
         given: "proxy is configured to ignore local connections"
         configuration.ignoreLocalhost >> true
-        proxy.start(recorder.tape)
+        recorder.start("ignore hosts spec")
 
         when: "a request is made"
         HttpURLConnection connection = requestURI.toURL().openConnection()
