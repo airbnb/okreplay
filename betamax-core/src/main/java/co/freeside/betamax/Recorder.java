@@ -41,8 +41,24 @@ public class Recorder {
         configuration.registerListeners(listeners);
     }
 
+    /**
+     * Starts the Recorder, inserting a tape with the specified parameters.
+     *
+     * @param tapeName the name of the tape.
+     * @param mode the tape mode. If not supplied the default mode from the configuration is used.
+     * @param matchRules the rules used to match recordings on the tape. If not supplied a default is used.
+     *
+     * @throws IllegalStateException if the Recorder is already started.
+     */
     public void start(String tapeName, Optional<TapeMode> mode, Optional<Iterable<? extends MatchRule>> matchRules) {
-        insertTape(tapeName, mode.orNull(), matchRules.orNull());
+        if (tape != null) {
+            throw new IllegalStateException("start called when Recorder is already started");
+        }
+
+        tape = getTapeLoader().loadTape(tapeName);
+        tape.setMode(mode.or(configuration.getDefaultMode()));
+        tape.setMatchRules(matchRules.or(RequestMatcher.DEFAULT_RULES));
+
         for (RecorderListener listener : listeners) {
             listener.onRecorderStart(tape);
         }
@@ -60,11 +76,21 @@ public class Recorder {
         start(tapeName, Optional.<TapeMode>absent(), Optional.<Iterable<? extends MatchRule>>absent());
     }
 
+    /**
+     * Stops the Recorder and writes its current tape out to a file.
+     *
+     * @throws IllegalStateException if the Recorder is not started.
+     */
     public void stop() {
+        if (tape == null) {
+            throw new IllegalStateException("stop called when Recorder is not started");
+        }
+
         for (RecorderListener listener : listeners) {
             listener.onRecorderStop();
         }
-        ejectTape();
+        getTapeLoader().writeTape(tape);
+        tape = null;
     }
 
     /**
@@ -74,28 +100,6 @@ public class Recorder {
      */
     public Tape getTape() {
         return tape;
-    }
-
-    /**
-     * Inserts a tape either creating a new one or loading an existing file.
-     *
-     * @param name      the name of the _tape_.
-     */
-    private void insertTape(String name, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
-        tape = getTapeLoader().loadTape(name);
-        tape.setMode(mode == null ? configuration.getDefaultMode() : mode);
-        tape.setMatchRules(matchRules == null ? RequestMatcher.DEFAULT_RULES : matchRules);
-    }
-
-    /**
-     * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
-     * will no longer record or play back any HTTP traffic until another tape is inserted.
-     */
-    private void ejectTape() {
-        if (tape != null) {
-            getTapeLoader().writeTape(tape);
-            tape = null;
-        }
     }
 
     /**
