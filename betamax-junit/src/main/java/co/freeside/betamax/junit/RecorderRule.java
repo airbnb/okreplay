@@ -33,6 +33,10 @@ public class RecorderRule extends Recorder implements TestRule {
 
     private final Logger log = Logger.getLogger(RecorderRule.class.getName());
 
+    public RecorderRule() {
+        super();
+    }
+
     public RecorderRule(Configuration configuration) {
         super(configuration);
     }
