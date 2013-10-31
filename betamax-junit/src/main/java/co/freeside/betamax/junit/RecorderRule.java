@@ -19,7 +19,6 @@ package co.freeside.betamax.junit;
 import java.util.*;
 import java.util.logging.*;
 import co.freeside.betamax.*;
-import com.google.common.collect.*;
 import org.junit.rules.*;
 import org.junit.runner.*;
 import org.junit.runners.model.*;
@@ -46,11 +45,8 @@ public class RecorderRule extends Recorder implements TestRule {
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
-                    Map<String, Object> map = new LinkedHashMap<String, Object>(2);
-                    map.put("mode", annotation.mode());
-                    map.put("match", ImmutableList.copyOf(annotation.match()));
                     try {
-                        start(annotation.tape(), map);
+                        start(annotation.tape(), annotation.mode(), Arrays.asList(annotation.match()));
                         statement.evaluate();
                     } catch (Exception e) {
                         log.log(SEVERE, "Caught exception starting Betamax", e);

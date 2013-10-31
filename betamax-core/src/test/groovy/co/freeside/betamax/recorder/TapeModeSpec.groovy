@@ -44,12 +44,12 @@ class TapeModeSpec extends Specification {
     }
 
     void cleanup() {
-        recorder.ejectTape()
+        recorder.stop()
     }
 
     void "in #mode mode the proxy rejects a request if no recorded interaction exists"() {
         given: "a read-only tape is inserted"
-        recorder.insertTape("read only tape", [mode: mode])
+        recorder.start("read only tape", mode)
 
         when: "a request is made that does not match anything recorded on the tape"
         handler.handle(request)
@@ -64,8 +64,8 @@ class TapeModeSpec extends Specification {
 
     void "in #mode mode a new interaction is recorded"() {
         given: "an empty write-only tape is inserted"
-        new File(tapeRoot, "blank_tape_" + mode + ".yaml").delete()
-        recorder.insertTape("blank tape " + mode, [mode: mode])
+        new File(tapeRoot, "blank_tape_${mode}.yaml").delete()
+        recorder.start("blank tape $mode", mode)
         def tape = recorder.tape
 
         when: "a request is made"
@@ -98,7 +98,7 @@ interactions:
     headers: {}
     body: Previous response made when endpoint was down.
 """
-        recorder.insertTape("write only tape", [mode: WRITE_ONLY])
+        recorder.start("write only tape", WRITE_ONLY)
         def tape = recorder.tape
 
         when: "a request is made that matches a request already recorded on the tape"
@@ -129,7 +129,7 @@ interactions:
     headers: {}
     body: Previous response made when endpoint was down.
 """
-        recorder.insertTape("write sequential tape", [mode: WRITE_SEQUENTIAL])
+        recorder.start("write sequential tape", WRITE_SEQUENTIAL)
         def tape = recorder.tape
 
         when: "a request is made that matches a request already recorded on the tape"

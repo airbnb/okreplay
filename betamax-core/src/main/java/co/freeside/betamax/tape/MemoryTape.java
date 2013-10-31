@@ -42,7 +42,7 @@ public class MemoryTape implements Tape {
         this.mode = mode;
     }
 
-    public void setMatchRules(Iterable<MatchRule> matchRules) {
+    public void setMatchRules(Iterable<? extends MatchRule> matchRules) {
         this.matchRules = ImmutableList.copyOf(matchRules);
     }
 

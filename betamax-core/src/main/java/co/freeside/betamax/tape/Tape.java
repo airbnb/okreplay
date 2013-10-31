@@ -38,7 +38,7 @@ public interface Tape {
     /**
      * @param matchRules the rules used to match recordings on the tape.
      */
-    void setMatchRules(Iterable<MatchRule> matchRules);
+    void setMatchRules(Iterable<? extends MatchRule> matchRules);
 
     /**
      * @return `true` if the tape is readable, `false` otherwise.

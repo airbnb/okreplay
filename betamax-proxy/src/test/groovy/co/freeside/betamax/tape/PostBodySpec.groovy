@@ -58,7 +58,7 @@ class PostBodySpec extends Specification {
         connection.addRequestProperty("Content-Type", "application/json")
 
         and:
-        recorder.start("post_body_with_url_connection", [mode: WRITE_ONLY])
+        recorder.start("post_body_with_url_connection", WRITE_ONLY)
 
         when:
         connection.outputStream.withStream { stream ->
@@ -87,7 +87,7 @@ class PostBodySpec extends Specification {
         httpPost.entity = reqEntity
 
         and:
-        recorder.start("post_body_with_http_client", [mode: WRITE_ONLY])
+        recorder.start("post_body_with_http_client", WRITE_ONLY)
 
         when:
         httpClient.execute(httpPost)

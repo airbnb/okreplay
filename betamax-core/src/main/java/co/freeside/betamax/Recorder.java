@@ -20,6 +20,7 @@ import java.util.*;
 import co.freeside.betamax.internal.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.tape.yaml.*;
+import com.google.common.base.*;
 import com.google.common.collect.*;
 
 /**
@@ -40,18 +41,26 @@ public class Recorder {
         configuration.registerListeners(listeners);
     }
 
-    public final void start(String tapeName, Map arguments) {
-        insertTape(tapeName, arguments);
+    public void start(String tapeName, Optional<TapeMode> mode, Optional<Iterable<? extends MatchRule>> matchRules) {
+        insertTape(tapeName, mode.orNull(), matchRules.orNull());
         for (RecorderListener listener : listeners) {
             listener.onRecorderStart(tape);
         }
     }
 
-    public final void start(String tapeName) {
-        start(tapeName, Collections.emptyMap());
+    public void start(String tapeName, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
+        start(tapeName, Optional.of(mode), Optional.<Iterable<? extends MatchRule>>of(matchRules));
     }
 
-    public final void stop() {
+    public void start(String tapeName, TapeMode mode) {
+        start(tapeName, Optional.of(mode), Optional.<Iterable<? extends MatchRule>>absent());
+    }
+
+    public void start(String tapeName) {
+        start(tapeName, Optional.<TapeMode>absent(), Optional.<Iterable<? extends MatchRule>>absent());
+    }
+
+    public void stop() {
         for (RecorderListener listener : listeners) {
             listener.onRecorderStop();
         }
@@ -62,21 +71,11 @@ public class Recorder {
      * Inserts a tape either creating a new one or loading an existing file.
      *
      * @param name      the name of the _tape_.
-     * @param arguments customize the behaviour of the tape.
      */
-    @SuppressWarnings("unchecked")
-    public final void insertTape(String name, Map arguments) {
+    public void insertTape(String name, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
         tape = getTapeLoader().loadTape(name);
-
-        if (arguments.containsKey("mode")) {
-            tape.setMode((TapeMode) arguments.get("mode"));
-        } else {
-            tape.setMode(configuration.getDefaultMode());
-        }
-
-        if (arguments.containsKey("match")) {
-            tape.setMatchRules((List<MatchRule>) arguments.get("match"));
-        }
+        tape.setMode(mode == null ? configuration.getDefaultMode() : mode);
+        tape.setMatchRules(matchRules == null ? RequestMatcher.DEFAULT_RULES : matchRules);
     }
 
     /**
@@ -84,8 +83,8 @@ public class Recorder {
      *
      * @param name the name of the _tape_.
      */
-    public final void insertTape(String name) {
-        insertTape(name, new LinkedHashMap<Object, Object>());
+    public void insertTape(String name) {
+        insertTape(name, null, null);
     }
 
     /**
@@ -95,13 +94,13 @@ public class Recorder {
      */
     public Tape getTape() {
         return tape;
-    }// TODO: this should be final but a couple of tests mock it
+    }
 
     /**
      * 'Ejects' the current _tape_, writing its content to file. If the proxy is active after calling this method it
      * will no longer record or play back any HTTP traffic until another tape is inserted.
      */
-    public final void ejectTape() {
+    public void ejectTape() {
         if (tape != null) {
             getTapeLoader().writeTape(tape);
             tape = null;
