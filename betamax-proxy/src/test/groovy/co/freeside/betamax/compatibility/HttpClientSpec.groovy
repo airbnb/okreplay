@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
@@ -26,13 +26,14 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
-@Betamax(tape = "http client spec", mode = TapeMode.READ_WRITE)
+@Betamax(mode = READ_WRITE)
 @Timeout(10)
 class HttpClientSpec extends Specification {
 

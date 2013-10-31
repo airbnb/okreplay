@@ -28,7 +28,7 @@ import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
-@Betamax(tape = "http url connection spec", mode = READ_WRITE)
+@Betamax(mode = READ_WRITE)
 @Timeout(10)
 @Unroll
 class HttpURLConnectionSpec extends Specification {

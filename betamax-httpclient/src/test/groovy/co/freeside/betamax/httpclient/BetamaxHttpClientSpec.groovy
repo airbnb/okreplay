@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.httpclient
 
-import co.freeside.betamax.*
+import co.freeside.betamax.Configuration
 import co.freeside.betamax.handler.HandlerException
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.Network
@@ -30,6 +30,7 @@ import org.apache.http.impl.client.AbstractHttpClient
 import org.apache.http.params.HttpParams
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
@@ -45,7 +46,7 @@ class BetamaxHttpClientSpec extends Specification {
     @AutoCleanup("stop") def endpoint
     def http = new BetamaxHttpClient(configuration, recorder)
 
-    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    @Betamax(tape = "betamax http client", mode = READ_WRITE)
     void "can use Betamax without starting the proxy"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)
@@ -65,7 +66,7 @@ class BetamaxHttpClientSpec extends Specification {
         response.getFirstHeader("X-Betamax").value == "REC"
     }
 
-    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    @Betamax(tape = "betamax http client", mode = READ_WRITE)
     void "can play back from tape"() {
         given:
         def handler = Mock(ChannelInboundHandler)
@@ -89,7 +90,7 @@ class BetamaxHttpClientSpec extends Specification {
         0 * handler.channelRead(* _)
     }
 
-    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    @Betamax(tape = "betamax http client", mode = READ_WRITE)
     void "can send a request with a body"() {
         given:
         endpoint = SimpleServer.start(EchoHandler)
@@ -171,7 +172,7 @@ class BetamaxHttpClientSpec extends Specification {
         !response.getFirstHeader("X-Betamax")
     }
 
-    @Betamax(tape = "betamax http client", mode = TapeMode.READ_WRITE)
+    @Betamax(tape = "betamax http client", mode = READ_WRITE)
     void "can use with HttpBuilder"() {
         given:
         endpoint = SimpleServer.start(HelloHandler)

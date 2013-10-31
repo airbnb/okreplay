@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.compatibility
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.httpbuilder.BetamaxRESTClient
 import co.freeside.betamax.util.server.*
@@ -26,11 +26,12 @@ import org.apache.http.HttpHost
 import org.apache.http.impl.conn.ProxySelectorRoutePlanner
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY
 
-@Betamax(tape = "http builder spec", mode = TapeMode.READ_WRITE)
+@Betamax(mode = READ_WRITE)
 @Timeout(10)
 class HttpBuilderSpec extends Specification {
 

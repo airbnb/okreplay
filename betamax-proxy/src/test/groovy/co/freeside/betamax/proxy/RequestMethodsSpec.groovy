@@ -16,16 +16,17 @@
 
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
-@Betamax(tape = "request methods spec", mode = TapeMode.READ_WRITE)
+@Betamax(mode = READ_WRITE)
 @Unroll
 @Timeout(10)
 class RequestMethodsSpec extends Specification {

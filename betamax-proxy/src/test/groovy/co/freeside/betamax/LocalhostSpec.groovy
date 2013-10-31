@@ -27,7 +27,7 @@ import static org.apache.http.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/62')
 @Issue('http://bugs.sun.com/view_bug.do?bug_id=6737819')
-@Betamax(tape = 'localhost', mode = WRITE_ONLY)
+@Betamax(mode = WRITE_ONLY)
 @Unroll
 class LocalhostSpec extends Specification {
 

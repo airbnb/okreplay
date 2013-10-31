@@ -30,7 +30,7 @@ import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 
-@Betamax(tape = "unirest spec", mode = TapeMode.READ_WRITE)
+@Betamax(mode = TapeMode.READ_WRITE)
 @Timeout(10)
 @Unroll
 class UnirestSpec extends Specification {

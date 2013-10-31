@@ -16,16 +16,17 @@
 
 package co.freeside.betamax.proxy
 
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 
 @Issue("https://github.com/robfletcher/betamax/issues/20")
 @Issue("https://github.com/adamfisk/LittleProxy/issues/96")
-@Betamax(tape = "proxy timeout spec", mode = TapeMode.READ_WRITE)
+@Betamax(mode = READ_WRITE)
 class ProxyTimeoutSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()

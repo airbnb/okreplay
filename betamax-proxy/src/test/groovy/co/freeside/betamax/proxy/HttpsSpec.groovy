@@ -25,6 +25,7 @@ import org.apache.http.client.methods.HttpGet
 import org.apache.http.impl.client.HttpClients
 import org.junit.ClassRule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static org.apache.http.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
@@ -32,7 +33,7 @@ import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOST
 
 @Issue("https://github.com/robfletcher/betamax/issues/34")
 @Unroll
-@Betamax(tape = "https spec", mode = TapeMode.WRITE_ONLY)
+@Betamax(mode = WRITE_ONLY)
 class HttpsSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
