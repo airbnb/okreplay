@@ -21,6 +21,8 @@ import java.util.*;
 import co.freeside.betamax.internal.*;
 import co.freeside.betamax.util.*;
 import com.google.common.collect.*;
+import static co.freeside.betamax.MatchRules.method;
+import static co.freeside.betamax.MatchRules.uri;
 
 /**
  * The configuration used by Betamax.
@@ -41,15 +43,18 @@ public class Configuration {
 
     public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes";
     public static final TapeMode DEFAULT_MODE = TapeMode.READ_ONLY;
+    public static final ImmutableCollection<? extends MatchRule> DEFAULT_MATCH_RULES = ImmutableList.of(method, uri);
 
     private final File tapeRoot;
     private final TapeMode defaultMode;
     private final ImmutableCollection<String> ignoreHosts;
     private final boolean ignoreLocalhost;
+    private final ImmutableCollection<? extends MatchRule> defaultMatchRules;
 
     protected Configuration(ConfigurationBuilder<?> builder) {
         this.tapeRoot = builder.tapeRoot;
         this.defaultMode = builder.defaultMode;
+        this.defaultMatchRules = builder.defaultMatchRules;
         this.ignoreHosts = builder.ignoreHosts;
         this.ignoreLocalhost = builder.ignoreLocalhost;
     }
@@ -70,6 +75,10 @@ public class Configuration {
      */
     public TapeMode getDefaultMode() {
         return defaultMode;
+    }
+
+    public Iterable<? extends MatchRule> getDefaultMatchRules() {
+        return defaultMatchRules;
     }
 
     /**

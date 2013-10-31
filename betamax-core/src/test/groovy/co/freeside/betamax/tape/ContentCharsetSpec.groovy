@@ -16,9 +16,11 @@
 
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.TapeMode
 import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.*
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
@@ -36,7 +38,7 @@ class ContentCharsetSpec extends Specification {
 		response.body = '\u00a3'.getBytes(charset)
 
 		and:
-		def tape = new YamlTape(name: 'charsets')
+		def tape = new YamlTape(name: 'charsets', mode: READ_WRITE)
 		tape.record(request, response)
 
 		when:

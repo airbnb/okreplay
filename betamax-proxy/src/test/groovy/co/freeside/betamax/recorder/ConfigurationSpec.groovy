@@ -16,6 +16,8 @@
 
 package co.freeside.betamax.recorder
 
+import co.freeside.betamax.MatchRule
+import co.freeside.betamax.MatchRules
 import co.freeside.betamax.ProxyConfiguration
 import com.google.common.io.Files
 import spock.lang.*
@@ -34,6 +36,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == new File(DEFAULT_TAPE_ROOT)
             proxyPort == DEFAULT_PROXY_PORT
             defaultMode == DEFAULT_MODE
+            defaultMatchRules == DEFAULT_MATCH_RULES
             proxyTimeoutSeconds == DEFAULT_PROXY_TIMEOUT
             ignoreHosts == []
             !ignoreLocalhost
@@ -47,6 +50,7 @@ class ConfigurationSpec extends Specification {
                 .tapeRoot(tempDir)
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
+                .defaultMatchRules([MatchRules.host, MatchRules.headers])
                 .proxyTimeoutSeconds(30)
                 .ignoreHosts(["freeside.co"])
                 .ignoreLocalhost(true)
@@ -59,6 +63,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_ONLY
+            defaultMatchRules == [MatchRules.host, MatchRules.headers]
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreLocalhost
@@ -73,6 +78,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
+            setProperty("betamax.defaultMatchRules", "host,headers")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
@@ -87,6 +93,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
+            defaultMatchRules == [MatchRules.host, MatchRules.headers]
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -103,6 +110,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
+            setProperty("betamax.defaultMatchRules", "host,headers")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
@@ -123,6 +131,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
+            defaultMatchRules == [MatchRules.host, MatchRules.headers]
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -142,6 +151,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
+            setProperty("betamax.defaultMatchRules", "host,headers")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
             setProperty("betamax.ignoreLocalhost", "true")
@@ -159,6 +169,7 @@ class ConfigurationSpec extends Specification {
                 .tapeRoot(new File("test/fixtures/tapes"))
                 .proxyPort(1234)
                 .defaultMode(WRITE_ONLY)
+                .defaultMatchRules([MatchRules.port, MatchRules.query])
                 .proxyTimeoutSeconds(10)
                 .ignoreHosts(["github.com"])
                 .ignoreLocalhost(false)
@@ -170,6 +181,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == new File("test/fixtures/tapes")
             proxyPort == 1234
             defaultMode == WRITE_ONLY
+            defaultMatchRules == [MatchRules.port, MatchRules.query]
             proxyTimeoutSeconds == 10
             ignoreHosts == ["github.com"]
             !ignoreLocalhost

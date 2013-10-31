@@ -22,8 +22,7 @@ import java.util.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.*;
-import static co.freeside.betamax.Configuration.DEFAULT_MODE;
-import static co.freeside.betamax.Configuration.DEFAULT_TAPE_ROOT;
+import static co.freeside.betamax.Configuration.*;
 
 public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
 
@@ -35,6 +34,7 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
 
     protected File tapeRoot = new File(DEFAULT_TAPE_ROOT);
     protected TapeMode defaultMode = DEFAULT_MODE;
+    protected ImmutableCollection<? extends MatchRule> defaultMatchRules = DEFAULT_MATCH_RULES;
     protected ImmutableCollection<String> ignoreHosts = ImmutableList.of();
     protected boolean ignoreLocalhost;
 
@@ -60,16 +60,25 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
             tapeRoot(new File(properties.getProperty("betamax.tapeRoot")));
         }
 
-        if (properties.containsKey("betamax.ignoreLocalhost")) {
-            ignoreLocalhost(Boolean.valueOf(properties.getProperty("betamax.ignoreLocalhost")));
-        }
-
         if (properties.containsKey("betamax.defaultMode")) {
             defaultMode(TapeMode.valueOf(properties.getProperty("betamax.defaultMode")));
         }
 
+        if (properties.containsKey("betamax.defaultMatchRules")) {
+            defaultMatchRules(Lists.transform(Splitter.on(",").splitToList(properties.getProperty("betamax.defaultMatchRules")), new Function<String, MatchRule>() {
+                @Override
+                public MatchRule apply(String input) {
+                    return MatchRules.valueOf(input);
+                }
+            }));
+        }
+
         if (properties.containsKey("betamax.ignoreHosts")) {
             ignoreHosts(Splitter.on(",").splitToList(properties.getProperty("betamax.ignoreHosts")));
+        }
+
+        if (properties.containsKey("betamax.ignoreLocalhost")) {
+            ignoreLocalhost(Boolean.valueOf(properties.getProperty("betamax.ignoreLocalhost")));
         }
 
         return self();
@@ -85,7 +94,12 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
         return self();
     }
 
-    public T ignoreHosts(Collection<String> ignoreHosts) {
+    public T defaultMatchRules(Iterable<? extends MatchRule> defaultMatchRules) {
+        this.defaultMatchRules = ImmutableList.copyOf(defaultMatchRules);
+        return self();
+    }
+
+    public T ignoreHosts(Iterable<String> ignoreHosts) {
         this.ignoreHosts = ImmutableList.copyOf(ignoreHosts);
         return self();
     }

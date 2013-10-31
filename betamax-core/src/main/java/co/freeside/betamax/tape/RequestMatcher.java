@@ -19,16 +19,8 @@ package co.freeside.betamax.tape;
 import co.freeside.betamax.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.tape.*;
-import com.google.common.collect.*;
-import static co.freeside.betamax.MatchRules.*;
 
 public class RequestMatcher {
-
-    public static final Iterable<? extends MatchRule> DEFAULT_RULES = ImmutableList.of(method, uri);
-
-    public RequestMatcher(Request request) {
-        this(request, DEFAULT_RULES);
-    }
 
     public RequestMatcher(Request request, Iterable<? extends MatchRule> rules) {
         this.request = request;

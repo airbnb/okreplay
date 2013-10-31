@@ -26,7 +26,7 @@ import static org.apache.http.HttpHeaders.*
 @Issue('https://github.com/robfletcher/betamax/issues/9')
 class RequestMatcherSpec extends Specification {
 
-	void 'by default matches method and url'() {
+	void 'can match method and url'() {
 		given:
 		def request1 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
 		def request2 = new RecordedRequest(method: 'HEAD', uri: 'http://freeside.co/betamax'.toURI())
@@ -34,7 +34,7 @@ class RequestMatcherSpec extends Specification {
 
 		and:
 		def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
-		def requestMatcher = new RequestMatcher(request)
+		def requestMatcher = new RequestMatcher(request, ImmutableList.of(method, uri))
 
 		expect:
 		requestMatcher.matches(request1)

@@ -225,8 +225,8 @@ public class MemoryTape implements Tape {
     }
 
     private String name;
+    private TapeMode mode = Configuration.DEFAULT_MODE;
+    private Iterable<? extends MatchRule> matchRules = Configuration.DEFAULT_MATCH_RULES;
     private List<RecordedInteraction> interactions = Lists.newArrayList();
-    private TapeMode mode = READ_WRITE;
     private AtomicInteger orderedIndex = new AtomicInteger();
-    private Iterable<? extends MatchRule> matchRules = RequestMatcher.DEFAULT_RULES;
 }

@@ -26,7 +26,7 @@ import static java.util.concurrent.TimeUnit.SECONDS
 @Issue('https://github.com/robfletcher/betamax/issues/57')
 class MultiThreadedTapeAccessSpec extends Specification {
 
-	Tape tape = new MemoryTape(name: 'multi_threaded_tape_access_spec')
+	Tape tape = new MemoryTape(name: 'multi_threaded_tape_access_spec', mode: READ_WRITE)
 
 	void 'the correct response is replayed to each thread'() {
 		given: 'a number of requests'

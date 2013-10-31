@@ -16,10 +16,12 @@
 
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.TapeMode
 import co.freeside.betamax.encoding.*
 import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.*
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
@@ -43,7 +45,7 @@ class ContentEncodingSpec extends Specification {
 		response.body = 'O HAI!'.bytes
 
 		and:
-		def tape = new YamlTape(name: 'encoded response tape')
+		def tape = new YamlTape(name: 'encoded response tape', mode: READ_WRITE)
 		tape.record(request, response)
 
 		when:
