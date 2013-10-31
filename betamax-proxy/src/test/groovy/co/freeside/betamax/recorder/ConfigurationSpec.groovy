@@ -16,8 +16,7 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.MatchRules
-import co.freeside.betamax.ProxyConfiguration
+import co.freeside.betamax.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
@@ -49,7 +48,7 @@ class ConfigurationSpec extends Specification {
                 .tapeRoot(tempDir)
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
-                .defaultMatchRule([MatchRules.host, MatchRules.headers])
+                .defaultMatchRules(MatchRules.host, MatchRules.headers)
                 .proxyTimeoutSeconds(30)
                 .ignoreHosts(["freeside.co"])
                 .ignoreLocalhost(true)
@@ -62,7 +61,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_ONLY
-            defaultMatchRule == [MatchRules.host, MatchRules.headers]
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreLocalhost
@@ -92,7 +91,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
-            defaultMatchRule == [MatchRules.host, MatchRules.headers]
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -130,7 +129,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == tempDir
             proxyPort == 1337
             defaultMode == READ_WRITE
-            defaultMatchRule == [MatchRules.host, MatchRules.headers]
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -168,7 +167,7 @@ class ConfigurationSpec extends Specification {
                 .tapeRoot(new File("test/fixtures/tapes"))
                 .proxyPort(1234)
                 .defaultMode(WRITE_ONLY)
-                .defaultMatchRule([MatchRules.port, MatchRules.query])
+                .defaultMatchRules(MatchRules.port, MatchRules.query)
                 .proxyTimeoutSeconds(10)
                 .ignoreHosts(["github.com"])
                 .ignoreLocalhost(false)
@@ -180,7 +179,7 @@ class ConfigurationSpec extends Specification {
             tapeRoot == new File("test/fixtures/tapes")
             proxyPort == 1234
             defaultMode == WRITE_ONLY
-            defaultMatchRule == [MatchRules.port, MatchRules.query]
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.port, MatchRules.query)
             proxyTimeoutSeconds == 10
             ignoreHosts == ["github.com"]
             !ignoreLocalhost

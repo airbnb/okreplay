@@ -45,4 +45,19 @@ public class ComposedMatchRule implements MatchRule {
             }
         });
     }
+
+    @Override
+    public int hashCode() {
+        return rules.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ComposedMatchRule that = (ComposedMatchRule) o;
+
+        return rules.equals(that.rules);
+    }
 }
