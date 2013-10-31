@@ -23,16 +23,16 @@ import com.google.common.collect.*;
 public class ComposedMatchRule implements MatchRule {
 
     public static MatchRule of(MatchRule... rules) {
-        return new ComposedMatchRule(ImmutableList.copyOf(rules));
+        return new ComposedMatchRule(ImmutableSet.copyOf(rules));
     }
 
     public static MatchRule of(Iterable<MatchRule> rules) {
-        return new ComposedMatchRule(ImmutableList.copyOf(rules));
+        return new ComposedMatchRule(ImmutableSet.copyOf(rules));
     }
 
-    private final ImmutableCollection<MatchRule> rules;
+    private final ImmutableSet<MatchRule> rules;
 
-    private ComposedMatchRule(ImmutableCollection<MatchRule> rules) {
+    private ComposedMatchRule(ImmutableSet<MatchRule> rules) {
         this.rules = rules;
     }
 
@@ -53,8 +53,12 @@ public class ComposedMatchRule implements MatchRule {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ComposedMatchRule that = (ComposedMatchRule) o;
 
