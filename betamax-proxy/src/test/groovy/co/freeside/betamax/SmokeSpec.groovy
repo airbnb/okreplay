@@ -26,7 +26,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.VIA
 
 @Unroll
-@Betamax(tape = "smoke spec")
+@Betamax
 class SmokeSpec extends Specification {
 
     static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())

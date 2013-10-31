@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 @Retention(RUNTIME)
 @Target({METHOD, TYPE})
 public @interface Betamax {
-    String tape();
+    String tape() default "";
 
     TapeMode mode() default READ_ONLY;
 

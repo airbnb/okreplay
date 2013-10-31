@@ -18,9 +18,11 @@ package co.freeside.betamax.junit;
 
 import java.util.logging.*;
 import co.freeside.betamax.*;
+import com.google.common.base.*;
 import org.junit.rules.*;
 import org.junit.runner.*;
 import org.junit.runners.model.*;
+import static com.google.common.base.CaseFormat.*;
 import static java.util.logging.Level.*;
 
 /**
@@ -41,7 +43,7 @@ public class RecorderRule extends Recorder implements TestRule {
     }
 
     @Override
-    public Statement apply(final Statement statement, Description description) {
+    public Statement apply(final Statement statement, final Description description) {
         final Betamax annotation = description.getAnnotation(Betamax.class);
         if (annotation != null) {
             log.fine(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
@@ -49,7 +51,15 @@ public class RecorderRule extends Recorder implements TestRule {
                 @Override
                 public void evaluate() throws Throwable {
                     try {
-                        start(annotation.tape(), annotation.mode(), ComposedMatchRule.of(annotation.match()));
+                        String tapeName = annotation.tape();
+                        if (Strings.isNullOrEmpty(tapeName)) {
+                            tapeName = defaultTapeName(description);
+                        }
+                        TapeMode tapeMode = annotation.mode();
+                        MatchRule matchRule = ComposedMatchRule.of(annotation.match());
+
+                        start(tapeName, tapeMode, matchRule);
+
                         statement.evaluate();
                     } catch (Exception e) {
                         log.log(SEVERE, "Caught exception starting Betamax", e);
@@ -63,6 +73,16 @@ public class RecorderRule extends Recorder implements TestRule {
             log.fine(String.format("no @Betamax annotation on '%s'", description.getDisplayName()));
             return statement;
         }
+    }
+
+    private String defaultTapeName(Description description) {
+        String name;
+        if (description.getMethodName() != null) {
+            name = LOWER_CAMEL.to(LOWER_UNDERSCORE, description.getMethodName());
+        } else {
+            name = UPPER_CAMEL.to(LOWER_UNDERSCORE, description.getTestClass().getSimpleName());
+        }
+        return name.replace('_', ' ');
     }
 
 }
