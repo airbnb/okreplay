@@ -43,18 +43,18 @@ public class Configuration {
 
     public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes";
     public static final TapeMode DEFAULT_MODE = TapeMode.READ_ONLY;
-    public static final ImmutableCollection<? extends MatchRule> DEFAULT_MATCH_RULES = ImmutableList.of(method, uri);
+    public static final MatchRule DEFAULT_MATCH_RULE = ComposedMatchRule.of(method, uri);
 
     private final File tapeRoot;
     private final TapeMode defaultMode;
     private final ImmutableCollection<String> ignoreHosts;
     private final boolean ignoreLocalhost;
-    private final ImmutableCollection<? extends MatchRule> defaultMatchRules;
+    private final MatchRule defaultMatchRule;
 
     protected Configuration(ConfigurationBuilder<?> builder) {
         this.tapeRoot = builder.tapeRoot;
         this.defaultMode = builder.defaultMode;
-        this.defaultMatchRules = builder.defaultMatchRules;
+        this.defaultMatchRule = builder.defaultMatchRule;
         this.ignoreHosts = builder.ignoreHosts;
         this.ignoreLocalhost = builder.ignoreLocalhost;
     }
@@ -77,8 +77,8 @@ public class Configuration {
         return defaultMode;
     }
 
-    public Iterable<? extends MatchRule> getDefaultMatchRules() {
-        return defaultMatchRules;
+    public MatchRule getDefaultMatchRule() {
+        return defaultMatchRule;
     }
 
     /**

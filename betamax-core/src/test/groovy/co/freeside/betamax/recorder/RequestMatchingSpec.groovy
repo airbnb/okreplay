@@ -16,10 +16,9 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.MatchRules
+import co.freeside.betamax.*
 import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.BasicRequest
-import com.google.common.collect.ImmutableList
 import spock.lang.*
 import static org.apache.http.HttpHeaders.*
 
@@ -96,7 +95,7 @@ interactions:
 
         and:
         def tape = YamlTape.readFrom(new StringReader(yaml))
-        tape.matchRules = ImmutableList.of(MatchRules.host)
+        tape.matchRule = MatchRules.host
 
         when:
         def request = new BasicRequest("GET", "http://xkcd.com/875")
@@ -140,7 +139,7 @@ interactions:
 
         and:
         def tape = YamlTape.readFrom(new StringReader(yaml))
-        tape.matchRules = ImmutableList.of(MatchRules.method, MatchRules.uri, MatchRules.headers)
+        tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.headers)
 
         when:
         def request = new BasicRequest("GET", "http://httpbin.org/get")

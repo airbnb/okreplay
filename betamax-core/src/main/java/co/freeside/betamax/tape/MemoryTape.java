@@ -29,7 +29,6 @@ import com.google.common.collect.*;
 import com.google.common.io.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
-import static co.freeside.betamax.TapeMode.*;
 import static java.util.Collections.*;
 import static org.apache.http.HttpHeaders.*;
 
@@ -42,8 +41,8 @@ public class MemoryTape implements Tape {
         this.mode = mode;
     }
 
-    public void setMatchRules(Iterable<? extends MatchRule> matchRules) {
-        this.matchRules = ImmutableList.copyOf(matchRules);
+    public void setMatchRule(MatchRule matchRule) {
+        this.matchRule = matchRule;
     }
 
     public boolean isReadable() {
@@ -69,8 +68,7 @@ public class MemoryTape implements Tape {
                 Integer index = orderedIndex.get();
                 RecordedInteraction interaction = interactions.get(index);
                 RecordedRequest nextRequest = interaction == null ? null : interaction.getRequest();
-                RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
-                return nextRequest != null && requestMatcher.matches(nextRequest);
+                return nextRequest != null && matchRule.isMatch(request, nextRequest);
             } catch (IndexOutOfBoundsException e) {
                 throw new NonWritableTapeException();
             }
@@ -85,14 +83,13 @@ public class MemoryTape implements Tape {
         }
 
         if (mode.isSequential()) {
-            RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
             Integer nextIndex = orderedIndex.getAndIncrement();
             final RecordedInteraction nextInteraction = interactions.get(nextIndex);
             if (nextInteraction == null) {
                 throw new IllegalStateException(String.format("No recording found at position %s", nextIndex));
             }
 
-            if (!requestMatcher.matches(nextInteraction.getRequest())) {
+            if (!matchRule.isMatch(request, nextInteraction.getRequest())) {
                 throw new IllegalStateException(String.format("Request %s does not match recorded request %s", stringify(request), stringify(nextInteraction.getRequest())));
             }
 
@@ -145,13 +142,11 @@ public class MemoryTape implements Tape {
         return String.format("Tape[%s]", name);
     }
 
-    private synchronized int findMatch(Request request) {
-        final RequestMatcher requestMatcher = new RequestMatcher(request, matchRules);
-
+    private synchronized int findMatch(final Request request) {
         return Iterables.indexOf(interactions, new Predicate<RecordedInteraction>() {
             @Override
             public boolean apply(RecordedInteraction input) {
-                return requestMatcher.matches(input.getRequest());
+                return matchRule.isMatch(request, input.getRequest());
             }
         });
     }
@@ -226,7 +221,7 @@ public class MemoryTape implements Tape {
 
     private String name;
     private TapeMode mode = Configuration.DEFAULT_MODE;
-    private Iterable<? extends MatchRule> matchRules = Configuration.DEFAULT_MATCH_RULES;
+    private MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
     private List<RecordedInteraction> interactions = Lists.newArrayList();
     private AtomicInteger orderedIndex = new AtomicInteger();
 }

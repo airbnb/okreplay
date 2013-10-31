@@ -16,7 +16,6 @@
 
 package co.freeside.betamax.junit;
 
-import java.util.*;
 import java.util.logging.*;
 import co.freeside.betamax.*;
 import org.junit.rules.*;
@@ -50,7 +49,7 @@ public class RecorderRule extends Recorder implements TestRule {
                 @Override
                 public void evaluate() throws Throwable {
                     try {
-                        start(annotation.tape(), annotation.mode(), Arrays.asList(annotation.match()));
+                        start(annotation.tape(), annotation.mode(), ComposedMatchRule.of(annotation.match()));
                         statement.evaluate();
                     } catch (Exception e) {
                         log.log(SEVERE, "Caught exception starting Betamax", e);

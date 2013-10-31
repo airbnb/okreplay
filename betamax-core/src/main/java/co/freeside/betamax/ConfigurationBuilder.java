@@ -34,7 +34,7 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
 
     protected File tapeRoot = new File(DEFAULT_TAPE_ROOT);
     protected TapeMode defaultMode = DEFAULT_MODE;
-    protected ImmutableCollection<? extends MatchRule> defaultMatchRules = DEFAULT_MATCH_RULES;
+    protected MatchRule defaultMatchRule = DEFAULT_MATCH_RULE;
     protected ImmutableCollection<String> ignoreHosts = ImmutableList.of();
     protected boolean ignoreLocalhost;
 
@@ -65,12 +65,13 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
         }
 
         if (properties.containsKey("betamax.defaultMatchRules")) {
-            defaultMatchRules(Lists.transform(Splitter.on(",").splitToList(properties.getProperty("betamax.defaultMatchRules")), new Function<String, MatchRule>() {
+            List<MatchRule> rules = Lists.transform(Splitter.on(",").splitToList(properties.getProperty("betamax.defaultMatchRules")), new Function<String, MatchRule>() {
                 @Override
                 public MatchRule apply(String input) {
                     return MatchRules.valueOf(input);
                 }
-            }));
+            });
+            defaultMatchRule(ComposedMatchRule.of(rules));
         }
 
         if (properties.containsKey("betamax.ignoreHosts")) {
@@ -94,8 +95,13 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
         return self();
     }
 
-    public T defaultMatchRules(Iterable<? extends MatchRule> defaultMatchRules) {
-        this.defaultMatchRules = ImmutableList.copyOf(defaultMatchRules);
+    public T defaultMatchRule(MatchRule defaultMatchRule) {
+        this.defaultMatchRule = defaultMatchRule;
+        return self();
+    }
+
+    public T defaultMatchRules(MatchRule... defaultMatchRules) {
+        this.defaultMatchRule = ComposedMatchRule.of(defaultMatchRules);
         return self();
     }
 

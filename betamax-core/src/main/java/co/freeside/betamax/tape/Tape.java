@@ -36,9 +36,9 @@ public interface Tape {
     void setMode(TapeMode mode);
 
     /**
-     * @param matchRules the rules used to match recordings on the tape.
+     * @param matchRule the rules used to match recordings on the tape.
      */
-    void setMatchRules(Iterable<? extends MatchRule> matchRules);
+    void setMatchRule(MatchRule matchRule);
 
     /**
      * @return `true` if the tape is readable, `false` otherwise.

@@ -46,34 +46,34 @@ public class Recorder {
      *
      * @param tapeName the name of the tape.
      * @param mode the tape mode. If not supplied the default mode from the configuration is used.
-     * @param matchRules the rules used to match recordings on the tape. If not supplied a default is used.
+     * @param matchRule the rules used to match recordings on the tape. If not supplied a default is used.
      *
      * @throws IllegalStateException if the Recorder is already started.
      */
-    public void start(String tapeName, Optional<TapeMode> mode, Optional<Iterable<? extends MatchRule>> matchRules) {
+    public void start(String tapeName, Optional<TapeMode> mode, Optional<MatchRule> matchRule) {
         if (tape != null) {
             throw new IllegalStateException("start called when Recorder is already started");
         }
 
         tape = getTapeLoader().loadTape(tapeName);
         tape.setMode(mode.or(configuration.getDefaultMode()));
-        tape.setMatchRules(matchRules.or(configuration.getDefaultMatchRules()));
+        tape.setMatchRule(matchRule.or(configuration.getDefaultMatchRule()));
 
         for (RecorderListener listener : listeners) {
             listener.onRecorderStart(tape);
         }
     }
 
-    public void start(String tapeName, TapeMode mode, Iterable<? extends MatchRule> matchRules) {
-        start(tapeName, Optional.of(mode), Optional.<Iterable<? extends MatchRule>>of(matchRules));
+    public void start(String tapeName, TapeMode mode, MatchRule matchRule) {
+        start(tapeName, Optional.of(mode), Optional.<MatchRule>of(matchRule));
     }
 
     public void start(String tapeName, TapeMode mode) {
-        start(tapeName, Optional.of(mode), Optional.<Iterable<? extends MatchRule>>absent());
+        start(tapeName, Optional.of(mode), Optional.<MatchRule>absent());
     }
 
     public void start(String tapeName) {
-        start(tapeName, Optional.<TapeMode>absent(), Optional.<Iterable<? extends MatchRule>>absent());
+        start(tapeName, Optional.<TapeMode>absent(), Optional.<MatchRule>absent());
     }
 
     /**
