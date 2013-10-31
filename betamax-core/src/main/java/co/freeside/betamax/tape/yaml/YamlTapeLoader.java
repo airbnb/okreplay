@@ -41,7 +41,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
             try {
                 BufferedReader reader = Files.newReader(file, Charset.forName(FILE_CHARSET));
                 YamlTape tape = YamlTape.readFrom(reader);
-                LOG.info("loaded tape with " + String.valueOf(tape.size()) + " recorded interactions from file " + file.getName() + "...");
+                LOG.info(String.format("loaded tape with %s recorded interactions from file %s...", String.valueOf(tape.size()), file.getName()));
                 return tape;
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
@@ -61,7 +61,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
         if (tape.isDirty()) {
             try {
                 BufferedWriter bufferedWriter = Files.newWriter(file, Charset.forName(FILE_CHARSET));
-                LOG.info("writing tape " + String.valueOf(tape) + " to file " + file.getName() + "...");
+                LOG.info(String.format("writing tape %s to file %s...", String.valueOf(tape), file.getAbsolutePath()));
                 tape.writeTo(bufferedWriter);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
