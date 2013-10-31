@@ -17,7 +17,7 @@ dependencies {
 		exclude module: "commons-codec"
 		exclude module: "commons-logging"
 	}
-	testCompile "com.github.groovy-wslite:groovy-wslite:0.7.1"
+	testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
 
     testCompile "com.mashape.unirest:unirest-java:1.2.8",
                 "org.apache.httpcomponents:httpasyncclient:4.0"

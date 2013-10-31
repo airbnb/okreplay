@@ -51,7 +51,7 @@ class WsLiteSpec extends Specification {
         def http = new RESTClient(url)
 
         when: "a request is made"
-        def response = http.get(path: "/", proxy: configuration.proxy)
+        def response = http.get(path: "/")
 
         then: "the request is intercepted"
         response.statusCode == HTTP_OK
