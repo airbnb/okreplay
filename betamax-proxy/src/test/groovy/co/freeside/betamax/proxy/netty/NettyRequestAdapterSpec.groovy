@@ -17,6 +17,7 @@
 package co.freeside.betamax.proxy.netty
 
 import io.netty.handler.codec.http.HttpRequest
+import static io.netty.handler.codec.http.HttpHeaders.Names.HOST
 import static io.netty.handler.codec.http.HttpMethod.GET
 
 class NettyRequestAdapterSpec extends NettyMessageAdapterSpec<HttpRequest, NettyRequestAdapter> {
@@ -32,27 +33,46 @@ class NettyRequestAdapterSpec extends NettyMessageAdapterSpec<HttpRequest, Netty
         adapter = new NettyRequestAdapter(nettyMessage)
     }
 
-	void 'can read basic fields'() {
+	void "can read basic fields"() {
 		given:
 		nettyMessage.method >> GET
-		nettyMessage.uri >> 'http://freeside.co/betamax'
+		nettyMessage.uri >> "http://freeside.co/betamax"
 
         and:
         createAdapter()
 
 		expect:
-		adapter.method == 'GET'
-		adapter.uri == 'http://freeside.co/betamax'.toURI()
+		adapter.method == "GET"
+		adapter.uri == "http://freeside.co/betamax".toURI()
 	}
 
-	void 'uri includes query string'() {
+	void "uri includes query string"() {
 		given:
-		nettyMessage.uri >> 'http://freeside.co/betamax?q=1'
+		nettyMessage.uri >> "http://freeside.co/betamax?q=1"
 
         and:
         createAdapter()
 
         expect:
-		adapter.uri == new URI('http://freeside.co/betamax?q=1')
+		adapter.uri == new URI("http://freeside.co/betamax?q=1")
 	}
+
+    /**
+     * LittleProxy returns only the path of the request URI of a tunnelled
+     * request. The adapter should handle this and construct the full URI using
+     * the *Host* header.
+     *
+     * The scheme is assumed to be HTTPS since it's not retrievable.
+     */
+    void "uri is synthesized using Host header if non-absolute"() {
+        given:
+        nettyMessage.uri >> "/betamax"
+        nettyMessageHeaders.add(HOST, "freeside.co")
+
+        and:
+        createAdapter()
+
+        expect:
+        adapter.uri == new URI("https://freeside.co/betamax")
+    }
 }

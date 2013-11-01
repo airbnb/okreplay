@@ -19,6 +19,7 @@ package co.freeside.betamax.proxy.netty;
 import java.net.*;
 import co.freeside.betamax.message.*;
 import io.netty.handler.codec.http.*;
+import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 
 public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implements Request {
 
@@ -42,7 +43,12 @@ public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implem
     @Override
     public URI getUri() {
         try {
-            return new URI(delegate.getUri());
+            URI uri = new URI(delegate.getUri());
+            if (uri.isAbsolute()) {
+                return uri;
+            } else {
+                return new URI(String.format("https://%s%s", getHeader(HOST), uri));
+            }
         } catch (URISyntaxException e) {
             throw new IllegalStateException("Invalid URI in underlying request", e);
         }

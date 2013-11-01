@@ -31,7 +31,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
     abstract void createAdapter()
 
-	void 'can read headers'() {
+	void "can read headers"() {
 		given:
         nettyMessageHeaders.add(IF_NONE_MATCH, "abc123")
         nettyMessageHeaders.add(ACCEPT_ENCODING, ["gzip", "deflate"])
@@ -40,22 +40,22 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         createAdapter()
 
 		expect:
-		adapter.getHeader(IF_NONE_MATCH) == 'abc123'
-		adapter.getHeader(ACCEPT_ENCODING) == 'gzip, deflate'
+		adapter.getHeader(IF_NONE_MATCH) == "abc123"
+		adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
 	}
 
-	void 'headers are immutable'() {
+	void "headers are immutable"() {
 		given:
         createAdapter()
 
 		when:
-		adapter.headers[IF_NONE_MATCH] = ['abc123']
+		adapter.headers[IF_NONE_MATCH] = ["abc123"]
 
 		then:
 		thrown UnsupportedOperationException
 	}
 
-	void 'body is readable as text'() {
+	void "body is readable as text"() {
 		given:
         nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
 
@@ -63,7 +63,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         createAdapter()
 
 		and:
-		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes('ISO-8859-1')))
+		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes("ISO-8859-1")))
 		adapter.append chunk
 
 		expect:
@@ -74,7 +74,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 		bodyText = "value=\u00a31"
 	}
 
-	void 'body is readable as binary'() {
+	void "body is readable as binary"() {
 		given:
         nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
 
@@ -90,7 +90,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 		adapter.bodyAsBinary.input.bytes == body
 
 		where:
-		body = 'value=\u00a31'.getBytes('ISO-8859-1')
+		body = "value=\u00a31".getBytes("ISO-8859-1")
 	}
 
     void "headers can be appended after the adapter is created"() {
@@ -111,8 +111,8 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         adapter.copyHeaders(message)
 
         then:
-        adapter.getHeader(IF_NONE_MATCH) == 'abc123'
-        adapter.getHeader(ACCEPT_ENCODING) == 'gzip, deflate'
+        adapter.getHeader(IF_NONE_MATCH) == "abc123"
+        adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
     }
 
 	void "#description if the content buffer is #contentDescription"() {

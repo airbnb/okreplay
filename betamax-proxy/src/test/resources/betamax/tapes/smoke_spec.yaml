@@ -148,7 +148,7 @@ interactions:
 - recorded: 2013-10-01T21:54:02.428Z
   request:
     method: GET
-    uri: /get
+    uri: https://httpbin.org/get
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Connection: keep-alive
@@ -179,7 +179,7 @@ interactions:
 - recorded: 2013-10-01T21:54:05.424Z
   request:
     method: POST
-    uri: /post
+    uri: https://httpbin.org/post
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Connection: close
