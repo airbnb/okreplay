@@ -31,7 +31,8 @@ import org.yaml.snakeyaml.representer.*;
 /**
  * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
  */
-public class TapeRepresenter extends GroovyRepresenter {
+public class TapeRepresenter extends Representer {
+
     public TapeRepresenter() {
         setPropertyUtils(new TapePropertyUtils());
         representers.put(URI.class, new RepresentURI());
