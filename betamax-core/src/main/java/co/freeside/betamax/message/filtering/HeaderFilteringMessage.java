@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.*;
 import co.freeside.betamax.message.*;
 import com.google.common.io.*;
-import static org.apache.http.HttpHeaders.*;
+import static com.google.common.net.HttpHeaders.*;
 
 public abstract class HeaderFilteringMessage implements Message {
     protected abstract Message getDelegate();

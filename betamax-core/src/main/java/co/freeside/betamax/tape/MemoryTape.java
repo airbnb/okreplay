@@ -37,30 +37,37 @@ import static org.apache.http.HttpHeaders.*;
  */
 public class MemoryTape implements Tape {
 
+    @Override
     public void setMode(TapeMode mode) {
         this.mode = mode;
     }
 
+    @Override
     public void setMatchRule(MatchRule matchRule) {
         this.matchRule = matchRule;
     }
 
+    @Override
     public boolean isReadable() {
         return mode.isReadable();
     }
 
+    @Override
     public boolean isWritable() {
         return mode.isWritable();
     }
 
+    @Override
     public boolean isSequential() {
         return mode.isSequential();
     }
 
+    @Override
     public int size() {
         return interactions.size();
     }
 
+    @Override
     public boolean seek(Request request) {
         if (isSequential()) {
             try {
@@ -77,6 +84,7 @@ public class MemoryTape implements Tape {
         }
     }
 
+    @Override
     public Response play(final Request request) {
         if (!mode.isReadable()) {
             throw new IllegalStateException("the tape is not readable");
@@ -115,6 +123,7 @@ public class MemoryTape implements Tape {
         }
     }
 
+    @Override
     public synchronized void record(Request request, Response response) {
         if (!mode.isWritable()) {
             throw new IllegalStateException("the tape is not writable");
@@ -203,6 +212,7 @@ public class MemoryTape implements Tape {
         return !StreamReader.NON_PRINTABLE.matcher(s).find();
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -224,4 +234,5 @@ public class MemoryTape implements Tape {
     private MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
     private List<RecordedInteraction> interactions = Lists.newArrayList();
     private AtomicInteger orderedIndex = new AtomicInteger();
+
 }
