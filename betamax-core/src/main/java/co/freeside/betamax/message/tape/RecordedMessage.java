@@ -48,7 +48,7 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
         return new StringReader(string);
     }
 
-    public final InputStream getBodyAsStream() throws UnsupportedEncodingException {
+    protected final InputStream getBodyAsStream() throws UnsupportedEncodingException {
         byte[] bytes;
         if (hasBody()) {
             bytes = body instanceof String ? ((String) body).getBytes(getCharset()) : (byte[]) body;
