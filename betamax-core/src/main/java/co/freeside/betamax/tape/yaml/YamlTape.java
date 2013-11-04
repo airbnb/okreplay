@@ -18,17 +18,24 @@ package co.freeside.betamax.tape.yaml;
 
 import java.io.*;
 import co.freeside.betamax.message.*;
+import co.freeside.betamax.message.tape.*;
 import co.freeside.betamax.tape.*;
+import com.google.common.io.*;
 import org.yaml.snakeyaml.*;
 import org.yaml.snakeyaml.constructor.*;
 import org.yaml.snakeyaml.error.*;
 import org.yaml.snakeyaml.nodes.*;
 
-public class YamlTape extends MemoryTape implements StorableTape {
+class YamlTape extends MemoryTape implements StorableTape {
 
     public static final Tag TAPE_TAG = new Tag("!tape");
 
+    private final File tapeRoot;
     private boolean dirty;
+
+    public YamlTape(File tapeRoot) {
+        this.tapeRoot = tapeRoot;
+    }
 
     public static YamlTape readFrom(Reader reader) {
         try {
@@ -50,6 +57,12 @@ public class YamlTape extends MemoryTape implements StorableTape {
     public void record(Request request, Response response) {
         super.record(request, response);
         dirty = true;
+    }
+
+    protected void writeBodyToExternal(Response response, RecordedResponse clone) throws IOException {
+        File body = new File(tapeRoot, "body.txt");
+        ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+        clone.setBody(body);
     }
 
     private static Yaml getYaml() {

@@ -35,7 +35,7 @@ import static org.apache.http.HttpHeaders.*;
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
  */
-public class MemoryTape implements Tape {
+public abstract class MemoryTape implements Tape {
 
     private String name;
     private TapeMode mode = Configuration.DEFAULT_MODE;
@@ -217,15 +217,15 @@ public class MemoryTape implements Tape {
     private void recordResponseBody(Response response, RecordedResponse clone) throws IOException {
         switch (responseBodyStorage) {
             case external:
-                File body = new File("body.txt");
-                ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
-                clone.setBody(body);
+                writeBodyToExternal(response, clone);
                 break;
             default:
                 boolean representAsText = isTextContentType(response.getContentType()) && isPrintable(CharStreams.toString(response.getBodyAsText()));
                 clone.setBody(representAsText ? CharStreams.toString(response.getBodyAsText()) : ByteStreams.toByteArray(response.getBodyAsBinary()));
         }
     }
+
+    protected abstract void writeBodyToExternal(Response response, RecordedResponse clone) throws IOException;
 
     public static boolean isTextContentType(String contentType) {
         return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();
