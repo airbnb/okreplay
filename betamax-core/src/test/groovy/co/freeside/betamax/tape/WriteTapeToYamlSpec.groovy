@@ -21,7 +21,6 @@ import co.freeside.betamax.tape.yaml.YamlTape
 import co.freeside.betamax.util.message.*
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
-import static co.freeside.betamax.ContentStorage.external
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*

@@ -37,6 +37,14 @@ import static org.apache.http.HttpHeaders.*;
  */
 public class MemoryTape implements Tape {
 
+    private String name;
+    private TapeMode mode = Configuration.DEFAULT_MODE;
+    private MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
+    private EntityStorage responseBodyStorage = Configuration.DEFAULT_RESPONSE_BODY_STORAGE;
+
+    private List<RecordedInteraction> interactions = Lists.newArrayList();
+    private AtomicInteger orderedIndex = new AtomicInteger();
+
     @Override
     public void setMode(TapeMode mode) {
         this.mode = mode;
@@ -45,6 +53,11 @@ public class MemoryTape implements Tape {
     @Override
     public void setMatchRule(MatchRule matchRule) {
         this.matchRule = matchRule;
+    }
+
+    @Override
+    public void setResponseBodyStorage(EntityStorage responseBodyStorage) {
+        this.responseBodyStorage = responseBodyStorage;
     }
 
     @Override
@@ -180,7 +193,7 @@ public class MemoryTape implements Tape {
         }
     }
 
-    private static RecordedResponse recordResponse(Response response) {
+    private RecordedResponse recordResponse(Response response) {
         try {
             RecordedResponse clone = new RecordedResponse();
             clone.setStatus(response.getStatus());
@@ -192,13 +205,25 @@ public class MemoryTape implements Tape {
             }
 
             if (response.hasBody()) {
-                boolean representAsText = isTextContentType(response.getContentType()) && isPrintable(CharStreams.toString(response.getBodyAsText()));
-                clone.setBody(representAsText ? CharStreams.toString(response.getBodyAsText()) : ByteStreams.toByteArray(response.getBodyAsBinary()));
+                recordResponseBody(response, clone);
             }
 
             return clone;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void recordResponseBody(Response response, RecordedResponse clone) throws IOException {
+        switch (responseBodyStorage) {
+            case external:
+                File body = new File("body.txt");
+                ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+                clone.setBody(body);
+                break;
+            default:
+                boolean representAsText = isTextContentType(response.getContentType()) && isPrintable(CharStreams.toString(response.getBodyAsText()));
+                clone.setBody(representAsText ? CharStreams.toString(response.getBodyAsText()) : ByteStreams.toByteArray(response.getBodyAsBinary()));
         }
     }
 
@@ -226,13 +251,7 @@ public class MemoryTape implements Tape {
     }
 
     public void setInteractions(List<RecordedInteraction> interactions) {
-        this.interactions = new ArrayList<RecordedInteraction>(interactions);
+        this.interactions = Lists.newArrayList(interactions);
     }
-
-    private String name;
-    private TapeMode mode = Configuration.DEFAULT_MODE;
-    private MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
-    private List<RecordedInteraction> interactions = Lists.newArrayList();
-    private AtomicInteger orderedIndex = new AtomicInteger();
 
 }

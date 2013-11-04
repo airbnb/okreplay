@@ -19,6 +19,7 @@ package co.freeside.betamax;
 import java.io.*;
 import java.util.*;
 import co.freeside.betamax.internal.*;
+import co.freeside.betamax.tape.*;
 import co.freeside.betamax.util.*;
 import com.google.common.collect.*;
 import static co.freeside.betamax.MatchRules.method;
@@ -44,6 +45,7 @@ public class Configuration {
     public static final String DEFAULT_TAPE_ROOT = "src/test/resources/betamax/tapes";
     public static final TapeMode DEFAULT_MODE = TapeMode.READ_ONLY;
     public static final MatchRule DEFAULT_MATCH_RULE = ComposedMatchRule.of(method, uri);
+    public static final EntityStorage DEFAULT_RESPONSE_BODY_STORAGE = EntityStorage.inline;
 
     private final File tapeRoot;
     private final TapeMode defaultMode;

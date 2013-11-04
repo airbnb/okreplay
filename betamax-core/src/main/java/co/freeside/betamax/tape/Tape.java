@@ -41,6 +41,11 @@ public interface Tape {
     void setMatchRule(MatchRule matchRule);
 
     /**
+     * @param entityStorage the policy used for storing response bodies on the tape.
+     */
+    void setResponseBodyStorage(EntityStorage entityStorage);
+
+    /**
      * @return `true` if the tape is readable, `false` otherwise.
      */
     boolean isReadable();
