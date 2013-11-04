@@ -16,7 +16,7 @@
 
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.tape.yaml.*
+import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
 import spock.lang.*
@@ -32,33 +32,34 @@ class ContentCharsetSpec extends Specification {
     @Shared def loader = new YamlTapeLoader(tapeRoot)
 
     void "a response with a #charset body is recorded correctly"() {
-		given:
-		def request = new BasicRequest()
+        given:
+        def request = new BasicRequest()
 
-		def response = new BasicResponse(HTTP_OK, "OK")
-		response.addHeader(CONTENT_TYPE, "text/plain;charset=$charset")
-		response.addHeader(CONTENT_ENCODING, "none")
-		response.body = "\u00a3".getBytes(charset)
+        def response = new BasicResponse(HTTP_OK, "OK")
+        response.addHeader(CONTENT_TYPE, "text/plain;charset=$charset")
+        response.addHeader(CONTENT_ENCODING, "none")
+        response.body = "\u00a3".getBytes(charset)
 
-		and:
-		def tape = new YamlTape(name: "charsets", mode: READ_WRITE)
-		tape.record(request, response)
+        and:
+        def tape = loader.newTape("charsets")
+        tape.mode = READ_WRITE
+        tape.record(request, response)
 
-		when:
-		def writer = new StringWriter()
-		loader.writeTo(tape, writer)
+        when:
+        def writer = new StringWriter()
+        loader.writeTo(tape, writer)
 
-		then:
-		def yaml = writer.toString()
-		yaml.contains("body: \u00a3")
+        then:
+        def yaml = writer.toString()
+        yaml.contains("body: \u00a3")
 
-		where:
-		charset << ["UTF-8", "ISO-8859-1"]
-	}
+        where:
+        charset << ["UTF-8", "ISO-8859-1"]
+    }
 
-	void "a response with a #charset body is played back correctly"() {
-		given:
-		def yaml = """\
+    void "a response with a #charset body is played back correctly"() {
+        given:
+        def yaml = """\
 !tape
 name: charsets
 interactions:
@@ -73,20 +74,20 @@ interactions:
       Content-Encoding: none
     body: \u00a3
 """
-		def tape = loader.readFrom(new StringReader(yaml))
+        def tape = loader.readFrom(new StringReader(yaml))
 
-		and:
-		def request = new BasicRequest("GET", "http://freeside.co/betamax")
+        and:
+        def request = new BasicRequest("GET", "http://freeside.co/betamax")
 
-		when:
-		def response = tape.play(request)
+        when:
+        def response = tape.play(request)
 
-		then:
-		def expected = "\u00a3".getBytes(charset)
-		response.bodyAsBinary.input.bytes == expected
+        then:
+        def expected = "\u00a3".getBytes(charset)
+        response.bodyAsBinary.input.bytes == expected
 
-		where:
-		charset << ["UTF-8", "ISO-8859-1"]
-	}
+        where:
+        charset << ["UTF-8", "ISO-8859-1"]
+    }
 
 }

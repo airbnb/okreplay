@@ -30,9 +30,14 @@ class YamlTape extends MemoryTape implements StorableTape {
     public static final Tag TAPE_TAG = new Tag("!tape");
 
     private boolean dirty;
+    private final File tapeRoot;
     private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
 
     private static final Logger LOG = Logger.getLogger(YamlTape.class.getName());
+
+    public YamlTape(File tapeRoot) {
+        this.tapeRoot = tapeRoot;
+    }
 
     @Override
     public boolean isDirty() {
@@ -47,15 +52,15 @@ class YamlTape extends MemoryTape implements StorableTape {
 
     @Override
     protected void writeBodyToExternal(Message message, RecordedMessage clone) throws IOException {
-        File body = tempFileFor(message);
+        File body = fileFor(message);
         ByteStreams.copy(message.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
         clone.setBody(body);
     }
 
-    private File tempFileFor(Message message) throws IOException {
+    private File fileFor(Message message) throws IOException {
         try {
             String suffix = mimeTypes.forName(message.getContentType()).getExtension();
-            return File.createTempFile("body", suffix);
+            return new File(tapeRoot, String.format("body%s", suffix));
         } catch (MimeTypeException e) {
             LOG.warning(String.format("Could not get extension for %s content type: %s", message.getContentType(), e.getMessage()));
             return File.createTempFile("body", ".bin");

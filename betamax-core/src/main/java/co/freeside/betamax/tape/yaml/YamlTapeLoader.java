@@ -51,9 +51,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
                 throw new RuntimeException(e);
             }
         } else {
-            YamlTape tape = new YamlTape();
-            tape.setName(name);
-            return tape;
+            return newTape(name);
         }
 
     }
@@ -71,6 +69,13 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @VisibleForTesting
+    public YamlTape newTape(String name) {
+        YamlTape tape = new YamlTape(tapeRoot);
+        tape.setName(name);
+        return tape;
     }
 
     @VisibleForTesting
@@ -108,7 +113,8 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
         TapeRepresenter representer = new TapeRepresenter();
         representer.addClassTag(YamlTape.class, YamlTape.TAPE_TAG);
 
-        Constructor constructor = new TapeConstructor();
+        Constructor constructor = new TapeConstructor(tapeRoot);
+        constructor.addTypeDescription(new TypeDescription(YamlTape.class, YamlTape.TAPE_TAG));
 
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);

@@ -17,7 +17,7 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.message.*
-import co.freeside.betamax.tape.yaml.*
+import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
@@ -72,7 +72,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "can write a tape to storage"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -93,7 +94,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "writes request headers"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -108,7 +110,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "writes response headers"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -124,7 +127,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "can write requests with a body"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -139,7 +143,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "can write multiple interactions"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -158,7 +163,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "can write a binary response body"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -173,7 +179,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "text response body is written to file as plain text"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
@@ -186,7 +193,8 @@ class WriteTapeToYamlSpec extends Specification {
 
     void "binary response body is written to file as binary data"() {
         given:
-        def tape = new YamlTape(name: "tape_loading_spec", mode: READ_WRITE)
+        def tape = loader.newTape("tape_loading_spec")
+        tape.mode = READ_WRITE
         def writer = new StringWriter()
 
         when:
