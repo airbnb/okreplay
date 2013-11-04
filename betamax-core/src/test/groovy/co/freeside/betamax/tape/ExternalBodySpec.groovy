@@ -35,9 +35,16 @@ class ExternalBodySpec extends Specification {
 
     @Shared def request = new BasicRequest("GET", "http://freeside.co/betamax")
     @Shared def plainTextResponse = new BasicResponse(status: 200, reason: "OK", body: "O HAI!".bytes)
+    @Shared
+    def imageResponse = new BasicResponse(status: 200, reason: "OK", body: Class.getResourceAsStream("/image.png").bytes)
+    @Shared def jsonResponse = new BasicResponse(status: 200, reason: "OK", body: '{"message":"O HAI!"}'.bytes)
 
     void setup() {
         tape.mode = READ_WRITE
+
+        plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
+        imageResponse.addHeader(CONTENT_TYPE, "image/png")
+        jsonResponse.addHeader(CONTENT_TYPE, "application/json")
     }
 
     void "can write an HTTP interaction to a tape"() {
@@ -68,6 +75,26 @@ class ExternalBodySpec extends Specification {
         then: "the body file is created in the tape root directory"
         def body = tape.interactions[-1].response.body as File
         body.parentFile == tapeRoot
+    }
+
+    void "the body file extension is #extension when the content type is #contentType"() {
+        given: "the tape is set to record response bodies externally"
+        tape.responseBodyStorage = external
+
+        when: "an HTTP interaction is recorded to tape"
+        tape.record(request, response)
+
+        then: "the body file is created in the tape root directory"
+        def body = tape.interactions[-1].response.body as File
+        Files.getFileExtension(body.name) == extension
+
+        where:
+        response          | extension
+        plainTextResponse | "txt"
+        imageResponse     | "png"
+        jsonResponse      | "json"
+
+        contentType = response.contentType
     }
 
 }

@@ -225,7 +225,7 @@ public abstract class MemoryTape implements Tape {
         }
     }
 
-    protected abstract void writeBodyToExternal(Response response, RecordedResponse clone) throws IOException;
+    protected abstract void writeBodyToExternal(Message response, RecordedMessage clone) throws IOException;
 
     public static boolean isTextContentType(String contentType) {
         return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();

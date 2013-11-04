@@ -17,10 +17,12 @@
 package co.freeside.betamax.tape.yaml;
 
 import java.io.*;
+import java.util.logging.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.tape.*;
 import co.freeside.betamax.tape.*;
 import com.google.common.io.*;
+import org.apache.tika.mime.*;
 import org.yaml.snakeyaml.*;
 import org.yaml.snakeyaml.constructor.*;
 import org.yaml.snakeyaml.error.*;
@@ -30,12 +32,10 @@ class YamlTape extends MemoryTape implements StorableTape {
 
     public static final Tag TAPE_TAG = new Tag("!tape");
 
-    private final File tapeRoot;
     private boolean dirty;
+    private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
 
-    public YamlTape(File tapeRoot) {
-        this.tapeRoot = tapeRoot;
-    }
+    private static final Logger LOG = Logger.getLogger(YamlTape.class.getName());
 
     public static YamlTape readFrom(Reader reader) {
         try {
@@ -45,10 +45,12 @@ class YamlTape extends MemoryTape implements StorableTape {
         }
     }
 
+    @Override
     public void writeTo(Writer writer) {
         getYaml().dump(this, writer);
     }
 
+    @Override
     public boolean isDirty() {
         return dirty;
     }
@@ -59,10 +61,21 @@ class YamlTape extends MemoryTape implements StorableTape {
         dirty = true;
     }
 
-    protected void writeBodyToExternal(Response response, RecordedResponse clone) throws IOException {
-        File body = new File(tapeRoot, "body.txt");
-        ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+    @Override
+    protected void writeBodyToExternal(Message message, RecordedMessage clone) throws IOException {
+        File body = tempFileFor(message);
+        ByteStreams.copy(message.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
         clone.setBody(body);
+    }
+
+    private File tempFileFor(Message message) throws IOException {
+        try {
+            String suffix = mimeTypes.forName(message.getContentType()).getExtension();
+            return File.createTempFile("body", suffix);
+        } catch (MimeTypeException e) {
+            LOG.warning(String.format("Could not get extension for %s content type: %s", message.getContentType(), e.getMessage()));
+            return File.createTempFile("body", ".bin");
+        }
     }
 
     private static Yaml getYaml() {

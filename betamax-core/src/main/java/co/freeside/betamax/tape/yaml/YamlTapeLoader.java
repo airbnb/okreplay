@@ -47,7 +47,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
                 throw new RuntimeException(e);
             }
         } else {
-            YamlTape tape = new YamlTape(tapeRoot);
+            YamlTape tape = new YamlTape();
             tape.setName(name);
             return tape;
         }

@@ -20,30 +20,27 @@ import java.io.*;
 import java.util.*;
 import co.freeside.betamax.message.*;
 import com.google.common.base.*;
+import com.google.common.collect.*;
 
 public abstract class BasicMessage extends AbstractMessage {
 
     @Override
     public void addHeader(String name, String value) {
-        if (headers.containsKey(name)) {
-            List<String> values = headers.get(name);
-            values.add(value);
-            headers.put(name, values);
-        } else {
-            headers.put(name, Arrays.asList(value));
-        }
-
+        headers.put(name, value);
     }
 
     public void setHeaders(Map<String, List<String>> headers) {
-        this.headers = headers;
+        this.headers.clear();
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            this.headers.putAll(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
     public Map<String, String> getHeaders() {
-        LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
-        for (Map.Entry<String, List<String>> header : headers.entrySet()) {
-            map.put(header.getKey(), Joiner.on(", ").join(header.getValue()));
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (String name : headers.keySet()) {
+            map.put(name, Joiner.on(", ").join(headers.get(name)));
         }
 
         return map;
@@ -67,6 +64,6 @@ public abstract class BasicMessage extends AbstractMessage {
         this.body = body;
     }
 
-    private Map<String, List<String>> headers = new LinkedHashMap<String, List<String>>();
+    private Multimap<String, String> headers = LinkedHashMultimap.create();
     private byte[] body = new byte[0];
 }

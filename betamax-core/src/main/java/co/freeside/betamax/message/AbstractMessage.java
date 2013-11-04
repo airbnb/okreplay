@@ -48,6 +48,7 @@ public abstract class AbstractMessage implements Message {
                 declaredCharset = matcher.group(1);
             }
         }
+        // TODO: this isn't valid for non-text data – this method should return Optional<String>
         return defaultIfNullOrEmpty(declaredCharset, DEFAULT_CHARSET);
     }
 

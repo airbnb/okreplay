@@ -105,7 +105,7 @@ public class Recorder {
     /**
      * Not just a property as `tapeRoot` gets changed during constructor.
      */
-    private TapeLoader getTapeLoader() {
+    private TapeLoader<? extends Tape> getTapeLoader() {
         return new YamlTapeLoader(configuration.getTapeRoot());
     }
 
