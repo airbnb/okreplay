@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape;
+package co.freeside.betamax.tape.yaml;
 
-/**
- * A `Tape` that can be read from an written to a backing store.
- */
-public interface StorableTape extends Tape {
+import org.yaml.snakeyaml.constructor.*;
+import org.yaml.snakeyaml.nodes.*;
 
-    /**
-     * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
-     */
-    public boolean isDirty();
+public class TapeConstructor extends Constructor {
+
+    public TapeConstructor() {
+        yamlConstructors.put(YamlTape.TAPE_TAG, new ConstructTape());
+    }
+
+    private class ConstructTape extends AbstractConstruct {
+        @Override
+        public Object construct(Node node) {
+            return new YamlTape();
+        }
+    }
 }

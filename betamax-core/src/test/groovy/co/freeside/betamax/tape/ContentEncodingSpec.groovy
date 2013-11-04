@@ -16,51 +16,53 @@
 
 package co.freeside.betamax.tape
 
-import co.freeside.betamax.TapeMode
-import co.freeside.betamax.encoding.*
-import co.freeside.betamax.tape.yaml.YamlTape
+import co.freeside.betamax.tape.yaml.*
 import co.freeside.betamax.util.message.*
+import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpHeaders.*
 
-@Issue('https://github.com/robfletcher/betamax/issues/3')
+@Issue("https://github.com/robfletcher/betamax/issues/3")
 @Unroll
 class ContentEncodingSpec extends Specification {
 
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def loader = new YamlTapeLoader(tapeRoot)
+
     /**
-     * This is really just testing that the tape doesn't do anything silly
+     * This is really just testing that the tape doesn"t do anything silly
      * in the presence of a Content-Encoding header. It is the responsibility
      * of the Response implementation to decode the downstream content.
      */
-	void 'a #encoding encoded response body is stored as plain text in a tape file'() {
+	void "a #encoding encoded response body is stored as plain text in a tape file"() {
 		given:
-		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
+		def request = new BasicRequest("GET", "http://freeside.co/betamax")
 		request.addHeader(ACCEPT_ENCODING, encoding)
 
-		def response = new BasicResponse(HTTP_OK, 'OK')
-		response.addHeader(CONTENT_TYPE, 'text/plain')
+		def response = new BasicResponse(HTTP_OK, "OK")
+		response.addHeader(CONTENT_TYPE, "text/plain")
 		response.addHeader(CONTENT_ENCODING, encoding)
-		response.body = 'O HAI!'.bytes
+		response.body = "O HAI!".bytes
 
 		and:
-		def tape = new YamlTape(name: 'encoded response tape', mode: READ_WRITE)
+		def tape = new YamlTape(name: "encoded response tape", mode: READ_WRITE)
 		tape.record(request, response)
 
 		when:
 		def writer = new StringWriter()
-		tape.writeTo(writer)
+		loader.writeTo(tape, writer)
 
 		then:
 		def yaml = writer.toString()
-		yaml.contains('body: O HAI!')
+		yaml.contains("body: O HAI!")
 
 		where:
-		encoding << ['gzip', 'deflate', 'none']
+		encoding << ["gzip", "deflate", "none"]
 	}
 
-	void 'response body is not encoded when played from tape and a #encoding content-encoding header is present'() {
+	void "response body is not encoded when played from tape and a #encoding content-encoding header is present"() {
 		given:
 		def yaml = """\
 !tape
@@ -76,17 +78,17 @@ interactions:
     headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
     body: O HAI!
 """
-		def tape = YamlTape.readFrom(new StringReader(yaml))
+		def tape = loader.readFrom(new StringReader(yaml))
 
 		and:
-		def request = new BasicRequest('GET', 'http://freeside.co/betamax')
+		def request = new BasicRequest("GET", "http://freeside.co/betamax")
 
 		when:
 		def response = tape.play(request)
 
 		then:
 		response.getHeader(CONTENT_ENCODING) == encoding
-		response.bodyAsText.input.text == 'O HAI!'
+		response.bodyAsText.input.text == "O HAI!"
 
 		where:
 		encoding << ["gzip", "deflate"]

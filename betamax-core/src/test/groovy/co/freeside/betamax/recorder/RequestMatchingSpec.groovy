@@ -17,13 +17,17 @@
 package co.freeside.betamax.recorder
 
 import co.freeside.betamax.*
-import co.freeside.betamax.tape.yaml.YamlTape
+import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.BasicRequest
+import com.google.common.io.Files
 import spock.lang.*
 import static org.apache.http.HttpHeaders.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
+
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def loader = new YamlTapeLoader(tapeRoot)
 
     @Unroll('#method request for #uri returns "#responseText"')
     void "default match is method and uri"() {
@@ -59,7 +63,7 @@ interactions:
 """
 
         and:
-        def tape = YamlTape.readFrom(new StringReader(yaml))
+        def tape = loader.readFrom(new StringReader(yaml))
 
         when:
         def response = tape.play(request)
@@ -94,7 +98,7 @@ interactions:
 """
 
         and:
-        def tape = YamlTape.readFrom(new StringReader(yaml))
+        def tape = loader.readFrom(new StringReader(yaml))
         tape.matchRule = MatchRules.host
 
         when:
@@ -138,7 +142,7 @@ interactions:
 """
 
         and:
-        def tape = YamlTape.readFrom(new StringReader(yaml))
+        def tape = loader.readFrom(new StringReader(yaml))
         tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.headers)
 
         when:

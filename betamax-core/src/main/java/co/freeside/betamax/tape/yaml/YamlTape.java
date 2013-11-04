@@ -23,9 +23,6 @@ import co.freeside.betamax.message.tape.*;
 import co.freeside.betamax.tape.*;
 import com.google.common.io.*;
 import org.apache.tika.mime.*;
-import org.yaml.snakeyaml.*;
-import org.yaml.snakeyaml.constructor.*;
-import org.yaml.snakeyaml.error.*;
 import org.yaml.snakeyaml.nodes.*;
 
 class YamlTape extends MemoryTape implements StorableTape {
@@ -36,19 +33,6 @@ class YamlTape extends MemoryTape implements StorableTape {
     private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
 
     private static final Logger LOG = Logger.getLogger(YamlTape.class.getName());
-
-    public static YamlTape readFrom(Reader reader) {
-        try {
-            return getYaml().loadAs(reader, YamlTape.class);
-        } catch (YAMLException e) {
-            throw new TapeLoadException("Invalid tape", e);
-        }
-    }
-
-    @Override
-    public void writeTo(Writer writer) {
-        getYaml().dump(this, writer);
-    }
 
     @Override
     public boolean isDirty() {
@@ -78,17 +62,4 @@ class YamlTape extends MemoryTape implements StorableTape {
         }
     }
 
-    private static Yaml getYaml() {
-        TapeRepresenter representer = new TapeRepresenter();
-        representer.addClassTag(YamlTape.class, TAPE_TAG);
-
-        Constructor constructor = new Constructor();
-        constructor.addTypeDescription(new TypeDescription(YamlTape.class, TAPE_TAG));
-
-        DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-        dumperOptions.setWidth(256);
-
-        return new Yaml(constructor, representer, dumperOptions);
-    }
 }

@@ -16,19 +16,23 @@
 
 package co.freeside.betamax.tape.yaml;
 
-import co.freeside.betamax.tape.StorableTape;
-import co.freeside.betamax.tape.TapeLoader;
-import com.google.common.io.Files;
-
 import java.io.*;
-import java.text.Normalizer;
-import java.util.logging.Logger;
-import java.nio.charset.Charset;
+import java.nio.charset.*;
+import java.text.*;
+import java.util.logging.*;
+import co.freeside.betamax.tape.*;
+import com.google.common.annotations.*;
+import com.google.common.io.*;
+import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.constructor.*;
+import org.yaml.snakeyaml.error.*;
 
 public class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     public static final String FILE_CHARSET = "UTF-8";
+
     private final File tapeRoot;
+
     private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getName());
 
     public YamlTapeLoader(File tapeRoot) {
@@ -40,7 +44,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
         if (file.isFile()) {
             try {
                 BufferedReader reader = Files.newReader(file, Charset.forName(FILE_CHARSET));
-                YamlTape tape = YamlTape.readFrom(reader);
+                YamlTape tape = readFrom(reader);
                 LOG.info(String.format("loaded tape with %d recorded interactions from file %s...", tape.size(), file.getAbsolutePath()));
                 return tape;
             } catch (FileNotFoundException e) {
@@ -62,10 +66,28 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
             try {
                 BufferedWriter bufferedWriter = Files.newWriter(file, Charset.forName(FILE_CHARSET));
                 LOG.info(String.format("writing tape %s to file %s...", tape.getName(), file.getAbsolutePath()));
-                tape.writeTo(bufferedWriter);
-            } catch (FileNotFoundException e) {
+                writeTo(tape, bufferedWriter);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @VisibleForTesting
+    public YamlTape readFrom(Reader reader) {
+        try {
+            return getYaml().loadAs(reader, YamlTape.class);
+        } catch (YAMLException e) {
+            throw new TapeLoadException("Invalid tape", e);
+        }
+    }
+
+    @VisibleForTesting
+    public void writeTo(StorableTape tape, Writer writer) throws IOException {
+        try {
+            getYaml().dump(tape, writer);
+        } finally {
+            writer.close();
         }
     }
 
@@ -81,4 +103,18 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     public final File getTapeRoot() {
         return tapeRoot;
     }
+
+    private Yaml getYaml() {
+        TapeRepresenter representer = new TapeRepresenter();
+        representer.addClassTag(YamlTape.class, YamlTape.TAPE_TAG);
+
+        Constructor constructor = new TapeConstructor();
+
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        dumperOptions.setWidth(256);
+
+        return new Yaml(constructor, representer, dumperOptions);
+    }
+
 }

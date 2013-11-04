@@ -17,8 +17,9 @@
 package co.freeside.betamax.tape
 
 import co.freeside.betamax.message.*
-import co.freeside.betamax.tape.yaml.YamlTape
+import co.freeside.betamax.tape.yaml.*
 import co.freeside.betamax.util.message.*
+import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
@@ -26,6 +27,9 @@ import static java.net.HttpURLConnection.*
 import static org.apache.http.HttpHeaders.*
 
 class WriteTapeToYamlSpec extends Specification {
+
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def loader = new YamlTapeLoader(tapeRoot)
 
     @Shared Request getRequest
     @Shared Request postRequest
@@ -73,7 +77,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, successResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -94,7 +98,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, successResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -109,7 +113,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, successResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -125,7 +129,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(postRequest, successResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -141,7 +145,7 @@ class WriteTapeToYamlSpec extends Specification {
         when:
         tape.record(getRequest, successResponse)
         tape.record(postRequest, failureResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -159,7 +163,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, imageResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
@@ -174,7 +178,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, successResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         writer.toString().contains("body: O HAI!")
@@ -187,7 +191,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         when:
         tape.record(getRequest, imageResponse)
-        tape.writeTo(writer)
+        loader.writeTo(tape, writer)
 
         then:
         writer.toString().contains("body: !!binary |-")
