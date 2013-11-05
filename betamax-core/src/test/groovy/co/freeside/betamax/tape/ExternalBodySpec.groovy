@@ -29,15 +29,14 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 @Unroll
 class ExternalBodySpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     def loader = new YamlTapeLoader(tapeRoot)
 
     @Subject def tape = loader.loadTape("external body spec")
 
     @Shared def request = new BasicRequest("GET", "http://freeside.co/betamax")
     @Shared def plainTextResponse = new BasicResponse(status: 200, reason: "OK", body: "O HAI!".bytes)
-    @Shared
-    def imageResponse = new BasicResponse(status: 200, reason: "OK", body: Class.getResourceAsStream("/image.png").bytes)
+    @Shared def imageResponse = new BasicResponse(status: 200, reason: "OK", body: Class.getResourceAsStream("/image.png").bytes)
     @Shared def jsonResponse = new BasicResponse(status: 200, reason: "OK", body: '{"message":"O HAI!"}'.bytes)
 
     void setup() {
@@ -63,6 +62,7 @@ class ExternalBodySpec extends Specification {
         and: "the response body is stored as a file reference"
         interaction.response.body instanceof File
         def body = interaction.response.body as File
+        body.isFile()
         body.text == "O HAI!"
     }
 
@@ -76,6 +76,40 @@ class ExternalBodySpec extends Specification {
         then: "the body file is created in the tape root directory"
         def body = tape.interactions[-1].response.body as File
         body.parentFile == tapeRoot
+    }
+
+    void "each recorded interaction gets its own file"() {
+        given: "the tape is set to record response bodies externally"
+        tape.responseBodyStorage = external
+
+        when: "multiple HTTP interactions are recorded to tape"
+        tape.record(request, plainTextResponse)
+        def request2 = new BasicRequest("GET", "http://freeside.co/betamax/2")
+        tape.record(request2, plainTextResponse)
+
+        then: "each interaction has its own body file"
+        def body1 = tape.interactions[0].response.body as File
+        def body2 = tape.interactions[1].response.body as File
+        body1.isFile()
+        body2.isFile()
+        body1 != body2
+    }
+
+    void "if a response is overwritten the body file is re-used"() {
+        given: "the tape is set to record response bodies externally"
+        tape.responseBodyStorage = external
+
+        and: "an HTTP interaction has already been recorded to tape"
+        tape.record(request, plainTextResponse)
+
+        when: "the same interaction is overwritten"
+        tape.record(request, new BasicResponse(status: 200, reason: "OK", body: "KTHXBYE".bytes))
+
+        then: "the body file is re-used"
+        tape.interactions[0].response.body == old(tape.interactions[0].response.body)
+
+        and: "the data in the file is replaced"
+        (tape.interactions[0].response.body as File).text == "KTHXBYE"
     }
 
     void "the body file extension is #extension when the content type is #contentType"() {
