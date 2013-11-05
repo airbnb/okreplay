@@ -90,4 +90,9 @@ public interface Tape {
      * @throws UnsupportedOperationException if this `Tape` implementation is not writable.
      */
     void record(Request request, Response response);
+
+    /**
+     * @return `true` if the tape content has changed since last being loaded from disk, `false` otherwise.
+     */
+    boolean isDirty();
 }

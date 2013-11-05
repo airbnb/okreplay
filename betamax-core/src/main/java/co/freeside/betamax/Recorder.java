@@ -109,5 +109,5 @@ public class Recorder {
         return new YamlTapeLoader(configuration.getTapeRoot());
     }
 
-    private StorableTape tape;
+    private Tape tape;
 }

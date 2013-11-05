@@ -65,7 +65,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void writeTape(final StorableTape tape) {
+    public void writeTape(final Tape tape) {
         File file = fileFor(tape.getName());
         file.getParentFile().mkdirs();
         if (tape.isDirty()) {
@@ -96,7 +96,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     }
 
     @VisibleForTesting
-    public void writeTo(StorableTape tape, Writer writer) throws IOException {
+    public void writeTo(Tape tape, Writer writer) throws IOException {
         try {
             getYaml().dump(tape, writer);
         } finally {

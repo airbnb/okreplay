@@ -21,7 +21,7 @@ import java.io.File;
 /**
  * The interface for factories that load tapes from file storage.
  */
-public interface TapeLoader<T extends StorableTape> {
+public interface TapeLoader<T extends Tape> {
     /**
      * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
      *
@@ -30,7 +30,7 @@ public interface TapeLoader<T extends StorableTape> {
      */
     public T loadTape(String name);
 
-    public void writeTape(StorableTape tape);
+    public void writeTape(Tape tape);
 
     /**
      * @return an appropriate file for storing a tape with the supplied name.

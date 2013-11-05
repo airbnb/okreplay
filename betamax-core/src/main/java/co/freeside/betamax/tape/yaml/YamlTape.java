@@ -21,7 +21,7 @@ import co.freeside.betamax.message.*;
 import co.freeside.betamax.tape.*;
 import org.yaml.snakeyaml.nodes.*;
 
-class YamlTape extends MemoryTape implements StorableTape {
+class YamlTape extends MemoryTape {
 
     public static final Tag TAPE_TAG = new Tag("!tape");
 
