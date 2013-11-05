@@ -32,8 +32,7 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*;
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued
- * properties,
- * empty collections and empty maps.
+ * properties, empty collections and empty maps.
  */
 public class TapeRepresenter extends Representer {
 
@@ -109,13 +108,13 @@ public class TapeRepresenter extends Representer {
         protected Set<Property> createPropertySet(Class<?> type, BeanAccess bAccess) {
             try {
                 Set<Property> properties = super.createPropertySet(type, bAccess);
-                if (type.equals(Tape.class)) {
+                if (Tape.class.isAssignableFrom(type)) {
                     return sort(properties, "name", "interactions");
-                } else if (type.equals(RecordedInteraction.class)) {
+                } else if (RecordedInteraction.class.isAssignableFrom(type)) {
                     return sort(properties, "recorded", "request", "response");
-                } else if (type.equals(RecordedRequest.class)) {
+                } else if (RecordedRequest.class.isAssignableFrom(type)) {
                     return sort(properties, "method", "uri", "headers", "body");
-                } else if (type.equals(RecordedResponse.class)) {
+                } else if (RecordedResponse.class.isAssignableFrom(type)) {
                     return sort(properties, "status", "headers", "body");
                 } else {
                     return properties;
@@ -126,13 +125,18 @@ public class TapeRepresenter extends Representer {
         }
 
         private Set<Property> sort(Set<Property> properties, String... names) {
-            return new LinkedHashSet<Property>(Ordering.from(new OrderedPropertyComparator(names)).sortedCopy(properties));
+            return Sets.newLinkedHashSet(Ordering.from(OrderedPropertyComparator.forNames(names)).sortedCopy(properties));
         }
     }
 
-    public class OrderedPropertyComparator implements Comparator<Property> {
-        public OrderedPropertyComparator(String... propertyNames) {
-            this.propertyNames = Lists.newArrayList(propertyNames);
+    public static class OrderedPropertyComparator implements Comparator<Property> {
+
+        public static OrderedPropertyComparator forNames(String... propertyNames) {
+            return new OrderedPropertyComparator(propertyNames);
+        }
+
+        private OrderedPropertyComparator(String... propertyNames) {
+            this.propertyNames = Arrays.asList(propertyNames);
         }
 
         public int compare(Property a, Property b) {
