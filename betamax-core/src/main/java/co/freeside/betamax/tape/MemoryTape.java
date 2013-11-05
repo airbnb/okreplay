@@ -18,23 +18,23 @@ package co.freeside.betamax.tape;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
-import java.util.regex.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 import co.freeside.betamax.*;
-import co.freeside.betamax.handler.*;
+import co.freeside.betamax.handler.NonWritableTapeException;
 import co.freeside.betamax.io.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.tape.*;
-import com.google.common.base.*;
+import com.google.common.base.Predicate;
 import com.google.common.collect.*;
 import com.google.common.io.*;
-import org.yaml.snakeyaml.reader.*;
-import static co.freeside.betamax.Headers.*;
-import static com.google.common.net.HttpHeaders.*;
-import static java.util.Collections.*;
+import static co.freeside.betamax.Headers.X_BETAMAX;
+import static com.google.common.net.HttpHeaders.VIA;
+import static java.util.Collections.unmodifiableList;
 
 /**
- * Represents a set of recorded HTTP interactions that can be played back or appended to.
+ * Represents a set of recorded HTTP interactions that can be played back or
+ * appended to.
  */
 public abstract class MemoryTape implements Tape {
 
@@ -249,7 +249,7 @@ public abstract class MemoryTape implements Tape {
     }
 
     private void recordBodyInline(Message message, RecordedMessage clone) throws IOException {
-        boolean representAsText = isTextContentType(message.getContentType()) && isPrintable(CharStreams.toString(message.getBodyAsText()));
+        boolean representAsText = isTextContentType(message.getContentType());
         clone.setBody(representAsText ? CharStreams.toString(message.getBodyAsText()) : ByteStreams.toByteArray(message.getBodyAsBinary()));
     }
 
@@ -262,12 +262,6 @@ public abstract class MemoryTape implements Tape {
 
     public static boolean isTextContentType(String contentType) {
         return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();
-    }
-
-    public static boolean isPrintable(String s) {
-        // this check is performed by SnakeYaml but we need to do so *before* unzipping the byte stream otherwise we
-        // won't be able to read it back again.
-        return !StreamReader.NON_PRINTABLE.matcher(s).find();
     }
 
 }
