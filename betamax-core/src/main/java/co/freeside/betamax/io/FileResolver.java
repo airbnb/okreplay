@@ -16,10 +16,32 @@
 
 package co.freeside.betamax.io;
 
-import java.io.*;
+import java.io.File;
 
-public interface FileResolver {
+/**
+ * Converts between {@link File} instances and a path relative to a known base
+ * directory.
+ */
+public final class FileResolver {
 
-    File newFile(String path);
+    private final File baseDirectory;
+    private final String baseDirectoryPath;
+
+    public FileResolver(File baseDirectory) {
+        this.baseDirectory = baseDirectory.getAbsoluteFile();
+        baseDirectoryPath = baseDirectory.getAbsolutePath();
+    }
+
+    public File toFile(String path) {
+        return new File(baseDirectory, path);
+    }
+
+    public String toPath(File file) {
+        String absolutePath = file.getAbsolutePath();
+        if (!absolutePath.startsWith(baseDirectoryPath)) {
+            throw new IllegalArgumentException("file is not in the base directory sub-tree of this FileResolver");
+        }
+        return absolutePath.substring(baseDirectoryPath.length() + 1);
+    }
 
 }

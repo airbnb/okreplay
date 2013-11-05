@@ -16,50 +16,50 @@
 
 package co.freeside.betamax.tape.yaml;
 
-import java.beans.*;
-import java.net.*;
+import java.beans.IntrospectionException;
+import java.io.File;
+import java.net.URI;
 import java.util.*;
+import co.freeside.betamax.io.FileResolver;
 import co.freeside.betamax.message.tape.*;
 import co.freeside.betamax.tape.*;
 import com.google.common.collect.*;
-import com.google.common.primitives.*;
-import org.yaml.snakeyaml.*;
+import com.google.common.primitives.Ints;
 import org.yaml.snakeyaml.introspector.*;
 import org.yaml.snakeyaml.nodes.*;
 import org.yaml.snakeyaml.representer.*;
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*;
 
 /**
- * Applies a fixed ordering to properties and excludes `null` valued properties, empty collections and empty maps.
+ * Applies a fixed ordering to properties and excludes `null` valued
+ * properties,
+ * empty collections and empty maps.
  */
 public class TapeRepresenter extends Representer {
 
-    public TapeRepresenter() {
+    private static final Tag FILE_TAG = new Tag("!file");
+
+    public TapeRepresenter(FileResolver fileResolver) {
         setPropertyUtils(new TapePropertyUtils());
         representers.put(URI.class, new RepresentURI());
+        representers.put(File.class, new RepresentFile(fileResolver));
     }
 
     @Override
     protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag customTag) {
         NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
-        if (tuple.getValueNode().getTag().equals(Tag.NULL)) {
+
+        if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
             return null;
         }
 
-        if (tuple.getValueNode() instanceof SequenceNode && ((SequenceNode) (tuple.getValueNode())).getValue().isEmpty()) {
-            return null;
-        }
-
-        if (tuple.getValueNode() instanceof MappingNode && ((MappingNode) (tuple.getValueNode())).getValue().isEmpty()) {
-            return null;
-        }
-
-        if (property.getName().equals("body")) {
+        if ("body".equals(property.getName())) {
             ScalarNode n = (ScalarNode) tuple.getValueNode();
-            if (n.getStyle() == DumperOptions.ScalarStyle.PLAIN.getChar()) {
+            if (n.getStyle() == PLAIN.getChar()) {
                 return tuple;
+            } else {
+                return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n.getStartMark(), n.getEndMark(), LITERAL.getChar()));
             }
-
-            return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n.getStartMark(), n.getEndMark(), DumperOptions.ScalarStyle.LITERAL.getChar()));
         }
 
         return tuple;
@@ -74,9 +74,35 @@ public class TapeRepresenter extends Representer {
         return new TreeMap<K, V>(self);
     }
 
+    private boolean isNullValue(NodeTuple tuple) {
+        return tuple.getValueNode().getTag().equals(Tag.NULL);
+    }
+
+    private boolean isEmptySequence(NodeTuple tuple) {
+        return tuple.getValueNode() instanceof SequenceNode && ((SequenceNode) tuple.getValueNode()).getValue().isEmpty();
+    }
+
+    private boolean isEmptyMapping(NodeTuple tuple) {
+        return tuple.getValueNode() instanceof MappingNode && ((MappingNode) tuple.getValueNode()).getValue().isEmpty();
+    }
+
     private class RepresentURI implements Represent {
         public Node representData(Object data) {
             return representScalar(Tag.STR, data.toString());
+        }
+    }
+
+    private class RepresentFile implements Represent {
+
+        private final FileResolver fileResolver;
+
+        public RepresentFile(FileResolver fileResolver) {
+            this.fileResolver = fileResolver;
+        }
+
+        @Override
+        public Node representData(Object data) {
+            return representScalar(FILE_TAG, fileResolver.toPath((File) data));
         }
     }
 

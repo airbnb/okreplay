@@ -97,4 +97,20 @@ class ExternalBodySpec extends Specification {
         contentType = response.contentType
     }
 
+    void "the body file is written to YAML as a file path relative to the tape root"() {
+        given: "the tape is set to record response bodies externally"
+        tape.responseBodyStorage = external
+
+        and: "an HTTP interaction has been recorded to tape"
+        tape.record(request, plainTextResponse)
+
+        when: "the tape is written to YAML"
+        def writer = new StringWriter()
+        loader.writeTo(tape, writer)
+
+        then: "the response body file is a relative path"
+        def body = tape.interactions[-1].response.body as File
+        writer.toString().contains("body: !file '$body.name'")
+    }
+
 }

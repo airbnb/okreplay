@@ -17,34 +17,30 @@
 package co.freeside.betamax.tape.yaml;
 
 import java.io.*;
-import java.nio.charset.*;
-import java.text.*;
-import java.util.logging.*;
-import co.freeside.betamax.io.*;
+import java.nio.charset.Charset;
+import java.text.Normalizer;
+import java.util.logging.Logger;
+import co.freeside.betamax.io.FileResolver;
 import co.freeside.betamax.tape.*;
-import com.google.common.annotations.*;
-import com.google.common.io.*;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.io.Files;
 import org.yaml.snakeyaml.*;
-import org.yaml.snakeyaml.constructor.*;
-import org.yaml.snakeyaml.error.*;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.representer.Representer;
+import static co.freeside.betamax.tape.yaml.YamlTape.TAPE_TAG;
+import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
 
 public class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     public static final String FILE_CHARSET = "UTF-8";
 
-    private final File tapeRoot;
-
-    private final FileResolver fileResolver = new FileResolver() {
-        @Override
-        public File newFile(String path) {
-            return new File(tapeRoot, path);
-        }
-    };
+    private final FileResolver fileResolver;
 
     private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getName());
 
     public YamlTapeLoader(File tapeRoot) {
-        this.tapeRoot = tapeRoot;
+        fileResolver = new FileResolver(tapeRoot);
     }
 
     public YamlTape loadTape(String name) {
@@ -110,22 +106,18 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
                 .replaceAll("[^\\w\\d]+", "_")
                 .replaceFirst("^_", "")
                 .replaceFirst("_$", "");
-        return new File(tapeRoot, normalizedName + ".yaml");
-    }
-
-    public final File getTapeRoot() {
-        return tapeRoot;
+        return fileResolver.toFile(normalizedName + ".yaml");
     }
 
     private Yaml getYaml() {
-        TapeRepresenter representer = new TapeRepresenter();
-        representer.addClassTag(YamlTape.class, YamlTape.TAPE_TAG);
+        Representer representer = new TapeRepresenter(fileResolver);
+        representer.addClassTag(YamlTape.class, TAPE_TAG);
 
         Constructor constructor = new TapeConstructor(fileResolver);
-        constructor.addTypeDescription(new TypeDescription(YamlTape.class, YamlTape.TAPE_TAG));
+        constructor.addTypeDescription(new TypeDescription(YamlTape.class, TAPE_TAG));
 
         DumperOptions dumperOptions = new DumperOptions();
-        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        dumperOptions.setDefaultFlowStyle(BLOCK);
         dumperOptions.setWidth(256);
 
         return new Yaml(constructor, representer, dumperOptions);
