@@ -18,9 +18,8 @@ package co.freeside.betamax.tape.yaml;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.text.Normalizer;
 import java.util.logging.Logger;
-import co.freeside.betamax.io.FileResolver;
+import co.freeside.betamax.io.*;
 import co.freeside.betamax.tape.*;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files;
@@ -101,11 +100,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     }
 
     public File fileFor(String tapeName) {
-        final String normalizedName = Normalizer.normalize(tapeName, Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                .replaceAll("[^\\w\\d]+", "_")
-                .replaceFirst("^_", "")
-                .replaceFirst("_$", "");
+        final String normalizedName = FilenameNormalizer.getInstance().toFilename(tapeName);
         return fileResolver.toFile(normalizedName + ".yaml");
     }
 

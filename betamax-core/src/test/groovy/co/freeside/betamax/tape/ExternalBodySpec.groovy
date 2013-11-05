@@ -16,9 +16,9 @@
 
 package co.freeside.betamax.tape
 
+import co.freeside.betamax.io.FilenameNormalizer
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.*
-import com.google.common.io.CharStreams
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
@@ -66,7 +66,7 @@ class ExternalBodySpec extends Specification {
         body.text == "O HAI!"
     }
 
-    void "the body is written to same root directory as the tape itself"() {
+    void "the body is written to a subdirectory alongside the tape itself"() {
         given: "the tape is set to record response bodies externally"
         tape.responseBodyStorage = external
 
@@ -75,7 +75,8 @@ class ExternalBodySpec extends Specification {
 
         then: "the body file is created in the tape root directory"
         def body = tape.interactions[-1].response.body as File
-        body.parentFile == tapeRoot
+        body.parentFile.name == FilenameNormalizer.instance.toFilename(tape.name)
+        body.parentFile.parentFile == tapeRoot
     }
 
     void "each recorded interaction gets its own file"() {
@@ -103,7 +104,9 @@ class ExternalBodySpec extends Specification {
         tape.record(request, plainTextResponse)
 
         when: "the same interaction is overwritten"
-        tape.record(request, new BasicResponse(status: 200, reason: "OK", body: "KTHXBYE".bytes))
+        def secondResponse = new BasicResponse(status: 200, reason: "OK", body: "KTHXBYE".bytes)
+        secondResponse.addHeader(CONTENT_TYPE, "text/plain")
+        tape.record(request, secondResponse)
 
         then: "the body file is re-used"
         tape.interactions[0].response.body == old(tape.interactions[0].response.body)
@@ -145,7 +148,7 @@ class ExternalBodySpec extends Specification {
 
         then: "the response body file is a relative path"
         def body = tape.interactions[-1].response.body as File
-        writer.toString().contains("body: !file '$body.name'")
+        writer.toString().contains("body: !file 'external_body_spec/$body.name'")
     }
 
     void "the body file is read from YAML as a file inside the tape root"() {

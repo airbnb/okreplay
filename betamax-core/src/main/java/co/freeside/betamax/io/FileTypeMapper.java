@@ -16,13 +16,19 @@
 
 package co.freeside.betamax.io;
 
-import java.util.logging.*;
+import java.util.logging.Logger;
 import org.apache.tika.mime.*;
 
 /**
  * Maps *MIME* types to file extensions.
  */
 public class FileTypeMapper {
+
+    /**
+     * The extension applied to a file name if the appropriate extension for a
+     * MIME type is not known.
+     */
+    public static final String DEFAULT_EXTENSION = ".data";
 
     public static FileTypeMapper getInstance() {
         return INSTANCE;
@@ -47,7 +53,7 @@ public class FileTypeMapper {
             filename = baseName + extension;
         } catch (MimeTypeException e) {
             LOG.warning(String.format("Could not get extension for %s content type: %s", contentType, e.getMessage()));
-            filename = baseName + ".bin";
+            filename = baseName + DEFAULT_EXTENSION;
         }
         return filename;
     }
