@@ -20,6 +20,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.text.*;
 import java.util.logging.*;
+import co.freeside.betamax.io.*;
 import co.freeside.betamax.tape.*;
 import com.google.common.annotations.*;
 import com.google.common.io.*;
@@ -32,6 +33,13 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     public static final String FILE_CHARSET = "UTF-8";
 
     private final File tapeRoot;
+
+    private final FileResolver fileResolver = new FileResolver() {
+        @Override
+        public File newFile(String path) {
+            return new File(tapeRoot, path);
+        }
+    };
 
     private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getName());
 
@@ -73,7 +81,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     @VisibleForTesting
     public YamlTape newTape(String name) {
-        YamlTape tape = new YamlTape(tapeRoot);
+        YamlTape tape = new YamlTape(fileResolver);
         tape.setName(name);
         return tape;
     }
@@ -113,7 +121,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
         TapeRepresenter representer = new TapeRepresenter();
         representer.addClassTag(YamlTape.class, YamlTape.TAPE_TAG);
 
-        Constructor constructor = new TapeConstructor(tapeRoot);
+        Constructor constructor = new TapeConstructor(fileResolver);
         constructor.addTypeDescription(new TypeDescription(YamlTape.class, YamlTape.TAPE_TAG));
 
         DumperOptions dumperOptions = new DumperOptions();

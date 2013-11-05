@@ -19,14 +19,17 @@ package co.freeside.betamax.tape;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.logging.*;
 import java.util.regex.*;
 import co.freeside.betamax.*;
 import co.freeside.betamax.handler.*;
+import co.freeside.betamax.io.*;
 import co.freeside.betamax.message.*;
 import co.freeside.betamax.message.tape.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.*;
+import org.apache.tika.mime.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
 import static java.util.Collections.*;
@@ -44,6 +47,15 @@ public abstract class MemoryTape implements Tape {
 
     private List<RecordedInteraction> interactions = Lists.newArrayList();
     private AtomicInteger orderedIndex = new AtomicInteger();
+
+    private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
+    private final FileResolver fileResolver;
+
+    private static final Logger LOG = Logger.getLogger(MemoryTape.class.getName());
+
+    protected MemoryTape(FileResolver fileResolver) {
+        this.fileResolver = fileResolver;
+    }
 
     @Override
     public void setMode(TapeMode mode) {
@@ -217,7 +229,9 @@ public abstract class MemoryTape implements Tape {
     private void recordResponseBody(Response response, RecordedResponse clone) throws IOException {
         switch (responseBodyStorage) {
             case external:
-                writeBodyToExternal(response, clone);
+                File body = fileFor(response);
+                ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+                clone.setBody(body);
                 break;
             default:
                 boolean representAsText = isTextContentType(response.getContentType()) && isPrintable(CharStreams.toString(response.getBodyAsText()));
@@ -225,7 +239,15 @@ public abstract class MemoryTape implements Tape {
         }
     }
 
-    protected abstract void writeBodyToExternal(Message response, RecordedMessage clone) throws IOException;
+    private File fileFor(Message message) {
+        try {
+            String suffix = mimeTypes.forName(message.getContentType()).getExtension();
+            return fileResolver.newFile("body" + suffix);
+        } catch (MimeTypeException e) {
+            LOG.warning(String.format("Could not get extension for %s content type: %s", message.getContentType(), e.getMessage()));
+            return fileResolver.newFile("body.bin");
+        }
+    }
 
     public static boolean isTextContentType(String contentType) {
         return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();

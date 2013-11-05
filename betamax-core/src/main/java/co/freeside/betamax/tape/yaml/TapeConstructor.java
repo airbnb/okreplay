@@ -16,28 +16,28 @@
 
 package co.freeside.betamax.tape.yaml;
 
-import java.io.*;
+import co.freeside.betamax.io.*;
 import org.yaml.snakeyaml.constructor.*;
 import org.yaml.snakeyaml.nodes.*;
 
 public class TapeConstructor extends Constructor {
 
-    public TapeConstructor(File tapeRoot) {
-        yamlClassConstructors.put(NodeId.mapping, new ConstructTape(tapeRoot));
+    public TapeConstructor(FileResolver fileResolver) {
+        yamlClassConstructors.put(NodeId.mapping, new ConstructTape(fileResolver));
     }
 
     private class ConstructTape extends ConstructMapping {
 
-        private final File tapeRoot;
+        private final FileResolver fileResolver;
 
-        public ConstructTape(File tapeRoot) {
-            this.tapeRoot = tapeRoot;
+        public ConstructTape(FileResolver fileResolver) {
+            this.fileResolver = fileResolver;
         }
 
         @Override
         protected Object createEmptyJavaBean(MappingNode node) {
             if (YamlTape.class.equals(node.getType())) {
-                return new YamlTape(tapeRoot);
+                return new YamlTape(fileResolver);
             } else {
                 return super.createEmptyJavaBean(node);
             }

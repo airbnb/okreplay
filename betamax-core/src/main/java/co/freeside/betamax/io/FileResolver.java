@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape;
+package co.freeside.betamax.io;
 
-/**
- * Determines how a `Tape` stores response body data.
- */
-public enum EntityStorage {
+import java.io.*;
 
-    /**
-     * Response body data should be stored inline with the rest of the data.
-     */
-    inline,
+public interface FileResolver {
 
-    /**
-     * Response body data should be written to an external file and only a
-     * reference to the file stored with the rest of the data.
-     */
-    external
+    File newFile(String path);
+
 }
