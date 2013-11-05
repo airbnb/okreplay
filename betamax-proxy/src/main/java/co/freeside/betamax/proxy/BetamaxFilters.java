@@ -62,7 +62,6 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             return response;
         } catch (IOException e) {
             return createErrorResponse(e);
-
         }
     }
 
@@ -91,9 +90,6 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
         if (httpObject instanceof HttpResponse) {
             upstreamResponse = NettyResponseAdapter.wrap(httpObject);
-
-            // TODO: prevent this from getting written to tape
-            setBetamaxHeader((HttpResponse) httpObject, "REC");
         }
 
         if (httpObject instanceof HttpContent) {
@@ -115,6 +111,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     public void responsePost(HttpObject httpObject) {
         LOG.info(String.format("responsePost %s", httpObject.getClass().getSimpleName()));
         if (httpObject instanceof HttpResponse) {
+            setBetamaxHeader((HttpResponse) httpObject, "REC");
             setViaHeader((HttpMessage) httpObject);
         }
     }
