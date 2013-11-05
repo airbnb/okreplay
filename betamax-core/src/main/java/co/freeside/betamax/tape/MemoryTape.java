@@ -19,7 +19,6 @@ package co.freeside.betamax.tape;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
-import java.util.logging.*;
 import java.util.regex.*;
 import co.freeside.betamax.*;
 import co.freeside.betamax.handler.*;
@@ -29,11 +28,10 @@ import co.freeside.betamax.message.tape.*;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import com.google.common.io.*;
-import org.apache.tika.mime.*;
 import org.yaml.snakeyaml.reader.*;
 import static co.freeside.betamax.Headers.*;
+import static com.google.common.net.HttpHeaders.*;
 import static java.util.Collections.*;
-import static org.apache.http.HttpHeaders.*;
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or appended to.
@@ -48,13 +46,19 @@ public abstract class MemoryTape implements Tape {
     private List<RecordedInteraction> interactions = Lists.newArrayList();
     private AtomicInteger orderedIndex = new AtomicInteger();
 
-    private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
     private final FileResolver fileResolver;
-
-    private static final Logger LOG = Logger.getLogger(MemoryTape.class.getName());
 
     protected MemoryTape(FileResolver fileResolver) {
         this.fileResolver = fileResolver;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -90,6 +94,14 @@ public abstract class MemoryTape implements Tape {
     @Override
     public int size() {
         return interactions.size();
+    }
+
+    public List<RecordedInteraction> getInteractions() {
+        return unmodifiableList(interactions);
+    }
+
+    public void setInteractions(List<RecordedInteraction> interactions) {
+        this.interactions = Lists.newArrayList(interactions);
     }
 
     @Override
@@ -229,24 +241,23 @@ public abstract class MemoryTape implements Tape {
     private void recordResponseBody(Response response, RecordedResponse clone) throws IOException {
         switch (responseBodyStorage) {
             case external:
-                File body = fileFor(response);
-                ByteStreams.copy(response.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
-                clone.setBody(body);
+                recordBodyToFile(response, clone);
                 break;
             default:
-                boolean representAsText = isTextContentType(response.getContentType()) && isPrintable(CharStreams.toString(response.getBodyAsText()));
-                clone.setBody(representAsText ? CharStreams.toString(response.getBodyAsText()) : ByteStreams.toByteArray(response.getBodyAsBinary()));
+                recordBodyInline(response, clone);
         }
     }
 
-    private File fileFor(Message message) {
-        try {
-            String suffix = mimeTypes.forName(message.getContentType()).getExtension();
-            return fileResolver.newFile("body" + suffix);
-        } catch (MimeTypeException e) {
-            LOG.warning(String.format("Could not get extension for %s content type: %s", message.getContentType(), e.getMessage()));
-            return fileResolver.newFile("body.bin");
-        }
+    private void recordBodyInline(Message message, RecordedMessage clone) throws IOException {
+        boolean representAsText = isTextContentType(message.getContentType()) && isPrintable(CharStreams.toString(message.getBodyAsText()));
+        clone.setBody(representAsText ? CharStreams.toString(message.getBodyAsText()) : ByteStreams.toByteArray(message.getBodyAsBinary()));
+    }
+
+    private void recordBodyToFile(Message message, RecordedMessage clone) throws IOException {
+        String filename = FileTypeMapper.getInstance().filenameFor("body", message.getContentType());
+        File body = fileResolver.newFile(filename);
+        ByteStreams.copy(message.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+        clone.setBody(body);
     }
 
     public static boolean isTextContentType(String contentType) {
@@ -257,23 +268,6 @@ public abstract class MemoryTape implements Tape {
         // this check is performed by SnakeYaml but we need to do so *before* unzipping the byte stream otherwise we
         // won't be able to read it back again.
         return !StreamReader.NON_PRINTABLE.matcher(s).find();
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<RecordedInteraction> getInteractions() {
-        return unmodifiableList(interactions);
-    }
-
-    public void setInteractions(List<RecordedInteraction> interactions) {
-        this.interactions = Lists.newArrayList(interactions);
     }
 
 }
