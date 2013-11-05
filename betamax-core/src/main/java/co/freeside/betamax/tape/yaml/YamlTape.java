@@ -24,6 +24,7 @@ import org.yaml.snakeyaml.nodes.*;
 class YamlTape extends MemoryTape {
 
     public static final Tag TAPE_TAG = new Tag("!tape");
+    public static final Tag FILE_TAG = new Tag("!file");
 
     private boolean dirty;
 

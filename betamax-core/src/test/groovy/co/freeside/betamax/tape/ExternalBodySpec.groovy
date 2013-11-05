@@ -18,6 +18,7 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.*
+import com.google.common.io.CharStreams
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
@@ -111,6 +112,33 @@ class ExternalBodySpec extends Specification {
         then: "the response body file is a relative path"
         def body = tape.interactions[-1].response.body as File
         writer.toString().contains("body: !file '$body.name'")
+    }
+
+    void "the body file is read from YAML as a file inside the tape root"() {
+        given: "a body file stored on disk"
+        def body = new File(tapeRoot, "body.txt")
+        body.text = "O HAI!"
+
+        and: "a YAML document referring to that file"
+        def yaml = """
+            !tape
+            name: external_body_spec
+            interactions:
+            - recorded: 2013-11-05T05:50:40.000Z
+              request:
+                method: GET
+                uri: http://freeside.co/betamax
+              response:
+                status: 200
+                headers: {Content-Type: text/plain}
+                body: !file 'body.txt'
+        """
+
+        when: "the YAML is loaded as a tape"
+        def tape = loader.readFrom(new StringReader(yaml))
+
+        then:
+        tape.interactions[-1].response.body == body
     }
 
 }

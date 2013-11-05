@@ -37,8 +37,6 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*;
  */
 public class TapeRepresenter extends Representer {
 
-    private static final Tag FILE_TAG = new Tag("!file");
-
     public TapeRepresenter(FileResolver fileResolver) {
         setPropertyUtils(new TapePropertyUtils());
         representers.put(URI.class, new RepresentURI());
@@ -102,7 +100,7 @@ public class TapeRepresenter extends Representer {
 
         @Override
         public Node representData(Object data) {
-            return representScalar(FILE_TAG, fileResolver.toPath((File) data));
+            return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
         }
     }
 
