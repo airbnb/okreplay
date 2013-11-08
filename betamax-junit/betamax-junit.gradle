@@ -10,9 +10,12 @@ dependencies {
     compile commonDependencies.junit
 }
 
-modifyPom {
-    project {
-        name "Betamax JUnit Support"
-        description "JUnit support classes for Betamax"
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            pom.withXml {
+                asNode().appendNode("description", "JUnit support classes for Betamax")
+            }
+        }
     }
 }

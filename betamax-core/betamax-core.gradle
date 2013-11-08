@@ -16,9 +16,12 @@ dependencies {
     testRuntime commonDependencies.cglib
 }
 
-modifyPom {
-    project {
-        name "Betamax Core"
-        description "The Core Betamax API."
+publishing {
+    publications {
+        mavenCustom(MavenPublication) {
+            pom.withXml {
+                asNode().appendNode("description", "The Core Betamax API.")
+            }
+        }
     }
 }

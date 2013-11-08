@@ -1,41 +1,62 @@
-apply plugin: "nexus"
+apply plugin: "maven-publish"
 
-modifyPom {
-	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
-
-	project {
-		packaging "jar"
-		url "http://freeside.co/betamax"
-		inceptionYear "2011"
-
-		scm {
-			url "scm:git@github.com:robfletcher/betamax.git"
-			connection "scm:git@github.com:robfletcher/betamax.git"
-			developerConnection "scm:git@github.com:robfletcher/betamax.git"
-		}
-
-		licenses {
-			license {
-				name "The Apache Software License, Version 2.0"
-				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-				distribution "repo"
-			}
-		}
-
-		developers {
-			developer {
-				id "robfletcher"
-				name "Rob Fletcher"
-				url "http://freeside.co/"
-				roles {
-					role "Lead"
-					role "Founder"
-				}
-			}
-		}
-	}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava, sourceSets.main.resources
 }
 
-nexus {
-	sign = true
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "http://oss.jfrog.org/oss-snapshot-local/"
+            credentials {
+                username = bintray_username
+                password = bintray_api_key
+            }
+        }
+    }
 }
+
+//modifyPom {
+//	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
+//
+//	project {
+//		packaging "jar"
+//		url "http://freeside.co/betamax"
+//		inceptionYear "2011"
+//
+//		scm {
+//			url "scm:git@github.com:robfletcher/betamax.git"
+//			connection "scm:git@github.com:robfletcher/betamax.git"
+//			developerConnection "scm:git@github.com:robfletcher/betamax.git"
+//		}
+//
+//		licenses {
+//			license {
+//				name "The Apache Software License, Version 2.0"
+//				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+//				distribution "repo"
+//			}
+//		}
+//
+//		developers {
+//			developer {
+//				id "robfletcher"
+//				name "Rob Fletcher"
+//				url "http://freeside.co/"
+//				roles {
+//					role "Lead"
+//					role "Founder"
+//				}
+//			}
+//		}
+//	}
+//}

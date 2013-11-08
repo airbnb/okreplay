@@ -1,17 +1,8 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.gradle.api.plugins:gradle-nexus-plugin:0.2"
-    }
-}
-
 apply from: "gradle/idea/idea.gradle"
 
 allprojects {
     version = "2.0-SNAPSHOT"
-    group = "co.freeside"
+    group = "co.freeside.betamax"
 
     plugins.withType(JavaPlugin) {
         sourceCompatibility = "1.6"
