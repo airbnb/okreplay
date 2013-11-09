@@ -19,6 +19,8 @@ package co.freeside.betamax.util.server
 import co.freeside.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 import io.netty.channel.*
 import io.netty.handler.codec.http.*
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.channel.ChannelFutureListener.CLOSE
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
@@ -33,8 +35,8 @@ class EchoHandler extends ExceptionHandlingHandlerAdapter {
                 OK,
                 ((FullHttpRequest) msg).content()
         )
-        response.headers().set(CONTENT_TYPE, "text/plain charset=UTF-8")
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
+        response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
+        ctx.writeAndFlush(response).addListener(CLOSE)
     }
 
 

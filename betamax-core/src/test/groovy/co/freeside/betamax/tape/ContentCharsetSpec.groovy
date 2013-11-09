@@ -21,8 +21,10 @@ import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
+import static com.google.common.base.Charsets.*
+import static com.google.common.net.HttpHeaders.*
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/21")
 @Unroll
@@ -36,7 +38,7 @@ class ContentCharsetSpec extends Specification {
         def request = new BasicRequest()
 
         def response = new BasicResponse(HTTP_OK, "OK")
-        response.addHeader(CONTENT_TYPE, "text/plain;charset=$charset")
+        response.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withCharset(charset).toString())
         response.addHeader(CONTENT_ENCODING, "none")
         response.body = "\u00a3".getBytes(charset)
 
@@ -54,7 +56,7 @@ class ContentCharsetSpec extends Specification {
         yaml.contains("body: \u00a3")
 
         where:
-        charset << ["UTF-8", "ISO-8859-1"]
+        charset << [UTF_8, ISO_8859_1]
     }
 
     void "a response with a #charset body is played back correctly"() {
@@ -87,7 +89,7 @@ interactions:
         response.bodyAsBinary.input.bytes == expected
 
         where:
-        charset << ["UTF-8", "ISO-8859-1"]
+        charset << [UTF_8, ISO_8859_1]
     }
 
 }

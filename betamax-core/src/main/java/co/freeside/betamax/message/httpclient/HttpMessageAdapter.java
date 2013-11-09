@@ -16,44 +16,35 @@
 
 package co.freeside.betamax.message.httpclient;
 
-import co.freeside.betamax.message.AbstractMessage;
-import co.freeside.betamax.message.Message;
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import org.apache.http.Header;
-import org.apache.http.HttpMessage;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import co.freeside.betamax.message.*;
+import com.google.common.base.*;
+import com.google.common.collect.*;
+import org.apache.http.*;
 
 public abstract class HttpMessageAdapter<T extends HttpMessage> extends AbstractMessage implements Message {
     protected abstract T getDelegate();
 
     @Override
     public final Map<String, String> getHeaders() {
-        HashMap<String, String> map = new HashMap<String, String>();
+        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
         for (Header header : getDelegate().getAllHeaders()) {
             String headerName = header.getName();
-            map.put(headerName, getHeader(headerName));
+            builder.put(headerName, getHeader(headerName));
         }
-
-        return map;
+        return builder.build();
     }
 
     @Override
     public final String getHeader(String name) {
-        Header[] headerArray = getDelegate().getHeaders(name);
-        List<Header> headerList = Arrays.asList(headerArray);
-        List<String> headerValueList = Lists.transform(headerList, new Function<Header, String>() {
+        List<Header> headers = Arrays.asList(getDelegate().getHeaders(name));
+        List<String> headerValues = Lists.transform(headers, new Function<Header, String>() {
             @Override
             public String apply(Header header) {
                 return header.getValue();
             }
         });
-        return Joiner.on(", ").skipNulls().join(headerValueList);
+        return Joiner.on(", ").skipNulls().join(headerValues);
     }
 
     @Override

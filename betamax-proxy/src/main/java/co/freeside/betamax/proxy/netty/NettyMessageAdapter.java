@@ -17,18 +17,19 @@
 package co.freeside.betamax.proxy.netty;
 
 import java.io.*;
-import java.util.*;
-import co.freeside.betamax.message.*;
-import com.google.common.base.*;
+import java.util.Map;
+import co.freeside.betamax.message.AbstractMessage;
+import co.freeside.betamax.tape.Tape;
+import com.google.common.base.Joiner;
 import com.google.common.collect.*;
-import com.google.common.io.*;
+import com.google.common.io.ByteStreams;
 import io.netty.buffer.*;
 import io.netty.handler.codec.http.*;
 
 public abstract class NettyMessageAdapter<T extends HttpMessage> extends AbstractMessage {
 
     protected final T delegate;
-    private final Multimap<String, String> additionalHeaders = LinkedHashMultimap.create();
+    private final Multimap<String, String> headers = LinkedHashMultimap.create();
     private final ByteArrayOutputStream body = new ByteArrayOutputStream();
 
     protected NettyMessageAdapter(T delegate) {
@@ -40,11 +41,12 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
      * LittleProxy will use multiple request / response objects and sometimes
      * subsequent ones will contain additional headers.
      */
+    @Deprecated
     public void copyHeaders(HttpMessage httpMessage) {
         for (String name : httpMessage.headers().names()) {
             for (String value : httpMessage.headers().getAll(name)) {
-                if (!additionalHeaders.containsEntry(name, value)) {
-                    additionalHeaders.put(name, value);
+                if (!headers.containsEntry(name, value)) {
+                    headers.put(name, value);
                 }
             }
         }
@@ -62,22 +64,24 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
+    @Deprecated
     public Map<String, String> getHeaders() {
         ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-        for (String name : additionalHeaders.keySet()) {
+        for (String name : headers.keySet()) {
             builder.put(name, getHeader(name));
         }
         return builder.build();
     }
 
     @Override
+    @Deprecated
     public String getHeader(String name) {
-        return Joiner.on(", ").join(additionalHeaders.get(name));
+        return Joiner.on(", ").join(headers.get(name));
     }
 
     @Override
     public void addHeader(String name, String value) {
-        additionalHeaders.put(name, value);
+        headers.put(name, value);
     }
 
     @Override
@@ -86,6 +90,7 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
+    @Deprecated
     protected InputStream getBodyAsStream() throws IOException {
         // TODO: can this be done without copying the entire byte array?
         return new ByteArrayInputStream(body.toByteArray());

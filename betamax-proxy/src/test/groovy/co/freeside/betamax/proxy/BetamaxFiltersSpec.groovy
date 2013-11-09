@@ -148,8 +148,16 @@ class BetamaxFiltersSpec extends Specification {
 				bodyAsBinary.input.bytes == readContent(response)
 			}
 		}
+    }
 
-		and:
+    void "responsePost adds the X-Betamax header"() {
+        given:
+        def response = new DefaultFullHttpResponse(HTTP_1_1, OK)
+
+        when:
+        filters.responsePost(response)
+
+        then:
 		response.headers().get(X_BETAMAX) == "REC"
 	}
 

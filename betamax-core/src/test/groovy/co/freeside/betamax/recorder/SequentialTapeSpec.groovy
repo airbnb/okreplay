@@ -23,7 +23,7 @@ import co.freeside.betamax.util.message.BasicRequest
 import groovy.json.JsonSlurper
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_SEQUENTIAL
-import static org.apache.http.HttpHeaders.CONTENT_TYPE
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static org.apache.http.HttpStatus.*
 import static org.apache.http.entity.ContentType.APPLICATION_JSON
 

@@ -23,7 +23,7 @@ import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Unroll
 @Betamax

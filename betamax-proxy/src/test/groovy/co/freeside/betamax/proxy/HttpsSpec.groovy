@@ -27,7 +27,7 @@ import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 

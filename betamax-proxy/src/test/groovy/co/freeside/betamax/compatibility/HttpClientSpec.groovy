@@ -29,7 +29,7 @@ import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
 

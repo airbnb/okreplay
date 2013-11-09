@@ -19,7 +19,12 @@ package co.freeside.betamax.util.server.internal
 import io.netty.buffer.Unpooled
 import io.netty.channel.*
 import io.netty.handler.codec.http.*
-import io.netty.util.CharsetUtil
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.channel.ChannelFutureListener.CLOSE
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
+import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import static io.netty.util.CharsetUtil.UTF_8
 
 abstract class ExceptionHandlingHandlerAdapter extends ChannelInboundHandlerAdapter {
 
@@ -27,11 +32,11 @@ abstract class ExceptionHandlingHandlerAdapter extends ChannelInboundHandlerAdap
     final void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace()
         FullHttpResponse response = new DefaultFullHttpResponse(
-                HttpVersion.HTTP_1_1,
-                HttpResponseStatus.INTERNAL_SERVER_ERROR,
-                Unpooled.copiedBuffer("${cause.getClass().simpleName}: $cause.message", CharsetUtil.UTF_8)
+                HTTP_1_1,
+                INTERNAL_SERVER_ERROR,
+                Unpooled.copiedBuffer("${cause.getClass().simpleName}: $cause.message", UTF_8)
         )
-        response.headers().set(HttpHeaders.Names.CONTENT_TYPE, "text/plain charset=UTF-8")
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
+        response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
+        ctx.writeAndFlush(response).addListener(CLOSE)
     }
 }

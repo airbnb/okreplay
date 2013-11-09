@@ -27,7 +27,7 @@ import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Betamax(mode = READ_WRITE)
 @Timeout(10)

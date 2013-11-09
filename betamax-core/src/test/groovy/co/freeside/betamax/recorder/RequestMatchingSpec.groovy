@@ -21,7 +21,8 @@ import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.BasicRequest
 import com.google.common.io.Files
 import spock.lang.*
-import static org.apache.http.HttpHeaders.*
+import static com.google.common.net.HttpHeaders.*
+import static com.google.common.net.MediaType.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
@@ -155,8 +156,8 @@ interactions:
         response.bodyAsText.input.text == responseText
 
         where:
-        acceptHeader       | responseText
-        "application/json" | '{ "message": "JSON data" }'
-        "text/plain"       | "Plain text data"
+        acceptHeader                                    | responseText
+        JSON_UTF_8.withoutParameters().toString()       | '{ "message": "JSON data" }'
+        PLAIN_TEXT_UTF_8.withoutParameters().toString() | "Plain text data"
     }
 }

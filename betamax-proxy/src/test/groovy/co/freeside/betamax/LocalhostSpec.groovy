@@ -23,7 +23,7 @@ import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Issue('https://github.com/robfletcher/betamax/issues/62')
 @Issue('http://bugs.sun.com/view_bug.do?bug_id=6737819')

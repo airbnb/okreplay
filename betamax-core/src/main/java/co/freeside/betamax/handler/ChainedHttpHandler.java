@@ -20,6 +20,7 @@ import co.freeside.betamax.message.Request;
 import co.freeside.betamax.message.Response;
 
 public abstract class ChainedHttpHandler implements HttpHandler {
+
     protected final Response chain(Request request) {
         if (next == null) {
             throw new IllegalStateException("attempted to chain from the last handler in the chain");

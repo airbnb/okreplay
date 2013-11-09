@@ -21,8 +21,9 @@ import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
+import static com.google.common.net.HttpHeaders.*
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 @Unroll
@@ -42,7 +43,7 @@ class ContentEncodingSpec extends Specification {
         request.addHeader(ACCEPT_ENCODING, encoding)
 
         def response = new BasicResponse(HTTP_OK, "OK")
-        response.addHeader(CONTENT_TYPE, "text/plain")
+        response.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withoutParameters().toString())
         response.addHeader(CONTENT_ENCODING, encoding)
         response.body = "O HAI!".bytes
 

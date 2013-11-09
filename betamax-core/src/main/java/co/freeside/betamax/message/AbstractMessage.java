@@ -17,39 +17,38 @@
 package co.freeside.betamax.message;
 
 import java.io.*;
-import java.util.regex.*;
-import com.google.common.base.*;
-import com.google.common.io.*;
-import static org.apache.http.HttpHeaders.*;
+import com.google.common.base.Strings;
+import com.google.common.io.InputSupplier;
+import com.google.common.net.MediaType;
+import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.net.HttpHeaders.*;
+import static com.google.common.net.MediaType.OCTET_STREAM;
 
 public abstract class AbstractMessage implements Message {
 
-    public static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
-    public static final String DEFAULT_CHARSET = "UTF-8";
+    public static final String DEFAULT_CONTENT_TYPE = OCTET_STREAM.toString();
+    public static final String DEFAULT_CHARSET = UTF_8.toString();
     public static final String DEFAULT_ENCODING = "none";
 
     @Override
     public String getContentType() {
-        String contentTypeHeader = getHeader(CONTENT_TYPE);
-        if (!Strings.isNullOrEmpty(contentTypeHeader)) {
-            return Splitter.on(';').splitToList(contentTypeHeader).get(0);
-        } else {
+        String header = getHeader(CONTENT_TYPE);
+        if (Strings.isNullOrEmpty(header)) {
             return DEFAULT_CONTENT_TYPE;
+        } else {
+            return MediaType.parse(header).withoutParameters().toString();
         }
     }
 
     @Override
     public String getCharset() {
-        String declaredCharset = null;
         String header = getHeader(CONTENT_TYPE);
-        if (!Strings.isNullOrEmpty(header)) {
-            Matcher matcher = Pattern.compile("charset=(.*)").matcher(header);
-            if (matcher.find()) {
-                declaredCharset = matcher.group(1);
-            }
+        if (Strings.isNullOrEmpty(header)) {
+            // TODO: this isn't valid for non-text data – this method should return Optional<String>
+            return DEFAULT_CHARSET;
+        } else {
+            return MediaType.parse(header).charset().or(UTF_8).toString();
         }
-        // TODO: this isn't valid for non-text data – this method should return Optional<String>
-        return defaultIfNullOrEmpty(declaredCharset, DEFAULT_CHARSET);
     }
 
     @Override
@@ -86,7 +85,8 @@ public abstract class AbstractMessage implements Message {
     protected abstract InputStream getBodyAsStream() throws IOException;
 
     /**
-     * A default implementation that decodes the byte stream from `getBodyAsBinary`. Implementations can override this
+     * A default implementation that decodes the byte stream from
+     * `getBodyAsBinary`. Implementations can override this
      * if they have a simpler way of doing it.
      */
     protected Reader getBodyAsReader() throws IOException {

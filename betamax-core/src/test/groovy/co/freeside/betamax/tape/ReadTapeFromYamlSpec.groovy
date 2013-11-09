@@ -21,7 +21,7 @@ import com.google.common.io.Files
 import org.yaml.snakeyaml.constructor.ConstructorException
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.*
+import static com.google.common.net.HttpHeaders.*
 
 @Unroll
 class ReadTapeFromYamlSpec extends Specification {

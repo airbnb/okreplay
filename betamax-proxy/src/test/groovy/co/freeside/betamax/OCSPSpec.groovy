@@ -20,7 +20,7 @@ import co.freeside.betamax.junit.*
 import org.junit.ClassRule
 import spock.lang.*
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Issue("https://github.com/robfletcher/betamax/issues/52")
 @Betamax(tape = "ocsp")

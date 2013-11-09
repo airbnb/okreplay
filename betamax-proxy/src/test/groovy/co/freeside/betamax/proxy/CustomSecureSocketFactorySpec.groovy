@@ -25,7 +25,7 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 
 @Issue('https://github.com/robfletcher/betamax/issues/72')

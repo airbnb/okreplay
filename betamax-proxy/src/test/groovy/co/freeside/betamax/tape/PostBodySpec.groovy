@@ -18,13 +18,19 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.Recorder
+import com.google.common.base.Charsets
 import com.google.common.io.Files
+import com.google.common.net.HttpHeaders
+import com.google.common.net.MediaType
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
 import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.WRITE_ONLY
+import static com.google.common.base.Charsets.UTF_8
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE
+import static com.google.common.net.MediaType.JSON_UTF_8
 import static java.util.concurrent.TimeUnit.SECONDS
 
 @Issue("https://github.com/robfletcher/betamax/issues/50")
@@ -55,14 +61,14 @@ class PostBodySpec extends Specification {
         HttpURLConnection connection = "http://httpbin.org/post".toURL().openConnection()
         connection.doOutput = true
         connection.requestMethod = "POST"
-        connection.addRequestProperty("Content-Type", "application/json")
+        connection.addRequestProperty(CONTENT_TYPE, JSON_UTF_8.toString())
 
         and:
         recorder.start("post_body_with_url_connection", WRITE_ONLY)
 
         when:
         connection.outputStream.withStream { stream ->
-            stream << postBody.getBytes("UTF-8")
+            stream << postBody.getBytes(UTF_8)
         }
         println connection.inputStream.text // response body must be consumed
 
@@ -80,10 +86,10 @@ class PostBodySpec extends Specification {
     void "post body is stored on tape when using HttpClient"() {
         given:
         def postBody = '{"foo":"bar"}'
-        def httpPost = new HttpPost('http://httpbin.org/post')
-        httpPost.setHeader('Content-Type', 'application/json')
-        def reqEntity = new StringEntity(postBody, 'UTF-8')
-        reqEntity.setContentType('application/json')
+        def httpPost = new HttpPost("http://httpbin.org/post")
+        httpPost.setHeader(CONTENT_TYPE, JSON_UTF_8.toString())
+        def reqEntity = new StringEntity(postBody, UTF_8)
+        reqEntity.setContentType(JSON_UTF_8.toString())
         httpPost.entity = reqEntity
 
         and:

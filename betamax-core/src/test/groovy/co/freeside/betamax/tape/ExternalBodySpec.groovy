@@ -20,10 +20,15 @@ import co.freeside.betamax.io.FilenameNormalizer
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
+import com.google.common.net.MediaType
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.tape.EntityStorage.external
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
+import static com.google.common.net.MediaType.JSON_UTF_8
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static com.google.common.net.MediaType.PNG
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue("https://github.com/robfletcher/betamax/issues/59")
 @Unroll
@@ -42,9 +47,9 @@ class ExternalBodySpec extends Specification {
     void setup() {
         tape.mode = READ_WRITE
 
-        plainTextResponse.addHeader(CONTENT_TYPE, "text/plain")
-        imageResponse.addHeader(CONTENT_TYPE, "image/png")
-        jsonResponse.addHeader(CONTENT_TYPE, "application/json")
+        plainTextResponse.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
+        imageResponse.addHeader(CONTENT_TYPE, PNG.toString())
+        jsonResponse.addHeader(CONTENT_TYPE, JSON_UTF_8.toString())
     }
 
     void "can write an HTTP interaction to a tape"() {
@@ -104,8 +109,8 @@ class ExternalBodySpec extends Specification {
         tape.record(request, plainTextResponse)
 
         when: "the same interaction is overwritten"
-        def secondResponse = new BasicResponse(status: 200, reason: "OK", body: "KTHXBYE".bytes)
-        secondResponse.addHeader(CONTENT_TYPE, "text/plain")
+        def secondResponse = new BasicResponse(status: HTTP_OK, reason: "OK", body: "KTHXBYE".bytes)
+        secondResponse.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         tape.record(request, secondResponse)
 
         then: "the body file is re-used"

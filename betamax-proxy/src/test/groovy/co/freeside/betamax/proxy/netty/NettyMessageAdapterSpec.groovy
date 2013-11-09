@@ -19,79 +19,80 @@ package co.freeside.betamax.proxy.netty
 import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import spock.lang.*
+import static com.google.common.base.Charsets.*
+import static com.google.common.net.MediaType.FORM_DATA
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
-import static io.netty.util.CharsetUtil.UTF_8
 
 @Unroll
 abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMessageAdapter<T>> extends Specification {
 
-	@Subject A adapter
+    @Subject A adapter
     HttpHeaders nettyMessageHeaders = new DefaultHttpHeaders()
-	T nettyMessage
+    T nettyMessage
 
     abstract void createAdapter()
 
-	void "can read headers"() {
-		given:
+    void "can read headers"() {
+        given:
         nettyMessageHeaders.add(IF_NONE_MATCH, "abc123")
         nettyMessageHeaders.add(ACCEPT_ENCODING, ["gzip", "deflate"])
 
         and:
         createAdapter()
 
-		expect:
-		adapter.getHeader(IF_NONE_MATCH) == "abc123"
-		adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
-	}
+        expect:
+        adapter.getHeader(IF_NONE_MATCH) == "abc123"
+        adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
+    }
 
-	void "headers are immutable"() {
-		given:
+    void "headers are immutable"() {
+        given:
         createAdapter()
 
-		when:
-		adapter.headers[IF_NONE_MATCH] = ["abc123"]
+        when:
+        adapter.headers[IF_NONE_MATCH] = ["abc123"]
 
-		then:
-		thrown UnsupportedOperationException
-	}
+        then:
+        thrown UnsupportedOperationException
+    }
 
-	void "body is readable as text"() {
-		given:
-        nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
+    void "body is readable as text"() {
+        given:
+        nettyMessageHeaders.set(CONTENT_TYPE, FORM_DATA.withCharset(ISO_8859_1).toString())
 
         and:
         createAdapter()
 
-		and:
-		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes("ISO-8859-1")))
-		adapter.append chunk
+        and:
+        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes(ISO_8859_1)))
+        adapter.append chunk
 
-		expect:
-		adapter.hasBody()
-		adapter.bodyAsText.input.text == bodyText
+        expect:
+        adapter.hasBody()
+        adapter.bodyAsText.input.text == bodyText
 
-		where:
-		bodyText = "value=\u00a31"
-	}
+        where:
+        bodyText = "value=\u00a31"
+    }
 
-	void "body is readable as binary"() {
-		given:
-        nettyMessageHeaders.set(CONTENT_TYPE, "application/x-www-form-urlencoded; charset=ISO-8859-1")
+    void "body is readable as binary"() {
+        given:
+        nettyMessageHeaders.set(CONTENT_TYPE, FORM_DATA.withCharset(ISO_8859_1).toString())
 
         and:
         createAdapter()
 
-		and:
-		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(body))
-		adapter.append chunk
+        and:
+        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(body))
+        adapter.append chunk
 
-		expect:
-		adapter.hasBody()
-		adapter.bodyAsBinary.input.bytes == body
+        expect:
+        adapter.hasBody()
+        adapter.bodyAsBinary.input.bytes == body
 
-		where:
-		body = "value=\u00a31".getBytes("ISO-8859-1")
-	}
+        where:
+        body = "value=\u00a31".getBytes(ISO_8859_1)
+    }
 
     void "headers can be appended after the adapter is created"() {
         given:
@@ -103,7 +104,8 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         when:
         def laterHeaders = new DefaultHttpHeaders()
         laterHeaders.add(IF_NONE_MATCH, "abc123")
-        laterHeaders.add(ACCEPT_ENCODING, "gzip") // duplicate should get discarded
+        laterHeaders.add(ACCEPT_ENCODING, "gzip")
+        // duplicate should get discarded
         laterHeaders.add(ACCEPT_ENCODING, "deflate")
         def message = Stub(HttpMessage) {
             headers() >> laterHeaders
@@ -115,24 +117,24 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
     }
 
-	void "#description if the content buffer is #contentDescription"() {
+    void "#description if the content buffer is #contentDescription"() {
         given:
         createAdapter()
 
         and:
-		def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(content))
-		adapter.append chunk
+        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(content))
+        adapter.append chunk
 
-		expect:
-		adapter.hasBody() == consideredToHaveBody
+        expect:
+        adapter.hasBody() == consideredToHaveBody
 
-		where:
-		content                               | consideredToHaveBody
-		Unpooled.copiedBuffer("O HAI", UTF_8) | true
-		Unpooled.EMPTY_BUFFER                 | false
+        where:
+        content                               | consideredToHaveBody
+        Unpooled.copiedBuffer("O HAI", UTF_8) | true
+        Unpooled.EMPTY_BUFFER                 | false
 
-		description = consideredToHaveBody ? "has a body" : "does not have a body"
-		contentDescription = content ? "${content.readableBytes()} bytes long" : "null"
-	}
+        description = consideredToHaveBody ? "has a body" : "does not have a body"
+        contentDescription = content ? "${content.readableBytes()} bytes long" : "null"
+    }
 
 }

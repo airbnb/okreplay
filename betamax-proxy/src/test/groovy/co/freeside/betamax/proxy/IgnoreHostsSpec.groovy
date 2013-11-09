@@ -21,7 +21,7 @@ import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Issue("https://github.com/robfletcher/betamax/issues/16")
 @Unroll

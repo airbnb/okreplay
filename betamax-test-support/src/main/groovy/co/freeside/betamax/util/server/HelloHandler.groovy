@@ -20,6 +20,8 @@ import co.freeside.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 import io.netty.buffer.Unpooled
 import io.netty.channel.*
 import io.netty.handler.codec.http.DefaultFullHttpResponse
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.channel.ChannelFutureListener.CLOSE
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
@@ -27,7 +29,7 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 @ChannelHandler.Sharable
 class HelloHandler extends ExceptionHandlingHandlerAdapter {
 
-	public static final String HELLO_WORLD = 'Hello World!'
+    public static final String HELLO_WORLD = 'Hello World!'
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -36,8 +38,8 @@ class HelloHandler extends ExceptionHandlingHandlerAdapter {
                 OK,
                 Unpooled.wrappedBuffer(HELLO_WORLD.bytes)
         )
-        response.headers().set(CONTENT_TYPE, "text/plain charset=UTF-8")
-        ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
+        response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
+        ctx.writeAndFlush(response).addListener(CLOSE)
     }
 
 }

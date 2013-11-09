@@ -23,7 +23,7 @@ import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.net.HttpURLConnection.HTTP_OK
-import static org.apache.http.HttpHeaders.VIA
+import static com.google.common.net.HttpHeaders.VIA
 
 @Issue("https://github.com/robfletcher/betamax/issues/107")
 @Unroll
