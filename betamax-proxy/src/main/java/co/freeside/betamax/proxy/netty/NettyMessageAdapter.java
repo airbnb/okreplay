@@ -19,7 +19,6 @@ package co.freeside.betamax.proxy.netty;
 import java.io.*;
 import java.util.Map;
 import co.freeside.betamax.message.AbstractMessage;
-import co.freeside.betamax.tape.Tape;
 import com.google.common.base.Joiner;
 import com.google.common.collect.*;
 import com.google.common.io.ByteStreams;
@@ -41,7 +40,6 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
      * LittleProxy will use multiple request / response objects and sometimes
      * subsequent ones will contain additional headers.
      */
-    @Deprecated
     public void copyHeaders(HttpMessage httpMessage) {
         for (String name : httpMessage.headers().names()) {
             for (String value : httpMessage.headers().getAll(name)) {
@@ -64,7 +62,6 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
-    @Deprecated
     public Map<String, String> getHeaders() {
         ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
         for (String name : headers.keySet()) {
@@ -74,7 +71,6 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
-    @Deprecated
     public String getHeader(String name) {
         return Joiner.on(", ").join(headers.get(name));
     }
@@ -90,7 +86,6 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     @Override
-    @Deprecated
     protected InputStream getBodyAsStream() throws IOException {
         // TODO: can this be done without copying the entire byte array?
         return new ByteArrayInputStream(body.toByteArray());
