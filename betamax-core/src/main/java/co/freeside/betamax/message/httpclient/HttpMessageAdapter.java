@@ -18,6 +18,7 @@ package co.freeside.betamax.message.httpclient;
 
 import java.util.*;
 import co.freeside.betamax.message.*;
+import co.freeside.betamax.util.MultimapUtils;
 import com.google.common.base.*;
 import com.google.common.collect.*;
 import org.apache.http.*;
@@ -27,12 +28,11 @@ public abstract class HttpMessageAdapter<T extends HttpMessage> extends Abstract
 
     @Override
     public final Map<String, String> getHeaders() {
-        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+        ImmutableMultimap.Builder<String, String> builder = ImmutableMultimap.builder();
         for (Header header : getDelegate().getAllHeaders()) {
-            String headerName = header.getName();
-            builder.put(headerName, getHeader(headerName));
+            builder.put(header.getName(), header.getValue());
         }
-        return builder.build();
+        return MultimapUtils.flatten(builder.build(), ", ");
     }
 
     @Override
