@@ -167,9 +167,6 @@ public abstract class MemoryTape implements Tape {
         }
 
         RecordedInteraction interaction = new RecordedInteraction();
-        interaction.setRequest(recordRequest(request));
-        interaction.setResponse(recordResponse(response));
-        interaction.setRecorded(new Date());
 
         if (mode.isSequential()) {
             interactions.add(interaction);
@@ -181,6 +178,10 @@ public abstract class MemoryTape implements Tape {
                 interactions.add(interaction);
             }
         }
+
+        interaction.setRequest(recordRequest(request));
+        interaction.setResponse(recordResponse(response));
+        interaction.setRecorded(new Date());
     }
 
     @Override
@@ -199,19 +200,19 @@ public abstract class MemoryTape implements Tape {
 
     private static RecordedRequest recordRequest(Request request) {
         try {
-            final RecordedRequest clone = new RecordedRequest();
-            clone.setMethod(request.getMethod());
-            clone.setUri(request.getUri());
+            final RecordedRequest recording = new RecordedRequest();
+            recording.setMethod(request.getMethod());
+            recording.setUri(request.getUri());
 
             for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
                 if (!header.getKey().equals(VIA)) {
-                    clone.getHeaders().put(header.getKey(), header.getValue());
+                    recording.getHeaders().put(header.getKey(), header.getValue());
                 }
             }
 
-            clone.setBody(request.hasBody() ? CharStreams.toString(request.getBodyAsText()) : null);
+            recording.setBody(request.hasBody() ? CharStreams.toString(request.getBodyAsText()) : null);
 
-            return clone;
+            return recording;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -219,46 +220,50 @@ public abstract class MemoryTape implements Tape {
 
     private RecordedResponse recordResponse(Response response) {
         try {
-            RecordedResponse clone = new RecordedResponse();
-            clone.setStatus(response.getStatus());
+            RecordedResponse recording = new RecordedResponse();
+            recording.setStatus(response.getStatus());
 
             for (Map.Entry<String, String> header : response.getHeaders().entrySet()) {
                 if (!header.getKey().equals(VIA) && !header.getKey().equals(X_BETAMAX)) {
-                    clone.getHeaders().put(header.getKey(), header.getValue());
+                    recording.getHeaders().put(header.getKey(), header.getValue());
                 }
             }
 
             if (response.hasBody()) {
-                recordResponseBody(response, clone);
+                recordResponseBody(response, recording);
             }
 
-            return clone;
+            return recording;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void recordResponseBody(Response response, RecordedResponse clone) throws IOException {
+    private void recordResponseBody(Response response, RecordedResponse recording) throws IOException {
         switch (responseBodyStorage) {
             case external:
-                recordBodyToFile(response, clone);
+                recordBodyToFile(response, recording);
                 break;
             default:
-                recordBodyInline(response, clone);
+                recordBodyInline(response, recording);
         }
     }
 
-    private void recordBodyInline(Message message, RecordedMessage clone) throws IOException {
+    private void recordBodyInline(Message message, RecordedMessage recording) throws IOException {
         boolean representAsText = isTextContentType(message.getContentType());
-        clone.setBody(representAsText ? CharStreams.toString(message.getBodyAsText()) : ByteStreams.toByteArray(message.getBodyAsBinary()));
+        if (representAsText) {
+            recording.setBody(CharStreams.toString(message.getBodyAsText()));
+        } else {
+            recording.setBody(ByteStreams.toByteArray(message.getBodyAsBinary()));
+        }
     }
 
-    private void recordBodyToFile(Message message, RecordedMessage clone) throws IOException {
-        String filename = FileTypeMapper.filenameFor("response", message.getContentType());
+    private void recordBodyToFile(Message message, RecordedMessage recording) throws IOException {
+        String filename = FileTypeMapper.filenameFor(String.format("response-%d", size() + 1), message.getContentType());
         File body = fileResolver.toFile(FilenameNormalizer.toFilename(name), filename);
         Files.createParentDirs(body);
         ByteStreams.copy(message.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
-        clone.setBody(body);
+        recording.setBody(body);
     }
 
     public static boolean isTextContentType(String contentType) {
