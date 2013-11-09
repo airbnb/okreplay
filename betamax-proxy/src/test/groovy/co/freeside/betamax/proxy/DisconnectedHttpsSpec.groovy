@@ -17,14 +17,16 @@
 package co.freeside.betamax.proxy
 
 import javax.net.ssl.HttpsURLConnection
-import co.freeside.betamax.*
+import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.junit.*
 import org.junit.Rule
-import spock.lang.Specification
+import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
 
+@Ignore
+@Issue("https://github.com/robfletcher/betamax/issues/117")
 class DisconnectedHttpsSpec extends Specification {
 
     static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
