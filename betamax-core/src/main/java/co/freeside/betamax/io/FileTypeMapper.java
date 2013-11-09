@@ -30,11 +30,7 @@ public class FileTypeMapper {
      */
     public static final String DEFAULT_EXTENSION = ".data";
 
-    public static FileTypeMapper getInstance() {
-        return INSTANCE;
-    }
-
-    private final MimeTypes mimeTypes = MimeTypes.getDefaultMimeTypes();
+    private static final MimeTypes MIME_TYPES = MimeTypes.getDefaultMimeTypes();
 
     private static final Logger LOG = Logger.getLogger(FileTypeMapper.class.getName());
 
@@ -46,10 +42,10 @@ public class FileTypeMapper {
      * @param contentType a MIME content type such as `text/plain`.
      * @return a filename with an appropriate extension.
      */
-    public String filenameFor(String baseName, String contentType) {
+    public static String filenameFor(String baseName, String contentType) {
         String filename;
         try {
-            String extension = mimeTypes.forName(contentType).getExtension();
+            String extension = MIME_TYPES.forName(contentType).getExtension();
             filename = baseName + extension;
         } catch (MimeTypeException e) {
             LOG.warning(String.format("Could not get extension for %s content type: %s", contentType, e.getMessage()));
@@ -57,8 +53,6 @@ public class FileTypeMapper {
         }
         return filename;
     }
-
-    private static final FileTypeMapper INSTANCE = new FileTypeMapper();
 
     private FileTypeMapper() {
     }

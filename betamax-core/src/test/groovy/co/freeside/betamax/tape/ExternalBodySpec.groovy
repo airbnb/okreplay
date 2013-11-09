@@ -80,7 +80,7 @@ class ExternalBodySpec extends Specification {
 
         then: "the body file is created in the tape root directory"
         def body = tape.interactions[-1].response.body as File
-        body.parentFile.name == FilenameNormalizer.instance.toFilename(tape.name)
+        body.parentFile.name == FilenameNormalizer.toFilename(tape.name)
         body.parentFile.parentFile == tapeRoot
     }
 

@@ -20,7 +20,7 @@ import java.text.Normalizer;
 
 public final class FilenameNormalizer {
 
-    public String toFilename(String tapeName) {
+    public static String toFilename(String tapeName) {
         return Normalizer.normalize(tapeName, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
                 .replaceAll("[^\\w\\d]+", "_")
@@ -28,9 +28,6 @@ public final class FilenameNormalizer {
                 .replaceFirst("_$", "");
     }
 
-    private static final FilenameNormalizer INSTANCE = new FilenameNormalizer();
-
-    public static FilenameNormalizer getInstance() {
-        return INSTANCE;
+    private FilenameNormalizer() {
     }
 }

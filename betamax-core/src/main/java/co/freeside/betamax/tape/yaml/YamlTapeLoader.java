@@ -100,7 +100,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
     }
 
     public File fileFor(String tapeName) {
-        final String normalizedName = FilenameNormalizer.getInstance().toFilename(tapeName);
+        final String normalizedName = FilenameNormalizer.toFilename(tapeName);
         return fileResolver.toFile(normalizedName + ".yaml");
     }
 

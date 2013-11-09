@@ -21,12 +21,9 @@ import spock.lang.*
 @Unroll
 class FilenameNormalizerSpec extends Specification {
 
-    @Subject
-    def normalizer = FilenameNormalizer.instance
-
     void "normalized form of '#s' is '#filename'"() {
         expect:
-        normalizer.toFilename(s) == filename
+        FilenameNormalizer.toFilename(s) == filename
 
         where:
         s              | filename
