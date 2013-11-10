@@ -17,58 +17,65 @@
 package co.freeside.betamax.tape
 
 import java.util.concurrent.CountDownLatch
-import co.freeside.betamax.*
+import co.freeside.betamax.Configuration
 import co.freeside.betamax.handler.DefaultHandlerChain
-import co.freeside.betamax.junit.Betamax
-import co.freeside.betamax.junit.RecorderRule
+import co.freeside.betamax.junit.*
 import co.freeside.betamax.util.message.BasicRequest
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.Rule
 import spock.lang.*
+import static co.freeside.betamax.TapeMode.READ_WRITE
 import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.util.concurrent.TimeUnit.SECONDS
 
 class MultiThreadedTapeWritingSpec extends Specification {
 
-	@Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-	@Rule RecorderRule recorder = new RecorderRule(configuration)
+    @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-	def handler = new DefaultHandlerChain(recorder)
+    def handler = new DefaultHandlerChain(recorder)
 
-	@Shared @AutoCleanup('stop') SimpleServer endpoint = new SimpleServer(HelloHandler)
+    @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
 
-	void setupSpec() {
-		endpoint.start()
-	}
+    void setupSpec() {
+        endpoint.start()
+    }
 
-	@Betamax(tape = 'multi_threaded_tape_writing_spec', mode = TapeMode.READ_WRITE)
-	void 'the tape can cope with concurrent reading and writing'() {
-		when: 'requests are fired concurrently'
-		def finished = new CountDownLatch(threads)
-		def responses = [:]
-		threads.times { i ->
-			Thread.start {
-				try {
-					def request = new BasicRequest('GET', "$endpoint.url$i")
-					responses[i] = handler.handle(request).bodyAsText.input.text
-				} catch (IOException e) {
-					responses[i] = 'FAIL!'
-				}
-				finished.countDown()
-			}
-		}
+    @Betamax(tape = "multi_threaded_tape_writing_spec", mode = READ_WRITE)
+    void "the tape can cope with concurrent reading and writing"() {
+        when: "requests are fired concurrently"
+        def finished = new CountDownLatch(threads)
+        def responses = [:]
+        threads.times { i ->
+            Thread.start {
+                try {
+                    responses[i.toString()] = makeRequest(i)
+                } catch (Exception e) {
+                    responses[i.toString()] = "FAIL!"
+                }
+                finished.countDown()
+            }
+        }
 
-		then: 'all threads complete'
-		finished.await(1, SECONDS)
+        then: "all threads complete"
+        finished.await(10, SECONDS)
+        responses.size() == threads
 
-		and: 'the correct response is returned to each request'
-		responses.every {
-			it.value == HELLO_WORLD
-		}
+        and: "the correct response is returned to each request"
+        responses.every { Map.Entry<String, String> it ->
+            println it.key
+            println it.value.substring(0, 36)
+            it.value.startsWith("GET ${endpoint.url}$it.key")
+        }
 
-		where:
-		threads = 10
-	}
+        where:
+        threads = 10
+    }
+
+    private String makeRequest(int i) {
+        def request = new BasicRequest("GET", "$endpoint.url$i")
+        handler.handle(request).bodyAsText.input.text
+    }
 }
