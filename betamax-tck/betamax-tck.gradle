@@ -6,7 +6,6 @@ repositories {
 
 dependencies {
     compile project(":betamax-core")
-    compile project(":betamax-junit")
-    compile commonDependencies.netty
-    compile commonDependencies.httpBuilder
+    compile project(":betamax-test-support")
+    compile commonDependencies.spock
 }

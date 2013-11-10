@@ -23,8 +23,8 @@ import com.google.common.io.Files
 import org.junit.ClassRule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Betamax(mode = READ_WRITE)
 @Unroll
@@ -35,7 +35,7 @@ class RequestMethodsSpec extends Specification {
     @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
-    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(OkHandler)
 
     void setupSpec() {
         endpoint.start()

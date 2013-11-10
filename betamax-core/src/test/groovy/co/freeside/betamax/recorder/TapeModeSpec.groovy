@@ -59,7 +59,6 @@ class TapeModeSpec extends Specification {
 
         where:
         mode << [READ_ONLY, READ_SEQUENTIAL]
-        request = new BasicRequest("GET", endpoint.url)
     }
 
     void "in #mode mode a new interaction is recorded"() {

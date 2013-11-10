@@ -33,20 +33,14 @@ class EchoHandler extends ExceptionHandlingHandlerAdapter {
     @Override
     void channelRead(ChannelHandlerContext ctx, Object msg) {
         def request = msg as FullHttpRequest
-        def response = new DefaultFullHttpResponse(
-                HTTP_1_1,
-                OK,
-                request.content()
-        )
+        def response = new DefaultFullHttpResponse(HTTP_1_1, OK)
 
         writeLine response, "$request.method ${relativeURI(request)} $request.protocolVersion"
         request.headers().entries().each {
             writeLine response, "$it.key: $it.value"
         }
-        if (request.content().readableBytes() > 0) {
-            writeLine response, ""
-            response.content().writeBytes(request.content())
-        }
+        writeLine response, ""
+        response.content().writeBytes(request.content())
 
         response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         ctx.writeAndFlush(response).addListener(CLOSE)

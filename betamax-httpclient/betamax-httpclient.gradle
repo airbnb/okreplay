@@ -9,6 +9,7 @@ dependencies {
     compile project(":betamax-core")
 
     testCompile project(":betamax-junit")
+    testCompile project(":betamax-tck")
     testCompile project(":betamax-test-support")
     testCompile commonDependencies.httpBuilder
 

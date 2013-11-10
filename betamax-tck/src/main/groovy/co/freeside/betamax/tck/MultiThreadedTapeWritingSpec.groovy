@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package co.freeside.betamax.tck
 
 import java.util.concurrent.CountDownLatch
 import co.freeside.betamax.junit.Betamax

@@ -12,6 +12,7 @@ dependencies {
     compile commonDependencies.netty
 
     testCompile project(":betamax-junit")
+    testCompile project(":betamax-tck")
     testCompile project(":betamax-test-support")
     testCompile("commons-httpclient:commons-httpclient:3.1") {
         exclude module: "commons-codec"
