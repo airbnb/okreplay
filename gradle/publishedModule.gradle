@@ -17,9 +17,13 @@ publishing {
     repositories {
         maven {
             url "http://oss.jfrog.org/oss-snapshot-local/"
-            credentials {
-                username = bintray_username
-                password = bintray_api_key
+            gradle.taskGraph.whenReady { taskGraph ->
+                if (taskGraph.hasTask("publish")) {
+                    credentials {
+                        username = bintray_username
+                        password = bintray_api_key
+                    }
+                }
             }
         }
     }
