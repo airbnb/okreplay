@@ -18,7 +18,9 @@ package co.freeside.betamax.tape
 
 import co.freeside.betamax.*
 import co.freeside.betamax.tck.TapeModeSpec
+import spock.lang.Ignore
 
+@Ignore("https://github.com/adamfisk/LittleProxy/issues/113")
 class ProxyTapeModeSpec extends TapeModeSpec {
 
     @Override
