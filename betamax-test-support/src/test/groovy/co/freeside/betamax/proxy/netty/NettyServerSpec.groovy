@@ -17,7 +17,9 @@
 package co.freeside.betamax.proxy.netty
 
 import co.freeside.betamax.util.server.*
+import com.google.common.base.Charsets
 import spock.lang.Specification
+import static com.google.common.base.Charsets.UTF_8
 
 class NettyServerSpec extends Specification {
 
@@ -31,13 +33,13 @@ class NettyServerSpec extends Specification {
 		connection.requestMethod = "POST"
 		connection.doInput = true
 		connection.doOutput = true
-		connection.outputStream.withWriter("UTF-8") { writer ->
+		connection.outputStream.withWriter(UTF_8.toString()) { writer ->
 			writer << message
 		}
 		connection.connect()
 
 		then:
-		connection.inputStream.getText("UTF-8") == message
+		connection.inputStream.getText(UTF_8.toString()).endsWith(message)
 
 		cleanup:
 		server.stop()
