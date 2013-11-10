@@ -16,71 +16,48 @@
 
 package co.freeside.betamax.recorder
 
-import co.freeside.betamax.Configuration
-
-import co.freeside.betamax.handler.DefaultHandlerChain
-import co.freeside.betamax.junit.*
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.server.*
+import co.freeside.betamax.tape.MemoryTape
+import co.freeside.betamax.tape.yaml.YamlTapeLoader
+import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
-import org.junit.Rule
 import spock.lang.*
-import static co.freeside.betamax.Headers.X_BETAMAX
 import static co.freeside.betamax.TapeMode.WRITE_SEQUENTIAL
-import static org.apache.http.HttpStatus.SC_OK
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue("https://github.com/robfletcher/betamax/issues/7")
 @Issue("https://github.com/robfletcher/betamax/pull/70")
 class SequentialTapeWritingSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+    @Shared def tapeLoader = new YamlTapeLoader(tapeRoot)
+    MemoryTape tape
 
-    def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    @Rule RecorderRule recorder = new RecorderRule(configuration)
-
-    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(IncrementingHandler)
-
-    def handler = new DefaultHandlerChain(recorder)
-
-    void setupSpec() {
-        endpoint.start()
+    void setup() {
+        tape = tapeLoader.loadTape("sequential tape")
+        tape.mode = WRITE_SEQUENTIAL
     }
 
-    @Betamax(tape = "sequential tape", mode = WRITE_SEQUENTIAL)
     void "write sequential tapes record multiple matching responses"() {
-        when:
-        "multiple requests are made to the same endpoint"
-        List<Response> responses = []
-        n.times {
-            responses << handler.handle(request)
+        when: "multiple responses are captured from the same endpoint"
+        (1..n).each {
+            def response = new BasicResponse(HTTP_OK, "OK")
+            response.body = "count: $it".bytes
+            tape.record(request, response)
         }
 
-        then:
-        "both successfully connect"
-        responses.every {
-            it.status == SC_OK
-        }
+        then: "multiple recordings are added to the tape"
+        tape.size() == old(tape.size()) + n
 
-        and:
-        "they both get recorded"
-        responses.every {
-            it.headers[X_BETAMAX] == "REC"
+        and: "each has different content"
+        with(tape.interactions) {
+            response.bodyAsText.input.text == (1..n).collect {
+                "count: $it"
+            }
         }
-
-        and:
-        "each has different content"
-        responses.bodyAsText.input.text == (1..n).collect {
-            "count: $it"
-        }
-
-        and:
-        "multiple recordings are added to the tape"
-        recorder.tape.size() == old(recorder.tape.size()) + n
 
         where:
         n = 2
-        request = new BasicRequest("GET", endpoint.url)
+        request = new BasicRequest("GET", "http://freeside.co/betamax")
     }
 
 }
