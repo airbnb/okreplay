@@ -17,25 +17,16 @@
 package co.freeside.betamax.tape
 
 import java.util.concurrent.CountDownLatch
-import co.freeside.betamax.Configuration
-import co.freeside.betamax.handler.DefaultHandlerChain
-import co.freeside.betamax.junit.*
-import co.freeside.betamax.util.message.BasicRequest
+import co.freeside.betamax.junit.Betamax
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
-import org.junit.Rule
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
-import static co.freeside.betamax.util.server.HelloHandler.HELLO_WORLD
 import static java.util.concurrent.TimeUnit.SECONDS
 
-class MultiThreadedTapeWritingSpec extends Specification {
+abstract class MultiThreadedTapeWritingSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    @Rule RecorderRule recorder = new RecorderRule(configuration)
-
-    def handler = new DefaultHandlerChain(recorder)
 
     @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
 
@@ -47,11 +38,11 @@ class MultiThreadedTapeWritingSpec extends Specification {
     void "the tape can cope with concurrent reading and writing"() {
         when: "requests are fired concurrently"
         def finished = new CountDownLatch(threads)
-        def responses = [:]
+        def responses = Collections.synchronizedMap([:])
         threads.times { i ->
             Thread.start {
                 try {
-                    responses[i.toString()] = makeRequest(i)
+                    responses[i.toString()] = makeRequest("$endpoint.url$i")
                 } catch (Exception e) {
                     responses[i.toString()] = "FAIL!"
                 }
@@ -65,17 +56,12 @@ class MultiThreadedTapeWritingSpec extends Specification {
 
         and: "the correct response is returned to each request"
         responses.every { Map.Entry<String, String> it ->
-            println it.key
-            println it.value.substring(0, 36)
-            it.value.startsWith("GET ${endpoint.url}$it.key")
+            it.value.startsWith("GET /$it.key")
         }
 
         where:
         threads = 10
     }
 
-    private String makeRequest(int i) {
-        def request = new BasicRequest("GET", "$endpoint.url$i")
-        handler.handle(request).bodyAsText.input.text
-    }
+    protected abstract String makeRequest(String url)
 }

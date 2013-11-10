@@ -39,7 +39,7 @@ class EchoHandler extends ExceptionHandlingHandlerAdapter {
                 request.content()
         )
 
-        writeLine response, "$request.method $request.uri $request.protocolVersion"
+        writeLine response, "$request.method ${relativeURI(request)} $request.protocolVersion"
         request.headers().entries().each {
             writeLine response, "$it.key: $it.value"
         }
@@ -50,6 +50,15 @@ class EchoHandler extends ExceptionHandlingHandlerAdapter {
 
         response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         ctx.writeAndFlush(response).addListener(CLOSE)
+    }
+
+    private String relativeURI(FullHttpRequest request) {
+        def requestURI = request.uri.toURI()
+        def builder = new StringBuilder(requestURI.path)
+        if (requestURI.query) {
+            builder << "?" << requestURI.query
+        }
+        builder as String
     }
 
     private ByteBuf writeLine(DefaultFullHttpResponse response, String string) {
