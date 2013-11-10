@@ -16,24 +16,25 @@
 
 package co.freeside.betamax.proxy;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Logger;
 import co.freeside.betamax.encoding.*;
-import co.freeside.betamax.message.*;
+import co.freeside.betamax.handler.NonWritableTapeException;
+import co.freeside.betamax.message.Response;
 import co.freeside.betamax.proxy.netty.*;
-import co.freeside.betamax.tape.*;
+import co.freeside.betamax.tape.Tape;
 import com.google.common.base.*;
-import com.google.common.io.*;
-import io.netty.buffer.*;
+import com.google.common.io.ByteStreams;
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
-import org.littleshoot.proxy.*;
+import org.littleshoot.proxy.HttpFiltersAdapter;
 import static co.freeside.betamax.Headers.*;
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
-import static io.netty.handler.codec.http.HttpResponseStatus.*;
-import static io.netty.handler.codec.http.HttpVersion.*;
-import static java.util.logging.Level.*;
+import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
+import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
+import static java.util.logging.Level.SEVERE;
 
 public class BetamaxFilters extends HttpFiltersAdapter {
 
@@ -103,8 +104,12 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         }
 
         if (httpObject instanceof LastHttpContent) {
-            LOG.warning(String.format("Recording to tape %s", tape.getName()));
-            tape.record(request, upstreamResponse);
+            if (tape.isWritable()) {
+                LOG.warning(String.format("Recording to tape %s", tape.getName()));
+                tape.record(request, upstreamResponse);
+            } else {
+                throw new NonWritableTapeException();
+            }
         }
     }
 
