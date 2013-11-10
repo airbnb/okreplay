@@ -12,7 +12,6 @@ dependencies {
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
-apply from: "$rootDir/gradle/codenarc.gradle"
 
 test {
 	testLogging {
