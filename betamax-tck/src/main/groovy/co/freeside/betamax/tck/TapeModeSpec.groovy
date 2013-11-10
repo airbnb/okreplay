@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.recorder
+package co.freeside.betamax.tck
 
 import co.freeside.betamax.*
-import co.freeside.betamax.handler.*
-import co.freeside.betamax.message.Request
-import co.freeside.betamax.util.message.BasicRequest
+import co.freeside.betamax.handler.NonWritableTapeException
+import co.freeside.betamax.message.Response
+import co.freeside.betamax.tape.MemoryTape
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import spock.lang.*
@@ -27,17 +27,16 @@ import static co.freeside.betamax.TapeMode.*
 import static java.net.HttpURLConnection.HTTP_OK
 
 @Unroll
-class TapeModeSpec extends Specification {
+abstract class TapeModeSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared Recorder recorder = new Recorder(configuration)
 
-    @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(HelloHandler)
+    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(HelloHandler)
 
-    HttpHandler handler = new DefaultHandlerChain(recorder)
+    protected abstract Configuration getConfiguration()
 
-    Request request = new BasicRequest("GET", endpoint.url)
+    protected abstract void makeRequest()
 
     void setupSpec() {
         endpoint.start()
@@ -52,7 +51,7 @@ class TapeModeSpec extends Specification {
         recorder.start("read only tape", mode)
 
         when: "a request is made that does not match anything recorded on the tape"
-        handler.handle(request)
+        makeRequest()
 
         then: "the proxy rejects the request"
         thrown NonWritableTapeException
@@ -68,7 +67,7 @@ class TapeModeSpec extends Specification {
         def tape = recorder.tape
 
         when: "a request is made"
-        handler.handle(request)
+        makeRequest()
 
         then: "the interaction is recorded"
         tape.size() == old(tape.size()) + 1
@@ -95,10 +94,10 @@ interactions:
     body: Previous response made when endpoint was down.
 """
         recorder.start("write only tape", WRITE_ONLY)
-        def tape = recorder.tape
+        def tape = recorder.tape as MemoryTape
 
         when: "a request is made that matches a request already recorded on the tape"
-        handler.handle(request)
+        makeRequest()
 
         then: "the previously recorded request is overwritten"
         tape.size() == old(tape.size())
@@ -126,10 +125,10 @@ interactions:
     body: Previous response made when endpoint was down.
 """
         recorder.start("write sequential tape", WRITE_SEQUENTIAL)
-        def tape = recorder.tape
+        def tape = recorder.tape as MemoryTape
 
         when: "a request is made that matches a request already recorded on the tape"
-        handler.handle(request)
+        makeRequest()
 
         then: "the previously recorded request is overwritten"
         tape.size() == old(tape.size()) + 1
