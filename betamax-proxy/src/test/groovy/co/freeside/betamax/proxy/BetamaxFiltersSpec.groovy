@@ -26,6 +26,7 @@ import io.netty.buffer.*
 import io.netty.handler.codec.http.*
 import spock.lang.*
 import static co.freeside.betamax.Headers.X_BETAMAX
+import static io.netty.buffer.Unpooled.copiedBuffer
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
 import static io.netty.handler.codec.http.HttpMethod.GET
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
@@ -128,7 +129,7 @@ class BetamaxFiltersSpec extends Specification {
 
 	void "responsePre records the exchange to tape"() {
 		given:
-		def response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.copiedBuffer("response body", Charset.forName("utf-8")))
+		def response = new DefaultFullHttpResponse(HTTP_1_1, OK, copiedBuffer("response body", Charset.forName("utf-8")))
 
 		and:
 		tape.isWritable() >> true

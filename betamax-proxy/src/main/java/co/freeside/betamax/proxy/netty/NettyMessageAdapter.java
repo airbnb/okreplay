@@ -21,15 +21,15 @@ import java.util.Map;
 import co.freeside.betamax.message.AbstractMessage;
 import com.google.common.base.Joiner;
 import com.google.common.collect.*;
-import com.google.common.io.ByteStreams;
 import io.netty.buffer.*;
 import io.netty.handler.codec.http.*;
+import static io.netty.buffer.Unpooled.copiedBuffer;
 
 public abstract class NettyMessageAdapter<T extends HttpMessage> extends AbstractMessage {
 
     protected final T delegate;
     private final Multimap<String, String> headers = LinkedHashMultimap.create();
-    private final ByteArrayOutputStream body = new ByteArrayOutputStream();
+    private final CompositeByteBuf body = Unpooled.compositeBuffer();
 
     protected NettyMessageAdapter(T delegate) {
         this.delegate = delegate;
@@ -51,14 +51,8 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
     }
 
     public void append(HttpContent chunk) throws IOException {
-        ByteBuf buffer = chunk.content();
-        InputStream from = new ByteBufInputStream(buffer);
-        try {
-            ByteStreams.copy(from, body);
-        } finally {
-            from.close();
-            buffer.resetReaderIndex();
-        }
+        body.addComponent(copiedBuffer(chunk.content()));
+        body.writerIndex(body.writerIndex() + chunk.content().readableBytes());
     }
 
     @Override
@@ -82,12 +76,11 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
 
     @Override
     public boolean hasBody() {
-        return body.size() > 0;
+        return body.capacity() > 0;
     }
 
     @Override
     protected InputStream getBodyAsStream() throws IOException {
-        // TODO: can this be done without copying the entire byte array?
-        return new ByteArrayInputStream(body.toByteArray());
+        return new ByteBufInputStream(body);
     }
 }

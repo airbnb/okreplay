@@ -33,11 +33,19 @@ class ProxyRecordAndPlaybackSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE).build()
-    @Shared @AutoCleanup("stop") def recorder = new Recorder(configuration)
+    @Shared def recorder = new Recorder(configuration)
     @AutoCleanup("stop") def endpoint = new SimpleServer(HelloHandler)
 
     void setupSpec() {
         recorder.start("proxy record and playback spec")
+    }
+
+    void cleanupSpec() {
+        try {
+            recorder.stop()
+        } catch (IllegalStateException e) {
+            // recorder was already stopped
+        }
     }
 
     void "proxy makes a real HTTP request the first time it gets a request for a URI"() {

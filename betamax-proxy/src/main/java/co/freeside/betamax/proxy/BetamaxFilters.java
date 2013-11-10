@@ -29,6 +29,7 @@ import io.netty.buffer.*;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.*;
 import static co.freeside.betamax.Headers.*;
+import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;
 import static io.netty.handler.codec.http.HttpVersion.*;
@@ -156,7 +157,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         } else {
             stream = ByteStreams.toByteArray(recordedResponse.getBodyAsBinary());
         }
-        return Unpooled.wrappedBuffer(stream);
+        return wrappedBuffer(stream);
     }
 
     private HttpHeaders setViaHeader(HttpMessage httpMessage) {

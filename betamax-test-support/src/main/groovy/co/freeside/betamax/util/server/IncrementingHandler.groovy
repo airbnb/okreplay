@@ -18,11 +18,10 @@ package co.freeside.betamax.util.server
 
 import java.util.concurrent.atomic.AtomicInteger
 import co.freeside.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
-import com.google.common.net.MediaType
-import io.netty.buffer.Unpooled
 import io.netty.channel.*
 import io.netty.handler.codec.http.DefaultFullHttpResponse
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.buffer.Unpooled.wrappedBuffer
 import static io.netty.channel.ChannelFutureListener.CLOSE
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
@@ -31,14 +30,14 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 @ChannelHandler.Sharable
 class IncrementingHandler extends ExceptionHandlingHandlerAdapter {
 
-	private final counter = new AtomicInteger()
+    private final counter = new AtomicInteger()
 
     @Override
     void channelRead(ChannelHandlerContext ctx, Object msg) {
         def response = new DefaultFullHttpResponse(
                 HTTP_1_1,
                 OK,
-                Unpooled.wrappedBuffer("count: ${counter.incrementAndGet()}".bytes)
+                wrappedBuffer("count: ${counter.incrementAndGet()}".bytes)
         )
         response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         ctx.writeAndFlush(response).addListener(CLOSE)

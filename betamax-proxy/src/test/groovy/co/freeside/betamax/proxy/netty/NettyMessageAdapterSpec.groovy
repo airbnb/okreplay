@@ -16,11 +16,11 @@
 
 package co.freeside.betamax.proxy.netty
 
-import io.netty.buffer.Unpooled
 import io.netty.handler.codec.http.*
 import spock.lang.*
 import static com.google.common.base.Charsets.*
-import static com.google.common.net.MediaType.FORM_DATA
+import static com.google.common.net.MediaType.*
+import static io.netty.buffer.Unpooled.*
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
 
 @Unroll
@@ -64,7 +64,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         createAdapter()
 
         and:
-        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(bodyText.getBytes(ISO_8859_1)))
+        def chunk = new DefaultHttpContent(copiedBuffer(bodyText.getBytes(ISO_8859_1)))
         adapter.append chunk
 
         expect:
@@ -83,7 +83,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         createAdapter()
 
         and:
-        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(body))
+        def chunk = new DefaultHttpContent(copiedBuffer(body))
         adapter.append chunk
 
         expect:
@@ -117,21 +117,38 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
         adapter.getHeader(ACCEPT_ENCODING) == "gzip, deflate"
     }
 
+    void "multiple content chunks can be appended to the body"() {
+        given:
+        nettyMessageHeaders.set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
+
+        and:
+        createAdapter()
+
+        and:
+        (1..3).each {
+            adapter.append new DefaultHttpContent(copiedBuffer("$it".bytes))
+        }
+
+        expect:
+        adapter.hasBody()
+        adapter.bodyAsText.input.text == "123"
+    }
+
     void "#description if the content buffer is #contentDescription"() {
         given:
         createAdapter()
 
         and:
-        def chunk = new DefaultHttpContent(Unpooled.copiedBuffer(content))
+        def chunk = new DefaultHttpContent(copiedBuffer(content))
         adapter.append chunk
 
         expect:
         adapter.hasBody() == consideredToHaveBody
 
         where:
-        content                               | consideredToHaveBody
-        Unpooled.copiedBuffer("O HAI", UTF_8) | true
-        Unpooled.EMPTY_BUFFER                 | false
+        content                      | consideredToHaveBody
+        copiedBuffer("O HAI", UTF_8) | true
+        EMPTY_BUFFER                 | false
 
         description = consideredToHaveBody ? "has a body" : "does not have a body"
         contentDescription = content ? "${content.readableBytes()} bytes long" : "null"

@@ -210,7 +210,9 @@ public abstract class MemoryTape implements Tape {
                 }
             }
 
-            recording.setBody(request.hasBody() ? CharStreams.toString(request.getBodyAsText()) : null);
+            if (request.hasBody()) {
+                recording.setBody(CharStreams.toString(request.getBodyAsText()));
+            }
 
             return recording;
         } catch (IOException e) {
