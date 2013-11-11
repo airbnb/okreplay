@@ -24,7 +24,7 @@ import org.yaml.snakeyaml.Yaml
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_WRITE
 import static java.net.HttpURLConnection.*
-import static org.apache.http.HttpHeaders.*
+import static com.google.common.net.HttpHeaders.*
 
 class WriteTapeToYamlSpec extends Specification {
 

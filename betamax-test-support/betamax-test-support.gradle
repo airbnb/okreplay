@@ -8,5 +8,6 @@ dependencies {
     compile project(":betamax-core")
     compile project(":betamax-junit")
     compile commonDependencies.netty
+    compile commonDependencies.httpClient
     compile commonDependencies.httpBuilder
 }

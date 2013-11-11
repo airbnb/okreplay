@@ -22,8 +22,8 @@ import co.freeside.betamax.util.message.*
 import com.google.common.io.Files
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.*
-import static org.apache.http.HttpHeaders.*
-import static org.apache.http.entity.ContentType.APPLICATION_FORM_URLENCODED
+import static com.google.common.net.HttpHeaders.*
+import static com.google.common.net.MediaType.FORM_DATA
 
 @Stepwise
 class TapeSpec extends Specification {
@@ -112,7 +112,7 @@ class TapeSpec extends Specification {
         given: 'a request with some content'
         def request = new BasicRequest('POST', 'http://github.com/')
         request.body = 'q=1'.getBytes('UTF-8')
-        request.addHeader(CONTENT_TYPE, APPLICATION_FORM_URLENCODED.toString())
+        request.addHeader(CONTENT_TYPE, FORM_DATA.toString())
 
         when: 'the request and its response are recorded'
         tape.record(request, plainTextResponse)

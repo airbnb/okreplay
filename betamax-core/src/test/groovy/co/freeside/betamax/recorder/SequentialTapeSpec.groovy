@@ -16,22 +16,23 @@
 
 package co.freeside.betamax.recorder
 
+import groovy.json.JsonSlurper
 import co.freeside.betamax.junit.Betamax
 import co.freeside.betamax.message.Response
 import co.freeside.betamax.tape.yaml.YamlTapeLoader
 import co.freeside.betamax.util.message.BasicRequest
-import groovy.json.JsonSlurper
 import spock.lang.*
 import static co.freeside.betamax.TapeMode.READ_SEQUENTIAL
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
-import static org.apache.http.HttpStatus.*
-import static org.apache.http.entity.ContentType.APPLICATION_JSON
+import static com.google.common.net.MediaType.JSON_UTF_8
+import static java.net.HttpURLConnection.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/7")
 @Issue("https://github.com/robfletcher/betamax/pull/70")
 class SequentialTapeSpec extends Specification {
 
-    static final TAPE_ROOT = new File(SequentialTapeSpec.getResource("/betamax/tapes").toURI())
+    static
+    final TAPE_ROOT = new File(SequentialTapeSpec.getResource("/betamax/tapes").toURI())
     @Shared def tapeLoader = new YamlTapeLoader(TAPE_ROOT)
 
     void "read sequential tapes play back recordings in correct sequence"() {
@@ -47,7 +48,7 @@ class SequentialTapeSpec extends Specification {
 
         then: "each read succeeds"
         responses.every {
-            it.status == SC_OK
+            it.status == HTTP_OK
         }
 
         and: "each has different content"
@@ -90,7 +91,7 @@ class SequentialTapeSpec extends Specification {
         and: "several sequential requests"
         def getRequest = new BasicRequest("GET", url)
         def postRequest = new BasicRequest("POST", url)
-        postRequest.addHeader(CONTENT_TYPE, APPLICATION_JSON.toString())
+        postRequest.addHeader(CONTENT_TYPE, JSON_UTF_8.toString())
         postRequest.body = '{"name":"foo"}'.bytes
 
         when: "the requests are played back in sequence"
@@ -100,7 +101,7 @@ class SequentialTapeSpec extends Specification {
         responses << tape.play(getRequest)
 
         then: "all play back successfully"
-        responses.status == [SC_NOT_FOUND, SC_CREATED, SC_OK]
+        responses.status == [HTTP_NOT_FOUND, HTTP_CREATED, HTTP_OK]
 
         and: "the correct data is played back"
         new JsonSlurper().parseText(responses[2].bodyAsText.input.text).name == "foo"

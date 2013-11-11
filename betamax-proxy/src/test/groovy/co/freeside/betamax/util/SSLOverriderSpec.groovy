@@ -17,10 +17,10 @@
 package co.freeside.betamax.util
 
 import java.security.Security
+import javax.net.ssl.HttpsURLConnection
 import co.freeside.betamax.proxy.ssl.DummyJVMSSLSocketFactory
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier
 import spock.lang.Specification
-import static co.freeside.betamax.util.SSLOverrider.SSL_SOCKET_FACTORY_PROVIDER
+import static co.freeside.betamax.util.SSLOverrider.*
 
 class SSLOverriderSpec extends Specification {
 
@@ -32,7 +32,7 @@ class SSLOverriderSpec extends Specification {
 
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  DummyJVMSSLSocketFactory.name
-		javax.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof AllowAllHostnameVerifier
+		HttpsURLConnection.defaultHostnameVerifier == ALLOW_ALL_HOSTNAME_VERIFIER
 
 		cleanup:
 		sslOverrider.deactivate()
@@ -45,7 +45,7 @@ class SSLOverriderSpec extends Specification {
 
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  old(Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER))
-		!(javax.net.ssl.HttpsURLConnection.defaultHostnameVerifier instanceof AllowAllHostnameVerifier)
+		HttpsURLConnection.defaultHostnameVerifier != ALLOW_ALL_HOSTNAME_VERIFIER
 	}
 
 }

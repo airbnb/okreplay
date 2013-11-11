@@ -17,11 +17,11 @@
 package co.freeside.betamax.message.tape;
 
 import java.io.*;
-import java.util.*;
+import java.util.LinkedHashMap;
 import co.freeside.betamax.encoding.*;
 import co.freeside.betamax.message.*;
-import com.google.common.io.*;
-import org.apache.http.*;
+import com.google.common.io.ByteStreams;
+import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
 
 public abstract class RecordedMessage extends AbstractMessage implements Message {
     public final void addHeader(final String name, String value) {
@@ -60,7 +60,7 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
     }
 
     private AbstractEncoder getEncoder() {
-        String contentEncoding = getHeader(HttpHeaders.CONTENT_ENCODING);
+        String contentEncoding = getHeader(CONTENT_ENCODING);
 
         if ("gzip".equals(contentEncoding)) {
             return new GzipEncoder();

@@ -6,7 +6,6 @@ repositories {
 }
 
 dependencies {
-    compile commonDependencies.httpClient
     compile commonDependencies.snakeYaml
     compile commonDependencies.tika
 

@@ -19,11 +19,16 @@ package co.freeside.betamax.util;
 import java.security.*;
 import javax.net.ssl.*;
 import co.freeside.betamax.proxy.ssl.*;
-import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.*;
 
 public class SSLOverrider {
 
     public static final String SSL_SOCKET_FACTORY_PROVIDER = "ssl.SocketFactory.provider";
+    public static final HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER = new HostnameVerifier() {
+        @Override
+        public boolean verify(String s, SSLSession sslSession) {
+            return true;
+        }
+    };
 
     private boolean isActive;
     private String originalSocketFactoryProvider;
