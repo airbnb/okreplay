@@ -32,6 +32,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == new File(DEFAULT_TAPE_ROOT)
+            proxyHost == DEFAULT_PROXY_HOST
             proxyPort == DEFAULT_PROXY_PORT
             defaultMode == DEFAULT_MODE
             defaultMatchRule == DEFAULT_MATCH_RULE
@@ -46,6 +47,7 @@ class ConfigurationSpec extends Specification {
         given:
         def configuration = ProxyConfiguration.builder()
                 .tapeRoot(tempDir)
+                .proxyHost("freeside.co")
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
                 .defaultMatchRules(MatchRules.host, MatchRules.headers)
@@ -59,6 +61,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
+            proxyHost == "freeside.co"
             proxyPort == 1337
             defaultMode == READ_ONLY
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -74,6 +77,7 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
+            setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,headers")
@@ -89,6 +93,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
+            proxyHost == "freeside.co"
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -106,6 +111,7 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
+            setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,headers")
@@ -127,6 +133,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
+            proxyHost == "freeside.co"
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -147,6 +154,7 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
+            setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,headers")
@@ -165,6 +173,7 @@ class ConfigurationSpec extends Specification {
         and:
         def configuration = ProxyConfiguration.builder()
                 .tapeRoot(new File("test/fixtures/tapes"))
+                .proxyHost("betamax.io")
                 .proxyPort(1234)
                 .defaultMode(WRITE_ONLY)
                 .defaultMatchRules(MatchRules.port, MatchRules.query)
@@ -177,6 +186,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == new File("test/fixtures/tapes")
+            proxyHost == "betamax.io"
             proxyPort == 1234
             defaultMode == WRITE_ONLY
             defaultMatchRule == ComposedMatchRule.of(MatchRules.port, MatchRules.query)

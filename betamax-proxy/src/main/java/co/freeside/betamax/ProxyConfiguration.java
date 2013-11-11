@@ -17,21 +17,24 @@
 package co.freeside.betamax;
 
 import java.net.*;
-import java.util.*;
-import co.freeside.betamax.internal.*;
-import co.freeside.betamax.proxy.*;
+import java.util.Collection;
+import co.freeside.betamax.internal.RecorderListener;
+import co.freeside.betamax.proxy.ProxyServer;
 
 public class ProxyConfiguration extends Configuration {
 
+    public static final String DEFAULT_PROXY_HOST = null;
     public static final int DEFAULT_PROXY_PORT = 5555;
     public static final int DEFAULT_PROXY_TIMEOUT = 5;
 
+    private final String proxyHost;
     private final int proxyPort;
     private final int proxyTimeoutSeconds;
     private final boolean sslEnabled;
 
     protected ProxyConfiguration(ProxyConfigurationBuilder<?> builder) {
         super(builder);
+        this.proxyHost = builder.proxyHost;
         this.proxyPort = builder.proxyPort;
         this.proxyTimeoutSeconds = builder.proxyTimeoutSeconds;
         this.sslEnabled = builder.sslEnabled;
@@ -56,25 +59,25 @@ public class ProxyConfiguration extends Configuration {
     }
 
     /**
-     * If set to true add support for proxying SSL (disable certificate checking).
+     * If set to true add support for proxying SSL (disable certificate
+     * checking).
      */
     public boolean isSslEnabled() {
         return sslEnabled;
     }
 
     /**
-     * @return the hostname or address where the proxy will run.
+     * @return the hostname or address where the proxy will run. A value of
+     * `null` means the proxy will bind to any local address.
+     * @see java.net.InetSocketAddress
      */
     public String getProxyHost() {
-        try {
-            return InetAddress.getLocalHost().getHostName();
-        } catch (UnknownHostException e) {
-            throw new IllegalStateException("Unable to get localhost address");
-        }
+        return proxyHost;
     }
 
     /**
-     * @return a `java.net.Proxy` instance configured to point to the Betamax proxy.
+     * @return a `java.net.Proxy` instance configured to point to the Betamax
+     * proxy.
      */
     public Proxy getProxy() {
         return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(getProxyHost(), getProxyPort()));
