@@ -26,12 +26,9 @@ dependencies {
     testRuntime "cglib:cglib-nodep:2.2.2"
 }
 
-publishing {
-    publications {
-        mavenCustom(MavenPublication) {
-            pom.withXml {
-                asNode().appendNode("description", "The HTTP proxy implementation of Betamax.")
-            }
-        }
+modifyPom {
+    project {
+        name "Betamax Proxy"
+        description "The HTTP proxy implementation of Betamax."
     }
 }

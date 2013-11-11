@@ -17,12 +17,9 @@ dependencies {
     testRuntime commonDependencies.cglib
 }
 
-publishing {
-    publications {
-        mavenCustom(MavenPublication) {
-            pom.withXml {
-                asNode().appendNode("description", "The Apache HTTPClient wrapper implementation of Betamax.")
-            }
-        }
+modifyPom {
+    project {
+        name "Betamax HTTPClient"
+        description "The Apache HTTPClient wrapper implementation of Betamax."
     }
 }

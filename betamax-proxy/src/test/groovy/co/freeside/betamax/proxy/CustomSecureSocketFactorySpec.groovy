@@ -20,7 +20,7 @@ import java.security.KeyStore
 import javax.net.ssl.HttpsURLConnection
 import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.Recorder
-import co.freeside.betamax.proxy.ssl.DummySSLSocketFactory
+
 import co.freeside.betamax.util.server.*
 import com.google.common.io.Files
 import spock.lang.*

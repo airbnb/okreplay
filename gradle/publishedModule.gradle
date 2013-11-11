@@ -1,66 +1,72 @@
-apply plugin: "maven-publish"
+apply plugin: "artifactory"
+apply plugin: "maven"
+apply from: "${rootDir}/gradle/pom.gradle"
+apply plugin: "signing"
 
 task sourceJar(type: Jar) {
+    description "An archive of the source code"
+    classifier "sources"
     from sourceSets.main.allJava, sourceSets.main.resources
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+task javadocJar(type: Jar) {
+    description "An archive of the JavaDocs"
+    classifier "javadoc"
+    from javadoc
+}
 
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
+artifacts {
+    archives sourceJar, javadocJar
+}
+
+signing {
+    if (!isSnapshot) {
+        sign configurations.archives
     }
-    repositories {
-        maven {
-            url "http://oss.jfrog.org/oss-snapshot-local/"
-            gradle.taskGraph.whenReady { taskGraph ->
-                if (taskGraph.hasTask("publish")) {
-                    credentials {
-                        username = bintray_username
-                        password = bintray_api_key
-                    }
-                }
+}
+
+artifactory {
+    publish {
+        repoKey = isSnapshot ? "oss-snapshot-local" : "oss-release-local"
+        gradle.taskGraph.whenReady { taskGraph ->
+            if (taskGraph.hasTask("artifactoryPublish")) {
+                username = bintray_username
+                password = bintray_api_key
             }
         }
     }
 }
 
-//modifyPom {
-//	dependencies.removeAll(dependencies.findAll { it.scope == "test" })
-//
-//	project {
-//		packaging "jar"
-//		url "http://freeside.co/betamax"
-//		inceptionYear "2011"
-//
-//		scm {
-//			url "scm:git@github.com:robfletcher/betamax.git"
-//			connection "scm:git@github.com:robfletcher/betamax.git"
-//			developerConnection "scm:git@github.com:robfletcher/betamax.git"
-//		}
-//
-//		licenses {
-//			license {
-//				name "The Apache Software License, Version 2.0"
-//				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-//				distribution "repo"
-//			}
-//		}
-//
-//		developers {
-//			developer {
-//				id "robfletcher"
-//				name "Rob Fletcher"
-//				url "http://freeside.co/"
-//				roles {
-//					role "Lead"
-//					role "Founder"
-//				}
-//			}
-//		}
-//	}
-//}
+modifyPom {
+	project {
+		packaging "jar"
+		url "http://freeside.co/betamax"
+		inceptionYear "2011"
+
+		scm {
+			url "scm:git@github.com:robfletcher/betamax.git"
+			connection "scm:git@github.com:robfletcher/betamax.git"
+			developerConnection "scm:git@github.com:robfletcher/betamax.git"
+		}
+
+		licenses {
+			license {
+				name "The Apache Software License, Version 2.0"
+				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+				distribution "repo"
+			}
+		}
+
+		developers {
+			developer {
+				id "robfletcher"
+				name "Rob Fletcher"
+				url "http://freeside.co/"
+				roles {
+					role "Lead"
+					role "Founder"
+				}
+			}
+		}
+	}
+}
