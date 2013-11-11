@@ -46,7 +46,7 @@ class HttpClient3Spec extends Specification {
     void "proxy intercepts HTTPClient 3.x connections"() {
         given:
         def client = new HttpClient()
-        client.hostConfiguration.proxyHost = new ProxyHost(configuration.proxyHost, configuration.proxyPort)
+        client.hostConfiguration.proxyHost = new ProxyHost(configuration.proxyHost.hostName, configuration.proxyPort)
 
         and:
         def request = new GetMethod(endpoint.url)

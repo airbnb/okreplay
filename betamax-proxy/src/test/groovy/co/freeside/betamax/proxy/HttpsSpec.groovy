@@ -70,7 +70,7 @@ class HttpsSpec extends Specification {
 
         and:
         def proxyURI = "${scheme}://${proxy.address()}".toURI()
-        InetAddress.getByName(proxyURI.host) == InetAddress.getByName(configuration.proxyHost)
+        InetAddress.getByName(proxyURI.host) == configuration.proxyHost
         proxyURI.port == configuration.proxyPort
 
         where:

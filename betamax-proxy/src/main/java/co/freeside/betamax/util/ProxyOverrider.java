@@ -16,13 +16,13 @@
 
 package co.freeside.betamax.util;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.*;
 import java.util.*;
 import com.google.common.base.*;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
-import static java.net.Proxy.Type.*;
+import static java.net.Proxy.Type.HTTP;
 
 /**
  * Provides a mechanism to temporarily override current HTTP and HTTPS proxy settings and restore them later.
@@ -35,14 +35,14 @@ public class ProxyOverrider implements ChainedProxyManager {
     /**
      * Activates a proxy override for the given URI scheme.
      */
-    public void activate(String host, int port, Collection<String> nonProxyHosts) {
+    public void activate(InetAddress host, int port, Collection<String> nonProxyHosts) {
         for (String scheme : new String[] {"http", "https"}) {
             String currentProxyHost = System.getProperty(scheme + ".proxyHost");
             String currentProxyPort = System.getProperty(scheme + ".proxyPort");
             if (currentProxyHost != null) {
                 originalProxies.put(scheme, new InetSocketAddress(currentProxyHost, Integer.parseInt(currentProxyPort)));
             }
-            System.setProperty(scheme + ".proxyHost", host);
+            System.setProperty(scheme + ".proxyHost", new InetSocketAddress(host, port).getHostString());
             System.setProperty(scheme + ".proxyPort", Integer.toString(port));
         }
 

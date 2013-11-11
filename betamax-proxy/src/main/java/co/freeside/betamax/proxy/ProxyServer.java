@@ -17,20 +17,20 @@
 package co.freeside.betamax.proxy;
 
 import java.net.*;
-import java.util.logging.*;
-import co.freeside.betamax.*;
-import co.freeside.betamax.internal.*;
-import co.freeside.betamax.proxy.netty.*;
-import co.freeside.betamax.tape.*;
+import java.util.logging.Logger;
+import co.freeside.betamax.ProxyConfiguration;
+import co.freeside.betamax.internal.RecorderListener;
+import co.freeside.betamax.proxy.netty.PredicatedHttpFilters;
+import co.freeside.betamax.tape.Tape;
 import co.freeside.betamax.util.*;
-import com.google.common.base.*;
-import io.netty.handler.codec.http.*;
+import com.google.common.base.Predicate;
+import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
-import org.littleshoot.proxy.extras.*;
-import org.littleshoot.proxy.impl.*;
-import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.*;
-import static com.google.common.base.Predicates.*;
-import static io.netty.handler.codec.http.HttpMethod.*;
+import org.littleshoot.proxy.extras.SelfSignedMitmManager;
+import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
+import static co.freeside.betamax.proxy.netty.PredicatedHttpFilters.httpMethodPredicate;
+import static com.google.common.base.Predicates.not;
+import static io.netty.handler.codec.http.HttpMethod.CONNECT;
 
 public class ProxyServer implements RecorderListener {
 
@@ -72,8 +72,7 @@ public class ProxyServer implements RecorderListener {
         }
 
         InetSocketAddress address = new InetSocketAddress(configuration.getProxyHost(), configuration.getProxyPort());
-//        address = new InetSocketAddress(NetworkUtils.getLocalHost(), recorder.getProxyPort());
-        LOG.info(String.format("created address, %s", address));
+        LOG.info(String.format("Betamax proxy is binding to %s", address));
         HttpProxyServerBootstrap proxyServerBootstrap = DefaultHttpProxyServer
                 .bootstrap()
                 .withIdleConnectionTimeout(configuration.getProxyTimeoutSeconds())

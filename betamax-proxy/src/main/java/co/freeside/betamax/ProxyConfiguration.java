@@ -19,11 +19,11 @@ package co.freeside.betamax;
 import java.net.*;
 import java.util.Collection;
 import co.freeside.betamax.internal.RecorderListener;
-import co.freeside.betamax.proxy.ProxyServer;
+import co.freeside.betamax.proxy.*;
 
 public class ProxyConfiguration extends Configuration {
 
-    public static final String DEFAULT_PROXY_HOST = null;
+    public static final String DEFAULT_PROXY_HOST = "0.0.0.0";
     public static final int DEFAULT_PROXY_PORT = 5555;
     public static final int DEFAULT_PROXY_TIMEOUT = 5;
 
@@ -69,10 +69,18 @@ public class ProxyConfiguration extends Configuration {
     /**
      * @return the hostname or address where the proxy will run. A value of
      * `null` means the proxy will bind to any local address.
-     * @see java.net.InetSocketAddress
+     * @see java.net.InetSocketAddress#InetSocketAddress(InetAddress, int)
      */
-    public String getProxyHost() {
-        return proxyHost;
+    public InetAddress getProxyHost() {
+        try {
+            if (proxyHost == null) {
+                return InetAddress.getByName(DEFAULT_PROXY_HOST);
+            } else {
+                return InetAddress.getByName(proxyHost);
+            }
+        } catch (UnknownHostException e) {
+            throw new ProxyConfigurationException(String.format("Unable to resolve host %s", proxyHost), e);
+        }
     }
 
     /**

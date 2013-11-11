@@ -32,7 +32,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == new File(DEFAULT_TAPE_ROOT)
-            proxyHost == DEFAULT_PROXY_HOST
+            proxyHost == InetAddress.getByName(DEFAULT_PROXY_HOST)
             proxyPort == DEFAULT_PROXY_PORT
             defaultMode == DEFAULT_MODE
             defaultMatchRule == DEFAULT_MATCH_RULE
@@ -61,7 +61,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == "freeside.co"
+            proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_ONLY
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -93,7 +93,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == "freeside.co"
+            proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -133,7 +133,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == "freeside.co"
+            proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
@@ -186,7 +186,7 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == new File("test/fixtures/tapes")
-            proxyHost == "betamax.io"
+            proxyHost == InetAddress.getByName("betamax.io")
             proxyPort == 1234
             defaultMode == WRITE_ONLY
             defaultMatchRule == ComposedMatchRule.of(MatchRules.port, MatchRules.query)

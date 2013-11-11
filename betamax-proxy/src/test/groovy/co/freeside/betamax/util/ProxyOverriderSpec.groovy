@@ -36,14 +36,14 @@ class ProxyOverriderSpec extends Specification {
 		}
 	}
 
-	void 'activate sets up proxy override if no existing proxy settings exist'() {
+	void 'activate sets up proxy localhost if no existing proxy settings exist'() {
 		when:
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 
 		then:
-		System.properties.'http.proxyHost' == 'override'
+		System.properties.'http.proxyHost' == 'localhost'
 		System.properties.'http.proxyPort' == '9999'
-		System.properties.'https.proxyHost' == 'override'
+		System.properties.'https.proxyHost' == 'localhost'
 		System.properties.'https.proxyPort' == '9999'
 		System.properties.'http.nonProxyHosts' == 'localhost'
 	}
@@ -57,19 +57,19 @@ class ProxyOverriderSpec extends Specification {
 		System.properties.'http.nonProxyHosts' == 'mydomain.com'
 
 		when:
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 
 		then:
-		System.properties.'http.proxyHost' == 'override'
+		System.properties.'http.proxyHost' == 'localhost'
 		System.properties.'http.proxyPort' == '9999'
-		System.properties.'https.proxyHost' == 'override'
+		System.properties.'https.proxyHost' == 'localhost'
 		System.properties.'https.proxyPort' == '9999'
 		System.properties.'http.nonProxyHosts' == 'localhost'
 	}
 
 	void 'deactivateAll clears proxy settings if none existed before activation'() {
 		when:
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 		proxyOverrider.deactivateAll()
 
 		then:
@@ -93,7 +93,7 @@ class ProxyOverriderSpec extends Specification {
 		System.properties.'http.nonProxyHosts' = 'mydomain.com'
 
 		when:
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 		proxyOverrider.deactivateAll()
 
 		then:
@@ -120,7 +120,7 @@ class ProxyOverriderSpec extends Specification {
 
 	void 'uses direct route if there were no pre-existing proxy settings'() {
 		given:
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 
 		expect:
 		def proxies = proxyOverrider.originalProxySelector.select(HTTP_URI)
@@ -134,7 +134,7 @@ class ProxyOverriderSpec extends Specification {
 	void 'uses pre-existing #scheme proxy if Betamax is overriding proxy settings'() {
 		given:
 		setupProxy 'myproxy', 1337
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 
 		expect:
 		def proxies = proxyOverrider.originalProxySelector.select(uri)
@@ -153,7 +153,7 @@ class ProxyOverriderSpec extends Specification {
 	void 'does not use pre-existing #scheme proxy for uri that is ignored'() {
 		given:
 		setupProxy 'myproxy', 1337, uri.host
-		proxyOverrider.activate 'override', 9999, ['localhost']
+		proxyOverrider.activate InetAddress.getByName('localhost'), 9999, ['localhost']
 
 		expect:
 		def proxies = proxyOverrider.originalProxySelector.select(uri)
