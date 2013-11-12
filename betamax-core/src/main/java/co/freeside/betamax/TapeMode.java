@@ -15,13 +15,26 @@
  */
 package co.freeside.betamax;
 
+import com.google.common.base.Optional;
+
 public enum TapeMode {
 
     READ_WRITE(true, true, false),
     READ_ONLY(true, false, false),
     READ_SEQUENTIAL(true, false, true),
     WRITE_ONLY(false, true, false),
-    WRITE_SEQUENTIAL(false, true, true);
+    WRITE_SEQUENTIAL(false, true, true),
+
+    /**
+     * This is a special value used for the `Betamax` annotation. Do not use
+     * this directly.
+     */
+    NULL(false, false, false) {
+        @Override
+        public Optional<TapeMode> toOptional() {
+            return Optional.absent();
+        }
+    };
 
     private final boolean readable;
     private final boolean writable;
@@ -50,6 +63,10 @@ public enum TapeMode {
      */
     public boolean asBoolean() {
         return readable || writable;
+    }
+
+    public Optional<TapeMode> toOptional() {
+        return Optional.of(this);
     }
 
 }

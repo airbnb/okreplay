@@ -16,18 +16,20 @@
 
 package co.freeside.betamax.junit;
 
-import java.util.logging.*;
+import java.util.logging.Logger;
 import co.freeside.betamax.*;
 import com.google.common.base.*;
-import org.junit.rules.*;
-import org.junit.runner.*;
-import org.junit.runners.model.*;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+import static co.freeside.betamax.TapeMode.NULL;
 import static com.google.common.base.CaseFormat.*;
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.SEVERE;
 
 /**
  * This is an extension of {@link Recorder} that can be used as a
- * _JUnit @Rule_ allowing tests annotated with `@Betamax` to automatically activate
+ * _JUnit @Rule_ allowing tests annotated with `@Betamax` to automatically
+ * activate
  * Betamax recording.
  */
 public class RecorderRule extends Recorder implements TestRule {
@@ -55,6 +57,7 @@ public class RecorderRule extends Recorder implements TestRule {
                         if (Strings.isNullOrEmpty(tapeName)) {
                             tapeName = defaultTapeName(description);
                         }
+
                         TapeMode tapeMode = annotation.mode();
                         MatchRule matchRule = ComposedMatchRule.of(annotation.match());
 

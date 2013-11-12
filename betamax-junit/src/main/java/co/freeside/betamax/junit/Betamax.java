@@ -17,6 +17,7 @@ package co.freeside.betamax.junit;
 
 import java.lang.annotation.*;
 import co.freeside.betamax.*;
+import com.google.common.base.Optional;
 import static co.freeside.betamax.MatchRules.*;
 import static co.freeside.betamax.TapeMode.*;
 import static java.lang.annotation.ElementType.*;
@@ -27,7 +28,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 public @interface Betamax {
     String tape() default "";
 
-    TapeMode mode() default READ_ONLY;
+    TapeMode mode() default NULL;
 
     MatchRules[] match() default {method, uri};
 }
