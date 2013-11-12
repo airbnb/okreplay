@@ -17,11 +17,10 @@ package co.freeside.betamax.junit;
 
 import java.lang.annotation.*;
 import co.freeside.betamax.*;
-import com.google.common.base.Optional;
 import static co.freeside.betamax.MatchRules.*;
-import static co.freeside.betamax.TapeMode.*;
+import static co.freeside.betamax.TapeMode.NULL;
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Target({METHOD, TYPE})
