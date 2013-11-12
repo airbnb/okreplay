@@ -62,6 +62,11 @@ public abstract class MemoryTape implements Tape {
     }
 
     @Override
+    public TapeMode getMode() {
+        return mode;
+    }
+
+    @Override
     public void setMode(TapeMode mode) {
         this.mode = mode;
     }
