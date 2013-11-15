@@ -43,44 +43,44 @@ import static java.util.concurrent.TimeUnit.SECONDS
 })
 class BasicAuthSpec extends Specification {
 
-    @Shared private endpoint = 'http://httpbin.org/basic-auth/user/passwd'.toURL()
+    @Shared private endpoint = "http://httpbin.org/basic-auth/user/passwd".toURL()
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
-\
-    @Betamax(tape = 'basic auth', mode = WRITE_ONLY, match = [method, uri, headers])
-    void 'can record #status response from authenticated endpoint'() {
+
+    @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, headers])
+    void "can record #status response from authenticated endpoint"() {
         when:
         HttpURLConnection connection = endpoint.openConnection()
         connection.setRequestProperty("Authorization", "Basic $credentials");
 
         then:
         connection.responseCode == status
-        connection.getHeaderField(X_BETAMAX) == 'REC'
+        connection.getHeaderField(X_BETAMAX) == "REC"
 
         where:
         password    | status
-        'passwd'    | HTTP_OK
-        'INCORRECT' | HTTP_UNAUTHORIZED
+        "passwd"    | HTTP_OK
+        "INCORRECT" | HTTP_UNAUTHORIZED
 
         credentials = BaseEncoding.base64().encode("user:$password".bytes)
     }
 
-    @Betamax(tape = 'basic auth', mode = READ_ONLY, match = [method, uri, headers])
-    void 'can play back #status response from authenticated endpoint'() {
+    @Betamax(tape = "basic auth", mode = READ_ONLY, match = [method, uri, headers])
+    void "can play back #status response from authenticated endpoint"() {
         when:
         HttpURLConnection connection = endpoint.openConnection()
         connection.setRequestProperty("Authorization", "Basic $credentials");
 
         then:
         connection.responseCode == status
-        connection.getHeaderField(X_BETAMAX) == 'PLAY'
+        connection.getHeaderField(X_BETAMAX) == "PLAY"
 
         where:
         password    | status
-        'passwd'    | HTTP_OK
-        'INCORRECT' | HTTP_UNAUTHORIZED
+        "passwd"    | HTTP_OK
+        "INCORRECT" | HTTP_UNAUTHORIZED
 
         credentials = BaseEncoding.base64().encode("user:$password".bytes)
     }
