@@ -50,7 +50,7 @@ public class BetamaxHttpClient extends DefaultHttpClient {
             UserTokenHandler userTokenHandler,
             HttpParams params) {
         RequestDirector director = super.createClientRequestDirector(requestExec, conman, reustrat, kastrat, rouplan, httpProcessor, retryHandler, redirectStrategy, targetAuthStrategy, proxyAuthStrategy, userTokenHandler, params);
-        return new BetamaxRequestDirector(director, configuration, recorder);
+        return new BetamaxRequestDirector(director, configuration, recorder, getCredentialsProvider());
     }
 
 }

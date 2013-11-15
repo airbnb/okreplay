@@ -16,21 +16,22 @@
 
 package co.freeside.betamax.httpclient;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Map;
 import co.freeside.betamax.*;
 import co.freeside.betamax.handler.*;
 import co.freeside.betamax.message.*;
-import co.freeside.betamax.message.httpclient.*;
-import com.google.common.io.*;
+import co.freeside.betamax.message.httpclient.HttpRequestAdapter;
+import com.google.common.io.ByteStreams;
 import org.apache.http.*;
 import org.apache.http.client.*;
 import org.apache.http.entity.*;
-import org.apache.http.impl.*;
-import org.apache.http.message.*;
-import org.apache.http.protocol.*;
-import static java.util.Locale.*;
-import static org.apache.http.HttpVersion.*;
+import org.apache.http.impl.EnglishReasonPhraseCatalog;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.protocol.HttpContext;
+import static java.util.Locale.ENGLISH;
+import static org.apache.http.HttpVersion.HTTP_1_1;
 
 class BetamaxRequestDirector implements RequestDirector {
 
@@ -38,11 +39,15 @@ class BetamaxRequestDirector implements RequestDirector {
     private final Configuration configuration;
     private final HttpHandler handlerChain;
 
-    public BetamaxRequestDirector(RequestDirector delegate, Configuration configuration, Recorder recorder) {
+    public BetamaxRequestDirector(final RequestDirector delegate, Configuration configuration, Recorder recorder, CredentialsProvider credentialsProvider) {
         this.delegate = delegate;
         this.configuration = configuration;
 
-        handlerChain = new DefaultHandlerChain(recorder);
+        HttpClient httpClient = HttpClientBuilder.create()
+                .setDefaultCredentialsProvider(credentialsProvider)
+                .useSystemProperties()
+                .build();
+        handlerChain = new DefaultHandlerChain(recorder, httpClient);
     }
 
     @Override
