@@ -82,6 +82,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
+        yaml.size() == 2
         yaml.name == tape.name
 
         yaml.interactions.size() == 1

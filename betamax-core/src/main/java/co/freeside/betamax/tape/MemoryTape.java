@@ -39,14 +39,14 @@ import static java.util.Collections.unmodifiableList;
 public abstract class MemoryTape implements Tape {
 
     private String name;
-    private TapeMode mode = Configuration.DEFAULT_MODE;
-    private MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
-    private EntityStorage responseBodyStorage = Configuration.DEFAULT_RESPONSE_BODY_STORAGE;
-
     private List<RecordedInteraction> interactions = Lists.newArrayList();
-    private AtomicInteger orderedIndex = new AtomicInteger();
 
-    private final FileResolver fileResolver;
+    private transient TapeMode mode = Configuration.DEFAULT_MODE;
+    private transient MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
+    private transient EntityStorage responseBodyStorage = Configuration.DEFAULT_RESPONSE_BODY_STORAGE;
+    private final transient FileResolver fileResolver;
+
+    private transient AtomicInteger orderedIndex = new AtomicInteger();
 
     protected MemoryTape(FileResolver fileResolver) {
         this.fileResolver = fileResolver;

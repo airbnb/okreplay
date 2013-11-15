@@ -26,6 +26,7 @@ import com.google.common.io.Files;
 import org.yaml.snakeyaml.*;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
+import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
 import static co.freeside.betamax.tape.yaml.YamlTape.TAPE_TAG;
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
@@ -115,7 +116,9 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
         dumperOptions.setDefaultFlowStyle(BLOCK);
         dumperOptions.setWidth(256);
 
-        return new Yaml(constructor, representer, dumperOptions);
+        Yaml yaml = new Yaml(constructor, representer, dumperOptions);
+        yaml.setBeanAccess(BeanAccess.FIELD);
+        return yaml;
     }
 
 }

@@ -111,7 +111,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
             new Yaml().loadAs(reader, Map)
         }
         yaml.name == "proxy record and playback spec"
-        yaml.size() == 2
+        yaml.interactions.size() == 2
     }
 
     void "can load an existing tape from a file"() {
