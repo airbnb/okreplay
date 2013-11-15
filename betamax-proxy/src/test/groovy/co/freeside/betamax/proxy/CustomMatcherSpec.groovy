@@ -38,12 +38,12 @@ class CustomMatcherSpec extends Specification {
     }
 
 
-    void "Doesn't change the tape when replaying an HTTPS connection"() {
+    void "Using a custom matcher, can replay the tape"() {
         given:
         def proxyConfig = ProxyConfiguration.builder()
                 .sslEnabled(true)
                 .tapeRoot(tapeRoot)
-                .defaultMode(TapeMode.READ_WRITE)
+                .defaultMode(TapeMode.READ_ONLY)
                 .defaultMatchRule(customMatchRule)
                 .build()
 
@@ -51,7 +51,6 @@ class CustomMatcherSpec extends Specification {
         recorder.start("httpBinTape")
 
         when:
-        //TODO simple rest client?
         def payload = "BUTTS"
         HttpsURLConnection conn = new URL("https://httpbin.org/post").openConnection()
         conn.setDoOutput(true)
