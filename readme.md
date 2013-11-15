@@ -15,7 +15,7 @@ Add a `@Rule RecorderRule` property to your test and annotate test methods with 
 Future test runs replay responses from _tape_ without traffic going to the real target. No more 3rd party downtime or rate limits breaking your tests. You can even run your tests offline! Insert different _tapes_ to stub different responses.
 
 ### Customize
-_Tapes_ are just [YAML][yaml] files so you can edit them with a text editor, commit to source control, share with your team & use on continuous integration.
+_Tapes_ are just [YAML][yaml] files so you can edit them with a text editor, commit to source control, share with your team & use on continuous integration.  An example tape file can be found [here](https://github.com/robfletcher/betamax/blob/master/betamax-proxy/src/test/resources/betamax/tapes/smoke_spec.yaml).
 
 ## Full documentation
 
