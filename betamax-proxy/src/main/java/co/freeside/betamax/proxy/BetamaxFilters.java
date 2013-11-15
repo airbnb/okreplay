@@ -46,15 +46,12 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
     public BetamaxFilters(HttpRequest originalRequest, Tape tape) {
         super(originalRequest);
-        LOG.info(String.format("Created filter for %s %s", originalRequest.getMethod(), originalRequest.getUri()));
         request = NettyRequestAdapter.wrap(originalRequest);
         this.tape = tape;
     }
 
     @Override
     public HttpResponse requestPre(HttpObject httpObject) {
-        LOG.info(String.format("requestPre %s", httpObject.getClass().getSimpleName()));
-
         try {
             HttpResponse response = null;
             if (httpObject instanceof HttpRequest) {
@@ -69,8 +66,6 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
     @Override
     public HttpResponse requestPost(HttpObject httpObject) {
-        LOG.info(String.format("requestPost %s", httpObject.getClass().getSimpleName()));
-
         try {
             if (httpObject instanceof HttpContent) {
                 request.append((HttpContent) httpObject);
@@ -88,8 +83,6 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
     @Override
     public void responsePre(HttpObject httpObject) {
-        LOG.info(String.format("responsePre %s", httpObject.getClass().getSimpleName()));
-
         if (httpObject instanceof HttpResponse) {
             upstreamResponse = NettyResponseAdapter.wrap(httpObject);
         }
@@ -105,7 +98,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
         if (httpObject instanceof LastHttpContent) {
             if (tape.isWritable()) {
-                LOG.warning(String.format("Recording to tape %s", tape.getName()));
+                LOG.info(String.format("Recording to tape %s", tape.getName()));
                 tape.record(request, upstreamResponse);
             } else {
                 throw new NonWritableTapeException();
@@ -115,7 +108,6 @@ public class BetamaxFilters extends HttpFiltersAdapter {
 
     @Override
     public void responsePost(HttpObject httpObject) {
-        LOG.info(String.format("responsePost %s", httpObject.getClass().getSimpleName()));
         if (httpObject instanceof HttpResponse) {
             setBetamaxHeader((HttpResponse) httpObject, "REC");
             setViaHeader((HttpMessage) httpObject);
@@ -126,6 +118,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         if (tape == null) {
             return Optional.of(new DefaultFullHttpResponse(HTTP_1_1, new HttpResponseStatus(403, "No tape")));
         } else if (tape.isReadable() && tape.seek(request)) {
+            LOG.warning(String.format("Playing back from tape %s", tape.getName()));
             Response recordedResponse = tape.play(request);
             FullHttpResponse response = playRecordedResponse(recordedResponse);
             setViaHeader(response);
