@@ -12,22 +12,13 @@ class InstrumentedMatchRule implements MatchRule {
 
     def requestValidations = []
 
-    def readAll(Reader r) {
-        def output = ""
-        def line = null
-        while((line = r.readLine()) != null) {
-            output << line << "\n"
-        }
-        return output.trim()
-    }
-
     def dumpRequest(Request r) {
         println("Request:")
         def lines = [
                 "URI: ${r.uri}",
                 "METHOD: ${r.method}",
                 "HEADERS: ${r.headers.collect { k,v -> "$k: $v"} join ", "}",
-                "BODY: ${readAll(r.bodyAsText.input)}"
+                "BODY: ${r.bodyAsText.input.getText()}"
         ]
         lines.each { l ->
             println("\t" + l)
