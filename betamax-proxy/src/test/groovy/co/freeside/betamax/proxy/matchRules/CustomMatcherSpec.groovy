@@ -3,8 +3,6 @@ package co.freeside.betamax.proxy.matchRules
 import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.TapeMode
-import groovyx.net.http.ContentType
-import groovyx.net.http.RESTClient
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -27,6 +25,7 @@ class CustomMatcherSpec extends Specification {
         conn.setFixedLengthStreamingMode(payload.getBytes().length)
         def out = new PrintWriter(conn.getOutputStream())
         out.print(payload)
+        out.flush()
         out.close()
 
         output = conn.getInputStream().getText()
@@ -50,6 +49,7 @@ class CustomMatcherSpec extends Specification {
         imr.requestValidations << { r ->
             //Will run this request validation on both requests being matched
             //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
+            //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
             if(r.bodyAsText.input.text != "BUTTS" ){
                 println("REQUEST BODY WASNT THERE!!!")
             }
