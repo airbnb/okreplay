@@ -3,6 +3,8 @@ package co.freeside.betamax.proxy.matchRules
 import co.freeside.betamax.ProxyConfiguration
 import co.freeside.betamax.Recorder
 import co.freeside.betamax.TapeMode
+import groovyx.net.http.ContentType
+import groovyx.net.http.RESTClient
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -14,24 +16,12 @@ import javax.net.ssl.HttpsURLConnection
  */
 @Unroll
 class CustomMatcherSpec extends Specification {
-    @Shared def tapeRoot = new File("src/test/resources/betamax/tapes")
+    @Shared
+    def tapeRoot = new File("src/test/resources/betamax/tapes")
 
-    void "Using a custom matcher, can replay the tape"() {
-        given:
-        def imr = new InstrumentedMatchRule()
-        def proxyConfig = ProxyConfiguration.builder()
-                .sslEnabled(true)
-                .tapeRoot(tapeRoot)
-                .defaultMode(TapeMode.READ_WRITE)
-                .defaultMatchRule(imr)
-                .build()
-
-        def recorder = new Recorder(proxyConfig)
-        recorder.start("httpBinTape")
-
-        when:
-        def payload = "BUTTS"
-        HttpsURLConnection conn = new URL("https://httpbin.org/post").openConnection()
+    def simplePost(String url, String payload) {
+        def output = null
+        HttpsURLConnection conn = new URL(url).openConnection()
         conn.setDoOutput(true)
         conn.setRequestMethod("POST")
         conn.setFixedLengthStreamingMode(payload.getBytes().length)
@@ -39,12 +29,39 @@ class CustomMatcherSpec extends Specification {
         out.print(payload)
         out.close()
 
-        then:
-        def response = conn.getInputStream().getText()
+        output = conn.getInputStream().getText()
         conn.disconnect()
+
+        return output
+    }
+
+    void "Using a custom matcher it should replay"() {
+        given:
+        def imr = new InstrumentedMatchRule()
+        def proxyConfig = ProxyConfiguration.builder()
+                .sslEnabled(true)
+                .tapeRoot(tapeRoot)
+                .defaultMode(TapeMode.READ_ONLY)
+                .defaultMatchRule(imr)
+                .build()
+
+        def recorder = new Recorder(proxyConfig)
+        recorder.start("httpBinTape")
+        imr.requestValidations << { r ->
+            //Will run this request validation on both requests being matched
+            //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
+            if(r.bodyAsText.input.text != "BUTTS" ){
+                println("REQUEST BODY WASNT THERE!!!")
+            }
+        }
+
+        when:
+        def response = simplePost("https://httpbin.org/post", "BUTTS")
+        then:
+        def content = response.toString()
         recorder.stop()
 
-        response == "Hey look some text: BUTTS"
+        content == "Hey look some text: BUTTS"
     }
 
     void "When the tape only contains a single entry in #mode, it should only match once"() {
@@ -61,19 +78,10 @@ class CustomMatcherSpec extends Specification {
         recorder.start("httpBinTape")
 
         when:
-        assert(imr.counter.get() == 0)
-        def payload = "BUTTS"
-        HttpsURLConnection conn = new URL("https://httpbin.org/post").openConnection()
-        conn.setDoOutput(true)
-        conn.setRequestMethod("POST")
-        conn.setFixedLengthStreamingMode(payload.getBytes().length)
-        def out = new PrintWriter(conn.getOutputStream())
-        out.print(payload)
-        out.close()
+        assert (imr.counter.get() == 0)
+        def response = simplePost("https://httpbin.org/post", "BUTTS")
 
         then:
-        def response = conn.getInputStream().getText()
-        conn.disconnect()
         recorder.stop()
 
         imr.counter.get() == 1
@@ -82,7 +90,6 @@ class CustomMatcherSpec extends Specification {
         where:
         mode << [TapeMode.READ_ONLY, TapeMode.READ_WRITE]
     }
-
 
 
 }
