@@ -17,7 +17,7 @@ import javax.net.ssl.HttpsURLConnection
 @Unroll
 class CustomMatcherSpec extends Specification {
     @Shared
-    def tapeRoot = new File("src/test/resources/betamax/tapes")
+    def tapeRoot = new File(CustomMatcherSpec.class.getResource("/betamax/tapes/").toURI())
 
     def simplePost(String url, String payload) {
         def output = null
