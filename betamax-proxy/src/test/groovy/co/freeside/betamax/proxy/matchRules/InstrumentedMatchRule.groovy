@@ -2,6 +2,7 @@ package co.freeside.betamax.proxy.matchRules
 
 import co.freeside.betamax.MatchRule
 import co.freeside.betamax.message.Request
+import com.google.common.io.ByteStreams
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -33,9 +34,9 @@ class InstrumentedMatchRule implements MatchRule {
         }
 
         //Does doing this eat all the text and ruin it?
-        println("REQUEST A:")
+        println("REQUEST SENT:")
         dumpRequest(a)
-        println("REQUEST B:")
+        println("REQUEST RECORDED:")
         dumpRequest(b)
         def current = counter.incrementAndGet()
         println("Matching attempt: ${current}")
@@ -52,8 +53,16 @@ class InstrumentedMatchRule implements MatchRule {
             println("aBody: " + aBody)
             println("bBody: " + bBody)
 
+            def bytesMatch = ByteStreams.equal(a.getBodyAsBinary(), b.getBodyAsBinary())
+            def textMatch = aBody.equals(bBody)
+
+            if(bytesMatch != textMatch){
+                println("HOW DID THIS NOT BE THE SAME?!!?!")
+            }
+
+
             //Right now, lets just compare the bodies also
-            return aBody.equals(bBody)
+            return textMatch
         } else {
             //URI and method don't match, so we're going to bail
             return false
