@@ -81,6 +81,7 @@ public abstract class NettyMessageAdapter<T extends HttpMessage> extends Abstrac
 
     @Override
     protected InputStream getBodyAsStream() throws IOException {
-        return new ByteBufInputStream(body);
+        //Copy the body into a new ByteBuf so that it can be consumed multiple times.
+        return new ByteBufInputStream(Unpooled.copiedBuffer(body));
     }
 }
