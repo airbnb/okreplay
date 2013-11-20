@@ -50,7 +50,7 @@ class CustomMatcherSpec extends Specification {
             //Will run this request validation on both requests being matched
             //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
             //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
-            if(r.bodyAsText.input.text != "BUTTS" ){
+            if(!r.hasBody() ){
                 println("REQUEST BODY WASNT THERE!!!")
             }
         }
