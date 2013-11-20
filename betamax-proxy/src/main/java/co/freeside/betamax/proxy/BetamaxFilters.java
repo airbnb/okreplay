@@ -56,8 +56,19 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             HttpResponse response = null;
             if (httpObject instanceof HttpRequest) {
                 request.copyHeaders((HttpMessage) httpObject);
-                response = onRequestIntercepted((HttpRequest) httpObject).orNull();
             }
+
+            //If we're getting content stick it in there.
+            if (httpObject instanceof HttpContent ) {
+                request.append((HttpContent) httpObject);
+                //If it's the last one, we want to take further steps, like checking to see if we've recorded on it!
+                if(httpObject instanceof LastHttpContent) {
+                    //We will have collected the last of the http Request finally
+                    //And now we're ready to intercept it and do proxy-type-things
+                    response = onRequestIntercepted((HttpRequest) httpObject).orNull();
+                }
+            }
+
             return response;
         } catch (IOException e) {
             return createErrorResponse(e);
