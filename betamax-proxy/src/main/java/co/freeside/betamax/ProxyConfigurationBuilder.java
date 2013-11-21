@@ -22,6 +22,7 @@ import static co.freeside.betamax.ProxyConfiguration.*;
 
 public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuilder<T>> extends ConfigurationBuilder<T> {
 
+
     public ProxyConfiguration build() {
         return new ProxyConfiguration(this);
     }
@@ -29,6 +30,7 @@ public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuil
     protected String proxyHost = DEFAULT_PROXY_HOST;
     protected int proxyPort = DEFAULT_PROXY_PORT;
     protected int proxyTimeoutSeconds = DEFAULT_PROXY_TIMEOUT;
+    protected int requestBufferSize = DEFAULT_REQUEST_BUFFER_SIZE;
     protected boolean sslEnabled;
 
     @Override
@@ -45,6 +47,10 @@ public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuil
 
         if (properties.containsKey("betamax.proxyTimeoutSeconds")) {
             proxyTimeoutSeconds(TypedProperties.getInteger(properties, "betamax.proxyTimeoutSeconds"));
+        }
+
+        if (properties.containsKey("betamax.requestBufferSize")) {
+            requestBufferSize(TypedProperties.getInteger(properties, "betamax.requestBufferSize"));
         }
 
         if (properties.containsKey("betamax.sslEnabled")) {
@@ -66,6 +72,11 @@ public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuil
 
     public T proxyTimeoutSeconds(int proxyTimeoutSeconds) {
         this.proxyTimeoutSeconds = proxyTimeoutSeconds;
+        return self();
+    }
+
+    public T requestBufferSize(int requestBufferSize){
+        this.requestBufferSize = requestBufferSize;
         return self();
     }
 

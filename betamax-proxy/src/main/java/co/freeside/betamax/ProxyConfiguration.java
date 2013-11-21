@@ -24,6 +24,7 @@ import co.freeside.betamax.proxy.*;
 public class ProxyConfiguration extends Configuration {
 
     public static final String DEFAULT_PROXY_HOST = "0.0.0.0";
+    public static final int DEFAULT_REQUEST_BUFFER_SIZE = 8388608; //8MB
     public static final int DEFAULT_PROXY_PORT = 5555;
     public static final int DEFAULT_PROXY_TIMEOUT = 5;
 
@@ -31,6 +32,7 @@ public class ProxyConfiguration extends Configuration {
     private final int proxyPort;
     private final int proxyTimeoutSeconds;
     private final boolean sslEnabled;
+    private final int requestBufferSize;
 
     protected ProxyConfiguration(ProxyConfigurationBuilder<?> builder) {
         super(builder);
@@ -38,6 +40,7 @@ public class ProxyConfiguration extends Configuration {
         this.proxyPort = builder.proxyPort;
         this.proxyTimeoutSeconds = builder.proxyTimeoutSeconds;
         this.sslEnabled = builder.sslEnabled;
+        this.requestBufferSize = builder.requestBufferSize;
     }
 
     public static ProxyConfigurationBuilder<?> builder() {
@@ -56,6 +59,14 @@ public class ProxyConfiguration extends Configuration {
      */
     public int getProxyTimeoutSeconds() {
         return proxyTimeoutSeconds;
+    }
+
+    /**
+     * The buffer size the proxy will use to aggregate incoming requests.
+     * Needed if you want to match on request body.
+     */
+    public int getRequestBufferSize() {
+        return requestBufferSize;
     }
 
     /**
