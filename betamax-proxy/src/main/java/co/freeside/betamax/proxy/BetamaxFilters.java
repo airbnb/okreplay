@@ -19,7 +19,6 @@ package co.freeside.betamax.proxy;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import co.freeside.betamax.encoding.*;
 import co.freeside.betamax.handler.NonWritableTapeException;
 import co.freeside.betamax.message.Response;
@@ -30,7 +29,6 @@ import com.google.common.io.ByteStreams;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFiltersAdapter;
-
 import static co.freeside.betamax.Headers.*;
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
@@ -60,15 +58,16 @@ public class BetamaxFilters extends HttpFiltersAdapter {
                 request.copyHeaders((HttpMessage) httpObject);
             }
 
-            //If we're getting content stick it in there.
+            // If we're getting content stick it in there.
             if (httpObject instanceof HttpContent) {
                 request.append((HttpContent) httpObject);
-                //If it's the last one, we want to take further steps, like checking to see if we've recorded on it!
-                if (httpObject instanceof LastHttpContent) {
-                    //We will have collected the last of the http Request finally
-                    //And now we're ready to intercept it and do proxy-type-things
-                    response = onRequestIntercepted().orNull();
-                }
+            }
+
+            // If it's the last one, we want to take further steps, like checking to see if we've recorded on it!
+            if (httpObject instanceof LastHttpContent) {
+                // We will have collected the last of the http Request finally
+                // And now we're ready to intercept it and do proxy-type-things
+                response = onRequestIntercepted().orNull();
             }
 
             return response;
