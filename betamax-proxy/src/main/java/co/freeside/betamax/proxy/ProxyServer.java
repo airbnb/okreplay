@@ -86,6 +86,11 @@ public class ProxyServer implements RecorderListener {
 
         proxyServerBootstrap.withFiltersSource(new HttpFiltersSourceAdapter() {
             @Override
+            public int getMaximumRequestBufferSizeInBytes() {
+                return configuration.getRequestBufferSize();
+            }
+
+            @Override
             public HttpFilters filterRequest(HttpRequest originalRequest) {
                 HttpFilters filters = new BetamaxFilters(originalRequest, tape);
                 return new PredicatedHttpFilters(filters, NOT_CONNECT, originalRequest);
