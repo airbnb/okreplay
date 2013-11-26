@@ -51,5 +51,8 @@ class TwitterService {
 
 }
 
-@InheritConstructors
-class TwitterException extends RuntimeException {}
+class TwitterException extends RuntimeException {
+    TwitterException(String message) {
+        super(message)
+    }
+}

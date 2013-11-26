@@ -6,8 +6,8 @@ grails.project.dependency.resolution = {
 	inherits "global"
 	log "warn"
 
-	def gebVersion = "0.7.2"
-	def seleniumVersion = "2.25.0"
+	def gebVersion = "0.9.2"
+	def seleniumVersion = "2.37.1"
 
 	repositories {
 		grailsPlugins()
@@ -15,14 +15,15 @@ grails.project.dependency.resolution = {
 		grailsCentral()
 		mavenLocal()
 		mavenCentral()
-		mavenRepo "http://oss.sonatype.org/content/groups/public/"
+		mavenRepo "http://oss.jfrog.org/oss-snapshot-local/"
 	}
 	dependencies {
-		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.5.1") {
+		compile("org.codehaus.groovy.modules.http-builder:http-builder:0.6") {
 			excludes "groovy", "xml-apis"
 		}
-		test 'co.freeside:betamax-proxy:1.2-SNAPSHOT'
-		test "org.codehaus.geb:geb-spock:$gebVersion"
+		test "co.freeside.betamax:betamax-proxy:2.0-SNAPSHOT"
+		test "co.freeside.betamax:betamax-junit:2.0-SNAPSHOT"
+		test "org.gebish:geb-spock:$gebVersion"
 		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
 			exclude "xml-apis"
 		}
