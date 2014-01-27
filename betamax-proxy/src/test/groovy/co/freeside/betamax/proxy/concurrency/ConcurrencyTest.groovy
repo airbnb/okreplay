@@ -26,7 +26,9 @@ import org.apache.http.concurrent.FutureCallback
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.nio.client.HttpAsyncClients
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
@@ -38,15 +40,17 @@ import static co.freeside.betamax.TapeMode.READ_WRITE
 /**
  * Testing a custom matcher when being used in the proxy.
  */
+@Unroll
 class ConcurrencyTest extends Specification {
 
+    @Shared
     def tapeRoot = new File(ConcurrencyTest.class.getResource("/betamax/tapes/").toURI())
 
-    void "When only playing back concurrently, it works"() {
+    void "#amount Concurrent accesses to a #tapeMode tape works"() {
         given:
         def proxyConfig = ProxyConfiguration.builder()
                 .tapeRoot(tapeRoot)
-                .defaultMode(READ_ONLY)
+                .defaultMode(tapeMode)
                 .defaultMatchRule(new PostingMatchRule())
                 .build()
 
@@ -59,7 +63,7 @@ class ConcurrencyTest extends Specification {
         def httpClient = builder.build()
 
         httpClient.start()
-        def requestCount = 10
+        def requestCount = amount
         println("client started, request count ${requestCount}")
 
         List<HttpPost> requests = []
@@ -116,7 +120,7 @@ class ConcurrencyTest extends Specification {
         println("Verifying results map")
         resultsMap.each { pair ->
             //This assertion doesn't seem to work?
-            assert(pair.key == pair.value)
+            assert (pair.key == pair.value)
         }
 
         cleanup:
@@ -124,5 +128,9 @@ class ConcurrencyTest extends Specification {
         recorder?.stop()
         println("Closing httpclient")
         httpClient?.close()
+
+        where:
+        tapeMode << [READ_ONLY, READ_WRITE]
+        amount << [10,15]
     }
 }
