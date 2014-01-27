@@ -30,6 +30,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.lang.management.ManagementFactory
+import java.lang.management.ThreadMXBean
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -45,6 +47,17 @@ class ConcurrencyTest extends Specification {
 
     @Shared
     def tapeRoot = new File(ConcurrencyTest.class.getResource("/betamax/tapes/").toURI())
+
+    /**
+     * http://meteatamel.wordpress.com/2012/03/21/deadlock-detection-in-java/
+     * handy
+     */
+    def countDeadlockedThreads() {
+        ThreadMXBean threadBean = ManagementFactory.getThreadMXBean()
+        long[] threadIds = threadBean.findDeadlockedThreads()
+        int deadlockedThreads = threadIds != null ? threadIds.length : 0
+        println("Number of deadlocked threads: $deadlockedThreads")
+    }
 
     void "#amount Concurrent accesses to a #tapeMode tape works"() {
         given:
@@ -68,13 +81,14 @@ class ConcurrencyTest extends Specification {
 
         List<HttpPost> requests = []
 
+        print("\t")
         requestCount.times { num ->
             def post = new HttpPost("http://httpbin.org/post")
             post.setEntity(new StringEntity(num.toString(), ContentType.TEXT_PLAIN))
-            println("\tQueueing post $num")
+            print(".")
             requests.add post
         }
-
+        println()
 
         when:
         //Map the request body to the result body, they should match
@@ -124,6 +138,9 @@ class ConcurrencyTest extends Specification {
         }
 
         cleanup:
+        println("counting deadlocked threads")
+        countDeadlockedThreads()
+
         println("stopping recorder")
         recorder?.stop()
         println("Closing httpclient")
