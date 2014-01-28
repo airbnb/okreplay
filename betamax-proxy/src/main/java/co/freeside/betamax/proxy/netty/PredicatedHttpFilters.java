@@ -59,16 +59,20 @@ public class PredicatedHttpFilters extends HttpFiltersAdapter {
     }
 
     @Override
-    public void responsePre(HttpObject httpObject) {
+    public HttpObject responsePre(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            delegate.responsePre(httpObject);
+            return delegate.responsePre(httpObject);
+        } else {
+            return httpObject;
         }
     }
 
     @Override
-    public void responsePost(HttpObject httpObject) {
+    public HttpObject responsePost(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            delegate.responsePost(httpObject);
+            return delegate.responsePost(httpObject);
+        } else {
+            return httpObject;
         }
     }
 }
