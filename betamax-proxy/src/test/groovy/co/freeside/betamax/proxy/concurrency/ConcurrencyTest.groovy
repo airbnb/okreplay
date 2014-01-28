@@ -40,7 +40,12 @@ import static co.freeside.betamax.TapeMode.READ_ONLY
 import static co.freeside.betamax.TapeMode.READ_WRITE
 
 /**
- * Testing a custom matcher when being used in the proxy.
+ * Doing some concurrent execution against betamax trying to flush out why things don't always behave the way I
+ * expected them to.
+ *
+ * Turns out there needs to be some kind of warning for the Content-Length header. If it's not precise,
+ * The Apache HttpAsyncClient will continue to wait for the remainder of the content, blocking littleproxy from
+ * Serving any other requests, because it has no other content to deliver. Oops!
  */
 @Unroll
 class ConcurrencyTest extends Specification {
@@ -105,19 +110,26 @@ class ConcurrencyTest extends Specification {
                     // that way we can ensure that we're not clobbering stuff, since each request will have a different
                     // request body
                     //Using this to get the "data" attribute out
-                    def json = new JsonSlurper().parseText(result.entity.content.text)
-
-                    resultsMap.put(request.entity.content.text, json.data)
+                    //Doing this first, because it might actually bomb, heh
                     latch.countDown()
+                    try {
+                        def json = new JsonSlurper().parseText(result.entity.content.text)
+
+                        resultsMap.put(request.entity.content.text, json.data)
+                    } catch (e) {
+                        resultsMap.put(request.entity.content.text, "FAILED: ${e.message}")
+                    }
                 }
 
                 @Override
                 void failed(Exception ex) {
+                    resultsMap.put(request.entity.content.text, "HTTP_FAILED: ${ex.message}")
                     latch.countDown()
                 }
 
                 @Override
                 void cancelled() {
+                    resultsMap.put(request.entity.content.text, "CANCELLED!")
                     latch.countDown()
                 }
             })
@@ -128,7 +140,12 @@ class ConcurrencyTest extends Specification {
         println("Awaiting request completion with latch")
         latch.await(5, TimeUnit.SECONDS)
 
-        println("Done, verifying things")
+        while(resultsMap.size() != requestCount) {
+            //Wait until the map lines up with the countdown latch
+            Thread.sleep(10)
+        }
+
+        //We'll verify it just for sanity
         resultsMap.size() == requestCount
 
         println("Verifying results map")
@@ -148,6 +165,6 @@ class ConcurrencyTest extends Specification {
 
         where:
         tapeMode << [READ_ONLY, READ_WRITE]
-        amount << [10,15]
+        amount << [10, 8]
     }
 }
