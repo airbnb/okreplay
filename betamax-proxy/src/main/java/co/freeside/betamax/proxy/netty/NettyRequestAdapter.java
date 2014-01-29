@@ -27,7 +27,7 @@ public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implem
         if (message instanceof HttpRequest) {
             return new NettyRequestAdapter((HttpRequest) message);
         } else {
-            throw new IllegalArgumentException(String.format("%s is not an instance of %s", message.getClass().getName(), FullHttpRequest.class.getName()));
+            throw new IllegalArgumentException(String.format("%s is not an instance of %s", message.getClass().getName(), HttpRequest.class.getName()));
         }
     }
 

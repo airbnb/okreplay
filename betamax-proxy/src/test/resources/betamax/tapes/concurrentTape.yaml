@@ -1,0 +1,383 @@
+!tape
+name: concurrentTape
+interactions:
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '0'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "0",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '1'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "1",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '2'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "2",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '3'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "3",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '4'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "4",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '5'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "5",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '6'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "6",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '7'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "7",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '8'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "8",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }
+- recorded: 2014-01-27T01:03:19.972Z
+  request:
+    method: POST
+    uri: http://httpbin.org/post
+    headers:
+      Content-Length: '1'
+      Content-Type: text/plain; charset=ISO-8859-1
+      Host: httpbin.org
+      Proxy-Connection: Keep-Alive
+      User-Agent: Apache-HttpAsyncClient/4.0 (java 1.5)
+    body: '9'
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Type: application/json
+      Date: Mon, 27 Jan 2014 01:03:19 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      {
+        "args": {},
+        "url": "http://httpbin.org/post",
+        "files": {},
+        "headers": {
+          "X-Request-Id": "ce99c82f-c429-4627-96ee-b394409a03b8",
+          "Host": "httpbin.org",
+          "User-Agent": "Apache-HttpAsyncClient/4.0 (java 1.5)",
+          "Content-Type": "text/plain; charset=ISO-8859-1",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Content-Length": "1"
+        },
+        "data": "9",
+        "json": 0,
+        "origin": "173.175.114.180",
+        "form": {}
+      }

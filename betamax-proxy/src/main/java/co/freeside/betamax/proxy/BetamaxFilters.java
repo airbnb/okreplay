@@ -29,6 +29,8 @@ import com.google.common.io.ByteStreams;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFiltersAdapter;
+import org.littleshoot.proxy.impl.ProxyUtils;
+
 import static co.freeside.betamax.Headers.*;
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaders.Names.*;
@@ -55,6 +57,12 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         try {
             HttpResponse response = null;
             if (httpObject instanceof HttpRequest) {
+                //TODO: I believe this is where the CONNECT needs to be caught...
+                // This would require changing the predicate to include all things
+                // As well, an appropriate response that the connect succeeded would have to be returned
+                // But only if the server we are trying to connect to actually has an entry in the tape
+                // It's something of a race condition with the SSL stuff. Because I don't believe we get a path
+                // When we have the connect go through. Could we send the connect later if we didn't send it now?
                 request.copyHeaders((HttpMessage) httpObject);
             }
 
@@ -64,7 +72,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             }
 
             // If it's the last one, we want to take further steps, like checking to see if we've recorded on it!
-            if (httpObject instanceof LastHttpContent) {
+            if (ProxyUtils.isLastChunk(httpObject)) {
                 // We will have collected the last of the http Request finally
                 // And now we're ready to intercept it and do proxy-type-things
                 response = onRequestIntercepted().orNull();
@@ -82,7 +90,11 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             setViaHeader((HttpMessage) httpObject);
         }
 
-        return null;
+        if(httpObject instanceof HttpResponse) {
+            return (HttpResponse) httpObject;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -100,7 +112,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             }
         }
 
-        if (httpObject instanceof LastHttpContent) {
+        if (ProxyUtils.isLastChunk(httpObject)) {
             if (tape.isWritable()) {
                 LOG.info(String.format("Recording to tape %s", tape.getName()));
                 tape.record(request, upstreamResponse);
@@ -118,7 +130,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
             setBetamaxHeader((HttpResponse) httpObject, "REC");
             setViaHeader((HttpMessage) httpObject);
         }
-        
+
         return httpObject;
     }
 
