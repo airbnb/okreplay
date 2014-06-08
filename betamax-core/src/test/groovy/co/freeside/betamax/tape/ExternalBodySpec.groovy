@@ -153,7 +153,7 @@ class ExternalBodySpec extends Specification {
 
         then: "the response body file is a relative path"
         def body = tape.interactions[-1].response.body as File
-        writer.toString().contains("body: !file 'external_body_spec/$body.name'")
+        writer.toString().contains("body: !file 'external_body_spec${File.separator}$body.name'")
     }
 
     void "the body file is read from YAML as a file inside the tape root"() {
