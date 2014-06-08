@@ -16,7 +16,7 @@
 
 package co.freeside.betamax;
 
-import java.util.*;
+import java.util.Collection;
 import co.freeside.betamax.internal.*;
 import co.freeside.betamax.tape.*;
 import co.freeside.betamax.tape.yaml.*;
