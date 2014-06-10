@@ -145,7 +145,9 @@ class ConfigurationSpec extends Specification {
         }
 
         cleanup:
-        propertiesFile.delete()
+        while (!propertiesFile.delete()) {
+            System.gc()
+        }
     }
 
     void "builder methods override properties file"() {
@@ -197,6 +199,8 @@ class ConfigurationSpec extends Specification {
         }
 
         cleanup:
-        propertiesFile.delete()
+        while (!propertiesFile.delete()) {
+            System.gc()
+        }
     }
 }

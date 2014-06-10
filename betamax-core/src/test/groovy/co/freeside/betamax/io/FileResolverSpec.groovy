@@ -36,10 +36,10 @@ class FileResolverSpec extends Specification {
         fileResolver.toFile(* path) == file
 
         where:
-        file                                       | path
-        new File(baseDirectory, "foo.txt")         | ["foo.txt"]
-        new File(baseDirectory, "foo/bar.txt")     | ["foo/bar.txt"]
-        new File(baseDirectory, "foo/bar/baz.txt") | ["foo", "bar", "baz.txt"]
+        file                                                   | path
+        new File(baseDirectory, "foo.txt")                     | ["foo.txt"]
+        new File(baseDirectory, "foo${File.separator}bar.txt") | ["foo${File.separator}bar.txt"]
+        new File(baseDirectory, "foo/bar/baz.txt")             | ["foo", "bar", "baz.txt"]
 
         absolutePath = file.absolutePath
     }
