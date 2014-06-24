@@ -2,7 +2,7 @@ apply from: "$rootDir/gradle/javaModule.gradle"
 apply from: "$rootDir/gradle/publishedModule.gradle"
 
 repositories {
-    mavenRepo url: "http://repository.codehaus.org"
+    maven { url "http://repository.codehaus.org" }
 }
 
 dependencies {
@@ -13,11 +13,4 @@ dependencies {
     testCompile project(":betamax-test-support")
 
     testRuntime commonDependencies.cglib
-}
-
-modifyPom {
-    project {
-        name "Betamax Core"
-        description "The Core Betamax API."
-    }
 }

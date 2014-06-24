@@ -1,7 +1,7 @@
 apply from: "$rootDir/gradle/groovyModule.gradle"
 
 repositories {
-    mavenRepo url: "http://repository.codehaus.org"
+    maven { url "http://repository.codehaus.org" }
 }
 
 dependencies {

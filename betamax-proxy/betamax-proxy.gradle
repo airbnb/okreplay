@@ -2,8 +2,8 @@ apply from: "$rootDir/gradle/javaModule.gradle"
 apply from: "$rootDir/gradle/publishedModule.gradle"
 
 repositories {
-    mavenRepo url: "http://repository.codehaus.org"
-    mavenRepo url: "http://maven.mashape.com/releases"
+    maven { url "http://repository.codehaus.org" }
+    maven { url "http://maven.mashape.com/releases" }
 }
 
 dependencies {
@@ -24,11 +24,4 @@ dependencies {
                 "org.apache.httpcomponents:httpasyncclient:4.0"
 
     testRuntime "cglib:cglib-nodep:2.2.2"
-}
-
-modifyPom {
-    project {
-        name "Betamax Proxy"
-        description "The HTTP proxy implementation of Betamax."
-    }
 }

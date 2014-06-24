@@ -1,12 +1,10 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "http://dl.bintray.com/jfrog/jfrog-jars"
-        }
+        maven { url "http://dl.bintray.com/jfrog/jfrog-jars" }
     }
     dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.2"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3"
     }
 }
 
@@ -18,9 +16,6 @@ artifactory {
 }
 
 allprojects {
-    version = "2.0-SNAPSHOT"
-    group = "co.freeside.betamax"
-
     plugins.withType(JavaPlugin) {
         sourceCompatibility = "1.6"
         targetCompatibility = "1.6"
@@ -31,7 +26,7 @@ allprojects {
 
         commonDependencies = [
             cglib: dependencies.create("cglib:cglib-nodep:2.2.2"),
-            groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.1.9"),
+            groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.3.3:indy"),
             guava: dependencies.create("com.google.guava:guava:15.0"),
             httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
                 exclude module: "groovy"

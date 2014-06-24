@@ -1,6 +1,7 @@
 apply plugin: "groovy"
 
 repositories {
+    jcenter()
 	mavenCentral()
 }
 
@@ -9,6 +10,11 @@ dependencies {
 	compile commonDependencies.guava
 	testCompile commonDependencies.spock
 	testCompile commonDependencies.junit
+}
+
+tasks.withType(GroovyCompile) {
+    compileGroovy.options.encoding = "UTF-8"
+    groovyOptions.optimizationOptions.indy = true
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
@@ -20,4 +26,10 @@ test {
 			exceptionFormat "short"
 		}
 	}
+}
+
+configurations.all {
+    resolutionStrategy {
+        force commonDependencies.groovy
+    }
 }

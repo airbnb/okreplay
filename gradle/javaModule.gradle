@@ -5,6 +5,7 @@ configurations {
 }
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
