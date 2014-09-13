@@ -140,6 +140,17 @@ interactions:
         thrown TapeLoadException
     }
 
+    void "barfs on yaml data which is not a YamlTape"() {
+        given:
+        def yaml = "this is valid yaml"
+
+        when:
+        loader.readFrom(new StringReader(yaml))
+
+        then:
+        thrown TapeLoadException
+    }
+
     void "barfs on an invalid record date"() {
         given:
         def yaml = """\
