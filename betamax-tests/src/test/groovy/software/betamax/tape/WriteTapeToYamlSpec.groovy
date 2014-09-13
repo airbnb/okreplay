@@ -52,6 +52,7 @@ class WriteTapeToYamlSpec extends Specification {
         getRequest.addHeader(IF_NONE_MATCH, "b00b135")
 
         postRequest = new BasicRequest("POST", "http://github.com/")
+        postRequest.addHeader(CONTENT_TYPE, FORM_DATA.toString())
         postRequest.body = "q=1".bytes
 
         successResponse = new BasicResponse(HTTP_OK, "OK")

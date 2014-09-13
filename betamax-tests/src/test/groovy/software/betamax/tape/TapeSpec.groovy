@@ -125,7 +125,7 @@ class TapeSpec extends Specification {
 
         then: 'the request body is stored on the tape'
         def interaction = tape.interactions[-1]
-        interaction.request.body == request.bodyAsText
+        interaction.request.bodyAsText == request.bodyAsText
     }
 
     void 'a write-only tape cannot be read from'() {

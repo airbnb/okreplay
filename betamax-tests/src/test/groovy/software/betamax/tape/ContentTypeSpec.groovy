@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package co.freeside.betamax.tape
+package software.betamax.tape
 
-import co.freeside.betamax.message.Response
-import co.freeside.betamax.tape.yaml.YamlTapeLoader
-import co.freeside.betamax.util.message.BasicRequest
-import co.freeside.betamax.util.message.BasicResponse
+import software.betamax.message.Response
+import software.betamax.tape.yaml.YamlTapeLoader
+import software.betamax.util.message.BasicRequest
+import software.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static co.freeside.betamax.TapeMode.READ_WRITE
+import static software.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static java.net.HttpURLConnection.HTTP_OK
 
@@ -53,7 +53,7 @@ class ContentTypeSpec extends Specification {
 
         then: 'the request body is stored on the tape'
         def interaction = tape.interactions[-1]
-        interaction.request.body == imagePostRequest.bodyAsBinary.input.bytes
+        interaction.request.body == imagePostRequest.bodyAsBinary
     }
 
 

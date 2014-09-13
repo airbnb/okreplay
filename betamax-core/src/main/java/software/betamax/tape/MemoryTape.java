@@ -216,22 +216,26 @@ public abstract class MemoryTape implements Tape {
         });
     }
 
-    private static RecordedRequest recordRequest(Request request) {
-        final RecordedRequest recording = new RecordedRequest();
-        recording.setMethod(request.getMethod());
-        recording.setUri(request.getUri());
+    private RecordedRequest recordRequest(Request request) {
+        try {
+            final RecordedRequest recording = new RecordedRequest();
+            recording.setMethod(request.getMethod());
+            recording.setUri(request.getUri());
 
-        for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
-            if (!header.getKey().equals(VIA)) {
-                recording.getHeaders().put(header.getKey(), header.getValue());
+            for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
+                if (!header.getKey().equals(VIA)) {
+                    recording.getHeaders().put(header.getKey(), header.getValue());
+                }
             }
-        }
 
-        if (request.hasBody()) {
-            recording.setBody(request.getBodyAsText());
-        }
+            if (request.hasBody()) {
+                recordBodyInline(request, recording);
+            }
 
-        return recording;
+            return recording;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private RecordedResponse recordResponse(Response response) {
