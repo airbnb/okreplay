@@ -131,7 +131,7 @@ interactions:
 
     void "barfs on non-yaml data"() {
         given:
-        def yaml = "THIS IS NOT YAML"
+        def yaml = "{}][: THIS IS NOT YAML"
 
         when:
         loader.readFrom(new StringReader(yaml))
