@@ -1,4 +1,4 @@
-# &beta;etamax [![Build Status](https://drone.io/github.com/robfletcher/betamax/status.png)](https://drone.io/github.com/robfletcher/betamax/latest)
+# &beta;etamax [![Build Status](https://travis-ci.org/cowboygneox/betamax.svg?branch=master)](https://travis-ci.org/cowboygneox/betamax)
 
 Betamax is a tool for mocking external HTTP resources such as web services and REST APIs in your tests. The project was inspired by the [VCR][vcr] library for Ruby.
 
