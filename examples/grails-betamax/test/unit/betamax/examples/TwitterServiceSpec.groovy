@@ -1,8 +1,8 @@
 package betamax.examples
 
 import java.util.logging.*
-import co.freeside.betamax.ProxyConfiguration
-import co.freeside.betamax.junit.*
+import com.gneoxsolutions.betamax.ProxyConfiguration
+import com.gneoxsolutions.betamax.junit.*
 import grails.test.mixin.TestFor
 import grails.util.BuildSettingsHolder
 import groovyx.net.http.RESTClient

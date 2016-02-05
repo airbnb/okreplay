@@ -1,7 +1,7 @@
 package betamax.examples
 
-import co.freeside.betamax.ProxyConfiguration
-import co.freeside.betamax.junit.*
+import com.gneoxsolutions.betamax.ProxyConfiguration
+import com.gneoxsolutions.betamax.junit.*
 import com.gargoylesoftware.htmlunit.ProxyConfig
 import geb.spock.GebSpec
 import grails.util.BuildSettingsHolder

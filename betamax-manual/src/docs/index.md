@@ -93,9 +93,9 @@ If you are using the Betamax proxy you need to use `ProxyRecorder` rule.
 
 ### JUnit
 
-    import co.freeside.betamax.junit.Betamax;
-    import co.freeside.betamax.junit.RecorderRule;
-    import co.freeside.betamax.Recorder;
+    import com.gneoxsolutions.betamax.junit.Betamax;
+    import com.gneoxsolutions.betamax.junit.RecorderRule;
+    import com.gneoxsolutions.betamax.Recorder;
     import org.junit.*;
 
     public class MyTest {
@@ -111,9 +111,9 @@ If you are using the Betamax proxy you need to use `ProxyRecorder` rule.
 
 ### Spock
 
-    import co.freeside.betamax.junit.Betamax
-    import co.freeside.betamax.junit.RecorderRule
-    import co.freeside.betamax.Recorder
+    import com.gneoxsolutions.betamax.junit.Betamax
+    import com.gneoxsolutions.betamax.junit.RecorderRule
+    import com.gneoxsolutions.betamax.Recorder
     import org.junit.*
     import spock.lang.*
 
