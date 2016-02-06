@@ -1,4 +1,5 @@
 language: groovy
 jdk:
   - oraclejdk7
-script: ./gradlew build
+  - oraclejdk8
+script: ./gradlew clean build
