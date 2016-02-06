@@ -15,13 +15,15 @@
  */
 package com.gneoxsolutions.betamax.junit;
 
-import java.lang.annotation.*;
-import com.gneoxsolutions.betamax.*;
 import com.gneoxsolutions.betamax.MatchRules;
 import com.gneoxsolutions.betamax.TapeMode;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import static com.gneoxsolutions.betamax.TapeMode.NULL;
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)

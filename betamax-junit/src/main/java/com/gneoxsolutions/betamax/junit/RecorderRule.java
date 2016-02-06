@@ -16,12 +16,14 @@
 
 package com.gneoxsolutions.betamax.junit;
 
-import java.util.logging.Logger;
 import com.gneoxsolutions.betamax.*;
 import com.google.common.base.Strings;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
+import java.util.logging.Logger;
+
 import static com.google.common.base.CaseFormat.*;
 import static java.util.logging.Level.SEVERE;
 
