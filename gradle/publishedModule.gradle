@@ -32,7 +32,7 @@ artifactory {
 def pomConfig = {
     name project.name
     description project.description
-    url "http://freeside.co/betamax"
+    url "https://github.com/cowboygneox/betamax"
     inceptionYear "2011"
     licenses {
         license([:]) {
@@ -42,18 +42,25 @@ def pomConfig = {
         }
     }
     scm {
-        url "https://github.com/$project.gitHubProject"
-        connection "https://github.com/${project.gitHubProject}.git"
-        developerConnection "scm:git@github.com:${project.gitHubProject}.git"
+        url "https://github.com/cowboygneox/betamax"
+        connection "https://github.com/cowboygneox/betamax.git"
+        developerConnection "scm:git@github.com:cowboygneox/betamax.git"
     }
     developers {
+        developer {
+            id "cowboygneox"
+            name "Sean Freitag"
+            url "https://github.com/cowboygneox/betamax"
+            roles {
+                role "Developer"
+                role "Lead"
+            }
+        }
         developer {
             id "robfletcher"
             name "Rob Fletcher"
             url "http://freeside.co/"
             roles {
-                role "Developer"
-                role "Lead"
                 role "Founder"
             }
         }
@@ -71,6 +78,10 @@ publishing {
                 asNode().dependencies.dependency.each { dep ->
                     if (dep.scope.text() in ["runtime", "test"]) {
                         dep.remove(dep.scope)
+                    }
+                    if (dep.artifactId.text() == "junit") {
+                        println "boom"
+                        dep.appendNode("scope", "provided")
                     }
                 }
                 asNode().children().last() + pomConfig

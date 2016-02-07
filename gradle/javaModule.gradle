@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    compile commonDependencies.guava
     testCompile commonDependencies.groovy
     testCompile commonDependencies.spock
     pegdownDoclet "ch.raffael.pegdown-doclet:pegdown-doclet:1.1.1"
