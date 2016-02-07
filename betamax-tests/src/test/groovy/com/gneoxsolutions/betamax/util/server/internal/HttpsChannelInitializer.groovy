@@ -16,12 +16,14 @@
 
 package com.gneoxsolutions.betamax.util.server.internal
 
+import com.gneoxsolutions.betamax.proxy.ssl.DummyX509TrustManager
 import io.netty.channel.ChannelHandler
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.ssl.SslHandler
 
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
 import java.security.KeyStore
 import java.security.Security
 
@@ -47,7 +49,7 @@ class HttpsChannelInitializer extends HttpChannelInitializer {
         def keystoreStream = HttpsChannelInitializer.getResourceAsStream("/betamax.keystore")
         def password = "password".toCharArray()
 
-        def sslContext = SSLContext.getInstance("TLS")
+        def sslContext = SSLContext.getInstance("SSL")
 
         def keyStore = KeyStore.getInstance("JKS")
         keyStore.load(keystoreStream, password)
@@ -56,7 +58,9 @@ class HttpsChannelInitializer extends HttpChannelInitializer {
         def factory = KeyManagerFactory.getInstance(algorithm)
         factory.init(keyStore, password)
 
-        sslContext.init(factory.keyManagers, null, null)
+        TrustManager[] trustFactory = [new DummyX509TrustManager()]
+
+        sslContext.init(factory.keyManagers, trustFactory, null)
 
         return sslContext
     }
