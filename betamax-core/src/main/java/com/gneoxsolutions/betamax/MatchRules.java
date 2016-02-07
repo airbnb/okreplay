@@ -65,8 +65,11 @@ public enum MatchRules implements MatchRule {
         public boolean isMatch(Request a, Request b) {
             return a.getHeaders().equals(b.getHeaders());
         }
-
-
+    }, authorization {
+        @Override
+        public boolean isMatch(Request a, Request b) {
+            return a.getHeader("Authorization").equals(b.getHeader("Authorization"));
+        }
     }, body {
         @Override
         public boolean isMatch(Request a, Request b) {

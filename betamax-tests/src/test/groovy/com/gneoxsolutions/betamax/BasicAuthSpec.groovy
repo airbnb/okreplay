@@ -51,7 +51,7 @@ class BasicAuthSpec extends Specification {
     @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-    @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, headers])
+    @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, authorization])
     void "can record #status response from authenticated endpoint"() {
         when:
         HttpURLConnection connection = endpoint.openConnection()
@@ -69,7 +69,7 @@ class BasicAuthSpec extends Specification {
         credentials = BaseEncoding.base64().encode("user:$password".bytes)
     }
 
-    @Betamax(tape = "basic auth", mode = READ_ONLY, match = [method, uri, headers])
+    @Betamax(tape = "basic auth", mode = READ_ONLY, match = [method, uri, authorization])
     void "can play back #status response from authenticated endpoint"() {
         when:
         HttpURLConnection connection = endpoint.openConnection()
