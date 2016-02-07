@@ -17,7 +17,6 @@
 package com.gneoxsolutions.betamax.util.server
 
 import com.gneoxsolutions.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
-
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.DefaultFullHttpResponse
