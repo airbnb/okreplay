@@ -2,5 +2,3 @@ language: groovy
 jdk:
   - oraclejdk7
   - oraclejdk8
-install: true
-script: ./gradle-2.10/bin/gradle clean build
