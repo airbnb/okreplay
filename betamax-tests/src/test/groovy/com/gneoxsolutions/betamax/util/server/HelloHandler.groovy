@@ -17,11 +17,10 @@
 package com.gneoxsolutions.betamax.util.server
 
 import com.gneoxsolutions.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
+
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.DefaultFullHttpResponse
-
-import java.util.concurrent.atomic.AtomicInteger
 
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static io.netty.buffer.Unpooled.wrappedBuffer
@@ -31,17 +30,13 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
 @ChannelHandler.Sharable
-class IncrementingHandler extends ExceptionHandlingHandlerAdapter {
+class HelloHandler extends ExceptionHandlingHandlerAdapter {
 
-    private final counter = new AtomicInteger()
+    public static final String HELLO_WORLD = "Hello World!"
 
     @Override
-    void channelRead(ChannelHandlerContext ctx, Object msg) {
-        def response = new DefaultFullHttpResponse(
-                HTTP_1_1,
-                OK,
-                wrappedBuffer("count: ${counter.incrementAndGet()}".bytes)
-        )
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        def response = new DefaultFullHttpResponse(HTTP_1_1, OK, wrappedBuffer(HELLO_WORLD.bytes))
         response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         ctx.writeAndFlush(response).addListener(CLOSE)
     }

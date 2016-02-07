@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 the original author or authors.
+ * Copyright 2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,33 @@
 package com.gneoxsolutions.betamax.util.server
 
 import com.gneoxsolutions.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
+
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.DefaultFullHttpResponse
 
+import java.util.concurrent.atomic.AtomicInteger
+
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.buffer.Unpooled.wrappedBuffer
 import static io.netty.channel.ChannelFutureListener.CLOSE
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
 
 @ChannelHandler.Sharable
-class OkHandler extends ExceptionHandlingHandlerAdapter {
+class IncrementingHandler extends ExceptionHandlingHandlerAdapter {
+
+    private final counter = new AtomicInteger()
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        def response = new DefaultFullHttpResponse(HTTP_1_1, OK)
+    void channelRead(ChannelHandlerContext ctx, Object msg) {
+        def response = new DefaultFullHttpResponse(
+                HTTP_1_1,
+                OK,
+                wrappedBuffer("count: ${counter.incrementAndGet()}".bytes)
+        )
+        response.headers().set(CONTENT_TYPE, PLAIN_TEXT_UTF_8.toString())
         ctx.writeAndFlush(response).addListener(CLOSE)
     }
 

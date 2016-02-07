@@ -8,11 +8,4 @@ repositories {
 dependencies {
     compile commonDependencies.snakeYaml
     compile commonDependencies.tika
-
-    testCompile project(":betamax-junit")
-    testCompile commonDependencies.netty
-    testCompile commonDependencies.httpClient
-    testCompile commonDependencies.httpBuilder
-
-    testRuntime commonDependencies.cglib
 }

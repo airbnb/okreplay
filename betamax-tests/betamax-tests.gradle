@@ -1,0 +1,17 @@
+apply from: "$rootDir/gradle/javaModule.gradle"
+apply from: "$rootDir/gradle/publishedModule.gradle"
+
+repositories {
+    maven { url "http://repository.codehaus.org" }
+}
+
+dependencies {
+    testCompile project(":betamax-core")
+    testCompile project(":betamax-junit")
+
+    testCompile commonDependencies.netty
+    testCompile commonDependencies.httpClient
+    testCompile commonDependencies.httpBuilder
+
+    testRuntime commonDependencies.cglib
+}

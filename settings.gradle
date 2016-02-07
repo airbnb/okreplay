@@ -1,5 +1,6 @@
 include "betamax-core",
-        "betamax-junit"
+        "betamax-junit",
+        "betamax-tests"
 
 rootProject.name = "betamax"
 
