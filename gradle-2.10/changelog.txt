@@ -1,3 +1,0 @@
-Release Notes - Gradle - Version 2.10
-
-See http://wiki.gradle.org/display/GRADLE/Gradle+2.10+Release+Notes
