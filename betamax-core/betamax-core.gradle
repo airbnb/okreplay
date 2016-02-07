@@ -10,7 +10,9 @@ dependencies {
     compile commonDependencies.tika
 
     testCompile project(":betamax-junit")
-    testCompile project(":betamax-test-support")
+    testCompile commonDependencies.netty
+    testCompile commonDependencies.httpClient
+    testCompile commonDependencies.httpBuilder
 
     testRuntime commonDependencies.cglib
 }
