@@ -37,11 +37,4 @@ public class TypedProperties extends Properties {
     public static int getInteger(Properties properties, String key) {
         return getInteger(properties, key, 0);
     }
-
-    public static <T extends Enum<T>> T getEnum(Properties properties, String key, T defaultValue) {
-        String value = properties.getProperty(key);
-        T anEnum = Enum.valueOf((Class<T>) defaultValue.getClass(), value);
-        return value != null ? anEnum : defaultValue;
-    }
-
 }
