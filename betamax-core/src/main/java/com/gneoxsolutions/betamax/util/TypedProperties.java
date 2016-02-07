@@ -16,7 +16,7 @@
 
 package com.gneoxsolutions.betamax.util;
 
-import java.util.*;
+import java.util.Properties;
 
 public class TypedProperties extends Properties {
 

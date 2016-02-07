@@ -16,10 +16,10 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.io.*;
-
 import com.gneoxsolutions.betamax.message.Request;
-import com.google.common.io.*;
+import com.google.common.io.ByteStreams;
+
+import java.io.IOException;
 
 /**
  * Standard {@link MatchRule} implementations.

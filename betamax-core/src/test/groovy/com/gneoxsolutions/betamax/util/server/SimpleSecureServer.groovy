@@ -17,8 +17,9 @@
 package com.gneoxsolutions.betamax.util.server
 
 import com.gneoxsolutions.betamax.util.server.internal.HttpsChannelInitializer
-import groovy.transform.*
-import io.netty.channel.*
+import groovy.transform.InheritConstructors
+import io.netty.channel.ChannelHandler
+import io.netty.channel.ChannelInitializer
 
 @InheritConstructors
 class SimpleSecureServer extends SimpleServer {

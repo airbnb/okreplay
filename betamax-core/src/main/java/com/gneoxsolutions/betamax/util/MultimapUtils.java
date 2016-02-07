@@ -16,9 +16,13 @@
 
 package com.gneoxsolutions.betamax.util;
 
-import java.util.*;
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class MultimapUtils {
 

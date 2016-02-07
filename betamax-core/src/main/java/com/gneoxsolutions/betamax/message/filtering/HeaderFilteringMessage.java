@@ -16,11 +16,16 @@
 
 package com.gneoxsolutions.betamax.message.filtering;
 
-import java.io.*;
-import java.util.*;
-
 import com.gneoxsolutions.betamax.message.Message;
-import com.google.common.io.*;
+import com.google.common.io.InputSupplier;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static com.google.common.net.HttpHeaders.*;
 
 public abstract class HeaderFilteringMessage implements Message {

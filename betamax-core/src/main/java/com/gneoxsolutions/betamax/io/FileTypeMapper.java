@@ -16,8 +16,10 @@
 
 package com.gneoxsolutions.betamax.io;
 
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
+
 import java.util.logging.Logger;
-import org.apache.tika.mime.*;
 
 /**
  * Maps *MIME* types to file extensions.

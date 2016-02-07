@@ -16,8 +16,10 @@
 
 package com.gneoxsolutions.betamax.io;
 
-import java.util.regex.Pattern;
 import com.google.common.net.MediaType;
+
+import java.util.regex.Pattern;
+
 import static com.google.common.net.MediaType.*;
 
 public class ContentTypes {

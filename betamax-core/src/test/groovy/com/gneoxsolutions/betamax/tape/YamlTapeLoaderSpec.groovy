@@ -18,7 +18,10 @@ package com.gneoxsolutions.betamax.tape
 
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.google.common.io.Files
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
 
 class YamlTapeLoaderSpec extends Specification {
 

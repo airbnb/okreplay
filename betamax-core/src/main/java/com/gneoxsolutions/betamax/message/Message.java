@@ -15,9 +15,11 @@
  */
 package com.gneoxsolutions.betamax.message;
 
-import java.io.*;
-import java.util.*;
-import com.google.common.io.*;
+import com.google.common.io.InputSupplier;
+
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.Map;
 
 /**
  * An abstraction of an HTTP request or response. Implementations can be backed by any sort of underlying

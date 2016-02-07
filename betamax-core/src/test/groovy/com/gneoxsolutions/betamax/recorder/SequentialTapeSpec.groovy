@@ -16,12 +16,15 @@
 
 package com.gneoxsolutions.betamax.recorder
 
-import groovy.json.JsonSlurper
 import com.gneoxsolutions.betamax.junit.Betamax
 import com.gneoxsolutions.betamax.message.Response
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
-import spock.lang.*
+import groovy.json.JsonSlurper
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static com.gneoxsolutions.betamax.TapeMode.READ_SEQUENTIAL
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.JSON_UTF_8

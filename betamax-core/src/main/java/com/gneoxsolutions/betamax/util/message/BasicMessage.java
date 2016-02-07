@@ -16,12 +16,16 @@
 
 package com.gneoxsolutions.betamax.util.message;
 
-import java.io.*;
-import java.util.*;
-
 import com.gneoxsolutions.betamax.message.AbstractMessage;
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Joiner;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BasicMessage extends AbstractMessage {
 

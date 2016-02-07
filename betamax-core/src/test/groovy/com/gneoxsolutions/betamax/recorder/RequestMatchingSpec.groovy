@@ -16,15 +16,17 @@
 
 package com.gneoxsolutions.betamax.recorder
 
-import com.gneoxsolutions.betamax.*
 import com.gneoxsolutions.betamax.ComposedMatchRule
 import com.gneoxsolutions.betamax.MatchRules
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.google.common.io.Files
 import spock.lang.*
-import static com.google.common.net.HttpHeaders.*
-import static com.google.common.net.MediaType.*
+
+import static com.google.common.net.HttpHeaders.ACCEPT
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE
+import static com.google.common.net.MediaType.JSON_UTF_8
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {

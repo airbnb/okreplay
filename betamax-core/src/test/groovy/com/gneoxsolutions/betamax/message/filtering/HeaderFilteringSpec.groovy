@@ -16,10 +16,11 @@
 
 package com.gneoxsolutions.betamax.message.filtering
 
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Unroll
+
 import static HeaderFilteringMessage.NO_PASS_HEADERS
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8

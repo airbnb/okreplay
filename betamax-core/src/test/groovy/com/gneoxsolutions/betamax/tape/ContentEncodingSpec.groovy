@@ -17,11 +17,11 @@
 package com.gneoxsolutions.betamax.tape
 
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import spock.lang.*
+
 import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.*
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8

@@ -16,8 +16,11 @@
 
 package com.gneoxsolutions.betamax
 
-import spock.lang.*
-import static TapeMode.*
+import spock.lang.Issue
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static com.gneoxsolutions.betamax.TapeMode.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/106")
 @Unroll

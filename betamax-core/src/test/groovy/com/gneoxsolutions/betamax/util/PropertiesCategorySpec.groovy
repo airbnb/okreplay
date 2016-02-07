@@ -16,8 +16,11 @@
 
 package com.gneoxsolutions.betamax.util
 
-import spock.lang.*
-import static com.gneoxsolutions.betamax.TapeMode.*
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static com.gneoxsolutions.betamax.TapeMode.READ_ONLY
+import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
 
 @Unroll
 class PropertiesCategorySpec extends Specification {

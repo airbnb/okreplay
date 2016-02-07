@@ -20,9 +20,11 @@
 
 package com.gneoxsolutions.betamax.util;
 
-import java.net.*;
-import java.util.*;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Collection;
 
 public class Network {
     public static Collection<String> getLocalAddresses() {

@@ -16,15 +16,18 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.util.message.BasicRequest
-import com.gneoxsolutions.betamax.util.message.BasicResponse
-
-import java.util.concurrent.CountDownLatch
 import com.gneoxsolutions.betamax.message.Request
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
-import com.gneoxsolutions.betamax.util.message.*
+import com.gneoxsolutions.betamax.util.message.BasicRequest
+import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
+
+import java.util.concurrent.CountDownLatch
+
 import static com.gneoxsolutions.betamax.TapeMode.*
 import static java.util.concurrent.TimeUnit.SECONDS
 

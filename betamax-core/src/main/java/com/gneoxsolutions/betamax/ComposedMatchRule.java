@@ -17,8 +17,9 @@
 package com.gneoxsolutions.betamax;
 
 import com.gneoxsolutions.betamax.message.Request;
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 
 public class ComposedMatchRule implements MatchRule {
 

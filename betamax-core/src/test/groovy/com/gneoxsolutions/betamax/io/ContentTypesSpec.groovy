@@ -16,8 +16,12 @@
 
 package com.gneoxsolutions.betamax.io
 
-import spock.lang.*
-import static com.google.common.net.MediaType.*
+import spock.lang.Issue
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static com.google.common.net.MediaType.FORM_DATA
+import static com.google.common.net.MediaType.JSON_UTF_8
 
 @Unroll
 @Issue("https://github.com/robfletcher/betamax/issues/53")

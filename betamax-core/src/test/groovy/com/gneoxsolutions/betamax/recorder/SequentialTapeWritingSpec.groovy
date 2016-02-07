@@ -16,13 +16,16 @@
 
 package com.gneoxsolutions.betamax.recorder
 
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.tape.MemoryTape
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static com.gneoxsolutions.betamax.TapeMode.WRITE_SEQUENTIAL
 import static java.net.HttpURLConnection.HTTP_OK
 

@@ -17,8 +17,11 @@
 package com.gneoxsolutions.betamax
 
 import com.gneoxsolutions.betamax.util.message.BasicRequest
-import spock.lang.*
-import static MatchRules.*
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import static com.gneoxsolutions.betamax.MatchRules.method
+import static com.gneoxsolutions.betamax.MatchRules.uri
 
 @Unroll
 class ComposedMatchRuleSpec extends Specification {

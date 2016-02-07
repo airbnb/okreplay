@@ -16,17 +16,18 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.*
 import com.gneoxsolutions.betamax.ComposedMatchRule
 import com.gneoxsolutions.betamax.Configuration
+import com.gneoxsolutions.betamax.MatchRule
 import com.gneoxsolutions.betamax.Recorder
 import com.gneoxsolutions.betamax.message.Request
 import com.gneoxsolutions.betamax.util.message.BasicRequest
-import com.gneoxsolutions.betamax.MatchRule
 import com.google.common.base.Optional
 import com.google.common.io.Files
 import spock.lang.*
-import static com.gneoxsolutions.betamax.MatchRules.*
+
+import static com.gneoxsolutions.betamax.MatchRules.method
+import static com.gneoxsolutions.betamax.MatchRules.uri
 import static com.google.common.net.HttpHeaders.ACCEPT
 
 @Issue("https://github.com/robfletcher/betamax/issues/43")

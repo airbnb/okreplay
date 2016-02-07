@@ -16,8 +16,6 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.message.*
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.message.Request
 import com.gneoxsolutions.betamax.message.Response
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
@@ -25,10 +23,14 @@ import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
-import static java.net.HttpURLConnection.*
 import static com.google.common.net.HttpHeaders.*
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import static java.net.HttpURLConnection.HTTP_OK
 
 class WriteTapeToYamlSpec extends Specification {
 

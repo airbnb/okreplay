@@ -16,9 +16,6 @@
 
 package com.gneoxsolutions.betamax.message.tape;
 
-import java.io.*;
-import java.util.LinkedHashMap;
-
 import com.gneoxsolutions.betamax.encoding.AbstractEncoder;
 import com.gneoxsolutions.betamax.encoding.DeflateEncoder;
 import com.gneoxsolutions.betamax.encoding.GzipEncoder;
@@ -26,6 +23,10 @@ import com.gneoxsolutions.betamax.encoding.NoOpEncoder;
 import com.gneoxsolutions.betamax.message.AbstractMessage;
 import com.gneoxsolutions.betamax.message.Message;
 import com.google.common.io.ByteStreams;
+
+import java.io.*;
+import java.util.LinkedHashMap;
+
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
 
 public abstract class RecordedMessage extends AbstractMessage implements Message {

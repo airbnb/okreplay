@@ -16,10 +16,9 @@
 
 package com.gneoxsolutions.betamax.tape;
 
-import com.gneoxsolutions.betamax.*;
+import com.gneoxsolutions.betamax.MatchRule;
 import com.gneoxsolutions.betamax.TapeMode;
 import com.gneoxsolutions.betamax.handler.HandlerException;
-import com.gneoxsolutions.betamax.MatchRule;
 import com.gneoxsolutions.betamax.message.Request;
 import com.gneoxsolutions.betamax.message.Response;
 

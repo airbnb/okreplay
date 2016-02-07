@@ -16,7 +16,8 @@
 
 package com.gneoxsolutions.betamax.io
 
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Unroll
 
 @Unroll
 class FilenameNormalizerSpec extends Specification {

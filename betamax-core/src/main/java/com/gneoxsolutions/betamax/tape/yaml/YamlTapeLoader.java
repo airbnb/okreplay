@@ -16,10 +16,6 @@
 
 package com.gneoxsolutions.betamax.tape.yaml;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.logging.Logger;
-
 import com.gneoxsolutions.betamax.io.FileResolver;
 import com.gneoxsolutions.betamax.io.FilenameNormalizer;
 import com.gneoxsolutions.betamax.tape.Tape;
@@ -27,11 +23,18 @@ import com.gneoxsolutions.betamax.tape.TapeLoadException;
 import com.gneoxsolutions.betamax.tape.TapeLoader;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files;
-import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.logging.Logger;
+
 import static com.gneoxsolutions.betamax.tape.yaml.YamlTape.TAPE_TAG;
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
 

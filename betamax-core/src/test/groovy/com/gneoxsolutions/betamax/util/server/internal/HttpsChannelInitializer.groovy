@@ -16,11 +16,14 @@
 
 package com.gneoxsolutions.betamax.util.server.internal
 
-import java.security.*
-import javax.net.ssl.*
 import io.netty.channel.ChannelHandler
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.ssl.SslHandler
+
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import java.security.KeyStore
+import java.security.Security
 
 class HttpsChannelInitializer extends HttpChannelInitializer {
 

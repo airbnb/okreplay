@@ -16,21 +16,28 @@
 
 package com.gneoxsolutions.betamax.tape.yaml;
 
-import java.beans.IntrospectionException;
-import java.io.File;
-import java.net.URI;
-import java.util.*;
 import com.gneoxsolutions.betamax.io.FileResolver;
 import com.gneoxsolutions.betamax.message.tape.RecordedRequest;
 import com.gneoxsolutions.betamax.message.tape.RecordedResponse;
 import com.gneoxsolutions.betamax.tape.RecordedInteraction;
 import com.gneoxsolutions.betamax.tape.Tape;
-import com.google.common.collect.*;
+import com.google.common.collect.Ordering;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
-import org.yaml.snakeyaml.introspector.*;
+import org.yaml.snakeyaml.introspector.BeanAccess;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
-import org.yaml.snakeyaml.representer.*;
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.*;
+import org.yaml.snakeyaml.representer.Represent;
+import org.yaml.snakeyaml.representer.Representer;
+
+import java.beans.IntrospectionException;
+import java.io.File;
+import java.net.URI;
+import java.util.*;
+
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.LITERAL;
+import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued

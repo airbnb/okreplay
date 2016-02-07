@@ -16,12 +16,20 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import com.google.common.base.*;
-import com.google.common.collect.*;
-import com.google.common.io.*;
+import com.google.common.base.Charsets;
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
+import java.util.Properties;
 
 public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
 

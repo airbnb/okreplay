@@ -16,12 +16,18 @@
 
 package com.gneoxsolutions.betamax.message;
 
-import java.io.*;
 import com.google.common.base.Strings;
 import com.google.common.io.InputSupplier;
 import com.google.common.net.MediaType;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.net.HttpHeaders.*;
+import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static com.google.common.net.MediaType.OCTET_STREAM;
 
 public abstract class AbstractMessage implements Message {

@@ -16,19 +16,17 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.io.FilenameNormalizer
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import spock.lang.*
-import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
+
 import static EntityStorage.external
+import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
-import static com.google.common.net.MediaType.JSON_UTF_8
-import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
-import static com.google.common.net.MediaType.PNG
+import static com.google.common.net.MediaType.*
 import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue("https://github.com/robfletcher/betamax/issues/59")

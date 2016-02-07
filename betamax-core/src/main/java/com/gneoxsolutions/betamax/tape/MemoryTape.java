@@ -16,16 +16,11 @@
 
 package com.gneoxsolutions.betamax.tape;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
-import com.gneoxsolutions.betamax.*;
-import com.gneoxsolutions.betamax.TapeMode;
-import com.gneoxsolutions.betamax.handler.NonWritableTapeException;
 import com.gneoxsolutions.betamax.Configuration;
 import com.gneoxsolutions.betamax.Headers;
 import com.gneoxsolutions.betamax.MatchRule;
+import com.gneoxsolutions.betamax.TapeMode;
+import com.gneoxsolutions.betamax.handler.NonWritableTapeException;
 import com.gneoxsolutions.betamax.io.FileResolver;
 import com.gneoxsolutions.betamax.io.FileTypeMapper;
 import com.gneoxsolutions.betamax.io.FilenameNormalizer;
@@ -36,8 +31,19 @@ import com.gneoxsolutions.betamax.message.tape.RecordedMessage;
 import com.gneoxsolutions.betamax.message.tape.RecordedRequest;
 import com.gneoxsolutions.betamax.message.tape.RecordedResponse;
 import com.google.common.base.Predicate;
-import com.google.common.collect.*;
-import com.google.common.io.*;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import static com.google.common.net.HttpHeaders.VIA;
 import static java.util.Collections.unmodifiableList;

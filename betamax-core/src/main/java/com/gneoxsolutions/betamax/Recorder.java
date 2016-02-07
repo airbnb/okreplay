@@ -16,14 +16,14 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.util.Collection;
-
 import com.gneoxsolutions.betamax.internal.RecorderListener;
 import com.gneoxsolutions.betamax.tape.Tape;
 import com.gneoxsolutions.betamax.tape.TapeLoader;
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader;
-import com.google.common.base.*;
-import com.google.common.collect.*;
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
+
+import java.util.Collection;
 
 /**
  * This class is the main interface to Betamax. It controls the Betamax lifecycle, inserting and

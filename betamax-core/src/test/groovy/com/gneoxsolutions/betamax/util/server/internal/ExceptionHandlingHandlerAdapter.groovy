@@ -16,8 +16,11 @@
 
 package com.gneoxsolutions.betamax.util.server.internal
 
-import io.netty.channel.*
-import io.netty.handler.codec.http.*
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelInboundHandlerAdapter
+import io.netty.handler.codec.http.DefaultFullHttpResponse
+import io.netty.handler.codec.http.FullHttpResponse
+
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static io.netty.buffer.Unpooled.copiedBuffer
 import static io.netty.channel.ChannelFutureListener.CLOSE

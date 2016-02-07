@@ -18,7 +18,8 @@ package com.gneoxsolutions.betamax
 
 import com.gneoxsolutions.betamax.internal.RecorderListener
 import com.gneoxsolutions.betamax.tape.Tape
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Subject
 
 class RecorderSpec extends Specification {
 

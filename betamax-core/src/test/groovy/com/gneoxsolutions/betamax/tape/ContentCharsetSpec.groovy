@@ -16,15 +16,17 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import spock.lang.*
+
 import static com.gneoxsolutions.betamax.TapeMode.READ_WRITE
-import static com.google.common.base.Charsets.*
-import static com.google.common.net.HttpHeaders.*
+import static com.google.common.base.Charsets.ISO_8859_1
+import static com.google.common.base.Charsets.UTF_8
+import static com.google.common.net.HttpHeaders.CONTENT_ENCODING
+import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
 

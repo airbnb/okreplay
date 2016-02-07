@@ -18,9 +18,12 @@ package com.gneoxsolutions.betamax
 
 import com.gneoxsolutions.betamax.message.tape.RecordedRequest
 import com.gneoxsolutions.betamax.util.message.BasicRequest
-import spock.lang.*
-import static MatchRules.*
-import static com.google.common.net.HttpHeaders.*
+import spock.lang.Issue
+import spock.lang.Specification
+
+import static com.gneoxsolutions.betamax.MatchRules.*
+import static com.google.common.net.HttpHeaders.ACCEPT_ENCODING
+import static com.google.common.net.HttpHeaders.CACHE_CONTROL
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')
 class MatchRuleSpec extends Specification {

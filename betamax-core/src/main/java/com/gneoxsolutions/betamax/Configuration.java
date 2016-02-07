@@ -16,13 +16,15 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.io.*;
-import java.util.*;
-
 import com.gneoxsolutions.betamax.internal.RecorderListener;
 import com.gneoxsolutions.betamax.tape.EntityStorage;
 import com.gneoxsolutions.betamax.util.Network;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
+
+import java.io.File;
+import java.util.Collection;
+
 import static com.gneoxsolutions.betamax.MatchRules.method;
 import static com.gneoxsolutions.betamax.MatchRules.uri;
 

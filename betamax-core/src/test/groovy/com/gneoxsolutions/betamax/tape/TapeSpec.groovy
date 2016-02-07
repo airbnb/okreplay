@@ -16,15 +16,17 @@
 
 package com.gneoxsolutions.betamax.tape
 
-import com.gneoxsolutions.betamax.message.*
-import com.gneoxsolutions.betamax.util.message.*
 import com.gneoxsolutions.betamax.message.Request
 import com.gneoxsolutions.betamax.message.Response
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.gneoxsolutions.betamax.util.message.BasicRequest
 import com.gneoxsolutions.betamax.util.message.BasicResponse
 import com.google.common.io.Files
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Stepwise
+
 import static com.gneoxsolutions.betamax.TapeMode.*
 import static com.google.common.net.HttpHeaders.*
 import static com.google.common.net.MediaType.FORM_DATA

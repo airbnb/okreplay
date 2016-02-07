@@ -16,9 +16,10 @@
 
 package com.gneoxsolutions.betamax.encoding;
 
+import com.google.common.io.CharStreams;
+
 import java.io.*;
-import java.nio.charset.*;
-import com.google.common.io.*;
+import java.nio.charset.Charset;
 
 public abstract class AbstractEncoder {
     public final String decode(InputStream input, String charset) {

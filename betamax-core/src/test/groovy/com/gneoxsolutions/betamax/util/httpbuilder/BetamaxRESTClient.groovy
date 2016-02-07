@@ -16,9 +16,11 @@
 
 package com.gneoxsolutions.betamax.util.httpbuilder
 
-import groovy.transform.*
+import groovy.transform.CompileStatic
+import groovy.transform.InheritConstructors
 import groovyx.net.http.RESTClient
-import org.apache.http.impl.client.*
+import org.apache.http.impl.client.AbstractHttpClient
+import org.apache.http.impl.client.SystemDefaultHttpClient
 import org.apache.http.params.HttpParams
 
 @CompileStatic

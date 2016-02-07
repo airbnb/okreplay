@@ -19,9 +19,13 @@ package com.gneoxsolutions.betamax.tape
 import com.gneoxsolutions.betamax.tape.yaml.YamlTapeLoader
 import com.google.common.io.Files
 import org.yaml.snakeyaml.constructor.ConstructorException
-import spock.lang.*
-import static java.net.HttpURLConnection.HTTP_OK
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
+
 import static com.google.common.net.HttpHeaders.*
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Unroll
 class ReadTapeFromYamlSpec extends Specification {

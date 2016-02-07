@@ -15,7 +15,7 @@
  */
 package com.gneoxsolutions.betamax.message;
 
-import java.net.*;
+import java.net.URI;
 
 public interface Request extends Message {
 

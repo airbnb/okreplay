@@ -16,10 +16,10 @@
 
 package com.gneoxsolutions.betamax.message.filtering;
 
-import java.net.*;
-
 import com.gneoxsolutions.betamax.message.Message;
 import com.gneoxsolutions.betamax.message.Request;
+
+import java.net.URI;
 
 public class HeaderFilteringRequest extends HeaderFilteringMessage implements Request {
     public HeaderFilteringRequest(Request request) {

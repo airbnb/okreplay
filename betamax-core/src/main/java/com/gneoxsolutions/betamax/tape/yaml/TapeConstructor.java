@@ -17,8 +17,12 @@
 package com.gneoxsolutions.betamax.tape.yaml;
 
 import com.gneoxsolutions.betamax.io.FileResolver;
-import org.yaml.snakeyaml.constructor.*;
-import org.yaml.snakeyaml.nodes.*;
+import org.yaml.snakeyaml.constructor.AbstractConstruct;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeId;
+import org.yaml.snakeyaml.nodes.ScalarNode;
 
 public class TapeConstructor extends Constructor {
 

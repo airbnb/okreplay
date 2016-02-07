@@ -16,8 +16,9 @@
 
 package com.gneoxsolutions.betamax.io;
 
-import java.io.File;
 import com.google.common.base.Joiner;
+
+import java.io.File;
 
 /**
  * Converts between {@link File} instances and a path relative to a known base

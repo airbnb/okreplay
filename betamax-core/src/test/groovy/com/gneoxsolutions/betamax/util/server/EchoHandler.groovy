@@ -18,8 +18,11 @@ package com.gneoxsolutions.betamax.util.server
 
 import com.gneoxsolutions.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 import io.netty.buffer.ByteBuf
-import io.netty.channel.*
-import io.netty.handler.codec.http.*
+import io.netty.channel.ChannelHandler
+import io.netty.channel.ChannelHandlerContext
+import io.netty.handler.codec.http.DefaultFullHttpResponse
+import io.netty.handler.codec.http.FullHttpRequest
+
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static io.netty.buffer.Unpooled.wrappedBuffer
 import static io.netty.channel.ChannelFutureListener.CLOSE

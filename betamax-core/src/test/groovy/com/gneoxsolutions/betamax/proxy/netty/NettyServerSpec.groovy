@@ -16,10 +16,10 @@
 
 package com.gneoxsolutions.betamax.proxy.netty
 
-import com.gneoxsolutions.betamax.util.server.*
 import com.gneoxsolutions.betamax.util.server.EchoHandler
 import com.gneoxsolutions.betamax.util.server.SimpleServer
 import spock.lang.Specification
+
 import static com.google.common.base.Charsets.UTF_8
 
 class NettyServerSpec extends Specification {

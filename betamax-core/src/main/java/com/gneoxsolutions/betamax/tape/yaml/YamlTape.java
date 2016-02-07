@@ -20,7 +20,7 @@ import com.gneoxsolutions.betamax.io.FileResolver;
 import com.gneoxsolutions.betamax.message.Request;
 import com.gneoxsolutions.betamax.message.Response;
 import com.gneoxsolutions.betamax.tape.MemoryTape;
-import org.yaml.snakeyaml.nodes.*;
+import org.yaml.snakeyaml.nodes.Tag;
 
 class YamlTape extends MemoryTape {
 
