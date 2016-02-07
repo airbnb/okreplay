@@ -38,12 +38,12 @@ allprojects {
             junit: dependencies.create("junit:junit:4.10"),
             littleProxy: dependencies.create("org.littleshoot:littleproxy:1.0.0-beta4"),
             netty: dependencies.create("io.netty:netty-all:4.0.11.Final"),
-            snakeYaml: dependencies.create("org.yaml:snakeyaml:1.13"),
+            snakeYaml: dependencies.create("org.yaml:snakeyaml:1.16"),
             spock: dependencies.create("org.spockframework:spock-core:0.7-groovy-2.0", {
                 exclude module: "groovy-all"
                 exclude module: "junit-dep"
             }),
-            tika: dependencies.create("org.apache.tika:tika-core:1.4")
+            tika: dependencies.create("org.apache.tika:tika-core:1.11")
         ]
     }
 }
