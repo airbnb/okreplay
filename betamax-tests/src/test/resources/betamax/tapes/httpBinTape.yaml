@@ -1,0 +1,27 @@
+!tape
+name: httpbinTape
+interactions:
+- recorded: 2013-11-11T17:53:35.524Z
+  request:
+    method: POST
+    uri: https://httpbin.org/post
+    headers:
+      Accept: '*/*'
+      Accept-Charset: UTF-8,*;q=.1
+      Accept-Encoding: gzip
+      Connection: keep-alive
+      Content-Length: '5'
+      Content-Type: text/plain
+      Host: httpbin.org
+      User-Agent: Java/1.7.0_45
+    body: "BUTTS"
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '425'
+      Content-Type: application/json
+      Date: Mon, 11 Nov 2013 17:53:35 GMT
+      Server: gunicorn/0.17.4
+    body: "Hey look some text: BUTTS"

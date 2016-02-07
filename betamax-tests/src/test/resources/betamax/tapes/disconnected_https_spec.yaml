@@ -1,0 +1,22 @@
+!tape
+interactions:
+- recorded: 2013-10-31T21:26:22.666Z
+  request:
+    method: GET
+    uri: https://freeside.bv/
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Connection: keep-alive
+      Host: freeside.bv
+      User-Agent: Java/1.8.0-ea
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '278'
+      Content-Type: application/json
+      Date: Thu, 31 Oct 2013 21:26:22 GMT
+      Server: gunicorn/0.17.4
+    body: O HAI!
+name: disconnected https spec
