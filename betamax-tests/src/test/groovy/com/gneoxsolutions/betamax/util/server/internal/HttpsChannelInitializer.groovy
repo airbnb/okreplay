@@ -54,7 +54,7 @@ class HttpsChannelInitializer extends HttpChannelInitializer {
         def keyStore = KeyStore.getInstance("JKS")
         keyStore.load(keystoreStream, password)
 
-        def algorithm = Security.getProperty("ssl.KeyManagerFactory.algorithm") ?: "SunX509"
+        def algorithm = "SunX509"
         def factory = KeyManagerFactory.getInstance(algorithm)
         factory.init(keyStore, password)
 
