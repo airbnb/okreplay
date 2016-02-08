@@ -148,7 +148,7 @@ interactions:
 
         and:
         def tape = loader.readFrom(new StringReader(yaml))
-        tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.headers)
+        tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.accept)
 
         when:
         def request = new BasicRequest("GET", "http://httpbin.org/get")

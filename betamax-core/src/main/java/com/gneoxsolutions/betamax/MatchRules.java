@@ -70,6 +70,11 @@ public enum MatchRules implements MatchRule {
         public boolean isMatch(Request a, Request b) {
             return a.getHeader("Authorization").equals(b.getHeader("Authorization"));
         }
+    }, accept {
+        @Override
+        public boolean isMatch(Request a, Request b) {
+            return a.getHeader("Accept").equals(b.getHeader("Accept"));
+        }
     }, body {
         @Override
         public boolean isMatch(Request a, Request b) {
