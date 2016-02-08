@@ -55,11 +55,6 @@ public enum MatchRules implements MatchRule {
         public boolean isMatch(Request a, Request b) {
             return a.getUri().getQuery().equals(b.getUri().getQuery());
         }
-    }, fragment {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().getFragment().equals(b.getUri().getFragment());
-        }
     }, authorization {
         @Override
         public boolean isMatch(Request a, Request b) {
