@@ -18,11 +18,13 @@ package com.gneoxsolutions.betamax
 
 import com.gneoxsolutions.betamax.message.tape.RecordedRequest
 import com.gneoxsolutions.betamax.util.message.BasicRequest
+import org.apache.http.auth.AUTH
 import spock.lang.Issue
 import spock.lang.Specification
 
 import static com.gneoxsolutions.betamax.MatchRules.*
 import static com.google.common.net.HttpHeaders.ACCEPT_ENCODING
+import static com.google.common.net.HttpHeaders.AUTHORIZATION
 import static com.google.common.net.HttpHeaders.CACHE_CONTROL
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')
@@ -80,16 +82,16 @@ class MatchRuleSpec extends Specification {
         rule.isMatch(request, request4)
     }
 
-    void 'can match headers'() {
+    void 'can match authorization'() {
         given:
-        def request1 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(ACCEPT_ENCODING): 'gzip, deflate'])
-        def request2 = new RecordedRequest(method: 'GET', uri: 'http://icanhascheezburger.com/'.toURI(), headers: [(ACCEPT_ENCODING): 'gzip, deflate'])
-        def request3 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(ACCEPT_ENCODING): 'none'])
-        def request4 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(ACCEPT_ENCODING): 'gzip, deflate', (CACHE_CONTROL): 'no-cache'])
+        def request1 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(),     headers: [(AUTHORIZATION): 'Basic 1234'])
+        def request2 = new RecordedRequest(method: 'GET', uri: 'http://icanhascheezburger.com/'.toURI(), headers: [(AUTHORIZATION): 'Basic 1234', (CACHE_CONTROL): 'no-cache'])
+        def request3 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(),     headers: [(AUTHORIZATION): 'Basic 4321'])
+        def request4 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(),     headers: [(AUTHORIZATION): 'Basic 4321', (CACHE_CONTROL): 'no-cache'])
 
         and:
-        def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(ACCEPT_ENCODING): ['gzip', 'deflate']])
-        def rule = headers
+        def request = new BasicRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI(), headers: [(AUTHORIZATION): ['Basic 1234']])
+        def rule = authorization
 
         expect:
         rule.isMatch(request, request1)
