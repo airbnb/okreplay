@@ -73,6 +73,7 @@ publishing {
             from components.java
             artifact sourceJar
             artifact javadocJar
+            groupId 'com.gneoxsolutions.betamax'
 
             pom.withXml {
                 asNode().dependencies.dependency.each { dep ->
@@ -80,7 +81,6 @@ publishing {
                         dep.remove(dep.scope)
                     }
                     if (dep.artifactId.text() == "junit") {
-                        println "boom"
                         dep.appendNode("scope", "provided")
                     }
                 }
