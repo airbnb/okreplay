@@ -53,7 +53,7 @@ class ConfigurationSpec extends Specification {
                 .proxyHost("freeside.co")
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
-                .defaultMatchRules(MatchRules.host, MatchRules.headers)
+                .defaultMatchRules(MatchRules.host, MatchRules.uri)
                 .proxyTimeoutSeconds(30)
                 .ignoreHosts(["freeside.co"])
                 .ignoreLocalhost(true)
@@ -67,7 +67,7 @@ class ConfigurationSpec extends Specification {
             proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_ONLY
-            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreLocalhost
@@ -83,7 +83,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
-            setProperty("betamax.defaultMatchRules", "host,headers")
+            setProperty("betamax.defaultMatchRules", "host,uri")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
@@ -99,7 +99,7 @@ class ConfigurationSpec extends Specification {
             proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_WRITE
-            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -117,7 +117,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
-            setProperty("betamax.defaultMatchRules", "host,headers")
+            setProperty("betamax.defaultMatchRules", "host,uri")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
@@ -139,7 +139,7 @@ class ConfigurationSpec extends Specification {
             proxyHost == InetAddress.getByName("freeside.co")
             proxyPort == 1337
             defaultMode == READ_WRITE
-            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.headers)
+            defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
             ignoreHosts.contains("freeside.co")
             ignoreHosts.contains("energizedwork.com")
@@ -162,7 +162,7 @@ class ConfigurationSpec extends Specification {
             setProperty("betamax.proxyHost", "freeside.co")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
-            setProperty("betamax.defaultMatchRules", "host,headers")
+            setProperty("betamax.defaultMatchRules", "host,query")
             setProperty("betamax.proxyTimeoutSeconds", "30")
             setProperty("betamax.ignoreHosts", "localhost,127.0.0.1")
             setProperty("betamax.ignoreLocalhost", "true")
