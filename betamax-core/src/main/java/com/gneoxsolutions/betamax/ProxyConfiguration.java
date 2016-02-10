@@ -16,11 +16,15 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.net.*;
-import java.util.Collection;
 import com.gneoxsolutions.betamax.internal.RecorderListener;
 import com.gneoxsolutions.betamax.proxy.ProxyConfigurationException;
 import com.gneoxsolutions.betamax.proxy.ProxyServer;
+
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.UnknownHostException;
+import java.util.Collection;
 
 public class ProxyConfiguration extends Configuration {
 

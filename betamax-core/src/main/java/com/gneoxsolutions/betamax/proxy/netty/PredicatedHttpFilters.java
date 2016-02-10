@@ -16,9 +16,13 @@
 
 package com.gneoxsolutions.betamax.proxy.netty;
 
-import com.google.common.base.*;
-import io.netty.handler.codec.http.*;
-import org.littleshoot.proxy.*;
+import com.google.common.base.Predicate;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+import org.littleshoot.proxy.HttpFilters;
+import org.littleshoot.proxy.HttpFiltersAdapter;
 
 public class PredicatedHttpFilters extends HttpFiltersAdapter {
 

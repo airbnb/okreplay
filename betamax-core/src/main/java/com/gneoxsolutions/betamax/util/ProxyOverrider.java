@@ -16,12 +16,17 @@
 
 package com.gneoxsolutions.betamax.util;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import io.netty.handler.codec.http.HttpRequest;
+import org.littleshoot.proxy.ChainedProxy;
+import org.littleshoot.proxy.ChainedProxyAdapter;
+import org.littleshoot.proxy.ChainedProxyManager;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
-import com.google.common.base.*;
-import io.netty.handler.codec.http.HttpRequest;
-import org.littleshoot.proxy.*;
+
 import static java.net.Proxy.Type.HTTP;
 
 /**

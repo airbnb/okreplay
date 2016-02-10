@@ -22,9 +22,10 @@ import com.gneoxsolutions.betamax.encoding.GzipEncoder;
 import com.gneoxsolutions.betamax.encoding.NoOpEncoder;
 import com.gneoxsolutions.betamax.message.AbstractMessage;
 import com.gneoxsolutions.betamax.message.Message;
-import com.google.common.io.ByteStreams;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
@@ -40,18 +41,6 @@ public abstract class RecordedMessage extends AbstractMessage implements Message
 
     public final boolean hasBody() {
         return body != null;
-    }
-
-    @Override
-    protected final Reader getBodyAsReader() throws IOException {
-        String string;
-        if (hasBody()) {
-            string = body instanceof String ? (String) body : new String(ByteStreams.toByteArray(getBodyAsBinary()), getCharset());
-        } else {
-            string = "";
-        }
-
-        return new StringReader(string);
     }
 
     protected final InputStream getBodyAsStream() throws UnsupportedEncodingException {

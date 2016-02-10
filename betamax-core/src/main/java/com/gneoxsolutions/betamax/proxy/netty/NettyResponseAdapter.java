@@ -17,7 +17,9 @@
 package com.gneoxsolutions.betamax.proxy.netty;
 
 import com.gneoxsolutions.betamax.message.Response;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpResponse;
 
 public class NettyResponseAdapter extends NettyMessageAdapter<HttpResponse> implements Response {
 

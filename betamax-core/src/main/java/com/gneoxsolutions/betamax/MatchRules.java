@@ -17,9 +17,8 @@
 package com.gneoxsolutions.betamax;
 
 import com.gneoxsolutions.betamax.message.Request;
-import com.google.common.io.ByteStreams;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Standard {@link MatchRule} implementations.
@@ -67,13 +66,6 @@ public enum MatchRules implements MatchRule {
         }
     }, body {
         @Override
-        public boolean isMatch(Request a, Request b) {
-            try {
-                return ByteStreams.equal(a.getBodyAsBinary(), b.getBodyAsBinary());
-            } catch (IOException e) {
-                // TODO: better exception type
-                throw new RuntimeException(e);
-            }
-        }
+        public boolean isMatch(Request a, Request b) { return Arrays.equals(a.getBodyAsBinary(), b.getBodyAsBinary()); }
     }
 }

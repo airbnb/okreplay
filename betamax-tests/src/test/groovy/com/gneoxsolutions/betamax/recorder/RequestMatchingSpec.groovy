@@ -74,7 +74,7 @@ interactions:
         def response = tape.play(request)
 
         then:
-        response.bodyAsText.input.text == responseText
+        response.bodyAsText == responseText
 
         where:
         method | uri
@@ -111,7 +111,7 @@ interactions:
         def response = tape.play(request)
 
         then:
-        response.bodyAsText.input.text == "GET method response from xkcd.com"
+        response.bodyAsText == "GET method response from xkcd.com"
     }
 
     @Unroll('request with Accept: #acceptHeader returns "#responseText"')
@@ -157,7 +157,7 @@ interactions:
 
         then:
         response.headers[CONTENT_TYPE] == acceptHeader
-        response.bodyAsText.input.text == responseText
+        response.bodyAsText == responseText
 
         where:
         acceptHeader                                    | responseText

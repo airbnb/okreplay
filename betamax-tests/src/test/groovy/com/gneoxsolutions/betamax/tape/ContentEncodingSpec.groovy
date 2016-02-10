@@ -92,7 +92,7 @@ interactions:
 
         then:
         response.getHeader(CONTENT_ENCODING) == encoding
-        response.bodyAsText.input.text == "O HAI!"
+        response.bodyAsText == "O HAI!"
 
         where:
         encoding << ["gzip", "deflate"]

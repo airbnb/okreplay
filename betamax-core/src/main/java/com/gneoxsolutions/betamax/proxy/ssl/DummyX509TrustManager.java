@@ -16,8 +16,8 @@
 
 package com.gneoxsolutions.betamax.proxy.ssl;
 
-import java.security.cert.*;
-import javax.net.ssl.*;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
 
 public class DummyX509TrustManager implements X509TrustManager {
 

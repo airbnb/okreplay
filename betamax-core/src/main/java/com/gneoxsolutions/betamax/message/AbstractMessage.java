@@ -17,13 +17,12 @@
 package com.gneoxsolutions.betamax.message;
 
 import com.google.common.base.Strings;
-import com.google.common.io.InputSupplier;
 import com.google.common.net.MediaType;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
@@ -60,7 +59,7 @@ public abstract class AbstractMessage implements Message {
     @Override
     public String getEncoding() {
         String header = getHeader(CONTENT_ENCODING);
-        return defaultIfNullOrEmpty(header, DEFAULT_ENCODING);
+        return header == null || header.length() == 0 ? DEFAULT_ENCODING : header;
     }
 
     @Override
@@ -69,39 +68,41 @@ public abstract class AbstractMessage implements Message {
     }
 
     @Override
-    public final InputSupplier<InputStream> getBodyAsBinary() {
-        return new InputSupplier<InputStream>() {
-            @Override
-            public InputStream getInput() throws IOException {
-                return getBodyAsStream();
+    public final byte[] getBodyAsBinary() {
+        // Credit goes to StackOverflow Post
+        // http://stackoverflow.com/questions/1264709/convert-inputstream-to-byte-array-in-java
+        try {
+            InputStream is = getBodyAsStream();
+
+            try {
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                int nRead;
+                byte[] data = new byte[8 * 1024]; // 8KB
+
+                while ((nRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, nRead);
+                }
+
+                buffer.flush();
+
+                return buffer.toByteArray();
+            } finally {
+                is.close();
             }
-        };
+        } catch (IOException e) {
+            return new byte[0];
+        }
     }
 
     @Override
-    public final InputSupplier<Reader> getBodyAsText() {
-        return new InputSupplier<Reader>() {
-            @Override
-            public Reader getInput() throws IOException {
-                return getBodyAsReader();
-            }
-        };
+    public final String getBodyAsText() {
+        try {
+            return new String(getBodyAsBinary(), getCharset());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected abstract InputStream getBodyAsStream() throws IOException;
-
-    /**
-     * A default implementation that decodes the byte stream from
-     * `getBodyAsBinary`. Implementations can override this
-     * if they have a simpler way of doing it.
-     */
-    protected Reader getBodyAsReader() throws IOException {
-        return new InputStreamReader(getBodyAsBinary().getInput(), getCharset());
-    }
-
-
-    private String defaultIfNullOrEmpty(String string, String defaultValue) {
-        return Strings.isNullOrEmpty(string) ? defaultValue : string;
-    }
-
 }

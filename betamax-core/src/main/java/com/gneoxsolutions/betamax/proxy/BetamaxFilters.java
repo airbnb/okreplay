@@ -16,10 +16,6 @@
 
 package com.gneoxsolutions.betamax.proxy;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import com.gneoxsolutions.betamax.encoding.DeflateEncoder;
 import com.gneoxsolutions.betamax.encoding.GzipEncoder;
 import com.gneoxsolutions.betamax.handler.NonWritableTapeException;
@@ -27,16 +23,22 @@ import com.gneoxsolutions.betamax.message.Response;
 import com.gneoxsolutions.betamax.proxy.netty.NettyRequestAdapter;
 import com.gneoxsolutions.betamax.proxy.netty.NettyResponseAdapter;
 import com.gneoxsolutions.betamax.tape.Tape;
-import com.google.common.base.*;
-import com.google.common.io.ByteStreams;
+import com.google.common.base.Optional;
+import com.google.common.base.Splitter;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFiltersAdapter;
 import org.littleshoot.proxy.impl.ProxyUtils;
 
-import static com.gneoxsolutions.betamax.Headers.*;
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import static com.gneoxsolutions.betamax.Headers.VIA_HEADER;
+import static com.gneoxsolutions.betamax.Headers.X_BETAMAX;
 import static io.netty.buffer.Unpooled.wrappedBuffer;
-import static io.netty.handler.codec.http.HttpHeaders.Names.*;
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_ENCODING;
+import static io.netty.handler.codec.http.HttpHeaders.Names.VIA;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 import static java.util.logging.Level.SEVERE;
@@ -172,11 +174,11 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         byte[] stream;
         String encodingHeader = recordedResponse.getHeader(CONTENT_ENCODING);
         if ("gzip".equals(encodingHeader)) {
-            stream = new GzipEncoder().encode(ByteStreams.toByteArray(recordedResponse.getBodyAsBinary()));
+            stream = new GzipEncoder().encode(recordedResponse.getBodyAsBinary());
         } else if ("deflate".equals(encodingHeader)) {
-            stream = new DeflateEncoder().encode(ByteStreams.toByteArray(recordedResponse.getBodyAsBinary()));
+            stream = new DeflateEncoder().encode(recordedResponse.getBodyAsBinary());
         } else {
-            stream = ByteStreams.toByteArray(recordedResponse.getBodyAsBinary());
+            stream = recordedResponse.getBodyAsBinary();
         }
         return wrappedBuffer(stream);
     }

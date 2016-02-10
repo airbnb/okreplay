@@ -16,13 +16,21 @@
 
 package com.gneoxsolutions.betamax.proxy.netty;
 
-import java.io.*;
-import java.util.Map;
 import com.gneoxsolutions.betamax.message.AbstractMessage;
 import com.google.common.base.Joiner;
-import com.google.common.collect.*;
-import io.netty.buffer.*;
-import io.netty.handler.codec.http.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.HttpMessage;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
 import static io.netty.buffer.Unpooled.copiedBuffer;
 
 public abstract class NettyMessageAdapter<T extends HttpMessage> extends AbstractMessage {

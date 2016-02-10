@@ -15,10 +15,6 @@
  */
 package com.gneoxsolutions.betamax.message;
 
-import com.google.common.io.InputSupplier;
-
-import java.io.InputStream;
-import java.io.Reader;
 import java.util.Map;
 
 /**
@@ -56,7 +52,7 @@ public interface Message {
      * @return the message body as a string.
      * @throws IllegalStateException if the message does not have a body.
      */
-    InputSupplier<Reader> getBodyAsText();
+    String getBodyAsText();
 
     /**
      * Returns the decoded message body. If the implementation stores the message body in an encoded form (e.g. gzipped) then it <em>must</em> be decoded
@@ -65,7 +61,7 @@ public interface Message {
      * @return the message body as binary data.
      * @throws IllegalStateException if the message does not have a body.
      */
-    InputSupplier<InputStream> getBodyAsBinary();
+    byte[] getBodyAsBinary();
 
     /**
      * @return the MIME content type of the message not including any charset.

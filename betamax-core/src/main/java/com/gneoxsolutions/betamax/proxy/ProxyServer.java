@@ -16,8 +16,6 @@
 
 package com.gneoxsolutions.betamax.proxy;
 
-import java.net.*;
-import java.util.logging.Logger;
 import com.gneoxsolutions.betamax.ProxyConfiguration;
 import com.gneoxsolutions.betamax.internal.RecorderListener;
 import com.gneoxsolutions.betamax.proxy.netty.PredicatedHttpFilters;
@@ -26,9 +24,16 @@ import com.gneoxsolutions.betamax.util.ProxyOverrider;
 import com.gneoxsolutions.betamax.util.SSLOverrider;
 import com.google.common.base.Predicate;
 import io.netty.handler.codec.http.HttpRequest;
-import org.littleshoot.proxy.*;
+import org.littleshoot.proxy.HttpFilters;
+import org.littleshoot.proxy.HttpFiltersSourceAdapter;
+import org.littleshoot.proxy.HttpProxyServer;
+import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.extras.SelfSignedMitmManager;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
+
+import java.net.InetSocketAddress;
+import java.util.logging.Logger;
+
 import static com.gneoxsolutions.betamax.proxy.netty.PredicatedHttpFilters.httpMethodPredicate;
 import static com.google.common.base.Predicates.not;
 import static io.netty.handler.codec.http.HttpMethod.CONNECT;

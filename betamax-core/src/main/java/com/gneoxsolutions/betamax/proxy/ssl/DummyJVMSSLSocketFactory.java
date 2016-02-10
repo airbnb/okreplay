@@ -16,10 +16,14 @@
 
 package com.gneoxsolutions.betamax.proxy.ssl;
 
-import java.io.*;
-import java.net.*;
-import java.security.*;
-import javax.net.ssl.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 
 public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 

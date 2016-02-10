@@ -42,8 +42,8 @@ class InstrumentedMatchRule implements MatchRule {
         if (a.uri == b.uri && a.method == b.method) {
             //Same method and URI, lets do a body comparison
             //Can only consume the body once, once it's gone it's gone.
-            def aBody = a.bodyAsText.input.text
-            def bBody = b.bodyAsText.input.text
+            def aBody = a.bodyAsText
+            def bBody = b.bodyAsText
 
             //Ideally in the real world, we'd parse the XML or the JSON and compare the ASTs instead
             // of just comparing the body strings, so that meaningless whitespace doesn't mean anything

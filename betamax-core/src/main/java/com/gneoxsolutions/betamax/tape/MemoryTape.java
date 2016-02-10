@@ -34,9 +34,9 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -171,14 +171,10 @@ public abstract class MemoryTape implements Tape {
     }
 
     private String stringify(Request request) {
-        try {
-            return "method: " + request.getMethod() + ", "
-                    + "uri: " + request.getUri() + ", "
-                    + "headers: " + request.getHeaders() + ", "
-                    + "body: " + CharStreams.toString(request.getBodyAsText());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return "method: " + request.getMethod() + ", "
+                + "uri: " + request.getUri() + ", "
+                + "headers: " + request.getHeaders() + ", "
+                + "body: " + request.getBodyAsText();
     }
 
     @Override
@@ -220,25 +216,21 @@ public abstract class MemoryTape implements Tape {
     }
 
     private static RecordedRequest recordRequest(Request request) {
-        try {
-            final RecordedRequest recording = new RecordedRequest();
-            recording.setMethod(request.getMethod());
-            recording.setUri(request.getUri());
+        final RecordedRequest recording = new RecordedRequest();
+        recording.setMethod(request.getMethod());
+        recording.setUri(request.getUri());
 
-            for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
-                if (!header.getKey().equals(VIA)) {
-                    recording.getHeaders().put(header.getKey(), header.getValue());
-                }
+        for (Map.Entry<String, String> header : request.getHeaders().entrySet()) {
+            if (!header.getKey().equals(VIA)) {
+                recording.getHeaders().put(header.getKey(), header.getValue());
             }
-
-            if (request.hasBody()) {
-                recording.setBody(CharStreams.toString(request.getBodyAsText()));
-            }
-
-            return recording;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+
+        if (request.hasBody()) {
+            recording.setBody(request.getBodyAsText());
+        }
+
+        return recording;
     }
 
     private RecordedResponse recordResponse(Response response) {
@@ -275,9 +267,9 @@ public abstract class MemoryTape implements Tape {
     private void recordBodyInline(Message message, RecordedMessage recording) throws IOException {
         boolean representAsText = isTextContentType(message.getContentType());
         if (representAsText) {
-            recording.setBody(CharStreams.toString(message.getBodyAsText()));
+            recording.setBody(message.getBodyAsText());
         } else {
-            recording.setBody(ByteStreams.toByteArray(message.getBodyAsBinary()));
+            recording.setBody(message.getBodyAsBinary());
         }
     }
 
@@ -285,7 +277,7 @@ public abstract class MemoryTape implements Tape {
         String filename = FileTypeMapper.filenameFor(String.format("response-%02d", size() + 1), message.getContentType());
         File body = fileResolver.toFile(FilenameNormalizer.toFilename(name), filename);
         Files.createParentDirs(body);
-        ByteStreams.copy(message.getBodyAsBinary(), Files.newOutputStreamSupplier(body));
+        ByteStreams.copy(new ByteArrayInputStream(message.getBodyAsBinary()), Files.newOutputStreamSupplier(body));
         recording.setBody(body);
     }
 

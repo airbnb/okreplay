@@ -17,10 +17,7 @@
 package com.gneoxsolutions.betamax.message.filtering;
 
 import com.gneoxsolutions.betamax.message.Message;
-import com.google.common.io.InputSupplier;
 
-import java.io.InputStream;
-import java.io.Reader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -59,12 +56,12 @@ public abstract class HeaderFilteringMessage implements Message {
     }
 
     @Override
-    public InputSupplier<Reader> getBodyAsText() {
+    public String getBodyAsText() {
         return getDelegate().getBodyAsText();
     }
 
     @Override
-    public InputSupplier<InputStream> getBodyAsBinary() {
+    public byte[] getBodyAsBinary() {
         return getDelegate().getBodyAsBinary();
     }
 

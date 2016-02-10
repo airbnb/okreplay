@@ -16,10 +16,12 @@
 
 package com.gneoxsolutions.betamax.util;
 
-import java.security.*;
-import javax.net.ssl.*;
-
 import com.gneoxsolutions.betamax.proxy.ssl.DummyJVMSSLSocketFactory;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+import java.security.Security;
 
 public class SSLOverrider {
 

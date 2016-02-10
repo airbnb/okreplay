@@ -110,7 +110,7 @@ class TapeSpec extends Specification {
 
         then: 'the recorded response data is copied onto the response'
         response.status == plainTextResponse.status
-        response.bodyAsText.input.text == 'O HAI!'
+        response.bodyAsText == 'O HAI!'
         response.headers == plainTextResponse.headers
     }
 
@@ -125,7 +125,7 @@ class TapeSpec extends Specification {
 
         then: 'the request body is stored on the tape'
         def interaction = tape.interactions[-1]
-        interaction.request.body == request.bodyAsText.input.text
+        interaction.request.body == request.bodyAsText
     }
 
     void 'a write-only tape cannot be read from'() {

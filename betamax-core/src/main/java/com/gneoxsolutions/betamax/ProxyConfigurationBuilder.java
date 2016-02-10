@@ -16,9 +16,9 @@
 
 package com.gneoxsolutions.betamax;
 
-import java.util.*;
-
 import com.gneoxsolutions.betamax.util.TypedProperties;
+
+import java.util.Properties;
 
 public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuilder<T>> extends ConfigurationBuilder<T> {
 

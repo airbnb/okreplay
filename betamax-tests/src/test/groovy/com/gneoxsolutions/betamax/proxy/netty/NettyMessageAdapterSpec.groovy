@@ -69,7 +69,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
         expect:
         adapter.hasBody()
-        adapter.bodyAsText.input.text == bodyText
+        adapter.bodyAsText == bodyText
 
         where:
         bodyText = "value=\u00a31"
@@ -88,7 +88,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
         expect:
         adapter.hasBody()
-        adapter.bodyAsBinary.input.bytes == body
+        adapter.bodyAsBinary == body
 
         where:
         body = "value=\u00a31".getBytes(ISO_8859_1)
@@ -131,7 +131,7 @@ abstract class NettyMessageAdapterSpec<T extends HttpMessage, A extends NettyMes
 
         expect:
         adapter.hasBody()
-        adapter.bodyAsText.input.text == "123"
+        adapter.bodyAsText == "123"
     }
 
     void "#description if the content buffer is #contentDescription"() {

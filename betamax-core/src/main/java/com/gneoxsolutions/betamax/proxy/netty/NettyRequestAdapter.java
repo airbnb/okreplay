@@ -16,10 +16,13 @@
 
 package com.gneoxsolutions.betamax.proxy.netty;
 
-import java.net.*;
-
 import com.gneoxsolutions.betamax.message.Request;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.codec.http.HttpRequest;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import static io.netty.handler.codec.http.HttpHeaders.Names.HOST;
 
 public class NettyRequestAdapter extends NettyMessageAdapter<HttpRequest> implements Request {
