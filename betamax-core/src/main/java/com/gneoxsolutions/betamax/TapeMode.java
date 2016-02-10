@@ -23,24 +23,13 @@ public enum TapeMode {
     READ_ONLY(true, false, false),
     READ_SEQUENTIAL(true, false, true),
     WRITE_ONLY(false, true, false),
-    WRITE_SEQUENTIAL(false, true, true),
-
-    /**
-     * This is a special value used for the `Betamax` annotation. Do not use
-     * this directly.
-     */
-    NULL(false, false, false) {
-        @Override
-        public Optional<TapeMode> toOptional() {
-            return Optional.absent();
-        }
-    };
+    WRITE_SEQUENTIAL(false, true, true);
 
     private final boolean readable;
     private final boolean writable;
     private final boolean sequential;
 
-    private TapeMode(boolean readable, boolean writable, boolean sequential) {
+    TapeMode(boolean readable, boolean writable, boolean sequential) {
         this.readable = readable;
         this.writable = writable;
         this.sequential = sequential;

@@ -40,7 +40,6 @@ class RecorderTapeModeSpec extends Specification {
         where:
         defaultMode | modeParam  | expectedMode
         READ_ONLY   | READ_WRITE | READ_WRITE
-        READ_ONLY   | NULL       | READ_ONLY
     }
 
 }

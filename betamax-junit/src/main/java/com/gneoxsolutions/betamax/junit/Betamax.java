@@ -21,7 +21,7 @@ import com.gneoxsolutions.betamax.TapeMode;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static com.gneoxsolutions.betamax.TapeMode.NULL;
+import static com.gneoxsolutions.betamax.TapeMode.READ_ONLY;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Betamax {
     String tape() default "";
 
-    TapeMode mode() default NULL;
+    TapeMode mode() default READ_ONLY;
 
     MatchRules[] match() default {MatchRules.method, MatchRules.uri};
 }
