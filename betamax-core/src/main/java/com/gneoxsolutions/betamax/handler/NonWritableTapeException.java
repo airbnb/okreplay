@@ -16,16 +16,9 @@
 
 package com.gneoxsolutions.betamax.handler;
 
-import static java.net.HttpURLConnection.HTTP_FORBIDDEN;
-
 public class NonWritableTapeException extends HandlerException {
     public NonWritableTapeException() {
         super("Tape is not writable");
-    }
-
-    @Override
-    public int getHttpStatus() {
-        return HTTP_FORBIDDEN;
     }
 
 }
