@@ -38,6 +38,7 @@ import com.google.common.io.Files;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -277,7 +278,7 @@ public abstract class MemoryTape implements Tape {
         String filename = FileTypeMapper.filenameFor(String.format("response-%02d", size() + 1), message.getContentType());
         File body = fileResolver.toFile(FilenameNormalizer.toFilename(name), filename);
         Files.createParentDirs(body);
-        ByteStreams.copy(new ByteArrayInputStream(message.getBodyAsBinary()), Files.newOutputStreamSupplier(body));
+        ByteStreams.copy(new ByteArrayInputStream(message.getBodyAsBinary()), new FileOutputStream(body));
         recording.setBody(body);
     }
 
