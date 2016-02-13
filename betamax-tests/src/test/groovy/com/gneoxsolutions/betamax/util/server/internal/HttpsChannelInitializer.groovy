@@ -20,6 +20,7 @@ import com.gneoxsolutions.betamax.proxy.ssl.DummyX509TrustManager
 import io.netty.channel.ChannelHandler
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.ssl.SslHandler
+import org.littleshoot.proxy.extras.SelfSignedSslEngineSource
 
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
@@ -39,29 +40,10 @@ class HttpsChannelInitializer extends HttpChannelInitializer {
 
         def pipeline = channel.pipeline()
 
-        def engine = sslContext().createSSLEngine()
+        def engine = new SelfSignedSslEngineSource().newSslEngine()
+
         engine.useClientMode = false
         pipeline.addFirst("ssl", new SslHandler(engine))
 
-    }
-
-    private static SSLContext sslContext() {
-        def keystoreStream = HttpsChannelInitializer.getResourceAsStream("/betamax.keystore")
-        def password = "password".toCharArray()
-
-        def sslContext = SSLContext.getInstance("SSL")
-
-        def keyStore = KeyStore.getInstance("JKS")
-        keyStore.load(keystoreStream, password)
-
-        def algorithm = "SunX509"
-        def factory = KeyManagerFactory.getInstance(algorithm)
-        factory.init(keyStore, password)
-
-        TrustManager[] trustFactory = [new DummyX509TrustManager()]
-
-        sslContext.init(factory.keyManagers, trustFactory, null)
-
-        return sslContext
     }
 }
