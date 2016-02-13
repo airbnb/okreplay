@@ -124,6 +124,8 @@ public class ProxyOverrider implements ChainedProxyManager {
                 }
             };
             chainedProxies.add(chainProxy);
+        } else {
+            chainedProxies.add(ChainedProxyAdapter.FALLBACK_TO_DIRECT_CONNECTION);
         }
     }
 
