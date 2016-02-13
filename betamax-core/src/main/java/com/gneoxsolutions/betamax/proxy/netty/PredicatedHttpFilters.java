@@ -45,36 +45,36 @@ public class PredicatedHttpFilters extends HttpFiltersAdapter {
     }
 
     @Override
-    public HttpResponse requestPre(HttpObject httpObject) {
+    public HttpResponse clientToProxyRequest(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            return delegate.requestPre(httpObject);
+            return delegate.clientToProxyRequest(httpObject);
         } else {
             return null;
         }
     }
 
     @Override
-    public HttpResponse requestPost(HttpObject httpObject) {
+    public HttpResponse proxyToServerRequest(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            return delegate.requestPost(httpObject);
+            return delegate.proxyToServerRequest(httpObject);
         } else {
             return null;
         }
     }
 
     @Override
-    public HttpObject responsePre(HttpObject httpObject) {
+    public HttpObject serverToProxyResponse(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            return delegate.responsePre(httpObject);
+            return delegate.serverToProxyResponse(httpObject);
         } else {
             return httpObject;
         }
     }
 
     @Override
-    public HttpObject responsePost(HttpObject httpObject) {
+    public HttpObject proxyToClientResponse(HttpObject httpObject) {
         if (predicate.apply(originalRequest)) {
-            return delegate.responsePost(httpObject);
+            return delegate.proxyToClientResponse(httpObject);
         } else {
             return httpObject;
         }

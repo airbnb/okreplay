@@ -50,21 +50,21 @@ class BetamaxFiltersSpec extends Specification {
 		filters = new BetamaxFilters(request, tape)
 	}
 
-	void "requestPre returns null if no match is found on tape"() {
+	void "clientToProxyRequest returns null if no match is found on tape"() {
 		given:
 		tape.isReadable() >> true
 		tape.seek(_) >> false
 
 		expect:
-		filters.requestPre(request) == null
+		filters.clientToProxyRequest(request) == null
 	}
 
-	void "requestPre returns null if tape is not readable"() {
+	void "clientToProxyRequest returns null if tape is not readable"() {
 		given:
 		tape.isReadable() >> false
 
 		when:
-		def response = filters.requestPre(request)
+		def response = filters.clientToProxyRequest(request)
 
 		then:
 		response == null
@@ -73,7 +73,7 @@ class BetamaxFiltersSpec extends Specification {
 		0 * tape.seek(_)
 	}
 
-	void "requestPre returns a recorded response if found on tape"() {
+	void "clientToProxyRequest returns a recorded response if found on tape"() {
 		given:
 		def recordedResponse = new BasicResponse(200, "OK")
 		recordedResponse.body = "message body".bytes
@@ -84,7 +84,7 @@ class BetamaxFiltersSpec extends Specification {
 		tape.play(_) >> recordedResponse
 
 		expect:
-		FullHttpResponse response = filters.requestPre(request)
+		FullHttpResponse response = filters.clientToProxyRequest(request)
 		response != null
 		response.status.code() == 200
 		response.status.reasonPhrase() == "OK"
@@ -94,7 +94,7 @@ class BetamaxFiltersSpec extends Specification {
 		response.headers().get(X_BETAMAX) == "PLAY"
 	}
 
-	void "requestPre encodes the response if the original response was encoded with #encoding"() {
+	void "clientToProxyRequest encodes the response if the original response was encoded with #encoding"() {
 		given:
 		def recordedResponse = new BasicResponse(200, "OK")
 		recordedResponse.addHeader CONTENT_ENCODING, encoding
@@ -106,7 +106,7 @@ class BetamaxFiltersSpec extends Specification {
 		tape.play(_) >> recordedResponse
 
 		expect:
-		FullHttpResponse response = filters.requestPre(request)
+		FullHttpResponse response = filters.clientToProxyRequest(request)
 		response != null
 		response.status.code() == 200
 		response.status.reasonPhrase() == "OK"
@@ -125,15 +125,7 @@ class BetamaxFiltersSpec extends Specification {
 		encodedBody = encoder.encode(responseBody)
 	}
 
-	void "requestPost adds headers to outgoing request"() {
-		when:
-		filters.requestPost(request)
-
-		then:
-		request.headers().get(VIA) == "Betamax"
-	}
-
-	void "responsePre records the exchange to tape"() {
+	void "serverToProxyResponse records the exchange to tape"() {
 		given:
 		def response = new DefaultFullHttpResponse(HTTP_1_1, OK, copiedBuffer("response body", Charset.forName("utf-8")))
 
@@ -141,7 +133,7 @@ class BetamaxFiltersSpec extends Specification {
 		tape.isWritable() >> true
 
 		when:
-		filters.responsePre(response)
+		filters.serverToProxyResponse(response)
 
 		then:
 		1 * tape.record(_, _) >> { Request recordedRequest, Response recordedResponse ->
@@ -157,12 +149,12 @@ class BetamaxFiltersSpec extends Specification {
 		}
     }
 
-    void "responsePost adds the X-Betamax header"() {
+    void "proxyToClientResponse adds the X-Betamax header"() {
         given:
         def response = new DefaultFullHttpResponse(HTTP_1_1, OK)
 
         when:
-        filters.responsePost(response)
+        filters.proxyToClientResponse(response)
 
         then:
 		response.headers().get(X_BETAMAX) == "REC"

@@ -40,12 +40,12 @@ class PredicatedHttpFiltersSpec extends Specification {
 		filters = new PredicatedHttpFilters(delegate, predicate, request)
 	}
 
-	void "request#method does not call delegate.request#method when the predicate returns false"() {
+	void "Request: #method does not call delegate.#method when the predicate returns false"() {
 		given:
 		predicate.apply(request) >> false
 
 		when:
-		def result = filters."request$method" httpObj
+		def result = filters."$method" httpObj
 
 		then:
 		result == null
@@ -54,52 +54,52 @@ class PredicatedHttpFiltersSpec extends Specification {
 		0 * delegate._
 
 		where:
-		method << ["Pre", "Post"]
+		method << ["clientToProxyRequest", "proxyToServerRequest"]
 	}
 
-	void "response#method does not call delegate.response#method when the predicate returns false"() {
+	void "Response: #method does not call delegate.#method when the predicate returns false"() {
 		given:
 		predicate.apply(request) >> false
 
 		when:
-		filters."response$method" httpObj
+		filters."$method" httpObj
 
 		then:
 		0 * delegate._
 
 		where:
-		method << ["Pre", "Post"]
+		method << ["serverToProxyResponse", "proxyToClientResponse"]
 	}
 
-	void "request#method calls delegate.request#method when the predicate returns true"() {
+	void "Request: #method calls delegate.#method when the predicate returns true"() {
 		given:
 		predicate.apply(request) >> true
 
 		when:
-		def result = filters."request$method" httpObj
+		def result = filters."$method" httpObj
 
 		then:
 		result == response
 
 		and:
-		1 * delegate."request$method"(httpObj) >> response
+		1 * delegate."$method"(httpObj) >> response
 
 		where:
-		method << ["Pre", "Post"]
+		method << ["clientToProxyRequest", "proxyToServerRequest"]
 	}
 
-	void "response#method calls delegate.response#method when the predicate returns true"() {
+	void "Response: #method calls delegate.#method when the predicate returns true"() {
 		given:
 		predicate.apply(request) >> true
 
 		when:
-		filters."response$method" httpObj
+		filters."$method" httpObj
 
 		then:
-		1 * delegate."response$method"(httpObj)
+		1 * delegate."$method"(httpObj)
 
 		where:
-		method << ["Pre", "Post"]
+		method << ["serverToProxyResponse", "proxyToClientResponse"]
 	}
 
 }

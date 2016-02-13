@@ -58,7 +58,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     }
 
     @Override
-    public HttpResponse requestPre(HttpObject httpObject) {
+    public HttpResponse clientToProxyRequest(HttpObject httpObject) {
         try {
             HttpResponse response = null;
             if (httpObject instanceof HttpRequest) {
@@ -83,6 +83,10 @@ public class BetamaxFilters extends HttpFiltersAdapter {
                 response = onRequestIntercepted().orNull();
             }
 
+            if (response != null) {
+                HttpHeaders.setKeepAlive(response, false);
+            }
+
             return response;
         } catch (IOException e) {
             return createErrorResponse(e);
@@ -90,20 +94,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     }
 
     @Override
-    public HttpResponse requestPost(HttpObject httpObject) {
-        if (httpObject instanceof HttpRequest) {
-            setViaHeader((HttpMessage) httpObject);
-        }
-
-        if(httpObject instanceof HttpResponse) {
-            return (HttpResponse) httpObject;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public HttpObject responsePre(HttpObject httpObject) {
+    public HttpObject serverToProxyResponse(HttpObject httpObject) {
         if (httpObject instanceof HttpResponse) {
             upstreamResponse = NettyResponseAdapter.wrap(httpObject);
         }
@@ -130,10 +121,17 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     }
 
     @Override
-    public HttpObject responsePost(HttpObject httpObject) {
+    public HttpObject proxyToClientResponse(HttpObject httpObject) {
         if (httpObject instanceof HttpResponse) {
-            setBetamaxHeader((HttpResponse) httpObject, "REC");
-            setViaHeader((HttpMessage) httpObject);
+            HttpResponse response = (HttpResponse) httpObject;
+
+            // we're not recording if we're playing back
+            if (response.headers().contains(X_BETAMAX)) {
+                return response;
+            }
+
+            setBetamaxHeader(response, "REC");
+            setViaHeader(response);
         }
 
         return httpObject;
@@ -188,7 +186,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     }
 
     private HttpHeaders setBetamaxHeader(HttpResponse response, String value) {
-        return response.headers().add(X_BETAMAX, value);
+        return response.headers().set(X_BETAMAX, value);
     }
 
     private HttpResponse createErrorResponse(Throwable e) {

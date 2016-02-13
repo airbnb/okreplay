@@ -82,7 +82,8 @@ public class ProxyServer implements RecorderListener {
         HttpProxyServerBootstrap proxyServerBootstrap = DefaultHttpProxyServer
                 .bootstrap()
                 .withIdleConnectionTimeout(configuration.getProxyTimeoutSeconds())
-                .withAddress(address);
+                .withAddress(address)
+                .withTransparent(true);
 
         if (configuration.isSslEnabled()) {
             proxyServerBootstrap.withManInTheMiddle(new SelfSignedMitmManager());
