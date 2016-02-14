@@ -48,7 +48,7 @@ public class ProxyConfiguration extends Configuration {
         this.requestBufferSize = builder.requestBufferSize;
     }
 
-    public static ProxyConfigurationBuilder<?> builder() {
+    public static ProxyConfigurationBuilder<Builder> builder() {
         return new Builder().configureFromPropertiesFile();
     }
 
