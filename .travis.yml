@@ -4,3 +4,4 @@ script:
   - ./gradlew clean build
   - jdk_switcher use oraclejdk8
   - ./gradlew clean build publishToMavenLocal
+  - cd ./example/play-framework-2.4.6-java && ./activator test
