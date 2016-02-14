@@ -112,7 +112,7 @@ public class ProxyConfiguration extends Configuration {
         listeners.add(new ProxyServer(this));
     }
 
-    private static class Builder extends ProxyConfigurationBuilder<Builder> {
+    public static class Builder extends ProxyConfigurationBuilder<Builder> {
         @Override
         protected Builder self() {
             return this;
