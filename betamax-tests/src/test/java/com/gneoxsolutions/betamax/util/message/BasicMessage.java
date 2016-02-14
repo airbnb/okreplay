@@ -29,7 +29,6 @@ import java.util.Map;
 
 public abstract class BasicMessage extends AbstractMessage {
 
-    @Override
     public void addHeader(String name, String value) {
         headers.put(name, value);
     }
@@ -41,7 +40,6 @@ public abstract class BasicMessage extends AbstractMessage {
         }
     }
 
-    @Override
     public Map<String, String> getHeaders() {
         Map<String, String> map = new LinkedHashMap<String, String>();
         for (String name : headers.keySet()) {
@@ -51,7 +49,6 @@ public abstract class BasicMessage extends AbstractMessage {
         return map;
     }
 
-    @Override
     public final boolean hasBody() {
         return body != null && body.length > 0;
     }

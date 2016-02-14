@@ -32,7 +32,6 @@ public class BasicResponse extends BasicMessage implements Response {
         this.reason = reason;
     }
 
-    @Override
     public int getStatus() {
         return status;
     }
