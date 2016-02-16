@@ -32,7 +32,7 @@ artifactory {
 def pomConfig = {
     name project.name
     description project.description
-    url "https://github.com/cowboygneox/betamax"
+    url "https://github.com/betamaxteam/betamax"
     inceptionYear "2011"
     licenses {
         license([:]) {
@@ -42,15 +42,14 @@ def pomConfig = {
         }
     }
     scm {
-        url "https://github.com/cowboygneox/betamax"
-        connection "https://github.com/cowboygneox/betamax.git"
-        developerConnection "scm:git@github.com:cowboygneox/betamax.git"
+        url "https://github.com/betamaxteam/betamax"
+        connection "https://github.com/betamaxteam/betamax.git"
+        developerConnection "scm:git@github.com:betamaxteam/betamax.git"
     }
     developers {
         developer {
             id "cowboygneox"
             name "Sean Freitag"
-            url "https://github.com/cowboygneox/betamax"
             roles {
                 role "Developer"
                 role "Lead"
@@ -62,6 +61,7 @@ def pomConfig = {
             url "http://freeside.co/"
             roles {
                 role "Founder"
+                role "Developer"
             }
         }
     }
