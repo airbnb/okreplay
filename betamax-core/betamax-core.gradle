@@ -6,11 +6,9 @@ repositories {
 }
 
 dependencies {
+    compile commonDependencies.guava
     compile commonDependencies.snakeYaml
     compile commonDependencies.tika
-
-    testCompile project(":betamax-junit")
-    testCompile project(":betamax-test-support")
-
-    testRuntime commonDependencies.cglib
+    compile commonDependencies.littleProxy
+    compile commonDependencies.netty
 }

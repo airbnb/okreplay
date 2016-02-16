@@ -1,0 +1,20 @@
+!tape
+name: my tape
+interactions:
+- recorded: 2016-02-11T14:03:46.216Z
+  request:
+    method: GET
+    uri: http://localhost:3333/
+    headers:
+      Accept: '*/*'
+      Connection: keep-alive
+      Content-Length: '0'
+      Host: localhost:3333
+      User-Agent: AHC/1.0
+  response:
+    status: 903
+    headers:
+      Content-Length: '18'
+      Content-Type: text/plain; charset=utf-8
+      Date: Thu, 11 Feb 2016 14:03:46 GMT
+    body: Hello from Betamax

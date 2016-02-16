@@ -32,7 +32,7 @@ artifactory {
 def pomConfig = {
     name project.name
     description project.description
-    url "http://freeside.co/betamax"
+    url "https://github.com/betamaxteam/betamax"
     inceptionYear "2011"
     licenses {
         license([:]) {
@@ -42,19 +42,26 @@ def pomConfig = {
         }
     }
     scm {
-        url "https://github.com/$project.gitHubProject"
-        connection "https://github.com/${project.gitHubProject}.git"
-        developerConnection "scm:git@github.com:${project.gitHubProject}.git"
+        url "https://github.com/betamaxteam/betamax"
+        connection "https://github.com/betamaxteam/betamax.git"
+        developerConnection "scm:git@github.com:betamaxteam/betamax.git"
     }
     developers {
+        developer {
+            id "cowboygneox"
+            name "Sean Freitag"
+            roles {
+                role "Developer"
+                role "Lead"
+            }
+        }
         developer {
             id "robfletcher"
             name "Rob Fletcher"
             url "http://freeside.co/"
             roles {
-                role "Developer"
-                role "Lead"
                 role "Founder"
+                role "Developer"
             }
         }
     }
@@ -66,11 +73,21 @@ publishing {
             from components.java
             artifact sourceJar
             artifact javadocJar
+            groupId 'software.betamax'
 
             pom.withXml {
                 asNode().dependencies.dependency.each { dep ->
                     if (dep.scope.text() in ["runtime", "test"]) {
                         dep.remove(dep.scope)
+                    }
+                    if (dep.artifactId.text() == "junit") {
+                        dep.appendNode("scope", "provided")
+                    }
+                    if (dep.groupId.text() == "org.scala-lang") {
+                        dep.appendNode("scope", "provided")
+                    }
+                    if (dep.groupId.text() == "org.specs2") {
+                        dep.appendNode("scope", "provided")
                     }
                 }
                 asNode().children().last() + pomConfig
