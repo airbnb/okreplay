@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   javaJdbc,
   cache,
   javaWs,
-  "com.gneoxsolutions.betamax" % "betamax-junit" % "2.0.0-SNAPSHOT"
+  "software.betamax" % "betamax-junit" % "2.0.0-SNAPSHOT"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

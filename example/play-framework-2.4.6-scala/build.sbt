@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   cache,
   ws,
   specs2 % Test,
-  "com.gneoxsolutions.betamax" %% "betamax-specs2" % "2.0.0-SNAPSHOT" % Test
+  "software.betamax" %% "betamax-specs2" % "2.0.0-SNAPSHOT" % Test
 )
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
