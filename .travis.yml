@@ -1,8 +1,11 @@
 language: groovy
 script:
-  - jdk_switcher use oraclejdk7
-  - ./gradlew clean build
-  - jdk_switcher use oraclejdk8
-  - ./gradlew clean build publishToMavenLocal
-  - cd ./example/play-framework-2.4.6-java && ./activator test
-  - cd ./example/play-framework-2.4.6-scala && ./activator test
+- jdk_switcher use oraclejdk7
+- ./gradlew clean build
+- jdk_switcher use oraclejdk8
+- ./gradlew clean build publishToMavenLocal
+- cd ./example/play-framework-2.4.6-java && ./activator test
+- cd ./example/play-framework-2.4.6-scala && ./activator test
+notifications:
+  slack:
+    secure: Y53pkX0JqvrGQrjEFUB//Vx1ljh6zBdJwTSGmdpjHSHOa0bAukBOTBtixX4vnd1yXCspE5TWcI5prdkuzcAdugRajrnMRr5n2cfUna4Qcf7KJWCsRKMdFVhipYQGOckWRLtL6LVKl4bLIzxBojthyIBrjXKQBBMs6y6PEaFRlGc=
