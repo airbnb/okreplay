@@ -8,4 +8,4 @@ script:
 - cd ./example/play-framework-2.4.6-scala && ./activator test
 notifications:
   slack:
-    secure: Y53pkX0JqvrGQrjEFUB//Vx1ljh6zBdJwTSGmdpjHSHOa0bAukBOTBtixX4vnd1yXCspE5TWcI5prdkuzcAdugRajrnMRr5n2cfUna4Qcf7KJWCsRKMdFVhipYQGOckWRLtL6LVKl4bLIzxBojthyIBrjXKQBBMs6y6PEaFRlGc=
+    secure: q94sSrSItRWrkAw418c93vCyruOmvRPdX9B7KvIVyY6rN/3PGKN9HvkohmR12wEHxwBbYW2tgqKirDy24gphaEltDZOHvOT7o/RPHP26TMl8nhgD2L4tNztvUHZkLdULNke/7d6Wt48JctqDG/3o48EDcJ3444x6X7Met475vKc=
