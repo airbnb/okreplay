@@ -83,6 +83,12 @@ publishing {
                     if (dep.artifactId.text() == "junit") {
                         dep.appendNode("scope", "provided")
                     }
+                    if (dep.groupId.text() == "org.scala-lang") {
+                        dep.appendNode("scope", "provided")
+                    }
+                    if (dep.groupId.text() == "org.specs2") {
+                        dep.appendNode("scope", "provided")
+                    }
                 }
                 asNode().children().last() + pomConfig
             }
