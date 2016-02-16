@@ -50,12 +50,12 @@ class ConfigurationSpec extends Specification {
         given:
         def configuration = ProxyConfiguration.builder()
                 .tapeRoot(tempDir)
-                .proxyHost("freeside.co")
+                .proxyHost("github.com")
                 .proxyPort(1337)
                 .defaultMode(READ_ONLY)
                 .defaultMatchRules(MatchRules.host, MatchRules.uri)
                 .proxyTimeoutSeconds(30)
-                .ignoreHosts(["freeside.co"])
+                .ignoreHosts(["github.com"])
                 .ignoreLocalhost(true)
                 .sslEnabled(true)
                 .build()
@@ -64,12 +64,12 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == InetAddress.getByName("freeside.co")
+            proxyHost == InetAddress.getByName("github.com")
             proxyPort == 1337
             defaultMode == READ_ONLY
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
-            ignoreHosts.contains("freeside.co")
+            ignoreHosts.contains("github.com")
             ignoreLocalhost
             sslEnabled
         }
@@ -80,12 +80,12 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
-            setProperty("betamax.proxyHost", "freeside.co")
+            setProperty("betamax.proxyHost", "github.com")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,uri")
             setProperty("betamax.proxyTimeoutSeconds", "30")
-            setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
+            setProperty("betamax.ignoreHosts", "github.com,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
             setProperty("betamax.sslEnabled", "true")
         }
@@ -96,12 +96,12 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == InetAddress.getByName("freeside.co")
+            proxyHost == InetAddress.getByName("github.com")
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
-            ignoreHosts.contains("freeside.co")
+            ignoreHosts.contains("github.com")
             ignoreHosts.contains("energizedwork.com")
             ignoreLocalhost
             sslEnabled
@@ -114,12 +114,12 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
-            setProperty("betamax.proxyHost", "freeside.co")
+            setProperty("betamax.proxyHost", "github.com")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,uri")
             setProperty("betamax.proxyTimeoutSeconds", "30")
-            setProperty("betamax.ignoreHosts", "freeside.co,energizedwork.com")
+            setProperty("betamax.ignoreHosts", "github.com,energizedwork.com")
             setProperty("betamax.ignoreLocalhost", "true")
             setProperty("betamax.sslEnabled", "true")
         }
@@ -136,12 +136,12 @@ class ConfigurationSpec extends Specification {
         expect:
         with(configuration) {
             tapeRoot == tempDir
-            proxyHost == InetAddress.getByName("freeside.co")
+            proxyHost == InetAddress.getByName("github.com")
             proxyPort == 1337
             defaultMode == READ_WRITE
             defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
             proxyTimeoutSeconds == 30
-            ignoreHosts.contains("freeside.co")
+            ignoreHosts.contains("github.com")
             ignoreHosts.contains("energizedwork.com")
             ignoreLocalhost
             sslEnabled
@@ -159,7 +159,7 @@ class ConfigurationSpec extends Specification {
         def properties = new Properties()
         properties.with {
             setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
-            setProperty("betamax.proxyHost", "freeside.co")
+            setProperty("betamax.proxyHost", "github.com")
             setProperty("betamax.proxyPort", "1337")
             setProperty("betamax.defaultMode", "READ_WRITE")
             setProperty("betamax.defaultMatchRules", "host,query")
