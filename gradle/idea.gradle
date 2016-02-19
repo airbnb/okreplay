@@ -1,16 +1,17 @@
-import com.sun.org.apache.xerces.internal.parsers.XMLParser
-
 apply plugin: "idea"
 
 idea {
 	project {
 		jdkName "1.7"
-		languageLevel "1.6"
+		languageLevel "JDK_1_6"
+    vcs = "Git"
 		ipr {
 			withXml { provider ->
 				def node = provider.asNode()
-				node.component.find { it."@name" == "VcsDirectoryMappings" }?.mapping[0]."@vcs" = "Git"
-				node.append(new XmlParser().parse(file("gradle/idea/codeStyle.xml")))
+        def parser = new XmlParser()
+        node.append(parser.parse(file("${rootDir}/gradle/idea/codeStyle.xml")))
+        node.append(parser.parse(file("${rootDir}/gradle/idea/gradle.xml")))
+        node.append(parser.parse(file("${rootDir}/gradle/idea/javac.xml")))
 
 				def copyrightManager = node.component.find { it."@name" == "CopyrightManager" }
 				copyrightManager.@default = "ASL2"
@@ -18,7 +19,7 @@ idea {
 					it.option.find { it.@name == "myName" }?.@value == "ASL2"
 				}
 				if (aslCopyright == null) {
-					copyrightManager.append(new XmlParser().parseText("""
+					copyrightManager.append(parser.parseText("""
 						<copyright>
 						  <option name="notice" value="Copyright ${new Date().format("yyyy")} the original author or authors.&#10;&#10;Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#10;you may not use this file except in compliance with the License.&#10;You may obtain a copy of the License at&#10;&#10;   http://www.apache.org/licenses/LICENSE-2.0&#10;&#10;Unless required by applicable law or agreed to in writing, software&#10;distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#10;WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#10;See the License for the specific language governing permissions and&#10;limitations under the License." />
 						  <option name="keyword" value="Copyright" />
@@ -34,17 +35,8 @@ idea {
 					it.element.find { it.@module == "Production" }?.@value == "ASL2"
 				}
 				if (productionCodeModule == null) {
-					module2copyright.append(new XmlParser().parseText("""
+					module2copyright.append(parser.parseText("""
 						  <element module="Production" copyright="ASL2" />
-					"""))
-				}
-
-				def javacSettings = node.component.find { it.@name == "JavacSettings" }
-				if (!javacSettings) {
-					node.append(new XmlParser().parseText("""
-					  <component name="JavacSettings">
-						<option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:all -Xlint:-options" />
-					  </component>
 					"""))
 				}
 			}
