@@ -31,12 +31,13 @@ import java.util.Collection;
  * `Configuration` instances are created with a builder returned by the
  * {@link #builder()} factory method. For example:
  *
- * ```java
+ * [source,java]
+ * ----
  * Configuration configuration = Configuration.builder()
  *                                            .tapeRoot(tapeRoot)
  *                                            .ignoreLocalhost(true)
  *                                            .build();
- * ```
+ * ----
  *
  * @see ConfigurationBuilder
  */

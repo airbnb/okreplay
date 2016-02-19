@@ -22,7 +22,7 @@ import org.apache.tika.mime.MimeTypes;
 import java.util.logging.Logger;
 
 /**
- * Maps *MIME* types to file extensions.
+ * Maps _MIME_ types to file extensions.
  */
 public class FileTypeMapper {
 
