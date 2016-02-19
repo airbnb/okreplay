@@ -16,20 +16,23 @@
 
 package software.betamax.proxy
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
-import software.betamax.junit.RecorderRule
 import com.google.common.io.Files
 import org.junit.ClassRule
 import software.betamax.ProxyConfiguration
 import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
 import software.betamax.util.server.SimpleServer
 import software.betamax.util.server.SlowHandler
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
 import static software.betamax.TapeMode.READ_WRITE
 
-@Issue("https://github.com/robfletcher/betamax/issues/20")
-@Issue("https://github.com/adamfisk/LittleProxy/issues/96")
+@Issue([
+    "https://github.com/robfletcher/betamax/issues/20",
+    "https://github.com/adamfisk/LittleProxy/issues/96"]
+)
 @Betamax(mode = READ_WRITE)
 class ProxyTimeoutSpec extends Specification {
 

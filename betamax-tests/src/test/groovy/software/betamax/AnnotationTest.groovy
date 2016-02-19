@@ -16,22 +16,22 @@
 
 package software.betamax
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
-import software.betamax.junit.Betamax
-import software.betamax.junit.RecorderRule
 import com.google.common.io.Files
-import org.junit.*
+import org.junit.After
+import org.junit.AfterClass
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
+import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
-
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @RunWith(OrderedRunner)
 class AnnotationTest {
@@ -110,12 +110,12 @@ class AnnotationTest {
 class OrderedRunner extends BlockJUnit4ClassRunner {
 
     private static final ORDER = [
-            'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
-            'annotationOnTestCausesTapeToBeInserted',
-            'tapeIsEjectedAfterAnnotatedTestCompletes',
-            'annotatedTestCanRecord',
-            'annotatedTestCanPlayBack',
-            'canMakeUnproxiedRequestAfterUsingAnnotation'
+        'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
+        'annotationOnTestCausesTapeToBeInserted',
+        'tapeIsEjectedAfterAnnotatedTestCompletes',
+        'annotatedTestCanRecord',
+        'annotatedTestCanPlayBack',
+        'canMakeUnproxiedRequestAfterUsingAnnotation'
     ]
 
     OrderedRunner(Class testClass) {
@@ -124,7 +124,7 @@ class OrderedRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        super.computeTestMethods().sort { FrameworkMethod o1, FrameworkMethod o2 ->
+        super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
             ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
         }
     }

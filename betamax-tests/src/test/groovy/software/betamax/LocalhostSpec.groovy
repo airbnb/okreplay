@@ -16,21 +16,21 @@
 
 package software.betamax
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
-import software.betamax.junit.Betamax
-import software.betamax.junit.RecorderRule
 import com.google.common.io.Files
 import org.junit.ClassRule
+import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
 import static TapeMode.WRITE_ONLY
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
-@Issue('https://github.com/robfletcher/betamax/issues/62')
-@Issue('http://bugs.sun.com/view_bug.do?bug_id=6737819')
+@Issue([
+    'https://github.com/robfletcher/betamax/issues/62',
+    'http://bugs.sun.com/view_bug.do?bug_id=6737819'
+])
 @Betamax(mode = WRITE_ONLY)
 @Unroll
 class LocalhostSpec extends Specification {

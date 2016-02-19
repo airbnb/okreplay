@@ -16,21 +16,22 @@
 
 package software.betamax.recorder
 
+import com.google.common.io.Files
 import software.betamax.tape.MemoryTape
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.Files
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
-
-import static software.betamax.TapeMode.WRITE_SEQUENTIAL
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.WRITE_SEQUENTIAL
 
-@Issue("https://github.com/robfletcher/betamax/issues/7")
-@Issue("https://github.com/robfletcher/betamax/pull/70")
+@Issue([
+    "https://github.com/robfletcher/betamax/issues/7",
+    "https://github.com/robfletcher/betamax/pull/70"
+])
 class SequentialTapeWritingSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()

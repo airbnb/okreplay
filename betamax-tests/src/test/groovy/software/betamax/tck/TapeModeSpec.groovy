@@ -16,17 +16,16 @@
 
 package software.betamax.tck
 
-import software.betamax.Recorder
-import software.betamax.tape.MemoryTape
-import software.betamax.util.server.*
-import software.betamax.Configuration
-import software.betamax.util.server.HelloHandler
 import com.google.common.io.Files
+import software.betamax.Configuration
+import software.betamax.Recorder
 import software.betamax.handler.NonWritableTapeException
+import software.betamax.tape.MemoryTape
+import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
-import static software.betamax.TapeMode.*
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.*
 
 @Unroll
 abstract class TapeModeSpec extends Specification {
@@ -107,8 +106,10 @@ interactions:
         tape.interactions[-1].response.body
     }
 
-    @Issue("https://github.com/robfletcher/betamax/issues/7")
-    @Issue("https://github.com/robfletcher/betamax/pull/70")
+    @Issue([
+        "https://github.com/robfletcher/betamax/issues/7",
+        "https://github.com/robfletcher/betamax/pull/70"
+    ])
     void "in write-sequential mode the proxy records additional interactions"() {
         given: "an existing tape file is inserted in write-sequential mode"
         def tapeFile = new File(tapeRoot, "write_sequential_tape.yaml")

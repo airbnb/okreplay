@@ -18,20 +18,21 @@ package software.betamax.recorder
 
 import software.betamax.junit.Betamax
 import software.betamax.message.Response
-import groovy.json.JsonSlurper
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
+import groovy.json.JsonSlurper
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
-
-import static software.betamax.TapeMode.READ_SEQUENTIAL
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.JSON_UTF_8
 import static java.net.HttpURLConnection.*
+import static software.betamax.TapeMode.READ_SEQUENTIAL
 
-@Issue("https://github.com/robfletcher/betamax/issues/7")
-@Issue("https://github.com/robfletcher/betamax/pull/70")
+@Issue([
+    "https://github.com/robfletcher/betamax/issues/7",
+    "https://github.com/robfletcher/betamax/pull/70"
+])
 class SequentialTapeSpec extends Specification {
 
     static
