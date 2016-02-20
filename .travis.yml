@@ -1,4 +1,6 @@
 language: groovy
+env:
+  - TERM=dumb
 script:
 - jdk_switcher use oraclejdk7
 - ./gradlew clean build
