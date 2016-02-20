@@ -19,6 +19,4 @@ test {
             exceptionFormat "short"
         }
     }
-
-    forkEvery 1
 }
