@@ -16,21 +16,22 @@
 
 package software.betamax.tape
 
-import software.betamax.message.Request
-import software.betamax.message.Response
-import software.betamax.util.message.BasicResponse
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
+import software.betamax.message.Request
+import software.betamax.message.Response
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
+import software.betamax.util.message.BasicResponse
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static software.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.*
+import static com.google.common.net.MediaType.FORM_DATA
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.READ_WRITE
 
 class WriteTapeToYamlSpec extends Specification {
 
@@ -146,7 +147,7 @@ class WriteTapeToYamlSpec extends Specification {
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
         yaml.interactions[0].request.method == "POST"
-        yaml.interactions[0].request.body == "q=1"
+        yaml.interactions[0].request.body == "q=1".bytes
     }
 
     void "can write multiple interactions"() {
