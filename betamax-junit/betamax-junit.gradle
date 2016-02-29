@@ -1,5 +1,5 @@
 apply from: "$rootDir/gradle/javaModule.gradle"
-apply from: "$rootDir/gradle/publishedModule.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
 
 repositories {
     maven { url "http://repository.codehaus.org" }
