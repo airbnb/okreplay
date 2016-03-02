@@ -29,6 +29,8 @@ public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuil
 
     protected String proxyHost = ProxyConfiguration.DEFAULT_PROXY_HOST;
     protected int proxyPort = ProxyConfiguration.DEFAULT_PROXY_PORT;
+    protected String proxyUser;
+    protected String proxyPassword;
     protected int proxyTimeoutSeconds = ProxyConfiguration.DEFAULT_PROXY_TIMEOUT;
     protected int requestBufferSize = ProxyConfiguration.DEFAULT_REQUEST_BUFFER_SIZE;
     protected boolean sslEnabled;
@@ -67,6 +69,16 @@ public abstract class ProxyConfigurationBuilder<T extends ProxyConfigurationBuil
 
     public T proxyPort(int proxyPort) {
         this.proxyPort = proxyPort;
+        return self();
+    }
+
+    public T proxyAuth(String username, String password) {
+        if (username == null || password == null) {
+            throw new IllegalArgumentException("The required proxy username and password cannot be null");
+        }
+
+        this.proxyUser = username;
+        this.proxyPassword = password;
         return self();
     }
 
