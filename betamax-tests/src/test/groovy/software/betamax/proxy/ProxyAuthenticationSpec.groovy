@@ -29,10 +29,10 @@ import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static software.betamax.TapeMode.READ_WRITE
+import static software.betamax.TapeMode.READ_ONLY
 
 @Issue("https://github.com/betamaxteam/betamax/issues/174")
-@Betamax(mode = READ_WRITE)
+@Betamax(mode = READ_ONLY)
 class ProxyAuthenticationSpec extends Specification {
     static final String PROXY_USERNAME = "dummy"
     static final String PROXY_PASSWORD = "password"
