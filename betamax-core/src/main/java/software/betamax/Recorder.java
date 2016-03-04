@@ -35,7 +35,7 @@ public class Recorder {
     private final Collection<RecorderListener> listeners = Lists.newArrayList();
 
     public Recorder() {
-        this(Configuration.builder().build());
+        this(ProxyConfiguration.builder().build());
     }
 
     public Recorder(Configuration configuration) {
