@@ -8,12 +8,12 @@ Documentation will follow soon. Please feel free to [file an issue](https://gith
 
 ## Contributors
 
-### Betamax Team
+**Betamax Team**
 
 - [Sean Freitag (lead)](https://github.com/cowboygneox)
 - [Rob Fletcher (creator)](https://github.com/robfletcher)
 
-### Additional Contributions
+**Additional Contributions**
 
 *Names are sorted alphabetically by last name.*
 
