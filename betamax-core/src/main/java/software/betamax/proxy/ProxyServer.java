@@ -16,6 +16,7 @@
 
 package software.betamax.proxy;
 
+import org.littleshoot.proxy.*;
 import software.betamax.ProxyConfiguration;
 import software.betamax.internal.RecorderListener;
 import software.betamax.proxy.netty.PredicatedHttpFilters;
@@ -24,10 +25,6 @@ import software.betamax.util.ProxyOverrider;
 import software.betamax.util.SSLOverrider;
 import com.google.common.base.Predicate;
 import io.netty.handler.codec.http.HttpRequest;
-import org.littleshoot.proxy.HttpFilters;
-import org.littleshoot.proxy.HttpFiltersSourceAdapter;
-import org.littleshoot.proxy.HttpProxyServer;
-import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.extras.SelfSignedMitmManager;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
@@ -89,6 +86,16 @@ public class ProxyServer implements RecorderListener {
             proxyServerBootstrap.withManInTheMiddle(new SelfSignedMitmManager());
         } else {
             proxyServerBootstrap.withChainProxyManager(proxyOverrider);
+        }
+
+        if (configuration.getProxyUser() != null) {
+            proxyServerBootstrap.withProxyAuthenticator(new ProxyAuthenticator() {
+                @Override
+                public boolean authenticate(String userName, String password) {
+                    return configuration.getProxyUser().equals(userName)
+                            && configuration.getProxyPassword().equals(password);
+                }
+            });
         }
 
         proxyServerBootstrap.withFiltersSource(new HttpFiltersSourceAdapter() {

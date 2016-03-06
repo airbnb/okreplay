@@ -35,6 +35,8 @@ public class ProxyConfiguration extends Configuration {
 
     private final String proxyHost;
     private final int proxyPort;
+    private final String proxyUser;
+    private final String proxyPassword;
     private final int proxyTimeoutSeconds;
     private final boolean sslEnabled;
     private final int requestBufferSize;
@@ -43,6 +45,8 @@ public class ProxyConfiguration extends Configuration {
         super(builder);
         this.proxyHost = builder.proxyHost;
         this.proxyPort = builder.proxyPort;
+        this.proxyUser = builder.proxyUser;
+        this.proxyPassword = builder.proxyPassword;
         this.proxyTimeoutSeconds = builder.proxyTimeoutSeconds;
         this.sslEnabled = builder.sslEnabled;
         this.requestBufferSize = builder.requestBufferSize;
@@ -97,6 +101,20 @@ public class ProxyConfiguration extends Configuration {
         } catch (UnknownHostException e) {
             throw new ProxyConfigurationException(String.format("Unable to resolve host %s", proxyHost), e);
         }
+    }
+
+    /**
+     * The username required to authenticate with the proxy.
+     */
+    public String getProxyUser() {
+        return proxyUser;
+    }
+
+    /**
+     * The password required to authenticate with the proxy.
+     */
+    public String getProxyPassword() {
+        return proxyPassword;
     }
 
     /**
