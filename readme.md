@@ -5,3 +5,28 @@ Betamax is a tool for mocking external HTTP resources in your tests. The project
 We've been more or less offline for 3 years, and we're reviving the project. Feel free to reach out to us with questions or concerns.
 
 Documentation will follow soon. Please feel free to [file an issue](https://github.com/betamaxteam/betamax/issues) if there is something you'd like to see.
+
+## Contributors
+
+### Betamax Team
+
+- [Sean Freitag (lead)](https://github.com/cowboygneox)
+- [Rob Fletcher (creator)](https://github.com/robfletcher)
+
+### Additional Contributions
+
+*Names are sorted alphabetically by last name.*
+
+- Marcin Erdmann
+- Ian Grayson
+- Russel Hart
+- Lari Hotari
+- David Kowis
+- Jason LeCount
+- Peter Ledbrook
+- George McIntosh
+- James Newbery
+- Ryan Schmitt
+- Michael Vorburger
+
+*Note: There were 3 others who didn't appropriately identify themselves via Git, and thus are not on this list.*
