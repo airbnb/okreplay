@@ -13,9 +13,7 @@ Documentation will follow soon. Please feel free to [file an issue](https://gith
 - [Sean Freitag (lead)](https://github.com/cowboygneox)
 - [Rob Fletcher (creator)](https://github.com/robfletcher)
 
-**Additional Contributions**
-
-*Names are sorted alphabetically by last name.*
+**Additional Contributions** *(sorted alphabetically by last name)*
 
 - Marcin Erdmann
 - Ian Grayson
