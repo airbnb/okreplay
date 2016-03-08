@@ -11,6 +11,10 @@ ossrhPassword=****
 See http://central.sonatype.org/pages/gradle.html for details
  */
 
+if (!project.hasProperty("ossrhUsername") || !project.hasProperty("ossrhPassword")) {
+    return
+}
+
 apply plugin: "maven"
 apply plugin: "signing"
 
@@ -96,12 +100,12 @@ def deployer = uploadArchives.repositories.mavenDeployer
 
 [installer, deployer]*.pom*.whenConfigured { pom ->
     // the order here matters; remove test dependencies and then alter the scopes of obvious libraries
-    pom.dependencies = pom.dependencies.findAll {dep -> dep.scope != 'test' }
+    pom.dependencies = pom.dependencies.findAll { dep -> dep.scope != 'test' }
 
     // TODO We should figure out why this is necessary
     pom.dependencies.find { dep -> dep.groupId == 'betamax' }?.groupId = 'software.betamax'
 
-    pom.dependencies.find { dep -> dep.groupId == 'junit'          && dep.artifactId == 'junit'            }?.scope = 'provided'
-    pom.dependencies.find { dep -> dep.groupId == 'org.specs2'     && dep.artifactId == 'specs2-core_2.11' }?.scope = 'provided'
-    pom.dependencies.find { dep -> dep.groupId == 'org.scala-lang' && dep.artifactId == 'scala-library'    }?.scope = 'provided'
+    pom.dependencies.find { dep -> dep.groupId == 'junit' && dep.artifactId == 'junit' }?.scope = 'provided'
+    pom.dependencies.find { dep -> dep.groupId == 'org.specs2' && dep.artifactId == 'specs2-core_2.11' }?.scope = 'provided'
+    pom.dependencies.find { dep -> dep.groupId == 'org.scala-lang' && dep.artifactId == 'scala-library' }?.scope = 'provided'
 }
