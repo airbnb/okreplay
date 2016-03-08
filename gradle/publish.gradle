@@ -53,7 +53,6 @@ uploadArchives {
                 url 'http://betamax.software/'
 
                 groupId "software.betamax"
-                version "2.0.0-SNAPSHOT"
 
                 scm {
                     connection 'scm:git:https://github.com/betamaxteam/betamax.git'

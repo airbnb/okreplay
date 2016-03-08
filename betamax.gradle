@@ -16,7 +16,7 @@ artifactory {
 }
 
 allprojects {
-    version = "2.0.0-SNAPSHOT"
+    version "2.0.0-alpha-1"
 
     ext {
         isSnapshot = version.endsWith("-SNAPSHOT")
