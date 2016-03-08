@@ -6,6 +6,14 @@ We've been more or less offline for 3 years, and we're reviving the project. Fee
 
 Documentation will follow soon. Please feel free to [file an issue](https://github.com/betamaxteam/betamax/issues) if there is something you'd like to see.
 
+## Releases
+
+**Latest Release:** [2.0.0-alpha-1](https://github.com/betamaxteam/betamax/releases/tag/2.0.0-alpha-1)
+
+Finally, some kind of release for the Java community to start playing with, please see the [release notes](https://github.com/betamaxteam/betamax/releases/tag/2.0.0-alpha-1) for information.
+
+As stated up there ^, documentation is coming soon.
+
 ## Contributors
 
 **Betamax Team**
