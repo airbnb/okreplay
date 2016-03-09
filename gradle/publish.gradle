@@ -33,6 +33,7 @@ artifacts {
 }
 
 signing {
+    required { !version.endsWith("SNAPSHOT") }
     sign configurations.archives
 }
 
