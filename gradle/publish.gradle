@@ -11,10 +11,6 @@ ossrhPassword=****
 See http://central.sonatype.org/pages/gradle.html for details
  */
 
-if (!project.hasProperty("ossrhUsername") || !project.hasProperty("ossrhPassword")) {
-    return
-}
-
 apply plugin: "maven"
 apply plugin: "signing"
 
@@ -42,12 +38,16 @@ uploadArchives {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
+            if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+            } else {
+                repository(url: "file://${System.properties['user.home']}/.m2/repository")
             }
 
             pom.project {
