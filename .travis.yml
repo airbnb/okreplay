@@ -6,6 +6,7 @@ script:
 - ./gradlew clean build
 - jdk_switcher use oraclejdk7
 - ./gradlew clean build uploadArchives 
+- jdk_switcher use oraclejdk8
 - cd ./example/play-framework-2.4.6-java && ./activator test && cd ../..
 - cd ./example/play-framework-2.4.6-scala && ./activator test
 notifications:
