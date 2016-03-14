@@ -2,9 +2,9 @@ language: groovy
 env:
   - TERM=dumb
 script:
-- jdk_switcher use oraclejdk7
-- ./gradlew clean build
 - jdk_switcher use oraclejdk8
+- ./gradlew clean build
+- jdk_switcher use oraclejdk7
 - ./gradlew clean build uploadArchives 
 - cd ./example/play-framework-2.4.6-java && ./activator test && cd ../..
 - cd ./example/play-framework-2.4.6-scala && ./activator test
