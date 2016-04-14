@@ -91,6 +91,11 @@ public class ProxyServer implements RecorderListener {
         if (configuration.getProxyUser() != null) {
             proxyServerBootstrap.withProxyAuthenticator(new ProxyAuthenticator() {
                 @Override
+                public String getRealm() {
+                    return null;
+                }
+
+                @Override
                 public boolean authenticate(String userName, String password) {
                     return configuration.getProxyUser().equals(userName)
                             && configuration.getProxyPassword().equals(password);
