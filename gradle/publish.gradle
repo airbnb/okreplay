@@ -45,7 +45,7 @@ uploadArchives {
                 ossrhPassword = System.getenv()['SONATYPE_PASSWORD']
             }
 
-            if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
+            if (ossrhUsername != null && ossrhPassword != null) {
                 repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
                     authentication(userName: ossrhUsername, password: ossrhPassword)
                 }

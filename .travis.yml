@@ -5,10 +5,6 @@ global:
 env:
   - TERM=dumb
 script:
-- jdk_switcher use oraclejdk8
-- ./gradlew --info clean build
-- jdk_switcher use oraclejdk7
-- ./gradlew --info clean build
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
 notifications:
