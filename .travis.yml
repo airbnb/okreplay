@@ -1,4 +1,7 @@
 language: groovy
+global:
+  - SONATYPE_USERNAME=cowboygneox
+  - secure: "DC7mxVvqGunaigj8rq2piYuOuISCnM4iwBF8iTSEm8pTjV2ZZfW8FqJ26ALhmQE97/YeUssGTZrcE+CcUWtoCupr6kkY05smm2PlEQxBynw2fWURfxFFIYSqsjqbpctMySS35vckfR9yie2LSDWrUHGBQ1dT9NOBY/w2VF6uazE="
 env:
   - TERM=dumb
 script:
@@ -6,7 +9,8 @@ script:
 - ./gradlew clean build
 - jdk_switcher use oraclejdk7
 - ./gradlew clean build
-- ./upload-snapshot
+after_success:
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
 notifications:
   slack:
     secure: q94sSrSItRWrkAw418c93vCyruOmvRPdX9B7KvIVyY6rN/3PGKN9HvkohmR12wEHxwBbYW2tgqKirDy24gphaEltDZOHvOT7o/RPHP26TMl8nhgD2L4tNztvUHZkLdULNke/7d6Wt48JctqDG/3o48EDcJ3444x6X7Met475vKc=

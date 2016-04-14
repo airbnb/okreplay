@@ -38,6 +38,13 @@ uploadArchives {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
+            if (System.getenv()['SONATYPE_USERNAME'] != null) {
+                ossrhUsername = System.getenv()['SONATYPE_USERNAME']
+            }
+            if (System.getenv()['SONATYPE_PASSWORD'] != null) {
+                ossrhPassword = System.getenv()['SONATYPE_PASSWORD']
+            }
+
             if (project.hasProperty("ossrhUsername") && project.hasProperty("ossrhPassword")) {
                 repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
                     authentication(userName: ossrhUsername, password: ossrhPassword)
