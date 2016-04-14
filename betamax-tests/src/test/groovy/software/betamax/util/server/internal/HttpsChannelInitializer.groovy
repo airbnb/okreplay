@@ -20,6 +20,7 @@ import io.netty.channel.ChannelHandler
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.ssl.SslHandler
 import org.littleshoot.proxy.extras.SelfSignedSslEngineSource
+import software.betamax.util.DynamicSelfSignedSslEngineSource
 
 class HttpsChannelInitializer extends HttpChannelInitializer {
 
@@ -33,7 +34,7 @@ class HttpsChannelInitializer extends HttpChannelInitializer {
 
         def pipeline = channel.pipeline()
 
-        def engine = new SelfSignedSslEngineSource().newSslEngine()
+        def engine = new DynamicSelfSignedSslEngineSource(channel.localAddress().getHostName(), channel.localAddress().port).newSslEngine()
 
         engine.useClientMode = false
         pipeline.addFirst("ssl", new SslHandler(engine))

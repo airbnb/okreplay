@@ -14,8 +14,8 @@ build/
 /src/docs/_site/
 .DS_Store
 /.java-version
-littleproxy_keystore.jks
-littleproxy_cert
+*.jks
+*.jks.cert
 lib/
 log.txt
 target/
