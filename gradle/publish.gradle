@@ -5,8 +5,7 @@ signing.keyId=****
 signing.password=****
 signing.secretKeyRingFile=****
 
-ossrhUsername=****
-ossrhPassword=****
+NOTE: SONATYPE_USERNAME and SONATYPE_PASSWORD must be set in your environment
 
 See http://central.sonatype.org/pages/gradle.html for details
  */

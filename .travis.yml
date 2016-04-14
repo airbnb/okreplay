@@ -5,6 +5,10 @@ env:
     - SONATYPE_USERNAME=cowboygneox
     - secure: "DC7mxVvqGunaigj8rq2piYuOuISCnM4iwBF8iTSEm8pTjV2ZZfW8FqJ26ALhmQE97/YeUssGTZrcE+CcUWtoCupr6kkY05smm2PlEQxBynw2fWURfxFFIYSqsjqbpctMySS35vckfR9yie2LSDWrUHGBQ1dT9NOBY/w2VF6uazE="
 script:
+  - jdk_switcher use oraclejdk8
+  - ./gradlew --info clean build
+  - jdk_switcher use oraclejdk7
+  - ./gradlew --info clean build
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
 notifications:
