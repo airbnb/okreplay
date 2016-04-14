@@ -7,8 +7,6 @@ script:
 - jdk_switcher use oraclejdk7
 - ./gradlew clean build uploadArchives 
 - jdk_switcher use oraclejdk8
-- cd ./example/play-framework-2.4.6-java && ./activator test && cd ../..
-- cd ./example/play-framework-2.4.6-scala && ./activator test
 notifications:
   slack:
     secure: q94sSrSItRWrkAw418c93vCyruOmvRPdX9B7KvIVyY6rN/3PGKN9HvkohmR12wEHxwBbYW2tgqKirDy24gphaEltDZOHvOT7o/RPHP26TMl8nhgD2L4tNztvUHZkLdULNke/7d6Wt48JctqDG/3o48EDcJ3444x6X7Met475vKc=
