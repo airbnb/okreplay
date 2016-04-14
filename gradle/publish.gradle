@@ -33,13 +33,6 @@ signing {
     sign configurations.archives
 }
 
-if (System.getenv()['SONATYPE_USERNAME'] != null) {
-    ossrhUsername = System.getenv()['SONATYPE_USERNAME']
-}
-if (System.getenv()['SONATYPE_PASSWORD'] != null) {
-    ossrhPassword = System.getenv()['SONATYPE_PASSWORD']
-}
-
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -47,11 +40,11 @@ uploadArchives {
 
             if (System.getenv()['SONATYPE_USERNAME'] != null && System.getenv()['SONATYPE_PASSWORD'] != null) {
                 repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                    authentication(userName: System.getenv()['SONATYPE_USERNAME'], password: System.getenv()['SONATYPE_PASSWORD'])
                 }
 
                 snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                    authentication(userName: System.getenv()['SONATYPE_USERNAME'], password: System.getenv()['SONATYPE_PASSWORD'])
                 }
             } else {
                 repository(url: "file://${System.properties['user.home']}/.m2/repository")
