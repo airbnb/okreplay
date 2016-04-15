@@ -4,6 +4,9 @@ env:
     - TERM=dumb 
     - SONATYPE_USERNAME=cowboygneox
     - secure: "DC7mxVvqGunaigj8rq2piYuOuISCnM4iwBF8iTSEm8pTjV2ZZfW8FqJ26ALhmQE97/YeUssGTZrcE+CcUWtoCupr6kkY05smm2PlEQxBynw2fWURfxFFIYSqsjqbpctMySS35vckfR9yie2LSDWrUHGBQ1dT9NOBY/w2VF6uazE="
+cache:
+  directories:
+    - $HOME/.gradle
 script:
   - jdk_switcher use oraclejdk8
   - ./gradlew clean build
