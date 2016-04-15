@@ -4,7 +4,7 @@ interactions:
 - recorded: 2016-02-12T00:03:37.243Z
   request:
     method: GET
-    uri: http://www.google.com/
+    uri: https://www.google.com/
     headers:
       Accept-Encoding: gzip,deflate
       Content-Length: '0'

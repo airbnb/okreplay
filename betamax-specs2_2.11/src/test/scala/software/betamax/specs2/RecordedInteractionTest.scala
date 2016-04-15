@@ -20,7 +20,7 @@ class RecordedInteractionTest extends Specification {
   "A Betamax test" should {
     "replay google.com" in RecordedInteraction(tape = "google") {
       withHttpClient { client =>
-        val response = client.execute(new HttpGet("http://www.google.com"))
+        val response = client.execute(new HttpGet("https://www.google.com"))
         response.getStatusLine.getStatusCode must beEqualTo(902) // obviously not from Google
       }
     }
