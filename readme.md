@@ -6,6 +6,8 @@ We've been more or less offline for 3 years, and we're reviving the project. Fee
 
 Documentation will follow soon. Please feel free to [file an issue](https://github.com/betamaxteam/betamax/issues) if there is something you'd like to see.
 
+[Snapshots](https://oss.sonatype.org/content/repositories/snapshots/software/betamax/betamax-core) are made after every successful build in master, so if you want the bleeding edge, you know where to get it.
+
 ## Releases
 
 **Latest Release:** [2.0.0-alpha-1](https://github.com/betamaxteam/betamax/releases/tag/2.0.0-alpha-1)
