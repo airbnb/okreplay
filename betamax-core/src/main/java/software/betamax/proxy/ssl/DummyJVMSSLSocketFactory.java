@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 
 public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
@@ -71,7 +70,7 @@ public class DummyJVMSSLSocketFactory extends SSLSocketFactory {
 
     public DummyJVMSSLSocketFactory() throws GeneralSecurityException {
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, new TrustManager[] {new DummyX509TrustManager()}, new SecureRandom());
+        sslContext.init(null, new TrustManager[] {new DummyX509TrustManager()}, null);
         factory = sslContext.getSocketFactory();
     }
 
