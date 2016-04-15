@@ -16,11 +16,12 @@
 
 package software.betamax.util
 
-import java.security.Security
-import javax.net.ssl.HttpsURLConnection
 import software.betamax.proxy.ssl.DummyJVMSSLSocketFactory
 import spock.lang.Specification
-import static SSLOverrider.*
+
+import java.security.Security
+
+import static software.betamax.util.SSLOverrider.SSL_SOCKET_FACTORY_PROVIDER
 
 class SSLOverriderSpec extends Specification {
 
@@ -32,7 +33,6 @@ class SSLOverriderSpec extends Specification {
 
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  DummyJVMSSLSocketFactory.name
-		HttpsURLConnection.defaultHostnameVerifier == ALLOW_ALL_HOSTNAME_VERIFIER
 
 		cleanup:
 		sslOverrider.deactivate()
@@ -45,7 +45,6 @@ class SSLOverriderSpec extends Specification {
 
 		then:
 		Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER) ==  old(Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER))
-		HttpsURLConnection.defaultHostnameVerifier != ALLOW_ALL_HOSTNAME_VERIFIER
 	}
 
 }
