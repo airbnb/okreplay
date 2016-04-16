@@ -1,19 +1,4 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "http://dl.bintray.com/jfrog/jfrog-jars" }
-    }
-    dependencies {
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.3"
-    }
-}
-
-apply plugin: "artifactory"
 apply from: "gradle/idea.gradle"
-
-artifactory {
-    contextUrl = "http://oss.jfrog.org/"
-}
 
 allprojects {
     version "2.0.0-SNAPSHOT"
@@ -42,4 +27,3 @@ allprojects {
         ]
     }
 }
-
