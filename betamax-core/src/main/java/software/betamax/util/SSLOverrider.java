@@ -18,33 +18,19 @@ package software.betamax.util;
 
 import software.betamax.proxy.ssl.DummyJVMSSLSocketFactory;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import java.security.Security;
 
 public class SSLOverrider {
 
     public static final String SSL_SOCKET_FACTORY_PROVIDER = "ssl.SocketFactory.provider";
-    public static final HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER = new HostnameVerifier() {
-        @Override
-        public boolean verify(String s, SSLSession sslSession) {
-            return true;
-        }
-    };
 
     private boolean isActive;
     private String originalSocketFactoryProvider;
-    private HostnameVerifier originalHostnameVerifier;
 
     public void activate() {
         if (!isActive) {
             originalSocketFactoryProvider = Security.getProperty(SSL_SOCKET_FACTORY_PROVIDER);
-            originalHostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
-
             Security.setProperty(SSL_SOCKET_FACTORY_PROVIDER, DummyJVMSSLSocketFactory.class.getName());
-
-            HttpsURLConnection.setDefaultHostnameVerifier(ALLOW_ALL_HOSTNAME_VERIFIER);
         }
 
         isActive = true;
@@ -53,7 +39,6 @@ public class SSLOverrider {
     public void deactivate() {
         if (isActive) {
             Security.setProperty(SSL_SOCKET_FACTORY_PROVIDER, originalSocketFactoryProvider != null ? originalSocketFactoryProvider : "");
-            HttpsURLConnection.setDefaultHostnameVerifier(originalHostnameVerifier);
         }
 
         isActive = false;
