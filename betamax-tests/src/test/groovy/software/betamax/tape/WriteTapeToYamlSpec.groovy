@@ -54,7 +54,7 @@ class WriteTapeToYamlSpec extends Specification {
 
         postRequest = new BasicRequest("POST", "http://github.com/")
         postRequest.addHeader(CONTENT_TYPE, FORM_DATA.toString())
-        postRequest.body = "q=1".bytes
+        postRequest.body = "q=1"
 
         successResponse = new BasicResponse(HTTP_OK, "OK")
         successResponse.addHeader(CONTENT_TYPE, "text/plain")
@@ -147,7 +147,7 @@ class WriteTapeToYamlSpec extends Specification {
         then:
         def yaml = yamlReader.loadAs(writer.toString(), Map)
         yaml.interactions[0].request.method == "POST"
-        yaml.interactions[0].request.body == "q=1".bytes
+        yaml.interactions[0].request.body == "q=1"
     }
 
     void "can write multiple interactions"() {
