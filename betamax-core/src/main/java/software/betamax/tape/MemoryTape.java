@@ -301,7 +301,7 @@ public abstract class MemoryTape implements Tape {
     }
 
     private static boolean isTextContentType(String contentType) {
-        return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();
+        return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml|x-www-form-urlencoded)").matcher(contentType).find();
     }
 
 }
