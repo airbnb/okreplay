@@ -16,17 +16,14 @@
 
 package software.betamax;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
@@ -50,11 +47,9 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
             URL propertiesFile = Configuration.class.getResource("/betamax.properties");
             if (propertiesFile != null) {
                 Properties properties = new Properties();
-                properties.load(Files.newReader(new File(propertiesFile.toURI()), Charsets.UTF_8));
+                properties.load(propertiesFile.openStream());
                 withProperties(properties);
             }
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
