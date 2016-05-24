@@ -20,6 +20,8 @@ import software.betamax.Configuration;
 import software.betamax.Headers;
 import software.betamax.MatchRule;
 import software.betamax.TapeMode;
+import software.betamax.encoding.DeflateEncoder;
+import software.betamax.encoding.GzipEncoder;
 import software.betamax.handler.NonWritableTapeException;
 import software.betamax.io.FileResolver;
 import software.betamax.io.FileTypeMapper;
@@ -272,7 +274,14 @@ public abstract class MemoryTape implements Tape {
     private void recordBodyInline(Message message, RecordedMessage recording) throws IOException {
         boolean representAsText = isTextContentType(message.getContentType());
         if (representAsText) {
-            recording.setBody(message.getBodyAsText());
+            // TODO find a better way to accommodate for this behavior
+            if (message.getEncoding().equals("gzip")) {
+                recording.setBody(new GzipEncoder().decode(new ByteArrayInputStream(message.getBodyAsBinary())));
+            } else if (message.getEncoding().equals("deflate")) {
+                recording.setBody(new DeflateEncoder().decode(new ByteArrayInputStream(message.getBodyAsBinary())));
+            } else {
+                recording.setBody(message.getBodyAsText());
+            }
         } else {
             recording.setBody(message.getBodyAsBinary());
         }
@@ -286,7 +295,7 @@ public abstract class MemoryTape implements Tape {
         recording.setBody(body);
     }
 
-    public static boolean isTextContentType(String contentType) {
+    private static boolean isTextContentType(String contentType) {
         return contentType != null && Pattern.compile("^text/|application/(json|javascript|(\\w+\\+)?xml)").matcher(contentType).find();
     }
 
