@@ -16,6 +16,7 @@
 
 package software.betamax.tape
 
+import software.betamax.encoding.GzipEncoder
 import software.betamax.message.Request
 import software.betamax.message.Response
 import software.betamax.tape.yaml.YamlTapeLoader
@@ -40,7 +41,7 @@ class TapeSpec extends Specification {
     @Shared Tape tape = loader.loadTape('tape_spec')
 
     Request getRequest = new BasicRequest('GET', 'http://icanhascheezburger.com/')
-    Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: 'O HAI!'.bytes)
+    Response plainTextResponse = new BasicResponse(status: 200, reason: 'OK', body: new GzipEncoder().encode('O HAI!'))
 
     void setup() {
         plainTextResponse.addHeader(CONTENT_TYPE, 'text/plain;charset=UTF-8')

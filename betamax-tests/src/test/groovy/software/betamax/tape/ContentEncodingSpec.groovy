@@ -16,6 +16,8 @@
 
 package software.betamax.tape
 
+import software.betamax.encoding.DeflateEncoder
+import software.betamax.encoding.GzipEncoder
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
@@ -47,7 +49,13 @@ class ContentEncodingSpec extends Specification {
         def response = new BasicResponse(HTTP_OK, "OK")
         response.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withoutParameters().toString())
         response.addHeader(CONTENT_ENCODING, encoding)
-        response.body = "O HAI!".bytes
+        if (encoding == "gzip") {
+            response.body = new GzipEncoder().encode("O HAI!")
+        } else if (encoding == "deflate") {
+            response.body = new DeflateEncoder().encode("O HAI!")
+        } else {
+            response.body = "O HAI!".bytes
+        }
 
         and:
         def tape = loader.newTape("encoded response tape")
