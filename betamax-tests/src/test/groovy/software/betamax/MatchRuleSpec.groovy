@@ -114,4 +114,19 @@ class MatchRuleSpec extends Specification {
         !rule.isMatch(request, request3)
     }
 
+    void 'can match query parameters in different orders'() {
+        given:
+        def request1 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?p=2&q=1'.toURI())
+        def request2 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?p=2&q=2'.toURI())
+
+        and:
+        def request = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?q=1&p=2'.toURI())
+        def rule = ComposedMatchRule.of(method, queryParams)
+
+        expect:
+        rule.isMatch(request, request1)
+        !rule.isMatch(request, request2)
+
+    }
+
 }
