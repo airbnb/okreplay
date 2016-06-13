@@ -54,6 +54,19 @@ public enum MatchRules implements MatchRule {
         public boolean isMatch(Request a, Request b) {
             return a.getUri().getQuery().equals(b.getUri().getQuery());
         }
+    },
+    /**
+     * Compare query parameters instead of query string representation.
+     */
+    queryParams {
+        @Override
+        public boolean isMatch(Request a, Request b) {
+            String[] aParameters = a.getUri().getQuery().split("&");
+            String[] bParameters = b.getUri().getQuery().split("&");
+            Arrays.sort(aParameters);
+            Arrays.sort(bParameters);
+            return Arrays.equals(aParameters, bParameters);
+        }
     }, authorization {
         @Override
         public boolean isMatch(Request a, Request b) {
