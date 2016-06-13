@@ -34,7 +34,7 @@ import java.security.cert.X509Certificate;
  */
 public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
 
-    private static final String PASSWORD = "Be Your Own Lantern";
+    private static final String PASSWORD = "changeit";
     private static final String PROTOCOL = "TLS";
     private final File keyStoreFile;
 
@@ -65,14 +65,23 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
             return;
         }
 
+        // Generate a private key / cert for this site
         nativeCall("keytool", "-genkey", "-alias", this.host, "-keysize",
                 "4096", "-validity", "36500", "-keyalg", "RSA", "-dname",
                 "CN=" + this.host, "-keypass", PASSWORD, "-storepass",
                 PASSWORD, "-keystore", keyStoreFile.getName());
 
-        nativeCall("keytool", "-exportcert", "-alias", host, "-keystore",
-                keyStoreFile.getName(), "-storepass", PASSWORD, "-file",
-                keyStoreFile.getName() + ".cert");
+        // Create a certificate signing request to send to the root authority
+        nativeCall("keytool", "-certreq", "-file", this.host + ".csr", "-alias", this.host,
+                "-keystore", keyStoreFile.getName(), "-storepass", PASSWORD);
+
+        // Generate a certificate for the site signed by the root authority
+        nativeCall("keytool", "-gencert", "-infile", this.host + ".csr", "-outfile", this.host + ".cert",
+                "-alias", "betamax", "-keystore", "betamax.jks", "-storepass", PASSWORD);
+
+        // Bring the signed certificate into the keystore and trust it
+        nativeCall("keytool", "-importcert", "-file", this.host + ".cert", "-noprompt", "-trustcacerts",
+                "-alias", this.host, "-keystore", keyStoreFile.getName(), "-storepass", PASSWORD);
     }
 
     private void initializeSSLContext() {
