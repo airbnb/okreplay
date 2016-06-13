@@ -8,6 +8,7 @@ cache:
   directories:
     - $HOME/.gradle
 script:
+  - sudo keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt
   - jdk_switcher use oraclejdk8
   - ./gradlew clean build
   - jdk_switcher use oraclejdk7
@@ -17,4 +18,4 @@ after_success:
 notifications:
   slack:
     secure: q94sSrSItRWrkAw418c93vCyruOmvRPdX9B7KvIVyY6rN/3PGKN9HvkohmR12wEHxwBbYW2tgqKirDy24gphaEltDZOHvOT7o/RPHP26TMl8nhgD2L4tNztvUHZkLdULNke/7d6Wt48JctqDG/3o48EDcJ3444x6X7Met475vKc=
-sudo: false
+sudo: required 
