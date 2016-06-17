@@ -16,6 +16,7 @@
 
 package software.betamax.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.littleshoot.proxy.SslEngineSource;
 
@@ -61,7 +62,19 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
     }
 
     private void initializeKeyStore() {
-        if (keyStoreFile.isFile()) {
+        String localBetamaxKeystore = "betamax-local.jks";
+
+        // we have to copy the original, immutable betamax.jks in order to sign a new cert
+        if (!new File(localBetamaxKeystore).exists()) {
+            try {
+                InputStream betamaxKeystoreStream = getClass().getClassLoader().getResourceAsStream("betamax.jks");
+                FileUtils.copyInputStreamToFile(betamaxKeystoreStream, new File(localBetamaxKeystore));
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+                // TODO figure out logging when this happens
+                return;
+            }
+        } else if (keyStoreFile.isFile()) {
             return;
         }
 
@@ -77,7 +90,7 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
 
         // Generate a certificate for the site signed by the root authority
         nativeCall("keytool", "-gencert", "-infile", this.host + ".csr", "-outfile", this.host + ".cert",
-                "-alias", "betamax", "-keystore", "betamax.jks", "-storepass", PASSWORD);
+                "-alias", "betamax", "-keystore", localBetamaxKeystore, "-storepass", PASSWORD);
 
         // Bring the signed certificate into the keystore and trust it
         nativeCall("keytool", "-importcert", "-file", this.host + ".cert", "-noprompt", "-trustcacerts",
@@ -145,6 +158,8 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
             final InputStream is = process.getInputStream();
             return IOUtils.toString(is);
         } catch (final IOException e) {
+            e.printStackTrace(System.out);
+            // TODO figure out logging when this happens
             return "";
         }
     }
