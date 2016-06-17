@@ -18,6 +18,29 @@ Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to b
 
 [2.0.0-alpha-1](https://github.com/betamaxteam/betamax/releases/tag/2.0.0-alpha-1)
 
+## SSL Configuration
+
+Starting with any build produced after 2.0.0-alpha-1, JDK 7 dramatically increased the security of the JVM, making it much more difficult to exploit man-in-the-middle attacks. Because Betamax is a legitimate use of MITM, it is necessary to instruct the JVM that Betamax is allowed to do so. This will be accomplished by installing a Betamax certificate-authority into Java's `cacerts` which will allow Betamax to generate a mock-SSL certificate for any site.
+
+**For all environments where tests are being run, a one-time installation of the Betamax certificate into Java's `cacerts` is necessary.**
+
+	keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt
+	
+*Notes:*
+
+1. `sudo` will likely be required for unix-based operating systems
+2. `betamax.pem` is included in the `betamax-core.jar`, but it's probably best to pull it from GitHub.
+3. `betamax.pem` shouldn't have a need to change for the foreseeable future, so this installation should last for the life of the tests.
+
+**Continuous Integration Considerations:**
+
+For [Docker](https://www.docker.com) users, please use the JDK images hosted on [Docker Hub](https://hub.docker.com/r/betamax/betamax/); they have the Betamax CA installed and ready to go.
+
+For [Travis CI](https://travis-ci.org/
+) users, please see Betamax's `.travis.yml`. As of writing, `sudo:required` is necessary in order to install the CA. Hopefully this won't be the case in the future.
+
+For all of CI environments, be sure to use the `keytool` command listed above to ensure the Betamax CA is installed.
+
 ## Contributors
 
 **Betamax Team**
