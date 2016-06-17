@@ -19,3 +19,5 @@ build/
 lib/
 log.txt
 target/
+*.csr
+*.cert

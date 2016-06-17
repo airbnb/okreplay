@@ -26,7 +26,6 @@ import software.betamax.proxy.netty.PredicatedHttpFilters;
 import software.betamax.tape.Tape;
 import software.betamax.util.BetamaxMitmManager;
 import software.betamax.util.ProxyOverrider;
-import software.betamax.util.SSLOverrider;
 
 import java.net.InetSocketAddress;
 import java.util.logging.Logger;
@@ -39,7 +38,6 @@ public class ProxyServer implements RecorderListener {
 
     private final ProxyConfiguration configuration;
     private final ProxyOverrider proxyOverrider = new ProxyOverrider();
-    private final SSLOverrider sslOverrider = new SSLOverrider();
     private HttpProxyServer proxyServer;
     private boolean running;
 
@@ -120,7 +118,6 @@ public class ProxyServer implements RecorderListener {
         running = true;
 
         overrideProxySettings();
-        overrideSSLSettings();
     }
 
     public void stop() {
@@ -128,7 +125,6 @@ public class ProxyServer implements RecorderListener {
             throw new IllegalStateException("Betamax proxy server is already stopped");
         }
         restoreOriginalProxySettings();
-        restoreOriginalSSLSettings();
 
         proxyServer.stop();
         running = false;
@@ -141,18 +137,5 @@ public class ProxyServer implements RecorderListener {
     private void restoreOriginalProxySettings() {
         proxyOverrider.deactivateAll();
     }
-
-    private void overrideSSLSettings() {
-        if (configuration.isSslEnabled()) {
-            sslOverrider.activate();
-        }
-    }
-
-    private void restoreOriginalSSLSettings() {
-        if (configuration.isSslEnabled()) {
-            sslOverrider.deactivate();
-        }
-    }
-
 }
 

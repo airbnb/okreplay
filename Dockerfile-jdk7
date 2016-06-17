@@ -1,0 +1,3 @@
+FROM java:7
+ADD betamax.pem /
+RUN keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt

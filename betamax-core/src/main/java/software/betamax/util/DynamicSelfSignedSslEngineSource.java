@@ -16,6 +16,7 @@
 
 package software.betamax.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.littleshoot.proxy.SslEngineSource;
 
@@ -34,7 +35,7 @@ import java.security.cert.X509Certificate;
  */
 public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
 
-    private static final String PASSWORD = "Be Your Own Lantern";
+    private static final String PASSWORD = "changeit";
     private static final String PROTOCOL = "TLS";
     private final File keyStoreFile;
 
@@ -61,18 +62,39 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
     }
 
     private void initializeKeyStore() {
-        if (keyStoreFile.isFile()) {
+        String localBetamaxKeystore = "betamax-local.jks";
+
+        // we have to copy the original, immutable betamax.jks in order to sign a new cert
+        if (!new File(localBetamaxKeystore).exists()) {
+            try {
+                InputStream betamaxKeystoreStream = getClass().getClassLoader().getResourceAsStream("betamax.jks");
+                FileUtils.copyInputStreamToFile(betamaxKeystoreStream, new File(localBetamaxKeystore));
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+                // TODO figure out logging when this happens
+                return;
+            }
+        } else if (keyStoreFile.isFile()) {
             return;
         }
 
+        // Generate a private key / cert for this site
         nativeCall("keytool", "-genkey", "-alias", this.host, "-keysize",
                 "4096", "-validity", "36500", "-keyalg", "RSA", "-dname",
                 "CN=" + this.host, "-keypass", PASSWORD, "-storepass",
                 PASSWORD, "-keystore", keyStoreFile.getName());
 
-        nativeCall("keytool", "-exportcert", "-alias", host, "-keystore",
-                keyStoreFile.getName(), "-storepass", PASSWORD, "-file",
-                keyStoreFile.getName() + ".cert");
+        // Create a certificate signing request to send to the root authority
+        nativeCall("keytool", "-certreq", "-file", this.host + ".csr", "-alias", this.host,
+                "-keystore", keyStoreFile.getName(), "-storepass", PASSWORD);
+
+        // Generate a certificate for the site signed by the root authority
+        nativeCall("keytool", "-gencert", "-infile", this.host + ".csr", "-outfile", this.host + ".cert",
+                "-alias", "betamax", "-keystore", localBetamaxKeystore, "-storepass", PASSWORD);
+
+        // Bring the signed certificate into the keystore and trust it
+        nativeCall("keytool", "-importcert", "-file", this.host + ".cert", "-noprompt", "-trustcacerts",
+                "-alias", this.host, "-keystore", keyStoreFile.getName(), "-storepass", PASSWORD);
     }
 
     private void initializeSSLContext() {
@@ -136,6 +158,8 @@ public class DynamicSelfSignedSslEngineSource implements SslEngineSource {
             final InputStream is = process.getInputStream();
             return IOUtils.toString(is);
         } catch (final IOException e) {
+            e.printStackTrace(System.out);
+            // TODO figure out logging when this happens
             return "";
         }
     }
