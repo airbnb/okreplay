@@ -20,7 +20,7 @@ Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to b
 
 ## SSL Configuration
 
-Starting with any build produced after 2.0.0-alpha-1, JDK 7 dramatically increased the security of the JVM, making it much more difficult to exploit man-in-the-middle attacks. Because Betamax is a legitimate use of MITM, it is necessary to instruct the JVM that Betamax is allowed to do so. This will be accomplished by installing a Betamax certificate-authority into Java's `cacerts` which will allow Betamax to generate a mock-SSL certificate for any site.
+JDK 7 dramatically increased the security of the JVM, making it much more difficult to exploit man-in-the-middle attacks. Because Betamax is a legitimate use of MITM, it is necessary to instruct the JVM that Betamax is allowed to do so. Starting with any build produced after 2.0.0-alpha-1, this will be accomplished by installing a Betamax certificate-authority into Java's `cacerts` which will allow Betamax to generate a mock-SSL certificate for any site.
 
 **For all environments where tests are being run, a one-time installation of the Betamax certificate into Java's `cacerts` is necessary.**
 
