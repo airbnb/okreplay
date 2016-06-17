@@ -32,6 +32,14 @@ Starting with any build produced after 2.0.0-alpha-1, JDK 7 dramatically increas
 2. `betamax.pem` is included in the `betamax-core.jar`, but it's probably best to pull it from GitHub.
 3. `betamax.pem` shouldn't have a need to change for the foreseeable future, so this installation should last for the life of the tests.
 
+**Files to Ignore:**
+
+Betamax generates files with the following extensions that should not be committed to source control:
+
+- *.csr
+- *.cert
+- *.jks
+
 **Continuous Integration Considerations:**
 
 For [Docker](https://www.docker.com) users, please use the JDK images hosted on [Docker Hub](https://hub.docker.com/r/betamax/betamax/); they have the Betamax CA installed and ready to go.
