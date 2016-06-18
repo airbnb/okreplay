@@ -16,12 +16,12 @@
 
 package software.betamax.junit;
 
-import software.betamax.Configuration;
 import com.google.common.io.Files;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
+import software.betamax.Configuration;
 import spock.lang.Issue;
 
 import java.io.File;

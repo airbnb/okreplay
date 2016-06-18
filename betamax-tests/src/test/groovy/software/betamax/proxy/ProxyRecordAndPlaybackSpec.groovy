@@ -16,19 +16,19 @@
 
 package software.betamax.proxy
 
-import software.betamax.util.server.*
-import software.betamax.util.server.HelloHandler
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
+import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
-import static software.betamax.Headers.X_BETAMAX
-import static software.betamax.TapeMode.READ_WRITE
+
 import static HelloHandler.HELLO_WORLD
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.Headers.X_BETAMAX
+import static software.betamax.TapeMode.READ_WRITE
 
 @Stepwise
 @Timeout(10)

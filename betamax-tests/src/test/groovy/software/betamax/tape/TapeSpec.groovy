@@ -16,21 +16,21 @@
 
 package software.betamax.tape
 
+import com.google.common.io.Files
 import software.betamax.encoding.GzipEncoder
 import software.betamax.message.Request
 import software.betamax.message.Response
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.Files
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Stepwise
 
-import static software.betamax.TapeMode.*
 import static com.google.common.net.HttpHeaders.*
 import static com.google.common.net.MediaType.FORM_DATA
+import static software.betamax.TapeMode.*
 
 @Stepwise
 class TapeSpec extends Specification {

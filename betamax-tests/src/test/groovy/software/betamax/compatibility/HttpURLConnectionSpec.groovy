@@ -16,8 +16,6 @@
 
 package software.betamax.compatibility
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
 import software.betamax.ProxyConfiguration
@@ -27,11 +25,12 @@ import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
+
+import static HelloHandler.HELLO_WORLD
+import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.Headers.X_BETAMAX
 import static software.betamax.TapeMode.READ_WRITE
-import static HelloHandler.HELLO_WORLD
-import static java.net.HttpURLConnection.HTTP_OK
-import static com.google.common.net.HttpHeaders.VIA
 
 @Betamax(mode = READ_WRITE)
 @Timeout(10)

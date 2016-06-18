@@ -24,11 +24,12 @@ import org.yaml.snakeyaml.Yaml
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
 import spock.lang.*
-import static software.betamax.TapeMode.WRITE_ONLY
+
 import static com.google.common.base.Charsets.UTF_8
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.JSON_UTF_8
 import static java.util.concurrent.TimeUnit.SECONDS
+import static software.betamax.TapeMode.WRITE_ONLY
 
 @Issue("https://github.com/robfletcher/betamax/issues/50")
 @IgnoreIf({

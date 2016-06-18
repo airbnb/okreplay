@@ -16,10 +16,10 @@
 
 package software.betamax;
 
-import software.betamax.message.Request;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import software.betamax.message.Request;
 
 public class ComposedMatchRule implements MatchRule {
 

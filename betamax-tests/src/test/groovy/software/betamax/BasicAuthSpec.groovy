@@ -16,17 +16,20 @@
 
 package software.betamax
 
-import software.betamax.junit.*
+import com.google.common.io.BaseEncoding
+import com.google.common.io.Files
+import org.junit.Rule
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
-import com.google.common.io.*
-import org.junit.Rule
 import spock.lang.*
+
 import static Headers.X_BETAMAX
-import static MatchRules.*
-import static TapeMode.*
-import static java.net.HttpURLConnection.*
+import static java.net.HttpURLConnection.HTTP_OK
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import static java.util.concurrent.TimeUnit.SECONDS
+import static software.betamax.MatchRules.*
+import static software.betamax.TapeMode.READ_ONLY
+import static software.betamax.TapeMode.WRITE_ONLY
 
 @Unroll
 @Stepwise

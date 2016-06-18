@@ -21,9 +21,9 @@ import software.betamax.util.message.BasicRequest
 import spock.lang.Issue
 import spock.lang.Specification
 
-import static MatchRules.*
 import static com.google.common.net.HttpHeaders.AUTHORIZATION
 import static com.google.common.net.HttpHeaders.CACHE_CONTROL
+import static software.betamax.MatchRules.*
 
 @Issue('https://github.com/robfletcher/betamax/issues/9')
 class MatchRuleSpec extends Specification {

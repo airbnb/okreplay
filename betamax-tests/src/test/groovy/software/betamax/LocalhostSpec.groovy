@@ -23,6 +23,7 @@ import software.betamax.junit.RecorderRule
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
+
 import static TapeMode.WRITE_ONLY
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK

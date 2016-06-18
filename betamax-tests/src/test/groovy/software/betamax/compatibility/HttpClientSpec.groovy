@@ -16,8 +16,6 @@
 
 package software.betamax.compatibility
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
 import com.google.common.io.Files
 import org.apache.http.HttpHost
 import org.apache.http.client.methods.HttpGet
@@ -31,13 +29,17 @@ import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
 import software.betamax.util.server.SimpleServer
-import spock.lang.*
-import static software.betamax.TapeMode.READ_WRITE
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Timeout
+
 import static HelloHandler.HELLO_WORLD
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
+import static software.betamax.TapeMode.READ_WRITE
 
 @Betamax(mode = READ_WRITE)
 @Timeout(10)

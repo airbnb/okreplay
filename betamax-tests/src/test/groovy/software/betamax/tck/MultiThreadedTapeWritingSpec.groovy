@@ -16,16 +16,18 @@
 
 package software.betamax.tck
 
+import com.google.common.io.Files
+import software.betamax.junit.Betamax
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
-import software.betamax.junit.Betamax
-import software.betamax.util.server.*
-import com.google.common.io.Files
-import spock.lang.*
-import static software.betamax.TapeMode.READ_WRITE
+
 import static java.util.concurrent.TimeUnit.SECONDS
+import static software.betamax.TapeMode.READ_WRITE
 
 abstract class MultiThreadedTapeWritingSpec extends Specification {
 

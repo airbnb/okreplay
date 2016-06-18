@@ -16,11 +16,20 @@
 
 package software.betamax.proxy.netty
 
-import io.netty.handler.codec.http.*
-import spock.lang.*
-import static com.google.common.base.Charsets.*
-import static com.google.common.net.MediaType.*
-import static io.netty.buffer.Unpooled.*
+import io.netty.handler.codec.http.DefaultHttpContent
+import io.netty.handler.codec.http.DefaultHttpHeaders
+import io.netty.handler.codec.http.HttpHeaders
+import io.netty.handler.codec.http.HttpMessage
+import spock.lang.Specification
+import spock.lang.Subject
+import spock.lang.Unroll
+
+import static com.google.common.base.Charsets.ISO_8859_1
+import static com.google.common.base.Charsets.UTF_8
+import static com.google.common.net.MediaType.FORM_DATA
+import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
+import static io.netty.buffer.Unpooled.EMPTY_BUFFER
+import static io.netty.buffer.Unpooled.copiedBuffer
 import static io.netty.handler.codec.http.HttpHeaders.Names.*
 
 @Unroll

@@ -24,6 +24,7 @@ import software.betamax.tape.MemoryTape
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
+
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.TapeMode.*
 

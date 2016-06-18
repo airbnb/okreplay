@@ -16,11 +16,6 @@
 
 package software.betamax.tape.yaml;
 
-import software.betamax.io.FileResolver;
-import software.betamax.io.FilenameNormalizer;
-import software.betamax.tape.Tape;
-import software.betamax.tape.TapeLoadException;
-import software.betamax.tape.TapeLoader;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files;
 import org.yaml.snakeyaml.DumperOptions;
@@ -30,6 +25,11 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.representer.Representer;
+import software.betamax.io.FileResolver;
+import software.betamax.io.FilenameNormalizer;
+import software.betamax.tape.Tape;
+import software.betamax.tape.TapeLoadException;
+import software.betamax.tape.TapeLoader;
 
 import java.io.*;
 import java.nio.charset.Charset;

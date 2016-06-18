@@ -16,17 +16,19 @@
 
 package software.betamax.proxy
 
-import software.betamax.junit.RecorderRule
+import org.junit.Rule
+import software.betamax.ProxyConfiguration
 import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
+import spock.lang.Ignore
+import spock.lang.Issue
+import spock.lang.Specification
 
 import javax.net.ssl.HttpsURLConnection
-import software.betamax.ProxyConfiguration
-import software.betamax.junit.*
-import org.junit.Rule
-import spock.lang.*
-import static software.betamax.Headers.X_BETAMAX
+
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.Headers.X_BETAMAX
 
 @Ignore
 @Issue("https://github.com/robfletcher/betamax/issues/117")

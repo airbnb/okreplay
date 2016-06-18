@@ -16,18 +16,18 @@
 
 package software.betamax.tape
 
+import com.google.common.io.Files
 import software.betamax.encoding.DeflateEncoder
 import software.betamax.encoding.GzipEncoder
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.Files
 import spock.lang.*
 
-import static software.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.*
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.READ_WRITE
 
 @Issue("https://github.com/robfletcher/betamax/issues/3")
 @Unroll

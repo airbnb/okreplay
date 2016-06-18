@@ -16,17 +16,17 @@
 
 package software.betamax
 
+import org.junit.ClassRule
+import software.betamax.encoding.GzipEncoder
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
+import spock.lang.*
 
 import javax.net.ssl.HttpsURLConnection
-import software.betamax.encoding.GzipEncoder
-import software.betamax.junit.*
-import org.junit.ClassRule
-import spock.lang.*
+
 import static Headers.X_BETAMAX
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Unroll
 @Betamax

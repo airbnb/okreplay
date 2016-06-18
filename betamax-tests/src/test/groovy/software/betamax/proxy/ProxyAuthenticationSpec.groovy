@@ -17,7 +17,6 @@
 package software.betamax.proxy
 
 import com.google.common.io.Files
-import java.net.Authenticator.RequestorType
 import org.junit.ClassRule
 import software.betamax.ProxyConfiguration
 import software.betamax.junit.Betamax

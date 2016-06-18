@@ -16,17 +16,17 @@
 
 package software.betamax
 
-import software.betamax.util.server.*
+import com.google.common.io.Files
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
-import com.google.common.io.Files
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
+
 import static Headers.X_BETAMAX
-import static TapeMode.READ_WRITE
 import static HelloHandler.HELLO_WORLD
-import static java.net.HttpURLConnection.HTTP_OK
+import static TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue("https://github.com/robfletcher/betamax/issues/107")
 @Unroll

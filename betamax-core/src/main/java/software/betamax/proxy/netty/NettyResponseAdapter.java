@@ -16,10 +16,10 @@
 
 package software.betamax.proxy.netty;
 
-import software.betamax.message.Response;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
+import software.betamax.message.Response;
 
 public class NettyResponseAdapter extends NettyMessageAdapter<HttpResponse> implements Response {
 

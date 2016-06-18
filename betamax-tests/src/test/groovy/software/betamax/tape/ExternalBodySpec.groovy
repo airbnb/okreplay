@@ -24,10 +24,10 @@ import software.betamax.util.message.BasicResponse
 import spock.lang.*
 
 import static EntityStorage.external
-import static software.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.*
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.READ_WRITE
 
 @Issue("https://github.com/robfletcher/betamax/issues/59")
 @Unroll

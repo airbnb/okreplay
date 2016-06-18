@@ -16,12 +16,12 @@
 
 package software.betamax;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import software.betamax.internal.RecorderListener;
 import software.betamax.tape.Tape;
 import software.betamax.tape.TapeLoader;
 import software.betamax.tape.yaml.YamlTapeLoader;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 
 import java.util.Collection;
 

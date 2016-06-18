@@ -16,8 +16,8 @@
 
 package software.betamax.tape
 
-import software.betamax.tape.yaml.YamlTapeLoader
 import com.google.common.io.Files
+import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared

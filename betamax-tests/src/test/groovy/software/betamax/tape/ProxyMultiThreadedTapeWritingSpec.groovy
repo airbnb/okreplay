@@ -16,10 +16,10 @@
 
 package software.betamax.tape
 
-import software.betamax.junit.RecorderRule
-import software.betamax.tck.MultiThreadedTapeWritingSpec
 import org.junit.Rule
 import software.betamax.ProxyConfiguration
+import software.betamax.junit.RecorderRule
+import software.betamax.tck.MultiThreadedTapeWritingSpec
 
 class ProxyMultiThreadedTapeWritingSpec extends MultiThreadedTapeWritingSpec {
 

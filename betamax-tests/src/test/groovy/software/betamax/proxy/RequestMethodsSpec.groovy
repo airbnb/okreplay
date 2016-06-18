@@ -16,8 +16,6 @@
 
 package software.betamax.proxy
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
 import com.google.common.io.Files
 import org.junit.ClassRule
 import software.betamax.ProxyConfiguration
@@ -26,9 +24,10 @@ import software.betamax.junit.RecorderRule
 import software.betamax.util.server.OkHandler
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
-import static software.betamax.TapeMode.READ_WRITE
+
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.READ_WRITE
 
 @Betamax(mode = READ_WRITE)
 @Unroll

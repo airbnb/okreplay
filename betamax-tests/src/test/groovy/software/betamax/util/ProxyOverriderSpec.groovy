@@ -16,7 +16,8 @@
 
 package software.betamax.util
 
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Unroll
 
 @Unroll
 class ProxyOverriderSpec extends Specification {

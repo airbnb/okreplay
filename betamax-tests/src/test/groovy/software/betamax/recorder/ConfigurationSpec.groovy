@@ -16,11 +16,14 @@
 
 package software.betamax.recorder
 
+import com.google.common.io.Files
 import software.betamax.ComposedMatchRule
 import software.betamax.MatchRules
 import software.betamax.ProxyConfiguration
-import com.google.common.io.Files
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static software.betamax.TapeMode.*
 
 class ConfigurationSpec extends Specification {

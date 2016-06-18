@@ -16,12 +16,12 @@
 
 package software.betamax.util.server
 
-import software.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.DefaultFullHttpResponse
 import io.netty.handler.codec.http.FullHttpRequest
+import software.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static io.netty.buffer.Unpooled.wrappedBuffer

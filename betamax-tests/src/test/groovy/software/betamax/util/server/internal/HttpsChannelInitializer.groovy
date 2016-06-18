@@ -19,7 +19,6 @@ package software.betamax.util.server.internal
 import io.netty.channel.ChannelHandler
 import io.netty.channel.socket.SocketChannel
 import io.netty.handler.ssl.SslHandler
-import org.littleshoot.proxy.extras.SelfSignedSslEngineSource
 import software.betamax.util.DynamicSelfSignedSslEngineSource
 
 class HttpsChannelInitializer extends HttpChannelInitializer {

@@ -16,11 +16,11 @@
 
 package software.betamax;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableSet;
 import software.betamax.internal.RecorderListener;
 import software.betamax.tape.EntityStorage;
 import software.betamax.util.Network;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableSet;
 
 import java.io.File;
 import java.util.Collection;

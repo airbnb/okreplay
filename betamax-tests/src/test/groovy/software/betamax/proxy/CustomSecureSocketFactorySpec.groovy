@@ -16,17 +16,16 @@
 
 package software.betamax.proxy
 
-import software.betamax.util.server.HelloHandler
-import software.betamax.util.server.SimpleSecureServer
-
-import java.security.KeyStore
-import javax.net.ssl.HttpsURLConnection
+import com.google.common.io.Files
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
-
-import software.betamax.util.server.*
-import com.google.common.io.Files
+import software.betamax.util.server.HelloHandler
+import software.betamax.util.server.SimpleSecureServer
 import spock.lang.*
+
+import javax.net.ssl.HttpsURLConnection
+import java.security.KeyStore
+
 import static HelloHandler.HELLO_WORLD
 import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK

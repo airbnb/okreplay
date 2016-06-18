@@ -16,11 +16,11 @@
 
 package software.betamax.util.server
 
-import software.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 import groovy.util.logging.Log
 import io.netty.channel.ChannelHandler
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpRequest
+import software.betamax.util.server.internal.ExceptionHandlingHandlerAdapter
 
 /**
  * A very dumb handler that will simply sit on any requests until it is told to shut down (i.e. the server is shutting

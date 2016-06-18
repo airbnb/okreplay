@@ -16,8 +16,6 @@
 
 package software.betamax.proxy
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
 import com.google.common.io.Files
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
@@ -30,11 +28,12 @@ import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
-import static software.betamax.TapeMode.WRITE_ONLY
+
 import static HelloHandler.HELLO_WORLD
 import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
+import static software.betamax.TapeMode.WRITE_ONLY
 
 @Issue("https://github.com/robfletcher/betamax/issues/34")
 @Unroll

@@ -16,13 +16,15 @@
 
 package software.betamax
 
-import software.betamax.junit.*
-import software.betamax.junit.RecorderRule
 import org.junit.ClassRule
 import software.betamax.junit.Betamax
-import spock.lang.*
-import static java.net.HttpURLConnection.HTTP_OK
+import software.betamax.junit.RecorderRule
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
+
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue("https://github.com/robfletcher/betamax/issues/52")
 @Betamax(tape = "ocsp")

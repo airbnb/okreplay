@@ -16,8 +16,8 @@
 
 package software.betamax.message.filtering
 
-import software.betamax.util.message.BasicResponse
 import software.betamax.util.message.BasicRequest
+import software.betamax.util.message.BasicResponse
 import spock.lang.Specification
 import spock.lang.Unroll
 

@@ -16,7 +16,6 @@
 
 package software.betamax.proxy.netty;
 
-import software.betamax.message.AbstractMessage;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
@@ -26,6 +25,7 @@ import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpMessage;
+import software.betamax.message.AbstractMessage;
 
 import java.io.IOException;
 import java.io.InputStream;

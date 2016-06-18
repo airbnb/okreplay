@@ -16,19 +16,21 @@
 
 package software.betamax
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
-import software.betamax.junit.RecorderRule
 import com.google.common.io.Files
 import org.junit.Rule
 import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Stepwise
+
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Stepwise
 class AnnotationSpec extends Specification {

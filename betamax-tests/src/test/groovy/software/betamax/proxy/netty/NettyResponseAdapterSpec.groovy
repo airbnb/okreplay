@@ -16,7 +16,8 @@
 
 package software.betamax.proxy.netty
 
-import io.netty.handler.codec.http.*
+import io.netty.handler.codec.http.HttpResponse
+import io.netty.handler.codec.http.HttpResponseStatus
 
 class NettyResponseAdapterSpec extends NettyMessageAdapterSpec<HttpResponse, NettyResponseAdapter> {
 

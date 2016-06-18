@@ -17,6 +17,7 @@
 package software.betamax.proxy.netty
 
 import io.netty.handler.codec.http.HttpRequest
+
 import static io.netty.handler.codec.http.HttpHeaders.Names.HOST
 import static io.netty.handler.codec.http.HttpMethod.GET
 

@@ -16,11 +16,6 @@
 
 package software.betamax.tape.yaml;
 
-import software.betamax.io.FileResolver;
-import software.betamax.message.tape.RecordedRequest;
-import software.betamax.message.tape.RecordedResponse;
-import software.betamax.tape.RecordedInteraction;
-import software.betamax.tape.Tape;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
@@ -30,6 +25,11 @@ import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
+import software.betamax.io.FileResolver;
+import software.betamax.message.tape.RecordedRequest;
+import software.betamax.message.tape.RecordedResponse;
+import software.betamax.tape.RecordedInteraction;
+import software.betamax.tape.Tape;
 
 import java.beans.IntrospectionException;
 import java.io.File;

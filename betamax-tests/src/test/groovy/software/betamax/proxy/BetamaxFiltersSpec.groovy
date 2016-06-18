@@ -16,27 +16,29 @@
 
 package software.betamax.proxy
 
+import com.google.common.io.ByteStreams
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
+import io.netty.handler.codec.http.*
 import software.betamax.encoding.DeflateEncoder
 import software.betamax.encoding.GzipEncoder
-import software.betamax.message.Response
 import software.betamax.encoding.NoOpEncoder
 import software.betamax.message.Request
-
-import java.nio.charset.Charset
-import software.betamax.encoding.*
-import software.betamax.message.*
+import software.betamax.message.Response
 import software.betamax.tape.Tape
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.ByteStreams
-import io.netty.buffer.*
-import io.netty.handler.codec.http.*
-import spock.lang.*
-import static software.betamax.Headers.X_BETAMAX
+import spock.lang.Specification
+import spock.lang.Subject
+import spock.lang.Unroll
+
+import java.nio.charset.Charset
+
 import static io.netty.buffer.Unpooled.copiedBuffer
-import static io.netty.handler.codec.http.HttpHeaders.Names.*
+import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_ENCODING
 import static io.netty.handler.codec.http.HttpMethod.GET
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import static software.betamax.Headers.X_BETAMAX
 
 @Unroll
 class BetamaxFiltersSpec extends Specification {

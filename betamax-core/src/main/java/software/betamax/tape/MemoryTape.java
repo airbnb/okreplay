@@ -16,6 +16,11 @@
 
 package software.betamax.tape;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
 import software.betamax.Configuration;
 import software.betamax.Headers;
 import software.betamax.MatchRule;
@@ -32,11 +37,6 @@ import software.betamax.message.Response;
 import software.betamax.message.tape.RecordedMessage;
 import software.betamax.message.tape.RecordedRequest;
 import software.betamax.message.tape.RecordedResponse;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

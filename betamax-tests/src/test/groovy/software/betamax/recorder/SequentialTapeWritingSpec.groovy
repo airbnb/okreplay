@@ -25,6 +25,7 @@ import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
+
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.TapeMode.WRITE_SEQUENTIAL
 

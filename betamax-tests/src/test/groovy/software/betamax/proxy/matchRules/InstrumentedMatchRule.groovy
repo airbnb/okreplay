@@ -16,9 +16,10 @@
 
 package software.betamax.proxy.matchRules
 
-import java.util.concurrent.atomic.AtomicInteger
 import software.betamax.MatchRule
 import software.betamax.message.Request
+
+import java.util.concurrent.atomic.AtomicInteger
 
 class InstrumentedMatchRule implements MatchRule {
 

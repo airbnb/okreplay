@@ -16,11 +16,11 @@
 
 package software.betamax.tape.yaml;
 
+import org.yaml.snakeyaml.nodes.Tag;
 import software.betamax.io.FileResolver;
 import software.betamax.message.Request;
 import software.betamax.message.Response;
 import software.betamax.tape.MemoryTape;
-import org.yaml.snakeyaml.nodes.Tag;
 
 class YamlTape extends MemoryTape {
 

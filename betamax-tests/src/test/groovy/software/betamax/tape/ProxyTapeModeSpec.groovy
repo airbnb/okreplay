@@ -16,8 +16,8 @@
 
 package software.betamax.tape
 
-import software.betamax.ProxyConfiguration
 import software.betamax.Configuration
+import software.betamax.ProxyConfiguration
 import software.betamax.tck.TapeModeSpec
 import spock.lang.Ignore
 

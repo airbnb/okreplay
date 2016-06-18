@@ -20,7 +20,8 @@ import spock.lang.Issue
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static TapeMode.*
+import static software.betamax.TapeMode.READ_ONLY
+import static software.betamax.TapeMode.READ_WRITE
 
 @Issue("https://github.com/robfletcher/betamax/issues/106")
 @Unroll

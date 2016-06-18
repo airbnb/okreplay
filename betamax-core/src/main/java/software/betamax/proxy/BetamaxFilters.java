@@ -16,13 +16,6 @@
 
 package software.betamax.proxy;
 
-import software.betamax.encoding.DeflateEncoder;
-import software.betamax.encoding.GzipEncoder;
-import software.betamax.handler.NonWritableTapeException;
-import software.betamax.message.Response;
-import software.betamax.proxy.netty.NettyRequestAdapter;
-import software.betamax.proxy.netty.NettyResponseAdapter;
-import software.betamax.tape.Tape;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import io.netty.buffer.ByteBuf;
@@ -30,6 +23,13 @@ import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFiltersAdapter;
 import org.littleshoot.proxy.impl.ProxyUtils;
 import software.betamax.Headers;
+import software.betamax.encoding.DeflateEncoder;
+import software.betamax.encoding.GzipEncoder;
+import software.betamax.handler.NonWritableTapeException;
+import software.betamax.message.Response;
+import software.betamax.proxy.netty.NettyRequestAdapter;
+import software.betamax.proxy.netty.NettyResponseAdapter;
+import software.betamax.tape.Tape;
 
 import java.io.IOException;
 import java.util.Map;

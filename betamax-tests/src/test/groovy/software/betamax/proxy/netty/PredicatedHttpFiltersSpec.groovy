@@ -17,9 +17,15 @@
 package software.betamax.proxy.netty
 
 import com.google.common.base.Predicate
-import io.netty.handler.codec.http.*
+import io.netty.handler.codec.http.DefaultHttpRequest
+import io.netty.handler.codec.http.DefaultHttpResponse
+import io.netty.handler.codec.http.DefaultLastHttpContent
+import io.netty.handler.codec.http.HttpRequest
 import org.littleshoot.proxy.HttpFilters
-import spock.lang.*
+import spock.lang.Specification
+import spock.lang.Subject
+import spock.lang.Unroll
+
 import static io.netty.handler.codec.http.HttpMethod.GET
 import static io.netty.handler.codec.http.HttpResponseStatus.OK
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1

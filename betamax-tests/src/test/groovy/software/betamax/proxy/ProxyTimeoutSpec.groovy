@@ -27,6 +27,7 @@ import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
+
 import static software.betamax.TapeMode.READ_WRITE
 
 @Issue([

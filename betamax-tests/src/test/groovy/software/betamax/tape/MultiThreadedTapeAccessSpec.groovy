@@ -16,11 +16,11 @@
 
 package software.betamax.tape
 
+import com.google.common.io.Files
 import software.betamax.message.Request
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.Files
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -28,8 +28,8 @@ import spock.lang.Specification
 
 import java.util.concurrent.CountDownLatch
 
-import static software.betamax.TapeMode.*
 import static java.util.concurrent.TimeUnit.SECONDS
+import static software.betamax.TapeMode.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/57")
 class MultiThreadedTapeAccessSpec extends Specification {

@@ -16,10 +16,6 @@
 
 package software.betamax.compatibility
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
-import software.betamax.junit.RecorderRule
-import software.betamax.util.server.HelloHandler
 import com.google.common.io.Files
 import com.mashape.unirest.http.Unirest
 import org.apache.http.impl.client.HttpClients
@@ -27,14 +23,17 @@ import org.junit.ClassRule
 import software.betamax.ProxyConfiguration
 import software.betamax.TapeMode
 import software.betamax.junit.Betamax
+import software.betamax.junit.RecorderRule
+import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
 import software.betamax.util.server.SimpleServer
 import spock.lang.*
-import static software.betamax.Headers.X_BETAMAX
+
 import static HelloHandler.HELLO_WORLD
 import static com.google.common.net.HttpHeaders.VIA
 import static org.apache.http.HttpStatus.SC_OK
 import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER
+import static software.betamax.Headers.X_BETAMAX
 
 @Betamax(mode = TapeMode.READ_WRITE)
 @Timeout(10)

@@ -16,18 +16,18 @@
 
 package software.betamax.tape
 
+import com.google.common.io.Files
 import software.betamax.message.Response
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
-import com.google.common.io.Files
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static software.betamax.TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static java.net.HttpURLConnection.HTTP_OK
+import static software.betamax.TapeMode.READ_WRITE
 
 class ContentTypeSpec extends Specification {
 

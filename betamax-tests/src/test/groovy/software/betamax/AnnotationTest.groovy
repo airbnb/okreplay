@@ -28,6 +28,7 @@ import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
+
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.VIA

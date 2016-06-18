@@ -16,15 +16,15 @@
 
 package software.betamax.proxy
 
-import software.betamax.util.server.*
+import com.google.common.io.Files
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
-import com.google.common.io.Files
 import spock.lang.*
-import static software.betamax.TapeMode.READ_WRITE
+
 import static com.google.common.net.HttpHeaders.VIA
+import static software.betamax.TapeMode.READ_WRITE
 
 @Issue("https://github.com/robfletcher/betamax/issues/16")
 @Unroll

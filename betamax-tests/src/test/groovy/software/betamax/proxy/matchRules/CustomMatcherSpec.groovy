@@ -16,15 +16,18 @@
 
 package software.betamax.proxy.matchRules
 
+import com.google.common.io.Files
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
+import spock.lang.Shared
+import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.net.ssl.HttpsURLConnection
 
-import com.google.common.io.Files
-import spock.lang.*
 import static software.betamax.TapeMode.READ_ONLY
 import static software.betamax.TapeMode.READ_WRITE
+
 /**
  * Testing a custom matcher when being used in the proxy.
  */

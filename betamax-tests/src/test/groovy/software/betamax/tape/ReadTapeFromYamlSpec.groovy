@@ -16,9 +16,9 @@
 
 package software.betamax.tape
 
-import software.betamax.tape.yaml.YamlTapeLoader
 import com.google.common.io.Files
 import org.yaml.snakeyaml.constructor.ConstructorException
+import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification

@@ -16,14 +16,15 @@
 
 package software.betamax.recorder
 
+import groovy.json.JsonSlurper
 import software.betamax.junit.Betamax
 import software.betamax.message.Response
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
-import groovy.json.JsonSlurper
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
+
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.JSON_UTF_8
 import static java.net.HttpURLConnection.*

@@ -16,12 +16,14 @@
 
 package software.betamax.proxy
 
-import software.betamax.util.server.*
 import software.betamax.ProxyConfiguration
 import software.betamax.Recorder
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
-import spock.lang.*
+import spock.lang.AutoCleanup
+import spock.lang.Issue
+import spock.lang.Shared
+import spock.lang.Specification
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {

@@ -16,20 +16,19 @@
 
 package software.betamax.proxy
 
-import software.betamax.junit.*
-import software.betamax.util.server.*
+import com.google.common.io.Files
+import org.junit.Rule
 import software.betamax.ProxyConfiguration
+import software.betamax.TapeMode
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleServer
-import com.google.common.io.Files
-import org.junit.Rule
-import software.betamax.TapeMode
 import spock.lang.*
+
 import static HelloHandler.HELLO_WORLD
-import static java.net.HttpURLConnection.HTTP_OK
 import static com.google.common.net.HttpHeaders.VIA
+import static java.net.HttpURLConnection.HTTP_OK
 
 @Issue('https://github.com/robfletcher/betamax/issues/54')
 class PreExistingProxySpec extends Specification {

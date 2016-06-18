@@ -16,10 +16,10 @@
 
 package software.betamax.util.message;
 
-import software.betamax.message.AbstractMessage;
 import com.google.common.base.Joiner;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import software.betamax.message.AbstractMessage;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

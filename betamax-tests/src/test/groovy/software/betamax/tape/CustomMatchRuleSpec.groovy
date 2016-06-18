@@ -16,19 +16,19 @@
 
 package software.betamax.tape
 
+import com.google.common.base.Optional
+import com.google.common.io.Files
 import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
-import software.betamax.message.Request
-import com.google.common.base.Optional
-import com.google.common.io.Files
 import software.betamax.Recorder
+import software.betamax.message.Request
 import software.betamax.util.message.BasicRequest
 import spock.lang.*
 
+import static com.google.common.net.HttpHeaders.ACCEPT
 import static software.betamax.MatchRules.method
 import static software.betamax.MatchRules.uri
-import static com.google.common.net.HttpHeaders.ACCEPT
 
 @Issue("https://github.com/robfletcher/betamax/issues/43")
 @Unroll
