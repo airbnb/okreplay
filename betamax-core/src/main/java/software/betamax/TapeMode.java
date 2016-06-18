@@ -19,6 +19,7 @@ import com.google.common.base.Optional;
 
 public enum TapeMode {
 
+    UNDEFINED(false, false, false),
     READ_WRITE(true, true, false),
     READ_ONLY(true, false, false),
     READ_SEQUENTIAL(true, false, true),
@@ -55,7 +56,11 @@ public enum TapeMode {
     }
 
     public Optional<TapeMode> toOptional() {
-        return Optional.of(this);
+        if (this.equals(TapeMode.UNDEFINED)) {
+            return Optional.absent();
+        } else {
+            return Optional.of(this);
+        }
     }
 
 }

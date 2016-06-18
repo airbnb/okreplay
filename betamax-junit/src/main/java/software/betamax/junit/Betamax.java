@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Betamax {
     String tape() default "";
 
-    TapeMode mode() default TapeMode.READ_ONLY;
+    TapeMode mode() default TapeMode.UNDEFINED;
 
-    MatchRules[] match() default {MatchRules.method, MatchRules.uri};
+    MatchRules[] match() default {};
 }

@@ -66,10 +66,6 @@ public class Recorder {
         }
     }
 
-    public void start(String tapeName, TapeMode mode, MatchRule matchRule) {
-        start(tapeName, mode.toOptional(), Optional.<MatchRule>of(matchRule));
-    }
-
     public void start(String tapeName, TapeMode mode) {
         start(tapeName, mode.toOptional(), Optional.<MatchRule>absent());
     }
