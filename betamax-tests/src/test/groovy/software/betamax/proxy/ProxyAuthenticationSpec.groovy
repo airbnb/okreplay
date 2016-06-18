@@ -113,7 +113,7 @@ class ProxyAuthenticationSpec extends Specification {
     private static class ProxyAuthenticator extends Authenticator {
         @Override
         protected PasswordAuthentication getPasswordAuthentication() {
-            if (requestorType == RequestorType.PROXY && System.getProperty("http.proxyUser") != null) {
+            if (requestorType == java.net.Authenticator.RequestorType.PROXY && System.getProperty("http.proxyUser") != null) {
                 return new PasswordAuthentication(
                         System.getProperty("http.proxyUser"),
                         System.getProperty("http.proxyPassword")?.toCharArray() ?: new char[0])
