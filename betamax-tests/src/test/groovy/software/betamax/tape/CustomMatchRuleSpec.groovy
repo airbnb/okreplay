@@ -18,10 +18,11 @@ package software.betamax.tape
 
 import com.google.common.base.Optional
 import com.google.common.io.Files
+import org.junit.ClassRule
 import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
-import software.betamax.Recorder
+import software.betamax.junit.RecorderRule
 import software.betamax.message.Request
 import software.betamax.util.message.BasicRequest
 import spock.lang.*
@@ -36,7 +37,7 @@ class CustomMatchRuleSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    Recorder recorder = new Recorder(configuration)
+    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared def url = "http://freeside.co/betamax"
     @Shared def acceptHeaderRule = new MatchRule() {
@@ -68,6 +69,10 @@ interactions:
     body: Hello World!
 """
         }
+    }
+
+    def cleanup() {
+        recorder.stop()
     }
 
     void "#verb request with Accept header #acceptHeader #description using #rules"() {

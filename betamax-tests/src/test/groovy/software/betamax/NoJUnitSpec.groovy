@@ -34,7 +34,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class NoJUnitSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
     @Shared Recorder recorder = new Recorder(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)

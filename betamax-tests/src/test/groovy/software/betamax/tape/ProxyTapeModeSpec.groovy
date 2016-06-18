@@ -17,7 +17,6 @@
 package software.betamax.tape
 
 import software.betamax.Configuration
-import software.betamax.ProxyConfiguration
 import software.betamax.tck.TapeModeSpec
 import spock.lang.Ignore
 
@@ -26,7 +25,7 @@ class ProxyTapeModeSpec extends TapeModeSpec {
 
     @Override
     protected Configuration getConfiguration() {
-        ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+        Configuration.builder().tapeRoot(tapeRoot).build()
     }
 
     @Override

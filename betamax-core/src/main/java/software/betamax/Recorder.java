@@ -35,7 +35,7 @@ public class Recorder {
     private final Collection<RecorderListener> listeners = Lists.newArrayList();
 
     public Recorder() {
-        this(ProxyConfiguration.builder().build());
+        this(Configuration.builder().build());
     }
 
     public Recorder(Configuration configuration) {
@@ -64,10 +64,6 @@ public class Recorder {
         for (RecorderListener listener : listeners) {
             listener.onRecorderStart(tape);
         }
-    }
-
-    public void start(String tapeName, TapeMode mode, MatchRule matchRule) {
-        start(tapeName, mode.toOptional(), Optional.<MatchRule>of(matchRule));
     }
 
     public void start(String tapeName, TapeMode mode) {

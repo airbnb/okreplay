@@ -21,7 +21,7 @@ import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.ProxyHost
 import org.apache.commons.httpclient.methods.GetMethod
 import org.junit.ClassRule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.util.server.HelloHandler
@@ -41,7 +41,7 @@ import static software.betamax.TapeMode.READ_WRITE
 class HttpClient3Spec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(HelloHandler)

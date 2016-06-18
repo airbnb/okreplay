@@ -17,7 +17,7 @@
 package software.betamax.proxy.matchRules
 
 import com.google.common.io.Files
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import spock.lang.Shared
 import spock.lang.Specification
@@ -56,7 +56,7 @@ class CustomMatcherSpec extends Specification {
     void "Using a custom matcher it should replay"() {
         given:
         def imr = new InstrumentedMatchRule()
-        def proxyConfig = ProxyConfiguration.builder()
+        def proxyConfig = Configuration.builder()
                 .sslEnabled(true)
                 .tapeRoot(tapeRoot)
                 .defaultMode(READ_ONLY)
@@ -88,7 +88,7 @@ class CustomMatcherSpec extends Specification {
         given:
         def tapeRoot = Files.createTempDir() //Using a temp dir this time
         def imr = new InstrumentedMatchRule()
-        def proxyConfig = ProxyConfiguration.builder()
+        def proxyConfig = Configuration.builder()
                 .sslEnabled(true)
                 .tapeRoot(tapeRoot)
                 .defaultMode(READ_WRITE)

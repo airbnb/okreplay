@@ -18,7 +18,7 @@ package software.betamax.proxy
 
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleServer
@@ -35,7 +35,7 @@ import static software.betamax.TapeMode.READ_WRITE
 class ProxyRecordAndPlaybackSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE).build()
     @Shared def recorder = new Recorder(configuration)
     @AutoCleanup("stop") def endpoint = new SimpleServer(HelloHandler)
 

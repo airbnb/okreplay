@@ -20,7 +20,7 @@ import com.google.common.base.Predicate;
 import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
-import software.betamax.ProxyConfiguration;
+import software.betamax.Configuration;
 import software.betamax.internal.RecorderListener;
 import software.betamax.proxy.netty.PredicatedHttpFilters;
 import software.betamax.tape.Tape;
@@ -36,7 +36,7 @@ import static software.betamax.proxy.netty.PredicatedHttpFilters.httpMethodPredi
 
 public class ProxyServer implements RecorderListener {
 
-    private final ProxyConfiguration configuration;
+    private final Configuration configuration;
     private final ProxyOverrider proxyOverrider = new ProxyOverrider();
     private HttpProxyServer proxyServer;
     private boolean running;
@@ -45,7 +45,7 @@ public class ProxyServer implements RecorderListener {
 
     private static final Logger LOG = Logger.getLogger(ProxyServer.class.getName());
 
-    public ProxyServer(ProxyConfiguration configuration) {
+    public ProxyServer(Configuration configuration) {
         this.configuration = configuration;
     }
 

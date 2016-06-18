@@ -17,7 +17,7 @@
 package software.betamax.proxy
 
 import org.junit.Rule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import spock.lang.Ignore
@@ -35,7 +35,7 @@ import static software.betamax.Headers.X_BETAMAX
 class DisconnectedHttpsSpec extends Specification {
 
     static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
-    def configuration = ProxyConfiguration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
+    def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
     @Betamax(tape = "disconnected https spec")

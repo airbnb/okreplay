@@ -31,7 +31,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class OCSPSpec extends Specification {
 
     static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(TAPE_ROOT).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     void "OCSP messages"() {

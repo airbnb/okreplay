@@ -20,7 +20,7 @@ import com.google.common.io.Files
 import com.mashape.unirest.http.Unirest
 import org.apache.http.impl.client.HttpClients
 import org.junit.ClassRule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.TapeMode
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
@@ -41,7 +41,7 @@ import static software.betamax.Headers.X_BETAMAX
 class UnirestSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)

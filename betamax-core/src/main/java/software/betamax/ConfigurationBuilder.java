@@ -21,16 +21,13 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import software.betamax.util.TypedProperties;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
-public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
-
-    protected abstract T self();
+public class ConfigurationBuilder {
 
     public Configuration build() {
         return new Configuration(this);
@@ -42,22 +39,15 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
     protected ImmutableCollection<String> ignoreHosts = ImmutableList.of();
     protected boolean ignoreLocalhost;
 
-    protected T configureFromPropertiesFile() {
-        try {
-            URL propertiesFile = Configuration.class.getResource("/betamax.properties");
-            if (propertiesFile != null) {
-                Properties properties = new Properties();
-                properties.load(propertiesFile.openStream());
-                withProperties(properties);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    protected String proxyHost = Configuration.DEFAULT_PROXY_HOST;
+    protected int proxyPort = Configuration.DEFAULT_PROXY_PORT;
+    protected String proxyUser;
+    protected String proxyPassword;
+    protected int proxyTimeoutSeconds = Configuration.DEFAULT_PROXY_TIMEOUT;
+    protected int requestBufferSize = Configuration.DEFAULT_REQUEST_BUFFER_SIZE;
+    protected boolean sslEnabled;
 
-        return self();
-    }
-
-    public T withProperties(Properties properties) {
+    public ConfigurationBuilder withProperties(Properties properties) {
         if (properties.containsKey("betamax.tapeRoot")) {
             tapeRoot(new File(properties.getProperty("betamax.tapeRoot")));
         }
@@ -84,37 +74,91 @@ public abstract class ConfigurationBuilder<T extends ConfigurationBuilder<T>> {
             ignoreLocalhost(Boolean.valueOf(properties.getProperty("betamax.ignoreLocalhost")));
         }
 
-        return self();
+        if (properties.containsKey("betamax.proxyHost")) {
+            proxyHost(properties.getProperty("betamax.proxyHost"));
+        }
+
+        if (properties.containsKey("betamax.proxyPort")) {
+            proxyPort(TypedProperties.getInteger(properties, "betamax.proxyPort"));
+        }
+
+        if (properties.containsKey("betamax.proxyTimeoutSeconds")) {
+            proxyTimeoutSeconds(TypedProperties.getInteger(properties, "betamax.proxyTimeoutSeconds"));
+        }
+
+        if (properties.containsKey("betamax.requestBufferSize")) {
+            requestBufferSize(TypedProperties.getInteger(properties, "betamax.requestBufferSize"));
+        }
+
+        if (properties.containsKey("betamax.sslEnabled")) {
+            sslEnabled(TypedProperties.getBoolean(properties, "betamax.sslEnabled"));
+        }
+
+        return this;
     }
 
-    public T tapeRoot(File tapeRoot) {
+    public ConfigurationBuilder tapeRoot(File tapeRoot) {
         this.tapeRoot = tapeRoot;
-        return self();
+        return this;
     }
 
-    public T defaultMode(TapeMode defaultMode) {
+    public ConfigurationBuilder defaultMode(TapeMode defaultMode) {
         this.defaultMode = defaultMode;
-        return self();
+        return this;
     }
 
-    public T defaultMatchRule(MatchRule defaultMatchRule) {
+    public ConfigurationBuilder defaultMatchRule(MatchRule defaultMatchRule) {
         this.defaultMatchRule = defaultMatchRule;
-        return self();
+        return this;
     }
 
-    public T defaultMatchRules(MatchRule... defaultMatchRules) {
+    public ConfigurationBuilder defaultMatchRules(MatchRule... defaultMatchRules) {
         this.defaultMatchRule = ComposedMatchRule.of(defaultMatchRules);
-        return self();
+        return this;
     }
 
-    public T ignoreHosts(Iterable<String> ignoreHosts) {
+    public ConfigurationBuilder ignoreHosts(Iterable<String> ignoreHosts) {
         this.ignoreHosts = ImmutableList.copyOf(ignoreHosts);
-        return self();
+        return this;
     }
 
-    public T ignoreLocalhost(boolean ignoreLocalhost) {
+    public ConfigurationBuilder ignoreLocalhost(boolean ignoreLocalhost) {
         this.ignoreLocalhost = ignoreLocalhost;
-        return self();
+        return this;
     }
 
+    public ConfigurationBuilder proxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+        return this;
+    }
+
+    public ConfigurationBuilder proxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+        return this;
+    }
+
+    public ConfigurationBuilder proxyAuth(String username, String password) {
+        if (username == null || password == null) {
+            throw new IllegalArgumentException("The required proxy username and password cannot be null");
+        }
+
+        this.proxyUser = username;
+        this.proxyPassword = password;
+        return this;
+    }
+
+    public ConfigurationBuilder proxyTimeoutSeconds(int proxyTimeoutSeconds) {
+        this.proxyTimeoutSeconds = proxyTimeoutSeconds;
+        return this;
+    }
+
+    public ConfigurationBuilder requestBufferSize(int requestBufferSize){
+        this.requestBufferSize = requestBufferSize;
+        return this;
+    }
+
+    public ConfigurationBuilder sslEnabled(boolean sslEnabled) {
+        this.sslEnabled = sslEnabled;
+        return this;
+    }
 }

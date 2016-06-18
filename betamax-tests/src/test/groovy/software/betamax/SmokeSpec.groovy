@@ -33,7 +33,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class SmokeSpec extends Specification {
 
     static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared def configuration = ProxyConfiguration.builder().sslEnabled(true).tapeRoot(TAPE_ROOT).build()
+    @Shared def configuration = Configuration.builder().sslEnabled(true).tapeRoot(TAPE_ROOT).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     void "#type response data"() {

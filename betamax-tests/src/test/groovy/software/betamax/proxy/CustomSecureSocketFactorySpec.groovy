@@ -17,7 +17,7 @@
 package software.betamax.proxy
 
 import com.google.common.io.Files
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import software.betamax.util.server.HelloHandler
 import software.betamax.util.server.SimpleSecureServer
@@ -53,7 +53,7 @@ class CustomSecureSocketFactorySpec extends Specification {
 
 		given: 'a recorder configured with a custom SSL socket factory'
 		def sslSocketFactory = Spy(DummySSLSocketFactory, constructorArgs: [trustStore])
-        def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
+        def configuration = Configuration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
         def recorder = new Recorder(configuration)
 		recorder.start 'custom secure socket factory spec'
 

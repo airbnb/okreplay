@@ -17,7 +17,7 @@
 package software.betamax.proxy
 
 import com.google.common.io.Files
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
@@ -31,7 +31,7 @@ import static software.betamax.TapeMode.READ_WRITE
 class IgnoreHostsSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-    def configuration = Spy(ProxyConfiguration, constructorArgs: [ProxyConfiguration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
+    def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
     @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
 
     @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
