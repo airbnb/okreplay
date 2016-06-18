@@ -18,7 +18,7 @@ package software.betamax.proxy
 
 import com.google.common.io.Files
 import org.junit.ClassRule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.util.server.SimpleServer
@@ -38,7 +38,7 @@ import static software.betamax.TapeMode.READ_WRITE
 class ProxyTimeoutSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().proxyTimeoutSeconds(1).tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().proxyTimeoutSeconds(1).tapeRoot(tapeRoot).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @AutoCleanup("stop") def endpoint = new SimpleServer(SlowHandler)

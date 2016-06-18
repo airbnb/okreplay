@@ -18,7 +18,7 @@ package software.betamax.proxy
 
 import com.google.common.io.Files
 import org.junit.Rule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.TapeMode
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
@@ -34,7 +34,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class PreExistingProxySpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup('stop') def proxyServer = new SimpleServer(HelloHandler)

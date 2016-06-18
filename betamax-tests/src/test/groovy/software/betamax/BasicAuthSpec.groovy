@@ -51,7 +51,7 @@ class BasicAuthSpec extends Specification {
     @Shared private endpoint = "http://httpbin.org/basic-auth/user/passwd".toURL()
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
     @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, authorization])

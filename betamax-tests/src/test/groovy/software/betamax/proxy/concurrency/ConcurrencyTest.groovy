@@ -24,7 +24,7 @@ import org.apache.http.concurrent.FutureCallback
 import org.apache.http.entity.ContentType
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.nio.client.HttpAsyncClients
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import spock.lang.Shared
 import spock.lang.Specification
@@ -66,7 +66,7 @@ class ConcurrencyTest extends Specification {
 
     void "#amount Concurrent accesses to a #tapeMode tape works"() {
         given:
-        def proxyConfig = ProxyConfiguration.builder()
+        def proxyConfig = Configuration.builder()
                 .tapeRoot(tapeRoot)
                 .defaultMode(tapeMode)
                 .defaultMatchRule(new PostingMatchRule())

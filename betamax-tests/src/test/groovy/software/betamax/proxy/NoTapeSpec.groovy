@@ -16,7 +16,7 @@
 
 package software.betamax.proxy
 
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import software.betamax.util.server.EchoHandler
 import software.betamax.util.server.SimpleServer
@@ -28,7 +28,7 @@ import spock.lang.Specification
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
 
-    @Shared def configuration = ProxyConfiguration.builder().build()
+    @Shared def configuration = Configuration.builder().build()
     @Shared def recorder = new Recorder(configuration)
     @Shared @AutoCleanup("stop") def proxy = new ProxyServer(configuration)
     @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)

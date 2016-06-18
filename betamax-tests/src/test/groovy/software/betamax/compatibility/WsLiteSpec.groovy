@@ -18,7 +18,7 @@ package software.betamax.compatibility
 
 import com.google.common.io.Files
 import org.junit.ClassRule
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.util.server.HelloHandler
@@ -39,7 +39,7 @@ import static software.betamax.TapeMode.READ_WRITE
 class WsLiteSpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().sslEnabled(true).tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().sslEnabled(true).tapeRoot(tapeRoot).build()
     @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
     @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)

@@ -18,8 +18,8 @@ package software.betamax.recorder
 
 import com.google.common.io.Files
 import software.betamax.ComposedMatchRule
+import software.betamax.Configuration
 import software.betamax.MatchRules
-import software.betamax.ProxyConfiguration
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -32,7 +32,7 @@ class ConfigurationSpec extends Specification {
 
     void "uses default configuration if not overridden and no properties file exists"() {
         given:
-        def configuration = ProxyConfiguration.builder().build()
+        def configuration = Configuration.builder().build()
 
         expect:
         with(configuration) {
@@ -50,7 +50,7 @@ class ConfigurationSpec extends Specification {
 
     void "configuration is overridden by builder methods"() {
         given:
-        def configuration = ProxyConfiguration.builder()
+        def configuration = Configuration.builder()
                 .tapeRoot(tempDir)
                 .proxyHost("github.com")
                 .proxyPort(1337)
@@ -93,7 +93,7 @@ class ConfigurationSpec extends Specification {
         }
 
         and:
-        def configuration = ProxyConfiguration.builder().withProperties(properties).build()
+        def configuration = Configuration.builder().withProperties(properties).build()
 
         expect:
         with(configuration) {
@@ -130,10 +130,10 @@ class ConfigurationSpec extends Specification {
         }
 
         and:
-        ProxyConfiguration.classLoader.addURL(tempDir.toURL())
+        Configuration.classLoader.addURL(tempDir.toURL())
 
         and:
-        def configuration = ProxyConfiguration.builder().build()
+        def configuration = Configuration.builder().build()
 
         expect:
         with(configuration) {
@@ -175,10 +175,10 @@ class ConfigurationSpec extends Specification {
         }
 
         and:
-        ProxyConfiguration.classLoader.addURL(tempDir.toURL())
+        Configuration.classLoader.addURL(tempDir.toURL())
 
         and:
-        def configuration = ProxyConfiguration.builder()
+        def configuration = Configuration.builder()
                 .tapeRoot(new File("test/fixtures/tapes"))
                 .proxyHost("betamax.io")
                 .proxyPort(1234)

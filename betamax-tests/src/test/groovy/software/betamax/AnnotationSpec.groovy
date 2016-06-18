@@ -36,7 +36,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class AnnotationSpec extends Specification {
 
     @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
     @Rule RecorderRule recorder = new RecorderRule(configuration)
 
     @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)

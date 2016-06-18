@@ -21,7 +21,7 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
 import org.yaml.snakeyaml.Yaml
-import software.betamax.ProxyConfiguration
+import software.betamax.Configuration
 import software.betamax.Recorder
 import spock.lang.*
 
@@ -48,7 +48,7 @@ import static software.betamax.TapeMode.WRITE_ONLY
 class PostBodySpec extends Specification {
 
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = ProxyConfiguration.builder().tapeRoot(tapeRoot).build()
+    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
     def recorder = new Recorder(configuration)
 
     def httpClient = HttpClients.createSystem()

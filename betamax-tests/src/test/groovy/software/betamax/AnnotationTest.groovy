@@ -38,7 +38,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class AnnotationTest {
 
     static def TAPE_ROOT = Files.createTempDir()
-    def configuration = ProxyConfiguration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
+    def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
     @Rule public RecorderRule recorder = new RecorderRule(configuration)
 
     def endpoint = new SimpleServer(EchoHandler)
