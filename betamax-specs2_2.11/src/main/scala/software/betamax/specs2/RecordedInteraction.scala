@@ -1,28 +1,14 @@
 package software.betamax.specs2
 
-import java.io.File
-
-import software.betamax.TapeMode._
-import software.betamax.{MatchRules, ProxyConfiguration, Recorder, TapeMode, _}
+import software.betamax.{ProxyConfiguration, Recorder, _}
 
 /**
   * Created by sean on 2/11/16.
   */
 
 object RecordedInteraction {
-  def apply[T](tape: String,
-               tapeMode: TapeMode = READ_ONLY,
-               matchRules: Seq[MatchRule] = Seq(MatchRules.method, MatchRules.uri),
-               sslEnabled: Boolean = true,
-               tapeRoot: String = Configuration.DEFAULT_TAPE_ROOT)(block: => T): T = {
-    val recorder = new Recorder({
-      ProxyConfiguration.builder()
-        .defaultMode(tapeMode)
-        .defaultMatchRules(matchRules: _*)
-        .sslEnabled(sslEnabled)
-        .tapeRoot(new File(tapeRoot))
-        .build()
-    })
+  def apply[T](tape: String, configuration: ProxyConfigurationBuilder[ProxyConfiguration.Builder] => ProxyConfigurationBuilder[ProxyConfiguration.Builder] = builder => builder)(block: => T): T = {
+    val recorder = new Recorder(configuration(ProxyConfiguration.builder()).build())
     recorder.start(tape)
 
     try {

@@ -21,13 +21,13 @@ class RecordedInteractionTest extends Specification {
   }
 
   "A Betamax test" should {
-    "replay google.com" in RecordedInteraction(tape = "google") {
+    "replay google.com" in RecordedInteraction(tape = "google", configuration = _.sslEnabled(true)) {
       withHttpClient { client =>
         val response = client.execute(new HttpGet("https://www.google.com"))
         response.getStatusLine.getStatusCode must beEqualTo(902) // obviously not from Google
       }
     }
-    "replay a gzip'd request from https://www.cultizm.com/" in RecordedInteraction(tape = "cultizm") {
+    "replay a gzip'd request from https://www.cultizm.com/" in RecordedInteraction(tape = "cultizm", configuration = _.sslEnabled(true)) {
       withHttpClient { client =>
         val response = client.execute(new HttpGet("https://www.cultizm.com/"))
         IOUtils.toString(response.getEntity.getContent) must contain("<!DOCTYPE html PUBLIC")
