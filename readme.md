@@ -62,6 +62,7 @@ For all of CI environments, be sure to use the `keytool` command listed above to
 - Ian Grayson
 - Russel Hart
 - Lari Hotari
+- Michal Kováč
 - David Kowis
 - Jason LeCount
 - Peter Ledbrook
