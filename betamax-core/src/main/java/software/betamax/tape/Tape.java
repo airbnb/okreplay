@@ -45,6 +45,8 @@ public interface Tape {
      */
     void setMatchRule(MatchRule matchRule);
 
+    MatchRule getMatchRule();
+
     /**
      * @param entityStorage the policy used for storing response bodies on the
      *                      tape.

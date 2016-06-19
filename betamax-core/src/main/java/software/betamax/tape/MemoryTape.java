@@ -91,6 +91,11 @@ public abstract class MemoryTape implements Tape {
     }
 
     @Override
+    public MatchRule getMatchRule() {
+        return this.matchRule;
+    }
+
+    @Override
     public void setMatchRule(MatchRule matchRule) {
         this.matchRule = matchRule;
     }

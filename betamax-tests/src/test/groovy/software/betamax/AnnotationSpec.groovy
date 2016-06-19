@@ -29,6 +29,7 @@ import spock.lang.Stepwise
 
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
+import static TapeMode.WRITE_ONLY
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
 
@@ -46,10 +47,12 @@ class AnnotationSpec extends Specification {
         recorder.tape == null
     }
 
-    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+    @Betamax(tape = 'annotation_spec', mode = WRITE_ONLY, match = [MatchRules.body])
     void 'annotation on feature causes tape to be inserted'() {
         expect:
         recorder.tape.name == 'annotation_spec'
+        recorder.tape.mode == WRITE_ONLY
+        recorder.tape.matchRule == ComposedMatchRule.of(MatchRules.body)
     }
 
     void 'tape is ejected after annotated feature completes'() {
