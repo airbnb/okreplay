@@ -24,7 +24,7 @@ JDK 7 dramatically increased the security of the JVM, making it much more diffic
 
 **For all environments where tests are being run, a one-time installation of the Betamax certificate into Java's `cacerts` is necessary.**
 
-	keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt
+	keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -alias betamax -storepass changeit -noprompt
 	
 *Notes:*
 
