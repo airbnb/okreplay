@@ -10,8 +10,6 @@ Documentation will follow soon. Please feel free to [file an issue](https://gith
 
 Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to be compatible with any Maven-based build tool.
 
-#### Latest Release:
-
 **JUnit**
 
 ```
