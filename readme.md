@@ -2,9 +2,7 @@
 
 Betamax is a tool for mocking external HTTP resources in your tests. The project was inspired by the [VCR](https://relishapp.com/vcr/vcr/docs) library for Ruby.
 
-We've been more or less offline for 3 years, and we're reviving the project. Feel free to reach out to us with questions or concerns.
-
-Documentation will follow soon. Please feel free to [file an issue](https://github.com/betamaxteam/betamax/issues) if there is something you'd like to see.
+Documentation hosted at [http://betamax.software/](http://betamax.software/) is currently only for the 1.X branch and is deprecated. New documentation is being produced, but it will take some time. Please see examples in Betamax's tests and follow this readme.
 
 ## Installation
 
