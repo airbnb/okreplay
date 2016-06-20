@@ -10,9 +10,9 @@ cache:
 script:
   - sudo keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt
   - jdk_switcher use oraclejdk8
-  - ./gradlew clean build
+  - ./gradlew clean build --info --stacktrace
   - jdk_switcher use oraclejdk7
-  - ./gradlew clean build
+  - ./gradlew clean build --info --stacktrace
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
 notifications:
