@@ -10,13 +10,39 @@ Documentation will follow soon. Please feel free to [file an issue](https://gith
 
 Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to be compatible with any Maven-based build tool.
 
+#### Latest Release:
+
+**JUnit**
+
+```
+<dependency>
+  <groupId>software.betamax</groupId>
+  <artifactId>betamax-junit</artifactId>
+  <version>2.0.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+**Specs2 Maven**
+
+```
+<dependency>
+  <groupId>software.betamax</groupId>
+  <artifactId>betamax-specs2_2.11</artifactId>
+  <version>2.0.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+**Specs2 SBT**
+
+```
+libraryDependencies += "software.betamax" %% "betamax-specs2" % "2.0.0" % "test"
+```
+
 #### Snapshots:
 
 [Snapshots](https://oss.sonatype.org/content/repositories/snapshots/software/betamax/betamax-core) are made after every successful build in master, so if you want the bleeding edge, you know where to get it.
-
-#### Releases:
-
-[2.0.0-alpha-1](https://github.com/betamaxteam/betamax/releases/tag/2.0.0-alpha-1)
 
 ## SSL Configuration
 
