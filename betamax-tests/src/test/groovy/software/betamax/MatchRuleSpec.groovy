@@ -118,6 +118,8 @@ class MatchRuleSpec extends Specification {
         given:
         def request1 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?p=2&q=1'.toURI())
         def request2 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?p=2&q=2'.toURI())
+        def request3 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
+        def request4 = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax'.toURI())
 
         and:
         def request = new RecordedRequest(method: 'GET', uri: 'http://freeside.co/betamax?q=1&p=2'.toURI())
@@ -126,6 +128,8 @@ class MatchRuleSpec extends Specification {
         expect:
         rule.isMatch(request, request1)
         !rule.isMatch(request, request2)
+        rule.isMatch(request3, request4)
+        !rule.isMatch(request, request3)
 
     }
 
