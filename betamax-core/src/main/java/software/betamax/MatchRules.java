@@ -61,11 +61,20 @@ public enum MatchRules implements MatchRule {
     queryParams {
         @Override
         public boolean isMatch(Request a, Request b) {
-            String[] aParameters = a.getUri().getQuery().split("&");
-            String[] bParameters = b.getUri().getQuery().split("&");
-            Arrays.sort(aParameters);
-            Arrays.sort(bParameters);
-            return Arrays.equals(aParameters, bParameters);
+            if((a.getUri().getQuery() != null) && (b.getUri().getQuery() != null)) {
+                // both request have a query, split query params and compare
+                String[] aParameters = a.getUri().getQuery().split("&");
+                String[] bParameters = b.getUri().getQuery().split("&");
+                Arrays.sort(aParameters);
+                Arrays.sort(bParameters);
+                return Arrays.equals(aParameters, bParameters);
+            } else {
+                if ((a.getUri().getQuery() == null) && (b.getUri().getQuery() == null)) {
+                    // both request have no query
+                    return true;
+                }
+                return false;
+            }
         }
     }, authorization {
         @Override
