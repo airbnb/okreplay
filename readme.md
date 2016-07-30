@@ -6,6 +6,8 @@ Documentation hosted at [http://betamax.software/](http://betamax.software/) is 
 
 ## Installation
 
+Since 2.0.1, requires JDK7 or later.
+
 Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to be compatible with any Maven-based build tool.
 
 **JUnit**
@@ -14,7 +16,7 @@ Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to b
 <dependency>
   <groupId>software.betamax</groupId>
   <artifactId>betamax-junit</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -25,7 +27,7 @@ Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to b
 <dependency>
   <groupId>software.betamax</groupId>
   <artifactId>betamax-specs2_2.11</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -33,7 +35,7 @@ Betamax is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to b
 **Specs2 SBT**
 
 ```
-libraryDependencies += "software.betamax" %% "betamax-specs2" % "2.0.0" % "test"
+libraryDependencies += "software.betamax" %% "betamax-specs2" % "2.0.1" % "test"
 ```
 
 #### Snapshots:
