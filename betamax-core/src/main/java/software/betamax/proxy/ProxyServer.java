@@ -17,6 +17,7 @@
 package software.betamax.proxy;
 
 import com.google.common.base.Predicate;
+import com.google.common.io.Files;
 import io.netty.handler.codec.http.HttpRequest;
 import org.apache.commons.io.FileUtils;
 import org.littleshoot.proxy.*;
@@ -31,10 +32,10 @@ import software.betamax.proxy.netty.PredicatedHttpFilters;
 import software.betamax.tape.Tape;
 import software.betamax.util.ProxyOverrider;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static com.google.common.base.Predicates.not;
 import static io.netty.handler.codec.http.HttpMethod.CONNECT;
@@ -148,27 +149,26 @@ public class ProxyServer implements RecorderListener {
         try {
 
             // Use the same betamax private key & cert for backwards compatibility with 2.0.1
-            Path storePath = Paths.get("betamax.p12").resolve(configuration.getTapeRoot().getAbsolutePath());
-            if (!storePath.toFile().exists()) {
-                InputStream betamaxKeystoreStream = getClass().getClassLoader().getResourceAsStream("betamax.p12");
-                FileUtils.copyInputStreamToFile(betamaxKeystoreStream, storePath.toFile());
-            }
+            // We use temporary files here so we don't pollute people's projects with temporary (and fake) keys and certs
+            File tempSSLDir = Files.createTempDir();
 
-            Path keyPath = Paths.get("betamax.pem").resolve(configuration.getTapeRoot().getAbsolutePath());
-            if (!keyPath.toFile().exists()) {
-                InputStream betamaxKeyStream = getClass().getClassLoader().getResourceAsStream("betamax.pem");
-                FileUtils.copyInputStreamToFile(betamaxKeyStream, keyPath.toFile());
-            }
+            Path storePath = tempSSLDir.toPath().resolve("betamax.p12");
+            InputStream betamaxKeystoreStream = getClass().getClassLoader().getResourceAsStream("betamax.p12");
+            FileUtils.copyInputStreamToFile(betamaxKeystoreStream, storePath.toFile());
+
+            Path keyPath = tempSSLDir.toPath().resolve("betamax.pem");
+            InputStream betamaxKeyStream = getClass().getClassLoader().getResourceAsStream("betamax.pem");
+            FileUtils.copyInputStreamToFile(betamaxKeyStream, keyPath.toFile());
 
             Authority authority = new Authority(
-                    configuration.getTapeRoot(),
+                    tempSSLDir,
                     "betamax",
                     "changeit".toCharArray(),
-                    "Record & replay HTTP traffic in tests",
-                    "betamax",
+                    "betamax.software",
+                    "Betamax",
                     "Certificate Authority",
-                    "betamax",
-                    "Record & replay HTTP traffic in tests"
+                    "Betamax",
+                    "betamax.software"
             );
 
             return new CertificateSniffingMitmManager(authority);
