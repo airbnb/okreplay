@@ -18,8 +18,8 @@ package software.betamax.io;
 
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Maps _MIME_ types to file extensions.
@@ -34,7 +34,7 @@ public class FileTypeMapper {
 
     private static final MimeTypes MIME_TYPES = MimeTypes.getDefaultMimeTypes();
 
-    private static final Logger LOG = Logger.getLogger(FileTypeMapper.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(FileTypeMapper.class.getName());
 
     /**
      * Returns a filename consisting of `baseName` and an appropriate file
@@ -50,7 +50,7 @@ public class FileTypeMapper {
             String extension = MIME_TYPES.forName(contentType).getExtension();
             filename = baseName + extension;
         } catch (MimeTypeException e) {
-            LOG.warning(String.format("Could not get extension for %s content type: %s", contentType, e.getMessage()));
+            LOG.warn(String.format("Could not get extension for %s content type: %s", contentType, e.getMessage()));
             filename = baseName + DEFAULT_EXTENSION;
         }
         return filename;

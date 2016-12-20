@@ -20,6 +20,8 @@ import com.google.common.base.Predicate;
 import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.betamax.Configuration;
 import software.betamax.internal.RecorderListener;
 import software.betamax.proxy.netty.PredicatedHttpFilters;
@@ -28,7 +30,6 @@ import software.betamax.util.BetamaxMitmManager;
 import software.betamax.util.ProxyOverrider;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Logger;
 
 import static com.google.common.base.Predicates.not;
 import static io.netty.handler.codec.http.HttpMethod.CONNECT;
@@ -43,7 +44,7 @@ public class ProxyServer implements RecorderListener {
 
     private static final Predicate<HttpRequest> NOT_CONNECT = not(httpMethodPredicate(CONNECT));
 
-    private static final Logger LOG = Logger.getLogger(ProxyServer.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ProxyServer.class.getName());
 
     public ProxyServer(Configuration configuration) {
         this.configuration = configuration;

@@ -21,12 +21,11 @@ import com.google.common.base.Strings;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.betamax.*;
 
-import java.util.logging.Logger;
-
 import static com.google.common.base.CaseFormat.*;
-import static java.util.logging.Level.SEVERE;
 
 /**
  * This is an extension of {@link Recorder} that can be used as a
@@ -36,7 +35,7 @@ import static java.util.logging.Level.SEVERE;
  */
 public class RecorderRule extends Recorder implements TestRule {
 
-    private final Logger log = Logger.getLogger(RecorderRule.class.getName());
+    private final Logger log = LoggerFactory.getLogger(RecorderRule.class.getName());
 
     public RecorderRule() {
         super();
@@ -50,7 +49,7 @@ public class RecorderRule extends Recorder implements TestRule {
     public Statement apply(final Statement statement, final Description description) {
         final Betamax annotation = description.getAnnotation(Betamax.class);
         if (annotation != null) {
-            log.fine(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
+            log.debug(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
             return new Statement() {
                 @Override
                 public void evaluate() throws Throwable {
@@ -74,7 +73,7 @@ public class RecorderRule extends Recorder implements TestRule {
 
                         statement.evaluate();
                     } catch (Exception e) {
-                        log.log(SEVERE, "Caught exception starting Betamax", e);
+                        log.error("Caught exception starting Betamax", e);
                         throw e;
                     } finally {
                         stop();
@@ -82,7 +81,7 @@ public class RecorderRule extends Recorder implements TestRule {
                 }
             };
         } else {
-            log.fine(String.format("no @Betamax annotation on '%s'", description.getDisplayName()));
+            log.debug(String.format("no @Betamax annotation on '%s'", description.getDisplayName()));
             return statement;
         }
     }
