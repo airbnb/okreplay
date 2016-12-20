@@ -22,6 +22,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFiltersAdapter;
 import org.littleshoot.proxy.impl.ProxyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.betamax.Headers;
 import software.betamax.encoding.DeflateEncoder;
 import software.betamax.encoding.GzipEncoder;
@@ -33,14 +35,12 @@ import software.betamax.tape.Tape;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_ENCODING;
 import static io.netty.handler.codec.http.HttpHeaders.Names.VIA;
 import static io.netty.handler.codec.http.HttpResponseStatus.INTERNAL_SERVER_ERROR;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
-import static java.util.logging.Level.SEVERE;
 
 public class BetamaxFilters extends HttpFiltersAdapter {
 
@@ -48,7 +48,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
     private NettyResponseAdapter upstreamResponse;
     private final Tape tape;
 
-    private static final Logger LOG = Logger.getLogger(BetamaxFilters.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(BetamaxFilters.class.getName());
 
     public BetamaxFilters(HttpRequest originalRequest, Tape tape) {
         super(originalRequest);
@@ -103,7 +103,7 @@ public class BetamaxFilters extends HttpFiltersAdapter {
                 upstreamResponse.append((HttpContent) httpObject);
             } catch (IOException e) {
                 // TODO: handle in some way
-                LOG.log(SEVERE, "Error appending content", e);
+                LOG.error("Error appending content", e);
             }
         }
 
@@ -140,14 +140,14 @@ public class BetamaxFilters extends HttpFiltersAdapter {
         if (tape == null) {
             return Optional.of(new DefaultFullHttpResponse(HTTP_1_1, new HttpResponseStatus(403, "No tape")));
         } else if (tape.isReadable() && tape.seek(request)) {
-            LOG.warning(String.format("Playing back from tape %s", tape.getName()));
+            LOG.warn(String.format("Playing back from tape %s", tape.getName()));
             Response recordedResponse = tape.play(request);
             FullHttpResponse response = playRecordedResponse(recordedResponse);
             setViaHeader(response);
             setBetamaxHeader(response, "PLAY");
             return Optional.of(response);
         } else {
-            LOG.warning(String.format("no matching request found on %s", tape.getName()));
+            LOG.warn(String.format("no matching request found on %s", tape.getName()));
             return Optional.absent();
         }
     }

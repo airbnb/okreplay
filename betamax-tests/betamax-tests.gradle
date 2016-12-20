@@ -27,3 +27,7 @@ dependencies {
 
     testCompile "com.mashape.unirest:unirest-java:1.2.8", "org.apache.httpcomponents:httpasyncclient:4.0"
 }
+
+test {
+    testLogging.showStandardStreams = true
+}

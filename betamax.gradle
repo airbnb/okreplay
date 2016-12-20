@@ -7,23 +7,25 @@ allprojects {
         isSnapshot = version.endsWith("-SNAPSHOT")
 
         commonDependencies = [
-            cglib: dependencies.create("cglib:cglib-nodep:2.2.2"),
-            groovy: dependencies.create("org.codehaus.groovy:groovy-all:2.4.5:indy"),
-            guava: dependencies.create("com.google.guava:guava:18.0"),
-            httpBuilder: dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
-                exclude module: "groovy"
-                exclude module: "httpclient"
-            }),
-            httpClient: dependencies.create("org.apache.httpcomponents:httpclient:4.3.1"),
-            junit: dependencies.create("junit:junit:4.12"),
-            littleProxy: dependencies.create("org.littleshoot:littleproxy:1.1.0-beta2"),
-            netty: dependencies.create("io.netty:netty-all:4.0.35.Final"),
-            snakeYaml: dependencies.create("org.yaml:snakeyaml:1.16"),
-            spock: dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
-                exclude module: "groovy-all"
-                exclude module: "junit"
-            }),
-            tika: dependencies.create("org.apache.tika:tika-core:1.11")
+                cglib         : dependencies.create("cglib:cglib-nodep:2.2.2"),
+                groovy        : dependencies.create("org.codehaus.groovy:groovy-all:2.4.5:indy"),
+                guava         : dependencies.create("com.google.guava:guava:18.0"),
+                httpBuilder   : dependencies.create("org.codehaus.groovy.modules.http-builder:http-builder:0.6", {
+                    exclude module: "groovy"
+                    exclude module: "httpclient"
+                }),
+                httpClient    : dependencies.create("org.apache.httpcomponents:httpclient:4.3.1"),
+                junit         : dependencies.create("junit:junit:4.12"),
+                littleProxy   : dependencies.create("org.littleshoot:littleproxy:1.1.0-beta2"),
+                log4jCore     : dependencies.create("org.apache.logging.log4j:log4j-core:2.0.1"),
+                log4jSlf4jImpl: dependencies.create("org.apache.logging.log4j:log4j-slf4j-impl:2.0.1"),
+                netty         : dependencies.create("io.netty:netty-all:4.0.35.Final"),
+                snakeYaml     : dependencies.create("org.yaml:snakeyaml:1.16"),
+                spock         : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
+                    exclude module: "groovy-all"
+                    exclude module: "junit"
+                }),
+                tika          : dependencies.create("org.apache.tika:tika-core:1.11")
         ]
     }
 }
