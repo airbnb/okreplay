@@ -1,21 +1,22 @@
-language: groovy
+sudo: required 
+
+services:
+  - docker
+
 env:
   global:
     - TERM=dumb 
     - SONATYPE_USERNAME=cowboygneox
     - secure: "DC7mxVvqGunaigj8rq2piYuOuISCnM4iwBF8iTSEm8pTjV2ZZfW8FqJ26ALhmQE97/YeUssGTZrcE+CcUWtoCupr6kkY05smm2PlEQxBynw2fWURfxFFIYSqsjqbpctMySS35vckfR9yie2LSDWrUHGBQ1dT9NOBY/w2VF6uazE="
-cache:
-  directories:
-    - $HOME/.gradle
+
 script:
-  - sudo keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -storepass changeit -noprompt
-  - jdk_switcher use oraclejdk8
-  - ./gradlew clean build --info --stacktrace
-  - jdk_switcher use oraclejdk7
-  - ./gradlew clean build --info --stacktrace
+  - docker run --rm -v $PWD:/app betamax/betamax:jdk7 /bin/bash -c "cd /app; ./gradlew clean build"
+  - docker run --rm -v $PWD:/app betamax/betamax:jdk8 /bin/bash -c "cd /app; ./gradlew clean build"
+
 after_success:
   - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
+
 notifications:
   slack:
     secure: q94sSrSItRWrkAw418c93vCyruOmvRPdX9B7KvIVyY6rN/3PGKN9HvkohmR12wEHxwBbYW2tgqKirDy24gphaEltDZOHvOT7o/RPHP26TMl8nhgD2L4tNztvUHZkLdULNke/7d6Wt48JctqDG/3o48EDcJ3444x6X7Met475vKc=
-sudo: required 
+
