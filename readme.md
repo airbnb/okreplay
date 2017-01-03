@@ -60,9 +60,9 @@ JDK 7 dramatically increased the security of the JVM, making it much more diffic
 
 `SecureRandom` requires a significant amount of entropy in order to generate random numbers, and when using SSL, Betamax stresses this aggressively. When `SecureRandom` fails to generate a random in a given time frame (usually around 3 seconds), a test will fail with almost no indiciation as to why, other than an SSL error occurred. It is likely best to get ahead of that issue before it becomes one, especially if your CI environment is Docker/Virtual Machine based.
 
-**To ensure `SecureRandom` will have adequate entropy:**
+**To ensure `SecureRandom` will have adequate entropy on Unix-based systems:**
 
-    sed -i 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/urandom/' $JAVA_HOME/jre/lib/security/java.security
+    sed -i -e 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/urandom/' $JAVA_HOME/jre/lib/security/java.security
 
 **Files to Ignore:**
 
