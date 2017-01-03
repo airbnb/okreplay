@@ -50,13 +50,19 @@ JDK 7 dramatically increased the security of the JVM, making it much more diffic
 
 **For all environments where tests are being run, a one-time installation of the Betamax certificate into Java's `cacerts` is necessary.**
 
-	keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -alias betamax -storepass changeit -noprompt
-	
+    keytool -importcert -keystore $JAVA_HOME/jre/lib/security/cacerts -file betamax.pem -alias betamax -storepass changeit -noprompt
+
 *Notes:*
 
 1. `sudo` will likely be required for unix-based operating systems
 2. `betamax.pem` is included in the `betamax-core.jar`, but it's probably best to pull it from GitHub.
 3. `betamax.pem` shouldn't have a need to change for the foreseeable future, so this installation should last for the life of the tests.
+
+`SecureRandom` requires a significant amount of entropy in order to generate random numbers, and when using SSL, Betamax stresses this aggressively. When `SecureRandom` fails to generate a random in a given time frame (usually around 3 seconds), a test will fail with almost no indiciation as to why, other than an SSL error occurred. It is likely best to get ahead of that issue before it becomes one, especially if your CI environment is Docker/Virtual Machine based.
+
+**To ensure `SecureRandom` will have adequate entropy on Unix-based systems:**
+
+    sed -i -e 's/securerandom.source=file:\/dev\/random/securerandom.source=file:\/dev\/urandom/' $JAVA_HOME/jre/lib/security/java.security
 
 **Files to Ignore:**
 
