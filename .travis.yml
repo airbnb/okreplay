@@ -14,7 +14,7 @@ script:
   - docker run --rm -v $PWD:/app betamax/betamax:jdk8 /bin/bash -c "cd /app; ./gradlew clean build"
 
 after_success:
-  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { ./gradlew uploadArchives; };"
+  - "[[ $TRAVIS_BRANCH == \"master\" ]] && { docker run --rm -v $PWD:/app betamax/betamax:jdk8 /bin/bash -c \"cd /app; ./gradlew uploadArchives\"; };"
 
 notifications:
   slack:
