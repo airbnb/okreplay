@@ -10,6 +10,7 @@ dependencies {
     compile commonDependencies.snakeYaml
     compile commonDependencies.tika
     compile commonDependencies.littleProxy
+    compile commonDependencies.littleProxyMitm
     compile commonDependencies.netty
     compile commonDependencies.log4jCore
     compile commonDependencies.log4jSlf4jImpl

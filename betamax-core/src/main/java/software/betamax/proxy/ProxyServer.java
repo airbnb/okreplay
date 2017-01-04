@@ -17,19 +17,25 @@
 package software.betamax.proxy;
 
 import com.google.common.base.Predicate;
+import com.google.common.io.Files;
 import io.netty.handler.codec.http.HttpRequest;
+import org.apache.commons.io.FileUtils;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
+import org.littleshoot.proxy.mitm.Authority;
+import org.littleshoot.proxy.mitm.CertificateSniffingMitmManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.betamax.Configuration;
 import software.betamax.internal.RecorderListener;
 import software.betamax.proxy.netty.PredicatedHttpFilters;
 import software.betamax.tape.Tape;
-import software.betamax.util.BetamaxMitmManager;
 import software.betamax.util.ProxyOverrider;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.nio.file.Path;
 
 import static com.google.common.base.Predicates.not;
 import static io.netty.handler.codec.http.HttpMethod.CONNECT;
@@ -82,7 +88,7 @@ public class ProxyServer implements RecorderListener {
                 .withTransparent(true);
 
         if (configuration.isSslEnabled()) {
-            proxyServerBootstrap.withManInTheMiddle(new BetamaxMitmManager());
+            proxyServerBootstrap.withManInTheMiddle(createMitmManager());
         } else {
             proxyServerBootstrap.withChainProxyManager(proxyOverrider);
         }
@@ -137,6 +143,38 @@ public class ProxyServer implements RecorderListener {
 
     private void restoreOriginalProxySettings() {
         proxyOverrider.deactivateAll();
+    }
+
+    private MitmManager createMitmManager() {
+        try {
+
+            // Use the same betamax private key & cert for backwards compatibility with 2.0.1
+            // We use temporary files here so we don't pollute people's projects with temporary (and fake) keys and certs
+            File tempSSLDir = Files.createTempDir();
+
+            Path storePath = tempSSLDir.toPath().resolve("betamax.p12");
+            InputStream betamaxKeystoreStream = getClass().getClassLoader().getResourceAsStream("betamax.p12");
+            FileUtils.copyInputStreamToFile(betamaxKeystoreStream, storePath.toFile());
+
+            Path keyPath = tempSSLDir.toPath().resolve("betamax.pem");
+            InputStream betamaxKeyStream = getClass().getClassLoader().getResourceAsStream("betamax.pem");
+            FileUtils.copyInputStreamToFile(betamaxKeyStream, keyPath.toFile());
+
+            Authority authority = new Authority(
+                    tempSSLDir,
+                    "betamax",
+                    "changeit".toCharArray(),
+                    "betamax.software",
+                    "Betamax",
+                    "Certificate Authority",
+                    "Betamax",
+                    "betamax.software"
+            );
+
+            return new CertificateSniffingMitmManager(authority);
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not create MITMManager", ex);
+        }
     }
 }
 

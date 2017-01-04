@@ -102,5 +102,6 @@ For all other CI environments, be sure to use the `keytool` command listed above
 - James Newbery
 - Ryan Schmitt
 - Michael Vorburger
+- Alex Ianus
 
 *Note: There were 3 others who didn't appropriately identify themselves via Git, and thus are not on this list.*
