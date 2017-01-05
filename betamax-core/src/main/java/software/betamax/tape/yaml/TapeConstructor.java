@@ -27,22 +27,15 @@ import software.betamax.io.FileResolver;
 public class TapeConstructor extends Constructor {
 
     public TapeConstructor(FileResolver fileResolver) {
-        yamlClassConstructors.put(NodeId.mapping, new ConstructTape(fileResolver));
+        yamlClassConstructors.put(NodeId.mapping, new ConstructTape());
         yamlConstructors.put(YamlTape.FILE_TAG, new ConstructFile(fileResolver));
     }
 
     private class ConstructTape extends ConstructMapping {
-
-        private final FileResolver fileResolver;
-
-        public ConstructTape(FileResolver fileResolver) {
-            this.fileResolver = fileResolver;
-        }
-
         @Override
         protected Object createEmptyJavaBean(MappingNode node) {
             if (YamlTape.class.equals(node.getType())) {
-                return new YamlTape(fileResolver);
+                return new YamlTape();
             } else {
                 return super.createEmptyJavaBean(node);
             }

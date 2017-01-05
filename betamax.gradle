@@ -25,8 +25,7 @@ allprojects {
             spock: dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
                 exclude module: "groovy-all"
                 exclude module: "junit"
-            }),
-            tika: dependencies.create("org.apache.tika:tika-core:1.11")
+            })
         ]
     }
 }

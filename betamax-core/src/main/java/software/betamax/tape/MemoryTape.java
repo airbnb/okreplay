@@ -19,8 +19,6 @@ package software.betamax.tape;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import software.betamax.Configuration;
 import software.betamax.Headers;
 import software.betamax.MatchRule;
@@ -28,9 +26,6 @@ import software.betamax.TapeMode;
 import software.betamax.encoding.DeflateEncoder;
 import software.betamax.encoding.GzipEncoder;
 import software.betamax.handler.NonWritableTapeException;
-import software.betamax.io.FileResolver;
-import software.betamax.io.FileTypeMapper;
-import software.betamax.io.FilenameNormalizer;
 import software.betamax.message.Message;
 import software.betamax.message.Request;
 import software.betamax.message.Response;
@@ -39,8 +34,6 @@ import software.betamax.message.tape.RecordedRequest;
 import software.betamax.message.tape.RecordedResponse;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -62,14 +55,8 @@ public abstract class MemoryTape implements Tape {
 
     private transient TapeMode mode = Configuration.DEFAULT_MODE;
     private transient MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
-    private transient EntityStorage responseBodyStorage = Configuration.DEFAULT_RESPONSE_BODY_STORAGE;
-    private final transient FileResolver fileResolver;
 
     private transient AtomicInteger orderedIndex = new AtomicInteger();
-
-    protected MemoryTape(FileResolver fileResolver) {
-        this.fileResolver = fileResolver;
-    }
 
     @Override
     public String getName() {
@@ -98,11 +85,6 @@ public abstract class MemoryTape implements Tape {
     @Override
     public void setMatchRule(MatchRule matchRule) {
         this.matchRule = matchRule;
-    }
-
-    @Override
-    public void setResponseBodyStorage(EntityStorage responseBodyStorage) {
-        this.responseBodyStorage = responseBodyStorage;
     }
 
     @Override
@@ -257,22 +239,12 @@ public abstract class MemoryTape implements Tape {
             }
 
             if (response.hasBody()) {
-                recordResponseBody(response, recording);
+                recordBodyInline(response, recording);
             }
 
             return recording;
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void recordResponseBody(Response response, RecordedResponse recording) throws IOException {
-        switch (responseBodyStorage) {
-            case external:
-                recordBodyToFile(response, recording);
-                break;
-            default:
-                recordBodyInline(response, recording);
         }
     }
 
@@ -290,14 +262,6 @@ public abstract class MemoryTape implements Tape {
         } else {
             recording.setBody(message.getBodyAsBinary());
         }
-    }
-
-    private void recordBodyToFile(Message message, RecordedMessage recording) throws IOException {
-        String filename = FileTypeMapper.filenameFor(String.format("response-%02d", size() + 1), message.getContentType());
-        File body = fileResolver.toFile(FilenameNormalizer.toFilename(name), filename);
-        Files.createParentDirs(body);
-        ByteStreams.copy(new ByteArrayInputStream(message.getBodyAsBinary()), new FileOutputStream(body));
-        recording.setBody(body);
     }
 
     private static boolean isTextContentType(String contentType) {
