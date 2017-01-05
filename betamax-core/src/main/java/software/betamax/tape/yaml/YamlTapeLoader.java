@@ -84,7 +84,7 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
 
     @VisibleForTesting
     public YamlTape newTape(String name) {
-        YamlTape tape = new YamlTape(fileResolver);
+        YamlTape tape = new YamlTape();
         tape.setName(name);
         return tape;
     }

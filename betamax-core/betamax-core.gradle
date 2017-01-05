@@ -8,7 +8,6 @@ repositories {
 dependencies {
     compile commonDependencies.guava
     compile commonDependencies.snakeYaml
-    compile commonDependencies.tika
     compile commonDependencies.littleProxy
     compile commonDependencies.littleProxyMitm
     compile commonDependencies.netty
