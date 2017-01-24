@@ -13,7 +13,7 @@ import scala.concurrent.Await
   */
 class BetamaxTest extends Specification with DefaultAwaitTimeout {
   "A recorded interation" should {
-    "replay /" in RecordedInteraction("index", tapeMode = TapeMode.READ_WRITE) {
+    "replay /" in RecordedInteraction("index") {
       val port = 3333
       new WithServer(port = port) {
         val response = Await.result(WS.url(s"http://localhost:$port").get(), defaultAwaitTimeout.duration)
