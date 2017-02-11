@@ -17,12 +17,12 @@
 package software.betamax.proxy.concurrency
 
 import software.betamax.MatchRule
-import software.betamax.message.Request
+import software.betamax.message.BetamaxRequest
 
 class PostingMatchRule implements MatchRule {
 
     @Override
-    boolean isMatch(Request a, Request b) {
+    boolean isMatch(BetamaxRequest a, BetamaxRequest b) {
         if (a.uri == b.uri && a.method == b.method) {
             //Same method and URI, lets do a body comparison
             //Can only consume the body once, once it's gone it's gone.

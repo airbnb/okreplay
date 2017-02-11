@@ -16,37 +16,31 @@
 
 package software.betamax.tape;
 
-import software.betamax.message.tape.RecordedRequest;
-import software.betamax.message.tape.RecordedResponse;
-
 import java.util.Date;
 
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class RecordedInteraction {
-    public Date getRecorded() {
-        return recorded;
-    }
+  private final Date recorded;
+  private final Request request;
+  private final Response response;
 
-    public void setRecorded(Date recorded) {
-        this.recorded = recorded;
-    }
+  public RecordedInteraction(Date recorded, Request request, Response response) {
+    this.recorded = recorded;
+    this.request = request;
+    this.response = response;
+  }
 
-    public RecordedRequest getRequest() {
-        return request;
-    }
+  public Date getRecorded() {
+    return recorded;
+  }
 
-    public void setRequest(RecordedRequest request) {
-        this.request = request;
-    }
+  public Request getRequest() {
+    return request;
+  }
 
-    public RecordedResponse getResponse() {
-        return response;
-    }
-
-    public void setResponse(RecordedResponse response) {
-        this.response = response;
-    }
-
-    private Date recorded;
-    private RecordedRequest request;
-    private RecordedResponse response;
+  public Response getResponse() {
+    return response;
+  }
 }

@@ -17,7 +17,7 @@
 package software.betamax.proxy.matchRules
 
 import software.betamax.MatchRule
-import software.betamax.message.Request
+import software.betamax.message.BetamaxRequest
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,7 +28,7 @@ class InstrumentedMatchRule implements MatchRule {
     def requestValidations = []
 
     @Override
-    boolean isMatch(Request a, Request b) {
+    boolean isMatch(BetamaxRequest a, BetamaxRequest b) {
 
         requestValidations.each { rv ->
             rv.call(a)

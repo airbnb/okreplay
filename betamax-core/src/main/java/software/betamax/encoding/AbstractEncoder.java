@@ -18,41 +18,45 @@ package software.betamax.encoding;
 
 import com.google.common.io.CharStreams;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 public abstract class AbstractEncoder {
-    public final String decode(InputStream input, String charset) {
-        try {
-            return CharStreams.toString(new InputStreamReader(getDecodingInputStream(input), charset));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+  public final String decode(InputStream input, String charset) {
+    try {
+      return CharStreams.toString(new InputStreamReader(getDecodingInputStream(input), charset));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public final String decode(InputStream input) {
-        return decode(input, Charset.defaultCharset().toString());
-    }
+  public final String decode(InputStream input) {
+    return decode(input, Charset.defaultCharset().toString());
+  }
 
-    public final byte[] encode(byte[] input) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        OutputStream stream = getEncodingOutputStream(out);
-        stream.write(input);
-        stream.flush();
-        stream.close();
-        return out.toByteArray();
-    }
+  public final byte[] encode(byte[] input) throws IOException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    OutputStream stream = getEncodingOutputStream(out);
+    stream.write(input);
+    stream.flush();
+    stream.close();
+    return out.toByteArray();
+  }
 
-    public final byte[] encode(String input, String charset) throws IOException {
-        return encode(input.getBytes(charset));
-    }
+  public final byte[] encode(String input, String charset) throws IOException {
+    return encode(input.getBytes(charset));
+  }
 
-    public final byte[] encode(String input) throws IOException {
-        String charset = Charset.defaultCharset().toString();
-        return encode(input.getBytes(charset));
-    }
+  public final byte[] encode(String input) throws IOException {
+    String charset = Charset.defaultCharset().toString();
+    return encode(input.getBytes(charset));
+  }
 
-    protected abstract InputStream getDecodingInputStream(InputStream input);
+  protected abstract InputStream getDecodingInputStream(InputStream input);
 
-    protected abstract OutputStream getEncodingOutputStream(OutputStream output);
+  protected abstract OutputStream getEncodingOutputStream(OutputStream output);
 }

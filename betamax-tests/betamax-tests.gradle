@@ -13,10 +13,6 @@ dependencies {
     testCompile project(":betamax-junit")
 
     testCompile commonDependencies.junit
-    testCompile commonDependencies.netty
-    testCompile commonDependencies.httpClient
-    testCompile commonDependencies.httpBuilder
-
     testRuntime commonDependencies.cglib
 
     testCompile("commons-httpclient:commons-httpclient:3.1") {

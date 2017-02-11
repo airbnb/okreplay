@@ -17,8 +17,7 @@
 package software.betamax.handler;
 
 public class NonWritableTapeException extends HandlerException {
-    public NonWritableTapeException() {
-        super("Tape is not writable");
-    }
-
+  public NonWritableTapeException() {
+    super("Tape is not writable");
+  }
 }

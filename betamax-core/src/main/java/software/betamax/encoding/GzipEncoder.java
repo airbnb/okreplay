@@ -23,22 +23,19 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class GzipEncoder extends AbstractEncoder {
-    @Override
-    protected InputStream getDecodingInputStream(InputStream input) {
-        try {
-            return new GZIPInputStream(input);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+  @Override protected InputStream getDecodingInputStream(InputStream input) {
+    try {
+      return new GZIPInputStream(input);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    protected OutputStream getEncodingOutputStream(OutputStream output) {
-        try {
-            return new GZIPOutputStream(output);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+  @Override protected OutputStream getEncodingOutputStream(OutputStream output) {
+    try {
+      return new GZIPOutputStream(output);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-
+  }
 }

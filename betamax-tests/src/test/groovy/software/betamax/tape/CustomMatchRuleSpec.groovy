@@ -23,7 +23,7 @@ import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
 import software.betamax.junit.RecorderRule
-import software.betamax.message.Request
+import software.betamax.message.BetamaxRequest
 import software.betamax.util.message.BasicRequest
 import spock.lang.*
 
@@ -42,7 +42,7 @@ class CustomMatchRuleSpec extends Specification {
     @Shared def url = "http://freeside.co/betamax"
     @Shared def acceptHeaderRule = new MatchRule() {
         @Override
-        boolean isMatch(Request a, Request b) {
+        boolean isMatch(BetamaxRequest a, BetamaxRequest b) {
             a.getHeader(ACCEPT) == b.getHeader(ACCEPT)
         }
     }

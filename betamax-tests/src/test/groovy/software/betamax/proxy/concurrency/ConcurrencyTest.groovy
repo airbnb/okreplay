@@ -82,7 +82,7 @@ class ConcurrencyTest extends Specification {
 
         httpClient.start()
         def requestCount = amount
-        println("client started, request count ${requestCount}")
+        println("okHttpClient started, request count ${requestCount}")
 
         List<HttpPost> requests = []
 

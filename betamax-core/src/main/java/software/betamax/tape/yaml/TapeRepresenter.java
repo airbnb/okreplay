@@ -19,22 +19,34 @@ package software.betamax.tape.yaml;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
+
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.*;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
-import software.betamax.io.FileResolver;
-import software.betamax.message.tape.RecordedRequest;
-import software.betamax.message.tape.RecordedResponse;
-import software.betamax.tape.RecordedInteraction;
-import software.betamax.tape.Tape;
 
 import java.beans.IntrospectionException;
 import java.io.File;
 import java.net.URI;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import okhttp3.Request;
+import okhttp3.Response;
+import software.betamax.io.FileResolver;
+import software.betamax.tape.RecordedInteraction;
+import software.betamax.tape.Tape;
 
 import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.LITERAL;
 import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
@@ -45,114 +57,116 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
  */
 public class TapeRepresenter extends Representer {
 
-    public TapeRepresenter(FileResolver fileResolver) {
-        setPropertyUtils(new TapePropertyUtils());
-        representers.put(URI.class, new RepresentURI());
-        representers.put(File.class, new RepresentFile(fileResolver));
+  public TapeRepresenter(FileResolver fileResolver) {
+    setPropertyUtils(new TapePropertyUtils());
+    representers.put(URI.class, new RepresentURI());
+    representers.put(File.class, new RepresentFile(fileResolver));
+  }
+
+  @Override
+  protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag
+      customTag) {
+    NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
+
+    if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
+      return null;
     }
 
-    @Override
-    protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag customTag) {
-        NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
-
-        if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
-            return null;
-        }
-
-        if ("body".equals(property.getName())) {
-            ScalarNode n = (ScalarNode) tuple.getValueNode();
-            if (n.getStyle() == PLAIN.getChar()) {
-                return tuple;
-            } else {
-                return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n.getStartMark(), n.getEndMark(), LITERAL.getChar()));
-            }
-        }
-
+    if ("body".equals(property.getName())) {
+      ScalarNode n = (ScalarNode) tuple.getValueNode();
+      if (n.getStyle() == PLAIN.getChar()) {
         return tuple;
+      } else {
+        return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n
+            .getStartMark(), n.getEndMark(), LITERAL.getChar()));
+      }
     }
 
-    @Override
-    protected Node representMapping(Tag tag, Map<?, ?> mapping, Boolean flowStyle) {
-        return super.representMapping(tag, sort(mapping), flowStyle);
+    return tuple;
+  }
+
+  @Override protected Node representMapping(Tag tag, Map<?, ?> mapping, Boolean flowStyle) {
+    return super.representMapping(tag, sort(mapping), flowStyle);
+  }
+
+  private <K, V> Map<K, V> sort(Map<K, V> self) {
+    return new TreeMap<K, V>(self);
+  }
+
+  private boolean isNullValue(NodeTuple tuple) {
+    return tuple.getValueNode().getTag().equals(Tag.NULL);
+  }
+
+  private boolean isEmptySequence(NodeTuple tuple) {
+    return tuple.getValueNode() instanceof SequenceNode && ((SequenceNode) tuple.getValueNode())
+        .getValue().isEmpty();
+  }
+
+  private boolean isEmptyMapping(NodeTuple tuple) {
+    return tuple.getValueNode() instanceof MappingNode && ((MappingNode) tuple.getValueNode())
+        .getValue().isEmpty();
+  }
+
+  private class RepresentURI implements Represent {
+    public Node representData(Object data) {
+      return representScalar(Tag.STR, data.toString());
+    }
+  }
+
+  private class RepresentFile implements Represent {
+
+    private final FileResolver fileResolver;
+
+    public RepresentFile(FileResolver fileResolver) {
+      this.fileResolver = fileResolver;
     }
 
-    private <K, V> Map<K, V> sort(Map<K, V> self) {
-        return new TreeMap<K, V>(self);
+    @Override public Node representData(Object data) {
+      return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
     }
+  }
 
-    private boolean isNullValue(NodeTuple tuple) {
-        return tuple.getValueNode().getTag().equals(Tag.NULL);
-    }
-
-    private boolean isEmptySequence(NodeTuple tuple) {
-        return tuple.getValueNode() instanceof SequenceNode && ((SequenceNode) tuple.getValueNode()).getValue().isEmpty();
-    }
-
-    private boolean isEmptyMapping(NodeTuple tuple) {
-        return tuple.getValueNode() instanceof MappingNode && ((MappingNode) tuple.getValueNode()).getValue().isEmpty();
-    }
-
-    private class RepresentURI implements Represent {
-        public Node representData(Object data) {
-            return representScalar(Tag.STR, data.toString());
+  public class TapePropertyUtils extends PropertyUtils {
+    @Override protected Set<Property> createPropertySet(Class<?> type, BeanAccess bAccess) {
+      try {
+        Set<Property> properties = super.createPropertySet(type, bAccess);
+        if (Tape.class.isAssignableFrom(type)) {
+          return sort(properties, "name", "interactions");
+        } else if (RecordedInteraction.class.isAssignableFrom(type)) {
+          return sort(properties, "recorded", "request", "response");
+        } else if (Request.class.isAssignableFrom(type)) {
+          return sort(properties, "method", "uri", "headers", "body");
+        } else if (Response.class.isAssignableFrom(type)) {
+          return sort(properties, "status", "headers", "body");
+        } else {
+          return properties;
         }
+      } catch (IntrospectionException e) {
+        throw new RuntimeException(e);
+      }
     }
 
-    private class RepresentFile implements Represent {
+    private Set<Property> sort(Set<Property> properties, String... names) {
+      return Sets.newLinkedHashSet(Ordering.from(OrderedPropertyComparator.forNames(names))
+          .sortedCopy(properties));
+    }
+  }
 
-        private final FileResolver fileResolver;
+  public static class OrderedPropertyComparator implements Comparator<Property> {
 
-        public RepresentFile(FileResolver fileResolver) {
-            this.fileResolver = fileResolver;
-        }
-
-        @Override
-        public Node representData(Object data) {
-            return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
-        }
+    public static OrderedPropertyComparator forNames(String... propertyNames) {
+      return new OrderedPropertyComparator(propertyNames);
     }
 
-    public class TapePropertyUtils extends PropertyUtils {
-        @Override
-        protected Set<Property> createPropertySet(Class<?> type, BeanAccess bAccess) {
-            try {
-                Set<Property> properties = super.createPropertySet(type, bAccess);
-                if (Tape.class.isAssignableFrom(type)) {
-                    return sort(properties, "name", "interactions");
-                } else if (RecordedInteraction.class.isAssignableFrom(type)) {
-                    return sort(properties, "recorded", "request", "response");
-                } else if (RecordedRequest.class.isAssignableFrom(type)) {
-                    return sort(properties, "method", "uri", "headers", "body");
-                } else if (RecordedResponse.class.isAssignableFrom(type)) {
-                    return sort(properties, "status", "headers", "body");
-                } else {
-                    return properties;
-                }
-            } catch (IntrospectionException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private Set<Property> sort(Set<Property> properties, String... names) {
-            return Sets.newLinkedHashSet(Ordering.from(OrderedPropertyComparator.forNames(names)).sortedCopy(properties));
-        }
+    private OrderedPropertyComparator(String... propertyNames) {
+      this.propertyNames = Arrays.asList(propertyNames);
     }
 
-    public static class OrderedPropertyComparator implements Comparator<Property> {
-
-        public static OrderedPropertyComparator forNames(String... propertyNames) {
-            return new OrderedPropertyComparator(propertyNames);
-        }
-
-        private OrderedPropertyComparator(String... propertyNames) {
-            this.propertyNames = Arrays.asList(propertyNames);
-        }
-
-        public int compare(Property a, Property b) {
-            return Ints.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
-        }
-
-        private List<String> propertyNames;
+    public int compare(Property a, Property b) {
+      return Ints.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
     }
+
+    private List<String> propertyNames;
+  }
 }
 

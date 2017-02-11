@@ -19,9 +19,7 @@ package software.betamax.internal;
 import software.betamax.tape.Tape;
 
 public interface RecorderListener {
+  void onRecorderStart(Tape tape);
 
-    void onRecorderStart(Tape tape);
-
-    void onRecorderStop();
-
+  void onRecorderStop();
 }

@@ -17,7 +17,7 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
-import software.betamax.message.Response
+import software.betamax.message.BetamaxResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
@@ -36,12 +36,12 @@ class ContentTypeSpec extends Specification {
     @Shared Tape tape = loader.loadTape('tape_spec')
     @Shared File image = new File(Class.getResource("/image.png").toURI())
 
-    @Shared Response successResponse = new BasicResponse(HTTP_OK, "OK")
+    @Shared BetamaxResponse successResponse = new BasicResponse(HTTP_OK, "OK")
 
     void setup() {
         tape.mode = READ_WRITE
     }
-    
+
     void 'can record post requests with an image content-type'() {
         given: 'a request with some content'
         def imagePostRequest = new BasicRequest("POST", "http://github.com/")

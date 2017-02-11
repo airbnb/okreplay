@@ -16,80 +16,73 @@
 
 package software.betamax;
 
-import software.betamax.message.Request;
-
+import java.io.IOException;
 import java.util.Arrays;
 
-/**
- * Standard {@link MatchRule} implementations.
- */
+import okhttp3.Request;
+import okio.Buffer;
+
+/** Standard {@link MatchRule} implementations. */
 public enum MatchRules implements MatchRule {
-    method {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getMethod().equalsIgnoreCase(b.getMethod());
-        }
-    }, uri {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().equals(b.getUri());
-        }
-    }, host {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().getHost().equals(b.getUri().getHost());
-        }
-    }, path {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().getPath().equals(b.getUri().getPath());
-        }
-    }, port {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().getPort() == b.getUri().getPort();
-        }
-    }, query {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getUri().getQuery().equals(b.getUri().getQuery());
-        }
-    },
+  method {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.method().equalsIgnoreCase(b.method());
+    }
+  }, uri {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.url().equals(b.url());
+    }
+  }, host {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.url().url().getHost().equals(b.url().url().getHost());
+    }
+  }, path {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.url().url().getPath().equals(b.url().url().getPath());
+    }
+  }, port {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.url().url().getPort() == b.url().url().getPort();
+    }
+  }, query {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.url().url().getQuery().equals(b.url().url().getQuery());
+    }
+  }, queryParams {
     /**
      * Compare query parameters instead of query string representation.
      */
-    queryParams {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            if((a.getUri().getQuery() != null) && (b.getUri().getQuery() != null)) {
-                // both request have a query, split query params and compare
-                String[] aParameters = a.getUri().getQuery().split("&");
-                String[] bParameters = b.getUri().getQuery().split("&");
-                Arrays.sort(aParameters);
-                Arrays.sort(bParameters);
-                return Arrays.equals(aParameters, bParameters);
-            } else {
-                if ((a.getUri().getQuery() == null) && (b.getUri().getQuery() == null)) {
-                    // both request have no query
-                    return true;
-                }
-                return false;
-            }
-        }
-    }, authorization {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getHeader("Authorization").equals(b.getHeader("Authorization"));
-        }
-    }, accept {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return a.getHeader("Accept").equals(b.getHeader("Accept"));
-        }
-    }, body {
-        @Override
-        public boolean isMatch(Request a, Request b) {
-            return Arrays.equals(a.getBodyAsBinary(), b.getBodyAsBinary());
-        }
+    @Override public boolean isMatch(Request a, Request b) {
+      if ((a.url().url().getQuery() != null) && (b.url().url().getQuery() != null)) {
+        // both request have a query, split query params and compare
+        String[] aParameters = a.url().url().getQuery().split("&");
+        String[] bParameters = b.url().url().getQuery().split("&");
+        Arrays.sort(aParameters);
+        Arrays.sort(bParameters);
+        return Arrays.equals(aParameters, bParameters);
+      } else {
+        return (a.url().url().getQuery() == null) && (b.url().url().getQuery() == null);
+      }
     }
+  }, authorization {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.header("Authorization").equals(b.header("Authorization"));
+    }
+  }, accept {
+    @Override public boolean isMatch(Request a, Request b) {
+      return a.header("Accept").equals(b.header("Accept"));
+    }
+  }, body {
+    @Override public boolean isMatch(Request a, Request b) {
+      try {
+        Buffer bufferA = new Buffer();
+        a.body().writeTo(bufferA);
+        Buffer bufferB = new Buffer();
+        b.body().writeTo(bufferB);
+        return Arrays.equals(bufferA.readByteArray(), bufferB.readByteArray());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
 }

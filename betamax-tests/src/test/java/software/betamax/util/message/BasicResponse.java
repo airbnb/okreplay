@@ -16,9 +16,9 @@
 
 package software.betamax.util.message;
 
-import software.betamax.message.Response;
+import software.betamax.message.BetamaxResponse;
 
-public class BasicResponse extends BasicMessage implements Response {
+public class BasicResponse extends BasicMessage implements BetamaxResponse {
 
     public BasicResponse() { }
 

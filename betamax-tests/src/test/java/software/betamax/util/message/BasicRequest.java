@@ -16,12 +16,12 @@
 
 package software.betamax.util.message;
 
-import software.betamax.message.Request;
+import software.betamax.message.BetamaxRequest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class BasicRequest extends BasicMessage implements Request {
+public class BasicRequest extends BasicMessage implements BetamaxRequest {
 
     public BasicRequest() { }
 

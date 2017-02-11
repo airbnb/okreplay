@@ -18,7 +18,7 @@ package software.betamax.recorder
 
 import groovy.json.JsonSlurper
 import software.betamax.junit.Betamax
-import software.betamax.message.Response
+import software.betamax.message.BetamaxResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import spock.lang.Issue
@@ -46,7 +46,7 @@ class SequentialTapeSpec extends Specification {
         tape.mode = READ_SEQUENTIAL
 
         when: "the tape is read multiple times"
-        List<Response> responses = []
+        List<BetamaxResponse> responses = []
         n.times {
             responses << tape.play(request)
         }
@@ -100,7 +100,7 @@ class SequentialTapeSpec extends Specification {
         postRequest.body = '{"name":"foo"}'.bytes
 
         when: "the requests are played back in sequence"
-        List<Response> responses = []
+        List<BetamaxResponse> responses = []
         responses << tape.play(getRequest)
         responses << tape.play(postRequest)
         responses << tape.play(getRequest)

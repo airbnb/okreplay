@@ -16,11 +16,12 @@
 
 package software.betamax;
 
-import software.betamax.message.Request;
+import okhttp3.Request;
 
 /**
- * A rule used to determine whether a recorded HTTP interaction on tape matches a new request being made.
+ * A rule used to determine whether a recorded HTTP interaction on tape matches a new request being
+ * made.
  */
 public interface MatchRule {
-    boolean isMatch(Request a, Request b);
+  boolean isMatch(Request a, Request b);
 }

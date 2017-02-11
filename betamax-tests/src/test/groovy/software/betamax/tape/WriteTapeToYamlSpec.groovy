@@ -18,8 +18,8 @@ package software.betamax.tape
 
 import com.google.common.io.Files
 import org.yaml.snakeyaml.Yaml
-import software.betamax.message.Request
-import software.betamax.message.Response
+import software.betamax.message.BetamaxRequest
+import software.betamax.message.BetamaxResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
@@ -38,11 +38,11 @@ class WriteTapeToYamlSpec extends Specification {
     @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
     @Shared def loader = new YamlTapeLoader(tapeRoot)
 
-    @Shared Request getRequest
-    @Shared Request postRequest
-    @Shared Response successResponse
-    @Shared Response failureResponse
-    @Shared Response imageResponse
+    @Shared BetamaxRequest getRequest
+    @Shared BetamaxRequest postRequest
+    @Shared BetamaxResponse successResponse
+    @Shared BetamaxResponse failureResponse
+    @Shared BetamaxResponse imageResponse
     @Shared File image
 
     Yaml yamlReader

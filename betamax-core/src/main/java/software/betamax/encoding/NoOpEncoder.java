@@ -20,14 +20,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class NoOpEncoder extends AbstractEncoder {
-    @Override
-    protected InputStream getDecodingInputStream(InputStream input) {
-        return input;
-    }
+  @Override protected InputStream getDecodingInputStream(InputStream input) {
+    return input;
+  }
 
-    @Override
-    protected OutputStream getEncodingOutputStream(OutputStream output) {
-        return output;
-    }
-
+  @Override protected OutputStream getEncodingOutputStream(OutputStream output) {
+    return output;
+  }
 }

@@ -17,7 +17,7 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
-import software.betamax.message.Request
+import software.betamax.message.BetamaxRequest
 import software.betamax.tape.yaml.YamlTapeLoader
 import software.betamax.util.message.BasicRequest
 import software.betamax.util.message.BasicResponse
@@ -45,7 +45,7 @@ class MultiThreadedTapeAccessSpec extends Specification {
 
     void "the correct response is replayed to each thread"() {
         given: "a number of requests"
-        List<Request> requests = (0..<threads).collect { i ->
+        List<BetamaxRequest> requests = (0..<threads).collect { i ->
             def request = new BasicRequest("GET", "http://example.com/$i")
             request.addHeader("X-Thread", i.toString())
             request
@@ -85,7 +85,7 @@ class MultiThreadedTapeAccessSpec extends Specification {
         tape.mode = WRITE_SEQUENTIAL
 
         and: "a number of requests"
-        List<Request> requests = (0..<threads).collect { i ->
+        List<BetamaxRequest> requests = (0..<threads).collect { i ->
             def request = new BasicRequest("GET", "http://example.com/")
             request.addHeader("X-Thread", i.toString())
             request

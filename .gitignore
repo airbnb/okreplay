@@ -21,3 +21,4 @@ log.txt
 target/
 *.csr
 *.cert
+classes/

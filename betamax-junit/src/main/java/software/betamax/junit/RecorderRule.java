@@ -18,14 +18,23 @@ package software.betamax.junit;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
+
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.betamax.*;
 
-import static com.google.common.base.CaseFormat.*;
+import software.betamax.ComposedMatchRule;
+import software.betamax.Configuration;
+import software.betamax.MatchRule;
+import software.betamax.MatchRules;
+import software.betamax.Recorder;
+import software.betamax.TapeMode;
+
+import static com.google.common.base.CaseFormat.LOWER_CAMEL;
+import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
+import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 
 /**
  * This is an extension of {@link Recorder} that can be used as a
@@ -35,65 +44,61 @@ import static com.google.common.base.CaseFormat.*;
  */
 public class RecorderRule extends Recorder implements TestRule {
 
-    private final Logger log = LoggerFactory.getLogger(RecorderRule.class.getName());
+  private final Logger log = LoggerFactory.getLogger(RecorderRule.class.getName());
 
-    public RecorderRule() {
-        super();
-    }
+  public RecorderRule() {
+  }
 
-    public RecorderRule(Configuration configuration) {
-        super(configuration);
-    }
+  public RecorderRule(Configuration configuration) {
+    super(configuration);
+  }
 
-    @Override
-    public Statement apply(final Statement statement, final Description description) {
-        final Betamax annotation = description.getAnnotation(Betamax.class);
-        if (annotation != null) {
-            log.debug(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    try {
-                        String tapeName = annotation.tape();
-                        if (Strings.isNullOrEmpty(tapeName)) {
-                            tapeName = defaultTapeName(description);
-                        }
+  @Override public Statement apply(final Statement statement, final Description description) {
+    final Betamax annotation = description.getAnnotation(Betamax.class);
+    if (annotation != null) {
+      log.debug(String.format("found @Betamax annotation on '%s'", description.getDisplayName()));
+      return new Statement() {
+        @Override public void evaluate() throws Throwable {
+          try {
+            String tapeName = annotation.tape();
+            if (Strings.isNullOrEmpty(tapeName)) {
+              tapeName = defaultTapeName(description);
+            }
 
-                        TapeMode tapeMode = annotation.mode();
-                        MatchRules[] matchRules = annotation.match();
+            TapeMode tapeMode = annotation.mode();
+            MatchRules[] matchRules = annotation.match();
 
-                        Optional<MatchRule> matchRule;
-                        if (matchRules.length > 0) {
-                            matchRule = Optional.<MatchRule>of(ComposedMatchRule.of(matchRules));
-                        } else {
-                            matchRule = Optional.absent();
-                        }
+            Optional<MatchRule> matchRule;
+            if (matchRules.length > 0) {
+              matchRule = Optional.<MatchRule>of(ComposedMatchRule.of(matchRules));
+            } else {
+              matchRule = Optional.absent();
+            }
 
-                        start(tapeName, tapeMode.toOptional(), matchRule);
+            start(tapeName, tapeMode.toOptional(), matchRule);
 
-                        statement.evaluate();
-                    } catch (Exception e) {
-                        log.error("Caught exception starting Betamax", e);
-                        throw e;
-                    } finally {
-                        stop();
-                    }
-                }
-            };
-        } else {
-            log.debug(String.format("no @Betamax annotation on '%s'", description.getDisplayName()));
-            return statement;
+            statement.evaluate();
+          } catch (Exception e) {
+            log.error("Caught exception starting Betamax", e);
+            throw e;
+          } finally {
+            stop();
+          }
         }
+      };
+    } else {
+      log.debug(String.format("no @Betamax annotation on '%s'", description.getDisplayName()));
+      return statement;
     }
+  }
 
-    private String defaultTapeName(Description description) {
-        String name;
-        if (description.getMethodName() != null) {
-            name = LOWER_CAMEL.to(LOWER_UNDERSCORE, description.getMethodName());
-        } else {
-            name = UPPER_CAMEL.to(LOWER_UNDERSCORE, description.getTestClass().getSimpleName());
-        }
-        return name.replace('_', ' ');
+  private String defaultTapeName(Description description) {
+    String name;
+    if (description.getMethodName() != null) {
+      name = LOWER_CAMEL.to(LOWER_UNDERSCORE, description.getMethodName());
+    } else {
+      name = UPPER_CAMEL.to(LOWER_UNDERSCORE, description.getTestClass().getSimpleName());
     }
-
+    return name.replace('_', ' ');
+  }
 }

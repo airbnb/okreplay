@@ -22,14 +22,11 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 public class DeflateEncoder extends AbstractEncoder {
-    @Override
-    protected InputStream getDecodingInputStream(InputStream input) {
-        return new InflaterInputStream(input);
-    }
+  @Override protected InputStream getDecodingInputStream(InputStream input) {
+    return new InflaterInputStream(input);
+  }
 
-    @Override
-    protected OutputStream getEncodingOutputStream(OutputStream output) {
-        return new DeflaterOutputStream(output);
-    }
-
+  @Override protected OutputStream getEncodingOutputStream(OutputStream output) {
+    return new DeflaterOutputStream(output);
+  }
 }

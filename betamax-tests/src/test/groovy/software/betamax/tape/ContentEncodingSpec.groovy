@@ -39,7 +39,7 @@ class ContentEncodingSpec extends Specification {
     /**
      * This is really just testing that the tape doesn"t do anything silly
      * in the presence of a Content-Encoding header. It is the responsibility
-     * of the Response implementation to decode the downstream content.
+     * of the BetamaxResponse implementation to decode the downstream content.
      */
     void "a #encoding encoded response body is stored as plain text in a tape file"() {
         given:
