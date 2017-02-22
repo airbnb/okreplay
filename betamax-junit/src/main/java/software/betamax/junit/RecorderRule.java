@@ -31,6 +31,7 @@ import software.betamax.MatchRule;
 import software.betamax.MatchRules;
 import software.betamax.Recorder;
 import software.betamax.TapeMode;
+import software.betamax.proxy.BetamaxInterceptor;
 
 import static com.google.common.base.CaseFormat.LOWER_CAMEL;
 import static com.google.common.base.CaseFormat.LOWER_UNDERSCORE;
@@ -49,8 +50,8 @@ public class RecorderRule extends Recorder implements TestRule {
   public RecorderRule() {
   }
 
-  public RecorderRule(Configuration configuration) {
-    super(configuration);
+  public RecorderRule(Configuration configuration, BetamaxInterceptor interceptor) {
+    super(configuration, interceptor);
   }
 
   @Override public Statement apply(final Statement statement, final Description description) {

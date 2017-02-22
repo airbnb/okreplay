@@ -17,12 +17,16 @@
 package software.betamax.proxy
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.ClassRule
 import software.betamax.Configuration
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
-import software.betamax.util.server.OkHandler
-import software.betamax.util.server.SimpleServer
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.VIA
@@ -33,12 +37,15 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 @Timeout(10)
 class RequestMethodsSpec extends Specification {
-
+  def interceptor = new BetamaxInterceptor()
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  @Shared @AutoCleanup("stop") def endpoint = new MockWebServer()
 
-  @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(OkHandler)
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
   void setupSpec() {
     endpoint.start()
@@ -46,15 +53,19 @@ class RequestMethodsSpec extends Specification {
 
   void "proxy handles #method requests"() {
     when:
-    HttpURLConnection connection = endpoint.url.toURL().openConnection()
-    connection.requestMethod = method
+    endpoint.enqueue(new MockResponse().setBody("OK"))
+    def body = method == "GET" ? null : RequestBody.create(MediaType.parse("text/plain"), "")
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .method(method, body)
+        .build()
+    def response = client.newCall(request).execute()
 
     then:
-    connection.responseCode == HTTP_OK
-    connection.getHeaderField(VIA) == "Betamax"
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
 
     where:
     method << ["GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS"]
   }
-
 }

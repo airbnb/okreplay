@@ -26,6 +26,7 @@ import org.junit.Test;
 import java.io.File;
 
 import software.betamax.Configuration;
+import software.betamax.proxy.BetamaxInterceptor;
 import spock.lang.Issue;
 
 @Issue("https://github.com/robfletcher/betamax/issues/36")
@@ -33,7 +34,8 @@ import spock.lang.Issue;
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
   private static Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
-  @ClassRule public static RecorderRule recorder = new RecorderRule(configuration);
+  @ClassRule public static RecorderRule recorder = new RecorderRule(configuration,
+      new BetamaxInterceptor());
 
   @AfterClass public static void deleteTempDir() {
     ResourceGroovyMethods.deleteDir(TAPE_ROOT);

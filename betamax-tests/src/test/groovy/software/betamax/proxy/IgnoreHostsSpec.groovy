@@ -17,10 +17,12 @@
 package software.betamax.proxy
 
 import com.google.common.io.Files
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import software.betamax.Configuration
 import software.betamax.Recorder
-import software.betamax.util.server.EchoHandler
-import software.betamax.util.server.SimpleServer
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.VIA
@@ -29,12 +31,17 @@ import static software.betamax.TapeMode.READ_WRITE
 @Issue("https://github.com/robfletcher/betamax/issues/16")
 @Unroll
 class IgnoreHostsSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
-  @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
+  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()
+      .tapeRoot(tapeRoot)
+      .defaultMode(READ_WRITE)])
+  def interceptor = new BetamaxInterceptor()
+  @AutoCleanup("stop") Recorder recorder = new Recorder(configuration, interceptor)
+  @Shared @AutoCleanup("stop") MockWebServer endpoint = new MockWebServer()
 
-  @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
   void setupSpec() {
     endpoint.start()
@@ -46,20 +53,24 @@ class IgnoreHostsSpec extends Specification {
     recorder.start("ignore hosts spec")
 
     when: "a request is made"
-    HttpURLConnection connection = requestURI.toURL().openConnection()
+    endpoint.enqueue(new MockResponse().setBody("OK"))
+    def request = new Request.Builder()
+        .url(requestURI)
+        .build()
+    def response = client.newCall(request).execute()
 
     then: "the request is not intercepted by the proxy"
-    connection.getHeaderField(VIA) == null
+    response.header(VIA) == null
 
     and: "nothing is recorded to the tape"
     recorder.tape.size() == old(recorder.tape.size())
 
     where:
-    ignoreHosts               | requestURI
-    endpoint.url.toURI().host | endpoint.url
-    "localhost"               | "http://localhost:${endpoint.url.toURI().port}"
-    "127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
-    endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
+    ignoreHosts              | requestURI
+    endpoint.url("/").host() | endpoint.url("/").toString()
+    "localhost"              | "http://localhost:${endpoint.url("/").port()}"
+    "127.0.0.1"              | "http://localhost:${endpoint.url("/").port()}"
+    endpoint.url("/").host() | "http://localhost:${endpoint.url("/").port()}"
   }
 
   void "does not proxy a request to #requestURI when ignoreLocalhost is true"() {
@@ -68,16 +79,20 @@ class IgnoreHostsSpec extends Specification {
     recorder.start("ignore hosts spec")
 
     when: "a request is made"
-    HttpURLConnection connection = requestURI.toURL().openConnection()
+    endpoint.enqueue(new MockResponse().setBody("OK"))
+    def request = new Request.Builder()
+        .url(requestURI)
+        .build()
+    def response = client.newCall(request).execute()
 
     then: "the request is not intercepted by the proxy"
-    connection.getHeaderField(VIA) == null
+    response.header(VIA) == null
 
     and: "nothing is recorded to the tape"
     recorder.tape.size() == old(recorder.tape.size())
 
     where:
-    requestURI << [endpoint.url, "http://localhost:${endpoint.url.toURI().port}"]
+    requestURI << [endpoint.url('/').toString(),
+        "http://localhost:${endpoint.url('/').port()}"]
   }
-
 }

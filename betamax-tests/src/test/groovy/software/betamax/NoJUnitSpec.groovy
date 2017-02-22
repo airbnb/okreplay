@@ -32,18 +32,18 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Unroll
 @Timeout(10)
 class NoJUnitSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder()
       .tapeRoot(tapeRoot)
       .sslEnabled(true)
       .build()
-  @Shared Recorder recorder = new Recorder(configuration)
+  @Shared BetamaxInterceptor interceptor = new BetamaxInterceptor()
+  @Shared Recorder recorder = new Recorder(configuration, interceptor)
 
-  @Shared @AutoCleanup("stop") def httpEndpoint = new MockWebServer()
+  @Shared def httpEndpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(new BetamaxInterceptor())
+      .addInterceptor(interceptor)
       .build()
 
   void setupSpec() {

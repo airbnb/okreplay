@@ -17,17 +17,17 @@
 package software.betamax
 
 import software.betamax.internal.RecorderListener
+import software.betamax.proxy.BetamaxInterceptor
 import software.betamax.tape.Tape
 import spock.lang.Specification
 import spock.lang.Subject
 
 class RecorderSpec extends Specification {
-
   def listener = Mock(RecorderListener)
   def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()]) {
     registerListeners(_) >> { it[0] << listener }
   }
-  @Subject def recorder = new Recorder(configuration)
+  @Subject def recorder = new Recorder(configuration, new BetamaxInterceptor())
 
   void "throws an exception if started when already running"() {
     given:

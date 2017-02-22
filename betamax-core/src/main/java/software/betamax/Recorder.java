@@ -22,6 +22,7 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 
 import software.betamax.internal.RecorderListener;
+import software.betamax.proxy.BetamaxInterceptor;
 import software.betamax.tape.Tape;
 import software.betamax.tape.TapeLoader;
 import software.betamax.tape.yaml.YamlTapeLoader;
@@ -31,16 +32,17 @@ import software.betamax.tape.yaml.YamlTapeLoader;
  * ejecting {@link Tape} instances and starting and stopping recording sessions.
  */
 public class Recorder {
-
   private final Configuration configuration;
+  private final BetamaxInterceptor interceptor;
   private final Collection<RecorderListener> listeners = Lists.newArrayList();
 
   public Recorder() {
-    this(Configuration.builder().build());
+    this(Configuration.builder().build(), new BetamaxInterceptor());
   }
 
-  public Recorder(Configuration configuration) {
+  public Recorder(Configuration configuration, BetamaxInterceptor interceptor) {
     this.configuration = configuration;
+    this.interceptor = interceptor;
     configuration.registerListeners(listeners);
   }
 
@@ -62,6 +64,7 @@ public class Recorder {
     tape = getTapeLoader().loadTape(tapeName);
     tape.setMode(mode.or(configuration.getDefaultMode()));
     tape.setMatchRule(matchRule.or(configuration.getDefaultMatchRule()));
+    interceptor.start(tape);
 
     for (RecorderListener listener : listeners) {
       listener.onRecorderStart(tape);

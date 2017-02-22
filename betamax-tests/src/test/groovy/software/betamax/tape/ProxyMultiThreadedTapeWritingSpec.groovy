@@ -15,19 +15,13 @@
  */
 
 package software.betamax.tape
-
-import org.junit.Rule
-import software.betamax.Configuration
-import software.betamax.junit.RecorderRule
-import software.betamax.tck.MultiThreadedTapeWritingSpec
-
-class ProxyMultiThreadedTapeWritingSpec extends MultiThreadedTapeWritingSpec {
-
-  def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-  @Rule RecorderRule recorder = new RecorderRule(configuration)
-
-  @Override
-  protected String makeRequest(String url) {
-    url.toURL().text
-  }
-}
+//class ProxyMultiThreadedTapeWritingSpec extends MultiThreadedTapeWritingSpec {
+//
+//  def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+//  @Rule RecorderRule recorder = new RecorderRule(configuration)
+//
+//  @Override
+//  protected String makeRequest(String url) {
+//    url.toURL().text
+//  }
+//}

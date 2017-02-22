@@ -16,6 +16,8 @@
 
 package software.betamax.proxy
 
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.junit.Rule
 import software.betamax.Configuration
 import software.betamax.junit.Betamax
@@ -24,8 +26,6 @@ import spock.lang.Ignore
 import spock.lang.Issue
 import spock.lang.Specification
 
-import javax.net.ssl.HttpsURLConnection
-
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.Headers.X_BETAMAX
@@ -33,21 +33,24 @@ import static software.betamax.Headers.X_BETAMAX
 @Ignore
 @Issue("https://github.com/robfletcher/betamax/issues/117")
 class DisconnectedHttpsSpec extends Specification {
-
   static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
   def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
-  @Rule RecorderRule recorder = new RecorderRule(configuration)
+  def interceptor = new BetamaxInterceptor();
+  @Rule RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
   @Betamax(tape = "disconnected https spec")
   void "can play back a recorded HTTPS response without contacting the original server"() {
     when:
-    HttpsURLConnection connection = "https://freeside.bv/".toURL().openConnection()
+    def request = new Request.Builder().url("https://freeside.bv/").build()
+    def response = client.newCall(request).execute()
 
     then:
-    connection.responseCode == HTTP_OK
-    connection.getHeaderField(VIA) == "Betamax"
-    connection.getHeaderField(X_BETAMAX) == "PLAY"
-    connection.inputStream.text == "O HAI!"
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
+    response.body().string() == "O HAI!"
   }
-
 }

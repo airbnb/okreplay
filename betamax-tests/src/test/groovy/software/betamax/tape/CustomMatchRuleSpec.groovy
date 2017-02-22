@@ -19,6 +19,7 @@ package software.betamax.tape
 import com.google.common.base.Optional
 import com.google.common.io.Files
 import okhttp3.MediaType
+import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.junit.ClassRule
@@ -26,6 +27,7 @@ import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
 import software.betamax.junit.RecorderRule
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.ACCEPT
@@ -35,11 +37,10 @@ import static software.betamax.MatchRules.uri
 @Issue("https://github.com/robfletcher/betamax/issues/43")
 @Unroll
 class CustomMatchRuleSpec extends Specification {
-
+  def interceptor = new BetamaxInterceptor()
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
-
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared def url = "http://freeside.co/betamax"
   @Shared def acceptHeaderRule = new MatchRule() {
     @Override
@@ -47,6 +48,10 @@ class CustomMatchRuleSpec extends Specification {
       a.header(ACCEPT) == b.header(ACCEPT)
     }
   }
+
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
   void setupSpec() {
     new File(tapeRoot, "custom_match_rule_spec.yaml").withWriter { writer ->
@@ -78,7 +83,8 @@ interactions:
 
   void "#verb request with Accept header #acceptHeader #description using #rules"() {
     given:
-    recorder.start("custom match rule spec", Optional.absent(), Optional.of(ComposedMatchRule.of(rules)))
+    recorder.start("custom match rule spec", Optional.absent(),
+        Optional.of(ComposedMatchRule.of(rules)))
 
     and:
     def body = RequestBody.create(MediaType.parse("text/plain"), "foo")
@@ -87,6 +93,7 @@ interactions:
         .addHeader(ACCEPT, acceptHeader)
         .method(verb, verb == "GET" ? null : body)
         .build()
+    client.newCall(request).execute()
 
     expect:
     recorder.tape.seek(request) == shouldMatch
@@ -103,5 +110,4 @@ interactions:
 
     description = shouldMatch ? "matches" : "does not match"
   }
-
 }
