@@ -17,14 +17,14 @@
 package software.betamax
 
 import com.google.common.io.Files
-import software.betamax.util.server.HelloHandler
-import software.betamax.util.server.SimpleSecureServer
-import software.betamax.util.server.SimpleServer
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
 
 import static Headers.X_BETAMAX
-import static HelloHandler.HELLO_WORLD
-import static TapeMode.READ_WRITE
 import static com.google.common.net.HttpHeaders.VIA
 import static java.net.HttpURLConnection.HTTP_OK
 
@@ -33,42 +33,44 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Timeout(10)
 class NoJUnitSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).sslEnabled(true).build()
-    @Shared Recorder recorder = new Recorder(configuration)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def configuration = Configuration.builder()
+      .tapeRoot(tapeRoot)
+      .sslEnabled(true)
+      .build()
+  @Shared Recorder recorder = new Recorder(configuration)
 
-    @Shared @AutoCleanup("stop") def httpEndpoint = new SimpleServer(HelloHandler)
-    @Shared @AutoCleanup("stop") def httpsEndpoint = new SimpleSecureServer(5001, HelloHandler)
+  @Shared @AutoCleanup("stop") def httpEndpoint = new MockWebServer()
 
-    void setupSpec() {
-        httpEndpoint.start()
-        httpsEndpoint.start()
-    }
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(new BetamaxInterceptor())
+      .build()
 
-    void setup() {
-        recorder.start("no junit spec", READ_WRITE)
-    }
+  void setupSpec() {
+    httpEndpoint.start()
+    httpEndpoint.enqueue(new MockResponse().setBody("Hello World!"))
+  }
 
-    void cleanup() {
-        recorder.stop()
-    }
+  void setup() {
+    recorder.start("no junit spec", TapeMode.READ_WRITE)
+  }
 
-    void "proxy intercepts #scheme URL connections"() {
-        given:
-        HttpURLConnection connection = url.toURL().openConnection()
-        connection.connect()
+  void cleanup() {
+    recorder.stop()
+  }
 
-        expect:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "REC"
-        connection.inputStream.text == HELLO_WORLD
+  void "proxy intercepts #scheme URL connections"() {
+    given:
+    def request = new Request.Builder().url(url).build()
+    def response = client.newCall(request).execute()
 
-        cleanup:
-        connection.disconnect()
+    expect:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "REC"
+    response.body().string() == "Hello World!"
 
-        where:
-        url << [httpEndpoint.url, httpsEndpoint.url]
-        scheme = url.toURI().scheme
-    }
+    where:
+    url << [httpEndpoint.url("/")]
+  }
 }

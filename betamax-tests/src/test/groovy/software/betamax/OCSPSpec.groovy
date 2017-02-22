@@ -16,9 +16,14 @@
 
 package software.betamax
 
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import org.junit.ClassRule
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.Issue
 import spock.lang.Shared
 import spock.lang.Specification
@@ -30,21 +35,28 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Betamax(tape = "ocsp")
 class OCSPSpec extends Specification {
 
-    static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build()
-    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
+  static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
+  @Shared def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build()
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
-    void "OCSP messages"() {
-        when:
-        HttpURLConnection connection = uri.toURL().openConnection()
-        connection.requestMethod = "POST"
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(new BetamaxInterceptor())
+      .build()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.inputStream.bytes.length == 2529
+  void "OCSP messages"() {
+    when:
+    def request = new Request.Builder()
+        .url(url)
+        .method("POST", RequestBody.create(MediaType.parse("text/plain"), ""))
+        .build()
+    def response = client.newCall(request).execute()
 
-        where:
-        uri = "http://ocsp.ocspservice.com/public/ocsp"
-    }
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.body().bytes().length == 2529
+
+    where:
+    url = "http://ocsp.ocspservice.com/public/ocsp"
+  }
 }

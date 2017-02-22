@@ -34,20 +34,20 @@ import static software.betamax.Headers.X_BETAMAX
 @Issue("https://github.com/robfletcher/betamax/issues/117")
 class DisconnectedHttpsSpec extends Specification {
 
-    static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
-    def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
-    @Rule RecorderRule recorder = new RecorderRule(configuration)
+  static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
+  def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
+  @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-    @Betamax(tape = "disconnected https spec")
-    void "can play back a recorded HTTPS response without contacting the original server"() {
-        when:
-        HttpsURLConnection connection = "https://freeside.bv/".toURL().openConnection()
+  @Betamax(tape = "disconnected https spec")
+  void "can play back a recorded HTTPS response without contacting the original server"() {
+    when:
+    HttpsURLConnection connection = "https://freeside.bv/".toURL().openConnection()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        connection.inputStream.text == "O HAI!"
-    }
+    then:
+    connection.responseCode == HTTP_OK
+    connection.getHeaderField(VIA) == "Betamax"
+    connection.getHeaderField(X_BETAMAX) == "PLAY"
+    connection.inputStream.text == "O HAI!"
+  }
 
 }

@@ -17,10 +17,10 @@
 package software.betamax.recorder
 
 import com.google.common.io.Files
+import okhttp3.Request
 import software.betamax.ComposedMatchRule
 import software.betamax.MatchRules
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.ACCEPT
@@ -31,13 +31,13 @@ import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
 
-    @Unroll('#method request for #uri returns "#responseText"')
-    void "default match is method and uri"() {
-        given:
-        def yaml = """\
+  @Unroll('#method request for #uri returns "#responseText"')
+  void "default match is method and uri"() {
+    given:
+    def yaml = """\
 !tape
 name: method and uri tape
 interactions:
@@ -67,28 +67,28 @@ interactions:
     body: GET method response from qwantz.com
 """
 
-        and:
-        def tape = loader.readFrom(new StringReader(yaml))
+    and:
+    def tape = loader.readFrom(new StringReader(yaml))
 
-        when:
-        def response = tape.play(request)
+    when:
+    def response = tape.play(request)
 
-        then:
-        response.bodyAsText == responseText
+    then:
+    response.body().string() == responseText
 
-        where:
-        method | uri
-        "GET"  | "http://xkcd.com/"
-        "POST" | "http://xkcd.com/"
-        "GET"  | "http://qwantz.com/"
+    where:
+    method | uri
+    "GET"  | "http://xkcd.com/"
+    "POST" | "http://xkcd.com/"
+    "GET"  | "http://qwantz.com/"
 
-        responseText = "$method method response from ${uri.toURI().host}"
-        request = new BasicRequest(method, uri)
-    }
+    responseText = "$method method response from ${uri.toURI().host}"
+    request = new Request.Builder().url(uri).method(method, null).build()
+  }
 
-    void "can match based on host"() {
-        given:
-        def yaml = """\
+  void "can match based on host"() {
+    given:
+    def yaml = """\
 !tape
 name: host match tape
 interactions:
@@ -102,22 +102,22 @@ interactions:
     body: GET method response from xkcd.com
 """
 
-        and:
-        def tape = loader.readFrom(new StringReader(yaml))
-        tape.matchRule = MatchRules.host
+    and:
+    def tape = loader.readFrom(new StringReader(yaml))
+    tape.matchRule = MatchRules.host
 
-        when:
-        def request = new BasicRequest("GET", "http://xkcd.com/875")
-        def response = tape.play(request)
+    when:
+    def request = new Request.Builder().url("http://xkcd.com/875").build()
+    def response = tape.play(request)
 
-        then:
-        response.bodyAsText == "GET method response from xkcd.com"
-    }
+    then:
+    response.body().string() == "GET method response from xkcd.com"
+  }
 
-    @Unroll('request with Accept: #acceptHeader returns "#responseText"')
-    void "can match based on headers"() {
-        given:
-        def yaml = """\
+  @Unroll('request with Accept: #acceptHeader returns "#responseText"')
+  void "can match based on headers"() {
+    given:
+    def yaml = """\
 !tape
 name: headers match tape
 interactions:
@@ -146,22 +146,24 @@ interactions:
     body: Plain text data
 """
 
-        and:
-        def tape = loader.readFrom(new StringReader(yaml))
-        tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.accept)
+    and:
+    def tape = loader.readFrom(new StringReader(yaml))
+    tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.accept)
 
-        when:
-        def request = new BasicRequest("GET", "http://httpbin.org/get")
-        request.addHeader(ACCEPT, acceptHeader)
-        def response = tape.play(request)
+    when:
+    def request = new Request.Builder()
+        .addHeader(ACCEPT, acceptHeader)
+        .url("http://httpbin.org/get")
+        .build()
+    def response = tape.play(request)
 
-        then:
-        response.headers[CONTENT_TYPE] == acceptHeader
-        response.bodyAsText == responseText
+    then:
+    response.header(CONTENT_TYPE) == acceptHeader
+    response.body().string() == responseText
 
-        where:
-        acceptHeader                                    | responseText
-        JSON_UTF_8.withoutParameters().toString()       | '{ "message": "JSON data" }'
-        PLAIN_TEXT_UTF_8.withoutParameters().toString() | "Plain text data"
-    }
+    where:
+    acceptHeader                                    | responseText
+    JSON_UTF_8.withoutParameters().toString()       | '{ "message": "JSON data" }'
+    PLAIN_TEXT_UTF_8.withoutParameters().toString() | "Plain text data"
+  }
 }

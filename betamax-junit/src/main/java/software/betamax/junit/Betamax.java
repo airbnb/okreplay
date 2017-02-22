@@ -29,8 +29,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, TYPE})
 public @interface Betamax {
   String tape() default "";
-
   TapeMode mode() default TapeMode.UNDEFINED;
-
   MatchRules[] match() default {};
 }

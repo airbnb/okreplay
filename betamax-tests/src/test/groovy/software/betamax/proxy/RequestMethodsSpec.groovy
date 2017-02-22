@@ -34,27 +34,27 @@ import static software.betamax.TapeMode.READ_WRITE
 @Timeout(10)
 class RequestMethodsSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
-    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(OkHandler)
+  @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(OkHandler)
 
-    void setupSpec() {
-        endpoint.start()
-    }
+  void setupSpec() {
+    endpoint.start()
+  }
 
-    void "proxy handles #method requests"() {
-        when:
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
-        connection.requestMethod = method
+  void "proxy handles #method requests"() {
+    when:
+    HttpURLConnection connection = endpoint.url.toURL().openConnection()
+    connection.requestMethod = method
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
+    then:
+    connection.responseCode == HTTP_OK
+    connection.getHeaderField(VIA) == "Betamax"
 
-        where:
-        method << ["GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS"]
-    }
+    where:
+    method << ["GET", "POST", "PUT", "HEAD", "DELETE", "OPTIONS"]
+  }
 
 }

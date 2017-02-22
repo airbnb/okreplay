@@ -33,78 +33,78 @@ import static software.betamax.TapeMode.WRITE_ONLY
 
 @Issue("https://github.com/robfletcher/betamax/issues/50")
 @IgnoreIf({
-    def url = "http://httpbin.org/".toURL()
-    try {
-        HttpURLConnection connection = url.openConnection()
-        connection.requestMethod = "HEAD"
-        connection.connectTimeout = SECONDS.toMillis(2)
-        connection.connect()
-        return connection.responseCode >= 400
-    } catch (IOException e) {
-        System.err.println "Skipping spec as $url is not available"
-        return true
-    }
+  def url = "http://httpbin.org/".toURL()
+  try {
+    HttpURLConnection connection = url.openConnection()
+    connection.requestMethod = "HEAD"
+    connection.connectTimeout = SECONDS.toMillis(2)
+    connection.connect()
+    return connection.responseCode >= 400
+  } catch (IOException e) {
+    System.err.println "Skipping spec as $url is not available"
+    return true
+  }
 })
 class PostBodySpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    def recorder = new Recorder(configuration)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  def recorder = new Recorder(configuration)
 
-    def httpClient = HttpClients.createSystem()
+  def httpClient = HttpClients.createSystem()
 
-    void "post body is stored on tape when using UrlConnection"() {
-        given:
-        def postBody = '{"foo":"bar"}'
-        HttpURLConnection connection = "http://httpbin.org/post".toURL().openConnection()
-        connection.doOutput = true
-        connection.requestMethod = "POST"
-        connection.addRequestProperty(CONTENT_TYPE, JSON_UTF_8.toString())
+  void "post body is stored on tape when using UrlConnection"() {
+    given:
+    def postBody = '{"foo":"bar"}'
+    HttpURLConnection connection = "http://httpbin.org/post".toURL().openConnection()
+    connection.doOutput = true
+    connection.requestMethod = "POST"
+    connection.addRequestProperty(CONTENT_TYPE, JSON_UTF_8.toString())
 
-        and:
-        recorder.start("post_body_with_url_connection", WRITE_ONLY)
+    and:
+    recorder.start("post_body_with_url_connection", WRITE_ONLY)
 
-        when:
-        connection.outputStream.withStream { stream ->
-            stream << postBody.getBytes(UTF_8)
-        }
-        println connection.inputStream.text // response body must be consumed
-
-        and:
-        recorder.stop()
-
-        then:
-        def file = new File(tapeRoot, "post_body_with_url_connection.yaml")
-        def tapeData = file.withReader {
-            new Yaml().loadAs(it, Map)
-        }
-        tapeData.interactions[0].request.body == postBody
+    when:
+    connection.outputStream.withStream { stream ->
+      stream << postBody.getBytes(UTF_8)
     }
+    println connection.inputStream.text // response body must be consumed
 
-    void "post body is stored on tape when using HttpClient"() {
-        given:
-        def postBody = '{"foo":"bar"}'
-        def httpPost = new HttpPost("http://httpbin.org/post")
-        httpPost.setHeader(CONTENT_TYPE, JSON_UTF_8.toString())
-        def reqEntity = new StringEntity(postBody, UTF_8)
-        reqEntity.setContentType(JSON_UTF_8.toString())
-        httpPost.entity = reqEntity
+    and:
+    recorder.stop()
 
-        and:
-        recorder.start("post_body_with_http_client", WRITE_ONLY)
-
-        when:
-        httpClient.execute(httpPost)
-
-        and:
-        recorder.stop()
-
-        then:
-        def file = new File(tapeRoot, "post_body_with_http_client.yaml")
-        def tapeData = file.withReader {
-            new Yaml().loadAs(it, Map)
-        }
-        tapeData.interactions[0].request.body == postBody
+    then:
+    def file = new File(tapeRoot, "post_body_with_url_connection.yaml")
+    def tapeData = file.withReader {
+      new Yaml().loadAs(it, Map)
     }
+    tapeData.interactions[0].request.body == postBody
+  }
+
+  void "post body is stored on tape when using HttpClient"() {
+    given:
+    def postBody = '{"foo":"bar"}'
+    def httpPost = new HttpPost("http://httpbin.org/post")
+    httpPost.setHeader(CONTENT_TYPE, JSON_UTF_8.toString())
+    def reqEntity = new StringEntity(postBody, UTF_8)
+    reqEntity.setContentType(JSON_UTF_8.toString())
+    httpPost.entity = reqEntity
+
+    and:
+    recorder.start("post_body_with_http_client", WRITE_ONLY)
+
+    when:
+    httpClient.execute(httpPost)
+
+    and:
+    recorder.stop()
+
+    then:
+    def file = new File(tapeRoot, "post_body_with_http_client.yaml")
+    def tapeData = file.withReader {
+      new Yaml().loadAs(it, Map)
+    }
+    tapeData.interactions[0].request.body == postBody
+  }
 
 }

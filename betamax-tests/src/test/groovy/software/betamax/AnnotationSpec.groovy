@@ -36,65 +36,65 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Stepwise
 class AnnotationSpec extends Specification {
 
-    @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    @Rule RecorderRule recorder = new RecorderRule(configuration)
+  @Shared @AutoCleanup('deleteDir') def tapeRoot = Files.createTempDir()
+  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-    @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
+  @AutoCleanup('stop') def endpoint = new SimpleServer(EchoHandler)
 
-    void 'no tape is inserted if there is no annotation on the feature'() {
-        expect:
-        recorder.tape == null
-    }
+  void 'no tape is inserted if there is no annotation on the feature'() {
+    expect:
+    recorder.tape == null
+  }
 
-    @Betamax(tape = 'annotation_spec', mode = WRITE_ONLY, match = [MatchRules.body])
-    void 'annotation on feature causes tape to be inserted'() {
-        expect:
-        recorder.tape.name == 'annotation_spec'
-        recorder.tape.mode == WRITE_ONLY
-        recorder.tape.matchRule == ComposedMatchRule.of(MatchRules.body)
-    }
+  @Betamax(tape = 'annotation_spec', mode = WRITE_ONLY, match = [MatchRules.body])
+  void 'annotation on feature causes tape to be inserted'() {
+    expect:
+    recorder.tape.name == 'annotation_spec'
+    recorder.tape.mode == WRITE_ONLY
+    recorder.tape.matchRule == ComposedMatchRule.of(MatchRules.body)
+  }
 
-    void 'tape is ejected after annotated feature completes'() {
-        expect:
-        recorder.tape == null
-    }
+  void 'tape is ejected after annotated feature completes'() {
+    expect:
+    recorder.tape == null
+  }
 
-    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
-    void 'annotated feature can record'() {
-        given:
-        endpoint.start()
+  @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+  void 'annotated feature can record'() {
+    given:
+    endpoint.start()
 
-        when:
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+    when:
+    HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == 'Betamax'
-        connection.getHeaderField(X_BETAMAX) == 'REC'
-    }
+    then:
+    connection.responseCode == HTTP_OK
+    connection.getHeaderField(VIA) == 'Betamax'
+    connection.getHeaderField(X_BETAMAX) == 'REC'
+  }
 
-    @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
-    void 'annotated feature can play back'() {
-        when:
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+  @Betamax(tape = 'annotation_spec', mode = READ_WRITE)
+  void 'annotated feature can play back'() {
+    when:
+    HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == 'Betamax'
-        connection.getHeaderField(X_BETAMAX) == 'PLAY'
-    }
+    then:
+    connection.responseCode == HTTP_OK
+    connection.getHeaderField(VIA) == 'Betamax'
+    connection.getHeaderField(X_BETAMAX) == 'PLAY'
+  }
 
-    void 'can make unproxied request after using annotation'() {
-        given:
-        endpoint.start()
+  void 'can make unproxied request after using annotation'() {
+    given:
+    endpoint.start()
 
-        when:
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+    when:
+    HttpURLConnection connection = endpoint.url.toURL().openConnection()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == null
-    }
+    then:
+    connection.responseCode == HTTP_OK
+    connection.getHeaderField(VIA) == null
+  }
 
 }

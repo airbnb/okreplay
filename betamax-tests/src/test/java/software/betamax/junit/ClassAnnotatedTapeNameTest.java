@@ -17,31 +17,29 @@
 package software.betamax.junit;
 
 import com.google.common.io.Files;
+
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.junit.AfterClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import software.betamax.Configuration;
-import spock.lang.Issue;
 
 import java.io.File;
+
+import software.betamax.Configuration;
+import spock.lang.Issue;
 
 @Issue("https://github.com/robfletcher/betamax/issues/36")
 @Betamax
 public class ClassAnnotatedTapeNameTest {
+  private static final File TAPE_ROOT = Files.createTempDir();
+  private static Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
+  @ClassRule public static RecorderRule recorder = new RecorderRule(configuration);
 
-    static final File TAPE_ROOT = Files.createTempDir();
-    static Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
-    @ClassRule public static RecorderRule recorder = new RecorderRule(configuration);
+  @AfterClass public static void deleteTempDir() {
+    ResourceGroovyMethods.deleteDir(TAPE_ROOT);
+  }
 
-    @AfterClass
-    public static void deleteTempDir() {
-        ResourceGroovyMethods.deleteDir(TAPE_ROOT);
-    }
-
-    @Test
-    public void tapeNameDefaultsToClassName() {
-        assert recorder.getTape().getName().equals("class annotated tape name test");
-    }
-
+  @Test public void tapeNameDefaultsToClassName() {
+    assert recorder.getTape().getName().equals("class annotated tape name test");
+  }
 }

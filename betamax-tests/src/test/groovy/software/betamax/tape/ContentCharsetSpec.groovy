@@ -17,15 +17,16 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.*
 
 import static com.google.common.base.Charsets.ISO_8859_1
 import static com.google.common.base.Charsets.UTF_8
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.TapeMode.READ_WRITE
@@ -34,38 +35,38 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 class ContentCharsetSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
 
-    void "a response with a #charset body is recorded correctly"() {
-        given:
-        def request = new BasicRequest()
+  void "a response with a #charset body is recorded correctly"() {
+    given:
+    def request = new Request.Builder().url("http://localhost").build()
+    def response = new Response.Builder().code(HTTP_OK)
+        .body(ResponseBody.create(MediaType.parse(PLAIN_TEXT_UTF_8.withCharset(charset).toString())
+        , "\u00a3".getBytes(charset)))
+        .addHeader(CONTENT_ENCODING, "none")
+        .build()
 
-        def response = new BasicResponse(HTTP_OK, "OK")
-        response.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withCharset(charset).toString())
-        response.addHeader(CONTENT_ENCODING, "none")
-        response.body = "\u00a3".getBytes(charset)
+    and:
+    def tape = loader.newTape("charsets")
+    tape.mode = READ_WRITE
+    tape.record(request, response)
 
-        and:
-        def tape = loader.newTape("charsets")
-        tape.mode = READ_WRITE
-        tape.record(request, response)
+    when:
+    def writer = new StringWriter()
+    loader.writeTo(tape, writer)
 
-        when:
-        def writer = new StringWriter()
-        loader.writeTo(tape, writer)
+    then:
+    def yaml = writer.toString()
+    yaml.contains("body: \u00a3")
 
-        then:
-        def yaml = writer.toString()
-        yaml.contains("body: \u00a3")
+    where:
+    charset << [UTF_8, ISO_8859_1]
+  }
 
-        where:
-        charset << [UTF_8, ISO_8859_1]
-    }
-
-    void "a response with a #charset body is played back correctly"() {
-        given:
-        def yaml = """\
+  void "a response with a #charset body is played back correctly"() {
+    given:
+    def yaml = """\
 !tape
 name: charsets
 interactions:
@@ -80,20 +81,19 @@ interactions:
       Content-Encoding: none
     body: \u00a3
 """
-        def tape = loader.readFrom(new StringReader(yaml))
+    def tape = loader.readFrom(new StringReader(yaml))
 
-        and:
-        def request = new BasicRequest("GET", "http://freeside.co/betamax")
+    and:
+    def request = new Request.Builder().url("http://freeside.co/betamax").build()
 
-        when:
-        def response = tape.play(request)
+    when:
+    def response = tape.play(request)
 
-        then:
-        def expected = "\u00a3".getBytes(charset)
-        response.bodyAsBinary == expected
+    then:
+    def expected = "\u00a3".getBytes(charset)
+    response.body().string().getBytes(UTF_8) == expected
 
-        where:
-        charset << [UTF_8, ISO_8859_1]
-    }
-
+    where:
+    charset << [UTF_8, ISO_8859_1]
+  }
 }

@@ -27,20 +27,20 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 class RecorderTapeModeSpec extends Specification {
 
-    void "tape mode is #expectedMode if default mode is #defaultMode and start is called with #modeParam"() {
-        given:
-        def configuration = Configuration.builder().defaultMode(defaultMode).build()
-        def recorder = new Recorder(configuration)
+  void "tape mode is #expectedMode if default mode is #defaultMode and start is called with #modeParam"() {
+    given:
+    def configuration = Configuration.builder().defaultMode(defaultMode).build()
+    def recorder = new Recorder(configuration)
 
-        when:
-        recorder.start("recorder tape mode spec", modeParam)
+    when:
+    recorder.start("recorder tape mode spec", modeParam)
 
-        then:
-        recorder.tape.mode == expectedMode
+    then:
+    recorder.tape.mode == expectedMode
 
-        where:
-        defaultMode | modeParam  | expectedMode
-        READ_ONLY   | READ_WRITE | READ_WRITE
-    }
+    where:
+    defaultMode | modeParam  | expectedMode
+    READ_ONLY   | READ_WRITE | READ_WRITE
+  }
 
 }

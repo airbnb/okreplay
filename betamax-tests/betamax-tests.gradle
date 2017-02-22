@@ -20,7 +20,7 @@ dependencies {
         exclude module: "commons-logging"
     }
     testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
-
+    testCompile commonDependencies.mockWebServer
     testCompile "com.mashape.unirest:unirest-java:1.2.8", "org.apache.httpcomponents:httpasyncclient:4.0"
 }
 

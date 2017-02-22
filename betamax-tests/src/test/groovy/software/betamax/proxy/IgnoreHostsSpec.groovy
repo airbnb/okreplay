@@ -30,54 +30,54 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 class IgnoreHostsSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-    def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
-    @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
+  @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
+  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder().tapeRoot(tapeRoot).defaultMode(READ_WRITE)])
+  @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
 
-    @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
+  @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
 
-    void setupSpec() {
-        endpoint.start()
-    }
+  void setupSpec() {
+    endpoint.start()
+  }
 
-    void "does not proxy a request to #requestURI when ignoring #ignoreHosts"() {
-        given: "proxy is configured to ignore local connections"
-        configuration.getIgnoreHosts() >> [ignoreHosts]
-        recorder.start("ignore hosts spec")
+  void "does not proxy a request to #requestURI when ignoring #ignoreHosts"() {
+    given: "proxy is configured to ignore local connections"
+    configuration.getIgnoreHosts() >> [ignoreHosts]
+    recorder.start("ignore hosts spec")
 
-        when: "a request is made"
-        HttpURLConnection connection = requestURI.toURL().openConnection()
+    when: "a request is made"
+    HttpURLConnection connection = requestURI.toURL().openConnection()
 
-        then: "the request is not intercepted by the proxy"
-        connection.getHeaderField(VIA) == null
+    then: "the request is not intercepted by the proxy"
+    connection.getHeaderField(VIA) == null
 
-        and: "nothing is recorded to the tape"
-        recorder.tape.size() == old(recorder.tape.size())
+    and: "nothing is recorded to the tape"
+    recorder.tape.size() == old(recorder.tape.size())
 
-        where:
-        ignoreHosts               | requestURI
-        endpoint.url.toURI().host | endpoint.url
-        "localhost"               | "http://localhost:${endpoint.url.toURI().port}"
-        "127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
-        endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
-    }
+    where:
+    ignoreHosts               | requestURI
+    endpoint.url.toURI().host | endpoint.url
+    "localhost"               | "http://localhost:${endpoint.url.toURI().port}"
+    "127.0.0.1"               | "http://localhost:${endpoint.url.toURI().port}"
+    endpoint.url.toURI().host | "http://localhost:${endpoint.url.toURI().port}"
+  }
 
-    void "does not proxy a request to #requestURI when ignoreLocalhost is true"() {
-        given: "proxy is configured to ignore local connections"
-        configuration.ignoreLocalhost >> true
-        recorder.start("ignore hosts spec")
+  void "does not proxy a request to #requestURI when ignoreLocalhost is true"() {
+    given: "proxy is configured to ignore local connections"
+    configuration.ignoreLocalhost >> true
+    recorder.start("ignore hosts spec")
 
-        when: "a request is made"
-        HttpURLConnection connection = requestURI.toURL().openConnection()
+    when: "a request is made"
+    HttpURLConnection connection = requestURI.toURL().openConnection()
 
-        then: "the request is not intercepted by the proxy"
-        connection.getHeaderField(VIA) == null
+    then: "the request is not intercepted by the proxy"
+    connection.getHeaderField(VIA) == null
 
-        and: "nothing is recorded to the tape"
-        recorder.tape.size() == old(recorder.tape.size())
+    and: "nothing is recorded to the tape"
+    recorder.tape.size() == old(recorder.tape.size())
 
-        where:
-        requestURI << [endpoint.url, "http://localhost:${endpoint.url.toURI().port}"]
-    }
+    where:
+    requestURI << [endpoint.url, "http://localhost:${endpoint.url.toURI().port}"]
+  }
 
 }

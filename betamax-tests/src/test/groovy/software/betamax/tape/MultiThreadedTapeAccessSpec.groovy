@@ -17,10 +17,9 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
-import software.betamax.message.BetamaxRequest
+import okhttp3.Request
+import okhttp3.Response
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -34,89 +33,89 @@ import static software.betamax.TapeMode.*
 @Issue("https://github.com/robfletcher/betamax/issues/57")
 class MultiThreadedTapeAccessSpec extends Specification {
 
-    // TODO: only need this because there's no convenient way to construct a tape
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
-    def tape = loader.loadTape("multi_threaded_tape_access_spec")
+  // TODO: only need this because there's no convenient way to construct a tape
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
+  def tape = loader.loadTape("multi_threaded_tape_access_spec")
 
-    void setup() {
-        tape.mode = READ_WRITE
+  void setup() {
+    tape.mode = READ_WRITE
+  }
+
+  void "the correct response is replayed to each thread"() {
+    given: "a number of requests"
+    List<Request> requests = (0..<threads).collect { i ->
+      def request = new Request("GET", "http://example.com/$i")
+      request.addHeader("X-Thread", i.toString())
+      request
     }
 
-    void "the correct response is replayed to each thread"() {
-        given: "a number of requests"
-        List<BetamaxRequest> requests = (0..<threads).collect { i ->
-            def request = new BasicRequest("GET", "http://example.com/$i")
-            request.addHeader("X-Thread", i.toString())
-            request
-        }
-
-        and: "some existing responses on tape"
-        requests.eachWithIndex { request, i ->
-            def response = new BasicResponse(status: 200, reason: 'OK', body: i.toString())
-            tape.record(request, response)
-        }
-
-        when: "requests are replayed concurrently"
-        def finished = new CountDownLatch(threads)
-        def responses = [:].asSynchronized()
-        requests.eachWithIndex { request, i ->
-            Thread.start {
-                def response = tape.play(request)
-                responses[requests[i].getHeader("X-Thread")] = response.bodyAsText
-                finished.countDown()
-            }
-        }
-
-        then: "all threads complete"
-        finished.await(1, SECONDS)
-
-        and: "the correct response is returned to each request"
-        responses.every { key, value ->
-            key == value
-        }
-
-        where:
-        threads = 10
+    and: "some existing responses on tape"
+    requests.eachWithIndex { request, i ->
+      def response = new Response(status: 200, reason: 'OK', body: i.toString())
+      tape.record(request, response)
     }
 
-    void "each recorded response is used by just one thread when using sequential mode"() {
-        given:
-        tape.mode = WRITE_SEQUENTIAL
-
-        and: "a number of requests"
-        List<BetamaxRequest> requests = (0..<threads).collect { i ->
-            def request = new BasicRequest("GET", "http://example.com/")
-            request.addHeader("X-Thread", i.toString())
-            request
-        }
-
-        and: "some existing responses on tape"
-        requests.eachWithIndex { request, i ->
-            def response = new BasicResponse(status: 200, reason: 'OK', body: i.toString())
-            tape.record(request, response)
-        }
-
-        when: "requests are replayed concurrently"
-        tape.mode = READ_SEQUENTIAL
-        def finished = new CountDownLatch(threads)
-        def responses = [].asSynchronized()
-        requests.eachWithIndex { request, i ->
-            Thread.start {
-                def response = tape.play(request)
-                responses << response.bodyAsText
-                finished.countDown()
-            }
-        }
-
-        then: "all threads complete"
-        finished.await(1, SECONDS)
-
-        and: "the responses are played back sequentially and not re-used"
-        responses.containsAll((0..<threads)*.toString())
-
-        where:
-        threads = 10
+    when: "requests are replayed concurrently"
+    def finished = new CountDownLatch(threads)
+    def responses = [:].asSynchronized()
+    requests.eachWithIndex { request, i ->
+      Thread.start {
+        def response = tape.play(request)
+        responses[requests[i].getHeader("X-Thread")] = response.bodyAsText
+        finished.countDown()
+      }
     }
+
+    then: "all threads complete"
+    finished.await(1, SECONDS)
+
+    and: "the correct response is returned to each request"
+    responses.every { key, value ->
+      key == value
+    }
+
+    where:
+    threads = 10
+  }
+
+  void "each recorded response is used by just one thread when using sequential mode"() {
+    given:
+    tape.mode = WRITE_SEQUENTIAL
+
+    and: "a number of requests"
+    List<Request> requests = (0..<threads).collect { i ->
+      def request = new Request("GET", "http://example.com/")
+      request.addHeader("X-Thread", i.toString())
+      request
+    }
+
+    and: "some existing responses on tape"
+    requests.eachWithIndex { request, i ->
+      def response = new Response(status: 200, reason: 'OK', body: i.toString())
+      tape.record(request, response)
+    }
+
+    when: "requests are replayed concurrently"
+    tape.mode = READ_SEQUENTIAL
+    def finished = new CountDownLatch(threads)
+    def responses = [].asSynchronized()
+    requests.eachWithIndex { request, i ->
+      Thread.start {
+        def response = tape.play(request)
+        responses << response.bodyAsText
+        finished.countDown()
+      }
+    }
+
+    then: "all threads complete"
+    finished.await(1, SECONDS)
+
+    and: "the responses are played back sequentially and not re-used"
+    responses.containsAll((0..<threads)*.toString())
+
+    where:
+    threads = 10
+  }
 
 }

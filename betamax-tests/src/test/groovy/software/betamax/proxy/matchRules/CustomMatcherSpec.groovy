@@ -33,84 +33,84 @@ import static software.betamax.TapeMode.READ_WRITE
  */
 @Unroll
 class CustomMatcherSpec extends Specification {
-    @Shared
-    def tapeRoot = new File(CustomMatcherSpec.class.getResource("/betamax/tapes/").toURI())
+  @Shared
+  def tapeRoot = new File(CustomMatcherSpec.class.getResource("/betamax/tapes/").toURI())
 
-    def simplePost(String url, String payload) {
-        HttpsURLConnection conn = new URL(url).openConnection()
-        try {
-            conn.doOutput = true
-            conn.requestMethod = "POST"
-            conn.fixedLengthStreamingMode = payload.bytes.length
-            def out = new PrintWriter(conn.outputStream)
-            out.print(payload)
-            out.flush()
-            out.close()
+  def simplePost(String url, String payload) {
+    HttpsURLConnection conn = new URL(url).openConnection()
+    try {
+      conn.doOutput = true
+      conn.requestMethod = "POST"
+      conn.fixedLengthStreamingMode = payload.bytes.length
+      def out = new PrintWriter(conn.outputStream)
+      out.print(payload)
+      out.flush()
+      out.close()
 
-            return conn.inputStream.text
-        } finally {
-            conn.disconnect()
-        }
+      return conn.inputStream.text
+    } finally {
+      conn.disconnect()
+    }
+  }
+
+  void "Using a custom matcher it should replay"() {
+    given:
+    def imr = new InstrumentedMatchRule()
+    def proxyConfig = Configuration.builder()
+        .sslEnabled(true)
+        .tapeRoot(tapeRoot)
+        .defaultMode(READ_ONLY)
+        .defaultMatchRule(imr)
+        .build()
+
+    def recorder = new Recorder(proxyConfig)
+    recorder.start("httpBinTape")
+    imr.requestValidations << { r ->
+      //Will run this request validation on both requests being matched
+      //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
+      //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
+      assert r.hasBody()
     }
 
-    void "Using a custom matcher it should replay"() {
-        given:
-        def imr = new InstrumentedMatchRule()
-        def proxyConfig = Configuration.builder()
-                .sslEnabled(true)
-                .tapeRoot(tapeRoot)
-                .defaultMode(READ_ONLY)
-                .defaultMatchRule(imr)
-                .build()
+    when:
+    def response = simplePost("https://httpbin.org/post", "BUTTS")
 
-        def recorder = new Recorder(proxyConfig)
-        recorder.start("httpBinTape")
-        imr.requestValidations << { r ->
-            //Will run this request validation on both requests being matched
-            //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
-            //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
-            assert r.hasBody()
-        }
+    then:
+    def content = response.toString()
 
-        when:
-        def response = simplePost("https://httpbin.org/post", "BUTTS")
+    content == "Hey look some text: BUTTS"
 
-        then:
-        def content = response.toString()
+    cleanup:
+    recorder.stop()
+  }
 
-        content == "Hey look some text: BUTTS"
+  void "Using a custom matcher it should record a new one"() {
+    given:
+    def tapeRoot = Files.createTempDir() //Using a temp dir this time
+    def imr = new InstrumentedMatchRule()
+    def proxyConfig = Configuration.builder()
+        .sslEnabled(true)
+        .tapeRoot(tapeRoot)
+        .defaultMode(READ_WRITE)
+        .defaultMatchRule(imr)
+        .build()
 
-        cleanup:
-        recorder.stop()
-    }
+    def recorder = new Recorder(proxyConfig)
+    recorder.start("httpBinTape")
 
-    void "Using a custom matcher it should record a new one"() {
-        given:
-        def tapeRoot = Files.createTempDir() //Using a temp dir this time
-        def imr = new InstrumentedMatchRule()
-        def proxyConfig = Configuration.builder()
-                .sslEnabled(true)
-                .tapeRoot(tapeRoot)
-                .defaultMode(READ_WRITE)
-                .defaultMatchRule(imr)
-                .build()
+    when:
+    def response = simplePost("https://httpbin.org/post", "LOLWUT")
 
-        def recorder = new Recorder(proxyConfig)
-        recorder.start("httpBinTape")
-
-        when:
-        def response = simplePost("https://httpbin.org/post", "LOLWUT")
-
-        then:
-        def content = response.toString()
+    then:
+    def content = response.toString()
 //        content ==
 
-        recorder.stop()
-        // The tape is written when it's referenced not in this dir
-        // make sure there's a file in there
-        def recordedTape = new File(tapeRoot, "httpBinTape.yaml")
-        // It should have recorded it to the tape
-        recordedTape.exists()
-    }
+    recorder.stop()
+    // The tape is written when it's referenced not in this dir
+    // make sure there's a file in there
+    def recordedTape = new File(tapeRoot, "httpBinTape.yaml")
+    // It should have recorded it to the tape
+    recordedTape.exists()
+  }
 
 }

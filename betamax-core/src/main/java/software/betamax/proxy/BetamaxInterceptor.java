@@ -51,6 +51,7 @@ public class BetamaxInterceptor implements Interceptor {
             .body(ResponseBody.create(MediaType.parse("text/plain"), "No tape")) //
             .build();
       } else {
+        //noinspection ConstantConditions
         Tape tape = this.tape.get();
         if (tape.isReadable() && tape.seek(request)) {
           LOG.warn(String.format("Playing back from tape %s", tape.getName()));

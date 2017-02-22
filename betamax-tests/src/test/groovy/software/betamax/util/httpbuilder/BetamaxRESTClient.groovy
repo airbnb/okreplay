@@ -27,8 +27,8 @@ import org.apache.http.params.HttpParams
 @InheritConstructors
 class BetamaxRESTClient extends RESTClient {
 
-	@Override
-	protected AbstractHttpClient createClient(HttpParams params) {
-		new SystemDefaultHttpClient(params)
-	}
+  @Override
+  protected AbstractHttpClient createClient(HttpParams params) {
+    new SystemDefaultHttpClient(params)
+  }
 }

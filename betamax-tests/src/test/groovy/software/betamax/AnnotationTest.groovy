@@ -17,6 +17,10 @@
 package software.betamax
 
 import com.google.common.io.Files
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Rule
@@ -26,8 +30,7 @@ import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
-import software.betamax.util.server.EchoHandler
-import software.betamax.util.server.SimpleServer
+import software.betamax.proxy.BetamaxInterceptor
 
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
@@ -37,69 +40,84 @@ import static java.net.HttpURLConnection.HTTP_OK
 @RunWith(OrderedRunner)
 class AnnotationTest {
 
-    static def TAPE_ROOT = Files.createTempDir()
-    def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
-    @Rule public RecorderRule recorder = new RecorderRule(configuration)
+  static def TAPE_ROOT = Files.createTempDir()
+  def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
+  @Rule public RecorderRule recorder = new RecorderRule(configuration)
 
-    def endpoint = new SimpleServer(EchoHandler)
+  def endpoint = new MockWebServer()
 
-    @After
-    void ensureEndpointIsStopped() {
-        endpoint.stop()
-    }
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(new BetamaxInterceptor())
+      .build()
 
-    @AfterClass
-    static void cleanUpTapeFiles() {
-        TAPE_ROOT.deleteDir()
-    }
+  @After
+  void ensureEndpointIsStopped() {
+    endpoint.stop()
+  }
 
-    @Test
-    void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
-        assert recorder.tape == null
-    }
+  @AfterClass
+  static void cleanUpTapeFiles() {
+    TAPE_ROOT.deleteDir()
+  }
 
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotationOnTestCausesTapeToBeInserted() {
-        assert recorder.tape.name == 'annotation_test'
-    }
+  @Test
+  void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
+    assert recorder.tape == null
+  }
 
-    @Test
-    void tapeIsEjectedAfterAnnotatedTestCompletes() {
-        assert recorder.tape == null
-    }
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotationOnTestCausesTapeToBeInserted() {
+    assert recorder.tape.name == 'annotation_test'
+  }
 
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotatedTestCanRecord() {
-        endpoint.start()
+  @Test
+  void tapeIsEjectedAfterAnnotatedTestCompletes() {
+    assert recorder.tape == null
+  }
 
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotatedTestCanRecord() {
+    endpoint.start()
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
 
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == 'Betamax'
-        assert connection.getHeaderField(X_BETAMAX) == 'REC'
-    }
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
 
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotatedTestCanPlayBack() {
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == 'Betamax'
+    assert response.header(X_BETAMAX) == 'REC'
+  }
 
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == 'Betamax'
-        assert connection.getHeaderField(X_BETAMAX) == 'PLAY'
-    }
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotatedTestCanPlayBack() {
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
 
-    @Test
-    void canMakeUnproxiedRequestAfterUsingAnnotation() {
-        endpoint.start()
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == 'Betamax'
+    assert response.header(X_BETAMAX) == 'PLAY'
+  }
 
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+  @Test
+  void canMakeUnproxiedRequestAfterUsingAnnotation() {
+    endpoint.start()
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
 
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == null
-    }
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
+
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == null
+  }
 
 }
 
@@ -110,23 +128,23 @@ class AnnotationTest {
  */
 class OrderedRunner extends BlockJUnit4ClassRunner {
 
-    private static final ORDER = [
-        'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
-        'annotationOnTestCausesTapeToBeInserted',
-        'tapeIsEjectedAfterAnnotatedTestCompletes',
-        'annotatedTestCanRecord',
-        'annotatedTestCanPlayBack',
-        'canMakeUnproxiedRequestAfterUsingAnnotation'
-    ]
+  private static final ORDER = [
+      'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
+      'annotationOnTestCausesTapeToBeInserted',
+      'tapeIsEjectedAfterAnnotatedTestCompletes',
+      'annotatedTestCanRecord',
+      'annotatedTestCanPlayBack',
+      'canMakeUnproxiedRequestAfterUsingAnnotation'
+  ]
 
-    OrderedRunner(Class testClass) {
-        super(testClass)
-    }
+  OrderedRunner(Class testClass) {
+    super(testClass)
+  }
 
-    @Override
-    protected List<FrameworkMethod> computeTestMethods() {
-        super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
-            ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
-        }
+  @Override
+  protected List<FrameworkMethod> computeTestMethods() {
+    super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
+      ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
     }
+  }
 }

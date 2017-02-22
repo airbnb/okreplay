@@ -34,60 +34,60 @@ import static software.betamax.TapeMode.WRITE_ONLY
 @Unroll
 @Stepwise
 @IgnoreIf({
-    def url = "http://httpbin.org/".toURL()
-    try {
-        HttpURLConnection connection = url.openConnection()
-        connection.requestMethod = "HEAD"
-        connection.connectTimeout = SECONDS.toMillis(2)
-        connection.connect()
-        return connection.responseCode >= 400
-    } catch (IOException e) {
-        System.err.println "Skipping spec as $url is not available"
-        return true
-    }
+  def url = "http://httpbin.org/".toURL()
+  try {
+    HttpURLConnection connection = url.openConnection()
+    connection.requestMethod = "HEAD"
+    connection.connectTimeout = SECONDS.toMillis(2)
+    connection.connect()
+    return connection.responseCode >= 400
+  } catch (IOException e) {
+    System.err.println "Skipping spec as $url is not available"
+    return true
+  }
 })
 class BasicAuthSpec extends Specification {
 
-    @Shared private endpoint = "http://httpbin.org/basic-auth/user/passwd".toURL()
+  @Shared private endpoint = "http://httpbin.org/basic-auth/user/passwd".toURL()
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-    @Rule RecorderRule recorder = new RecorderRule(configuration)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Rule RecorderRule recorder = new RecorderRule(configuration)
 
-    @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, authorization])
-    void "can record #status response from authenticated endpoint"() {
-        when:
-        HttpURLConnection connection = endpoint.openConnection()
-        connection.setRequestProperty("Authorization", "Basic $credentials");
+  @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, authorization])
+  void "can record #status response from authenticated endpoint"() {
+    when:
+    HttpURLConnection connection = endpoint.openConnection()
+    connection.setRequestProperty("Authorization", "Basic $credentials");
 
-        then:
-        connection.responseCode == status
-        connection.getHeaderField(X_BETAMAX) == "REC"
+    then:
+    connection.responseCode == status
+    connection.getHeaderField(X_BETAMAX) == "REC"
 
-        where:
-        password    | status
-        "passwd"    | HTTP_OK
-        "INCORRECT" | HTTP_UNAUTHORIZED
+    where:
+    password    | status
+    "passwd"    | HTTP_OK
+    "INCORRECT" | HTTP_UNAUTHORIZED
 
-        credentials = BaseEncoding.base64().encode("user:$password".bytes)
-    }
+    credentials = BaseEncoding.base64().encode("user:$password".bytes)
+  }
 
-    @Betamax(tape = "basic auth", mode = READ_ONLY, match = [method, uri, authorization])
-    void "can play back #status response from authenticated endpoint"() {
-        when:
-        HttpURLConnection connection = endpoint.openConnection()
-        connection.setRequestProperty("Authorization", "Basic $credentials");
+  @Betamax(tape = "basic auth", mode = READ_ONLY, match = [method, uri, authorization])
+  void "can play back #status response from authenticated endpoint"() {
+    when:
+    HttpURLConnection connection = endpoint.openConnection()
+    connection.setRequestProperty("Authorization", "Basic $credentials");
 
-        then:
-        connection.responseCode == status
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
+    then:
+    connection.responseCode == status
+    connection.getHeaderField(X_BETAMAX) == "PLAY"
 
-        where:
-        password    | status
-        "passwd"    | HTTP_OK
-        "INCORRECT" | HTTP_UNAUTHORIZED
+    where:
+    password    | status
+    "passwd"    | HTTP_OK
+    "INCORRECT" | HTTP_UNAUTHORIZED
 
-        credentials = BaseEncoding.base64().encode("user:$password".bytes)
-    }
+    credentials = BaseEncoding.base64().encode("user:$password".bytes)
+  }
 
 }

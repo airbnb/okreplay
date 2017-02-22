@@ -16,6 +16,7 @@
 
 package software.betamax.tape
 
+import okhttp3.Request
 import software.betamax.Configuration
 import software.betamax.tck.TapeModeSpec
 import spock.lang.Ignore
@@ -23,13 +24,16 @@ import spock.lang.Ignore
 @Ignore("https://github.com/adamfisk/LittleProxy/issues/113")
 class ProxyTapeModeSpec extends TapeModeSpec {
 
-    @Override
-    protected Configuration getConfiguration() {
-        Configuration.builder().tapeRoot(tapeRoot).build()
-    }
+  @Override
+  protected Configuration getConfiguration() {
+    Configuration.builder().tapeRoot(tapeRoot).build()
+  }
 
-    @Override
-    protected void makeRequest() {
-        endpoint.url.toURL().text
-    }
+  @Override
+  protected void makeRequest() {
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    client.newCall(request).execute()
+  }
 }

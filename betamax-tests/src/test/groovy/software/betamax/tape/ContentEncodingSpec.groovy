@@ -17,11 +17,13 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody
 import software.betamax.encoding.DeflateEncoder
 import software.betamax.encoding.GzipEncoder
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.*
@@ -33,50 +35,57 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 class ContentEncodingSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
 
-    /**
-     * This is really just testing that the tape doesn"t do anything silly
-     * in the presence of a Content-Encoding header. It is the responsibility
-     * of the BetamaxResponse implementation to decode the downstream content.
-     */
-    void "a #encoding encoded response body is stored as plain text in a tape file"() {
-        given:
-        def request = new BasicRequest("GET", "http://freeside.co/betamax")
-        request.addHeader(ACCEPT_ENCODING, encoding)
+  /**
+   * This is really just testing that the tape doesn"t do anything silly
+   * in the presence of a Content-Encoding header. It is the responsibility
+   * of the BetamaxResponse implementation to decode the downstream content.
+   */
+  void "a #encoding encoded response body is stored as plain text in a tape file"() {
+    given:
+    def request = new Request.Builder()
+        .addHeader(ACCEPT_ENCODING, encoding)
+        .url("http://freeside.co/betamax")
+        .build()
 
-        def response = new BasicResponse(HTTP_OK, "OK")
-        response.addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withoutParameters().toString())
-        response.addHeader(CONTENT_ENCODING, encoding)
-        if (encoding == "gzip") {
-            response.body = new GzipEncoder().encode("O HAI!")
-        } else if (encoding == "deflate") {
-            response.body = new DeflateEncoder().encode("O HAI!")
-        } else {
-            response.body = "O HAI!".bytes
-        }
-
-        and:
-        def tape = loader.newTape("encoded response tape")
-        tape.mode = READ_WRITE
-        tape.record(request, response)
-
-        when:
-        def writer = new StringWriter()
-        loader.writeTo(tape, writer)
-
-        then:
-        def yaml = writer.toString()
-        yaml.contains("body: O HAI!")
-
-        where:
-        encoding << ["gzip", "deflate", "none"]
+    def responseBuilder = new Response.Builder()
+        .code(HTTP_OK)
+        .addHeader(CONTENT_TYPE, PLAIN_TEXT_UTF_8.withoutParameters().toString())
+        .addHeader(CONTENT_ENCODING, encoding)
+    byte[] body
+    if (encoding == "gzip") {
+      body = new GzipEncoder().encode("O HAI!")
+    } else if (encoding == "deflate") {
+      body = new DeflateEncoder().encode("O HAI!")
+    } else {
+      body = "O HAI!".bytes
     }
+    def response = responseBuilder
+        .body(ResponseBody.create(MediaType.parse("text/plain"), body))
+        .build()
 
-    void "response body is not encoded when played from tape and a #encoding content-encoding header is present"() {
-        given:
-        def yaml = """\
+    and:
+    def tape = loader.newTape("encoded response tape")
+    tape.mode = READ_WRITE
+    tape.record(request, response)
+
+    when:
+    def writer = new StringWriter()
+    loader.writeTo(tape, writer)
+
+    then:
+    def yaml = writer.toString()
+    yaml.contains("body: O HAI!")
+
+    where:
+    encoding << ["gzip", "deflate", "none"]
+  }
+
+  void "response body is not encoded when played from tape and a #encoding content-encoding header is present"() {
+    given:
+    def yaml = """\
 !tape
 name: encoded response tape
 interactions:
@@ -90,20 +99,20 @@ interactions:
     headers: {Content-Type: text/plain, Content-Language: en-GB, Content-Encoding: $encoding}
     body: O HAI!
 """
-        def tape = loader.readFrom(new StringReader(yaml))
+    def tape = loader.readFrom(new StringReader(yaml))
 
-        and:
-        def request = new BasicRequest("GET", "http://freeside.co/betamax")
+    and:
+    def request = new Request.Builder().url("http://freeside.co/betamax").build()
 
-        when:
-        def response = tape.play(request)
+    when:
+    def response = tape.play(request)
 
-        then:
-        response.getHeader(CONTENT_ENCODING) == encoding
-        response.bodyAsText == "O HAI!"
+    then:
+    response.header(CONTENT_ENCODING) == encoding
+    response.body().string() == "O HAI!"
 
-        where:
-        encoding << ["gzip", "deflate"]
-    }
+    where:
+    encoding << ["gzip", "deflate"]
+  }
 
 }
