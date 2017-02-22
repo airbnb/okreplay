@@ -4,7 +4,7 @@ interactions:
 - recorded: 2012-08-29T09:42:28.251Z
   request:
     method: POST
-    uri: http://ocsp.ocspservice.com/public/ocsp
+    url: http://ocsp.ocspservice.com/public/ocsp
     headers:
       Content-Length: '2251'
       Content-Type: application/ocsp-request

@@ -4,7 +4,7 @@ interactions:
 - recorded: 2012-10-21T14:04:39.797Z
   request:
     method: GET
-    uri: http://freeside.co/thing/1
+    url: http://freeside.co/thing/1
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate
@@ -17,7 +17,7 @@ interactions:
 - recorded: 2012-10-21T14:04:40.153Z
   request:
     method: POST
-    uri: http://freeside.co/thing/1
+    url: http://freeside.co/thing/1
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate
@@ -31,7 +31,7 @@ interactions:
 - recorded: 2012-10-21T14:04:42.340Z
   request:
     method: GET
-    uri: http://freeside.co/thing/1
+    url: http://freeside.co/thing/1
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate

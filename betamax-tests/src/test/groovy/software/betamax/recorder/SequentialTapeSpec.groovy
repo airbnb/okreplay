@@ -18,10 +18,10 @@ package software.betamax.recorder
 
 import groovy.json.JsonSlurper
 import okhttp3.MediaType
-import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.Response
 import software.betamax.junit.Betamax
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.Issue
 import spock.lang.Shared
@@ -47,7 +47,7 @@ class SequentialTapeSpec extends Specification {
     tape.mode = READ_SEQUENTIAL
 
     when: "the tape is read multiple times"
-    List<Response> responses = []
+    List<RecordedResponse> responses = []
     n.times {
       responses << tape.play(request)
     }
@@ -64,7 +64,7 @@ class SequentialTapeSpec extends Specification {
 
     where:
     n = 2
-    request = new Request.Builder()
+    request = new RecordedRequest.Builder()
         .url("http://freeside.co/betamax")
         .build()
   }
@@ -88,7 +88,7 @@ class SequentialTapeSpec extends Specification {
 
     where:
     n = 2
-    request = new Request.Builder()
+    request = new RecordedRequest.Builder()
         .url("http://freeside.co/betamax")
         .build()
   }
@@ -99,14 +99,16 @@ class SequentialTapeSpec extends Specification {
     tape.mode = READ_SEQUENTIAL
 
     and: "several sequential requests"
-    def getRequest = new Request.Builder().url(url).build()
-    def postRequest = new Request.Builder()
+    def getRequest = new RecordedRequest.Builder()
+        .url(url)
+        .build()
+    def postRequest = new RecordedRequest.Builder()
         .method("POST", RequestBody.create(MediaType.parse(JSON_UTF_8.toString()), '{"name":"foo"}'))
         .url(url)
         .build()
 
     when: "the requests are played back in sequence"
-    List<Response> responses = []
+    List<RecordedResponse> responses = []
     responses << tape.play(getRequest)
     responses << tape.play(postRequest)
     responses << tape.play(getRequest)
@@ -137,7 +139,7 @@ class SequentialTapeSpec extends Specification {
     thrown IllegalStateException
 
     where:
-    request = new Request.Builder()
+    request = new RecordedRequest.Builder()
         .url("http://freeside.co/thing/1")
         .build()
   }

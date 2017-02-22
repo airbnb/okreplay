@@ -26,11 +26,13 @@ import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import software.betamax.Headers;
 import software.betamax.handler.NonWritableTapeException;
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
+import software.betamax.proxy.okhttp.OkHttpRequestAdapter;
+import software.betamax.proxy.okhttp.OkHttpResponseAdapter;
 import software.betamax.tape.Tape;
 
 import static com.google.common.net.HttpHeaders.VIA;
@@ -41,36 +43,40 @@ public class BetamaxInterceptor implements Interceptor {
   private boolean isRunning;
   private static final Logger LOG = LoggerFactory.getLogger(BetamaxInterceptor.class.getName());
 
-  @Override public Response intercept(Chain chain) throws IOException {
-    Request request = chain.request();
+  @Override public okhttp3.Response intercept(Chain chain) throws IOException {
+    okhttp3.Request request = chain.request();
     if (isRunning) {
       if (!tape.isPresent()) {
-        return new Response.Builder() //
+        return new okhttp3.Response.Builder() //
             .protocol(Protocol.HTTP_1_1)  //
             .code(403) //
             .body(ResponseBody.create(MediaType.parse("text/plain"), "No tape")) //
+            .request(request) //
             .build();
       } else {
         //noinspection ConstantConditions
         Tape tape = this.tape.get();
-        if (tape.isReadable() && tape.seek(request)) {
+        Request recordedRequest = OkHttpRequestAdapter.adapt(request);
+        if (tape.isReadable() && tape.seek(recordedRequest)) {
           LOG.warn(String.format("Playing back from tape %s", tape.getName()));
-          Response response = tape.play(request);
-          response = setBetamaxHeader(response, "PLAY");
-          response = setViaHeader(response);
-          return response;
+          Response recordedResponse = tape.play(recordedRequest);
+          okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
+          okhttpResponse = setBetamaxHeader(okhttpResponse, "PLAY");
+          okhttpResponse = setViaHeader(okhttpResponse);
+          return okhttpResponse;
         } else {
           LOG.warn(String.format("no matching request found on %s", tape.getName()));
-          Response response = chain.proceed(request);
-          response = setBetamaxHeader(response, "REC");
-          response = setViaHeader(response);
+          okhttp3.Response okhttpResponse = chain.proceed(request);
+          okhttpResponse = setBetamaxHeader(okhttpResponse, "REC");
+          okhttpResponse = setViaHeader(okhttpResponse);
           if (tape.isWritable()) {
             LOG.info(String.format("Recording to tape %s", tape.getName()));
-            tape.record(request, response);
+            Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse);
+            tape.record(recordedRequest, recordedResponse);
           } else {
             throw new NonWritableTapeException();
           }
-          return response;
+          return okhttpResponse;
         }
       }
     } else {
@@ -78,13 +84,13 @@ public class BetamaxInterceptor implements Interceptor {
     }
   }
 
-  private Response setViaHeader(Response response) {
+  private okhttp3.Response setViaHeader(okhttp3.Response response) {
     return response.newBuilder() //
         .addHeader(VIA, Headers.VIA_HEADER) //
         .build();
   }
 
-  private Response setBetamaxHeader(Response response, String value) {
+  private okhttp3.Response setBetamaxHeader(okhttp3.Response response, String value) {
     return response.newBuilder() //
         .addHeader(Headers.X_BETAMAX, value) //
         .build();
@@ -92,7 +98,7 @@ public class BetamaxInterceptor implements Interceptor {
 
   public void start(Tape tape) {
     isRunning = true;
-    this.tape = Optional.of(tape);
+    this.tape = Optional.fromNullable(tape);
   }
 
   public void stop() {

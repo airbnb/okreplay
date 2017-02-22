@@ -129,7 +129,7 @@ package software.betamax.proxy
 //- recorded: 2011-08-19T11:45:33.000Z
 //  request:
 //    method: GET
-//    uri: http://icanhascheezburger.com/
+//    url: http://icanhascheezburger.com/
 //    headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
 //  response:
 //    status: 200

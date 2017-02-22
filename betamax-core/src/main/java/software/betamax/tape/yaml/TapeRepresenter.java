@@ -56,16 +56,14 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
  * properties, empty collections and empty maps.
  */
 public class TapeRepresenter extends Representer {
-
-  public TapeRepresenter(FileResolver fileResolver) {
+  TapeRepresenter(FileResolver fileResolver) {
     setPropertyUtils(new TapePropertyUtils());
     representers.put(URI.class, new RepresentURI());
     representers.put(File.class, new RepresentFile(fileResolver));
   }
 
-  @Override
-  protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag
-      customTag) {
+  @Override protected NodeTuple representJavaBeanProperty(Object bean, Property property,
+      Object value, Tag customTag) {
     NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
 
     if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
@@ -90,7 +88,7 @@ public class TapeRepresenter extends Representer {
   }
 
   private <K, V> Map<K, V> sort(Map<K, V> self) {
-    return new TreeMap<K, V>(self);
+    return new TreeMap<>(self);
   }
 
   private boolean isNullValue(NodeTuple tuple) {

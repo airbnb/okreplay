@@ -16,8 +16,8 @@
 
 package software.betamax.proxy.concurrency
 
-import okhttp3.Request
 import software.betamax.MatchRule
+import software.betamax.message.tape.Request
 
 class PostingMatchRule implements MatchRule {
   @Override

@@ -21,20 +21,18 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import java.io.EOFException;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import okio.Buffer;
 import software.betamax.Configuration;
 import software.betamax.Headers;
 import software.betamax.MatchRule;
 import software.betamax.TapeMode;
 import software.betamax.handler.NonWritableTapeException;
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
 
 import static com.google.common.net.HttpHeaders.VIA;
 import static java.util.Collections.unmodifiableList;
@@ -148,19 +146,8 @@ public abstract class MemoryTape implements Tape {
   }
 
   private String stringify(Request request) {
-    RequestBody requestBody = request.body();
-    String bodyLog;
-    try {
-      Buffer buffer = new Buffer();
-      requestBody.writeTo(buffer);
-      if (isPlaintext(buffer)) {
-        bodyLog = " (" + requestBody.contentLength() + "-byte body)";
-      } else {
-        bodyLog = " (binary " + requestBody.contentLength() + "-byte body omitted)";
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    byte[] body = request.getBodyAsBinary();
+    String bodyLog = " (binary " + body.length + "-byte body omitted)";
     return "method: " + request.method() + ", " + "uri: " + request.url() + ", " + "headers: " +
         request.headers() + ", " + bodyLog;
   }
@@ -198,11 +185,16 @@ public abstract class MemoryTape implements Tape {
   }
 
   private Request recordRequest(Request request) {
-    return request.newBuilder().removeHeader(VIA).build();
+    return request.newBuilder() //
+        .removeHeader(VIA) //
+        .build();
   }
 
   private Response recordResponse(Response response) {
-    return response.newBuilder().removeHeader(VIA).removeHeader(Headers.X_BETAMAX).build();
+    return response.newBuilder() //
+        .removeHeader(VIA) //
+        .removeHeader(Headers.X_BETAMAX) //
+        .build();
   }
 
   /**

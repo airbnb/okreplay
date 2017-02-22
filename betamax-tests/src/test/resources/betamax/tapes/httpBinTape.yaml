@@ -4,7 +4,7 @@ interactions:
 - recorded: 2013-11-11T17:53:35.524Z
   request:
     method: POST
-    uri: https://httpbin.org/post
+    url: https://httpbin.org/post
     headers:
       Accept: '*/*'
       Accept-Charset: UTF-8,*;q=.1

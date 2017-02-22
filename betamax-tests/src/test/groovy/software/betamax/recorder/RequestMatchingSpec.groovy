@@ -17,9 +17,9 @@
 package software.betamax.recorder
 
 import com.google.common.io.Files
-import okhttp3.Request
 import software.betamax.ComposedMatchRule
 import software.betamax.MatchRules
+import software.betamax.message.tape.RecordedRequest
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.*
 
@@ -39,12 +39,12 @@ class RequestMatchingSpec extends Specification {
     given:
     def yaml = """\
 !tape
-name: method and uri tape
+name: method and url tape
 interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: GET
-    uri: http://xkcd.com/
+    url: http://xkcd.com/
   response:
     status: 200
     headers: {Content-Type: text/plain}
@@ -52,7 +52,7 @@ interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: POST
-    uri: http://xkcd.com/
+    url: http://xkcd.com/
   response:
     status: 200
     headers: {Content-Type: text/plain}
@@ -60,7 +60,7 @@ interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: GET
-    uri: http://qwantz.com/
+    url: http://qwantz.com/
   response:
     status: 200
     headers: {Content-Type: text/plain}
@@ -83,7 +83,10 @@ interactions:
     "GET"  | "http://qwantz.com/"
 
     responseText = "$method method response from ${uri.toURI().host}"
-    request = new Request.Builder().url(uri).method(method, null).build()
+    request = new RecordedRequest.Builder()
+        .url(uri)
+        .method(method, null)
+        .build()
   }
 
   void "can match based on host"() {
@@ -95,7 +98,7 @@ interactions:
 - recorded: 2011-08-23T20:24:33.000Z
   request:
     method: GET
-    uri: http://xkcd.com/936/
+    url: http://xkcd.com/936/
   response:
     status: 200
     headers: {Content-Type: text/plain}
@@ -107,7 +110,9 @@ interactions:
     tape.matchRule = MatchRules.host
 
     when:
-    def request = new Request.Builder().url("http://xkcd.com/875").build()
+    def request = new RecordedRequest.Builder()
+        .url("http://xkcd.com/875")
+        .build()
     def response = tape.play(request)
 
     then:
@@ -124,7 +129,7 @@ interactions:
 - recorded: 2013-10-01T13:27:37.000Z
   request:
     method: GET
-    uri: http://httpbin.org/get
+    url: http://httpbin.org/get
     headers:
       Accept: application/json
   response:
@@ -136,7 +141,7 @@ interactions:
 - recorded: 2013-10-01T13:34:33.000Z
   request:
     method: GET
-    uri: http://httpbin.org/get
+    url: http://httpbin.org/get
     headers:
       Accept: text/plain
   response:
@@ -151,7 +156,7 @@ interactions:
     tape.matchRule = ComposedMatchRule.of(MatchRules.method, MatchRules.uri, MatchRules.accept)
 
     when:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .addHeader(ACCEPT, acceptHeader)
         .url("http://httpbin.org/get")
         .build()

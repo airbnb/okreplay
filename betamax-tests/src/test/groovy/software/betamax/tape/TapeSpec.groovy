@@ -18,11 +18,10 @@ package software.betamax.tape
 
 import com.google.common.io.Files
 import okhttp3.MediaType
-import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.Response
 import okhttp3.ResponseBody
-import software.betamax.encoding.GzipEncoder
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Shared
@@ -41,15 +40,14 @@ class TapeSpec extends Specification {
   @Shared def loader = new YamlTapeLoader(tapeRoot)
   @Shared Tape tape = loader.loadTape('tape_spec')
 
-  Request getRequest = new Request.Builder()
+  RecordedRequest getRequest = new RecordedRequest.Builder()
       .url('http://icanhascheezburger.com/')
       .build()
-  Response plainTextResponse = new Response.Builder()
+  RecordedResponse plainTextResponse = new RecordedResponse.Builder()
       .code(200)
       .addHeader(CONTENT_LANGUAGE, 'en-GB')
       .addHeader(CONTENT_ENCODING, 'gzip')
-      .body(ResponseBody.create(MediaType.parse('text/plain;charset=UTF-8'),
-      new GzipEncoder().encode('O HAI!')))
+      .body(ResponseBody.create(MediaType.parse('text/plain;charset=UTF-8'), 'O HAI!'))
       .build()
 
   void cleanup() {
@@ -73,15 +71,15 @@ class TapeSpec extends Specification {
     def interaction = tape.interactions[-1]
 
     and: 'the request data is correctly stored'
-    interaction.request.method == getRequest.method()
-    interaction.request.uri == getRequest.uri
+    interaction.request.method() == getRequest.method()
+    interaction.request.url() == getRequest.url()
 
     and: 'the response data is correctly stored'
-    interaction.response.status == plainTextResponse.status
-    interaction.response.body == 'O HAI!'
-    interaction.response.headers[CONTENT_TYPE] == plainTextResponse.header(CONTENT_TYPE)
-    interaction.response.headers[CONTENT_LANGUAGE] == plainTextResponse.header(CONTENT_LANGUAGE)
-    interaction.response.headers[CONTENT_ENCODING] == plainTextResponse.header(CONTENT_ENCODING)
+    interaction.response.code() == plainTextResponse.code()
+    interaction.response.getBodyAsText() == 'O HAI!'
+    interaction.response.header(CONTENT_TYPE) == plainTextResponse.header(CONTENT_TYPE)
+    interaction.response.header(CONTENT_LANGUAGE) == plainTextResponse.header(CONTENT_LANGUAGE)
+    interaction.response.header(CONTENT_ENCODING) == plainTextResponse.header(CONTENT_ENCODING)
   }
 
   void 'can overwrite a recorded interaction'() {
@@ -97,7 +95,9 @@ class TapeSpec extends Specification {
 
   void 'seek does not match a request for a different URI'() {
     given:
-    def request = new Request.Builder().url('http://qwantz.com/').build()
+    def request = new RecordedRequest.Builder()
+        .url('http://qwantz.com/')
+        .build()
 
     expect:
     !tape.seek(request)
@@ -114,13 +114,13 @@ class TapeSpec extends Specification {
 
     then: 'the recorded response data is copied onto the response'
     response.code() == plainTextResponse.code()
-    response.body().string() == 'O HAI!'
+    response.getBodyAsText() == 'O HAI!'
     response.headers() == plainTextResponse.headers()
   }
 
   void 'can record post requests with a body'() {
     given: 'a request with some content'
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://github.com/')
         .method("POST", RequestBody.create(MediaType.parse(FORM_DATA.toString()), 'q=1'))
         .build()

@@ -16,15 +16,13 @@
 
 package software.betamax.proxy.matchRules
 
-import okhttp3.Request
 import software.betamax.MatchRule
+import software.betamax.message.tape.Request
 
 import java.util.concurrent.atomic.AtomicInteger
 
 class InstrumentedMatchRule implements MatchRule {
-
   def counter = new AtomicInteger(0)
-
   def requestValidations = []
 
   @Override

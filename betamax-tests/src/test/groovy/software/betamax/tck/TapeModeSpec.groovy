@@ -94,7 +94,7 @@ interactions:
 - recorded: 2011-08-26T21:46:52.000Z
   request:
     method: GET
-    uri: ${endpoint.url("/").toString()}
+    url: ${endpoint.url("/").toString()}
     headers: {}
   response:
     status: 202
@@ -127,7 +127,7 @@ interactions:
 - recorded: 2011-08-26T21:46:52.000Z
   request:
     method: GET
-    uri: ${endpoint.url("/").toString()}
+    url: ${endpoint.url("/").toString()}
     headers: {}
   response:
     status: 202

@@ -30,7 +30,7 @@ class EncoderSpec extends Specification {
     encoder.decode(new ByteArrayInputStream(bytes)) == text
 
     where:
-    encoderClass << [GzipEncoder, DeflateEncoder]
+    encoderClass << [DeflateEncoder]
     text = 'this is some text that gets encoded'
     encoder = encoderClass.newInstance()
   }

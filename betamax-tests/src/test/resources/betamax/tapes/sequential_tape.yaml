@@ -4,7 +4,7 @@ interactions:
 - recorded: 2012-10-21T12:52:39.797Z
   request:
     method: GET
-    uri: http://freeside.co/betamax
+    url: http://freeside.co/betamax
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate
@@ -19,7 +19,7 @@ interactions:
 - recorded: 2012-10-21T12:52:39.844Z
   request:
     method: GET
-    uri: http://freeside.co/betamax
+    url: http://freeside.co/betamax
     headers:
       Accept: '*/*'
       Accept-Encoding: gzip,deflate

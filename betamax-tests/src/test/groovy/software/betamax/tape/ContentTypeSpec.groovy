@@ -18,6 +18,8 @@ package software.betamax.tape
 
 import com.google.common.io.Files
 import okhttp3.*
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Shared
@@ -32,7 +34,7 @@ class ContentTypeSpec extends Specification {
   @Shared Tape tape = loader.loadTape('tape_spec')
   @Shared File image = new File(Class.getResource("/image.png").toURI())
 
-  @Shared Response successResponse = new Response.Builder()
+  @Shared RecordedResponse successResponse = new RecordedResponse.Builder()
       .code(HTTP_OK)
       .body(ResponseBody.create(MediaType.parse("text/plain"), "OK"))
       .build()
@@ -43,7 +45,7 @@ class ContentTypeSpec extends Specification {
 
   void 'can record post requests with an image content-type'() {
     given: 'a request with some content'
-    def imagePostRequest = new Request.Builder()
+    def imagePostRequest = new RecordedRequest.Builder()
         .method("POST", RequestBody.create(MediaType.parse("image/png"), image.bytes))
         .url("http://github.com/")
         .build()

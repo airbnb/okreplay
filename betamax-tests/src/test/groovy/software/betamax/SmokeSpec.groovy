@@ -21,7 +21,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.junit.ClassRule
-import software.betamax.encoding.GzipEncoder
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.proxy.BetamaxInterceptor
@@ -62,25 +61,6 @@ class SmokeSpec extends Specification {
     "txt"  | "http://httpbin.org/robots.txt" | "User-agent: *"
     "html" | "http://httpbin.org/html"       | "<!DOCTYPE html>"
     "json" | "http://httpbin.org/get"        | '"url": "http://httpbin.org/get"'
-  }
-
-  void "gzipped response data"() {
-    when:
-    def request = new Request.Builder()
-        .url(uri)
-        .addHeader("Accept-Encoding", "gzip")
-        .build()
-    def response = client.newCall(request).execute()
-
-    then:
-    response.code() == HTTP_OK
-    response.header(VIA) == "Betamax"
-    response.header(X_BETAMAX) == "PLAY"
-    encoder.decode(response.body().byteStream()).contains('"gzipped": true')
-
-    where:
-    uri = "http://httpbin.org/gzip"
-    encoder = new GzipEncoder()
   }
 
   void "redirects are followed"() {

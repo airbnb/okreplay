@@ -42,7 +42,7 @@ interactions:
 - recorded: 2011-08-23T22:41:40.000Z
   request:
     method: GET
-    uri: http://icanhascheezburger.com/
+    url: http://icanhascheezburger.com/
     headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
   response:
     status: 200
@@ -76,7 +76,7 @@ interactions:
 - recorded: 2011-08-23T23:41:40.000Z
   request:
     method: GET
-    uri: http://icanhascheezburger.com/
+    url: http://icanhascheezburger.com/
     headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
   response:
     status: 200
@@ -85,7 +85,7 @@ interactions:
 - recorded: 2011-08-23T23:41:40.000Z
   request:
     method: GET
-    uri: http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol
+    url: http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol
     headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
   response:
     status: 418
@@ -114,7 +114,7 @@ interactions:
 - recorded: 2011-08-23T22:41:40.000Z
   request:
     method: GET
-    uri: http://icanhascheezburger.com/
+    url: http://icanhascheezburger.com/
     headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
   response:
     status: 200
@@ -160,7 +160,7 @@ interactions:
 - recorded: THIS IS NOT A DATE!
   request:
     method: GET
-    uri: http://icanhascheezburger.com/
+    url: http://icanhascheezburger.com/
     headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
   response:
     status: 200

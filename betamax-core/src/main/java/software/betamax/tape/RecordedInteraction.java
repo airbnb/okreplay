@@ -18,15 +18,15 @@ package software.betamax.tape;
 
 import java.util.Date;
 
-import okhttp3.Request;
-import okhttp3.Response;
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
 
 public class RecordedInteraction {
   private final Date recorded;
   private final Request request;
   private final Response response;
 
-  public RecordedInteraction(Date recorded, Request request, Response response) {
+  RecordedInteraction(Date recorded, Request request, Response response) {
     this.recorded = recorded;
     this.request = request;
     this.response = response;

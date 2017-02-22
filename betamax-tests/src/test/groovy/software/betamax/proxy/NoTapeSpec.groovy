@@ -27,8 +27,8 @@ import spock.lang.Specification
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
-  def interceptor = new BetamaxInterceptor()
-  def client = new OkHttpClient.Builder()
+  @Shared def interceptor = new BetamaxInterceptor()
+  @Shared def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
       .build()
 
@@ -45,10 +45,10 @@ class NoTapeSpec extends Specification {
     def request = new Request.Builder()
         .url("http://localhost")
         .build()
-    client.newCall(request).execute()
+    def response = client.newCall(request).execute()
 
     then:
-    def e = thrown(IOException)
-    e.message == "Server returned HTTP response code: 403 for URL: http://localhost:5000/"
+    response.code() == 403
+    response.body().string() == "No tape"
   }
 }

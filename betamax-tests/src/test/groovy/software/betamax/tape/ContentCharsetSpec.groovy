@@ -18,9 +18,9 @@ package software.betamax.tape
 
 import com.google.common.io.Files
 import okhttp3.MediaType
-import okhttp3.Request
-import okhttp3.Response
 import okhttp3.ResponseBody
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.*
 
@@ -40,8 +40,8 @@ class ContentCharsetSpec extends Specification {
 
   void "a response with a #charset body is recorded correctly"() {
     given:
-    def request = new Request.Builder().url("http://localhost").build()
-    def response = new Response.Builder().code(HTTP_OK)
+    def request = new RecordedRequest.Builder().url("http://localhost").build()
+    def response = new RecordedResponse.Builder().code(HTTP_OK)
         .body(ResponseBody.create(MediaType.parse(PLAIN_TEXT_UTF_8.withCharset(charset).toString())
         , "\u00a3".getBytes(charset)))
         .addHeader(CONTENT_ENCODING, "none")
@@ -73,7 +73,7 @@ interactions:
 - recorded: 2011-08-27T23:25:45.000Z
   request:
     method: GET
-    uri: http://freeside.co/betamax
+    url: http://freeside.co/betamax
   response:
     status: 200
     headers:
@@ -84,14 +84,16 @@ interactions:
     def tape = loader.readFrom(new StringReader(yaml))
 
     and:
-    def request = new Request.Builder().url("http://freeside.co/betamax").build()
+    def request = new RecordedRequest.Builder()
+        .url("http://freeside.co/betamax")
+        .build()
 
     when:
     def response = tape.play(request)
 
     then:
     def expected = "\u00a3".getBytes(charset)
-    response.body().string().getBytes(UTF_8) == expected
+    response.getBodyAsBinary() == expected
 
     where:
     charset << [UTF_8, ISO_8859_1]

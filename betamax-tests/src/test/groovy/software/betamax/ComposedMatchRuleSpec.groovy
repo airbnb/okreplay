@@ -17,8 +17,8 @@
 package software.betamax
 
 import okhttp3.MediaType
-import okhttp3.Request
 import okhttp3.RequestBody
+import software.betamax.message.tape.RecordedRequest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -33,11 +33,11 @@ class ComposedMatchRuleSpec extends Specification {
     def rule = ComposedMatchRule.of(*rules)
 
     and:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .method(method1, null)
         .url(uri1).build()
     def body = RequestBody.create(MediaType.parse("text/plain"), "foo")
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .method(method2, method1 == 'GET' ? null : body)
         .url(uri2)
         .build()

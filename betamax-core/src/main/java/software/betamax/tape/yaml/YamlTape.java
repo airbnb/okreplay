@@ -18,8 +18,8 @@ package software.betamax.tape.yaml;
 
 import org.yaml.snakeyaml.nodes.Tag;
 
-import okhttp3.Request;
-import okhttp3.Response;
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
 import software.betamax.tape.MemoryTape;
 
 class YamlTape extends MemoryTape {

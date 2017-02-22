@@ -18,9 +18,9 @@ package software.betamax.recorder
 
 import com.google.common.io.Files
 import okhttp3.MediaType
-import okhttp3.Request
-import okhttp3.Response
 import okhttp3.ResponseBody
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.MemoryTape
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
@@ -49,7 +49,7 @@ class SequentialTapeWritingSpec extends Specification {
   void "write sequential tapes record multiple matching responses"() {
     when: "multiple responses are captured from the same endpoint"
     (1..n).each {
-      def response = new Response.Builder()
+      def response = new RecordedResponse.Builder()
           .code(HTTP_OK)
           .body(ResponseBody.create(MediaType.parse("text/plain"), "count: $it".bytes))
           .build()
@@ -68,7 +68,8 @@ class SequentialTapeWritingSpec extends Specification {
 
     where:
     n = 2
-    request = new Request.Builder().url("http://freeside.co/betamax").build()
+    request = new RecordedRequest.Builder()
+        .url("http://freeside.co/betamax")
+        .build()
   }
-
 }

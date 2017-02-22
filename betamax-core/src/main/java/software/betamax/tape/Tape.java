@@ -16,11 +16,11 @@
 
 package software.betamax.tape;
 
-import okhttp3.Request;
-import okhttp3.Response;
 import software.betamax.MatchRule;
 import software.betamax.TapeMode;
 import software.betamax.handler.HandlerException;
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
 
 /** Represents a set of recorded HTTP interactions that can be played back or appended to. */
 public interface Tape {

@@ -16,7 +16,7 @@
 
 package software.betamax;
 
-import okhttp3.Request;
+import software.betamax.message.tape.Request;
 
 /**
  * A rule used to determine whether a recorded HTTP interaction on tape matches a new request being

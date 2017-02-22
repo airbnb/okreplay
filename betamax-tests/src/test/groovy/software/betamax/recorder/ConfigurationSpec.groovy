@@ -76,7 +76,7 @@ class ConfigurationSpec extends Specification {
     properties.with {
       setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
       setProperty("betamax.defaultMode", "READ_WRITE")
-      setProperty("betamax.defaultMatchRules", "host,uri")
+      setProperty("betamax.defaultMatchRules", "host,url")
       setProperty("betamax.ignoreHosts", "github.com,energizedwork.com")
       setProperty("betamax.ignoreLocalhost", "true")
       setProperty("betamax.sslEnabled", "true")
@@ -104,7 +104,7 @@ class ConfigurationSpec extends Specification {
     properties.with {
       setProperty("betamax.tapeRoot", this.tempDir.absolutePath)
       setProperty("betamax.defaultMode", "READ_WRITE")
-      setProperty("betamax.defaultMatchRules", "host,uri")
+      setProperty("betamax.defaultMatchRules", "host,url")
       setProperty("betamax.ignoreHosts", "github.com,energizedwork.com")
       setProperty("betamax.ignoreLocalhost", "true")
       setProperty("betamax.sslEnabled", "true")

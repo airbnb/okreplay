@@ -4,7 +4,7 @@ interactions:
 - recorded: 2016-02-11T14:03:46.216Z
   request:
     method: GET
-    uri: http://localhost:3333/
+    url: http://localhost:3333/
     headers:
       Accept: '*/*'
       Connection: keep-alive

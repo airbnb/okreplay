@@ -20,9 +20,8 @@ import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.ResponseBody
-import software.betamax.encoding.DeflateEncoder
-import software.betamax.encoding.GzipEncoder
-import software.betamax.encoding.NoOpEncoder
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.Tape
 import spock.lang.Specification
 import spock.lang.Subject
@@ -63,7 +62,8 @@ class BetamaxInterceptorSpec extends Specification {
 
   void "clientToProxyRequest returns a recorded response if found on tape"() {
     given:
-    def recordedResponse = new Response.Builder().code(200)
+    def recordedResponse = new RecordedResponse.Builder()
+        .code(200)
         .body(ResponseBody.create(MediaType.parse("text/plain"), "message body"))
         .build()
 
@@ -82,41 +82,9 @@ class BetamaxInterceptorSpec extends Specification {
     response.headers().get(X_BETAMAX) == "PLAY"
   }
 
-  void "clientToProxyRequest encodes the response if the original response was encoded with #encoding"() {
-    given:
-    def recordedResponse = new Response.Builder()
-        .code(200)
-        .body(ResponseBody.create(MediaType.parse(encoding), responseBody.bytes))
-        .build()
-
-    and:
-    tape.isReadable() >> true
-    tape.seek(_) >> true
-    tape.play(_) >> recordedResponse
-
-    expect:
-    Response response = filters.clientToProxyRequest(request)
-    response != null
-    response.status.code() == 200
-    response.status.reasonPhrase() == "OK"
-    readContent(response) == encodedBody
-
-    and:
-    response.headers().get(X_BETAMAX) == "PLAY"
-
-    where:
-    encoding  | encoder
-    "gzip"    | new GzipEncoder()
-    "deflate" | new DeflateEncoder()
-    "none"    | new NoOpEncoder()
-
-    responseBody = "message body"
-    encodedBody = encoder.encode(responseBody)
-  }
-
   void "serverToProxyResponse records the exchange to tape"() {
     given:
-    def response = new Response.Builder()
+    def response = new RecordedResponse.Builder()
         .code(200)
         .body(ResponseBody.create(MediaType.parse("text/plain"), "response body"))
         .build()
@@ -143,7 +111,7 @@ class BetamaxInterceptorSpec extends Specification {
 
   void "proxyToClientResponse adds the X-Betamax header"() {
     given:
-    def response = new Response.Builder()
+    def response = new RecordedResponse.Builder()
         .code(200)
         .build()
 
@@ -154,7 +122,7 @@ class BetamaxInterceptorSpec extends Specification {
     response.headers().get(X_BETAMAX) == "REC"
   }
 
-  private static byte[] readContent(Response response) {
-    return response.body().bytes()
+  private static byte[] readContent(RecordedRequest response) {
+    return response.body as byte[]
   }
 }

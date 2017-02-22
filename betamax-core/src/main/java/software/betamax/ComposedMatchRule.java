@@ -20,7 +20,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
-import okhttp3.Request;
+import software.betamax.message.tape.Request;
 
 public class ComposedMatchRule implements MatchRule {
 

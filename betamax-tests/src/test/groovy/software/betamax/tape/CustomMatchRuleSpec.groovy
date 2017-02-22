@@ -20,13 +20,13 @@ import com.google.common.base.Optional
 import com.google.common.io.Files
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody
 import org.junit.ClassRule
 import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
 import software.betamax.junit.RecorderRule
+import software.betamax.message.tape.Request
 import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
 
@@ -62,7 +62,7 @@ interactions:
 - recorded: 2013-10-31T07:44:59.023Z
   request:
     method: GET
-    uri: $url
+    url: $url
     headers:
       Accept: text/plain
       X-Whatever: some random value
@@ -88,7 +88,7 @@ interactions:
 
     and:
     def body = RequestBody.create(MediaType.parse("text/plain"), "foo")
-    def request = new Request.Builder()
+    def request = new okhttp3.Request.Builder()
         .url(url)
         .addHeader(ACCEPT, acceptHeader)
         .method(verb, verb == "GET" ? null : body)

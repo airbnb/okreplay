@@ -37,9 +37,9 @@ class OCSPSpec extends Specification {
 
   static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
   @Shared def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build()
-  def interceptor = new BetamaxInterceptor()
+  @Shared def interceptor = new BetamaxInterceptor()
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
-  def client = new OkHttpClient.Builder()
+  @Shared def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
       .build()
 

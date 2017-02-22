@@ -16,11 +16,9 @@
 
 package software.betamax;
 
-import java.io.IOException;
 import java.util.Arrays;
 
-import okhttp3.Request;
-import okio.Buffer;
+import software.betamax.message.tape.Request;
 
 /** Standard {@link MatchRule} implementations. */
 public enum MatchRules implements MatchRule {
@@ -74,15 +72,7 @@ public enum MatchRules implements MatchRule {
     }
   }, body {
     @Override public boolean isMatch(Request a, Request b) {
-      try {
-        Buffer bufferA = new Buffer();
-        a.body().writeTo(bufferA);
-        Buffer bufferB = new Buffer();
-        b.body().writeTo(bufferB);
-        return Arrays.equals(bufferA.readByteArray(), bufferB.readByteArray());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
+      return Arrays.equals(a.getBodyAsBinary(), b.getBodyAsBinary());
     }
   }
 }

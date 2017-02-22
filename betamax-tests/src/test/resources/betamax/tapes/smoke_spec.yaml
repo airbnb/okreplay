@@ -3,7 +3,7 @@ interactions:
 - recorded: 2013-10-01T21:53:48.227Z
   request:
     method: GET
-    uri: http://httpbin.org/robots.txt
+    url: http://httpbin.org/robots.txt
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Accept-Encoding: gzip
@@ -25,7 +25,7 @@ interactions:
 - recorded: 2013-10-01T21:53:50.934Z
   request:
     method: GET
-    uri: http://httpbin.org/html
+    url: http://httpbin.org/html
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Accept-Encoding: gzip
@@ -59,7 +59,7 @@ interactions:
 - recorded: 2013-10-01T21:53:59.023Z
   request:
     method: GET
-    uri: http://httpbin.org/get
+    url: http://httpbin.org/get
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Host: httpbin.org
@@ -90,7 +90,7 @@ interactions:
 - recorded: 2013-10-01T21:53:56.133Z
   request:
     method: GET
-    uri: http://httpbin.org/gzip
+    url: http://httpbin.org/gzip
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Accept-Encoding: gzip
@@ -124,7 +124,7 @@ interactions:
 - recorded: 2013-10-01T21:53:58.731Z
   request:
     method: GET
-    uri: http://httpbin.org/redirect/1
+    url: http://httpbin.org/redirect/1
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Host: httpbin.org
@@ -148,7 +148,7 @@ interactions:
 - recorded: 2013-10-01T21:54:02.428Z
   request:
     method: GET
-    uri: https://httpbin.org/get
+    url: https://httpbin.org/get
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Connection: keep-alive
@@ -179,7 +179,7 @@ interactions:
 - recorded: 2013-10-01T21:54:05.424Z
   request:
     method: POST
-    uri: https://httpbin.org/post
+    url: https://httpbin.org/post
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Connection: close
@@ -222,7 +222,7 @@ interactions:
 - recorded: 2013-10-01T21:54:08.105Z
   request:
     method: GET
-    uri: http://httpbin.org
+    url: http://httpbin.org
     headers:
       Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
       Host: httpbin.org

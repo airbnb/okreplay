@@ -17,8 +17,8 @@
 package software.betamax
 
 import okhttp3.MediaType
-import okhttp3.Request
 import okhttp3.RequestBody
+import software.betamax.message.tape.RecordedRequest
 import spock.lang.Issue
 import spock.lang.Specification
 
@@ -30,19 +30,19 @@ import static software.betamax.MatchRules.*
 class MatchRuleSpec extends Specification {
   void 'can match method and url'() {
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .method('HEAD', null)
         .url('http://freeside.co/betamax')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax?q=1')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
     def rule = ComposedMatchRule.of(method, uri)
@@ -55,22 +55,22 @@ class MatchRuleSpec extends Specification {
 
   void 'can match host'() {
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .url('http://freeside.co/grails-fields')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .method('HEAD', null)
         .url('http://freeside.co/betamax')
         .build()
-    def request4 = new Request.Builder()
+    def request4 = new RecordedRequest.Builder()
         .url('http://icanhascheezburger.com/')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
     def rule = host
@@ -84,22 +84,22 @@ class MatchRuleSpec extends Specification {
 
   void 'can match path'() {
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .url('http://robfletcher.github.com/grails-enhanced-scaffolding')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .method('HEAD', null)
         .url('http://freeside.co/betamax')
         .build()
-    def request4 = new Request.Builder()
+    def request4 = new RecordedRequest.Builder()
         .url('http://icanhascheezburger.com/betamax')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
     def rule = path
@@ -113,27 +113,27 @@ class MatchRuleSpec extends Specification {
 
   void 'can match authorization'() {
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .addHeader(AUTHORIZATION, 'Basic 1234')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .url('http://icanhascheezburger.com/')
         .addHeader(AUTHORIZATION, 'Basic 1234')
         .addHeader(CACHE_CONTROL, 'no-cache')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .addHeader(AUTHORIZATION, 'Basic 4321')
         .build()
-    def request4 = new Request.Builder()
+    def request4 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .addHeader(AUTHORIZATION, 'Basic 4321')
         .addHeader(CACHE_CONTROL, 'no-cache')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .addHeader(AUTHORIZATION, 'Basic 1234')
         .build()
@@ -149,21 +149,21 @@ class MatchRuleSpec extends Specification {
   void 'can match post body'() {
     def mediaType = MediaType.parse("text/plain")
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .method('POST', RequestBody.create(mediaType, 'q=1'))
         .url('http://freeside.co/betamax')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .method('POST', RequestBody.create(mediaType, 'q=2'))
         .url('http://freeside.co/betamax')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .method('POST', RequestBody.create(mediaType, 'q=1&r=1'))
         .url('http://freeside.co/betamax')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .method('POST', RequestBody.create(mediaType, 'q=1'))
         .url('http://freeside.co/betamax')
         .build()
@@ -177,21 +177,21 @@ class MatchRuleSpec extends Specification {
 
   void 'can match query parameters in different orders'() {
     given:
-    def request1 = new Request.Builder()
+    def request1 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax?p=2&q=1')
         .build()
-    def request2 = new Request.Builder()
+    def request2 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax?p=2&q=2')
         .build()
-    def request3 = new Request.Builder()
+    def request3 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
-    def request4 = new Request.Builder()
+    def request4 = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax')
         .build()
 
     and:
-    def request = new Request.Builder()
+    def request = new RecordedRequest.Builder()
         .url('http://freeside.co/betamax?q=1&p=2')
         .build()
     def rule = ComposedMatchRule.of(method, queryParams)
