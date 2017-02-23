@@ -26,7 +26,7 @@ public class RecordedInteraction {
   private final Request request;
   private final Response response;
 
-  RecordedInteraction(Date recorded, Request request, Response response) {
+  public RecordedInteraction(Date recorded, Request request, Response response) {
     this.recorded = recorded;
     this.request = request;
     this.response = response;

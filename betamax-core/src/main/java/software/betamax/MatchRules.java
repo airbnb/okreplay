@@ -72,7 +72,7 @@ public enum MatchRules implements MatchRule {
     }
   }, body {
     @Override public boolean isMatch(Request a, Request b) {
-      return Arrays.equals(a.getBodyAsBinary(), b.getBodyAsBinary());
+      return Arrays.equals(a.getBody(), b.getBody());
     }
   }
 }

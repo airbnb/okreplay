@@ -146,7 +146,7 @@ public abstract class MemoryTape implements Tape {
   }
 
   private String stringify(Request request) {
-    byte[] body = request.getBodyAsBinary();
+    byte[] body = request.getBody();
     String bodyLog = " (binary " + body.length + "-byte body omitted)";
     return "method: " + request.method() + ", " + "uri: " + request.url() + ", " + "headers: " +
         request.headers() + ", " + bodyLog;

@@ -61,7 +61,7 @@ class SequentialTapeWritingSpec extends Specification {
 
     and: "each has different content"
     with(tape.interactions) {
-      response.body().string() == (1..n).collect {
+      response.bodyAsText == (1..n).collect {
         "count: $it"
       }
     }

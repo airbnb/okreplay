@@ -37,14 +37,18 @@ import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import software.betamax.io.FileResolver;
+import software.betamax.message.tape.RecordedRequest;
+import software.betamax.message.tape.RecordedResponse;
 import software.betamax.tape.RecordedInteraction;
 import software.betamax.tape.Tape;
 
@@ -60,10 +64,14 @@ public class TapeRepresenter extends Representer {
     setPropertyUtils(new TapePropertyUtils());
     representers.put(URI.class, new RepresentURI());
     representers.put(File.class, new RepresentFile(fileResolver));
+    representers.put(RecordedRequest.class, new RepresentRecordedRequest());
+    representers.put(RecordedResponse.class, new RepresentRecordedResponse());
+    representers.put(Headers.class, new RepresentHeaders());
   }
 
-  @Override protected NodeTuple representJavaBeanProperty(Object bean, Property property,
-      Object value, Tag customTag) {
+  @Override
+  protected NodeTuple representJavaBeanProperty(Object bean, Property property, Object value, Tag
+      customTag) {
     NodeTuple tuple = super.representJavaBeanProperty(bean, property, value, customTag);
 
     if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
@@ -112,15 +120,44 @@ public class TapeRepresenter extends Representer {
   }
 
   private class RepresentFile implements Represent {
-
     private final FileResolver fileResolver;
 
-    public RepresentFile(FileResolver fileResolver) {
+    RepresentFile(FileResolver fileResolver) {
       this.fileResolver = fileResolver;
     }
 
     @Override public Node representData(Object data) {
       return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
+    }
+  }
+
+  private class RepresentRecordedRequest implements Represent {
+    @Override public Node representData(Object data) {
+      RecordedRequest recordedRequest = (RecordedRequest) data;
+      Tag tag = getTag(RecordedRequest.class, new Tag(RecordedRequest.class));
+      return representSequence(tag, Arrays.asList(recordedRequest.method(), recordedRequest.url()
+          .toString(), recordedRequest.headers(), recordedRequest.getBody()), true);
+    }
+  }
+
+  private class RepresentRecordedResponse implements Represent {
+    @Override public Node representData(Object data) {
+      RecordedResponse recordedResponse = (RecordedResponse) data;
+      Tag tag = getTag(RecordedResponse.class, new Tag(RecordedResponse.class));
+      return representSequence(tag, Arrays.asList(recordedResponse.code(), recordedResponse
+          .headers(), recordedResponse.getBody()), true);
+    }
+  }
+
+  private class RepresentHeaders implements Represent {
+    @Override public Node representData(Object data) {
+      Map<String, List<String>> multimap = ((Headers) data).toMultimap();
+      Map<String, String> map = new HashMap<>(multimap.keySet().size());
+      // TODO: For simplicity, just use the first entry for each header in the multimap.
+      for (Map.Entry<String, List<String>> entry : multimap.entrySet()) {
+        map.put(entry.getKey(), entry.getValue().get(0));
+      }
+      return representMapping(Tag.MAP, map, true);
     }
   }
 
@@ -151,8 +188,7 @@ public class TapeRepresenter extends Representer {
   }
 
   public static class OrderedPropertyComparator implements Comparator<Property> {
-
-    public static OrderedPropertyComparator forNames(String... propertyNames) {
+    static OrderedPropertyComparator forNames(String... propertyNames) {
       return new OrderedPropertyComparator(propertyNames);
     }
 

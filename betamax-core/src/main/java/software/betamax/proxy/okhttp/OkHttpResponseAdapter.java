@@ -9,7 +9,7 @@ public class OkHttpResponseAdapter {
   /** Construct a OkHttp Response from a previously recorded interaction */
   public static okhttp3.Response adapt(okhttp3.Request okhttpRequest, Response recordedResponse) {
     ResponseBody responseBody = ResponseBody.create(
-        MediaType.parse(recordedResponse.getContentType()), recordedResponse.getBodyAsBinary());
+        MediaType.parse(recordedResponse.getContentType()), recordedResponse.getBody());
     return new okhttp3.Response.Builder()
         .headers(recordedResponse.headers())
         .body(responseBody)

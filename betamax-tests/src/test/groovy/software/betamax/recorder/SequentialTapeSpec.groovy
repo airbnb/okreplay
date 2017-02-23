@@ -54,7 +54,7 @@ class SequentialTapeSpec extends Specification {
 
     then: "each read succeeds"
     responses.every {
-      it.status == HTTP_OK
+      it.code() == HTTP_OK
     }
 
     and: "each has different content"
@@ -114,7 +114,7 @@ class SequentialTapeSpec extends Specification {
     responses << tape.play(getRequest)
 
     then: "all play back successfully"
-    responses.status == [HTTP_NOT_FOUND, HTTP_CREATED, HTTP_OK]
+    responses.code == [HTTP_NOT_FOUND, HTTP_CREATED, HTTP_OK]
 
     and: "the correct data is played back"
     new JsonSlurper().parseText(responses[2].bodyAsText).name == "foo"

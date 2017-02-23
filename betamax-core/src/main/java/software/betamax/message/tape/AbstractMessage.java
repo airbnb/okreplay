@@ -3,12 +3,7 @@ package software.betamax.message.tape;
 import com.google.common.base.Strings;
 import com.google.common.net.MediaType;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-
-import okio.Buffer;
-import okio.Okio;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
@@ -48,24 +43,11 @@ public abstract class AbstractMessage implements Message {
     return headers().get(name);
   }
 
-  @Override public final byte[] getBodyAsBinary() {
-    try {
-      InputStream is = getBodyAsStream();
-      Buffer buffer = new Buffer();
-      buffer.writeAll(Okio.source(is));
-      return buffer.readByteArray();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   @Override public final String getBodyAsText() {
     try {
-      return new String(getBodyAsBinary(), getCharset());
+      return new String(getBody(), getCharset());
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     }
   }
-
-  protected abstract InputStream getBodyAsStream() throws IOException;
 }

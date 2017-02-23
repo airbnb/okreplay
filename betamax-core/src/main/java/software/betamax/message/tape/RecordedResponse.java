@@ -1,6 +1,7 @@
 package software.betamax.message.tape;
 
 import java.io.IOException;
+import java.util.Map;
 
 import okhttp3.Headers;
 import okhttp3.Protocol;
@@ -16,6 +17,12 @@ public class RecordedResponse extends RecordedMessage implements Response {
     super(builder.headers.build(), builder.body);
     this.code = builder.code;
     this.protocol = builder.protocol;
+  }
+
+  public RecordedResponse(int code, Map<String, String> headers, byte[] body) {
+    super(Headers.of(headers), body);
+    this.code = code;
+    this.protocol = Protocol.HTTP_1_1;
   }
 
   public int code() {
@@ -34,7 +41,7 @@ public class RecordedResponse extends RecordedMessage implements Response {
     private Protocol protocol = Protocol.HTTP_1_1;
     private int code = -1;
     private Headers.Builder headers;
-    private Object body;
+    private byte[] body;
 
     public Builder() {
       headers = new Headers.Builder();
