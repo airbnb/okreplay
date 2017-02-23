@@ -17,6 +17,8 @@
 package software.betamax.recorder
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import software.betamax.ComposedMatchRule
 import software.betamax.MatchRules
 import software.betamax.message.tape.RecordedRequest
@@ -41,30 +43,42 @@ class RequestMatchingSpec extends Specification {
 !tape
 name: method and url tape
 interactions:
-- recorded: 2011-08-23T20:24:33.000Z
-  request:
-    method: GET
-    url: http://xkcd.com/
-  response:
-    status: 200
-    headers: {Content-Type: text/plain}
-    body: GET method response from xkcd.com
-- recorded: 2011-08-23T20:24:33.000Z
-  request:
-    method: POST
-    url: http://xkcd.com/
-  response:
-    status: 200
-    headers: {Content-Type: text/plain}
-    body: POST method response from xkcd.com
-- recorded: 2011-08-23T20:24:33.000Z
-  request:
-    method: GET
-    url: http://qwantz.com/
-  response:
-    status: 200
-    headers: {Content-Type: text/plain}
-    body: GET method response from qwantz.com
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T20:24:33.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://xkcd.com/'
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: text/plain},
+      !!binary "R0VUIG1ldGhvZCByZXNwb25zZSBmcm9tIHhrY2QuY29t"
+    ]
+  ]
+  - !!software.betamax.tape.RecordedInteraction [ 
+    '2011-08-23T20:24:33.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'POST',
+      'http://xkcd.com/'
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: text/plain},
+      !!binary "UE9TVCBtZXRob2QgcmVzcG9uc2UgZnJvbSB4a2NkLmNvbQ=="
+    ]
+  ]
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T20:24:33.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://qwantz.com/'
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: text/plain},
+      !!binary "R0VUIG1ldGhvZCByZXNwb25zZSBmcm9tIHF3YW50ei5jb20="
+    ]
+  ]
 """
 
     and:
@@ -74,7 +88,7 @@ interactions:
     def response = tape.play(request)
 
     then:
-    response.body().string() == responseText
+    response.getBodyAsText() == responseText
 
     where:
     method | uri
@@ -85,7 +99,8 @@ interactions:
     responseText = "$method method response from ${uri.toURI().host}"
     request = new RecordedRequest.Builder()
         .url(uri)
-        .method(method, null)
+        .method(method, method == 'GET' ? null : RequestBody.create(MediaType.parse("text/plain"),
+        "O HAI!"))
         .build()
   }
 
@@ -95,14 +110,18 @@ interactions:
 !tape
 name: host match tape
 interactions:
-- recorded: 2011-08-23T20:24:33.000Z
-  request:
-    method: GET
-    url: http://xkcd.com/936/
-  response:
-    status: 200
-    headers: {Content-Type: text/plain}
-    body: GET method response from xkcd.com
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T20:24:33.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://xkcd.com/936/'
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: text/plain},
+      !!binary "R0VUIG1ldGhvZCByZXNwb25zZSBmcm9tIHhrY2QuY29t"
+    ]
+  ]
 """
 
     and:
@@ -116,7 +135,7 @@ interactions:
     def response = tape.play(request)
 
     then:
-    response.body().string() == "GET method response from xkcd.com"
+    response.getBodyAsText() == "GET method response from xkcd.com"
   }
 
   @Unroll('request with Accept: #acceptHeader returns "#responseText"')
@@ -126,29 +145,32 @@ interactions:
 !tape
 name: headers match tape
 interactions:
-- recorded: 2013-10-01T13:27:37.000Z
-  request:
-    method: GET
-    url: http://httpbin.org/get
-    headers:
-      Accept: application/json
-  response:
-    status: 200
-    headers:
-      Content-Type: application/json
-    body: |-
-      { "message": "JSON data" }
-- recorded: 2013-10-01T13:34:33.000Z
-  request:
-    method: GET
-    url: http://httpbin.org/get
-    headers:
-      Accept: text/plain
-  response:
-    status: 200
-    headers:
-      Content-Type: text/plain
-    body: Plain text data
+  - !!software.betamax.tape.RecordedInteraction [
+    '2013-10-01T13:27:37.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://httpbin.org/get',
+      {Accept: application/json}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: application/json},
+      !!binary "eyAibWVzc2FnZSI6ICJKU09OIGRhdGEiIH0="
+    ]
+  ]
+  - !!software.betamax.tape.RecordedInteraction [
+    '2013-10-01T13:34:33.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://httpbin.org/get',
+      {Accept: text/plain}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: text/plain},
+      !!binary "UGxhaW4gdGV4dCBkYXRh"
+    ]
+  ]
 """
 
     and:
@@ -164,7 +186,7 @@ interactions:
 
     then:
     response.header(CONTENT_TYPE) == acceptHeader
-    response.body().string() == responseText
+    response.getBodyAsText() == responseText
 
     where:
     acceptHeader                                    | responseText

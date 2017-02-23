@@ -2,6 +2,7 @@ package software.betamax.message.tape;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Map;
 
 import okhttp3.CacheControl;
@@ -21,6 +22,10 @@ public class RecordedRequest extends RecordedMessage implements Request {
     super(builder.headers.build(), builder.body);
     this.url = builder.url;
     this.method = builder.method;
+  }
+
+  public RecordedRequest(String method, String url) {
+    this(method, url, Collections.<String, String>emptyMap());
   }
 
   public RecordedRequest(String method, String url, Map<String, String> headers) {

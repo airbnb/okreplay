@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 
@@ -99,7 +100,10 @@ public class RecordedResponse extends RecordedMessage implements Response {
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
-      addHeader(CONTENT_TYPE, body.contentType().toString());
+      MediaType contentType = body.contentType();
+      if (contentType != null) {
+        addHeader(CONTENT_TYPE, contentType.toString());
+      }
       return this;
     }
 
