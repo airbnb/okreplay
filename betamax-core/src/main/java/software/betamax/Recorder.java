@@ -36,10 +36,6 @@ public class Recorder {
   private final BetamaxInterceptor interceptor;
   private final Collection<RecorderListener> listeners = Lists.newArrayList();
 
-  public Recorder() {
-    this(Configuration.builder().build(), new BetamaxInterceptor());
-  }
-
   public Recorder(Configuration configuration, BetamaxInterceptor interceptor) {
     this.configuration = configuration;
     this.interceptor = interceptor;

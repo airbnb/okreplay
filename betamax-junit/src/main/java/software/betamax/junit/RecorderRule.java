@@ -47,9 +47,6 @@ public class RecorderRule extends Recorder implements TestRule {
 
   private final Logger log = LoggerFactory.getLogger(RecorderRule.class.getName());
 
-  public RecorderRule() {
-  }
-
   public RecorderRule(Configuration configuration, BetamaxInterceptor interceptor) {
     super(configuration, interceptor);
   }

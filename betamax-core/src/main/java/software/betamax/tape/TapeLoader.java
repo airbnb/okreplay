@@ -28,12 +28,12 @@ public interface TapeLoader<T extends Tape> {
    * @param name the name of the tape.
    * @return a tape loaded from a file or a new blank tape.
    */
-  public T loadTape(String name);
+  T loadTape(String name);
 
-  public void writeTape(Tape tape);
+  void writeTape(Tape tape);
 
   /**
    * @return an appropriate file for storing a tape with the supplied name.
    */
-  public File fileFor(String tapeName);
+  File fileFor(String tapeName);
 }

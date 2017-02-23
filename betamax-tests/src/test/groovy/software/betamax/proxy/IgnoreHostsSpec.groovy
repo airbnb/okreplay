@@ -35,7 +35,7 @@ class IgnoreHostsSpec extends Specification {
   def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()
       .tapeRoot(tapeRoot)
       .defaultMode(READ_WRITE)])
-  @Shared def interceptor = new BetamaxInterceptor()
+  @Shared def interceptor = new BetamaxInterceptor(configuration)
   @AutoCleanup("stop") Recorder recorder = new Recorder(configuration, interceptor)
   @Shared @AutoCleanup("stop") MockWebServer endpoint = new MockWebServer()
 

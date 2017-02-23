@@ -33,9 +33,9 @@ import static software.betamax.Headers.X_BETAMAX
 class BetamaxInterceptorSpec extends Specification {
 
   @Subject
-  BetamaxInterceptor filters = new BetamaxInterceptor()
-  Request request = new Request.Builder().url("http://freeside.co/betamax").build()
   Tape tape = Mock(Tape)
+  BetamaxInterceptor filters = new BetamaxInterceptor(tape)
+  Request request = new Request.Builder().url("http://freeside.co/betamax").build()
 
   void "clientToProxyRequest returns null if no match is found on tape"() {
     given:

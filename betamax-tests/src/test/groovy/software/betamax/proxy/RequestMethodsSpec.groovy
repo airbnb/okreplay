@@ -37,9 +37,9 @@ import static software.betamax.TapeMode.READ_WRITE
 @Unroll
 @Timeout(10)
 class RequestMethodsSpec extends Specification {
-  def interceptor = new BetamaxInterceptor()
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Shared def interceptor = new BetamaxInterceptor(configuration)
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared @AutoCleanup("stop") def endpoint = new MockWebServer()
 

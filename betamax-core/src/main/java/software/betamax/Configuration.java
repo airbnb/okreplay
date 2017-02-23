@@ -74,7 +74,7 @@ public class Configuration {
     this.ignoreHosts = builder.ignoreHosts;
     this.ignoreLocalhost = builder.ignoreLocalhost;
     this.sslEnabled = builder.sslEnabled;
-    this.interceptor = builder.interceptor;
+    this.interceptor = new BetamaxInterceptor(this);
   }
 
   public static Builder builder() {
@@ -113,13 +113,14 @@ public class Configuration {
 
   /**
    * Hosts that are ignored by Betamax. Any connections made will be allowed to proceed
-   * normally and
-   * not be intercepted.
+   * normally and not be intercepted.
    */
   public Collection<String> getIgnoreHosts() {
     if (isIgnoreLocalhost()) {
-      return new ImmutableSet.Builder<String>().addAll(ignoreHosts).addAll(Network
-          .getLocalAddresses()).build();
+      return new ImmutableSet.Builder<String>()
+          .addAll(ignoreHosts)
+          .addAll(Network.getLocalAddresses())
+          .build();
     } else {
       return ignoreHosts;
     }
@@ -159,7 +160,6 @@ public class Configuration {
   }
 
   public static class Builder {
-    final BetamaxInterceptor interceptor = new BetamaxInterceptor();
     File tapeRoot = new File(Configuration.DEFAULT_TAPE_ROOT);
     TapeMode defaultMode = Configuration.DEFAULT_MODE;
     MatchRule defaultMatchRule = Configuration.DEFAULT_MATCH_RULE;

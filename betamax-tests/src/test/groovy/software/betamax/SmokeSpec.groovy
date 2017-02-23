@@ -33,9 +33,12 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Unroll
 @Betamax
 class SmokeSpec extends Specification {
-  def interceptor = new BetamaxInterceptor()
   static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-  @Shared def configuration = Configuration.builder().sslEnabled(true).tapeRoot(TAPE_ROOT).build()
+  @Shared def configuration = Configuration.builder()
+      .sslEnabled(true)
+      .tapeRoot(TAPE_ROOT)
+      .build()
+  @Shared def interceptor = new BetamaxInterceptor(configuration)
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
 
   def client = new OkHttpClient.Builder()

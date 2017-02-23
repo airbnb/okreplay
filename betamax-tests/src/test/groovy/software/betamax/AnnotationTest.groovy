@@ -42,7 +42,7 @@ class AnnotationTest {
 
   static def TAPE_ROOT = Files.createTempDir()
   def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
-  def interceptor = new BetamaxInterceptor()
+  def interceptor = new BetamaxInterceptor(configuration)
   @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
 
   def endpoint = new MockWebServer()

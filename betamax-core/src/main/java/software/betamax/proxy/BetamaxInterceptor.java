@@ -27,6 +27,7 @@ import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
+import software.betamax.Configuration;
 import software.betamax.Headers;
 import software.betamax.handler.NonWritableTapeException;
 import software.betamax.message.tape.Request;
@@ -39,13 +40,18 @@ import static com.google.common.net.HttpHeaders.VIA;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class BetamaxInterceptor implements Interceptor {
+  private final Configuration configuration;
   private Optional<Tape> tape = Optional.absent();
   private boolean isRunning;
   private static final Logger LOG = LoggerFactory.getLogger(BetamaxInterceptor.class.getName());
 
+  public BetamaxInterceptor(Configuration configuration) {
+    this.configuration = configuration;
+  }
+
   @Override public okhttp3.Response intercept(Chain chain) throws IOException {
     okhttp3.Request request = chain.request();
-    if (isRunning) {
+    if (isRunning || !isHostIgnored(request)) {
       if (!tape.isPresent()) {
         return new okhttp3.Response.Builder() //
             .protocol(Protocol.HTTP_1_1)  //
@@ -82,6 +88,10 @@ public class BetamaxInterceptor implements Interceptor {
     } else {
       return chain.proceed(request);
     }
+  }
+
+  private boolean isHostIgnored(okhttp3.Request request) {
+    return configuration.getIgnoreHosts().contains(request.url().host());
   }
 
   private okhttp3.Response setViaHeader(okhttp3.Response response) {
