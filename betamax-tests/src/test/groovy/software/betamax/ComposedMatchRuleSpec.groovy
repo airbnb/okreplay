@@ -27,7 +27,6 @@ import static MatchRules.uri
 
 @Unroll
 class ComposedMatchRuleSpec extends Specification {
-
   void "composed rule matches if all contained rules match"() {
     given:
     def rule = ComposedMatchRule.of(*rules)
@@ -38,7 +37,7 @@ class ComposedMatchRuleSpec extends Specification {
         .url(uri1).build()
     def body = RequestBody.create(MediaType.parse("text/plain"), "foo")
     def request2 = new RecordedRequest.Builder()
-        .method(method2, method1 == 'GET' ? null : body)
+        .method(method2, method2 == 'GET' ? null : body)
         .url(uri2)
         .build()
 

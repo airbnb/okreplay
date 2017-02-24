@@ -19,7 +19,7 @@ interactions:
         Content-Type: 'text/plain',
         Server: 'Jetty(7.6.7.v20120910)',
       },
-      'count: 1'
+      !!binary "Y291bnQ6IDE="
     ]
   ]
   - !!software.betamax.tape.RecordedInteraction [
@@ -40,6 +40,6 @@ interactions:
         Content-Type: 'text/plain',
         Server: 'Jetty(7.6.7.v20120910)',
       },
-      'count: 2'
+      !!binary "Y291bnQ6IDI="
     ]
   ]

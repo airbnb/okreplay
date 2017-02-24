@@ -17,7 +17,7 @@ interactions:
       {
         Content-Type: 'application/json'
       },
-      '{}'
+      !!binary "e30="
     ]
   ]
   - !!software.betamax.tape.RecordedInteraction [
@@ -30,14 +30,14 @@ interactions:
         Accept-Encoding: 'gzip,deflate',
         Host: 'freeside.co'
       },
-      '{"name":"foo"}'
+      !!binary "eyJuYW1lIjoiZm9vIn0="
     ],
     !!software.betamax.message.tape.RecordedResponse [
       201,
       {
         Content-Type: 'application/json'
       },
-      '{"name":"foo"}'
+      !!binary "eyJuYW1lIjoiZm9vIn0="
     ]
   ]
   - !!software.betamax.tape.RecordedInteraction [
@@ -56,6 +56,6 @@ interactions:
       {
         Content-Type: 'application/json'
       },
-      '{"name":"foo"}'
+      !!binary "eyJuYW1lIjoiZm9vIn0="
     ]
   ]
