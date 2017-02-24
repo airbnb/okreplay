@@ -74,7 +74,7 @@ public class Configuration {
     this.ignoreHosts = builder.ignoreHosts;
     this.ignoreLocalhost = builder.ignoreLocalhost;
     this.sslEnabled = builder.sslEnabled;
-    this.interceptor = new BetamaxInterceptor(this);
+    this.interceptor = new BetamaxInterceptor();
   }
 
   public static Builder builder() {
@@ -156,7 +156,7 @@ public class Configuration {
    * You should **not** call this method yourself.
    */
   public void registerListeners(Collection<RecorderListener> listeners) {
-    listeners.add(new ProxyServer(interceptor));
+    listeners.add(new ProxyServer(this, interceptor));
   }
 
   public static class Builder {

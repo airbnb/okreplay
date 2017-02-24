@@ -37,7 +37,7 @@ class NoJUnitSpec extends Specification {
       .tapeRoot(tapeRoot)
       .sslEnabled(true)
       .build()
-  @Shared BetamaxInterceptor interceptor = new BetamaxInterceptor(configuration)
+  @Shared BetamaxInterceptor interceptor = new BetamaxInterceptor()
   @Shared Recorder recorder = new Recorder(configuration, interceptor)
 
   @Shared def httpEndpoint = new MockWebServer()

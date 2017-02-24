@@ -28,12 +28,12 @@ import spock.lang.Specification
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
   @Shared def configuration = Configuration.builder().build()
-  @Shared def interceptor = new BetamaxInterceptor(configuration)
+  @Shared def interceptor = new BetamaxInterceptor()
   @Shared def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
       .build()
   @Shared def recorder = new Recorder(configuration, interceptor)
-  @Shared @AutoCleanup("stop") def proxy = new ProxyServer(interceptor)
+  @Shared @AutoCleanup("stop") def proxy = new ProxyServer(this, interceptor)
 
   void setupSpec() {
     proxy.start(null)

@@ -38,7 +38,7 @@ class SmokeSpec extends Specification {
       .sslEnabled(true)
       .tapeRoot(TAPE_ROOT)
       .build()
-  @Shared def interceptor = new BetamaxInterceptor(configuration)
+  @Shared def interceptor = new BetamaxInterceptor()
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
 
   def client = new OkHttpClient.Builder()

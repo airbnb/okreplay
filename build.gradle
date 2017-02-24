@@ -1,7 +1,18 @@
 apply from: "gradle/idea.gradle"
 
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+  }
+}
+
 allprojects {
-  version "2.1.0-SNAPSHOT"
+  repositories {
+    jcenter()
+  }
 
   ext {
     isSnapshot = version.endsWith("-SNAPSHOT")
@@ -23,4 +34,8 @@ allprojects {
         })
     ]
   }
+}
+
+def isCi() {
+  project.hasProperty('CI') && CI == 'true'
 }

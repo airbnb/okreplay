@@ -60,7 +60,7 @@ public class Recorder {
     tape = getTapeLoader().loadTape(tapeName);
     tape.setMode(mode.or(configuration.getDefaultMode()));
     tape.setMatchRule(matchRule.or(configuration.getDefaultMatchRule()));
-    interceptor.start(tape);
+    interceptor.start(configuration, tape);
 
     for (RecorderListener listener : listeners) {
       listener.onRecorderStart(tape);

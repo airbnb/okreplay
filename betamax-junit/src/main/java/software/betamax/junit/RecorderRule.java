@@ -44,7 +44,6 @@ import static com.google.common.base.CaseFormat.UPPER_CAMEL;
  * Betamax recording.
  */
 public class RecorderRule extends Recorder implements TestRule {
-
   private final Logger log = LoggerFactory.getLogger(RecorderRule.class.getName());
 
   public RecorderRule(Configuration configuration, BetamaxInterceptor interceptor) {

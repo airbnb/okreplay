@@ -35,7 +35,7 @@ import static software.betamax.Headers.X_BETAMAX
 class DisconnectedHttpsSpec extends Specification {
   static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/betamax/tapes").toURI())
   def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
-  def interceptor = new BetamaxInterceptor(configuration)
+  def interceptor = new BetamaxInterceptor()
   @Rule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)

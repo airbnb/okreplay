@@ -33,8 +33,7 @@ import spock.lang.Issue;
 public class TapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
   private Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
-  @Rule public RecorderRule recorder = new RecorderRule(configuration,
-      new BetamaxInterceptor(configuration));
+  @Rule public RecorderRule recorder = new RecorderRule(configuration, new BetamaxInterceptor());
 
   @AfterClass public static void deleteTempDir() {
     ResourceGroovyMethods.deleteDir(TAPE_ROOT);

@@ -42,7 +42,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 class AnnotationTest {
   static def TAPE_ROOT = Files.createTempDir()
   def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
-  def interceptor = new BetamaxInterceptor(configuration)
+  def interceptor = new BetamaxInterceptor()
   @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared static def endpoint = new MockWebServer()
 

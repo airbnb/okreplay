@@ -40,14 +40,10 @@ import static com.google.common.net.HttpHeaders.VIA;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class BetamaxInterceptor implements Interceptor {
-  private final Configuration configuration;
+  private Configuration configuration;
   private Optional<Tape> tape = Optional.absent();
   private boolean isRunning;
   private static final Logger LOG = LoggerFactory.getLogger(BetamaxInterceptor.class.getName());
-
-  public BetamaxInterceptor(Configuration configuration) {
-    this.configuration = configuration;
-  }
 
   @Override public okhttp3.Response intercept(Chain chain) throws IOException {
     okhttp3.Request request = chain.request();
@@ -106,9 +102,10 @@ public class BetamaxInterceptor implements Interceptor {
         .build();
   }
 
-  public void start(Tape tape) {
-    isRunning = true;
+  public void start(Configuration configuration, Tape tape) {
+    this.configuration = configuration;
     this.tape = Optional.fromNullable(tape);
+    isRunning = true;
   }
 
   public void stop() {

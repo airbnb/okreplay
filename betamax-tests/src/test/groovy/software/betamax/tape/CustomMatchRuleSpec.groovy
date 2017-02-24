@@ -40,7 +40,7 @@ import static software.betamax.MatchRules.uri
 class CustomMatchRuleSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-  @Shared def interceptor = new BetamaxInterceptor(configuration)
+  @Shared def interceptor = new BetamaxInterceptor()
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared def url = "http://freeside.co/betamax"
   @Shared def acceptHeaderRule = new MatchRule() {

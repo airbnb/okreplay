@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.*;
 
 public class BetamaxTest {
-    File f = new File("test/resources/betamax/tapes");
+    File f = new File("test/resources/build/tapes");
     Configuration configuration = ProxyConfiguration.builder().tapeRoot(f).ignoreLocalhost(false).build();
     @Rule public RecorderRule recorder = new RecorderRule(configuration);
 

@@ -1,17 +1,3 @@
 include "betamax-core",
         "betamax-junit",
         "betamax-tests"
-
-rootProject.name = "betamax"
-
-def setBuildFile(project) {
-    project.buildFileName = "${project.name}.gradle"
-    project.children.each {
-        setBuildFile(it)
-    }
-}
-
-setBuildFile(rootProject)
-rootProject.children.each {
-    setBuildFile(it)
-}

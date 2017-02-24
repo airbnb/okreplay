@@ -1,24 +1,20 @@
 apply plugin: "groovy" // TODO: this should be Java but Spock tests don't run
 apply from: "$rootDir/gradle/asciidoclet.gradle"
 
-repositories {
-    jcenter()
-}
-
 dependencies {
-    testCompile commonDependencies.groovy
-    testCompile commonDependencies.spock
+  testCompile commonDependencies.groovy
+  testCompile commonDependencies.spock
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"
 
 test {
-    testLogging {
-        quiet {
-            events "failed"
-            exceptionFormat "short"
-        }
+  testLogging {
+    quiet {
+      events "failed"
+      exceptionFormat "short"
     }
+  }
 
-    forkEvery 1
+  forkEvery 1
 }

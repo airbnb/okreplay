@@ -16,14 +16,17 @@
 
 package software.betamax.proxy;
 
+import software.betamax.Configuration;
 import software.betamax.internal.RecorderListener;
 import software.betamax.tape.Tape;
 
 public class ProxyServer implements RecorderListener {
+  private final Configuration configuration;
   private final BetamaxInterceptor interceptor;
   private boolean running;
 
-  public ProxyServer(BetamaxInterceptor interceptor) {
+  public ProxyServer(Configuration configuration, BetamaxInterceptor interceptor) {
+    this.configuration = configuration;
     this.interceptor = interceptor;
   }
 
@@ -47,7 +50,7 @@ public class ProxyServer implements RecorderListener {
     if (isRunning()) {
       throw new IllegalStateException("Betamax proxy server is already running");
     }
-    interceptor.start(tape);
+    interceptor.start(configuration, tape);
     running = true;
   }
 
