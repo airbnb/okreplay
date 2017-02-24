@@ -35,9 +35,9 @@ class IgnoreHostsSpec extends Specification {
   def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()
       .tapeRoot(tapeRoot)
       .defaultMode(READ_WRITE)])
-  @Shared def interceptor = new BetamaxInterceptor(configuration)
+  def interceptor = new BetamaxInterceptor(configuration)
   @AutoCleanup("stop") Recorder recorder = new Recorder(configuration, interceptor)
-  @Shared @AutoCleanup("stop") MockWebServer endpoint = new MockWebServer()
+  @Shared MockWebServer endpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
@@ -60,6 +60,7 @@ class IgnoreHostsSpec extends Specification {
     def response = client.newCall(request).execute()
 
     then: "the request is not intercepted by the proxy"
+    println(configuration.getIgnoreHosts())
     response.header(VIA) == null
 
     and: "nothing is recorded to the tape"
@@ -69,7 +70,7 @@ class IgnoreHostsSpec extends Specification {
     ignoreHosts              | requestURI
     endpoint.url("/").host() | endpoint.url("/").toString()
     "localhost"              | "http://localhost:${endpoint.url("/").port()}"
-    "127.0.0.1"              | "http://localhost:${endpoint.url("/").port()}"
+    "127.0.0.1"              | "http://127.0.0.1:${endpoint.url("/").port()}"
     endpoint.url("/").host() | "http://localhost:${endpoint.url("/").port()}"
   }
 

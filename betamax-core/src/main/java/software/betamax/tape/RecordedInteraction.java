@@ -32,15 +32,15 @@ public class RecordedInteraction {
     this.response = response;
   }
 
-  public Date getRecorded() {
+  public Date recorded() {
     return recorded;
   }
 
-  public Request getRequest() {
+  public Request request() {
     return request;
   }
 
-  public Response getResponse() {
+  public Response response() {
     return response;
   }
 }

@@ -41,7 +41,7 @@ class RequestMethodsSpec extends Specification {
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
   @Shared def interceptor = new BetamaxInterceptor(configuration)
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
-  @Shared @AutoCleanup("stop") def endpoint = new MockWebServer()
+  @Shared def endpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
@@ -52,9 +52,14 @@ class RequestMethodsSpec extends Specification {
   }
 
   void "proxy handles #method requests"() {
+    def mockResponse = new MockResponse().setBody("OK")
+    if (method == 'HEAD') {
+      mockResponse.clearHeaders()
+    }
     when:
-    endpoint.enqueue(new MockResponse().setBody("OK"))
-    def body = method == "GET" ? null : RequestBody.create(MediaType.parse("text/plain"), "")
+    endpoint.enqueue(mockResponse)
+    MediaType mediaType = MediaType.parse("text/plain")
+    def body = method == "GET" || method == 'HEAD' ? null : RequestBody.create(mediaType, "")
     def request = new Request.Builder()
         .url(endpoint.url("/"))
         .method(method, body)

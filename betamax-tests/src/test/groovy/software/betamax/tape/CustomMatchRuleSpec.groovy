@@ -28,6 +28,7 @@ import software.betamax.MatchRule
 import software.betamax.junit.RecorderRule
 import software.betamax.message.tape.Request
 import software.betamax.proxy.BetamaxInterceptor
+import software.betamax.proxy.okhttp.OkHttpRequestAdapter
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.ACCEPT
@@ -59,20 +60,26 @@ class CustomMatchRuleSpec extends Specification {
 !tape
 name: custom match rule spec
 interactions:
-- recorded: 2013-10-31T07:44:59.023Z
-  request:
-    method: GET
-    url: $url
-    headers:
-      Accept: text/plain
-      X-Whatever: some random value
-  response:
-    status: 200
-    headers:
-      Content-Length: '12'
-      Content-Type: text/plain
-      Date: Tue, 01 Oct 2013 21:53:58 GMT
-    body: Hello World!
+  - !!software.betamax.tape.RecordedInteraction [
+    '2013-10-31T07:44:59.023Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      GET,
+      '$url',
+      {
+        Accept: 'text/plain',
+        X-Whatever: 'some random value'
+      }
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {
+        Content-Length: '12',
+        Content-Type: 'text/plain',
+        Date: 'Tue, 01 Oct 2013 21:53:58 GMT'
+      },
+      !!binary "SGVsbG8gV29ybGQh"
+    ]
+  ] 
 """
     }
   }
@@ -93,10 +100,9 @@ interactions:
         .addHeader(ACCEPT, acceptHeader)
         .method(verb, verb == "GET" ? null : body)
         .build()
-    client.newCall(request).execute()
 
     expect:
-    recorder.tape.seek(request) == shouldMatch
+    recorder.tape.seek(OkHttpRequestAdapter.adapt(request)) == shouldMatch
 
     where:
     verb   | acceptHeader       | rules                           | shouldMatch

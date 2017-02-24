@@ -23,7 +23,6 @@ import com.google.common.collect.Iterables;
 import software.betamax.message.tape.Request;
 
 public class ComposedMatchRule implements MatchRule {
-
   public static MatchRule of(MatchRule... rules) {
     return new ComposedMatchRule(ImmutableSet.copyOf(rules));
   }

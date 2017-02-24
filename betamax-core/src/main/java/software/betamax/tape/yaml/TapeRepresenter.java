@@ -64,6 +64,7 @@ public class TapeRepresenter extends Representer {
     setPropertyUtils(new TapePropertyUtils());
     representers.put(URI.class, new RepresentURI());
     representers.put(File.class, new RepresentFile(fileResolver));
+    representers.put(RecordedInteraction.class, new RepresentRecordedInteraction());
     representers.put(RecordedRequest.class, new RepresentRecordedRequest());
     representers.put(RecordedResponse.class, new RepresentRecordedResponse());
     representers.put(Headers.class, new RepresentHeaders());
@@ -128,6 +129,15 @@ public class TapeRepresenter extends Representer {
 
     @Override public Node representData(Object data) {
       return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
+    }
+  }
+
+  private class RepresentRecordedInteraction implements Represent {
+    @Override public Node representData(Object data) {
+      RecordedInteraction recordedInteraction = (RecordedInteraction) data;
+      Tag tag = getTag(RecordedInteraction.class, new Tag(RecordedInteraction.class));
+      return representSequence(tag, Arrays.asList(recordedInteraction.recorded(),
+          recordedInteraction.request(), recordedInteraction.response()), true);
     }
   }
 

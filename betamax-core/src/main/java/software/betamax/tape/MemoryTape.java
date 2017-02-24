@@ -106,7 +106,7 @@ public abstract class MemoryTape implements Tape {
         // before play in a non-transactional way
         Integer index = orderedIndex.get();
         RecordedInteraction interaction = interactions.get(index);
-        Request nextRequest = interaction == null ? null : interaction.getRequest();
+        Request nextRequest = interaction == null ? null : interaction.request();
         return nextRequest != null && matchRule.isMatch(request, nextRequest);
       } catch (IndexOutOfBoundsException e) {
         throw new NonWritableTapeException();
@@ -129,18 +129,18 @@ public abstract class MemoryTape implements Tape {
             nextIndex));
       }
 
-      if (!matchRule.isMatch(request, nextInteraction.getRequest())) {
+      if (!matchRule.isMatch(request, nextInteraction.request())) {
         throw new IllegalStateException(String.format("Request %s does not match recorded " +
-            "request" + " %s", stringify(request), stringify(nextInteraction.getRequest())));
+            "request" + " %s", stringify(request), stringify(nextInteraction.request())));
       }
 
-      return nextInteraction.getResponse();
+      return nextInteraction.response();
     } else {
       int position = findMatch(request);
       if (position < 0) {
         throw new IllegalStateException("no matching recording found");
       } else {
-        return interactions.get(position).getResponse();
+        return interactions.get(position).response();
       }
     }
   }
@@ -179,7 +179,7 @@ public abstract class MemoryTape implements Tape {
   private synchronized int findMatch(final Request request) {
     return Iterables.indexOf(interactions, new Predicate<RecordedInteraction>() {
       @Override public boolean apply(RecordedInteraction input) {
-        return matchRule.isMatch(request, input.getRequest());
+        return matchRule.isMatch(request, input.request());
       }
     });
   }

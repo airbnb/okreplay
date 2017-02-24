@@ -21,8 +21,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
 import org.junit.AfterClass
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,6 +31,7 @@ import org.junit.runners.model.FrameworkMethod
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
 import software.betamax.proxy.BetamaxInterceptor
+import spock.lang.Shared
 
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
@@ -39,21 +40,21 @@ import static java.net.HttpURLConnection.HTTP_OK
 
 @RunWith(OrderedRunner)
 class AnnotationTest {
-
   static def TAPE_ROOT = Files.createTempDir()
   def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
   def interceptor = new BetamaxInterceptor(configuration)
   @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
-
-  def endpoint = new MockWebServer()
+  @Shared static def endpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
       .build()
 
-  @After
-  void ensureEndpointIsStopped() {
-    endpoint.stop()
+  @BeforeClass
+  static void startServer() {
+    // The endpoint needs to be shared between all tests otherwise it will be assigned a random
+    // port for each test and the rule matching will fail on different URLs
+    endpoint.start()
   }
 
   @AfterClass
@@ -80,14 +81,11 @@ class AnnotationTest {
   @Test
   @Betamax(tape = 'annotation_test', mode = READ_WRITE)
   void annotatedTestCanRecord() {
-    endpoint.start()
     endpoint.enqueue(new MockResponse().setBody("Echo"))
-
     def request = new Request.Builder()
         .url(endpoint.url("/"))
         .build()
     def response = client.newCall(request).execute()
-
     assert response.code() == HTTP_OK
     assert response.header(VIA) == 'Betamax'
     assert response.header(X_BETAMAX) == 'REC'
@@ -96,11 +94,11 @@ class AnnotationTest {
   @Test
   @Betamax(tape = 'annotation_test', mode = READ_WRITE)
   void annotatedTestCanPlayBack() {
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
     def request = new Request.Builder()
         .url(endpoint.url("/"))
         .build()
     def response = client.newCall(request).execute()
-
     assert response.code() == HTTP_OK
     assert response.header(VIA) == 'Betamax'
     assert response.header(X_BETAMAX) == 'PLAY'
@@ -108,9 +106,7 @@ class AnnotationTest {
 
   @Test
   void canMakeUnproxiedRequestAfterUsingAnnotation() {
-    endpoint.start()
     endpoint.enqueue(new MockResponse().setBody("Echo"))
-
     def request = new Request.Builder()
         .url(endpoint.url("/"))
         .build()
@@ -128,7 +124,6 @@ class AnnotationTest {
  * should be idempotent.
  */
 class OrderedRunner extends BlockJUnit4ClassRunner {
-
   private static final ORDER = [
       'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
       'annotationOnTestCausesTapeToBeInserted',
@@ -142,8 +137,7 @@ class OrderedRunner extends BlockJUnit4ClassRunner {
     super(testClass)
   }
 
-  @Override
-  protected List<FrameworkMethod> computeTestMethods() {
+  @Override protected List<FrameworkMethod> computeTestMethods() {
     super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
       ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
     }

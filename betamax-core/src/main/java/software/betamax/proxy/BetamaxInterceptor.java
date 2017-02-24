@@ -51,7 +51,7 @@ public class BetamaxInterceptor implements Interceptor {
 
   @Override public okhttp3.Response intercept(Chain chain) throws IOException {
     okhttp3.Request request = chain.request();
-    if (isRunning || !isHostIgnored(request)) {
+    if (isRunning && !isHostIgnored(request)) {
       if (!tape.isPresent()) {
         return new okhttp3.Response.Builder() //
             .protocol(Protocol.HTTP_1_1)  //

@@ -19,6 +19,7 @@ package software.betamax.tape
 import com.google.common.io.Files
 import okhttp3.MediaType
 import okhttp3.ResponseBody
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
 import software.betamax.message.tape.RecordedRequest
 import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
@@ -27,7 +28,6 @@ import spock.lang.*
 import static com.google.common.base.Charsets.ISO_8859_1
 import static com.google.common.base.Charsets.UTF_8
 import static com.google.common.net.HttpHeaders.CONTENT_ENCODING
-import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.TapeMode.READ_WRITE
 
@@ -40,10 +40,13 @@ class ContentCharsetSpec extends Specification {
 
   void "a response with a #charset body is recorded correctly"() {
     given:
-    def request = new RecordedRequest.Builder().url("http://localhost").build()
+    def request = new RecordedRequest.Builder()
+        .url("http://localhost")
+        .build()
+    def responseBody = ResponseBody.create(
+        MediaType.parse("text/plain; charset=$charset"), "\u00a3".getBytes(charset))
     def response = new RecordedResponse.Builder().code(HTTP_OK)
-        .body(ResponseBody.create(MediaType.parse(PLAIN_TEXT_UTF_8.withCharset(charset).toString())
-        , "\u00a3".getBytes(charset)))
+        .body(responseBody)
         .addHeader(CONTENT_ENCODING, "none")
         .build()
 
@@ -58,7 +61,7 @@ class ContentCharsetSpec extends Specification {
 
     then:
     def yaml = writer.toString()
-    yaml.contains("body: \u00a3")
+    yaml.contains("!!binary \"${Base64Coder.encode((byte[]) "\u00a3".getBytes(charset))}\"")
 
     where:
     charset << [UTF_8, ISO_8859_1]
@@ -70,16 +73,21 @@ class ContentCharsetSpec extends Specification {
 !tape
 name: charsets
 interactions:
-- recorded: 2011-08-27T23:25:45.000Z
-  request:
-    method: GET
-    url: http://freeside.co/betamax
-  response:
-    status: 200
-    headers:
-      Content-Type: text/plain;charset=$charset
-      Content-Encoding: none
-    body: \u00a3
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-27T23:25:45.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      'GET',
+      'http://freeside.co/betamax'
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {
+        Content-Type: 'text/plain;charset=$charset',
+        Content-Encoding: 'none'
+      },
+      !!binary "${Base64Coder.encode("\u00a3".getBytes(charset))}"
+    ]
+  ]
 """
     def tape = loader.readFrom(new StringReader(yaml))
 
