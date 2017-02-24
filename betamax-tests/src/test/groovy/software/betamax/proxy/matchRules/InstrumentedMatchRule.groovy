@@ -38,7 +38,7 @@ class InstrumentedMatchRule implements MatchRule {
     println("A request class: ${a.getClass()}")
     println("B request class: ${b.getClass()}")
 
-    if (a.uri == b.uri && a.method() == b.method()) {
+    if (a.url() == b.url() && a.method() == b.method()) {
       //Same method and URI, lets do a body comparison
       //Can only consume the body once, once it's gone it's gone.
       def aBody = a.bodyAsText
