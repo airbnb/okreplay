@@ -39,15 +39,19 @@ class ReadTapeFromYamlSpec extends Specification {
 !tape
 name: single_interaction_tape
 interactions:
-- recorded: 2011-08-23T22:41:40.000Z
-  request:
-    method: GET
-    url: http://icanhascheezburger.com/
-    headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
-  response:
-    status: 200
-    headers: {Content-Type: text/plain, Content-Language: en-GB}
-    body: O HAI!
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T22:41:40.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      GET,
+      'http://icanhascheezburger.com/',
+      {Accept-Language: "en-GB,en", If-None-Match: 'b00b135'}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: 'text/plain', Content-Language: 'en-GB'},
+      !!binary "TyBIQUkh"
+    ]
+  ]
 """
     when:
     def tape = loader.readFrom(new StringReader(yaml))
@@ -59,12 +63,12 @@ interactions:
     tape.name == "single_interaction_tape"
     tape.interactions.size() == 1
     tape.interactions[0].recorded == utc.time
-    tape.interactions[0].request.method == "GET"
-    tape.interactions[0].request.uri == "http://icanhascheezburger.com/".toURI()
-    tape.interactions[0].response.status == HTTP_OK
-    tape.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
-    tape.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
-    tape.interactions[0].response.body == "O HAI!"
+    tape.interactions[0].request.method() == "GET"
+    tape.interactions[0].request.url().toString() == "http://icanhascheezburger.com/"
+    tape.interactions[0].response.code() == HTTP_OK
+    tape.interactions[0].response.header(CONTENT_TYPE) == "text/plain"
+    tape.interactions[0].response.header(CONTENT_LANGUAGE) == "en-GB"
+    tape.interactions[0].response.getBodyAsText() == "O HAI!"
   }
 
   void "can load a valid tape with multiple interactions"() {
@@ -73,36 +77,44 @@ interactions:
 !tape
 name: multiple_interaction_tape
 interactions:
-- recorded: 2011-08-23T23:41:40.000Z
-  request:
-    method: GET
-    url: http://icanhascheezburger.com/
-    headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
-  response:
-    status: 200
-    headers: {Content-Type: text/plain, Content-Language: en-GB}
-    body: O HAI!
-- recorded: 2011-08-23T23:41:40.000Z
-  request:
-    method: GET
-    url: http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol
-    headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
-  response:
-    status: 418
-    headers: {Content-Type: text/plain, Content-Language: en-GB}
-    body: I'm a teapot
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T23:41:40.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      GET,
+      'http://icanhascheezburger.com/',
+      {Accept-Language: "en-GB,en", If-None-Match: 'b00b135'}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: 'text/plain', Content-Language: 'en-GB'},
+      !!binary "TyBIQUkh"
+    ]
+  ]
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T23:41:40.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      GET,
+      'http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol',
+      {Accept-Language: "en-GB,en", If-None-Match: 'b00b135'}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      418,
+      {Content-Type: 'text/plain', Content-Language: 'en-GB'},
+      !!binary "SSdtIGEgdGVhcG90"
+    ]
+  ]
 """
     when:
     def tape = loader.readFrom(new StringReader(yaml))
 
     then:
     tape.interactions.size() == 2
-    tape.interactions[0].request.uri == "http://icanhascheezburger.com/".toURI()
-    tape.interactions[1].request.uri == "http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol".toURI()
-    tape.interactions[0].response.status == HTTP_OK
-    tape.interactions[1].response.status == 418
-    tape.interactions[0].response.body == "O HAI!"
-    tape.interactions[1].response.body == "I'm a teapot"
+    tape.interactions[0].request.url().toString() == "http://icanhascheezburger.com/"
+    tape.interactions[1].request.url().toString() == "http://en.wikipedia.org/wiki/Hyper_Text_Coffee_Pot_Control_Protocol"
+    tape.interactions[0].response.code() == HTTP_OK
+    tape.interactions[1].response.code() == 418
+    tape.interactions[0].response.getBodyAsText() == "O HAI!"
+    tape.interactions[1].response.getBodyAsText() == "I'm a teapot"
   }
 
   void "reads request headers"() {
@@ -111,22 +123,26 @@ interactions:
 !tape
 name: single_interaction_tape
 interactions:
-- recorded: 2011-08-23T22:41:40.000Z
-  request:
-    method: GET
-    url: http://icanhascheezburger.com/
-    headers: {Accept-Language: "en-GB,en", If-None-Match: b00b135}
-  response:
-    status: 200
-    headers: {Content-Type: text/plain, Content-Language: en-GB}
-    body: O HAI!
+  - !!software.betamax.tape.RecordedInteraction [
+    '2011-08-23T22:41:40.000Z',
+    !!software.betamax.message.tape.RecordedRequest [
+      GET,
+      'http://icanhascheezburger.com/',
+      {Accept-Language: "en-GB,en", If-None-Match: 'b00b135'}
+    ],
+    !!software.betamax.message.tape.RecordedResponse [
+      200,
+      {Content-Type: 'text/plain', Content-Language: 'en-GB'},
+      !!binary "TyBIQUkh"
+    ]
+  ]
 """
     when:
     def tape = loader.readFrom(new StringReader(yaml))
 
     then:
-    tape.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
-    tape.interactions[0].request.headers[IF_NONE_MATCH] == "b00b135"
+    tape.interactions[0].request.header(ACCEPT_LANGUAGE) == "en-GB,en"
+    tape.interactions[0].request.header(IF_NONE_MATCH) == "b00b135"
   }
 
   void "barfs on non-yaml data"() {

@@ -55,6 +55,6 @@ class ContentTypeSpec extends Specification {
 
     then: 'the request body is stored on the tape'
     def interaction = tape.interactions[-1]
-    interaction.request.body == imagePostRequest.bodyAsBinary
+    interaction.request.body == imagePostRequest.getBody()
   }
 }
