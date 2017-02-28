@@ -2,8 +2,8 @@ apply plugin: 'java'
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'maven'
 
-project.group = PROJECT_GROUP_ID
-project.version = PROJECT_VERSION
+project.group = GROUP
+project.version = VERSION_NAME
 
 repositories {
   maven { url "http://repository.codehaus.org" }
@@ -15,8 +15,6 @@ targetCompatibility = 1.7
 dependencies {
   compile commonDependencies.guava
   compile commonDependencies.snakeYaml
-  compile commonDependencies.log4jCore
-  compile commonDependencies.log4jSlf4jImpl
   compile commonDependencies.okhttp
 }
 

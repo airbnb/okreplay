@@ -1,11 +1,11 @@
-apply from: "gradle/idea.gradle"
-
 buildscript {
   repositories {
     jcenter()
   }
   dependencies {
     classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    classpath "com.android.tools.build:gradle:2.3.0-rc1"
+    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
   }
 }
 
@@ -26,7 +26,6 @@ allprojects {
         log4jCore     : dependencies.create("org.apache.logging.log4j:log4j-core:2.0.1"),
         okhttp        : dependencies.create("com.squareup.okhttp3:okhttp:3.4.2"),
         mockWebServer : dependencies.create("com.squareup.okhttp3:mockwebserver:3.4.2"),
-        log4jSlf4jImpl: dependencies.create("org.apache.logging.log4j:log4j-slf4j-impl:2.0.1"),
         snakeYaml     : dependencies.create("org.yaml:snakeyaml:1.16"),
         spock         : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
           exclude module: "groovy-all"

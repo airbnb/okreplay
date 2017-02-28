@@ -18,10 +18,8 @@ package software.betamax.proxy;
 
 import com.google.common.base.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -43,7 +41,7 @@ public class BetamaxInterceptor implements Interceptor {
   private Configuration configuration;
   private Optional<Tape> tape = Optional.absent();
   private boolean isRunning;
-  private static final Logger LOG = LoggerFactory.getLogger(BetamaxInterceptor.class.getName());
+  private static final Logger LOG = Logger.getLogger(BetamaxInterceptor.class.getName());
 
   @Override public okhttp3.Response intercept(Chain chain) throws IOException {
     okhttp3.Request request = chain.request();
@@ -60,14 +58,14 @@ public class BetamaxInterceptor implements Interceptor {
         Tape tape = this.tape.get();
         Request recordedRequest = OkHttpRequestAdapter.adapt(request);
         if (tape.isReadable() && tape.seek(recordedRequest)) {
-          LOG.warn(String.format("Playing back from tape %s", tape.getName()));
+          LOG.warning(String.format("Playing back from tape %s", tape.getName()));
           Response recordedResponse = tape.play(recordedRequest);
           okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
           okhttpResponse = setBetamaxHeader(okhttpResponse, "PLAY");
           okhttpResponse = setViaHeader(okhttpResponse);
           return okhttpResponse;
         } else {
-          LOG.warn(String.format("no matching request found on %s", tape.getName()));
+          LOG.warning(String.format("no matching request found on %s", tape.getName()));
           okhttp3.Response okhttpResponse = chain.proceed(request);
           okhttpResponse = setBetamaxHeader(okhttpResponse, "REC");
           okhttpResponse = setViaHeader(okhttpResponse);

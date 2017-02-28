@@ -21,6 +21,7 @@ import com.google.common.io.Files
 import org.junit.Rule
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
 
 import static Headers.X_BETAMAX
@@ -52,7 +53,7 @@ class BasicAuthSpec extends Specification {
 
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
-  @Rule RecorderRule recorder = new RecorderRule(configuration)
+  @Rule RecorderRule recorder = new RecorderRule(configuration, new BetamaxInterceptor())
 
   @Betamax(tape = "basic auth", mode = WRITE_ONLY, match = [method, uri, authorization])
   void "can record #status response from authenticated endpoint"() {

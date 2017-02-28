@@ -1,0 +1,20 @@
+apply plugin: 'com.android.library'
+apply from: '../gradle/gradle-mvn-push.gradle'
+
+repositories {
+  maven { url "http://repository.codehaus.org" }
+}
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.2"
+
+  lintOptions {
+    disable 'InvalidPackage'
+  }
+}
+
+dependencies {
+  compile project(":betamax-core")
+  compile commonDependencies.junit
+}

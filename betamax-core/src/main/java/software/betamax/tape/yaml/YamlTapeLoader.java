@@ -19,8 +19,6 @@ package software.betamax.tape.yaml;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.io.Files;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -37,6 +35,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.logging.Logger;
 
 import software.betamax.io.FileResolver;
 import software.betamax.io.FilenameNormalizer;
@@ -49,7 +48,7 @@ import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
 public class YamlTapeLoader implements TapeLoader<YamlTape> {
   private static final String FILE_CHARSET = "UTF-8";
   private final FileResolver fileResolver;
-  private static final Logger LOG = LoggerFactory.getLogger(YamlTapeLoader.class.getName());
+  private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getName());
 
   public YamlTapeLoader(File tapeRoot) {
     fileResolver = new FileResolver(tapeRoot);

@@ -1,24 +1,26 @@
-apply from: "$rootDir/gradle/javaModule.gradle"
+apply plugin: 'com.android.library'
+apply plugin: 'groovyx.android'
 
-repositories {
-  maven { url "http://repository.codehaus.org" }
-  maven { url "http://maven.mashape.com/releases" }
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.2"
+
+  lintOptions {
+    disable 'InvalidPackage'
+  }
 }
 
 dependencies {
   compile project(":betamax-core")
-  compile project(":betamax-junit")
+  compile project(":betamax-espresso")
 
-  testCompile project(":betamax-core")
-  testCompile project(":betamax-junit")
-
+  testCompile "org.codehaus.groovy:groovy:2.4.7:grooid"
+  testCompile "org.codehaus.groovy:groovy-json:2.4.7"
+  testCompile commonDependencies.cglib
+  testCompile commonDependencies.spock
   testCompile commonDependencies.junit
-  testRuntime commonDependencies.cglib
-
   testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
   testCompile commonDependencies.mockWebServer
 }
 
-test {
-  testLogging.showStandardStreams = true
-}
+apply from: "$rootDir/gradle/checkstyle.gradle"

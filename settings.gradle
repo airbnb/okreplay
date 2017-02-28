@@ -1,3 +1,3 @@
 include "betamax-core",
-        "betamax-junit",
+        "betamax-espresso",
         "betamax-tests"
