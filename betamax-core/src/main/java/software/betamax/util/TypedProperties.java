@@ -20,21 +20,21 @@ import java.util.Properties;
 
 public class TypedProperties extends Properties {
 
-    public static boolean getBoolean(Properties properties, String key, boolean defaultValue) {
-        String value = properties.getProperty(key);
-        return value != null ? Boolean.valueOf(value) : defaultValue;
-    }
+  public static boolean getBoolean(Properties properties, String key, boolean defaultValue) {
+    String value = properties.getProperty(key);
+    return value != null ? Boolean.valueOf(value) : defaultValue;
+  }
 
-    public static boolean getBoolean(Properties properties, String key) {
-        return getBoolean(properties, key, false);
-    }
+  public static boolean getBoolean(Properties properties, String key) {
+    return getBoolean(properties, key, false);
+  }
 
-    public static int getInteger(Properties properties, String key, int defaultValue) {
-        String value = properties.getProperty(key);
-        return value != null ? Integer.parseInt(value) : defaultValue;
-    }
+  public static int getInteger(Properties properties, String key, int defaultValue) {
+    String value = properties.getProperty(key);
+    return value != null ? Integer.parseInt(value) : defaultValue;
+  }
 
-    public static int getInteger(Properties properties, String key) {
-        return getInteger(properties, key, 0);
-    }
+  public static int getInteger(Properties properties, String key) {
+    return getInteger(properties, key, 0);
+  }
 }

@@ -17,13 +17,16 @@
 package software.betamax.proxy.matchRules
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import software.betamax.Configuration
 import software.betamax.Recorder
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.net.ssl.HttpsURLConnection
 
 import static software.betamax.TapeMode.READ_ONLY
 import static software.betamax.TapeMode.READ_WRITE
@@ -33,84 +36,76 @@ import static software.betamax.TapeMode.READ_WRITE
  */
 @Unroll
 class CustomMatcherSpec extends Specification {
-    @Shared
-    def tapeRoot = new File(CustomMatcherSpec.class.getResource("/betamax/tapes/").toURI())
+  @Shared def tapeRoot = new File(CustomMatcherSpec.class.getResource("/betamax/tapes/").toURI())
+  static def simplePost(OkHttpClient client, String url, String payload) {
+    def request = new Request.Builder()
+        .method("POST", RequestBody.create(MediaType.parse('text/plain'), payload))
+        .url(url)
+        .build()
+    return client.newCall(request).execute()
+  }
 
-    def simplePost(String url, String payload) {
-        HttpsURLConnection conn = new URL(url).openConnection()
-        try {
-            conn.doOutput = true
-            conn.requestMethod = "POST"
-            conn.fixedLengthStreamingMode = payload.bytes.length
-            def out = new PrintWriter(conn.outputStream)
-            out.print(payload)
-            out.flush()
-            out.close()
-
-            return conn.inputStream.text
-        } finally {
-            conn.disconnect()
-        }
+  void "Using a custom matcher it should replay"() {
+    given:
+    def imr = new InstrumentedMatchRule()
+    def configuration = Configuration.builder()
+        .sslEnabled(true)
+        .tapeRoot(tapeRoot)
+        .defaultMode(READ_ONLY)
+        .defaultMatchRule(imr)
+        .build()
+    def interceptor = new BetamaxInterceptor()
+    def recorder = new Recorder(configuration, interceptor)
+    def client = new OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        .build()
+    recorder.start("httpBinTape")
+    imr.requestValidations << { r ->
+      //Will run this request validation on both requests being matched
+      //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
+      //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
+      assert r.hasBody()
     }
 
-    void "Using a custom matcher it should replay"() {
-        given:
-        def imr = new InstrumentedMatchRule()
-        def proxyConfig = Configuration.builder()
-                .sslEnabled(true)
-                .tapeRoot(tapeRoot)
-                .defaultMode(READ_ONLY)
-                .defaultMatchRule(imr)
-                .build()
+    when:
+    def response = simplePost(client, "https://httpbin.org/post", "BUTTS")
 
-        def recorder = new Recorder(proxyConfig)
-        recorder.start("httpBinTape")
-        imr.requestValidations << { r ->
-            //Will run this request validation on both requests being matched
-            //No matter what, either recorded, or sent, I should have a payload of "BUTTS"
-            //I'm posting "BUTTS" and the recorded interaction should have "BUTTS"
-            assert r.hasBody()
-        }
+    then:
+    def content = response.body().string()
 
-        when:
-        def response = simplePost("https://httpbin.org/post", "BUTTS")
+    content == "Hey look some text: BUTTS"
 
-        then:
-        def content = response.toString()
+    cleanup:
+    recorder.stop()
+  }
 
-        content == "Hey look some text: BUTTS"
+  void "Using a custom matcher it should record a new one"() {
+    given:
+    def tapeRoot = Files.createTempDir() //Using a temp dir this time
+    def imr = new InstrumentedMatchRule()
+    def configuration = Configuration.builder()
+        .sslEnabled(true)
+        .tapeRoot(tapeRoot)
+        .defaultMode(READ_WRITE)
+        .defaultMatchRule(imr)
+        .build()
+    def interceptor = new BetamaxInterceptor()
+    def recorder = new Recorder(configuration, interceptor)
+    def client = new OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        .build()
+    recorder.start("httpBinTape")
 
-        cleanup:
-        recorder.stop()
-    }
+    when:
+    def response = simplePost(client, "https://httpbin.org/post", "LOLWUT")
 
-    void "Using a custom matcher it should record a new one"() {
-        given:
-        def tapeRoot = Files.createTempDir() //Using a temp dir this time
-        def imr = new InstrumentedMatchRule()
-        def proxyConfig = Configuration.builder()
-                .sslEnabled(true)
-                .tapeRoot(tapeRoot)
-                .defaultMode(READ_WRITE)
-                .defaultMatchRule(imr)
-                .build()
-
-        def recorder = new Recorder(proxyConfig)
-        recorder.start("httpBinTape")
-
-        when:
-        def response = simplePost("https://httpbin.org/post", "LOLWUT")
-
-        then:
-        def content = response.toString()
-//        content ==
-
-        recorder.stop()
-        // The tape is written when it's referenced not in this dir
-        // make sure there's a file in there
-        def recordedTape = new File(tapeRoot, "httpBinTape.yaml")
-        // It should have recorded it to the tape
-        recordedTape.exists()
-    }
-
+    then:
+    response.toString()
+    recorder.stop()
+    // The tape is written when it's referenced not in this dir
+    // make sure there's a file in there
+    def recordedTape = new File(tapeRoot, "httpBinTape.yaml")
+    // It should have recorded it to the tape
+    recordedTape.exists()
+  }
 }

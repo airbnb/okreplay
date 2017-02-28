@@ -17,8 +17,12 @@
 package software.betamax
 
 import com.google.common.io.Files
-import org.junit.After
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.AfterClass
+import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,8 +30,8 @@ import org.junit.runners.BlockJUnit4ClassRunner
 import org.junit.runners.model.FrameworkMethod
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
-import software.betamax.util.server.EchoHandler
-import software.betamax.util.server.SimpleServer
+import software.betamax.proxy.BetamaxInterceptor
+import spock.lang.Shared
 
 import static Headers.X_BETAMAX
 import static TapeMode.READ_WRITE
@@ -36,70 +40,81 @@ import static java.net.HttpURLConnection.HTTP_OK
 
 @RunWith(OrderedRunner)
 class AnnotationTest {
+  static def TAPE_ROOT = Files.createTempDir()
+  def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
+  def interceptor = new BetamaxInterceptor()
+  @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  @Shared static def endpoint = new MockWebServer()
 
-    static def TAPE_ROOT = Files.createTempDir()
-    def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
-    @Rule public RecorderRule recorder = new RecorderRule(configuration)
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
-    def endpoint = new SimpleServer(EchoHandler)
+  @BeforeClass
+  static void startServer() {
+    // The endpoint needs to be shared between all tests otherwise it will be assigned a random
+    // port for each test and the rule matching will fail on different URLs
+    endpoint.start()
+  }
 
-    @After
-    void ensureEndpointIsStopped() {
-        endpoint.stop()
-    }
+  @AfterClass
+  static void cleanUpTapeFiles() {
+    TAPE_ROOT.deleteDir()
+  }
 
-    @AfterClass
-    static void cleanUpTapeFiles() {
-        TAPE_ROOT.deleteDir()
-    }
+  @Test
+  void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
+    assert recorder.tape == null
+  }
 
-    @Test
-    void noTapeIsInsertedIfThereIsNoAnnotationOnTheTest() {
-        assert recorder.tape == null
-    }
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotationOnTestCausesTapeToBeInserted() {
+    assert recorder.tape.name == 'annotation_test'
+  }
 
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotationOnTestCausesTapeToBeInserted() {
-        assert recorder.tape.name == 'annotation_test'
-    }
+  @Test
+  void tapeIsEjectedAfterAnnotatedTestCompletes() {
+    assert recorder.tape == null
+  }
 
-    @Test
-    void tapeIsEjectedAfterAnnotatedTestCompletes() {
-        assert recorder.tape == null
-    }
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotatedTestCanRecord() {
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == 'Betamax'
+    assert response.header(X_BETAMAX) == 'REC'
+  }
 
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotatedTestCanRecord() {
-        endpoint.start()
+  @Test
+  @Betamax(tape = 'annotation_test', mode = READ_WRITE)
+  void annotatedTestCanPlayBack() {
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == 'Betamax'
+    assert response.header(X_BETAMAX) == 'PLAY'
+  }
 
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
+  @Test
+  void canMakeUnproxiedRequestAfterUsingAnnotation() {
+    endpoint.enqueue(new MockResponse().setBody("Echo"))
+    def request = new Request.Builder()
+        .url(endpoint.url("/"))
+        .build()
+    def response = client.newCall(request).execute()
 
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == 'Betamax'
-        assert connection.getHeaderField(X_BETAMAX) == 'REC'
-    }
-
-    @Test
-    @Betamax(tape = 'annotation_test', mode = READ_WRITE)
-    void annotatedTestCanPlayBack() {
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
-
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == 'Betamax'
-        assert connection.getHeaderField(X_BETAMAX) == 'PLAY'
-    }
-
-    @Test
-    void canMakeUnproxiedRequestAfterUsingAnnotation() {
-        endpoint.start()
-
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
-
-        assert connection.responseCode == HTTP_OK
-        assert connection.getHeaderField(VIA) == null
-    }
+    assert response.code() == HTTP_OK
+    assert response.header(VIA) == null
+  }
 
 }
 
@@ -109,24 +124,22 @@ class AnnotationTest {
  * should be idempotent.
  */
 class OrderedRunner extends BlockJUnit4ClassRunner {
+  private static final ORDER = [
+      'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
+      'annotationOnTestCausesTapeToBeInserted',
+      'tapeIsEjectedAfterAnnotatedTestCompletes',
+      'annotatedTestCanRecord',
+      'annotatedTestCanPlayBack',
+      'canMakeUnproxiedRequestAfterUsingAnnotation'
+  ]
 
-    private static final ORDER = [
-        'noTapeIsInsertedIfThereIsNoAnnotationOnTheTest',
-        'annotationOnTestCausesTapeToBeInserted',
-        'tapeIsEjectedAfterAnnotatedTestCompletes',
-        'annotatedTestCanRecord',
-        'annotatedTestCanPlayBack',
-        'canMakeUnproxiedRequestAfterUsingAnnotation'
-    ]
+  OrderedRunner(Class testClass) {
+    super(testClass)
+  }
 
-    OrderedRunner(Class testClass) {
-        super(testClass)
+  @Override protected List<FrameworkMethod> computeTestMethods() {
+    super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
+      ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
     }
-
-    @Override
-    protected List<FrameworkMethod> computeTestMethods() {
-        super.computeTestMethods().sort(false) { FrameworkMethod o1, FrameworkMethod o2 ->
-            ORDER.indexOf(o1.name) <=> ORDER.indexOf(o2.name)
-        }
-    }
+  }
 }

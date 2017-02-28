@@ -17,12 +17,13 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import org.yaml.snakeyaml.Yaml
-import software.betamax.message.Request
-import software.betamax.message.Response
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -35,183 +36,192 @@ import static software.betamax.TapeMode.READ_WRITE
 
 class WriteTapeToYamlSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
 
-    @Shared Request getRequest
-    @Shared Request postRequest
-    @Shared Response successResponse
-    @Shared Response failureResponse
-    @Shared Response imageResponse
-    @Shared File image
+  @Shared RecordedRequest getRequest
+  @Shared RecordedRequest postRequest
+  @Shared RecordedResponse successResponse
+  @Shared RecordedResponse failureResponse
+  @Shared RecordedResponse imageResponse
+  @Shared File image
 
-    Yaml yamlReader
+  Yaml yamlReader
 
-    void setupSpec() {
-        getRequest = new BasicRequest("GET", "http://freeside.co/betamax")
-        getRequest.addHeader(ACCEPT_LANGUAGE, "en-GB,en")
-        getRequest.addHeader(IF_NONE_MATCH, "b00b135")
+  void setupSpec() {
+    getRequest = new RecordedRequest.Builder()
+        .url("http://freeside.co/betamax")
+        .addHeader(ACCEPT_LANGUAGE, "en-GB,en")
+        .addHeader(IF_NONE_MATCH, "b00b135")
+        .build()
 
-        postRequest = new BasicRequest("POST", "http://github.com/")
-        postRequest.addHeader(CONTENT_TYPE, FORM_DATA.toString())
-        postRequest.body = "q=1"
+    postRequest = new RecordedRequest.Builder()
+        .method("POST", RequestBody.create(MediaType.parse(FORM_DATA.toString()), "q=1"))
+        .url("http://github.com/")
+        .build()
 
-        successResponse = new BasicResponse(HTTP_OK, "OK")
-        successResponse.addHeader(CONTENT_TYPE, "text/plain")
-        successResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-        successResponse.addHeader(CONTENT_ENCODING, "none")
-        successResponse.body = "O HAI!".getBytes("UTF-8")
+    successResponse = new RecordedResponse.Builder()
+        .code(HTTP_OK)
+        .body(ResponseBody.create(MediaType.parse("text/plain"), "O HAI!"))
+        .addHeader(CONTENT_LANGUAGE, "en-GB")
+        .addHeader(CONTENT_ENCODING, "none")
+        .build()
 
-        failureResponse = new BasicResponse(HTTP_BAD_REQUEST, "BAD REQUEST")
-        failureResponse.addHeader(CONTENT_TYPE, "text/plain")
-        failureResponse.addHeader(CONTENT_LANGUAGE, "en-GB")
-        failureResponse.addHeader(CONTENT_ENCODING, "none")
-        failureResponse.body = "KTHXBYE!".getBytes("UTF-8")
+    failureResponse = new RecordedResponse.Builder()
+        .code(HTTP_BAD_REQUEST)
+        .addHeader(CONTENT_LANGUAGE, "en-GB")
+        .addHeader(CONTENT_ENCODING, "none")
+        .body(ResponseBody.create(MediaType.parse("text/plain"), "KTHXBYE!"))
+        .build()
 
-        image = new File(Class.getResource("/image.png").toURI())
-        imageResponse = new BasicResponse(HTTP_OK, "OK")
-        imageResponse.addHeader(CONTENT_TYPE, "image/png")
-        imageResponse.body = image.bytes
-    }
+    image = new File(Class.getResource("/image.png").toURI())
+    imageResponse = new RecordedResponse.Builder()
+        .code(HTTP_OK)
+        .body(ResponseBody.create(MediaType.parse("image/png"), image.bytes))
+        .build()
+  }
 
-    void setup() {
-        yamlReader = new Yaml()
-    }
+  void setup() {
+    yamlReader = new Yaml()
+  }
 
-    void "can write a tape to storage"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "can write a tape to storage"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, successResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, successResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.size() == 2
-        yaml.name == tape.name
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.size() == 2
+    yaml.name == tape.name
 
-        yaml.interactions.size() == 1
-        yaml.interactions[0].recorded instanceof Date
-        yaml.interactions[0].request.method == "GET"
-        yaml.interactions[0].request.uri == "http://freeside.co/betamax"
-        yaml.interactions[0].response.status == HTTP_OK
-        yaml.interactions[0].response.body == "O HAI!"
-    }
+    yaml.interactions.size() == 1
+    yaml.interactions[0].recorded instanceof Date
+    yaml.interactions[0].request.method() == "GET"
+    yaml.interactions[0].request.url().toString() == "http://freeside.co/betamax"
+    yaml.interactions[0].response.code() == HTTP_OK
+    yaml.interactions[0].response.getBodyAsText() == "O HAI!"
+  }
 
-    void "writes request headers"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "writes request headers"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, successResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, successResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.interactions[0].request.headers[ACCEPT_LANGUAGE] == "en-GB,en"
-        yaml.interactions[0].request.headers[IF_NONE_MATCH] == "b00b135"
-    }
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions[0].request.header(ACCEPT_LANGUAGE) == "en-GB,en"
+    yaml.interactions[0].request.header(IF_NONE_MATCH) == "b00b135"
+  }
 
-    void "writes response headers"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "writes response headers"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, successResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, successResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.interactions[0].response.headers[CONTENT_TYPE] == "text/plain"
-        yaml.interactions[0].response.headers[CONTENT_LANGUAGE] == "en-GB"
-        yaml.interactions[0].response.headers[CONTENT_ENCODING] == "none"
-    }
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions[0].response.header(CONTENT_TYPE) == "text/plain; charset=utf-8"
+    yaml.interactions[0].response.header(CONTENT_LANGUAGE) == "en-GB"
+    yaml.interactions[0].response.header(CONTENT_ENCODING) == "none"
+  }
 
-    void "can write requests with a body"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "can write requests with a body"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(postRequest, successResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(postRequest, successResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.interactions[0].request.method == "POST"
-        yaml.interactions[0].request.body == "q=1"
-    }
+    then:
+    println(writer.toString())
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions[0].request.method() == "POST"
+    yaml.interactions[0].request.getBodyAsText() == "q=1"
+  }
 
-    void "can write multiple interactions"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "can write multiple interactions"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, successResponse)
-        tape.record(postRequest, failureResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, successResponse)
+    tape.record(postRequest, failureResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.interactions.size() == 2
-        yaml.interactions[0].request.method == "GET"
-        yaml.interactions[1].request.method == "POST"
-        yaml.interactions[0].response.status == HTTP_OK
-        yaml.interactions[1].response.status == HTTP_BAD_REQUEST
-    }
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions.size() == 2
+    yaml.interactions[0].request.method() == "GET"
+    yaml.interactions[1].request.method == "POST"
+    yaml.interactions[0].response.code() == HTTP_OK
+    yaml.interactions[1].response.code() == HTTP_BAD_REQUEST
+  }
 
-    void "can write a binary response body"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "can write a binary RecordedResponse body"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, imageResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, imageResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        def yaml = yamlReader.loadAs(writer.toString(), Map)
-        yaml.interactions[0].response.headers[CONTENT_TYPE] == "image/png"
-        yaml.interactions[0].response.body == image.bytes
-    }
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions[0].response.header(CONTENT_TYPE) == "image/png"
+    yaml.interactions[0].response.getBody() == image.bytes
+  }
 
-    void "text response body is written to file as plain text"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "text RecordedResponse body is written to file as plain text"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, successResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, successResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        writer.toString().contains("body: O HAI!")
-    }
+    then:
+    def yaml = yamlReader.loadAs(writer.toString(), Map)
+    yaml.interactions[0].response.header(CONTENT_TYPE) == "text/plain; charset=utf-8"
+    yaml.interactions[0].response.getBodyAsText() == 'O HAI!'
+  }
 
-    void "binary response body is written to file as binary data"() {
-        given:
-        def tape = loader.newTape("tape_loading_spec")
-        tape.mode = READ_WRITE
-        def writer = new StringWriter()
+  void "binary RecordedResponse body is written to file as binary data"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
 
-        when:
-        tape.record(getRequest, imageResponse)
-        loader.writeTo(tape, writer)
+    when:
+    tape.record(getRequest, imageResponse)
+    loader.writeTo(tape, writer)
 
-        then:
-        writer.toString().contains("body: !!binary |-")
-    }
+    then:
+    writer.toString().contains("!!binary")
+  }
 
 }

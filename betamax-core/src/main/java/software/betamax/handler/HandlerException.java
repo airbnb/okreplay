@@ -20,9 +20,7 @@ package software.betamax.handler;
  * Thrown to indicates an exception with some part of the handling chain.
  */
 public abstract class HandlerException extends RuntimeException {
-
-    public HandlerException(String message) {
-        super(message);
-    }
-
+  public HandlerException(String message) {
+    super(message);
+  }
 }

@@ -16,13 +16,15 @@
 
 package software.betamax
 
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
 import org.junit.ClassRule
-import software.betamax.encoding.GzipEncoder
 import software.betamax.junit.Betamax
 import software.betamax.junit.RecorderRule
+import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
-
-import javax.net.ssl.HttpsURLConnection
 
 import static Headers.X_BETAMAX
 import static com.google.common.net.HttpHeaders.VIA
@@ -31,104 +33,106 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Unroll
 @Betamax
 class SmokeSpec extends Specification {
+  static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
+  @Shared def configuration = Configuration.builder()
+      .sslEnabled(true)
+      .tapeRoot(TAPE_ROOT)
+      .build()
+  @Shared def interceptor = new BetamaxInterceptor()
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
 
-    static final TAPE_ROOT = new File(SmokeSpec.getResource("/betamax/tapes").toURI())
-    @Shared def configuration = Configuration.builder().sslEnabled(true).tapeRoot(TAPE_ROOT).build()
-    @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
+  def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
 
-    void "#type response data"() {
-        when:
-        HttpURLConnection connection = uri.toURL().openConnection()
-        connection.setRequestProperty("Accept-Encoding", "gzip")
+  void "#type response data"() {
+    when:
+    def request = new Request.Builder()
+        .url(uri)
+        .addHeader("Accept-Encoding", "gzip")
+        .build()
+    def response = client.newCall(request).execute()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        connection.inputStream.text.contains(expectedContent)
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
+    response.body().string().contains(expectedContent)
 
-        where:
-        type   | uri                             | expectedContent
-        "txt"  | "http://httpbin.org/robots.txt" | "User-agent: *"
-        "html" | "http://httpbin.org/html"       | "<!DOCTYPE html>"
-        "json" | "http://httpbin.org/get"        | '"url": "http://httpbin.org/get"'
-    }
+    where:
+    type   | uri                             | expectedContent
+    "txt"  | "http://httpbin.org/robots.txt" | "User-agent: *"
+    "html" | "http://httpbin.org/html"       | "<!DOCTYPE html>"
+    "json" | "http://httpbin.org/get"        | '"url": "http://httpbin.org/get"'
+  }
 
-    void "gzipped response data"() {
-        when:
-        HttpURLConnection connection = uri.toURL().openConnection()
-        connection.setRequestProperty("Accept-Encoding", "gzip")
+  void "redirects are followed"() {
+    when:
+    def request = new Request.Builder()
+        .url(uri)
+        .build()
+    def response = client.newCall(request).execute()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        encoder.decode(connection.inputStream).contains('"gzipped": true')
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
+    response.body().string().contains('"url": "http://httpbin.org/get"')
 
-        where:
-        uri = "http://httpbin.org/gzip"
-        encoder = new GzipEncoder()
-    }
+    where:
+    uri = "http://httpbin.org/redirect/1"
+  }
 
-    void "redirects are followed"() {
-        when:
-        HttpURLConnection connection = uri.toURL().openConnection()
+  void "https proxying"() {
+    when:
+    def request = new Request.Builder()
+        .url(uri)
+        .build()
+    def response = client.newCall(request).execute()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
+    response.body().string().contains('"url": "http://httpbin.org/get"')
 
-        where:
-        uri = "http://httpbin.org/redirect/1"
-    }
+    where:
+    uri = "https://httpbin.org/get"
+  }
 
-    void "https proxying"() {
-        when:
-        HttpsURLConnection connection = uri.toURL().openConnection()
+  @Ignore
+  void "can POST to https"() {
+    when:
+    def request = new Request.Builder()
+        .url(uri)
+        .method("POST", RequestBody.create(MediaType.parse("text/plain"), "message=O HAI"))
+        .build()
+    def response = client.newCall(request).execute()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        connection.inputStream.text.contains('"url": "http://httpbin.org/get"')
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
+    response.body().string().contains('"message": "O HAI"')
 
-        where:
-        uri = "https://httpbin.org/get"
-    }
+    where:
+    uri = "https://httpbin.org/post"
+  }
 
-    @Ignore
-    void "can POST to https"() {
-        when:
-        HttpsURLConnection connection = uri.toURL().openConnection()
-        connection.requestMethod = "POST"
-        connection.doOutput = true
-        connection.outputStream.withStream {
-            it << "message=O HAI"
-        }
+  @Issue(["https://github.com/robfletcher/betamax/issues/61", "http://jira.codehaus.org/browse/JETTY-1533"])
+  void "can cope with URLs that do not end in a slash"() {
+    when:
+    def request = new Request.Builder()
+        .url(uri)
+        .build()
+    def response = client.newCall(request).execute()
 
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-        connection.inputStream.text.contains('"message": "O HAI"')
+    then:
+    response.code() == HTTP_OK
+    response.header(VIA) == "Betamax"
+    response.header(X_BETAMAX) == "PLAY"
 
-        where:
-        uri = "https://httpbin.org/post"
-    }
-
-    @Issue(["https://github.com/robfletcher/betamax/issues/61", "http://jira.codehaus.org/browse/JETTY-1533"])
-    void "can cope with URLs that do not end in a slash"() {
-        when:
-        HttpURLConnection connection = uri.toURL().openConnection()
-
-        then:
-        connection.responseCode == HTTP_OK
-        connection.getHeaderField(VIA) == "Betamax"
-        connection.getHeaderField(X_BETAMAX) == "PLAY"
-
-        where:
-        uri = "http://httpbin.org"
-    }
+    where:
+    uri = "http://httpbin.org"
+  }
 }

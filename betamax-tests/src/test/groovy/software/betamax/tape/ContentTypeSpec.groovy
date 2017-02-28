@@ -17,44 +17,44 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
-import software.betamax.message.Response
+import okhttp3.*
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE
 import static java.net.HttpURLConnection.HTTP_OK
 import static software.betamax.TapeMode.READ_WRITE
 
 class ContentTypeSpec extends Specification {
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared Tape tape = loader.loadTape('tape_spec')
+  @Shared File image = new File(Class.getResource("/image.png").toURI())
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def loader = new YamlTapeLoader(tapeRoot)
-    @Shared Tape tape = loader.loadTape('tape_spec')
-    @Shared File image = new File(Class.getResource("/image.png").toURI())
+  @Shared RecordedResponse successResponse = new RecordedResponse.Builder()
+      .code(HTTP_OK)
+      .body(ResponseBody.create(MediaType.parse("text/plain"), "OK"))
+      .build()
 
-    @Shared Response successResponse = new BasicResponse(HTTP_OK, "OK")
+  void setup() {
+    tape.mode = READ_WRITE
+  }
 
-    void setup() {
-        tape.mode = READ_WRITE
-    }
-    
-    void 'can record post requests with an image content-type'() {
-        given: 'a request with some content'
-        def imagePostRequest = new BasicRequest("POST", "http://github.com/")
-        imagePostRequest.addHeader(CONTENT_TYPE, "image/png")
-        imagePostRequest.body = image.bytes
+  void 'can record post requests with an image content-type'() {
+    given: 'a request with some content'
+    def imagePostRequest = new RecordedRequest.Builder()
+        .method("POST", RequestBody.create(MediaType.parse("image/png"), image.bytes))
+        .url("http://github.com/")
+        .build()
 
-        when: 'the request and its response are recorded'
-        tape.record(imagePostRequest, successResponse)
+    when: 'the request and its response are recorded'
+    tape.record(imagePostRequest, successResponse)
 
-        then: 'the request body is stored on the tape'
-        def interaction = tape.interactions[-1]
-        interaction.request.body == imagePostRequest.bodyAsBinary
-    }
-
-
+    then: 'the request body is stored on the tape'
+    def interaction = tape.interactions[-1]
+    interaction.request.body == imagePostRequest.getBody()
+  }
 }

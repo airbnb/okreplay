@@ -1,18 +1,4 @@
+include ':betamax-sample'
 include "betamax-core",
-        "betamax-junit",
-        "betamax-specs2_2.11",
-        "betamax-tests"
-
-rootProject.name = "betamax"
-
-def setBuildFile(project) {
-    project.buildFileName = "${project.name}.gradle"
-    project.children.each {
-        setBuildFile(it)
-    }
-}
-
-setBuildFile(rootProject)
-rootProject.children.each {
-    setBuildFile(it)
-}
+    "betamax-espresso",
+    "betamax-tests"

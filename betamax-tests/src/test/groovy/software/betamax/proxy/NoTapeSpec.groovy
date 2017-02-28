@@ -16,10 +16,10 @@
 
 package software.betamax.proxy
 
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import software.betamax.Configuration
 import software.betamax.Recorder
-import software.betamax.util.server.EchoHandler
-import software.betamax.util.server.SimpleServer
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -27,24 +27,27 @@ import spock.lang.Specification
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
+  @Shared def configuration = Configuration.builder().build()
+  @Shared def interceptor = new BetamaxInterceptor()
+  @Shared def client = new OkHttpClient.Builder()
+      .addInterceptor(interceptor)
+      .build()
+  @Shared def recorder = new Recorder(configuration, interceptor)
+  @Shared @AutoCleanup("stop") def proxy = new ProxyServer(this, interceptor)
 
-    @Shared def configuration = Configuration.builder().build()
-    @Shared def recorder = new Recorder(configuration)
-    @Shared @AutoCleanup("stop") def proxy = new ProxyServer(configuration)
-    @Shared @AutoCleanup("stop") def endpoint = new SimpleServer(EchoHandler)
+  void setupSpec() {
+    proxy.start(null)
+  }
 
-    void setupSpec() {
-        proxy.start()
-        endpoint.start()
-    }
+  void "an error is returned if the proxy intercepts a request when no tape is inserted"() {
+    when:
+    def request = new Request.Builder()
+        .url("http://localhost")
+        .build()
+    def response = client.newCall(request).execute()
 
-    void "an error is returned if the proxy intercepts a request when no tape is inserted"() {
-        when:
-        HttpURLConnection connection = endpoint.url.toURL().openConnection()
-        connection.inputStream.text
-
-        then:
-        def e = thrown(IOException)
-        e.message == "Server returned HTTP response code: 403 for URL: http://localhost:5000/"
-    }
+    then:
+    response.code() == 403
+    response.body().string() == "No tape"
+  }
 }

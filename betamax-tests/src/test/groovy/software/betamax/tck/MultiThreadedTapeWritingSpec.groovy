@@ -16,57 +16,55 @@
 
 package software.betamax.tck
 
-import com.google.common.io.Files
-import software.betamax.junit.Betamax
-import software.betamax.util.server.EchoHandler
-import software.betamax.util.server.SimpleServer
-import spock.lang.AutoCleanup
-import spock.lang.Shared
-import spock.lang.Specification
-
-import java.util.concurrent.CountDownLatch
-
-import static java.util.concurrent.TimeUnit.SECONDS
-import static software.betamax.TapeMode.READ_WRITE
-
-abstract class MultiThreadedTapeWritingSpec extends Specification {
-
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-
-    @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
-
-    void setupSpec() {
-        endpoint.start()
-    }
-
-    @Betamax(tape = "multi_threaded_tape_writing_spec", mode = READ_WRITE)
-    void "the tape can cope with concurrent reading and writing"() {
-        when: "requests are fired concurrently"
-        def finished = new CountDownLatch(threads)
-        def responses = Collections.synchronizedMap([:])
-        threads.times { i ->
-            Thread.start {
-                try {
-                    responses[i.toString()] = makeRequest("$endpoint.url$i")
-                } catch (Exception e) {
-                    responses[i.toString()] = "FAIL!"
-                }
-                finished.countDown()
-            }
-        }
-
-        then: "all threads complete"
-        finished.await(10, SECONDS)
-        responses.size() == threads
-
-        and: "the correct response is returned to each request"
-        responses.every { Map.Entry<String, String> it ->
-            it.value.startsWith("GET /$it.key")
-        }
-
-        where:
-        threads = 10
-    }
-
-    protected abstract String makeRequest(String url)
-}
+//import com.google.common.io.Files
+//import software.betamax.junit.Betamax
+//import software.betamax.util.server.EchoHandler
+//import software.betamax.util.server.SimpleServer
+//import spock.lang.AutoCleanup
+//import spock.lang.Shared
+//import spock.lang.Specification
+//
+//import java.util.concurrent.CountDownLatch
+//
+//import static java.util.concurrent.TimeUnit.SECONDS
+//import static software.betamax.TapeMode.READ_WRITE
+//
+//abstract class MultiThreadedTapeWritingSpec extends Specification {
+//  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+//  @Shared @AutoCleanup("stop") SimpleServer endpoint = new SimpleServer(EchoHandler)
+//
+//  void setupSpec() {
+//    endpoint.start()
+//  }
+//
+//  @Betamax(tape = "multi_threaded_tape_writing_spec", mode = READ_WRITE)
+//  void "the tape can cope with concurrent reading and writing"() {
+//    when: "requests are fired concurrently"
+//    def finished = new CountDownLatch(threads)
+//    def responses = Collections.synchronizedMap([:])
+//    threads.times { i ->
+//      Thread.start {
+//        try {
+//          responses[i.toString()] = makeRequest("$endpoint.url$i")
+//        } catch (Exception e) {
+//          responses[i.toString()] = "FAIL!"
+//        }
+//        finished.countDown()
+//      }
+//    }
+//
+//    then: "all threads complete"
+//    finished.await(10, SECONDS)
+//    responses.size() == threads
+//
+//    and: "the correct response is returned to each request"
+//    responses.every { Map.Entry<String, String> it ->
+//      it.value.startsWith("GET /$it.key")
+//    }
+//
+//    where:
+//    threads = 10
+//  }
+//
+//  protected abstract String makeRequest(String url)
+//}

@@ -17,10 +17,12 @@
 package software.betamax.recorder
 
 import com.google.common.io.Files
+import okhttp3.MediaType
+import okhttp3.ResponseBody
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.MemoryTape
 import software.betamax.tape.yaml.YamlTapeLoader
-import software.betamax.util.message.BasicRequest
-import software.betamax.util.message.BasicResponse
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -35,36 +37,39 @@ import static software.betamax.TapeMode.WRITE_SEQUENTIAL
 ])
 class SequentialTapeWritingSpec extends Specification {
 
-    @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-    @Shared def tapeLoader = new YamlTapeLoader(tapeRoot)
-    MemoryTape tape
+  @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
+  @Shared def tapeLoader = new YamlTapeLoader(tapeRoot)
+  MemoryTape tape
 
-    void setup() {
-        tape = tapeLoader.loadTape("sequential tape")
-        tape.mode = WRITE_SEQUENTIAL
+  void setup() {
+    tape = tapeLoader.loadTape("sequential tape")
+    tape.mode = WRITE_SEQUENTIAL
+  }
+
+  void "write sequential tapes record multiple matching responses"() {
+    when: "multiple responses are captured from the same endpoint"
+    (1..n).each {
+      def response = new RecordedResponse.Builder()
+          .code(HTTP_OK)
+          .body(ResponseBody.create(MediaType.parse("text/plain"), "count: $it".bytes))
+          .build()
+      tape.record(request, response)
     }
 
-    void "write sequential tapes record multiple matching responses"() {
-        when: "multiple responses are captured from the same endpoint"
-        (1..n).each {
-            def response = new BasicResponse(HTTP_OK, "OK")
-            response.body = "count: $it".bytes
-            tape.record(request, response)
-        }
+    then: "multiple recordings are added to the tape"
+    tape.size() == old(tape.size()) + n
 
-        then: "multiple recordings are added to the tape"
-        tape.size() == old(tape.size()) + n
-
-        and: "each has different content"
-        with(tape.interactions) {
-            response.bodyAsText == (1..n).collect {
-                "count: $it"
-            }
-        }
-
-        where:
-        n = 2
-        request = new BasicRequest("GET", "http://freeside.co/betamax")
+    and: "each has different content"
+    with(tape.interactions) {
+      response.bodyAsText == (1..n).collect {
+        "count: $it"
+      }
     }
 
+    where:
+    n = 2
+    request = new RecordedRequest.Builder()
+        .url("http://freeside.co/betamax")
+        .build()
+  }
 }

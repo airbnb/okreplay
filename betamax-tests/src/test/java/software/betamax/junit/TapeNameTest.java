@@ -17,37 +17,33 @@
 package software.betamax.junit;
 
 import com.google.common.io.Files;
+
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
-import software.betamax.Configuration;
-import spock.lang.Issue;
 
 import java.io.File;
 
+import software.betamax.Configuration;
+import software.betamax.proxy.BetamaxInterceptor;
+import spock.lang.Issue;
+
 @Issue("https://github.com/robfletcher/betamax/issues/36")
 public class TapeNameTest {
+  private static final File TAPE_ROOT = Files.createTempDir();
+  private Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
+  @Rule public RecorderRule recorder = new RecorderRule(configuration, new BetamaxInterceptor());
 
-    static final File TAPE_ROOT = Files.createTempDir();
-    Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
-    @Rule public RecorderRule recorder = new RecorderRule(configuration);
+  @AfterClass public static void deleteTempDir() {
+    ResourceGroovyMethods.deleteDir(TAPE_ROOT);
+  }
 
-    @AfterClass
-    public static void deleteTempDir() {
-        ResourceGroovyMethods.deleteDir(TAPE_ROOT);
-    }
+  @Test @Betamax(tape = "explicit name") public void tapeCanBeNamedExplicitly() {
+    assert recorder.getTape().getName().equals("explicit name");
+  }
 
-    @Test
-    @Betamax(tape = "explicit name")
-    public void tapeCanBeNamedExplicitly() {
-        assert recorder.getTape().getName().equals("explicit name");
-    }
-
-    @Test
-    @Betamax
-    public void tapeNameDefaultsToTestName() {
-        assert recorder.getTape().getName().equals("tape name defaults to test name");
-    }
-
+  @Test @Betamax public void tapeNameDefaultsToTestName() {
+    assert recorder.getTape().getName().equals("tape name defaults to test name");
+  }
 }

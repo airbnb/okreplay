@@ -17,30 +17,23 @@
 package software.betamax.tape.yaml;
 
 import org.yaml.snakeyaml.nodes.Tag;
-import software.betamax.message.Request;
-import software.betamax.message.Response;
+
+import software.betamax.message.tape.Request;
+import software.betamax.message.tape.Response;
 import software.betamax.tape.MemoryTape;
 
 class YamlTape extends MemoryTape {
+  static final Tag TAPE_TAG = new Tag("!tape");
+  static final Tag FILE_TAG = new Tag("!file");
 
-    public static final Tag TAPE_TAG = new Tag("!tape");
-    public static final Tag FILE_TAG = new Tag("!file");
+  private transient boolean dirty;
 
-    private transient boolean dirty;
+  @Override public boolean isDirty() {
+    return dirty;
+  }
 
-    YamlTape() {
-        super();
-    }
-
-    @Override
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    @Override
-    public void record(Request request, Response response) {
-        super.record(request, response);
-        dirty = true;
-    }
-
+  @Override public void record(Request request, Response response) {
+    super.record(request, response);
+    dirty = true;
+  }
 }
