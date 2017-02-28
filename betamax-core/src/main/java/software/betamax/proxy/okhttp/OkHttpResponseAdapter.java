@@ -1,7 +1,10 @@
 package software.betamax.proxy.okhttp;
 
+import java.io.IOException;
+
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
+import okio.BufferedSource;
 import software.betamax.message.tape.RecordedResponse;
 import software.betamax.message.tape.Response;
 
@@ -20,12 +23,23 @@ public class OkHttpResponseAdapter {
   }
 
   /** Construct a Betamax Response based on the provided OkHttp response */
-  public static Response adapt(okhttp3.Response okhttpResponse) {
+  public static Response adapt(final okhttp3.Response okhttpResponse, ResponseBody body) {
     return new RecordedResponse.Builder()
         .headers(okhttpResponse.headers())
-        .body(okhttpResponse.body())
+        .body(body)
         .protocol(okhttpResponse.protocol())
         .code(okhttpResponse.code())
         .build();
+  }
+
+  public static ResponseBody cloneResponseBody(ResponseBody responseBody) {
+    try {
+      BufferedSource source = responseBody.source();
+      source.request(Long.MAX_VALUE);
+      return ResponseBody.create(responseBody.contentType(), responseBody.contentLength(),
+          source.buffer().clone());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to read response body", e);
+    }
   }
 }

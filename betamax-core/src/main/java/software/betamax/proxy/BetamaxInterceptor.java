@@ -71,8 +71,12 @@ public class BetamaxInterceptor implements Interceptor {
           okhttpResponse = setViaHeader(okhttpResponse);
           if (tape.isWritable()) {
             LOG.info(String.format("Recording to tape %s", tape.getName()));
-            Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse);
+            ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
+            Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
             tape.record(recordedRequest, recordedResponse);
+            okhttpResponse = okhttpResponse.newBuilder()
+                .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
+                .build();
           } else {
             throw new NonWritableTapeException();
           }
