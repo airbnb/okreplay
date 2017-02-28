@@ -32,6 +32,13 @@ allprojects {
           exclude module: "junit"
         })
     ]
+
+    androidConfig = [
+        compileSdkVersion: 25,
+        buildToolsVersion: '25.0.2',
+        minSdkVersion    : 9,
+        targetSdkVersion : 25
+    ]
   }
 }
 

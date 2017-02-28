@@ -41,8 +41,7 @@ import static com.google.common.base.CaseFormat.UPPER_CAMEL;
 /**
  * This is an extension of {@link Recorder} that can be used as a
  * _JUnit @Rule_ allowing tests annotated with `@Betamax` to automatically
- * activate
- * Betamax recording.
+ * activate Betamax recording.
  */
 public class RecorderRule extends Recorder implements TestRule {
   private static final Logger LOG = Logger.getLogger(RecorderRule.class.getName());
@@ -62,19 +61,15 @@ public class RecorderRule extends Recorder implements TestRule {
             if (Strings.isNullOrEmpty(tapeName)) {
               tapeName = defaultTapeName(description);
             }
-
             TapeMode tapeMode = annotation.mode();
             MatchRules[] matchRules = annotation.match();
-
             Optional<MatchRule> matchRule;
             if (matchRules.length > 0) {
               matchRule = Optional.<MatchRule>of(ComposedMatchRule.of(matchRules));
             } else {
               matchRule = Optional.absent();
             }
-
             start(tapeName, tapeMode.toOptional(), matchRule);
-
             statement.evaluate();
           } catch (Exception e) {
             LOG.log(Level.SEVERE, "Caught exception starting Betamax", e);

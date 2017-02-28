@@ -1,3 +1,4 @@
+include ':betamax-sample'
 include "betamax-core",
-        "betamax-espresso",
-        "betamax-tests"
+    "betamax-espresso",
+    "betamax-tests"

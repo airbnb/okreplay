@@ -2,11 +2,15 @@ apply plugin: 'com.android.library'
 apply plugin: 'groovyx.android'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion "25.0.2"
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
 
   lintOptions {
     disable 'InvalidPackage'
+  }
+
+  defaultConfig {
+    minSdkVersion androidConfig.minSdkVersion
   }
 }
 
