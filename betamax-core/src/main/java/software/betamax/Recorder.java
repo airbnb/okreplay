@@ -35,6 +35,7 @@ public class Recorder {
   private final Configuration configuration;
   private final BetamaxInterceptor interceptor;
   private final Collection<RecorderListener> listeners = Lists.newArrayList();
+  private Tape tape;
 
   public Recorder(Configuration configuration, BetamaxInterceptor interceptor) {
     this.configuration = configuration;
@@ -101,12 +102,8 @@ public class Recorder {
     return tape;
   }
 
-  /**
-   * Not just a property as `tapeRoot` gets changed during constructor.
-   */
+  /** Not just a property as `tapeRoot` gets changed during constructor. */
   private TapeLoader<? extends Tape> getTapeLoader() {
     return new YamlTapeLoader(configuration.getTapeRoot());
   }
-
-  private Tape tape;
 }

@@ -11,7 +11,7 @@ import java.io.File;
  * Provides a directory for Betamax to store its tapes in.
  * Took from: https://github.com/facebook/screenshot-tests-for-android/blob/master/core/src/main/java/com/facebook/testing/screenshot/internal/ScreenshotDirectories.java
  */
-class TapeDirectories {
+public class TapeDirectories {
   private final Context context;
 
   public TapeDirectories(Context context) {

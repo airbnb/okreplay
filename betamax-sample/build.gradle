@@ -33,7 +33,11 @@ dependencies {
   androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
+  androidTestCompile 'com.android.support:support-annotations:25.2.0'
+  androidTestCompile 'com.android.support.test:runner:0.5'
+  androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile project(':betamax-espresso')
   androidTestCompile 'com.squareup.okio:okio:1.11.0'
   androidTestCompile 'com.squareup.okhttp3:okhttp:3.6.0'
+  androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 }
