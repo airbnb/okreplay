@@ -1,47 +1,22 @@
-buildscript {
-  repositories {
-    jcenter()
+subprojects {
+  apply from: "../gradle/dependencies.gradle"
+
+  buildscript {
+    repositories {
+      jcenter()
+      mavenLocal()
+    }
+    dependencies {
+      classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+      classpath "com.android.tools.build:gradle:2.3.0-rc1"
+      classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
+      classpath 'software.betamax.android:gradle-plugin:2.1.0-SNAPSHOT'
+    }
   }
-  dependencies {
-    classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-    classpath "com.android.tools.build:gradle:2.3.0-rc1"
-    classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
+
+  allprojects {
+    repositories {
+      jcenter()
+    }
   }
-}
-
-allprojects {
-  repositories {
-    jcenter()
-  }
-
-  ext {
-    isSnapshot = version.endsWith("-SNAPSHOT")
-
-    commonDependencies = [
-        cglib         : dependencies.create("cglib:cglib-nodep:2.2.2"),
-        groovy        : dependencies.create("org.codehaus.groovy:groovy-all:2.4.5:indy"),
-        guava         : dependencies.create("com.google.guava:guava:20.0"),
-        httpClient    : dependencies.create("org.apache.httpcomponents:httpclient:4.3.1"),
-        junit         : dependencies.create("junit:junit:4.12"),
-        log4jCore     : dependencies.create("org.apache.logging.log4j:log4j-core:2.0.1"),
-        okhttp        : dependencies.create("com.squareup.okhttp3:okhttp:3.4.2"),
-        mockWebServer : dependencies.create("com.squareup.okhttp3:mockwebserver:3.4.2"),
-        snakeYaml     : dependencies.create("org.yaml:snakeyaml:1.16"),
-        spock         : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
-          exclude module: "groovy-all"
-          exclude module: "junit"
-        })
-    ]
-
-    androidConfig = [
-        compileSdkVersion: 25,
-        buildToolsVersion: '25.0.2',
-        minSdkVersion    : 9,
-        targetSdkVersion : 25
-    ]
-  }
-}
-
-def isCi() {
-  project.hasProperty('CI') && CI == 'true'
 }

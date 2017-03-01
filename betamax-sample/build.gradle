@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'software.betamax.android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -19,7 +20,7 @@ android {
 
 dependencies {
   compile project(':betamax-core')
-  compile 'com.android.support:appcompat-v7:25.2.0'
+  compile dep.appcompat
   compile 'com.android.support:design:25.2.0'
   compile 'com.android.support:support-vector-drawable:25.2.0'
   compile 'com.squareup.retrofit2:converter-moshi:2.2.0'

@@ -20,11 +20,11 @@ dependencies {
 
   testCompile "org.codehaus.groovy:groovy:2.4.7:grooid"
   testCompile "org.codehaus.groovy:groovy-json:2.4.7"
-  testCompile commonDependencies.cglib
-  testCompile commonDependencies.spock
-  testCompile commonDependencies.junit
+  testCompile dep.cglib
+  testCompile dep.spock
+  testCompile dep.junit
   testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
-  testCompile commonDependencies.mockWebServer
+  testCompile dep.mockWebServer
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"

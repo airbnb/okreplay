@@ -13,31 +13,31 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-  compile commonDependencies.guava
-  compile commonDependencies.snakeYaml
-  compile commonDependencies.okhttp
+  compile dep.guava
+  compile dep.snakeYaml
+  compile dep.okhttp
 }
 
 modifyPom {
   project {
     name 'Betamax OkHttp interceptor'
     description PROJECT_DESCRIPTION
-    url PROJECT_URL
+    url POM_URL
     inceptionYear '2017'
-    version PROJECT_VERSION
-    groupId PROJECT_GROUP_ID
-    artifactId 'betamax-core'
+    version VERSION_NAME
+    groupId GROUP
+    artifactId 'core'
 
     scm {
-      url PROJECT_URL
-      connection 'scm:https://github.com/betamaxteam/betamax-okhttp.git'
-      developerConnection 'scm:git@github.com:betamaxteam/betamax-okhttp.git'
+      url POM_URL
+      connection POM_SCM_CONNECTION
+      developerConnection POM_SCM_DEV_CONNECTION
     }
 
     licenses {
       license {
-        name 'The Apache Software License, Version 2.0'
-        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        name POM_LICENCE_NAME
+        url POM_LICENCE_URL
         distribution 'repo'
       }
     }
@@ -60,7 +60,7 @@ extraArchive {
 }
 
 nexus {
-  sign = !isCi()
+  sign = !isCi
   repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
   snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
 }
