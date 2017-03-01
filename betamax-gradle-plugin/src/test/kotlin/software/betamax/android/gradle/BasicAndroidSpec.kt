@@ -18,10 +18,15 @@ internal constructor() {
         .withPluginClasspath()
         .withArguments("connectedAndroidTest", "--stacktrace")
         .forwardStdError(OutputStreamWriter(System.err))
+        .forwardStdOutput(OutputStreamWriter(System.out))
         .build()
 
-    assertThat(result.task(":pullBetamaxTapes").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(result.task(":pushBetamaxTapes").outcome).isEqualTo(TaskOutcome.SUCCESS)
+    val pullTask = result.task(":pullBetamaxTapes")
+    val pushTask = result.task(":pushBetamaxTapes")
+    assertThat(pullTask).isNotNull()
+    assertThat(pushTask).isNotNull()
+    assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    assertThat(pushTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
     // Tape Files pulled successfully
     assertThat(File(testProjectDir, "betamax/tapes/testTape.yml").isFile).isTrue()
   }

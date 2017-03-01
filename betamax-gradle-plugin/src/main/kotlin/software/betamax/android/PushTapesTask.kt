@@ -1,5 +1,6 @@
 package software.betamax.android
 
+import org.apache.commons.io.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
@@ -7,10 +8,10 @@ import java.io.File
 import javax.inject.Inject
 
 open class PushTapesTask
-@Inject constructor() : DefaultTask() {
-  @Input var adbPath: File? = null
-  @Input var adbTimeoutMs: Int = 0
-  @Input var packageName: String? = null
+@Inject constructor() : DefaultTask(), TapeTask {
+  @Input var _adbPath: File? = null
+  @Input var _adbTimeoutMs: Int = 0
+  @Input var _packageName: String? = null
 
   init {
     description = "Push Betamax tapes to the device"
@@ -18,14 +19,27 @@ open class PushTapesTask
   }
 
   @TaskAction internal fun pushTapes() {
-    val deviceBridge = DeviceBridge(adbPath!!, adbTimeoutMs, logger)
+    val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     val inputDir = project.file(BetamaxPlugin.TAPES_DIR)
     for (device in deviceBridge.devices()) {
       val externalStorage = deviceBridge.externalStorageDir(device)
-      val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, packageName)
+      val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, _packageName)
       // TODO: Remove all remote files first
+      FileUtils.forceMkdir(inputDir)
       deviceBridge.pushDirectory(device, inputDir.absolutePath, tapesPath)
     }
+  }
+
+  override fun setAdbPath(file: File) {
+    _adbPath = file
+  }
+
+  override fun setAdbTimeoutMs(timeout: Int) {
+    _adbTimeoutMs = timeout
+  }
+
+  override fun setPackageName(packageName: String) {
+    _packageName = packageName
   }
 
   companion object {

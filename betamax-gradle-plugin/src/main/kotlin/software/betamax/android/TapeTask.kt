@@ -1,0 +1,10 @@
+package software.betamax.android
+
+import org.gradle.api.Task
+import java.io.File
+
+interface TapeTask : Task {
+  fun setAdbPath(file: File)
+  fun setAdbTimeoutMs(timeout: Int)
+  fun setPackageName(packageName: String)
+}
