@@ -25,13 +25,17 @@ class DeviceBridge(adbPath: File, adbTimeoutMs: Int, logger: Logger) {
   fun devices(): List<DeviceConnector> = deviceProvider.devices
 
   fun pullDirectory(device: DeviceConnector, localPath: String, remotePath: String) =
-    device.runCmd("pull $remotePath $localPath")
+      device.runCmd("pull $remotePath $localPath")
 
-  fun pushFile(device: DeviceConnector, localPath: String, remotePath: String) {
+  fun pushDirectory(device: DeviceConnector, localPath: String, remotePath: String) {
     val iDeviceField = device.javaClass.getDeclaredField("iDevice")
     iDeviceField.isAccessible = true
     val iDevice: IDevice = iDeviceField.get(device) as IDevice
-    iDevice.pushFile(localPath, remotePath)
+    File(localPath).listFiles().forEach {
+      if (!it.isDirectory) {
+        iDevice.pushFile(it.absolutePath, File(remotePath, it.name).absolutePath)
+      }
+    }
   }
 
   fun externalStorageDir(device: DeviceConnector): String =

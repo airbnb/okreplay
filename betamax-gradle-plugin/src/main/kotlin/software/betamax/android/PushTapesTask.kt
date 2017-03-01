@@ -23,9 +23,8 @@ open class PushTapesTask
     for (device in deviceBridge.devices()) {
       val externalStorage = deviceBridge.externalStorageDir(device)
       val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, packageName)
-      inputDir.listFiles().forEach {
-        deviceBridge.pushFile(device, it.absolutePath, File(tapesPath, it.name).absolutePath)
-      }
+      // TODO: Remove all remote files first
+      deviceBridge.pushDirectory(device, inputDir.absolutePath, tapesPath)
     }
   }
 
