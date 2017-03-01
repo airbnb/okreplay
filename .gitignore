@@ -1,6 +1,5 @@
 /.idea
 /.gradle
-/gradle.properties
 build/
 /out
 /_site

@@ -1,0 +1,40 @@
+def versions = [
+    betamaxVersion: '2.1.0-SNAPSHOT',
+    kotlinVersion : '1.0.6',
+    okhttpVersion : '3.4.2'
+]
+
+ext {
+  isSnapshot = version.endsWith("-SNAPSHOT")
+
+  isCi = "true" == System.getenv('CI')
+
+  dep = [
+      androidPlugin     : 'com.android.tools.build:gradle:2.3.0-rc1',
+      groovyPlugin      : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
+      nexusPlugin       : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
+      appcompat         : 'com.android.support:appcompat-v7:25.2.0',
+      cglib             : "cglib:cglib-nodep:2.2.2",
+      groovy            : "org.codehaus.groovy:groovy-all:2.4.5:indy",
+      guava             : "com.google.guava:guava:20.0",
+      ddmlib            : 'com.android.tools.ddms:ddmlib:25.3.0-rc1',
+      junit             : "junit:junit:4.12",
+      okhttp            : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
+      mockWebServer     : "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
+      snakeYaml         : "org.yaml:snakeyaml:1.16",
+      kotlinStdLib      : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
+      kotlinGradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
+      truth             : 'com.google.truth:truth:0.30',
+      spock             : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
+        exclude module: "groovy-all"
+        exclude module: "junit"
+      })
+  ]
+
+  androidConfig = [
+      compileSdkVersion: 25,
+      buildToolsVersion: '25.0.2',
+      minSdkVersion    : 9,
+      targetSdkVersion : 25
+  ]
+}

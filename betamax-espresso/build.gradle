@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply from: '../gradle/gradle-mvn-push.gradle'
 
 repositories {
   maven { url "http://repository.codehaus.org" }
@@ -20,5 +19,7 @@ android {
 
 dependencies {
   compile project(":betamax-core")
-  compile commonDependencies.junit
+  compile dep.junit
 }
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
