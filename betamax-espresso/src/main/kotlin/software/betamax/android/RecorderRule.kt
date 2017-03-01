@@ -52,11 +52,10 @@ class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor
             }
             val tapeMode = annotation.mode
             val matchRules = annotation.match
-            val matchRule: Optional<MatchRule>
-            if (matchRules.isNotEmpty()) {
-              matchRule = Optional.of(ComposedMatchRule.of(*matchRules))
+            val matchRule = if (matchRules.isNotEmpty()) {
+              Optional.of(ComposedMatchRule.of(*matchRules))
             } else {
-              matchRule = Optional.absent<MatchRule>()
+              Optional.absent<MatchRule>()
             }
             start(tapeName, tapeMode.toOptional(), matchRule)
             statement.evaluate()
@@ -67,6 +66,7 @@ class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor
             try {
               stop()
             } catch (e: IllegalStateException) {
+              // Recorder has not started yet.
             }
           }
         }
