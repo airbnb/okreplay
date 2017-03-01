@@ -22,7 +22,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import org.junit.ClassRule
 import software.betamax.junit.Betamax
-import software.betamax.junit.RecorderRule
+import software.betamax.android.RecorderRule
 import software.betamax.proxy.BetamaxInterceptor
 import spock.lang.*
 

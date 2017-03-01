@@ -28,13 +28,17 @@ ext {
       spock             : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
         exclude module: "groovy-all"
         exclude module: "junit"
+      }),
+      uiautomator       : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1',
+      espresso          : dependencies.create('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
       })
   ]
 
   androidConfig = [
       compileSdkVersion: 25,
       buildToolsVersion: '25.0.2',
-      minSdkVersion    : 9,
+      minSdkVersion    : 18,  // for tests only, due to UIAutomator
       targetSdkVersion : 25
   ]
 }

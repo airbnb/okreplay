@@ -38,7 +38,7 @@ open class PushTapesTask
     _adbTimeoutMs = timeout
   }
 
-  override fun setPackageName(packageName: String) {
+  override fun setTestApplicationId(packageName: String) {
     _packageName = packageName
   }
 

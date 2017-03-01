@@ -67,11 +67,11 @@ class BetamaxPlugin
           val globalScope = it.globalScope()
           val adbPath = globalScope.androidBuilder.sdkInfo.adb
           val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
-          val applicationId = androidConfig().defaultConfig.applicationId
+          val testApplicationId = testApplicationId()
           listOf(pullTapesTask, pushTapesTask).forEach {
             it.setAdbPath(adbPath)
             it.setAdbTimeoutMs(adbTimeoutMs)
-            it.setPackageName(applicationId)
+            it.setTestApplicationId(testApplicationId)
           }
           runBefore("connected${targetName}AndroidTest", pushTapesTask)
           runAfter("connected${targetName}AndroidTest", pullTapesTask)
@@ -89,6 +89,15 @@ class BetamaxPlugin
 
   private fun androidConfig(): AndroidConfig {
     return project!!.extensions.getByName("android") as BaseExtension
+  }
+
+  private fun testApplicationId(): String {
+    val androidConfig = androidConfig()
+    if (androidConfig is AppExtension || androidConfig is LibraryExtension) {
+      return (androidConfig as TestedExtension).testVariants.first().applicationId
+    } else {
+      throw IllegalStateException("Invalid project type")
+    }
   }
 
   private fun getVariants(): DefaultDomainObjectSet<out BaseVariant> {

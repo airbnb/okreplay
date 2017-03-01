@@ -6,5 +6,5 @@ import java.io.File
 interface TapeTask : Task {
   fun setAdbPath(file: File)
   fun setAdbTimeoutMs(timeout: Int)
-  fun setPackageName(packageName: String)
+  fun setTestApplicationId(packageName: String)
 }

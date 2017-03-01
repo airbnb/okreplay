@@ -19,7 +19,7 @@ package software.betamax
 //import com.google.common.io.Files
 //import org.junit.Rule
 //import software.betamax.junit.Betamax
-//import software.betamax.junit.RecorderRule
+//import software.betamax.android.RecorderRule
 //import software.betamax.util.server.EchoHandler
 //import software.betamax.util.server.SimpleServer
 //import spock.lang.AutoCleanup

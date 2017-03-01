@@ -11,7 +11,7 @@ import java.io.IOException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class DeviceBridge(adbPath: File, adbTimeoutMs: Int, logger: Logger) {
+class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
   private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
 
   init {
@@ -24,8 +24,10 @@ class DeviceBridge(adbPath: File, adbTimeoutMs: Int, logger: Logger) {
 
   fun devices(): List<DeviceConnector> = deviceProvider.devices
 
-  fun pullDirectory(device: DeviceConnector, localPath: String, remotePath: String) =
-      device.runCmd("pull $remotePath $localPath")
+  fun pullDirectory(device: DeviceConnector, localPath: String, remotePath: String): String {
+    logger.info("Pulling directory $remotePath")
+    return device.runCmd("pull $remotePath $localPath")
+  }
 
   fun pushDirectory(device: DeviceConnector, localPath: String, remotePath: String) {
     val iDeviceField = device.javaClass.getDeclaredField("iDevice")

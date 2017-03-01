@@ -21,8 +21,8 @@ import software.betamax.Configuration;
 import software.betamax.MatchRules;
 import software.betamax.TapeMode;
 import software.betamax.junit.Betamax;
-import software.betamax.junit.RecorderRule;
-import software.betamax.junit.TapeDirectories;
+import software.betamax.android.RecorderRule;
+import software.betamax.android.TapeDirectories;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,8 +36,8 @@ import static org.junit.Assert.assertEquals;
 public class ExampleInstrumentedTest {
   @Rule public final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
-  private final File tapeRoot =
-      new TapeDirectories(InstrumentationRegistry.getContext()).get("example");
+  private final File tapeRoot = new TapeDirectories(InstrumentationRegistry.getContext(), "example")
+      .get();
   private final Configuration configuration = new Configuration.Builder()
       .tapeRoot(tapeRoot)
       .defaultMode(TapeMode.READ_WRITE)

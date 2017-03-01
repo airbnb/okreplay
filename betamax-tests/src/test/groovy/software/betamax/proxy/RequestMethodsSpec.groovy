@@ -26,7 +26,7 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.ClassRule
 import software.betamax.Configuration
 import software.betamax.junit.Betamax
-import software.betamax.junit.RecorderRule
+import software.betamax.android.RecorderRule
 import spock.lang.*
 
 import static com.google.common.net.HttpHeaders.VIA
