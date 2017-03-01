@@ -1,6 +1,6 @@
 def versions = [
     betamaxVersion: '2.1.0-SNAPSHOT',
-    kotlinVersion : '1.0.6',
+    kotlinVersion : '1.1.0',
     okhttpVersion : '3.4.2'
 ]
 

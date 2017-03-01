@@ -21,3 +21,4 @@ target/
 *.csr
 *.cert
 classes/
+local.properties

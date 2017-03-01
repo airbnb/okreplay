@@ -44,11 +44,11 @@ public class ExampleInstrumentedTest {
       .sslEnabled(true)
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)
       .build();
-  private final DependencyGraph graph = DependencyGraph.instance();
+  private final DependencyGraph graph = DependencyGraph.Companion.instance();
   @Rule public final RecorderRule recorderRule =
-      new RecorderRule(configuration, graph.betamaxInterceptor);
+      new RecorderRule(configuration, graph.getBetamaxInterceptor());
   private final IdlingResource okHttp3IdlingResource =
-      OkHttp3IdlingResource.create("OkHttp", graph.okHttpClient);
+      OkHttp3IdlingResource.create("OkHttp", graph.getOkHttpClient());
 
   @Before
   public void setUp() {
