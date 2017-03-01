@@ -64,7 +64,10 @@ class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor
             LOG.log(Level.SEVERE, "Caught exception starting Betamax", e)
             throw e
           } finally {
-            stop()
+            try {
+              stop()
+            } catch (e: IllegalStateException) {
+            }
           }
         }
       }

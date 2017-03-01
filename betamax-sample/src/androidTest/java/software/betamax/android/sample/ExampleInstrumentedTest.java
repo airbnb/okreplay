@@ -36,8 +36,9 @@ import static org.junit.Assert.assertEquals;
 public class ExampleInstrumentedTest {
   @Rule public final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
-  private final File tapeRoot = new TapeDirectories(InstrumentationRegistry.getContext(), "example")
-      .get();
+  private final TapeDirectories tapeDirectories =
+      new TapeDirectories(InstrumentationRegistry.getContext(), "example");
+  private final File tapeRoot = tapeDirectories.get();
   private final Configuration configuration = new Configuration.Builder()
       .tapeRoot(tapeRoot)
       .defaultMode(TapeMode.READ_WRITE)
@@ -53,6 +54,7 @@ public class ExampleInstrumentedTest {
   @Before
   public void setUp() {
     Espresso.registerIdlingResources(okHttp3IdlingResource);
+    tapeDirectories.grantPermissionsIfNeeded(activityTestRule.getActivity());
   }
 
   @After

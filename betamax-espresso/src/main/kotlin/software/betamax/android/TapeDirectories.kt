@@ -11,7 +11,6 @@ import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiObjectNotFoundException
 import android.support.test.uiautomator.UiSelector
 import android.support.v4.app.ActivityCompat
-import android.util.Log
 import java.io.File
 import java.lang.RuntimeException
 
@@ -32,14 +31,23 @@ class TapeDirectories(private val context: Context, testName: String) {
   }
 
   fun grantPermissionsIfNeeded(activity: Activity) {
-    val res = context.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE)
+    val res = context.checkCallingPermission(WRITE_EXTERNAL_STORAGE)
     if (res != PackageManager.PERMISSION_GRANTED) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        requestPermissions(activity)
+        requestWriteExternalStoragePermissions(activity)
+        Thread.sleep(DELAY_WAIT_FOR_PERMISSIONS_DIALOG)
         grantPermissions()
       } else {
         throw RuntimeException("We need WRITE_EXTERNAL_STORAGE permission for Walkman")
       }
+      // After granting the permission, we need to wait a little bit before creating the directory
+      // otherwise it will fail if we do it immediately after.
+      Thread.sleep(DELAY_CREATE_DIRECTORY_MS)
+    }
+    directory.mkdirs()
+    if (!directory.exists()) {
+      throw RuntimeException("Failed to create the directory for tapes. "
+          + "Is your sdcard directory read-only?")
     }
     setWorldWriteable(directory)
   }
@@ -50,34 +58,28 @@ class TapeDirectories(private val context: Context, testName: String) {
     val parent = "$externalStorage/betamax/tapes/$context.packageName/"
     val child = "$parent/tapes-$type"
     File(parent).mkdirs()
-    val dir = File(child)
-    dir.mkdir()
-    if (!dir.exists()) {
-      throw RuntimeException(
-          "Failed to create the directory for tapes. Is your sdcard directory read-only?")
-    }
-    return dir
+    return File(child)
   }
 
   companion object {
-    private val TAG = "TapeDirectories"
-    private val PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0
+    private val DELAY_CREATE_DIRECTORY_MS: Long = 1000
+    private val DELAY_WAIT_FOR_PERMISSIONS_DIALOG: Long = 1000
+    private val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0
 
-    private fun requestPermissions(activity: Activity) {
-      ActivityCompat.requestPermissions(activity,
-          arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE)
+    private fun requestWriteExternalStoragePermissions(activity: Activity) {
+      ActivityCompat.requestPermissions(activity, arrayOf(WRITE_EXTERNAL_STORAGE),
+          REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
     }
 
     private fun grantPermissions() {
       val device = UiDevice.getInstance(getInstrumentation())
-      val allowPermissions = device.findObject(UiSelector().text("Allow"))
+      val allowPermissions = device.findObject(UiSelector().text("ALLOW"))
       if (allowPermissions.exists()) {
         try {
           allowPermissions.click()
         } catch (e: UiObjectNotFoundException) {
-          Log.e(TAG, "There is no permissions dialog to interact with ", e)
+          throw RuntimeException("There is no permissions dialog to interact with ", e)
         }
-
       }
     }
 
