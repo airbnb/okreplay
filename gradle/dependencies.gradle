@@ -1,5 +1,5 @@
 def versions = [
-    betamaxVersion: '1.0.0-SNAPSHOT',
+    walkmanVersion: '1.0.0-SNAPSHOT',
     kotlinVersion : '1.1.0',
     okhttpVersion : '3.4.2'
 ]
@@ -24,7 +24,7 @@ ext {
       mockWebServer: "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
       snakeYaml    : "org.yaml:snakeyaml:1.16",
       kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
-      betamaxPlugin: "software.betamax.android:gradle-plugin:$versions.betamaxVersion",
+      walkmanPlugin: "com.airbnb.walkman:gradle-plugin:$versions.walkmanVersion",
       kotlinPlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
       truth        : 'com.google.truth:truth:0.30',
       spock        : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {

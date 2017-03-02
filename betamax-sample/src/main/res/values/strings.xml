@@ -1,6 +1,0 @@
-<resources>
-  <string name="app_name">betamax-sample</string>
-  <string name="title_activity">Activity</string>
-  <string name="title_repositories">Repositories</string>
-  <string name="title_organizations">Organizations</string>
-</resources>

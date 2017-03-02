@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'groovyx.android'
+
+android {
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
+
+  lintOptions {
+    disable 'InvalidPackage'
+  }
+
+  defaultConfig {
+    minSdkVersion androidConfig.minSdkVersion
+  }
+}
+
+dependencies {
+  compile project(":walkman-core")
+  compile project(":walkman-espresso")
+
+  testCompile "org.codehaus.groovy:groovy:2.4.7:grooid"
+  testCompile "org.codehaus.groovy:groovy-json:2.4.7"
+  testCompile dep.cglib
+  testCompile dep.spock
+  testCompile dep.junit
+  testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
+  testCompile dep.mockWebServer
+}
+
+apply from: "$rootDir/gradle/checkstyle.gradle"
