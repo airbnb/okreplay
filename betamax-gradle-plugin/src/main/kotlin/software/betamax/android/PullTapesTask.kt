@@ -24,9 +24,9 @@ open class PullTapesTask
     val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     outputDir = project.file(TAPES_DIR)
     deviceBridge.devices().forEach {
-      val externalStorage = deviceBridge.externalStorageDir(it)
+      val externalStorage = it.externalStorageDir()
       val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, _packageName)
-      deviceBridge.pullDirectory(it, outputDir!!.absolutePath, tapesPath)
+      it.pullDirectory(outputDir!!.absolutePath, tapesPath)
     }
   }
 

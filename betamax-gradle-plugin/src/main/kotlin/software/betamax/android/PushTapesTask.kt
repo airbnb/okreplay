@@ -21,12 +21,12 @@ open class PushTapesTask
   @TaskAction internal fun pushTapes() {
     val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     val inputDir = project.file(BetamaxPlugin.TAPES_DIR)
-    for (device in deviceBridge.devices()) {
-      val externalStorage = deviceBridge.externalStorageDir(device)
+    deviceBridge.devices().forEach {
+      val externalStorage = it.externalStorageDir()
       val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, _packageName)
       // TODO: Remove all remote files first
       FileUtils.forceMkdir(inputDir)
-      deviceBridge.pushDirectory(device, inputDir.absolutePath, tapesPath)
+      it.pushDirectory(inputDir.absolutePath, tapesPath)
     }
   }
 

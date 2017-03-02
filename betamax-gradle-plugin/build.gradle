@@ -5,7 +5,6 @@ apply plugin: 'java-gradle-plugin'
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
-
 dependencies {
   compileOnly gradleApi()
   compile localGroovy()
@@ -15,6 +14,7 @@ dependencies {
   testCompile gradleTestKit()
   testCompile dep.junit
   testCompile dep.truth
+  testCompile dep.mockito
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

@@ -10,8 +10,8 @@ subprojects {
       classpath dep.nexusPlugin
       classpath dep.androidPlugin
       classpath dep.groovyPlugin
-      classpath dep.kotlinGradlePlugin
-      classpath 'software.betamax.android:gradle-plugin:2.1.0-SNAPSHOT'
+      classpath dep.kotlinPlugin
+      classpath dep.betamaxPlugin
     }
   }
 
