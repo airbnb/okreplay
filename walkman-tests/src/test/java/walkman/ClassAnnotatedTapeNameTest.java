@@ -31,7 +31,7 @@ import spock.lang.Issue;
 @Walkman
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
-  private static final Configuration configuration = Configuration.builder()
+  private static final WalkmanConfig configuration = WalkmanConfig.builder()
       .tapeRoot(TAPE_ROOT)
       .build();
   @ClassRule public static RecorderRule recorder = new RecorderRule(configuration,

@@ -21,7 +21,7 @@ import spock.lang.Subject
 
 class RecorderSpec extends Specification {
   def listener = Mock(RecorderListener)
-  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()]) {
+  def configuration = Spy(WalkmanConfig, constructorArgs: [WalkmanConfig.builder()]) {
     registerListeners(_) >> { it[0] << listener }
   }
   @Subject def recorder = new Recorder(configuration, new WalkmanInterceptor())

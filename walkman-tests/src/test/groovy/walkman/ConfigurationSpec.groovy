@@ -15,7 +15,7 @@ class ConfigurationSpec extends Specification {
 
   void "uses default configuration if not overridden and no properties file exists"() {
     given:
-    def configuration = Configuration.builder().build()
+    def configuration = WalkmanConfig.builder().build()
 
     expect:
     with(configuration) {
@@ -30,7 +30,7 @@ class ConfigurationSpec extends Specification {
 
   void "configuration is overridden by builder methods"() {
     given:
-    def configuration = Configuration.builder()
+    def configuration = WalkmanConfig.builder()
         .tapeRoot(tempDir)
         .defaultMode(READ_ONLY)
         .defaultMatchRules(MatchRules.host, MatchRules.uri)
@@ -64,7 +64,7 @@ class ConfigurationSpec extends Specification {
     }
 
     and:
-    def configuration = Configuration.builder().withProperties(properties).build()
+    def configuration = WalkmanConfig.builder().withProperties(properties).build()
 
     expect:
     with(configuration) {
@@ -95,10 +95,10 @@ class ConfigurationSpec extends Specification {
     }
 
     and:
-    Configuration.classLoader.addURL(tempDir.toURL())
+    WalkmanConfig.classLoader.addURL(tempDir.toURL())
 
     and:
-    def configuration = Configuration.builder().build()
+    def configuration = WalkmanConfig.builder().build()
 
     expect:
     with(configuration) {
@@ -134,10 +134,10 @@ class ConfigurationSpec extends Specification {
     }
 
     and:
-    Configuration.classLoader.addURL(tempDir.toURL())
+    WalkmanConfig.classLoader.addURL(tempDir.toURL())
 
     and:
-    def configuration = Configuration.builder()
+    def configuration = WalkmanConfig.builder()
         .tapeRoot(new File("test/fixtures/tapes"))
         .defaultMode(WRITE_ONLY)
         .defaultMatchRules(MatchRules.port, MatchRules.query)

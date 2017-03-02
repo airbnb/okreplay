@@ -16,7 +16,7 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Timeout(10)
 class NoJUnitSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = Configuration.builder()
+  @Shared def configuration = WalkmanConfig.builder()
       .tapeRoot(tapeRoot)
       .sslEnabled(true)
       .build()

@@ -12,7 +12,7 @@ import static walkman.TapeMode.READ_WRITE
 class RecorderTapeModeSpec extends Specification {
   void "tape mode is #expectedMode if default mode is #defaultMode and start is called with #modeParam"() {
     given:
-    def configuration = Configuration.builder().defaultMode(defaultMode).build()
+    def configuration = WalkmanConfig.builder().defaultMode(defaultMode).build()
     def recorder = new Recorder(configuration, new WalkmanInterceptor())
 
     when:

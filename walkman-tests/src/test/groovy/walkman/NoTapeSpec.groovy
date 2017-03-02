@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
-  @Shared def configuration = Configuration.builder().build()
+  @Shared def configuration = WalkmanConfig.builder().build()
   @Shared def interceptor = new WalkmanInterceptor()
   @Shared def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)

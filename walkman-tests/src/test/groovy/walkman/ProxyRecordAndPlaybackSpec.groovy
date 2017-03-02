@@ -19,7 +19,7 @@ import static walkman.TapeMode.READ_WRITE
 @Timeout(10)
 class ProxyRecordAndPlaybackSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = Configuration.builder()
+  @Shared def configuration = WalkmanConfig.builder()
       .tapeRoot(tapeRoot)
       .defaultMode(READ_WRITE)
       .build()

@@ -29,7 +29,7 @@ class CustomMatcherSpec extends Specification {
   void "Using a custom matcher it should replay"() {
     given:
     def imr = new InstrumentedMatchRule()
-    def configuration = Configuration.builder()
+    def configuration = WalkmanConfig.builder()
         .sslEnabled(true)
         .tapeRoot(tapeRoot)
         .defaultMode(READ_ONLY)
@@ -64,7 +64,7 @@ class CustomMatcherSpec extends Specification {
     given:
     def tapeRoot = Files.createTempDir() //Using a temp dir this time
     def imr = new InstrumentedMatchRule()
-    def configuration = Configuration.builder()
+    def configuration = WalkmanConfig.builder()
         .sslEnabled(true)
         .tapeRoot(tapeRoot)
         .defaultMode(READ_WRITE)

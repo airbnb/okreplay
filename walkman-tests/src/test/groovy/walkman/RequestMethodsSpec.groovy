@@ -19,7 +19,7 @@ import static walkman.TapeMode.READ_WRITE
 @Timeout(10)
 class RequestMethodsSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Shared def configuration = WalkmanConfig.builder().tapeRoot(tapeRoot).build()
   @Shared def interceptor = new WalkmanInterceptor()
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared def endpoint = new MockWebServer()

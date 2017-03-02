@@ -14,7 +14,7 @@ import static com.google.common.net.HttpHeaders.VIA;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class WalkmanInterceptor implements Interceptor {
-  private Configuration configuration;
+  private WalkmanConfig configuration;
   private Optional<Tape> tape = Optional.absent();
   private boolean isRunning;
   private static final Logger LOG = Logger.getLogger(WalkmanInterceptor.class.getName());
@@ -80,7 +80,7 @@ public class WalkmanInterceptor implements Interceptor {
         .build();
   }
 
-  public void start(Configuration configuration, Tape tape) {
+  public void start(WalkmanConfig configuration, Tape tape) {
     this.configuration = configuration;
     this.tape = Optional.fromNullable(tape);
     isRunning = true;

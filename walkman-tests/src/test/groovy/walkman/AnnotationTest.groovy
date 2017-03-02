@@ -36,7 +36,7 @@ import static walkman.TapeMode.READ_WRITE
 @RunWith(OrderedRunner)
 class AnnotationTest {
   static def TAPE_ROOT = Files.createTempDir()
-  def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
+  def configuration = WalkmanConfig.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
   def interceptor = new WalkmanInterceptor()
   @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared static def endpoint = new MockWebServer()

@@ -30,7 +30,7 @@ import spock.lang.Issue;
 @Issue("https://github.com/robfletcher/betamax/issues/36")
 public class TapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
-  private final Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
+  private final WalkmanConfig configuration = WalkmanConfig.builder().tapeRoot(TAPE_ROOT).build();
   @Rule public RecorderRule recorder = new RecorderRule(configuration, new WalkmanInterceptor());
 
   @AfterClass public static void deleteTempDir() {

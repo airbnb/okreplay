@@ -16,7 +16,7 @@ import static walkman.MatchRules.uri
 @Unroll
 class CustomMatchRuleSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = Configuration.builder().tapeRoot(tapeRoot).build()
+  @Shared def configuration = WalkmanConfig.builder().tapeRoot(tapeRoot).build()
   @Shared def interceptor = new WalkmanInterceptor()
   @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   @Shared def url = "http://freeside.co/betamax"

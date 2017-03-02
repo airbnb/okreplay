@@ -14,7 +14,7 @@ import static walkman.TapeMode.READ_WRITE
 @Unroll
 class IgnoreHostsSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()
+  def configuration = Spy(WalkmanConfig, constructorArgs: [WalkmanConfig.builder()
       .tapeRoot(tapeRoot)
       .defaultMode(READ_WRITE)])
   def interceptor = new WalkmanInterceptor()
