@@ -33,7 +33,7 @@ class NoTapeSpec extends Specification {
       .addInterceptor(interceptor)
       .build()
   @Shared def recorder = new Recorder(configuration, interceptor)
-  @Shared @AutoCleanup("stop") def proxy = new ProxyServer(this, interceptor)
+  @Shared @AutoCleanup("stop") def proxy = new ProxyServer(configuration, interceptor)
 
   void setupSpec() {
     proxy.start(null)
