@@ -30,7 +30,7 @@ class TapeDirectories(private val context: Context, testName: String) {
     return directory
   }
 
-  fun grantPermissionsIfNeeded(activity: Activity) {
+  internal fun grantPermissionsIfNeeded(activity: Activity) {
     val res = context.checkCallingPermission(WRITE_EXTERNAL_STORAGE)
     if (res != PackageManager.PERMISSION_GRANTED) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

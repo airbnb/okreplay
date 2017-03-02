@@ -1,7 +1,5 @@
 package walkman.sample;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
@@ -17,8 +15,6 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-
 import walkman.Configuration;
 import walkman.MatchRules;
 import walkman.PermissionRule;
@@ -27,6 +23,8 @@ import walkman.TapeDirectories;
 import walkman.TapeMode;
 import walkman.Walkman;
 
+import static android.support.test.InstrumentationRegistry.getContext;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -37,20 +35,16 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-  private final ActivityTestRule<MainActivity> activityTestRule =
-      new ActivityTestRule<>(MainActivity.class);
-  private final TapeDirectories tapeDirectories =
-      new TapeDirectories(InstrumentationRegistry.getContext(), "example");
-  private final File tapeRoot = tapeDirectories.get();
+  private final DependencyGraph graph = DependencyGraph.Companion.instance();
+  private final ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+  private final TapeDirectories tapeDirectories = new TapeDirectories(getContext(), "example");
   private final Configuration configuration = new Configuration.Builder()
-      .tapeRoot(tapeRoot)
+      .tapeRoot(tapeDirectories.get())
       .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)
       .build();
-  private final DependencyGraph graph = DependencyGraph.Companion.instance();
-  @Rule public final TestRule ruleChain = RuleChain
-      .outerRule(activityTestRule)
+  @Rule public final TestRule ruleChain = RuleChain.outerRule(activityTestRule)
       .around(new PermissionRule(tapeDirectories, activityTestRule))
       .around(new RecorderRule(configuration, graph.getWalkmanInterceptor()));
   private final IdlingResource okHttp3IdlingResource =
@@ -67,9 +61,7 @@ public class ExampleInstrumentedTest {
   @Test
   @Walkman
   public void useAppContext() throws Exception {
-    // Context of the app under test.
-    Context appContext = InstrumentationRegistry.getTargetContext();
-    assertEquals("walkman.sample", appContext.getPackageName());
+    assertEquals("walkman.sample", getTargetContext().getPackageName());
     onView(withId(R.id.navigation_repositories)).perform(click());
     onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));
   }

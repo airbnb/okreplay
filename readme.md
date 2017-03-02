@@ -1,13 +1,63 @@
 # Walkman [![Build Status](https://travis-ci.org/felipecsl/walkman.svg?branch=master)](https://travis-ci.org/felipecsl/walkman)
 
-Walkman lets you record and replay OkHttp network interaction your Android application. This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library, which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs).
+Automatically record and replay OkHttp network interaction through your Android application.
+This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
+
+## Introduction
+
+You don’t want 3rd party downtime, network issues or resource constraints (such as the Twitter API’s
+rate limit) to break your tests. Writing custom stub web server code and configuring the application
+to connect to a different URI when under test is tedious and might not accurately simulate the real
+service.
+
+Walkman aims to solve these problems by intercepting HTTP connections initiated by your application
+and replaying previously __recorded__ responses.
+
+The first time a test annotated with `@Betamax` is run, any HTTP traffic is recorded to a tape and
+subsequent test runs will play back the recorded HTTP response from the tape without actually
+connecting to the external server.
+
+Betamax works with JUnit and Espresso. Betamax can be used to test any Java or Android applications,
+provided they are using an `OkHttpClient` to make requests.
+
+Tapes are stored to disk as YAML files and can be modified (or even created) by hand and committed
+to your project’s source control repository so they can be shared by other members of your team and
+used by your CI server. Different tests can use different tapes to simulate various response conditions.
+Each tape can hold multiple request/response interactions. An example tape file can be found
+[here](https://github.com/felipecsl/walkman/blob/master/walkman-tests/src/test/resources/walkman/tapes/smoke_spec.yaml).
 
 ## Usage
 
+Walkman comes as an OkHttp `Interceptor`. When "started", responses are served from the `Tape` file
+when a match is found for the `MatchRule` and the `TapeMode` is readable. If the `Tape` is writable,
+responses will be served from the network as usual and the interaction will be stored on a `Tape`.
 
-Walkman is hosted via [Sonatype](https://oss.sonatype.org/) and is intended to be compatible with any Maven-based build tool.
+Add the `WalkmanInterceptor` to your `OkHttpClient`:
 
-This is still a work in progress. Please check back soon for updates!
+```java
+WalkmanInterceptor = new WalkmanInterceptor();
+OkHttpClient client = new OkHttpClient.Builder()
+  .addInterceptor(walkmanInterceptor)
+```
+
+By default the interceptor won't do anything unless it's explicitly started. Then, in your
+
+## Download
+
+Download [the latest JAR][2] or grab via Maven:
+```xml
+<dependency>
+  <groupId>com.airbnb.walkman</groupId>
+  <artifactId>core</artifactId>
+  <version>1.1.0-SNAPSHOT</version>
+</dependency>
+```
+or Gradle:
+```groovy
+compile 'com.airbnb.walkman:core:1.0.0-SNAPSHOT'
+```
+
+Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
 
 License
 -------
@@ -23,3 +73,7 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+ [1]: http://airbnb.io/projects/walkman/
+ [2]: https://search.maven.org/remote_content?g=com.airbnb.walkman&a=core&v=LATEST
+ [snap]: https://oss.sonatype.org/content/repositories/snapshots/

@@ -19,11 +19,9 @@ android {
 }
 
 dependencies {
-  compile project(":walkman-core")
-  compile dep.junit
+  compile project(':walkman-junit')
   compile dep.appcompat
   compile dep.espresso
-  compile dep.kotlinStdLib
   compile dep.uiautomator
 }
 
