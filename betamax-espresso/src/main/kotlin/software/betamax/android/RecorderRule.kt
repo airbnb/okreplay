@@ -18,7 +18,6 @@ package software.betamax.android
 
 import com.google.common.base.CaseFormat.*
 import com.google.common.base.Optional
-import com.google.common.base.Strings
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -36,8 +35,9 @@ import java.util.logging.Logger
  * _JUnit @Rule_ allowing tests annotated with `@Betamax` to automatically
  * activate Betamax recording.
  */
-class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor) :
-    Recorder(configuration, interceptor), TestRule {
+class RecorderRule(
+    configuration: Configuration,
+    interceptor: BetamaxInterceptor) : Recorder(configuration, interceptor), TestRule {
   override fun apply(statement: Statement, description: Description): Statement {
     val annotation = description.getAnnotation(Betamax::class.java)
     if (annotation != null) {
@@ -46,9 +46,10 @@ class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor
         @Throws(Throwable::class)
         override fun evaluate() {
           try {
-            var tapeName = annotation.tape
-            if (Strings.isNullOrEmpty(tapeName)) {
-              tapeName = defaultTapeName(description)
+            val tapeName = if (annotation.tape.isNullOrEmpty()) {
+              description.defaultTapeName()
+            } else {
+              annotation.tape
             }
             val tapeMode = annotation.mode
             val matchRules = annotation.match
@@ -77,11 +78,11 @@ class RecorderRule(configuration: Configuration, interceptor: BetamaxInterceptor
     }
   }
 
-  private fun defaultTapeName(description: Description): String {
-    val name = if (description.methodName != null) {
-      LOWER_CAMEL.to(LOWER_UNDERSCORE, description.methodName)
+  private fun Description.defaultTapeName(): String {
+    val name = if (methodName != null) {
+      LOWER_CAMEL.to(LOWER_UNDERSCORE, methodName)
     } else {
-      UPPER_CAMEL.to(LOWER_UNDERSCORE, description.testClass.simpleName)
+      UPPER_CAMEL.to(LOWER_UNDERSCORE, testClass.simpleName)
     }
     return name.replace('_', ' ')
   }

@@ -57,7 +57,6 @@ public class Recorder {
     if (tape != null) {
       throw new IllegalStateException("start called when Recorder is already started");
     }
-
     tape = getTapeLoader().loadTape(tapeName);
     tape.setMode(mode.or(configuration.getDefaultMode()));
     tape.setMatchRule(matchRule.or(configuration.getDefaultMatchRule()));

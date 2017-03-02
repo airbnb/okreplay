@@ -55,7 +55,7 @@ class TapeDirectories(private val context: Context, testName: String) {
   private fun getSdcardDir(type: String): File {
     val externalStorage = System.getenv("EXTERNAL_STORAGE") ?: throw RuntimeException(
         "No \$EXTERNAL_STORAGE has been set on the device, please report this bug!")
-    val parent = "$externalStorage/betamax/tapes/$context.packageName/"
+    val parent = "$externalStorage/betamax/tapes/${context.packageName}/"
     val child = "$parent/tapes-$type"
     File(parent).mkdirs()
     return File(child)

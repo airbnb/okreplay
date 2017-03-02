@@ -34,7 +34,9 @@ import spock.lang.Issue;
 @Betamax
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
-  private static Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
+  private static final Configuration configuration = Configuration.builder()
+      .tapeRoot(TAPE_ROOT)
+      .build();
   @ClassRule public static RecorderRule recorder = new RecorderRule(configuration,
       new BetamaxInterceptor());
 
