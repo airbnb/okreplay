@@ -5,6 +5,7 @@ subprojects {
     repositories {
       jcenter()
       mavenLocal()
+      maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {
       classpath dep.nexusPlugin

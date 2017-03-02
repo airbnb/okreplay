@@ -1,0 +1,12 @@
+apply plugin: 'kotlin'
+
+dependencies {
+  compile project(":walkman-core")
+  compile dep.junit
+  compile dep.kotlinStdLib
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

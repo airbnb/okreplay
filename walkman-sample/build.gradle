@@ -39,11 +39,10 @@ dependencies {
   annotationProcessor 'com.ryanharter.auto.value:auto-value-moshi:0.4.3'
   provided 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
   testCompile 'junit:junit:4.12'
-  androidTestCompile dep.espresso
+  androidTestCompile project(':walkman-espresso')
   androidTestCompile 'com.android.support:support-annotations:25.2.0'
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'
-  androidTestCompile project(':walkman-espresso')
   androidTestCompile 'com.squareup.okio:okio:1.11.0'
   androidTestCompile 'com.squareup.okhttp3:okhttp:3.6.0'
   androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'

@@ -1,13 +1,7 @@
 apply plugin: 'java'
-apply plugin: 'com.bmuschko.nexus'
-apply plugin: 'maven'
 
 project.group = GROUP
 project.version = VERSION_NAME
-
-repositories {
-  maven { url "http://repository.codehaus.org" }
-}
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -18,48 +12,4 @@ dependencies {
   compile dep.okhttp
 }
 
-modifyPom {
-  project {
-    name POM_NAME
-    description PROJECT_DESCRIPTION
-    url POM_URL
-    inceptionYear '2017'
-    version VERSION_NAME
-    groupId GROUP
-    artifactId POM_ARTIFACT_ID
-
-    scm {
-      url POM_URL
-      connection POM_SCM_CONNECTION
-      developerConnection POM_SCM_DEV_CONNECTION
-    }
-
-    licenses {
-      license {
-        name POM_LICENCE_NAME
-        url POM_LICENCE_URL
-        distribution POM_LICENCE_DIST
-      }
-    }
-
-    developers {
-      developer {
-        id POM_DEVELOPER_ID
-        name POM_DEVELOPER_NAME
-      }
-    }
-  }
-}
-
-
-extraArchive {
-  sources = true
-  tests = false
-  javadoc = true
-}
-
-nexus {
-  sign = !isCi
-  repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-  snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-}
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

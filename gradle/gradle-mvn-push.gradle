@@ -35,11 +35,11 @@ def getSnapshotRepositoryUrl() {
 }
 
 def getRepositoryUsername() {
-  return hasProperty('SONATYPE_NEXUS_USERNAME') ? SONATYPE_NEXUS_USERNAME : ""
+  return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
 }
 
 def getRepositoryPassword() {
-  return hasProperty('SONATYPE_NEXUS_PASSWORD') ? SONATYPE_NEXUS_PASSWORD : ""
+  return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
 }
 
 archivesBaseName = POM_ARTIFACT_ID
@@ -47,7 +47,7 @@ archivesBaseName = POM_ARTIFACT_ID
 afterEvaluate { project ->
   uploadArchives {
     repositories {
-      if (project.hasProperty('SONATYPE_NEXUS_USERNAME')) {
+      if (project.hasProperty('NEXUS_USERNAME')) {
         mavenDeployer {
           beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
@@ -147,6 +147,7 @@ afterEvaluate { project ->
 
     task androidJavadocs(type: Javadoc) {
       source = android.sourceSets.main.java.source
+      excludes = ['**/*.kt']
       classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
 
