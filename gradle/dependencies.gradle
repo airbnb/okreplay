@@ -1,5 +1,5 @@
 def versions = [
-    betamaxVersion: '2.1.0-SNAPSHOT',
+    betamaxVersion: '1.0.0-SNAPSHOT',
     kotlinVersion : '1.1.0',
     okhttpVersion : '3.4.2'
 ]
@@ -10,27 +10,29 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin     : 'com.android.tools.build:gradle:2.3.0-rc1',
-      groovyPlugin      : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
-      nexusPlugin       : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
-      appcompat         : 'com.android.support:appcompat-v7:25.2.0',
-      cglib             : "cglib:cglib-nodep:2.2.2",
-      groovy            : "org.codehaus.groovy:groovy-all:2.4.5:indy",
-      guava             : "com.google.guava:guava:20.0",
-      ddmlib            : 'com.android.tools.ddms:ddmlib:25.3.0-rc1',
-      junit             : "junit:junit:4.12",
-      okhttp            : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
-      mockWebServer     : "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
-      snakeYaml         : "org.yaml:snakeyaml:1.16",
-      kotlinStdLib      : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
-      kotlinGradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
-      truth             : 'com.google.truth:truth:0.30',
-      spock             : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
+      androidPlugin: 'com.android.tools.build:gradle:2.3.0-rc1',
+      groovyPlugin : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
+      nexusPlugin  : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
+      appcompat    : 'com.android.support:appcompat-v7:25.2.0',
+      cglib        : "cglib:cglib-nodep:2.2.2",
+      groovy       : "org.codehaus.groovy:groovy-all:2.4.5:indy",
+      guava        : "com.google.guava:guava:20.0",
+      ddmlib       : 'com.android.tools.ddms:ddmlib:25.3.0-rc1',
+      junit        : "junit:junit:4.12",
+      mockito      : 'org.mockito:mockito-core:2.7.13',
+      okhttp       : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
+      mockWebServer: "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
+      snakeYaml    : "org.yaml:snakeyaml:1.16",
+      kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
+      betamaxPlugin: "software.betamax.android:gradle-plugin:$versions.betamaxVersion",
+      kotlinPlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
+      truth        : 'com.google.truth:truth:0.30',
+      spock        : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
         exclude module: "groovy-all"
         exclude module: "junit"
       }),
-      uiautomator       : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1',
-      espresso          : dependencies.create('com.android.support.test.espresso:espresso-core:2.2.2', {
+      uiautomator  : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1',
+      espresso     : dependencies.create('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
       })
   ]

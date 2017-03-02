@@ -44,7 +44,7 @@ public class ExampleInstrumentedTest {
   private final File tapeRoot = tapeDirectories.get();
   private final Configuration configuration = new Configuration.Builder()
       .tapeRoot(tapeRoot)
-      .defaultMode(TapeMode.READ_WRITE)
+      .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)
       .build();
