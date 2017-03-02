@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-
 class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
   private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
 
@@ -56,13 +55,13 @@ class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger)
   fun externalStorageDir(device: DeviceConnector): String =
       device.runCmd("echo \$EXTERNAL_STORAGE")
 
-  fun DeviceConnector.idevice(): IDevice {
+  private fun DeviceConnector.idevice(): IDevice {
     val iDeviceField = this.javaClass.getDeclaredField("iDevice")
     iDeviceField.isAccessible = true
     return iDeviceField.get(this) as IDevice
   }
 
-  fun String.toFileEntry(): FileListingService.FileEntry {
+  private fun String.toFileEntry(): FileListingService.FileEntry {
     try {
       var lastEntry: FileListingService.FileEntry? = null
       val c = FileListingService.FileEntry::class.java.getDeclaredConstructor(
@@ -71,7 +70,7 @@ class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger)
           Int::class.javaPrimitiveType,
           Boolean::class.javaPrimitiveType)
       c.isAccessible = true
-      for (part in split("/")) {
+      split("/").forEach { part ->
         lastEntry = c.newInstance(lastEntry, part, TYPE_DIRECTORY, lastEntry == null)
       }
       return lastEntry!!
@@ -86,7 +85,7 @@ class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger)
     }
   }
 
-  fun DeviceConnector.runCmd(cmd: String): String {
+  private fun DeviceConnector.runCmd(cmd: String): String {
     val latch = CountDownLatch(1)
     val receiver = CollectingOutputReceiver(latch)
     try {
