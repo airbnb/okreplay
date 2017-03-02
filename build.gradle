@@ -11,7 +11,7 @@ subprojects {
       classpath dep.androidPlugin
       classpath dep.groovyPlugin
       classpath dep.kotlinPlugin
-      classpath dep.betamaxPlugin
+      classpath dep.walkmanPlugin
     }
   }
 

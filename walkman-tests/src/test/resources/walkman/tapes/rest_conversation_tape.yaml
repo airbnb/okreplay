@@ -1,0 +1,61 @@
+!tape
+name: rest conversation tape
+interactions:
+  - !!walkman.RecordedInteraction [
+    '2012-10-21T14:04:39.797Z',
+    !!walkman.RecordedRequest [
+      'GET',
+      'http://freeside.co/thing/1',
+      {
+        Accept: '*/*',
+        Accept-Encoding: 'gzip,deflate',
+        Host: 'freeside.co'
+      }
+    ],
+    !!walkman.RecordedResponse [
+      404,
+      {
+        Content-Type: 'application/json'
+      },
+      !!binary "e30="
+    ]
+  ]
+  - !!walkman.RecordedInteraction [
+    '2012-10-21T14:04:40.153Z',
+    !!walkman.RecordedRequest [
+      'POST',
+      'http://freeside.co/thing/1',
+      {
+        Accept: '*/*',
+        Accept-Encoding: 'gzip,deflate',
+        Host: 'freeside.co'
+      },
+      !!binary "eyJuYW1lIjoiZm9vIn0="
+    ],
+    !!walkman.RecordedResponse [
+      201,
+      {
+        Content-Type: 'application/json'
+      },
+      !!binary "eyJuYW1lIjoiZm9vIn0="
+    ]
+  ]
+  - !!walkman.RecordedInteraction [
+    '2012-10-21T14:04:42.340Z',
+    !!walkman.RecordedRequest [
+      'GET',
+      'http://freeside.co/thing/1',
+      {
+        Accept: '*/*',
+        Accept-Encoding: 'gzip,deflate',
+        Host: 'freeside.co'
+      }
+    ],
+    !!walkman.RecordedResponse [
+      200,
+      {
+        Content-Type: 'application/json'
+      },
+      !!binary "eyJuYW1lIjoiZm9vIn0="
+    ]
+  ]

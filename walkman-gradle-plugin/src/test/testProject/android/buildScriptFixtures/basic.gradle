@@ -1,0 +1,41 @@
+buildscript {
+  apply from: "../../../../gradle/dependencies.gradle"
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath dep.androidPlugin
+  }
+}
+
+plugins {
+  id 'com.android.application'
+  id 'walkman'
+}
+
+android {
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
+
+  defaultConfig {
+    applicationId "walkman.testProject.basic"
+    minSdkVersion androidConfig.minSdkVersion
+    targetSdkVersion androidConfig.targetSdkVersion
+  }
+
+  lintOptions {
+    textReport true
+    textOutput 'stdout'
+    ignore 'InvalidPackage', 'GoogleAppIndexingWarning', 'AllowBackup'
+  }
+}
+
+repositories {
+  jcenter()
+  maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+  compile dep.appcompat
+}

@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
+
+  lintOptions {
+    disable 'InvalidPackage'
+  }
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
+
+  defaultConfig {
+    minSdkVersion androidConfig.minSdkVersion
+  }
+}
+
+dependencies {
+  compile project(":walkman-core")
+  compile dep.junit
+  compile dep.appcompat
+  compile dep.espresso
+  compile dep.kotlinStdLib
+  compile dep.uiautomator
+}
+
+apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
