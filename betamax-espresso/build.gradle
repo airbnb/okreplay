@@ -1,8 +1,5 @@
 apply plugin: 'com.android.library'
-
-repositories {
-  maven { url "http://repository.codehaus.org" }
-}
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -10,6 +7,10 @@ android {
 
   lintOptions {
     disable 'InvalidPackage'
+  }
+
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
   }
 
   defaultConfig {
@@ -20,6 +21,10 @@ android {
 dependencies {
   compile project(":betamax-core")
   compile dep.junit
+  compile dep.appcompat
+  compile dep.espresso
+  compile dep.kotlinStdLib
+  compile dep.uiautomator
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

@@ -1,16 +1,22 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'software.betamax.android'
+apply plugin: 'kotlin-android'
+apply plugin: 'software.betamax.android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
   buildToolsVersion androidConfig.buildToolsVersion
 
+  sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+  }
+
   defaultConfig {
     applicationId "software.betamax.android.sample"
-    minSdkVersion androidConfig.minSdkVersion
+    minSdkVersion 21 // so we get faster multidex
     targetSdkVersion androidConfig.targetSdkVersion
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+    multiDexEnabled true
   }
 
   lintOptions {
@@ -21,7 +27,9 @@ android {
 dependencies {
   compile project(':betamax-core')
   compile dep.appcompat
+  compile dep.kotlinStdLib
   compile 'com.android.support:design:25.2.0'
+  compile 'com.android.support:multidex:1.0.1'
   compile 'com.android.support:support-vector-drawable:25.2.0'
   compile 'com.squareup.retrofit2:converter-moshi:2.2.0'
   compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
@@ -31,9 +39,7 @@ dependencies {
   annotationProcessor 'com.ryanharter.auto.value:auto-value-moshi:0.4.3'
   provided 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
   testCompile 'junit:junit:4.12'
-  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-    exclude group: 'com.android.support', module: 'support-annotations'
-  })
+  androidTestCompile dep.espresso
   androidTestCompile 'com.android.support:support-annotations:25.2.0'
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'

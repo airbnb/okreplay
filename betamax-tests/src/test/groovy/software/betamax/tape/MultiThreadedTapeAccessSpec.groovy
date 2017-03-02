@@ -17,8 +17,10 @@
 package software.betamax.tape
 
 import com.google.common.io.Files
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.MediaType
+import okhttp3.ResponseBody
+import software.betamax.message.tape.RecordedRequest
+import software.betamax.message.tape.RecordedResponse
 import software.betamax.tape.yaml.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Issue
@@ -32,7 +34,6 @@ import static software.betamax.TapeMode.*
 
 @Issue("https://github.com/robfletcher/betamax/issues/57")
 class MultiThreadedTapeAccessSpec extends Specification {
-
   // TODO: only need this because there's no convenient way to construct a tape
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def loader = new YamlTapeLoader(tapeRoot)
@@ -44,15 +45,19 @@ class MultiThreadedTapeAccessSpec extends Specification {
 
   void "the correct response is replayed to each thread"() {
     given: "a number of requests"
-    List<Request> requests = (0..<threads).collect { i ->
-      def request = new Request("GET", "http://example.com/$i")
-      request.addHeader("X-Thread", i.toString())
-      request
+    List<RecordedRequest> requests = (0..<threads).collect { i ->
+      new RecordedRequest.Builder()
+          .url("http://example.com/$i")
+          .addHeader("X-Thread", i.toString())
+          .build()
     }
 
     and: "some existing responses on tape"
     requests.eachWithIndex { request, i ->
-      def response = new Response(status: 200, reason: 'OK', body: i.toString())
+      def response = new RecordedResponse.Builder()
+          .code(200)
+          .body(ResponseBody.create(MediaType.parse("text/plain"), i.toString()))
+          .build()
       tape.record(request, response)
     }
 
@@ -62,7 +67,7 @@ class MultiThreadedTapeAccessSpec extends Specification {
     requests.eachWithIndex { request, i ->
       Thread.start {
         def response = tape.play(request)
-        responses[requests[i].getHeader("X-Thread")] = response.bodyAsText
+        responses[requests[i].header("X-Thread")] = response.bodyAsText
         finished.countDown()
       }
     }
@@ -84,15 +89,19 @@ class MultiThreadedTapeAccessSpec extends Specification {
     tape.mode = WRITE_SEQUENTIAL
 
     and: "a number of requests"
-    List<Request> requests = (0..<threads).collect { i ->
-      def request = new Request("GET", "http://example.com/")
-      request.addHeader("X-Thread", i.toString())
-      request
+    List<RecordedRequest> requests = (0..<threads).collect { i ->
+      new RecordedRequest.Builder()
+          .url("http://example.com/")
+          .addHeader("X-Thread", i.toString())
+          .build()
     }
 
     and: "some existing responses on tape"
     requests.eachWithIndex { request, i ->
-      def response = new Response(status: 200, reason: 'OK', body: i.toString())
+      def response = new RecordedResponse.Builder()
+          .code(200)
+          .body(ResponseBody.create(MediaType.parse("text/plain"), i.toString()))
+          .build()
       tape.record(request, response)
     }
 
@@ -117,5 +126,4 @@ class MultiThreadedTapeAccessSpec extends Specification {
     where:
     threads = 10
   }
-
 }

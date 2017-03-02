@@ -26,6 +26,7 @@ import org.junit.Test;
 import java.io.File;
 
 import software.betamax.Configuration;
+import software.betamax.android.RecorderRule;
 import software.betamax.proxy.BetamaxInterceptor;
 import spock.lang.Issue;
 
@@ -33,7 +34,9 @@ import spock.lang.Issue;
 @Betamax
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
-  private static Configuration configuration = Configuration.builder().tapeRoot(TAPE_ROOT).build();
+  private static final Configuration configuration = Configuration.builder()
+      .tapeRoot(TAPE_ROOT)
+      .build();
   @ClassRule public static RecorderRule recorder = new RecorderRule(configuration,
       new BetamaxInterceptor());
 

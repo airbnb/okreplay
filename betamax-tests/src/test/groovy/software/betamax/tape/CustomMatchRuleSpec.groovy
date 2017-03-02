@@ -25,7 +25,7 @@ import org.junit.ClassRule
 import software.betamax.ComposedMatchRule
 import software.betamax.Configuration
 import software.betamax.MatchRule
-import software.betamax.junit.RecorderRule
+import software.betamax.android.RecorderRule
 import software.betamax.message.tape.Request
 import software.betamax.proxy.BetamaxInterceptor
 import software.betamax.proxy.okhttp.OkHttpRequestAdapter

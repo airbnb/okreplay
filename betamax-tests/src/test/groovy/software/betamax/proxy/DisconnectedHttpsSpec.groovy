@@ -21,7 +21,7 @@ import okhttp3.Request
 import org.junit.Rule
 import software.betamax.Configuration
 import software.betamax.junit.Betamax
-import software.betamax.junit.RecorderRule
+import software.betamax.android.RecorderRule
 import spock.lang.Ignore
 import spock.lang.Issue
 import spock.lang.Specification

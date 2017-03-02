@@ -9,11 +9,11 @@ import java.io.File
 import javax.inject.Inject
 
 open class PullTapesTask
-@Inject constructor() : DefaultTask() {
+@Inject constructor() : DefaultTask(), TapeTask {
   @OutputDirectory private var outputDir: File? = null
-  @Input var adbPath: File? = null
-  @Input var adbTimeoutMs: Int = 0
-  @Input var packageName: String? = null
+  @Input var _adbPath: File? = null
+  @Input var _adbTimeoutMs: Int = 0
+  @Input var _packageName: String? = null
 
   init {
     description = "Pull Betamax tapes from the Device SD Card"
@@ -21,13 +21,25 @@ open class PullTapesTask
   }
 
   @TaskAction internal fun pullTapes() {
-    val deviceBridge = DeviceBridge(adbPath!!, adbTimeoutMs, logger)
+    val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     outputDir = project.file(TAPES_DIR)
     deviceBridge.devices().forEach {
       val externalStorage = deviceBridge.externalStorageDir(it)
-      val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, packageName)
+      val tapesPath = String.format("%s/betamax/tapes/%s/", externalStorage, _packageName)
       deviceBridge.pullDirectory(it, outputDir!!.absolutePath, tapesPath)
     }
+  }
+
+  override fun setAdbPath(file: File) {
+    _adbPath = file
+  }
+
+  override fun setAdbTimeoutMs(timeout: Int) {
+    _adbTimeoutMs = timeout
+  }
+
+  override fun setTestApplicationId(packageName: String) {
+    _packageName = packageName
   }
 
   companion object {
