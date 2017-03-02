@@ -16,9 +16,11 @@ import static walkman.MatchRules.uri
 @Unroll
 class CustomMatchRuleSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = WalkmanConfig.builder().tapeRoot(tapeRoot).build()
-  @Shared def interceptor = new WalkmanInterceptor()
-  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  @Shared def configuration = new WalkmanConfig.Builder()
+      .tapeRoot(tapeRoot)
+      .interceptor(new WalkmanInterceptor())
+      .build()
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
   @Shared def url = "http://freeside.co/betamax"
   @Shared def acceptHeaderRule = new MatchRule() {
     @Override
@@ -28,7 +30,7 @@ class CustomMatchRuleSpec extends Specification {
   }
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   void setupSpec() {

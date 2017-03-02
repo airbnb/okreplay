@@ -19,15 +19,15 @@ import static walkman.TapeMode.READ_WRITE
 @Timeout(10)
 class ProxyRecordAndPlaybackSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = WalkmanConfig.builder()
+  @Shared def configuration = new WalkmanConfig.Builder()
       .tapeRoot(tapeRoot)
       .defaultMode(READ_WRITE)
+      .interceptor(new WalkmanInterceptor())
       .build()
-  @Shared def interceptor = new WalkmanInterceptor();
-  @Shared def recorder = new Recorder(configuration, interceptor)
+  @Shared def recorder = new Recorder(configuration)
   @Shared def endpoint = new MockWebServer()
   @Shared def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   void setupSpec() {
@@ -92,7 +92,7 @@ class ProxyRecordAndPlaybackSpec extends Specification {
     def request = new Request.Builder()
         .url(endpoint.url("/"))
         .method("POST",
-          RequestBody.create(MediaType.parse("text/plain"), "foo".getBytes(Charsets.UTF_8)))
+        RequestBody.create(MediaType.parse("text/plain"), "foo".getBytes(Charsets.UTF_8)))
         .build()
     def response = client.newCall(request).execute()
 

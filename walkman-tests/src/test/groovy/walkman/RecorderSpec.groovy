@@ -21,10 +21,11 @@ import spock.lang.Subject
 
 class RecorderSpec extends Specification {
   def listener = Mock(RecorderListener)
-  def configuration = Spy(WalkmanConfig, constructorArgs: [WalkmanConfig.builder()]) {
+  def configuration = Spy(WalkmanConfig, constructorArgs: [new WalkmanConfig.Builder()
+      .interceptor(new WalkmanInterceptor())]) {
     registerListeners(_) >> { it[0] << listener }
   }
-  @Subject def recorder = new Recorder(configuration, new WalkmanInterceptor())
+  @Subject def recorder = new Recorder(configuration)
 
   void "throws an exception if started when already running"() {
     given:

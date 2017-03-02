@@ -15,7 +15,7 @@ import static walkman.Headers.X_WALKMAN
 @Issue("https://github.com/robfletcher/betamax/issues/117")
 class DisconnectedHttpsSpec extends Specification {
   static final TAPE_ROOT = new File(DisconnectedHttpsSpec.getResource("/walkman/tapes").toURI())
-  def configuration = WalkmanConfig.builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
+  def configuration = new WalkmanConfig.Builder().tapeRoot(TAPE_ROOT).sslEnabled(true).build()
   def interceptor = new WalkmanInterceptor()
   @Rule RecorderRule recorder = new RecorderRule(configuration, interceptor)
   def client = new OkHttpClient.Builder()

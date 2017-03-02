@@ -15,11 +15,11 @@ class ConfigurationSpec extends Specification {
 
   void "uses default configuration if not overridden and no properties file exists"() {
     given:
-    def configuration = WalkmanConfig.builder().build()
+    def configuration = new WalkmanConfig.Builder().build()
 
     expect:
     with(configuration) {
-      tapeRoot == new File(DEFAULT_TAPE_ROOT)
+      tapeRoot.get() == new File(DEFAULT_TAPE_ROOT)
       defaultMode == DEFAULT_MODE
       defaultMatchRule == DEFAULT_MATCH_RULE
       ignoreHosts == []
@@ -30,7 +30,7 @@ class ConfigurationSpec extends Specification {
 
   void "configuration is overridden by builder methods"() {
     given:
-    def configuration = WalkmanConfig.builder()
+    def configuration = new WalkmanConfig.Builder()
         .tapeRoot(tempDir)
         .defaultMode(READ_ONLY)
         .defaultMatchRules(MatchRules.host, MatchRules.uri)
@@ -42,7 +42,7 @@ class ConfigurationSpec extends Specification {
 
     expect:
     with(configuration) {
-      tapeRoot == tempDir
+      tapeRoot.get() == tempDir
       defaultMode == READ_ONLY
       defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
       ignoreHosts.contains("github.com")
@@ -64,11 +64,11 @@ class ConfigurationSpec extends Specification {
     }
 
     and:
-    def configuration = WalkmanConfig.builder().withProperties(properties).build()
+    def configuration = new WalkmanConfig.Builder().withProperties(properties).build()
 
     expect:
     with(configuration) {
-      tapeRoot == tempDir
+      tapeRoot.get() == tempDir
       defaultMode == READ_WRITE
       defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
       ignoreHosts.contains("github.com")
@@ -98,11 +98,11 @@ class ConfigurationSpec extends Specification {
     WalkmanConfig.classLoader.addURL(tempDir.toURL())
 
     and:
-    def configuration = WalkmanConfig.builder().build()
+    def configuration = new WalkmanConfig.Builder().build()
 
     expect:
     with(configuration) {
-      tapeRoot == tempDir
+      tapeRoot.get() == tempDir
       defaultMode == READ_WRITE
       defaultMatchRule == ComposedMatchRule.of(MatchRules.host, MatchRules.uri)
       ignoreHosts.contains("github.com")
@@ -137,7 +137,7 @@ class ConfigurationSpec extends Specification {
     WalkmanConfig.classLoader.addURL(tempDir.toURL())
 
     and:
-    def configuration = WalkmanConfig.builder()
+    def configuration = new WalkmanConfig.Builder()
         .tapeRoot(new File("test/fixtures/tapes"))
         .defaultMode(WRITE_ONLY)
         .defaultMatchRules(MatchRules.port, MatchRules.query)
@@ -148,7 +148,7 @@ class ConfigurationSpec extends Specification {
 
     expect:
     with(configuration) {
-      tapeRoot == new File("test/fixtures/tapes")
+      tapeRoot.get() == new File("test/fixtures/tapes")
       defaultMode == WRITE_ONLY
       defaultMatchRule == ComposedMatchRule.of(MatchRules.port, MatchRules.query)
       ignoreHosts == ["github.com"]
