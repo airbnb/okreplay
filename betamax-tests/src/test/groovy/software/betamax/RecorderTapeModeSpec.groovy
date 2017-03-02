@@ -27,11 +27,10 @@ import static software.betamax.TapeMode.READ_WRITE
 @Issue("https://github.com/robfletcher/betamax/issues/106")
 @Unroll
 class RecorderTapeModeSpec extends Specification {
-
   void "tape mode is #expectedMode if default mode is #defaultMode and start is called with #modeParam"() {
     given:
     def configuration = Configuration.builder().defaultMode(defaultMode).build()
-    def recorder = new Recorder(configuration, new BetamaxInterceptor(configuration))
+    def recorder = new Recorder(configuration, new BetamaxInterceptor())
 
     when:
     recorder.start("recorder tape mode spec", modeParam)

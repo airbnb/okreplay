@@ -66,7 +66,7 @@ class SmokeSpec extends Specification {
     "json" | "http://httpbin.org/get"        | '"url": "http://httpbin.org/get"'
   }
 
-  void "redirects are followed"() {
+  @Ignore void "redirects are followed"() {
     when:
     def request = new Request.Builder()
         .url(uri)
