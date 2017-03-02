@@ -147,6 +147,7 @@ afterEvaluate { project ->
 
     task androidJavadocs(type: Javadoc) {
       source = android.sourceSets.main.java.source
+      excludes = ['**/*.kt']
       classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
 
