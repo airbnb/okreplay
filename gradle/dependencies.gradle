@@ -10,7 +10,7 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin: 'com.android.tools.build:gradle:2.3.0-rc1',
+      androidPlugin: 'com.android.tools.build:gradle:2.3.0',
       groovyPlugin : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin  : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat    : 'com.android.support:appcompat-v7:25.2.0',
