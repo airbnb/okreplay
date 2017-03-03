@@ -10,14 +10,12 @@ import java.util.Collection;
  * ejecting {@link Tape} instances and starting and stopping recording sessions.
  */
 public class Recorder {
-  private final Configuration configuration;
-  private final WalkmanInterceptor interceptor;
+  private final WalkmanConfig configuration;
   private final Collection<RecorderListener> listeners = Lists.newArrayList();
   private Tape tape;
 
-  public Recorder(Configuration configuration, WalkmanInterceptor interceptor) {
+  public Recorder(WalkmanConfig configuration) {
     this.configuration = configuration;
-    this.interceptor = interceptor;
     configuration.registerListeners(listeners);
   }
 
@@ -38,7 +36,7 @@ public class Recorder {
     tape = getTapeLoader().loadTape(tapeName);
     tape.setMode(mode.or(configuration.getDefaultMode()));
     tape.setMatchRule(matchRule.or(configuration.getDefaultMatchRule()));
-    interceptor.start(configuration, tape);
+    configuration.interceptor().start(configuration, tape);
 
     for (RecorderListener listener : listeners) {
       listener.onRecorderStart(tape);
@@ -81,6 +79,6 @@ public class Recorder {
 
   /** Not just a property as `tapeRoot` gets changed during constructor. */
   private TapeLoader<? extends Tape> getTapeLoader() {
-    return new YamlTapeLoader(configuration.getTapeRoot());
+    return new YamlTapeLoader(configuration.getTapeRoot().get());
   }
 }

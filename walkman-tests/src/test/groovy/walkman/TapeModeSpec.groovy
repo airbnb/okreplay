@@ -17,7 +17,7 @@ abstract class TapeModeSpec extends Specification {
 
   @Shared @AutoCleanup("stop") def endpoint = new MockWebServer()
 
-  protected abstract Configuration getConfiguration()
+  protected abstract WalkmanConfig getConfiguration()
   protected abstract void makeRequest()
 
   def client = new OkHttpClient.Builder()

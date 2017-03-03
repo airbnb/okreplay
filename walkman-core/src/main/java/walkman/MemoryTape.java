@@ -19,8 +19,8 @@ import static java.util.Collections.unmodifiableList;
 abstract class MemoryTape implements Tape {
   private String name;
   private List<RecordedInteraction> interactions = Lists.newArrayList();
-  private transient TapeMode mode = Configuration.DEFAULT_MODE;
-  private transient MatchRule matchRule = Configuration.DEFAULT_MATCH_RULE;
+  private transient TapeMode mode = WalkmanConfig.DEFAULT_MODE;
+  private transient MatchRule matchRule = WalkmanConfig.DEFAULT_MATCH_RULE;
   private final transient AtomicInteger orderedIndex = new AtomicInteger();
 
   @Override public String getName() {

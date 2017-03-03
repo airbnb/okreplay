@@ -36,13 +36,16 @@ import static walkman.TapeMode.READ_WRITE
 @RunWith(OrderedRunner)
 class AnnotationTest {
   static def TAPE_ROOT = Files.createTempDir()
-  def configuration = Configuration.builder().tapeRoot(TAPE_ROOT).defaultMode(READ_WRITE).build()
-  def interceptor = new WalkmanInterceptor()
-  @Rule public RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  def configuration = new WalkmanConfig.Builder()
+      .tapeRoot(TAPE_ROOT)
+      .defaultMode(READ_WRITE)
+      .interceptor(new WalkmanInterceptor())
+      .build()
+  @Rule public RecorderRule recorder = new RecorderRule(configuration)
   @Shared static def endpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   @BeforeClass

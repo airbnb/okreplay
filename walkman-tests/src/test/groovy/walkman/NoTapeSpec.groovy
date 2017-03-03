@@ -9,12 +9,12 @@ import spock.lang.Specification
 
 @Issue("https://github.com/robfletcher/betamax/issues/18")
 class NoTapeSpec extends Specification {
-  @Shared def configuration = Configuration.builder().build()
+  @Shared def configuration = new WalkmanConfig.Builder().build()
   @Shared def interceptor = new WalkmanInterceptor()
   @Shared def client = new OkHttpClient.Builder()
       .addInterceptor(interceptor)
       .build()
-  @Shared def recorder = new Recorder(configuration, interceptor)
+  @Shared def recorder = new Recorder(configuration)
   @Shared @AutoCleanup("stop") def proxy = new ProxyServer(configuration, interceptor)
 
   void setupSpec() {

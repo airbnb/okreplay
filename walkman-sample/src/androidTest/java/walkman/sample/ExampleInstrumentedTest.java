@@ -11,17 +11,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
-import walkman.Configuration;
+import walkman.AndroidTapeRoot;
 import walkman.MatchRules;
-import walkman.PermissionRule;
-import walkman.RecorderRule;
-import walkman.TapeDirectories;
 import walkman.TapeMode;
 import walkman.Walkman;
+import walkman.WalkmanConfig;
+import walkman.WalkmanRuleChain;
 
 import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -36,17 +34,17 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
   private final DependencyGraph graph = DependencyGraph.Companion.instance();
-  private final ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
-  private final TapeDirectories tapeDirectories = new TapeDirectories(getContext(), "example");
-  private final Configuration configuration = new Configuration.Builder()
-      .tapeRoot(tapeDirectories.get())
+  private final ActivityTestRule<MainActivity> activityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
+  private final WalkmanConfig configuration = new WalkmanConfig.Builder()
+      .tapeRoot(new AndroidTapeRoot(getContext(), "example"))
       .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
+      .interceptor(graph.getWalkmanInterceptor())
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)
       .build();
-  @Rule public final TestRule ruleChain = RuleChain.outerRule(activityTestRule)
-      .around(new PermissionRule(tapeDirectories, activityTestRule))
-      .around(new RecorderRule(configuration, graph.getWalkmanInterceptor()));
+  @Rule public final TestRule testRule =
+      new WalkmanRuleChain(configuration, activityTestRule).get();
   private final IdlingResource okHttp3IdlingResource =
       OkHttp3IdlingResource.create("OkHttp", graph.getOkHttpClient());
 
@@ -60,7 +58,7 @@ public class ExampleInstrumentedTest {
 
   @Test
   @Walkman
-  public void useAppContext() throws Exception {
+  public void useAppContext() {
     assertEquals("walkman.sample", getTargetContext().getPackageName());
     onView(withId(R.id.navigation_repositories)).perform(click());
     onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));

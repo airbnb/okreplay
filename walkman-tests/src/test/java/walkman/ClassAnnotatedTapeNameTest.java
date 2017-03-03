@@ -31,11 +31,11 @@ import spock.lang.Issue;
 @Walkman
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
-  private static final Configuration configuration = Configuration.builder()
+  private static final WalkmanConfig configuration = new WalkmanConfig.Builder()
       .tapeRoot(TAPE_ROOT)
+      .interceptor(new WalkmanInterceptor())
       .build();
-  @ClassRule public static RecorderRule recorder = new RecorderRule(configuration,
-      new WalkmanInterceptor());
+  @ClassRule public static RecorderRule recorder = new RecorderRule(configuration);
 
   @AfterClass public static void deleteTempDir() {
     ResourceGroovyMethods.deleteDir(TAPE_ROOT);

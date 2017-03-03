@@ -14,15 +14,15 @@ import static walkman.TapeMode.READ_WRITE
 @Unroll
 class IgnoreHostsSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") File tapeRoot = Files.createTempDir()
-  def configuration = Spy(Configuration, constructorArgs: [Configuration.builder()
+  def configuration = Spy(WalkmanConfig, constructorArgs: [new WalkmanConfig.Builder()
       .tapeRoot(tapeRoot)
+      .interceptor(new WalkmanInterceptor())
       .defaultMode(READ_WRITE)])
-  def interceptor = new WalkmanInterceptor()
-  @AutoCleanup("stop") Recorder recorder = new Recorder(configuration, interceptor)
+  @AutoCleanup("stop") Recorder recorder = new Recorder(configuration)
   @Shared MockWebServer endpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   void setupSpec() {

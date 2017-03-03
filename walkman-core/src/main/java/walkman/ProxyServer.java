@@ -1,11 +1,11 @@
 package walkman;
 
 public class ProxyServer implements RecorderListener {
-  private final Configuration configuration;
+  private final WalkmanConfig configuration;
   private final WalkmanInterceptor interceptor;
   private boolean running;
 
-  public ProxyServer(Configuration configuration, WalkmanInterceptor interceptor) {
+  public ProxyServer(WalkmanConfig configuration, WalkmanInterceptor interceptor) {
     this.configuration = configuration;
     this.interceptor = interceptor;
   }

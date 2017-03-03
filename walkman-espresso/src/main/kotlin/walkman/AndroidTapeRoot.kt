@@ -19,19 +19,15 @@ import java.lang.RuntimeException
  * Took from: https://github.com/facebook/screenshot-tests-for-android/blob/master/core/src/main
  * /java/com/facebook/testing/screenshot/internal/ScreenshotDirectories.java
  */
-class TapeDirectories(private val context: Context, testName: String) {
-  private val directory: File
+class AndroidTapeRoot(private val context: Context, testName: String) : TapeRoot {
+  private val directory: File = getSdcardDir(testName)
 
-  init {
-    this.directory = getSdcardDir(testName)
-  }
-
-  fun get(): File {
+  override fun get(): File {
     return directory
   }
 
   internal fun grantPermissionsIfNeeded(activity: Activity) {
-    val res = context.checkCallingPermission(WRITE_EXTERNAL_STORAGE)
+    val res = context.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE)
     if (res != PackageManager.PERMISSION_GRANTED) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         requestWriteExternalStoragePermissions(activity)

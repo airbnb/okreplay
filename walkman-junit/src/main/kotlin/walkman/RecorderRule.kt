@@ -13,9 +13,7 @@ import java.util.logging.Logger
  * _JUnit @Rule_ allowing tests annotated with `@Walkman` to automatically
  * activate Walkman recording.
  */
-class RecorderRule(
-    configuration: Configuration,
-    interceptor: WalkmanInterceptor) : Recorder(configuration, interceptor), TestRule {
+class RecorderRule(configuration: WalkmanConfig) : Recorder(configuration), TestRule {
   override fun apply(statement: Statement, description: Description): Statement {
     val annotation = description.getAnnotation(Walkman::class.java)
     if (annotation != null) {

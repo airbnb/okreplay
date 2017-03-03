@@ -14,17 +14,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import okhttp3.Interceptor;
-
 /**
  * The configuration used by walkman.
  *
- * `Configuration` instances are created with a builder returned by the
- * {@link #builder()} factory method. For example:
+ * `WalkmanConfig` instances are created with a builder. For example:
  *
  * [source,java]
  * ----
- * Configuration configuration = Configuration.builder()
+ * WalkmanConfig configuration = new WalkmanConfig.Builder()
  * .tapeRoot(tapeRoot)
  * .ignoreLocalhost(true)
  * .build();
@@ -32,13 +29,14 @@ import okhttp3.Interceptor;
  *
  * @see Builder
  */
-public class Configuration {
+@SuppressWarnings("WeakerAccess")
+public class WalkmanConfig {
   public static final String DEFAULT_TAPE_ROOT = "src/test/resources/walkman/tapes";
   public static final TapeMode DEFAULT_MODE = TapeMode.READ_ONLY;
   public static final MatchRule DEFAULT_MATCH_RULE = ComposedMatchRule.of(MatchRules.method,
       MatchRules.uri);
 
-  private final File tapeRoot;
+  private final TapeRoot tapeRoot;
   private final TapeMode defaultMode;
   private final ImmutableCollection<String> ignoreHosts;
   private final boolean ignoreLocalhost;
@@ -46,36 +44,20 @@ public class Configuration {
   private final boolean sslEnabled;
   private final WalkmanInterceptor interceptor;
 
-  protected Configuration(Builder builder) {
+  protected WalkmanConfig(Builder builder) {
     this.tapeRoot = builder.tapeRoot;
     this.defaultMode = builder.defaultMode;
     this.defaultMatchRule = builder.defaultMatchRule;
     this.ignoreHosts = builder.ignoreHosts;
     this.ignoreLocalhost = builder.ignoreLocalhost;
     this.sslEnabled = builder.sslEnabled;
-    this.interceptor = new WalkmanInterceptor();
-  }
-
-  public static Builder builder() {
-    try {
-      Builder builder = new Builder();
-      URL propertiesFile = Configuration.class.getResource("/walkman.properties");
-      if (propertiesFile != null) {
-        Properties properties = new Properties();
-        properties.load(propertiesFile.openStream());
-        return builder.withProperties(properties);
-      } else {
-        return builder;
-      }
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    this.interceptor = builder.interceptor;
   }
 
   /**
    * The base directory where tape files are stored.
    */
-  public File getTapeRoot() {
+  public TapeRoot getTapeRoot() {
     return tapeRoot;
   }
 
@@ -117,7 +99,7 @@ public class Configuration {
     return ignoreLocalhost;
   }
 
-  public Interceptor interceptor() {
+  public WalkmanInterceptor interceptor() {
     return interceptor;
   }
 
@@ -139,12 +121,26 @@ public class Configuration {
   }
 
   public static class Builder {
-    File tapeRoot = new File(Configuration.DEFAULT_TAPE_ROOT);
-    TapeMode defaultMode = Configuration.DEFAULT_MODE;
-    MatchRule defaultMatchRule = Configuration.DEFAULT_MATCH_RULE;
+    TapeRoot tapeRoot = new DefaultTapeRoot(new File(WalkmanConfig.DEFAULT_TAPE_ROOT));
+    TapeMode defaultMode = WalkmanConfig.DEFAULT_MODE;
+    MatchRule defaultMatchRule = WalkmanConfig.DEFAULT_MATCH_RULE;
     ImmutableCollection<String> ignoreHosts = ImmutableList.of();
     boolean ignoreLocalhost;
     boolean sslEnabled;
+    WalkmanInterceptor interceptor;
+
+    public Builder() {
+      try {
+        URL propertiesFile = WalkmanConfig.class.getResource("/walkman.properties");
+        if (propertiesFile != null) {
+          Properties properties = new Properties();
+          properties.load(propertiesFile.openStream());
+          withProperties(properties);
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
 
     public Builder withProperties(Properties properties) {
       if (properties.containsKey("walkman.tapeRoot")) {
@@ -181,12 +177,21 @@ public class Configuration {
     }
 
     public Builder tapeRoot(File tapeRoot) {
+      return tapeRoot(new DefaultTapeRoot(tapeRoot));
+    }
+
+    public Builder tapeRoot(TapeRoot tapeRoot) {
       this.tapeRoot = tapeRoot;
       return this;
     }
 
     public Builder defaultMode(TapeMode defaultMode) {
       this.defaultMode = defaultMode;
+      return this;
+    }
+
+    public Builder interceptor(WalkmanInterceptor interceptor) {
+      this.interceptor = interceptor;
       return this;
     }
 
@@ -215,8 +220,8 @@ public class Configuration {
       return this;
     }
 
-    public Configuration build() {
-      return new Configuration(this);
+    public WalkmanConfig build() {
+      return new WalkmanConfig(this);
     }
   }
 }

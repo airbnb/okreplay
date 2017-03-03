@@ -16,17 +16,17 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Timeout(10)
 class NoJUnitSpec extends Specification {
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def configuration = Configuration.builder()
+  @Shared def configuration = new WalkmanConfig.Builder()
       .tapeRoot(tapeRoot)
       .sslEnabled(true)
+      .interceptor(new WalkmanInterceptor())
       .build()
-  @Shared WalkmanInterceptor interceptor = new WalkmanInterceptor()
-  @Shared Recorder recorder = new Recorder(configuration, interceptor)
+  @Shared Recorder recorder = new Recorder(configuration)
 
   @Shared def httpEndpoint = new MockWebServer()
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   void setupSpec() {

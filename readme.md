@@ -38,6 +38,7 @@ Add the `WalkmanInterceptor` to your `OkHttpClient`:
 WalkmanInterceptor = new WalkmanInterceptor();
 OkHttpClient client = new OkHttpClient.Builder()
   .addInterceptor(walkmanInterceptor)
+  .build()
 ```
 
 By default the interceptor won't do anything unless it's explicitly started. Then, in your

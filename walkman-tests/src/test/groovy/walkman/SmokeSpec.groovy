@@ -31,15 +31,15 @@ import static java.net.HttpURLConnection.HTTP_OK
 @Walkman
 class SmokeSpec extends Specification {
   static final TAPE_ROOT = new File(SmokeSpec.getResource("/walkman/tapes").toURI())
-  @Shared def configuration = Configuration.builder()
+  @Shared def configuration = new WalkmanConfig.Builder()
       .sslEnabled(true)
       .tapeRoot(TAPE_ROOT)
+      .interceptor(new WalkmanInterceptor())
       .build()
-  @Shared def interceptor = new WalkmanInterceptor()
-  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration, interceptor)
+  @Shared @ClassRule RecorderRule recorder = new RecorderRule(configuration)
 
   def client = new OkHttpClient.Builder()
-      .addInterceptor(interceptor)
+      .addInterceptor(configuration.interceptor())
       .build()
 
   void "#type response data"() {

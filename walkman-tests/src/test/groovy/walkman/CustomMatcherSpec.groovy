@@ -18,6 +18,7 @@ import static walkman.TapeMode.READ_WRITE
 @Unroll
 class CustomMatcherSpec extends Specification {
   @Shared def tapeRoot = new File(CustomMatcherSpec.class.getResource("/walkman/tapes/").toURI())
+
   static def simplePost(OkHttpClient client, String url, String payload) {
     def request = new Request.Builder()
         .method("POST", RequestBody.create(MediaType.parse('text/plain'), payload))
@@ -29,16 +30,16 @@ class CustomMatcherSpec extends Specification {
   void "Using a custom matcher it should replay"() {
     given:
     def imr = new InstrumentedMatchRule()
-    def configuration = Configuration.builder()
+    def configuration = new WalkmanConfig.Builder()
         .sslEnabled(true)
         .tapeRoot(tapeRoot)
         .defaultMode(READ_ONLY)
         .defaultMatchRule(imr)
+        .interceptor(new WalkmanInterceptor())
         .build()
-    def interceptor = new WalkmanInterceptor()
-    def recorder = new Recorder(configuration, interceptor)
+    def recorder = new Recorder(configuration)
     def client = new OkHttpClient.Builder()
-        .addInterceptor(interceptor)
+        .addInterceptor(configuration.interceptor())
         .build()
     recorder.start("httpBinTape")
     imr.requestValidations << { r ->
@@ -64,16 +65,16 @@ class CustomMatcherSpec extends Specification {
     given:
     def tapeRoot = Files.createTempDir() //Using a temp dir this time
     def imr = new InstrumentedMatchRule()
-    def configuration = Configuration.builder()
+    def configuration = new WalkmanConfig.Builder()
         .sslEnabled(true)
         .tapeRoot(tapeRoot)
         .defaultMode(READ_WRITE)
         .defaultMatchRule(imr)
+        .interceptor(new WalkmanInterceptor())
         .build()
-    def interceptor = new WalkmanInterceptor()
-    def recorder = new Recorder(configuration, interceptor)
+    def recorder = new Recorder(configuration)
     def client = new OkHttpClient.Builder()
-        .addInterceptor(interceptor)
+        .addInterceptor(configuration.interceptor())
         .build()
     recorder.start("httpBinTape")
 
