@@ -39,7 +39,7 @@ ext {
   androidConfig = [
       compileSdkVersion: 25,
       buildToolsVersion: '25.0.2',
-      minSdkVersion    : 18,  // for tests only, due to UIAutomator
+      minSdkVersion    : 9,
       targetSdkVersion : 25
   ]
 }
