@@ -2,15 +2,8 @@ package walkman
 
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
-import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.uiautomator.UiDevice
-import android.support.test.uiautomator.UiObjectNotFoundException
-import android.support.test.uiautomator.UiSelector
-import android.support.v4.app.ActivityCompat
 import java.io.File
 import java.lang.RuntimeException
 
@@ -26,19 +19,11 @@ class AndroidTapeRoot(private val context: Context, testName: String) : TapeRoot
     return directory
   }
 
-  internal fun grantPermissionsIfNeeded(activity: Activity) {
+  internal fun grantPermissionsIfNeeded() {
     val res = context.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE)
     if (res != PackageManager.PERMISSION_GRANTED) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        requestWriteExternalStoragePermissions(activity)
-        Thread.sleep(DELAY_WAIT_FOR_PERMISSIONS_DIALOG)
-        grantPermissions()
-      } else {
-        throw RuntimeException("We need WRITE_EXTERNAL_STORAGE permission for Walkman")
-      }
-      // After granting the permission, we need to wait a little bit before creating the directory
-      // otherwise it will fail if we do it immediately after.
-      Thread.sleep(DELAY_CREATE_DIRECTORY_MS)
+      throw RuntimeException("We need WRITE_EXTERNAL_STORAGE permission for Walkman. " +
+          "Please add `adbOptions { installOptions \"-g\" }` to your build.gradle file.")
     }
     directory.mkdirs()
     if (!directory.exists()) {
@@ -58,27 +43,6 @@ class AndroidTapeRoot(private val context: Context, testName: String) : TapeRoot
   }
 
   companion object {
-    private val DELAY_CREATE_DIRECTORY_MS: Long = 1000
-    private val DELAY_WAIT_FOR_PERMISSIONS_DIALOG: Long = 1000
-    private val REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 0
-
-    private fun requestWriteExternalStoragePermissions(activity: Activity) {
-      ActivityCompat.requestPermissions(activity, arrayOf(WRITE_EXTERNAL_STORAGE),
-          REQUEST_CODE_WRITE_EXTERNAL_STORAGE)
-    }
-
-    private fun grantPermissions() {
-      val device = UiDevice.getInstance(getInstrumentation())
-      val allowPermissions = device.findObject(UiSelector().text("ALLOW"))
-      if (allowPermissions.exists()) {
-        try {
-          allowPermissions.click()
-        } catch (e: UiObjectNotFoundException) {
-          throw RuntimeException("There is no permissions dialog to interact with ", e)
-        }
-      }
-    }
-
     @SuppressLint("SetWorldWritable") private fun setWorldWriteable(dir: File) {
       // Context.MODE_WORLD_WRITEABLE has been deprecated, so let's manually set this
       dir.setWritable(/* writeable = */true, /* ownerOnly = */ false)
