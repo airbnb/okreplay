@@ -42,7 +42,7 @@ class WalkmanPluginTest {
     pullTask.execute()
     verify(device).pullDirectory(
         "${project.projectDir.absolutePath}/src/androidTest/walkman/tapes",
-        "/foo/src/androidTest/walkman/tapes/com.example.walkman.test/")
+        "/foo/walkman/tapes/com.example.walkman.test/")
   }
 
   private fun prepareProject(): Project {

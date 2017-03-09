@@ -32,13 +32,13 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class ExampleInstrumentedFooTest {
   private final DependencyGraph graph = DependencyGraph.Companion.instance();
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final WalkmanConfig configuration = new WalkmanConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(getContext(), "example"))
-      .defaultMode(TapeMode.READ_ONLY)
+      .tapeRoot(new AndroidTapeRoot(getContext(), getClass().getSimpleName()))
+      .defaultMode(TapeMode.READ_WRITE)
       .sslEnabled(true)
       .interceptor(graph.getWalkmanInterceptor())
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)
@@ -58,7 +58,7 @@ public class ExampleInstrumentedTest {
 
   @Test
   @Walkman
-  public void useAppContext() {
+  public void foo() {
     assertEquals("walkman.sample", getTargetContext().getPackageName());
     onView(withId(R.id.navigation_repositories)).perform(click());
     onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));

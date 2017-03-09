@@ -6,7 +6,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
-import walkman.WalkmanPlugin.Companion.TAPES_DIR
+import walkman.WalkmanPlugin.Companion.LOCAL_TAPES_DIR
+import walkman.WalkmanPlugin.Companion.REMOTE_TAPES_DIR
 import java.io.File
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ open class PullTapesTask
   }
 
   @TaskAction internal fun pullTapes() {
-    outputDir = project.file(TAPES_DIR)
+    outputDir = project.file(LOCAL_TAPES_DIR)
     _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
       if (externalStorage.isNullOrEmpty()) {
@@ -31,7 +32,7 @@ open class PullTapesTask
       }
       val localDir = outputDir!!.absolutePath
       FileUtils.forceMkdir(outputDir)
-      it.pullDirectory(localDir, "$externalStorage/$TAPES_DIR/$_packageName/")
+      it.pullDirectory(localDir, "$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
     }
   }
 
