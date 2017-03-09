@@ -116,6 +116,6 @@ class WalkmanPlugin
   }
 
   companion object {
-    val TAPES_DIR = "walkman/tapes"
+    val TAPES_DIR = "src/androidTest/walkman/tapes"
   }
 }

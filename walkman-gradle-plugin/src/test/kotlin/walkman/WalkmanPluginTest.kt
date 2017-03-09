@@ -41,8 +41,8 @@ class WalkmanPluginTest {
     val pullTask: DefaultTask = project.tasks.getByName(PullTapesTask.NAME) as DefaultTask
     pullTask.execute()
     verify(device).pullDirectory(
-        "${project.projectDir.absolutePath}/walkman/tapes",
-        "/foo/walkman/tapes/com.example.walkman.test/")
+        "${project.projectDir.absolutePath}/src/androidTest/walkman/tapes",
+        "/foo/src/androidTest/walkman/tapes/com.example.walkman.test/")
   }
 
   private fun prepareProject(): Project {
