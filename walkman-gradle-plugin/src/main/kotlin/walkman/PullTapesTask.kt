@@ -5,6 +5,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskExecutionException
 import walkman.WalkmanPlugin.Companion.TAPES_DIR
 import java.io.File
 import javax.inject.Inject
@@ -24,6 +25,10 @@ open class PullTapesTask
     outputDir = project.file(TAPES_DIR)
     _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
+      if (externalStorage.isNullOrEmpty()) {
+        throw TaskExecutionException(this,
+            RuntimeException("Failed to retrieve the device external storage dir."))
+      }
       val localDir = outputDir!!.absolutePath
       FileUtils.forceMkdir(outputDir)
       it.pullDirectory(localDir, "$externalStorage/$TAPES_DIR/$_packageName/")

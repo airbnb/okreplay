@@ -57,6 +57,7 @@ class WalkmanPlugin
   private fun applyPlugin() {
     if (project != null) {
       val project = this.project!!
+      // TODO: Create different tasks per variant
       val pullTapesTask: TapeTask =
           project.tasks.create(PullTapesTask.NAME, PullTapesTask::class.java)
       val pushTapesTask: TapeTask =
@@ -70,7 +71,7 @@ class WalkmanPlugin
           val adbPath = globalScope.androidBuilder.sdkInfo.adb
           val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
           val testApplicationId = testApplicationId()
-          val deviceBridge = DeviceBridge(adbPath, adbTimeoutMs, project.logger)
+          val deviceBridge = DeviceBridgeProvider.get(adbPath, adbTimeoutMs, project)
           listOf(pullTapesTask, pushTapesTask).forEach {
             it.setDeviceBridge(deviceBridge)
             it.setPackageName(testApplicationId)
