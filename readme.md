@@ -35,13 +35,42 @@ responses will be served from the network as usual and the interaction will be s
 Add the `WalkmanInterceptor` to your `OkHttpClient`:
 
 ```java
-WalkmanInterceptor = new WalkmanInterceptor();
+WalkmanInterceptor walkmanInterceptor = new WalkmanInterceptor();
 OkHttpClient client = new OkHttpClient.Builder()
   .addInterceptor(walkmanInterceptor)
   .build()
 ```
 
-By default the interceptor won't do anything unless it's explicitly started. Then, in your
+By default the interceptor won't do anything unless it's explicitly started.
+
+### JUnit integration
+
+TODO
+
+### Espresso integration
+
+In your instrumentation test class, add:
+
+```java
+private final ActivityTestRule<MainActivity> activityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
+  private final WalkmanConfig configuration = new WalkmanConfig.Builder()
+      .tapeRoot(new AndroidTapeRoot(getContext(), "testName"))
+      .defaultMode(TapeMode.READ_WRITE) // or TapeMode.READ_ONLY
+      .sslEnabled(true)
+      .interceptor(walkmanInterceptor))
+      .build();
+  @Rule public final TestRule testRule =
+      new WalkmanRuleChain(configuration, activityTestRule).get();
+
+  @Test
+  @Walkman
+  public void testFooBar() {
+    // write your test as usual...
+  }
+```
+
+**IMPORTANT**: If you already have one, remove the `@Rule` annotation from your `ActivityTestRule`.
 
 ## Download
 
@@ -49,13 +78,13 @@ Download [the latest JAR][2] or grab via Maven:
 ```xml
 <dependency>
   <groupId>com.airbnb.walkman</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>walkman</artifactId>
   <version>1.1.0-SNAPSHOT</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.walkman:core:1.0.0-SNAPSHOT'
+compile 'com.airbnb.walkman:walkman:1.0.0-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].

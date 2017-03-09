@@ -115,6 +115,7 @@ class WalkmanPlugin
     }
   }
 
+  // TODO: Make this configurable from the plugin extension script
   companion object {
     val LOCAL_TAPES_DIR = "src/androidTest/walkman/tapes"
     // This is also hardcoded in AndroidTapeRoot#getSdcardDir()
