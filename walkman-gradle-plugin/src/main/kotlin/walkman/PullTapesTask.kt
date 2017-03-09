@@ -1,9 +1,11 @@
 package walkman
 
+import org.apache.commons.io.FileUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskExecutionException
 import walkman.WalkmanPlugin.Companion.TAPES_DIR
 import java.io.File
 import javax.inject.Inject
@@ -11,9 +13,8 @@ import javax.inject.Inject
 open class PullTapesTask
 @Inject constructor() : DefaultTask(), TapeTask {
   @OutputDirectory private var outputDir: File? = null
-  @Input var _adbPath: File? = null
-  @Input var _adbTimeoutMs: Int = 0
   @Input var _packageName: String? = null
+  @Input var _deviceBridge: DeviceBridge? = null
 
   init {
     description = "Pull Walkman tapes from the Device SD Card"
@@ -21,24 +22,24 @@ open class PullTapesTask
   }
 
   @TaskAction internal fun pullTapes() {
-    val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     outputDir = project.file(TAPES_DIR)
-    deviceBridge.devices().forEach {
+    _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
-      val tapesPath = String.format("%s/$TAPES_DIR/%s/", externalStorage, _packageName)
-      it.pullDirectory(outputDir!!.absolutePath, tapesPath)
+      if (externalStorage.isNullOrEmpty()) {
+        throw TaskExecutionException(this,
+            RuntimeException("Failed to retrieve the device external storage dir."))
+      }
+      val localDir = outputDir!!.absolutePath
+      FileUtils.forceMkdir(outputDir)
+      it.pullDirectory(localDir, "$externalStorage/$TAPES_DIR/$_packageName/")
     }
   }
 
-  override fun setAdbPath(file: File) {
-    _adbPath = file
+  override fun setDeviceBridge(deviceBridge: DeviceBridge) {
+    _deviceBridge = deviceBridge
   }
 
-  override fun setAdbTimeoutMs(timeout: Int) {
-    _adbTimeoutMs = timeout
-  }
-
-  override fun setTestApplicationId(packageName: String) {
+  override fun setPackageName(packageName: String) {
     _packageName = packageName
   }
 

@@ -5,13 +5,11 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import walkman.WalkmanPlugin.Companion.TAPES_DIR
-import java.io.File
 import javax.inject.Inject
 
 open class PushTapesTask
 @Inject constructor() : DefaultTask(), TapeTask {
-  @Input var _adbPath: File? = null
-  @Input var _adbTimeoutMs: Int = 0
+  @Input var _deviceBridge: DeviceBridge? = null
   @Input var _packageName: String? = null
 
   init {
@@ -20,9 +18,8 @@ open class PushTapesTask
   }
 
   @TaskAction internal fun pushTapes() {
-    val deviceBridge = DeviceBridge(_adbPath!!, _adbTimeoutMs, logger)
     val inputDir = project.file(WalkmanPlugin.TAPES_DIR)
-    deviceBridge.devices().forEach {
+    _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
       val tapesPath = String.format("%s/$TAPES_DIR/%s/", externalStorage, _packageName)
       // TODO: Remove all remote files first
@@ -31,16 +28,12 @@ open class PushTapesTask
     }
   }
 
-  override fun setAdbPath(file: File) {
-    _adbPath = file
+  override fun setDeviceBridge(deviceBridge: DeviceBridge) {
+    _deviceBridge = deviceBridge
   }
 
-  override fun setAdbTimeoutMs(timeout: Int) {
-    _adbTimeoutMs = timeout
-  }
+  override fun setPackageName(packageName: String) {
 
-  override fun setTestApplicationId(packageName: String) {
-    _packageName = packageName
   }
 
   companion object {

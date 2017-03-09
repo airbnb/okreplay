@@ -3,7 +3,10 @@ package walkman
 import org.gradle.api.logging.Logger
 import java.io.File
 
-internal class Device(private val deviceInterface: DeviceInterface, private val logger: Logger) {
+internal open class Device(
+    private val deviceInterface: DeviceInterface,
+    private val logger: Logger
+) {
   internal fun pullDirectory(localPath: String, remotePath: String) {
     logger.info("Pulling remote $remotePath to local $localPath")
     deviceInterface.pull(remotePath, localPath)

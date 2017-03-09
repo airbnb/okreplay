@@ -7,7 +7,7 @@ import org.gradle.api.logging.Logger
 import walkman.DeviceInterface
 import java.io.File
 
-internal class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
+open class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
   private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
 
   init {
