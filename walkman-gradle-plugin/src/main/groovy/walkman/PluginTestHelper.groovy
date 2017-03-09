@@ -4,10 +4,6 @@ import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
 
 class PluginTestHelper {
-  static def setupJavaProject(Project project) {
-    project.apply plugin: 'java'
-  }
-
   static def setupDefaultAndroidProject(Project project) {
     setupAndroidProject(project)
     project.android {
