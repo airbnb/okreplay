@@ -17,7 +17,7 @@ ext {
       cglib        : "cglib:cglib-nodep:2.2.2",
       groovy       : "org.codehaus.groovy:groovy-all:2.4.5:indy",
       guava        : "com.google.guava:guava:20.0",
-      ddmlib       : 'com.android.tools.ddms:ddmlib:25.3.0-rc1',
+      ddmlib       : 'com.android.tools.ddms:ddmlib:25.3.0',
       junit        : "junit:junit:4.12",
       mockito      : 'org.mockito:mockito-core:2.7.13',
       okhttp       : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
@@ -31,7 +31,6 @@ ext {
         exclude module: "groovy-all"
         exclude module: "junit"
       }),
-      uiautomator  : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1',
       espresso     : dependencies.create('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
       })
@@ -40,7 +39,7 @@ ext {
   androidConfig = [
       compileSdkVersion: 25,
       buildToolsVersion: '25.0.2',
-      minSdkVersion    : 18,  // for tests only, due to UIAutomator
+      minSdkVersion    : 9,
       targetSdkVersion : 25
   ]
 }

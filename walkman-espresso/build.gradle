@@ -22,7 +22,6 @@ dependencies {
   compile project(':walkman-junit')
   compile dep.appcompat
   compile dep.espresso
-  compile dep.uiautomator
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
