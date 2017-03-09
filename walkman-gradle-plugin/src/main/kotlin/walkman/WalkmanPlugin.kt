@@ -70,10 +70,10 @@ class WalkmanPlugin
           val adbPath = globalScope.androidBuilder.sdkInfo.adb
           val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
           val testApplicationId = testApplicationId()
+          val deviceBridge = DeviceBridge(adbPath, adbTimeoutMs, project.logger)
           listOf(pullTapesTask, pushTapesTask).forEach {
-            it.setAdbPath(adbPath)
-            it.setAdbTimeoutMs(adbTimeoutMs)
-            it.setTestApplicationId(testApplicationId)
+            it.setDeviceBridge(deviceBridge)
+            it.setPackageName(testApplicationId)
           }
           runBefore("connected${targetName}AndroidTest", pushTapesTask)
           runAfter("connected${targetName}AndroidTest", pullTapesTask)
