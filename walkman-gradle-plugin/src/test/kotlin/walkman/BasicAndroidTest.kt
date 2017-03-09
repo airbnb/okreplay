@@ -20,7 +20,7 @@ internal constructor() {
     assertThat(pushTask).isNotNull()
     assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
     assertThat(pushTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(File(testProjectDir, "walkman/tapes/testTape.yml").isFile).isTrue()
+    assertThat(File(testProjectDir, "src/androidTest/walkman/tapes/testTape.yml").isFile).isTrue()
   }
 
   @Test fun createsLocalTapesDirectoryIfNotExists() {
@@ -29,7 +29,7 @@ internal constructor() {
     val pullTask = result!!.task(":${PullTapesTask.NAME}")
     assertThat(pullTask).isNotNull()
     assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(File(testProjectDir, "walkman/tapes").isDirectory).isTrue()
+    assertThat(File(testProjectDir, "src/androidTest/walkman/tapes").isDirectory).isTrue()
   }
 
   private fun runGradleForProjectDir(projectDir: File, taskName: String): BuildResult? {
