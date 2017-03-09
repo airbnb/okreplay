@@ -28,27 +28,27 @@ class WalkmanPlugin
     }
   }
 
-  private fun runBefore(dependentTaskName: String, task: Task) {
+  private fun Task.runBefore(dependentTaskName: String) {
     try {
       val taskToFind = project!!.tasks.getByName(dependentTaskName)
-      taskToFind.dependsOn(task)
+      taskToFind.dependsOn(this)
     } catch (e: UnknownTaskException) {
       project!!.tasks.whenTaskAdded { dependentTask ->
         if (dependentTask.name == dependentTaskName) {
-          dependentTask.dependsOn(task)
+          dependentTask.dependsOn(this)
         }
       }
     }
   }
 
-  private fun runAfter(dependentTaskName: String, task: Task) {
+  private fun Task.runAfter(dependentTaskName: String) {
     try {
       val taskToFind = project!!.tasks.getByName(dependentTaskName)
-      taskToFind.finalizedBy(task)
+      taskToFind.finalizedBy(this)
     } catch (e: UnknownTaskException) {
       project!!.tasks.whenTaskAdded { dependentTask ->
         if (dependentTask.name == dependentTaskName) {
-          dependentTask.finalizedBy(task)
+          dependentTask.finalizedBy(this)
         }
       }
     }
@@ -75,8 +75,8 @@ class WalkmanPlugin
             it.setDeviceBridge(deviceBridge)
             it.setPackageName(testApplicationId)
           }
-          runBefore("connected${targetName}AndroidTest", pushTapesTask)
-          runAfter("connected${targetName}AndroidTest", pullTapesTask)
+          pushTapesTask.runBefore("connected${targetName}AndroidTest")
+          pullTapesTask.runAfter("connected${targetName}AndroidTest")
         }
       }
     }

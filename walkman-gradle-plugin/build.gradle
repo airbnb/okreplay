@@ -17,4 +17,8 @@ dependencies {
   testCompile dep.mockito
 }
 
+test {
+  testLogging.showStandardStreams = isCi
+}
+
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
