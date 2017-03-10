@@ -1,5 +1,5 @@
 def versions = [
-    walkmanVersion: '1.0.0-SNAPSHOT',
+    walkmanVersion: VERSION_NAME,
     kotlinVersion : '1.1.0',
     okhttpVersion : '3.4.2'
 ]

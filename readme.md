@@ -79,12 +79,12 @@ Download [the latest JAR][2] or grab via Maven:
 <dependency>
   <groupId>com.airbnb.walkman</groupId>
   <artifactId>walkman</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.walkman:walkman:1.0.0-SNAPSHOT'
+compile 'com.airbnb.walkman:walkman:1.0.1-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
