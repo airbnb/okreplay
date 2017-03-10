@@ -40,6 +40,9 @@ branches:
 notifications:
   email: false
 
+script:
+  - ./gradlew check --stacktrace
+
 sudo: false
 
 before_cache:
