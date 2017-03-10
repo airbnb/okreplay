@@ -8,8 +8,8 @@ class WalkmanRuleChain(
     private val configuration: WalkmanConfig,
     private val activityTestRule: ActivityTestRule<*>) {
   fun get(): TestRule {
-    return RuleChain.outerRule(activityTestRule)
-        .around(PermissionRule(configuration))
+    return RuleChain.outerRule(PermissionRule(configuration))
         .around(RecorderRule(configuration))
+        .around(activityTestRule)
   }
 }
