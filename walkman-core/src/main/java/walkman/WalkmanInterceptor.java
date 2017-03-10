@@ -34,7 +34,7 @@ public class WalkmanInterceptor implements Interceptor {
         Tape tape = this.tape.get();
         Request recordedRequest = OkHttpRequestAdapter.adapt(request);
         if (tape.isReadable() && tape.seek(recordedRequest)) {
-          LOG.warning(String.format("Playing back from tape %s", tape.getName()));
+          LOG.info(String.format("Playing back from tape %s", tape.getName()));
           Response recordedResponse = tape.play(recordedRequest);
           okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
           okhttpResponse = setWalkmanHeader(okhttpResponse, "PLAY");

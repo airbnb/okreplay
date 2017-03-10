@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
@@ -26,7 +27,7 @@ import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
 public class YamlTapeLoader implements TapeLoader<YamlTape> {
   private static final String FILE_CHARSET = "UTF-8";
   private final FileResolver fileResolver;
-  private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getName());
+  private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getSimpleName());
 
   public YamlTapeLoader(File tapeRoot) {
     fileResolver = new FileResolver(tapeRoot);
@@ -38,8 +39,9 @@ public class YamlTapeLoader implements TapeLoader<YamlTape> {
       try {
         BufferedReader reader = Files.newReader(file, Charset.forName(FILE_CHARSET));
         YamlTape tape = readFrom(reader);
-        LOG.info(String.format("loaded tape with %d recorded interactions from file %s...", tape
-            .size(), file.getAbsolutePath()));
+        LOG.info(String.format(Locale.US,
+            "loaded tape with %d recorded interactions from file %s...", tape.size(),
+            file.getAbsolutePath()));
         return tape;
       } catch (FileNotFoundException e) {
         throw new RuntimeException(e);

@@ -64,6 +64,6 @@ class RecorderRule(configuration: WalkmanConfig) : Recorder(configuration), Test
   }
 
   companion object {
-    private val LOG = Logger.getLogger(RecorderRule::class.java.name)
+    private val LOG = Logger.getLogger(RecorderRule::class.java.simpleName)
   }
 }
