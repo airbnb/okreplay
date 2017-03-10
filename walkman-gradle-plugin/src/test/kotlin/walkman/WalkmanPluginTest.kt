@@ -35,12 +35,22 @@ class WalkmanPluginTest {
     }
   }
 
-  @Test fun basicTest() {
+  @Test fun pull() {
     `when`(device.externalStorageDir()).thenReturn("/foo")
     val project = prepareProject()
     val pullTask: DefaultTask = project.tasks.getByName(PullTapesTask.NAME) as DefaultTask
     pullTask.execute()
     verify(device).pullDirectory(
+        "${project.projectDir.absolutePath}/src/androidTest/walkman/tapes",
+        "/foo/walkman/tapes/com.example.walkman.test/")
+  }
+
+  @Test fun push() {
+    `when`(device.externalStorageDir()).thenReturn("/foo")
+    val project = prepareProject()
+    val pullTask: DefaultTask = project.tasks.getByName(PushTapesTask.NAME) as DefaultTask
+    pullTask.execute()
+    verify(device).pushDirectory(
         "${project.projectDir.absolutePath}/src/androidTest/walkman/tapes",
         "/foo/walkman/tapes/com.example.walkman.test/")
   }

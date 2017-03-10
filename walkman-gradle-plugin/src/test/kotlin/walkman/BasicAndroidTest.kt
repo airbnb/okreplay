@@ -36,7 +36,7 @@ internal constructor() {
     return GradleRunner.create()
         .withProjectDir(projectDir)
         .withPluginClasspath()
-        .withArguments(taskName, "--stacktrace")
+        .withArguments(taskName, "--stacktrace", "--info")
         .forwardStdError(OutputStreamWriter(System.err))
         .forwardStdOutput(OutputStreamWriter(System.out))
         .build()
