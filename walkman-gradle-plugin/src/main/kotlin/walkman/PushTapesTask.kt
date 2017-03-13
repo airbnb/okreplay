@@ -32,7 +32,7 @@ open class PushTapesTask
   }
 
   override fun setPackageName(packageName: String) {
-
+    _packageName = packageName
   }
 
   companion object {

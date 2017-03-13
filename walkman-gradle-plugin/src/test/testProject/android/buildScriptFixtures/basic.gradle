@@ -23,12 +23,6 @@ android {
     minSdkVersion androidConfig.minSdkVersion
     targetSdkVersion androidConfig.targetSdkVersion
   }
-
-  lintOptions {
-    textReport true
-    textOutput 'stdout'
-    ignore 'InvalidPackage', 'GoogleAppIndexingWarning', 'AllowBackup'
-  }
 }
 
 repositories {
