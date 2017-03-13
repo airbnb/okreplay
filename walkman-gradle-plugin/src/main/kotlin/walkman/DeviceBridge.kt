@@ -14,7 +14,7 @@ open class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Lo
     try {
       deviceProvider.init()
     } catch (e: DeviceException) {
-      throw RuntimeException(e)
+      logger.warn(e.message)
     }
   }
 

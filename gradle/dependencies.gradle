@@ -1,7 +1,7 @@
 def versions = [
     // TODO: This is duplicated because the plugin unit tests cannot read VERSION_NAME from the
     // gradle.properties file. Figure out a way to fix this.
-    walkmanVersion: '1.0.1-SNAPSHOT',
+    walkmanVersion: '1.0.1',
     kotlinVersion : '1.1.0',
     okhttpVersion : '3.4.2'
 ]
