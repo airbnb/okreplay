@@ -34,19 +34,22 @@ public class WalkmanInterceptor implements Interceptor {
         Tape tape = this.tape.get();
         Request recordedRequest = OkHttpRequestAdapter.adapt(request);
         if (tape.isReadable() && tape.seek(recordedRequest)) {
-          LOG.info(String.format("Playing back from tape %s", tape.getName()));
+          LOG.info(String.format("Playing back request %s %s from tape '%s'",
+              recordedRequest.method(), recordedRequest.url().toString(), tape.getName()));
           Response recordedResponse = tape.play(recordedRequest);
           okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
           okhttpResponse = setWalkmanHeader(okhttpResponse, "PLAY");
           okhttpResponse = setViaHeader(okhttpResponse);
           return okhttpResponse;
         } else {
-          LOG.warning(String.format("no matching request found on %s", tape.getName()));
+          LOG.warning(String.format("no matching request found on tape '%s' for request %s %s",
+              tape.getName(), request.method(), request.url().toString()));
           okhttp3.Response okhttpResponse = chain.proceed(request);
           okhttpResponse = setWalkmanHeader(okhttpResponse, "REC");
           okhttpResponse = setViaHeader(okhttpResponse);
           if (tape.isWritable()) {
-            LOG.info(String.format("Recording to tape %s", tape.getName()));
+            LOG.info(String.format("Recording request %s %s to tape '%s'",
+                request.method(), request.url().toString(), tape.getName()));
             ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
             Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
             tape.record(recordedRequest, recordedResponse);
