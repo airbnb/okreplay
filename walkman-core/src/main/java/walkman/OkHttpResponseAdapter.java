@@ -38,8 +38,6 @@ class OkHttpResponseAdapter {
           source.buffer().clone());
     } catch (IOException e) {
       throw new RuntimeException("Failed to read response body", e);
-    } finally {
-      responseBody.close();
     }
   }
 }

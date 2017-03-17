@@ -56,6 +56,7 @@ public class WalkmanInterceptor implements Interceptor {
             okhttpResponse = okhttpResponse.newBuilder()
                 .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
                 .build();
+            okhttpResponse.body().close();
           } else {
             throw new NonWritableTapeException();
           }
