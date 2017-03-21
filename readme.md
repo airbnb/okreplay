@@ -72,7 +72,32 @@ private final ActivityTestRule<MainActivity> activityTestRule =
 
 **IMPORTANT**: If you already have one, remove the `@Rule` annotation from your `ActivityTestRule`.
 
-## Download
+## Gradle integration
+
+Add the classpath and apply the plugin in you build.config:
+
+```groovy
+buildscript {
+    repositories {
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    }
+    dependencies {
+        classpath 'com.airbnb.walkman:gradle-plugin:1.0.1-SNAPSHOT'
+    }
+}
+
+apply plugin: 'walkman'
+
+```
+
+You should now see both these tasks when you run ./gradlew tasks:
+
+```
+pullWalkmanTapes - Pull Walkman tapes from the Device SD Card
+pushWalkmanTapes - Push Walkman tapes to the device
+```
+
+## Download 
 
 Download [the latest JAR][2] or grab via Maven:
 ```xml
