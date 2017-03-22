@@ -33,6 +33,11 @@ class AndroidTapeRoot(private val context: Context, testName: String) : TapeRoot
     setWorldWriteable(directory)
   }
 
+  @SuppressLint("SetWorldWritable") private fun setWorldWriteable(dir: File) {
+    // Context.MODE_WORLD_WRITEABLE has been deprecated, so let's manually set this
+    dir.setWritable(/* writeable = */true, /* ownerOnly = */ false)
+  }
+
   private fun getSdcardDir(type: String): File {
     val externalStorage = System.getenv("EXTERNAL_STORAGE") ?: throw RuntimeException(
         "No \$EXTERNAL_STORAGE has been set on the device, please report this bug!")
@@ -40,12 +45,5 @@ class AndroidTapeRoot(private val context: Context, testName: String) : TapeRoot
     val child = "$parent/tapes-$type"
     File(parent).mkdirs()
     return File(child)
-  }
-
-  companion object {
-    @SuppressLint("SetWorldWritable") private fun setWorldWriteable(dir: File) {
-      // Context.MODE_WORLD_WRITEABLE has been deprecated, so let's manually set this
-      dir.setWritable(/* writeable = */true, /* ownerOnly = */ false)
-    }
   }
 }
