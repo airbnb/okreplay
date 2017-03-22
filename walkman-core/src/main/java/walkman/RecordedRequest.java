@@ -8,6 +8,7 @@ import java.util.Map;
 import okhttp3.CacheControl;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
 import okio.Buffer;
@@ -203,7 +204,10 @@ public class RecordedRequest extends RecordedMessage implements Request {
           Buffer buffer = new Buffer();
           body.writeTo(buffer);
           this.body = buffer.readByteArray();
-          addHeader(CONTENT_TYPE, body.contentType().toString());
+          MediaType contentType = body.contentType();
+          if (contentType != null) {
+            addHeader(CONTENT_TYPE, contentType.toString());
+          }
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
