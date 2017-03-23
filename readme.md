@@ -72,25 +72,25 @@ private final ActivityTestRule<MainActivity> activityTestRule =
 
 **IMPORTANT**: If you already have one, remove the `@Rule` annotation from your `ActivityTestRule`.
 
-### Gradle integration
+### Gradle plugin integration
 
 Add the classpath and apply the plugin in your build.config:
 
 ```groovy
 buildscript {
-    repositories {
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-    }
-    dependencies {
-        classpath 'com.airbnb.walkman:gradle-plugin:1.0.1-SNAPSHOT'
-    }
+  repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+  dependencies {
+    classpath 'com.airbnb.walkman:gradle-plugin:1.0.3'
+  }
 }
 
 apply plugin: 'walkman'
 
 ```
 
-You should now see both these tasks when you run ./gradlew tasks:
+You should now see these two tasks when you run `./gradlew tasks`:
 
 ```
 pullWalkmanTapes - Pull Walkman tapes from the Device SD Card
@@ -104,12 +104,12 @@ Download [the latest JAR][2] or grab via Maven:
 <dependency>
   <groupId>com.airbnb.walkman</groupId>
   <artifactId>walkman</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.walkman:walkman:1.0.1-SNAPSHOT'
+compile 'com.airbnb.walkman:walkman:1.0.3'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
