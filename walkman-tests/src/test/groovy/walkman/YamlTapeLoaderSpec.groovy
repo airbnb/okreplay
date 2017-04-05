@@ -1,7 +1,6 @@
 package walkman
 
 import com.google.common.io.Files
-import walkman.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Issue
 import spock.lang.Shared
@@ -20,7 +19,7 @@ class YamlTapeLoaderSpec extends Specification {
     given:
     def tapeName = 'yaml tape loader spec'
     def loader = new YamlTapeLoader(tapeRoot)
-    def tapeFile = loader.fileFor(tapeName)
+    def tapeFile = new File(tapeRoot, loader.normalize(tapeName))
 
     tapeFile.text = """\
 !tape

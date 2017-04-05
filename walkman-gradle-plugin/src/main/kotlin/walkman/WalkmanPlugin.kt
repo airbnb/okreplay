@@ -10,7 +10,6 @@ import org.gradle.api.Task
 import org.gradle.api.UnknownTaskException
 import org.gradle.api.internal.DefaultDomainObjectSet
 import walkman.PullTapesTask
-import walkman.PushTapesTask
 import javax.inject.Inject
 
 class WalkmanPlugin
@@ -60,8 +59,8 @@ class WalkmanPlugin
       // TODO: Create different tasks per variant
       val pullTapesTask: TapeTask =
           project.tasks.create(PullTapesTask.NAME, PullTapesTask::class.java)
-      val pushTapesTask: TapeTask =
-          project.tasks.create(PushTapesTask.NAME, PushTapesTask::class.java)
+      val clearTapesTask: TapeTask =
+          project.tasks.create(ClearTapesTask.NAME, ClearTapesTask::class.java)
       project.afterEvaluate {
         getVariants().all {
           val flavorNameCapitalized = it.flavorName.capitalize()
@@ -72,11 +71,11 @@ class WalkmanPlugin
           val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
           val testApplicationId = testApplicationId()
           val deviceBridge = DeviceBridgeProvider.get(adbPath, adbTimeoutMs, project)
-          listOf(pullTapesTask, pushTapesTask).forEach {
+          listOf(pullTapesTask, clearTapesTask).forEach {
             it.setDeviceBridge(deviceBridge)
             it.setPackageName(testApplicationId)
           }
-          pushTapesTask.runBefore("connected${targetName}AndroidTest")
+          clearTapesTask.runBefore("connected${targetName}AndroidTest")
           pullTapesTask.runAfter("connected${targetName}AndroidTest")
         }
       }
@@ -117,7 +116,7 @@ class WalkmanPlugin
 
   // TODO: Make this configurable from the plugin extension script
   companion object {
-    val LOCAL_TAPES_DIR = "src/androidTest/walkman/tapes"
+    val LOCAL_TAPES_DIR = "src/androidTest/assets/tapes"
     // This is also hardcoded in AndroidTapeRoot#getSdcardDir()
     // Need to use the same value in both places
     val REMOTE_TAPES_DIR = "walkman/tapes"

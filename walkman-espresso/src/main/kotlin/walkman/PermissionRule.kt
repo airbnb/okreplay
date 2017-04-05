@@ -4,9 +4,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class PermissionRule(
-    private val configuration: WalkmanConfig) : TestRule {
-
+class PermissionRule(private val configuration: WalkmanConfig) : TestRule {
   override fun apply(statement: Statement, description: Description): Statement {
     return object : Statement() {
       @Throws(Throwable::class) override fun evaluate() {

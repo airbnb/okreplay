@@ -6,10 +6,16 @@ import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import com.android.ddmlib.ShellCommandUnresponsiveException
+import com.android.ddmlib.AdbCommandRejectedException
+import com.android.ddmlib.NullOutputReceiver
+
+
 
 internal interface DeviceInterface {
   fun push(localFile: String, remotePath: String)
   fun pull(remotePath: String, localPath: String)
+  fun delete(remotePath: String)
   fun externalStorageDir(): String
 
   companion object Factory {
@@ -17,6 +23,21 @@ internal interface DeviceInterface {
   }
 
   private class Impl(private val deviceConn: DeviceConnector) : DeviceInterface {
+    override fun delete(remotePath: String) {
+      try {
+        deviceConn.idevice().executeShellCommand(String.format("rm -rf \"%1\$s\"", remotePath),
+            NullOutputReceiver(), 1, TimeUnit.MINUTES)
+      } catch (e: IOException) {
+        throw InstallException(e)
+      } catch (e: TimeoutException) {
+        throw InstallException(e)
+      } catch (e: AdbCommandRejectedException) {
+        throw InstallException(e)
+      } catch (e: ShellCommandUnresponsiveException) {
+        throw InstallException(e)
+      }
+    }
+
     override fun push(localFile: String, remotePath: String) {
       deviceConn.idevice().syncService.push(arrayOf(localFile), remotePath.toFileEntry(),
           SyncService.getNullProgressMonitor())

@@ -38,7 +38,7 @@ public class ExampleInstrumentedFooTest {
       new ActivityTestRule<>(MainActivity.class);
   private final WalkmanConfig configuration = new WalkmanConfig.Builder()
       .tapeRoot(new AndroidTapeRoot(getContext(), getClass().getSimpleName()))
-      .defaultMode(TapeMode.READ_WRITE)
+      .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
       .interceptor(graph.getWalkmanInterceptor())
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)

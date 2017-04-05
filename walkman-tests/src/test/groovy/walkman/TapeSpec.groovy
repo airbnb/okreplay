@@ -4,10 +4,6 @@ import com.google.common.io.Files
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import walkman.RecordedRequest
-import walkman.RecordedResponse
-import walkman.Tape
-import walkman.YamlTapeLoader
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -22,7 +18,7 @@ class TapeSpec extends Specification {
 
   // TODO: only need this because there's no convenient way to construct a tape
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
-  @Shared def loader = new YamlTapeLoader(tapeRoot)
+  @Shared YamlTapeLoader loader = new YamlTapeLoader(tapeRoot)
   @Shared Tape tape = loader.loadTape('tape_spec')
 
   RecordedRequest getRequest = new RecordedRequest.Builder()

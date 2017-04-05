@@ -1,7 +1,6 @@
 package walkman
 
 import org.gradle.api.logging.Logger
-import java.io.File
 
 internal open class Device(
     private val deviceInterface: DeviceInterface,
@@ -12,21 +11,10 @@ internal open class Device(
     deviceInterface.pull(remotePath, localPath)
   }
 
-  internal fun pushDirectory(localPath: String, remotePath: String) {
-    val allFiles = File(localPath)
-        .walkTopDown()
-        .filter { !it.isDirectory }
-        .toList()
-        .toTypedArray()
-    allFiles.forEach {
-      val suffix = it.absolutePath.removePrefix(localPath)
-      val finalRemotePath = suffix.split("/")
-          .dropLast(1)
-          .fold(File(remotePath), ::File)
-          .absolutePath
-      logger.info("Pushing local $it to remote $finalRemotePath")
-      deviceInterface.push(it.absolutePath, finalRemotePath)
-    }
+  /** Recursively delete all files and directories in the remote path */
+  internal fun deleteDirectory(remotePath: String) {
+    logger.info("Clearing remote directory $remotePath")
+    deviceInterface.delete(remotePath)
   }
 
   internal fun externalStorageDir() = deviceInterface.externalStorageDir()

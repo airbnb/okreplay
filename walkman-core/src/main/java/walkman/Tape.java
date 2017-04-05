@@ -1,11 +1,5 @@
 package walkman;
 
-import walkman.MatchRule;
-import walkman.TapeMode;
-import walkman.HandlerException;
-import walkman.Request;
-import walkman.Response;
-
 /** Represents a set of recorded HTTP interactions that can be played back or appended to. */
 public interface Tape {
 
