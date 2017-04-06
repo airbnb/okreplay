@@ -32,9 +32,9 @@ dependencies {
   compile project(':walkman-core')
   compile dep.appcompat
   compile dep.kotlinStdLib
-  compile 'com.android.support:design:25.2.0'
+  compile "com.android.support:design:${versions.appCompatVersion}"
   compile 'com.android.support:multidex:1.0.1'
-  compile 'com.android.support:support-vector-drawable:25.2.0'
+  compile "com.android.support:support-vector-drawable:${versions.appCompatVersion}"
   compile 'com.squareup.retrofit2:converter-moshi:2.2.0'
   compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
   compile 'com.squareup.retrofit2:converter-moshi:2.2.0'
@@ -44,7 +44,7 @@ dependencies {
   provided 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
   testCompile 'junit:junit:4.12'
   androidTestCompile project(':walkman-espresso')
-  androidTestCompile 'com.android.support:support-annotations:25.2.0'
+  androidTestCompile "com.android.support:support-annotations:${versions.appCompatVersion}"
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile 'com.squareup.okio:okio:1.11.0'

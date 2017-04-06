@@ -11,16 +11,16 @@ import java.io.OutputStreamWriter
 
 class BasicAndroidTest @Throws(IOException::class)
 internal constructor() {
-  @Test fun buildsPushesAndPullsTapeFiles() {
+  @Test fun buildsAndPullsTapeFiles() {
     val testProjectDir = setupBasicAndroidProject("basic")
     val result = runGradleForProjectDir(testProjectDir, "connectedAndroidTest")
-    val pullTask = result!!.task(":${PullTapesTask.NAME}")
-    val pushTask = result.task(":${PushTapesTask.NAME}")
+    val clearTask = result!!.task(":${ClearTapesTask.NAME}")
+    val pullTask = result.task(":${PullTapesTask.NAME}")
+    assertThat(clearTask).isNotNull()
     assertThat(pullTask).isNotNull()
-    assertThat(pushTask).isNotNull()
+    assertThat(clearTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
     assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(pushTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(File(testProjectDir, "src/androidTest/walkman/tapes/testTape.yml").isFile).isTrue()
+    assertThat(File(testProjectDir, "src/androidTest/assets/tapes/testTape.yml").isFile).isTrue()
   }
 
   @Test fun createsLocalTapesDirectoryIfNotExists() {
@@ -29,7 +29,7 @@ internal constructor() {
     val pullTask = result!!.task(":${PullTapesTask.NAME}")
     assertThat(pullTask).isNotNull()
     assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(File(testProjectDir, "src/androidTest/walkman/tapes").isDirectory).isTrue()
+    assertThat(File(testProjectDir, "src/androidTest/assets/tapes").isDirectory).isTrue()
   }
 
   private fun runGradleForProjectDir(projectDir: File, taskName: String): BuildResult? {

@@ -1,10 +1,6 @@
 package walkman;
 
-import java.io.File;
-
-/**
- * The interface for factories that load tapes from file storage.
- */
+/** The interface for factories that load tapes from file storage. */
 public interface TapeLoader<T extends Tape> {
   /**
    * Loads the named tape or returns a new blank tape if an existing tape cannot be located.
@@ -16,8 +12,6 @@ public interface TapeLoader<T extends Tape> {
 
   void writeTape(Tape tape);
 
-  /**
-   * @return an appropriate file for storing a tape with the supplied name.
-   */
-  File fileFor(String tapeName);
+  /** @return an appropriate filename for storing a tape with the supplied name. */
+  String normalize(String tapeName);
 }

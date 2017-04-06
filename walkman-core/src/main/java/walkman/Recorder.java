@@ -29,6 +29,7 @@ public class Recorder {
    *                  used.
    * @throws IllegalStateException if the Recorder is already started.
    */
+  @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   public void start(String tapeName, Optional<TapeMode> mode, Optional<MatchRule> matchRule) {
     if (tape != null) {
       throw new IllegalStateException("start called when Recorder is already started");
@@ -79,6 +80,6 @@ public class Recorder {
 
   /** Not just a property as `tapeRoot` gets changed during constructor. */
   private TapeLoader<? extends Tape> getTapeLoader() {
-    return new YamlTapeLoader(configuration.getTapeRoot().get());
+    return new YamlTapeLoader(configuration.getTapeRoot());
   }
 }

@@ -15,6 +15,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
 import walkman.AndroidTapeRoot;
+import walkman.AssetManager;
 import walkman.MatchRules;
 import walkman.TapeMode;
 import walkman.Walkman;
@@ -35,8 +36,8 @@ public class ExampleInstrumentedBarTest {
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final WalkmanConfig configuration = new WalkmanConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(getContext(), getClass().getSimpleName()))
-      .defaultMode(TapeMode.READ_WRITE)
+      .tapeRoot(new AndroidTapeRoot(new AssetManager(getContext()), getClass().getSimpleName()))
+      .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
       .interceptor(graph.getWalkmanInterceptor())
       .defaultMatchRules(MatchRules.host, MatchRules.path, MatchRules.method)

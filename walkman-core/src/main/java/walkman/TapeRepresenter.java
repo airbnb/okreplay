@@ -17,7 +17,6 @@ import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
 import java.beans.IntrospectionException;
-import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -39,10 +38,9 @@ import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
  * properties, empty collections and empty maps.
  */
 class TapeRepresenter extends Representer {
-  TapeRepresenter(FileResolver fileResolver) {
+  TapeRepresenter() {
     setPropertyUtils(new TapePropertyUtils());
     representers.put(URI.class, new RepresentURI());
-    representers.put(File.class, new RepresentFile(fileResolver));
     representers.put(RecordedInteraction.class, new RepresentRecordedInteraction());
     representers.put(RecordedRequest.class, new RepresentRecordedRequest());
     representers.put(RecordedResponse.class, new RepresentRecordedResponse());
@@ -96,18 +94,6 @@ class TapeRepresenter extends Representer {
   private class RepresentURI implements Represent {
     public Node representData(Object data) {
       return representScalar(Tag.STR, data.toString());
-    }
-  }
-
-  private class RepresentFile implements Represent {
-    private final FileResolver fileResolver;
-
-    RepresentFile(FileResolver fileResolver) {
-      this.fileResolver = fileResolver;
-    }
-
-    @Override public Node representData(Object data) {
-      return representScalar(YamlTape.FILE_TAG, fileResolver.toPath((File) data));
     }
   }
 
