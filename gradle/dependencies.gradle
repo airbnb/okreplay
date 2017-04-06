@@ -1,11 +1,11 @@
-def versions = [
+ext.versions = [
     // TODO: This is duplicated because the plugin unit tests cannot read VERSION_NAME from the
     // gradle.properties file. Figure out a way to fix this.
-    walkmanVersion: '1.0.3',
+    walkmanVersion: '1.1.0-SNAPSHOT',
     kotlinVersion : '1.1.0',
-    okhttpVersion : '3.4.2'
+    okhttpVersion : '3.4.2',
+    appCompatVersion: '25.3.1'
 ]
-
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
 
@@ -15,7 +15,7 @@ ext {
       androidPlugin: 'com.android.tools.build:gradle:2.3.0',
       groovyPlugin : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin  : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
-      appcompat    : 'com.android.support:appcompat-v7:25.2.0',
+      appcompat    : "com.android.support:appcompat-v7:$versions.appCompatVersion",
       cglib        : "cglib:cglib-nodep:2.2.2",
       groovy       : "org.codehaus.groovy:groovy-all:2.4.5:indy",
       guava        : "com.google.guava:guava:20.0",
@@ -29,6 +29,7 @@ ext {
       walkmanPlugin: "com.airbnb.walkman:gradle-plugin:$versions.walkmanVersion",
       kotlinPlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
       truth        : 'com.google.truth:truth:0.30',
+      robolectric  : "org.robolectric:robolectric:3.3.2",
       spock        : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
         exclude module: "groovy-all"
         exclude module: "junit"

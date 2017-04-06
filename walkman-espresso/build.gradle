@@ -11,6 +11,11 @@ android {
 
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+
+    androidTest {
+      assets.srcDir file('src/test/assets')
+    }
   }
 
   defaultConfig {
@@ -22,6 +27,9 @@ dependencies {
   compile project(':walkman-junit')
   compile dep.appcompat
   compile dep.espresso
+  testCompile dep.robolectric
+  testCompile dep.truth
+  testCompile dep.mockito
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

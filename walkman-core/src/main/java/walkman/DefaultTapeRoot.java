@@ -16,8 +16,8 @@ public class DefaultTapeRoot implements TapeRoot {
     this.root = root;
   }
 
-  @Override public Reader readerFor(String tapePath) {
-    File file = new File(root, tapePath);
+  @Override public Reader readerFor(String tapeFileName) {
+    File file = new File(root, tapeFileName);
     try {
       return Files.newReader(file, Charset.forName(FILE_CHARSET));
     } catch (FileNotFoundException e) {
@@ -36,8 +36,8 @@ public class DefaultTapeRoot implements TapeRoot {
     }
   }
 
-  @Override public boolean tapeExists(String tapePath) {
-    return new File(root, tapePath).isFile();
+  @Override public boolean tapeExists(String tapeFileName) {
+    return new File(root, tapeFileName).isFile();
   }
 
   @Override public File get() {

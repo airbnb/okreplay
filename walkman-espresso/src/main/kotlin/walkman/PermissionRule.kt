@@ -10,7 +10,9 @@ class PermissionRule(private val configuration: WalkmanConfig) : TestRule {
       @Throws(Throwable::class) override fun evaluate() {
         val tapeRoot = configuration.tapeRoot
         if (tapeRoot is AndroidTapeRoot) {
-          tapeRoot.grantPermissionsIfNeeded()
+          if (configuration.defaultMode.isWritable) {
+            tapeRoot.grantPermissionsIfNeeded()
+          }
         } else {
           throw IllegalArgumentException("TapeRoot needs to be an instance of AndroidTapeRoot")
         }
