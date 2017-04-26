@@ -71,7 +71,7 @@ public class WalkmanInterceptor implements Interceptor {
   private void throwTapeNotWritable(String request) {
     throw new NonWritableTapeException("\n"
         + "================================================================================\n"
-        + "An HTTP request has been made that VCR does not know how to handle:\n"
+        + "An HTTP request has been made that Walkman does not know how to handle:\n"
         + "  " + request + "\n\n"
         + "Under the current configuration, Walkman can not find a suitable HTTP interaction\n"
         + "to replay and is prevented from recording new requests. There are a few ways you\n"
