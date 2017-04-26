@@ -58,7 +58,7 @@ public class WalkmanInterceptor implements Interceptor {
                 .build();
             okhttpResponse.body().close();
           } else {
-            throw new NonWritableTapeException();
+            throwTapeNotWritable(request.method() + " " + request.url().toString());
           }
           return okhttpResponse;
         }
@@ -66,6 +66,25 @@ public class WalkmanInterceptor implements Interceptor {
     } else {
       return chain.proceed(request);
     }
+  }
+
+  private void throwTapeNotWritable(String request) {
+    throw new NonWritableTapeException("\n"
+        + "================================================================================\n"
+        + "An HTTP request has been made that Walkman does not know how to handle:\n"
+        + "  " + request + "\n\n"
+        + "Under the current configuration, Walkman can not find a suitable HTTP interaction\n"
+        + "to replay and is prevented from recording new requests. There are a few ways you\n"
+        + "can configure Walkman to handle this request:\n\n"
+        + "* If you want Walkman to record this request and play it back during future test\n"
+        + "  runs, you should set your annotation to `@Walkman(mode = TapeMode.READ_WRITE)`\n"
+        + "* If you believe this request has been already recorded, you can update your\n"
+        + "  `MatchRule` to make sure it matches one of the recorded requests by updating\n"
+        + "  your annotation like `@Walkman(match = { ... })`. You can also manually fix your\n"
+        + "  tape file(s) to make sure a match can be found. Sometimes the same request is\n"
+        + "  made with different parameters between multiple test runs causing the match.\n"
+        + "  rule to not find a suitable interaction to replay.\n"
+        + "================================================================================\n");
   }
 
   private boolean isHostIgnored(okhttp3.Request request) {
