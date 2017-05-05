@@ -1,4 +1,4 @@
-# Walkman [![Build Status](https://travis-ci.org/felipecsl/walkman.svg?branch=master)](https://travis-ci.org/felipecsl/walkman)
+# OkReplay [![Build Status](https://travis-ci.org/felipecsl/okreplay.svg?branch=master)](https://travis-ci.org/felipecsl/okreplay)
 
 Automatically record and replay OkHttp network interaction through your Android application.
 This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
@@ -10,7 +10,7 @@ rate limit) to break your tests. Writing custom stub web server code and configu
 to connect to a different URI when under test is tedious and might not accurately simulate the real
 service.
 
-Walkman aims to solve these problems by intercepting HTTP connections initiated by your application
+OkReplay aims to solve these problems by intercepting HTTP connections initiated by your application
 and replaying previously __recorded__ responses.
 
 The first time a test annotated with `@Betamax` is run, any HTTP traffic is recorded to a tape and
@@ -24,20 +24,20 @@ Tapes are stored to disk as YAML files and can be modified (or even created) by 
 to your project’s source control repository so they can be shared by other members of your team and
 used by your CI server. Different tests can use different tapes to simulate various response conditions.
 Each tape can hold multiple request/response interactions. An example tape file can be found
-[here](https://github.com/felipecsl/walkman/blob/master/walkman-tests/src/test/resources/walkman/tapes/smoke_spec.yaml).
+[here](https://github.com/felipecsl/okreplay/blob/master/okreplay-tests/src/test/resources/okreplay/tapes/smoke_spec.yaml).
 
 ## Usage
 
-Walkman comes as an OkHttp `Interceptor`. When "started", responses are served from the `Tape` file
+OkReplay comes as an OkHttp `Interceptor`. When "started", responses are served from the `Tape` file
 when a match is found for the `MatchRule` and the `TapeMode` is readable. If the `Tape` is writable,
 responses will be served from the network as usual and the interaction will be stored on a `Tape`.
 
-Add the `WalkmanInterceptor` to your `OkHttpClient`:
+Add the `OkReplayInterceptor` to your `OkHttpClient`:
 
 ```java
-WalkmanInterceptor walkmanInterceptor = new WalkmanInterceptor();
+OkReplayInterceptor OkReplayInterceptor = new OkReplayInterceptor();
 OkHttpClient client = new OkHttpClient.Builder()
-  .addInterceptor(walkmanInterceptor)
+  .addInterceptor(OkReplayInterceptor)
   .build()
 ```
 
@@ -54,17 +54,17 @@ In your instrumentation test class, add:
 ```java
 private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
-  private final WalkmanConfig configuration = new WalkmanConfig.Builder()
+  private final OkReplayConfig configuration = new OkReplayConfig.Builder()
       .tapeRoot(new AndroidTapeRoot(getContext(), "testName"))
       .defaultMode(TapeMode.READ_WRITE) // or TapeMode.READ_ONLY
       .sslEnabled(true)
-      .interceptor(walkmanInterceptor))
+      .interceptor(OkReplayInterceptor))
       .build();
   @Rule public final TestRule testRule =
-      new WalkmanRuleChain(configuration, activityTestRule).get();
+      new OkReplayRuleChain(configuration, activityTestRule).get();
 
   @Test
-  @Walkman
+  @OkReplay
   public void testFooBar() {
     // write your test as usual...
   }
@@ -82,19 +82,19 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.airbnb.walkman:gradle-plugin:1.0.3'
+    classpath 'com.airbnb.okreplay:gradle-plugin:1.0.3'
   }
 }
 
-apply plugin: 'walkman'
+apply plugin: 'okreplay'
 
 ```
 
 You should now see these two tasks when you run `./gradlew tasks`:
 
 ```
-pullWalkmanTapes - Pull Walkman tapes from the Device SD Card
-pushWalkmanTapes - Push Walkman tapes to the device
+pullOkReplayTapes - Pull OkReplay tapes from the Device SD Card
+pushOkReplayTapes - Push OkReplay tapes to the device
 ```
 
 ## Download 
@@ -102,14 +102,14 @@ pushWalkmanTapes - Push Walkman tapes to the device
 Download [the latest JAR][2] or grab via Maven:
 ```xml
 <dependency>
-  <groupId>com.airbnb.walkman</groupId>
-  <artifactId>walkman</artifactId>
+  <groupId>com.airbnb.okreplay</groupId>
+  <artifactId>okreplay</artifactId>
   <version>1.0.3</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.walkman:walkman:1.0.3'
+compile 'com.airbnb.okreplay:okreplay:1.0.3'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
@@ -129,6 +129,6 @@ License
     See the License for the specific language governing permissions and
     limitations under the License.
 
- [1]: http://airbnb.io/projects/walkman/
- [2]: https://search.maven.org/remote_content?g=com.airbnb.walkman&a=core&v=LATEST
+ [1]: http://airbnb.io/projects/okreplay/
+ [2]: https://search.maven.org/remote_content?g=com.airbnb.okreplay&a=core&v=LATEST
  [snap]: https://oss.sonatype.org/content/repositories/snapshots/
