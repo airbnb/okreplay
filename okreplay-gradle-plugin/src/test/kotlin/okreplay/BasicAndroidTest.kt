@@ -25,7 +25,7 @@ internal constructor() {
 
   @Test fun createsLocalTapesDirectoryIfNotExists() {
     val testProjectDir = setupBasicAndroidProject("notapes")
-    val result = runGradleForProjectDir(testProjectDir, "pullOkReplayTapes")
+    val result = runGradleForProjectDir(testProjectDir, PullTapesTask.NAME)
     val pullTask = result!!.task(":${PullTapesTask.NAME}")
     assertThat(pullTask).isNotNull()
     assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)

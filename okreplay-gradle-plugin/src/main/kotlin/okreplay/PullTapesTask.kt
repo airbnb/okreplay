@@ -24,14 +24,14 @@ open class PullTapesTask
 
   @TaskAction internal fun pullTapes() {
     outputDir = project.file(LOCAL_TAPES_DIR)
+    val localDir = outputDir!!.absolutePath
+    FileUtils.forceMkdir(outputDir)
     _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
       if (externalStorage.isNullOrEmpty()) {
         throw TaskExecutionException(this,
             RuntimeException("Failed to retrieve the device external storage dir."))
       }
-      val localDir = outputDir!!.absolutePath
-      FileUtils.forceMkdir(outputDir)
       it.pullDirectory(localDir, "$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
     }
   }
