@@ -1,0 +1,35 @@
+buildscript {
+  apply from: "../../../../gradle/dependencies.gradle"
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath dep.androidPlugin
+  }
+}
+
+plugins {
+  id 'com.android.application'
+  id 'okreplay'
+}
+
+android {
+  compileSdkVersion androidConfig.compileSdkVersion
+  buildToolsVersion androidConfig.buildToolsVersion
+
+  defaultConfig {
+    applicationId "okreplay.testProject.basic"
+    minSdkVersion androidConfig.minSdkVersion
+    targetSdkVersion androidConfig.targetSdkVersion
+  }
+}
+
+repositories {
+  jcenter()
+  maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+  compile dep.appcompat
+}

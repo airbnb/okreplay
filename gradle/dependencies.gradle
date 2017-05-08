@@ -1,7 +1,7 @@
 ext.versions = [
     // TODO: This is duplicated because the plugin unit tests cannot read VERSION_NAME from the
     // gradle.properties file. Figure out a way to fix this.
-    walkmanVersion: '1.1.0-SNAPSHOT',
+    okreplayVersion: '1.1.0-SNAPSHOT',
     kotlinVersion : '1.1.2',
     okhttpVersion : '3.4.2',
     appCompatVersion: '25.3.1'
@@ -26,7 +26,7 @@ ext {
       mockWebServer: "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
       snakeYaml    : "org.yaml:snakeyaml:1.16",
       kotlinStdLib : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
-      walkmanPlugin: "com.airbnb.walkman:gradle-plugin:$versions.walkmanVersion",
+      okreplayPlugin: "com.airbnb.walkman:gradle-plugin:$versions.okreplayVersion",
       kotlinPlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
       truth        : 'com.google.truth:truth:0.30',
       robolectric  : "org.robolectric:robolectric:3.3.2",

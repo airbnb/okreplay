@@ -26,7 +26,7 @@ after_success:
 
 env:
   global:
-    - ARTIFACT_PATHS=walkman-gradle-plugin/build/reports
+    - ARTIFACT_PATHS=okreplay-gradle-plugin/build/reports
     - ARTIFACTS_KEY=
     - ARTIFACTS_SECRET=
     - ARTIFACTS_BUCKET=
