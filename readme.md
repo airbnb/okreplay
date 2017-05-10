@@ -35,17 +35,13 @@ responses will be served from the network as usual and the interaction will be s
 Add the `OkReplayInterceptor` to your `OkHttpClient`:
 
 ```java
-OkReplayInterceptor OkReplayInterceptor = new OkReplayInterceptor();
+OkReplayInterceptor okReplayInterceptor = new OkReplayInterceptor();
 OkHttpClient client = new OkHttpClient.Builder()
-  .addInterceptor(OkReplayInterceptor)
+  .addInterceptor(okReplayInterceptor)
   .build()
 ```
 
 By default the interceptor won't do anything unless it's explicitly started.
-
-### JUnit integration
-
-TODO
 
 ### Espresso integration
 
@@ -55,10 +51,10 @@ In your instrumentation test class, add:
 private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(getContext(), "testName"))
+      .tapeRoot(new AndroidTapeRoot(getContext(), getClass()))
       .defaultMode(TapeMode.READ_WRITE) // or TapeMode.READ_ONLY
       .sslEnabled(true)
-      .interceptor(OkReplayInterceptor))
+      .interceptor(okReplayInterceptor))
       .build();
   @Rule public final TestRule testRule =
       new OkReplayRuleChain(configuration, activityTestRule).get();
@@ -104,12 +100,12 @@ Download [the latest JAR][2] or grab via Maven:
 <dependency>
   <groupId>com.airbnb.okreplay</groupId>
   <artifactId>okreplay</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0-SNAPSHOT</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.okreplay:okreplay:1.0.3'
+compile 'com.airbnb.okreplay:okreplay:1.1.0-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
