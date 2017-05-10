@@ -36,7 +36,7 @@ public class ExampleInstrumentedBarTest {
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(new AssetManager(getContext()), getClass().getSimpleName()))
+      .tapeRoot(new AndroidTapeRoot(getContext(), getClass()))
       .defaultMode(TapeMode.READ_ONLY)
       .sslEnabled(true)
       .interceptor(graph.getOkReplayInterceptor())
