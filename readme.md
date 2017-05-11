@@ -78,7 +78,7 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.airbnb.okreplay:gradle-plugin:1.0.3'
+    classpath 'com.airbnb.okreplay:gradle-plugin:1.1.0-SNAPSHOT'
   }
 }
 
