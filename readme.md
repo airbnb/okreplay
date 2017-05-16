@@ -13,11 +13,11 @@ service.
 OkReplay aims to solve these problems by intercepting HTTP connections initiated by your application
 and replaying previously __recorded__ responses.
 
-The first time a test annotated with `@Betamax` is run, any HTTP traffic is recorded to a tape and
+The first time a test annotated with `@OkReplay` is run, any HTTP traffic is recorded to a tape and
 subsequent test runs will play back the recorded HTTP response from the tape without actually
 connecting to the external server.
 
-Betamax works with JUnit and Espresso. Betamax can be used to test any Java or Android applications,
+OkReplay works with JUnit and Espresso. OkReplay can be used to test any Java or Android applications,
 provided they are using an `OkHttpClient` to make requests.
 
 Tapes are stored to disk as YAML files and can be modified (or even created) by hand and committed
@@ -78,7 +78,7 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.airbnb.okreplay:gradle-plugin:1.1.0-SNAPSHOT'
+    classpath 'com.airbnb.okreplay:gradle-plugin:1.1.0'
   }
 }
 
@@ -93,19 +93,19 @@ clearOkReplayTapes - Clear OkReplay tapes from the Device SD Card
 pushOkReplayTapes - Push OkReplay tapes to the device
 ```
 
-## Download 
+## Download
 
 Download [the latest JAR][2] or grab via Maven:
 ```xml
 <dependency>
   <groupId>com.airbnb.okreplay</groupId>
   <artifactId>okreplay</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.okreplay:okreplay:1.1.0-SNAPSHOT'
+compile 'com.airbnb.okreplay:okreplay:1.1.0'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
