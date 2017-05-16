@@ -89,11 +89,11 @@ apply plugin: 'okreplay'
 You should now see these two tasks when you run `./gradlew tasks`:
 
 ```
-pullOkReplayTapes - Pull OkReplay tapes from the Device SD Card
+clearOkReplayTapes - Clear OkReplay tapes from the Device SD Card
 pushOkReplayTapes - Push OkReplay tapes to the device
 ```
 
-## Download 
+## Download
 
 Download [the latest JAR][2] or grab via Maven:
 ```xml
