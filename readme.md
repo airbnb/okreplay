@@ -1,7 +1,7 @@
 # OkReplay [![Build Status](https://travis-ci.org/felipecsl/okreplay.svg?branch=master)](https://travis-ci.org/felipecsl/okreplay)
 
 Automatically record and replay OkHttp network interaction through your Android application.
-This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
+This project was based on the great [OkReplay](https://github.com/OkReplayteam/OkReplay) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
 
 ## Introduction
 
@@ -13,11 +13,11 @@ service.
 OkReplay aims to solve these problems by intercepting HTTP connections initiated by your application
 and replaying previously __recorded__ responses.
 
-The first time a test annotated with `@Betamax` is run, any HTTP traffic is recorded to a tape and
+The first time a test annotated with `@OkReplay` is run, any HTTP traffic is recorded to a tape and
 subsequent test runs will play back the recorded HTTP response from the tape without actually
 connecting to the external server.
 
-Betamax works with JUnit and Espresso. Betamax can be used to test any Java or Android applications,
+OkReplay works with JUnit and Espresso. OkReplay can be used to test any Java or Android applications,
 provided they are using an `OkHttpClient` to make requests.
 
 Tapes are stored to disk as YAML files and can be modified (or even created) by hand and committed
