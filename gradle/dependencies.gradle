@@ -1,7 +1,7 @@
 ext.versions = [
     // TODO: This is duplicated because the plugin unit tests cannot read VERSION_NAME from the
     // gradle.properties file. Figure out a way to fix this.
-    okreplayVersion: '1.1.0-SNAPSHOT',
+    okreplayVersion: '1.1.0',
     kotlinVersion : '1.1.2',
     okhttpVersion : '3.4.2',
     appCompatVersion: '25.3.1'

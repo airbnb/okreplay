@@ -78,7 +78,7 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.airbnb.okreplay:gradle-plugin:1.0.3'
+    classpath 'com.airbnb.okreplay:gradle-plugin:1.1.0'
   }
 }
 
@@ -100,12 +100,12 @@ Download [the latest JAR][2] or grab via Maven:
 <dependency>
   <groupId>com.airbnb.okreplay</groupId>
   <artifactId>okreplay</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.airbnb.okreplay:okreplay:1.1.0-SNAPSHOT'
+compile 'com.airbnb.okreplay:okreplay:1.1.0'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
