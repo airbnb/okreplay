@@ -82,7 +82,7 @@ class YamlTapeLoader implements TapeLoader<YamlTape> {
     return FilenameNormalizer.toFilename(tapeName) + ".yaml";
   }
 
-  private Yaml getYaml() {
+  private static Yaml getYaml() {
     Representer representer = new TapeRepresenter();
     representer.addClassTag(YamlTape.class, YamlTape.TAPE_TAG);
     Constructor constructor = new TapeConstructor();

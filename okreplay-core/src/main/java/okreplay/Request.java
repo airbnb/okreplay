@@ -8,4 +8,6 @@ public interface Request extends Message {
   /** @return the target URL of the request. */
   HttpUrl url();
   RecordedRequest.Builder newBuilder();
+
+  RecordedRequestJavabean toJavaBean();
 }

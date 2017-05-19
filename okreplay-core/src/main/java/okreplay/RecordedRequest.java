@@ -15,7 +15,7 @@ import okio.Buffer;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
-public class RecordedRequest extends RecordedMessage implements Request {
+class RecordedRequest extends RecordedMessage implements Request {
   private final String method;
   private final HttpUrl url;
 
@@ -25,25 +25,25 @@ public class RecordedRequest extends RecordedMessage implements Request {
     this.method = builder.method;
   }
 
-  public RecordedRequest(String method, String url) {
+  RecordedRequest(String method, String url) {
     this(method, url, Collections.<String, String>emptyMap());
   }
 
-  public RecordedRequest(String method, String url, Map<String, String> headers) {
+  RecordedRequest(String method, String url, Map<String, String> headers) {
     this(method, url, headers, null);
   }
 
-  public RecordedRequest(String method, String url, Map<String, String> headers, byte[] body) {
+  RecordedRequest(String method, String url, Map<String, String> headers, byte[] body) {
     super(Headers.of(headers), body);
     this.method = method;
     this.url = HttpUrl.parse(url);
   }
 
-  public String method() {
+  @Override public String method() {
     return method;
   }
 
-  public HttpUrl url() {
+  @Override public HttpUrl url() {
     return url;
   }
 
@@ -51,13 +51,22 @@ public class RecordedRequest extends RecordedMessage implements Request {
     return new Builder(this);
   }
 
-  public static class Builder {
+  @Override public RecordedRequestJavabean toJavaBean() {
+    RecordedRequestJavabean javabean = new RecordedRequestJavabean();
+    javabean.setMethod(method);
+    javabean.setUri(url.uri());
+    javabean.setHeaders(headersAsMap());
+    javabean.setBody(maybeBodyAsString());
+    return javabean;
+  }
+
+  static class Builder {
     private HttpUrl url;
     private String method;
     private Headers.Builder headers;
     private byte[] body;
 
-    public Builder() {
+    Builder() {
       this.method = "GET";
       this.headers = new Headers.Builder();
     }
@@ -69,7 +78,7 @@ public class RecordedRequest extends RecordedMessage implements Request {
       this.headers = request.headers.newBuilder();
     }
 
-    public Builder url(HttpUrl url) {
+    Builder url(HttpUrl url) {
       if (url == null)
         throw new NullPointerException("url == null");
       this.url = url;
@@ -83,7 +92,7 @@ public class RecordedRequest extends RecordedMessage implements Request {
      *                                  exception by calling {@link HttpUrl#parse}; it returns null
      *                                  for invalid URLs.
      */
-    public Builder url(String url) {
+    Builder url(String url) {
       if (url == null)
         throw new NullPointerException("url == null");
 
@@ -106,7 +115,7 @@ public class RecordedRequest extends RecordedMessage implements Request {
      * @throws IllegalArgumentException if the scheme of {@code url} is not {@code http} or {@code
      *                                  https}.
      */
-    public Builder url(URL url) {
+    Builder url(URL url) {
       if (url == null)
         throw new NullPointerException("url == null");
       HttpUrl parsed = HttpUrl.get(url);
@@ -119,7 +128,7 @@ public class RecordedRequest extends RecordedMessage implements Request {
      * Sets the header named {@code name} to {@code value}. If this request already has any headers
      * with that name, they are all replaced.
      */
-    public Builder header(String name, String value) {
+    Builder header(String name, String value) {
       headers.set(name, value);
       return this;
     }
@@ -131,18 +140,18 @@ public class RecordedRequest extends RecordedMessage implements Request {
      * <p>Note that for some headers including {@code Content-Length} and {@code Content-Encoding},
      * OkHttp may replace {@code value} with a header derived from the request body.
      */
-    public Builder addHeader(String name, String value) {
+    Builder addHeader(String name, String value) {
       headers.add(name, value);
       return this;
     }
 
-    public Builder removeHeader(String name) {
+    Builder removeHeader(String name) {
       headers.removeAll(name);
       return this;
     }
 
     /** Removes all headers on this builder and adds {@code headers}. */
-    public Builder headers(Headers headers) {
+    Builder headers(Headers headers) {
       this.headers = headers.newBuilder();
       return this;
     }
@@ -152,42 +161,42 @@ public class RecordedRequest extends RecordedMessage implements Request {
      * present. If {@code cacheControl} doesn't define any directives, this clears this request's
      * cache-control headers.
      */
-    public Builder cacheControl(CacheControl cacheControl) {
+    Builder cacheControl(CacheControl cacheControl) {
       String value = cacheControl.toString();
       if (value.isEmpty())
         return removeHeader("Cache-Control");
       return header("Cache-Control", value);
     }
 
-    public Builder get() {
+    Builder get() {
       return method("GET", null);
     }
 
-    public Builder head() {
+    Builder head() {
       return method("HEAD", null);
     }
 
-    public Builder post(RequestBody body) {
+    Builder post(RequestBody body) {
       return method("POST", body);
     }
 
-    public Builder delete(RequestBody body) {
+    Builder delete(RequestBody body) {
       return method("DELETE", body);
     }
 
-    public Builder delete() {
+    Builder delete() {
       return delete(RequestBody.create(null, new byte[0]));
     }
 
-    public Builder put(RequestBody body) {
+    Builder put(RequestBody body) {
       return method("PUT", body);
     }
 
-    public Builder patch(RequestBody body) {
+    Builder patch(RequestBody body) {
       return method("PATCH", body);
     }
 
-    public Builder method(String method, RequestBody body) {
+    Builder method(String method, RequestBody body) {
       if (method == null)
         throw new NullPointerException("method == null");
       if (method.length() == 0)
@@ -215,7 +224,7 @@ public class RecordedRequest extends RecordedMessage implements Request {
       return this;
     }
 
-    public RecordedRequest build() {
+    RecordedRequest build() {
       if (url == null)
         throw new IllegalStateException("url == null");
       return new RecordedRequest(this);

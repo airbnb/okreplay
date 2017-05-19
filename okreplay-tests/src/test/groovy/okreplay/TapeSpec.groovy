@@ -53,11 +53,11 @@ class TapeSpec extends Specification {
 
     and: 'the request data is correctly stored'
     interaction.request.method() == getRequest.method()
-    interaction.request.url() == getRequest.url()
+    interaction.request.uri() == getRequest.url().uri()
 
     and: 'the response data is correctly stored'
     interaction.response.code() == plainTextResponse.code()
-    interaction.response.getBodyAsText() == 'O HAI!'
+    interaction.response.body() == 'O HAI!'
     interaction.response.header(CONTENT_TYPE) == plainTextResponse.header(CONTENT_TYPE)
     interaction.response.header(CONTENT_LANGUAGE) == plainTextResponse.header(CONTENT_LANGUAGE)
     interaction.response.header(CONTENT_ENCODING) == plainTextResponse.header(CONTENT_ENCODING)

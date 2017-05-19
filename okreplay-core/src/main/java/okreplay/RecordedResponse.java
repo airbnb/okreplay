@@ -10,7 +10,7 @@ import okhttp3.ResponseBody;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 
-public class RecordedResponse extends RecordedMessage implements Response {
+class RecordedResponse extends RecordedMessage implements Response {
   private final int code;
   private final Protocol protocol;
 
@@ -20,13 +20,13 @@ public class RecordedResponse extends RecordedMessage implements Response {
     this.protocol = builder.protocol;
   }
 
-  public RecordedResponse(int code, Map<String, String> headers, byte[] body) {
+  RecordedResponse(int code, Map<String, String> headers, byte[] body) {
     super(Headers.of(headers), body);
     this.code = code;
     this.protocol = Protocol.HTTP_1_1;
   }
 
-  public int code() {
+  @Override public int code() {
     return code;
   }
 
@@ -38,13 +38,21 @@ public class RecordedResponse extends RecordedMessage implements Response {
     return protocol;
   }
 
-  public static class Builder {
+  @Override public RecordedResponseJavabean toJavaBean() {
+    RecordedResponseJavabean javabean = new RecordedResponseJavabean();
+    javabean.setCode(code);
+    javabean.setBody(maybeBodyAsString());
+    javabean.setHeaders(headersAsMap());
+    return javabean;
+  }
+
+  static class Builder {
     private Protocol protocol = Protocol.HTTP_1_1;
     private int code = -1;
     private Headers.Builder headers;
     private byte[] body;
 
-    public Builder() {
+    Builder() {
       headers = new Headers.Builder();
     }
 
@@ -55,12 +63,12 @@ public class RecordedResponse extends RecordedMessage implements Response {
       this.protocol = response.protocol;
     }
 
-    public Builder protocol(Protocol protocol) {
+    Builder protocol(Protocol protocol) {
       this.protocol = protocol;
       return this;
     }
 
-    public Builder code(int code) {
+    Builder code(int code) {
       this.code = code;
       return this;
     }
@@ -69,7 +77,7 @@ public class RecordedResponse extends RecordedMessage implements Response {
      * Sets the header named {@code name} to {@code value}. If this request already has any headers
      * with that name, they are all replaced.
      */
-    public Builder header(String name, String value) {
+    Builder header(String name, String value) {
       headers.set(name, value);
       return this;
     }
@@ -78,23 +86,23 @@ public class RecordedResponse extends RecordedMessage implements Response {
      * Adds a header with {@code name} and {@code value}. Prefer this method for multiply-valued
      * headers like "Set-Cookie".
      */
-    public Builder addHeader(String name, String value) {
+    Builder addHeader(String name, String value) {
       headers.add(name, value);
       return this;
     }
 
-    public Builder removeHeader(String name) {
+    Builder removeHeader(String name) {
       headers.removeAll(name);
       return this;
     }
 
     /** Removes all headers on this builder and adds {@code headers}. */
-    public Builder headers(Headers headers) {
+    Builder headers(Headers headers) {
       this.headers = headers.newBuilder();
       return this;
     }
 
-    public Builder body(ResponseBody body) {
+    Builder body(ResponseBody body) {
       try {
         this.body = body.bytes();
       } catch (IOException e) {
@@ -107,7 +115,7 @@ public class RecordedResponse extends RecordedMessage implements Response {
       return this;
     }
 
-    public RecordedResponse build() {
+    RecordedResponse build() {
       if (code < 0)
         throw new IllegalStateException("code < 0: " + code);
       return new RecordedResponse(this);

@@ -11,7 +11,7 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static com.google.common.net.MediaType.OCTET_STREAM;
 
 abstract class AbstractMessage implements Message {
-  private static final String DEFAULT_CONTENT_TYPE = OCTET_STREAM.toString();
+  static final String DEFAULT_CONTENT_TYPE = OCTET_STREAM.toString();
   private static final String DEFAULT_CHARSET = UTF_8.toString();
   private static final String DEFAULT_ENCODING = "none";
 
