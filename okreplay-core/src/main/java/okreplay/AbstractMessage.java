@@ -43,9 +43,9 @@ abstract class AbstractMessage implements Message {
     return headers().get(name);
   }
 
-  @Override public final String getBodyAsText() {
+  @Override public final String bodyAsText() {
     try {
-      return new String(getBody(), getCharset());
+      return new String(body(), getCharset());
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     }

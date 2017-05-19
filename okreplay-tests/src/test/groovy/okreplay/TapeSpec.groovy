@@ -95,7 +95,7 @@ class TapeSpec extends Specification {
 
     then: 'the recorded response data is copied onto the response'
     response.code() == plainTextResponse.code()
-    response.getBodyAsText() == 'O HAI!'
+    response.bodyAsText() == 'O HAI!'
     response.headers() == plainTextResponse.headers()
   }
 

@@ -1,11 +1,9 @@
 package okreplay
 
 import com.google.common.io.Files
-import okhttp3.*
-import okreplay.RecordedRequest
-import okreplay.RecordedResponse
-import okreplay.Tape
-import okreplay.YamlTapeLoader
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -40,6 +38,6 @@ class ContentTypeSpec extends Specification {
 
     then: 'the request body is stored on the tape'
     def interaction = tape.interactions[-1]
-    interaction.request.body == imagePostRequest.getBody()
+    interaction.request.body() == imagePostRequest.body()
   }
 }

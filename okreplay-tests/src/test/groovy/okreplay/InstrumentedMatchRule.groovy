@@ -1,8 +1,5 @@
 package okreplay
 
-import okreplay.MatchRule
-import okreplay.Request
-
 import java.util.concurrent.atomic.AtomicInteger
 
 class InstrumentedMatchRule implements MatchRule {

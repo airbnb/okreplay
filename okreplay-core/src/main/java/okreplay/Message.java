@@ -26,7 +26,7 @@ interface Message {
    * @return the message body as a string.
    * @throws IllegalStateException if the message does not have a body.
    */
-  String getBodyAsText();
+  String bodyAsText();
 
   /**
    * Returns the decoded message body. If the implementation stores the message body in an encoded
@@ -35,7 +35,7 @@ interface Message {
    * @return the message body as binary data.
    * @throws IllegalStateException if the message does not have a body.
    */
-  byte[] getBody();
+  byte[] body();
 
   /** @return the MIME content type of the message not including any charset. */
   String getContentType();

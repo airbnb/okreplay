@@ -25,7 +25,7 @@ abstract class RecordedMessage extends AbstractMessage implements Message {
     return headers;
   }
 
-  @Override public byte[] getBody() {
+  @Override public byte[] body() {
     return body;
   }
 
@@ -47,7 +47,7 @@ abstract class RecordedMessage extends AbstractMessage implements Message {
       // For text or application media types, assume it's readable text and return the body
       // as a String
       if (mediaType.equals("text") || mediaType.equals("application")) {
-        return getBodyAsText();
+        return bodyAsText();
       } else {
         return body;
       }

@@ -92,7 +92,7 @@ interactions:
 
     then:
     def expected = "\u00a3".getBytes(charset)
-    response.getBody() == expected
+    response.body() == expected
 
     where:
     charset << [UTF_8, ISO_8859_1]
