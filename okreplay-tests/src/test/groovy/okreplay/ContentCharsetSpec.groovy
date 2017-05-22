@@ -30,7 +30,6 @@ import static okreplay.TapeMode.READ_WRITE
 @Issue("https://github.com/robfletcher/betamax/issues/21")
 @Unroll
 class ContentCharsetSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def loader = new YamlTapeLoader(tapeRoot)
 

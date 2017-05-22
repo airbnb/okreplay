@@ -12,7 +12,6 @@ import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8
 
 @Issue("https://github.com/robfletcher/betamax/issues/9")
 class RequestMatchingSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def loader = new YamlTapeLoader(tapeRoot)
 
@@ -114,7 +113,7 @@ interactions:
     method: GET
     uri: http://httpbin.org/get
     headers:
-      Accept: application/json; charset=utf-8
+      Accept: application/json
   response:
     status: 200
     headers:

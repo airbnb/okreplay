@@ -109,7 +109,7 @@ class RecordedResponse extends RecordedMessage implements Response {
         throw new RuntimeException(e);
       }
       MediaType contentType = body.contentType();
-      if (contentType != null) {
+      if (contentType != null && headers.get(CONTENT_TYPE) == null) {
         addHeader(CONTENT_TYPE, contentType.toString());
       }
       return this;
