@@ -17,7 +17,7 @@ public class RecordedMessageJavabean {
     if (Strings.isNullOrEmpty(header)) {
       return DEFAULT_CONTENT_TYPE;
     } else {
-      return MediaType.parse(header).withoutParameters().toString();
+      return MediaType.parse(header).toString();
     }
   }
 
