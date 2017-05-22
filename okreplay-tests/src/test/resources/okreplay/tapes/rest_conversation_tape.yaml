@@ -1,0 +1,43 @@
+!tape
+name: rest conversation tape
+interactions:
+- recorded: 2012-10-21T14:04:39.797Z
+  request:
+    method: GET
+    uri: http://freeside.co/thing/1
+    headers:
+      Accept: '*/*'
+      Accept-Encoding: gzip,deflate
+      Host: freeside.co
+  response:
+    status: 404
+    headers:
+      Content-Type: application/json
+    body: '{}'
+- recorded: 2012-10-21T14:04:40.153Z
+  request:
+    method: POST
+    uri: http://freeside.co/thing/1
+    headers:
+      Accept: '*/*'
+      Accept-Encoding: gzip,deflate
+      Host: freeside.co
+    body: '{"name":"foo"}'
+  response:
+    status: 201
+    headers:
+      Content-Type: application/json
+    body: '{"name":"foo"}'
+- recorded: 2012-10-21T14:04:42.340Z
+  request:
+    method: GET
+    uri: http://freeside.co/thing/1
+    headers:
+      Accept: '*/*'
+      Accept-Encoding: gzip,deflate
+      Host: freeside.co
+  response:
+    status: 200
+    headers:
+      Content-Type: application/json
+    body: '{"name":"foo"}'
