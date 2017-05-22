@@ -3,14 +3,19 @@ package okreplay;
 import com.google.common.base.Strings;
 import com.google.common.net.MediaType;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static okreplay.AbstractMessage.DEFAULT_CONTENT_TYPE;
 
 public class RecordedMessageJavabean {
-  private LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-  private Object body;
+  private final Map<String, String> headers;
+  private final Object body;
+
+  RecordedMessageJavabean(Map<String, String> headers, Object body) {
+    this.headers = headers;
+    this.body = body;
+  }
 
   String contentType() {
     String header = headers.get(CONTENT_TYPE);
@@ -21,7 +26,7 @@ public class RecordedMessageJavabean {
     }
   }
 
-  public LinkedHashMap<String, String> headers() {
+  public Map<String, String> headers() {
     return headers;
   }
 
@@ -29,15 +34,7 @@ public class RecordedMessageJavabean {
     return headers.get(name);
   }
 
-  public void setHeaders(LinkedHashMap<String, String> headers) {
-    this.headers = headers;
-  }
-
   public Object body() {
     return body;
-  }
-
-  public void setBody(Object body) {
-    this.body = body;
   }
 }

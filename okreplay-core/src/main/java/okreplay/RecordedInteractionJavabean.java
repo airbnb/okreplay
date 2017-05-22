@@ -3,32 +3,32 @@ package okreplay;
 import java.util.Date;
 
 public class RecordedInteractionJavabean {
-  private Date recorded;
-  private RecordedRequestJavabean request;
-  private RecordedResponseJavabean response;
+  private final Date recorded;
+  private final RecordedRequestJavabean request;
+  private final RecordedResponseJavabean response;
+
+  public RecordedInteractionJavabean(Date recorded, RecordedRequestJavabean request,
+      RecordedResponseJavabean response) {
+    this.recorded = recorded;
+    this.request = request;
+    this.response = response;
+  }
+
+  /** For SnakeYAML */
+  @SuppressWarnings("unused") public RecordedInteractionJavabean() {
+    this(null, null, null);
+  }
 
   public Date getRecorded() {
     return recorded;
-  }
-
-  public void setRecorded(Date recorded) {
-    this.recorded = recorded;
   }
 
   public RecordedRequestJavabean getRequest() {
     return request;
   }
 
-  public void setRequest(RecordedRequestJavabean request) {
-    this.request = request;
-  }
-
   public RecordedResponseJavabean getResponse() {
     return response;
-  }
-
-  public void setResponse(RecordedResponseJavabean response) {
-    this.response = response;
   }
 
   RecordedInteraction toImmutable() {

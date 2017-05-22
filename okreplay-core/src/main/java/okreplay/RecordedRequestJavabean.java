@@ -1,6 +1,8 @@
 package okreplay;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -8,23 +10,26 @@ import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
 
 public class RecordedRequestJavabean extends RecordedMessageJavabean {
-  private String method;
-  private URI uri;
+  private final String method;
+  private final URI uri;
+
+  RecordedRequestJavabean(Map<String, String> headers, Object body, String method, URI uri) {
+    super(headers, body);
+    this.method = method;
+    this.uri = uri;
+  }
+
+  /** For SnakeYAML */
+  @SuppressWarnings("unused") public RecordedRequestJavabean() {
+    this(Collections.<String, String>emptyMap(), null, null, null);
+  }
 
   public String method() {
     return method;
   }
 
-  public void setMethod(String method) {
-    this.method = method;
-  }
-
   public URI uri() {
     return uri;
-  }
-
-  public void setUri(URI uri) {
-    this.uri = uri;
   }
 
   Request toImmutable() {

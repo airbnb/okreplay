@@ -1,17 +1,26 @@
 package okreplay;
 
+import java.util.Collections;
+import java.util.Map;
+
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 
 public class RecordedResponseJavabean extends RecordedMessageJavabean {
-  private int status;
+  private final int status;
+
+  RecordedResponseJavabean(Map<String, String> headers, Object body, int status) {
+    super(headers, body);
+    this.status = status;
+  }
+
+  /** For SnakeYAML */
+  @SuppressWarnings("unused") public RecordedResponseJavabean() {
+    this(Collections.<String, String>emptyMap(), null, 0);
+  }
 
   public int code() {
     return status;
-  }
-
-  public void setCode(int status) {
-    this.status = status;
   }
 
   Response toImmutable() {

@@ -39,11 +39,7 @@ class RecordedResponse extends RecordedMessage implements Response {
   }
 
   @Override public RecordedResponseJavabean toJavaBean() {
-    RecordedResponseJavabean javabean = new RecordedResponseJavabean();
-    javabean.setCode(code);
-    javabean.setBody(maybeBodyAsString());
-    javabean.setHeaders(headersAsMap());
-    return javabean;
+    return new RecordedResponseJavabean(headersAsMap(), maybeBodyAsString(), code);
   }
 
   static class Builder {

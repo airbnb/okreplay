@@ -52,12 +52,7 @@ class RecordedRequest extends RecordedMessage implements Request {
   }
 
   @Override public RecordedRequestJavabean toJavaBean() {
-    RecordedRequestJavabean javabean = new RecordedRequestJavabean();
-    javabean.setMethod(method);
-    javabean.setUri(url.uri());
-    javabean.setHeaders(headersAsMap());
-    javabean.setBody(maybeBodyAsString());
-    return javabean;
+    return new RecordedRequestJavabean(headersAsMap(), maybeBodyAsString(), method, url.uri());
   }
 
   static class Builder {

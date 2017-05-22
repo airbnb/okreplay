@@ -26,10 +26,6 @@ class RecordedInteraction {
   }
 
   RecordedInteractionJavabean toJavaBean() {
-    RecordedInteractionJavabean javabean = new RecordedInteractionJavabean();
-    javabean.setRecorded(recorded);
-    javabean.setRequest(request.toJavaBean());
-    javabean.setResponse(response.toJavaBean());
-    return javabean;
+    return new RecordedInteractionJavabean(recorded, request.toJavaBean(), response.toJavaBean());
   }
 }
