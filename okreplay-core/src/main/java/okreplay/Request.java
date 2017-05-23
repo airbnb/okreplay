@@ -8,6 +8,6 @@ public interface Request extends Message {
   /** @return the target URL of the request. */
   HttpUrl url();
   RecordedRequest.Builder newBuilder();
-
-  RecordedRequestJavabean toJavaBean();
+  /** @return a copy of this Request object ready to be serialized to YAML */
+  YamlRecordedRequest toYaml();
 }

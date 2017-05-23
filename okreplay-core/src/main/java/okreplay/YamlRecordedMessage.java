@@ -8,11 +8,11 @@ import java.util.Map;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static okreplay.AbstractMessage.DEFAULT_CONTENT_TYPE;
 
-public class RecordedMessageJavabean {
+public class YamlRecordedMessage {
   private final Map<String, String> headers;
   private final Object body;
 
-  RecordedMessageJavabean(Map<String, String> headers, Object body) {
+  YamlRecordedMessage(Map<String, String> headers, Object body) {
     this.headers = headers;
     this.body = body;
   }

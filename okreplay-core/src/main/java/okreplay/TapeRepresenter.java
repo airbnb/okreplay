@@ -10,7 +10,6 @@ import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.MappingNode;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.SequenceNode;
 import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Represent;
@@ -24,9 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.LITERAL;
-import static org.yaml.snakeyaml.DumperOptions.ScalarStyle.PLAIN;
 
 /**
  * Applies a fixed ordering to properties and excludes `null` valued
@@ -45,16 +41,6 @@ class TapeRepresenter extends Representer {
 
     if (isNullValue(tuple) || isEmptySequence(tuple) || isEmptyMapping(tuple)) {
       return null;
-    }
-
-    if ("body".equals(property.getName())) {
-      ScalarNode n = (ScalarNode) tuple.getValueNode();
-      if (n.getStyle() == PLAIN.getChar()) {
-        return tuple;
-      } else {
-        return new NodeTuple(tuple.getKeyNode(), new ScalarNode(n.getTag(), n.getValue(), n
-            .getStartMark(), n.getEndMark(), LITERAL.getChar()));
-      }
     }
 
     return tuple;
@@ -94,11 +80,11 @@ class TapeRepresenter extends Representer {
         Set<Property> properties = super.createPropertySet(type, bAccess);
         if (Tape.class.isAssignableFrom(type)) {
           return sort(properties, "name", "interactions");
-        } else if (RecordedInteractionJavabean.class.isAssignableFrom(type)) {
+        } else if (YamlRecordedInteraction.class.isAssignableFrom(type)) {
           return sort(properties, "recorded", "request", "response");
-        } else if (RecordedRequestJavabean.class.isAssignableFrom(type)) {
+        } else if (YamlRecordedRequest.class.isAssignableFrom(type)) {
           return sort(properties, "method", "uri", "headers", "body");
-        } else if (RecordedResponseJavabean.class.isAssignableFrom(type)) {
+        } else if (YamlRecordedResponse.class.isAssignableFrom(type)) {
           return sort(properties, "status", "headers", "body");
         } else {
           return properties;

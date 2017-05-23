@@ -1,5 +1,6 @@
 package okreplay
 
+import com.android.ddmlib.AdbCommandRejectedException
 import okreplay.OkReplayPlugin.Companion.REMOTE_TAPES_DIR
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -16,10 +17,14 @@ open class ClearTapesTask
     group = "okreplay"
   }
 
-  @TaskAction internal fun pushTapes() {
+  @TaskAction internal fun clearTapes() {
     _deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
-      it.deleteDirectory("$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
+      try {
+        it.deleteDirectory("$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
+      } catch (e: AdbCommandRejectedException) {
+        project.logger.error("ADB Command failed: ${e.message}")
+      }
     }
   }
 

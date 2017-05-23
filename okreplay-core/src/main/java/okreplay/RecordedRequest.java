@@ -51,8 +51,8 @@ class RecordedRequest extends RecordedMessage implements Request {
     return new Builder(this);
   }
 
-  @Override public RecordedRequestJavabean toJavaBean() {
-    return new RecordedRequestJavabean(headersAsMap(), maybeBodyAsString(), method, url.uri());
+  @Override public YamlRecordedRequest toYaml() {
+    return new YamlRecordedRequest(headersAsMap(), maybeBodyAsString(), method, url.uri());
   }
 
   static class Builder {

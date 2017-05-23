@@ -18,7 +18,7 @@ import static java.util.Collections.unmodifiableList;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 abstract class MemoryTape implements Tape {
   private String name;
-  private List<RecordedInteractionJavabean> interactions = Lists.newArrayList();
+  private List<YamlRecordedInteraction> interactions = Lists.newArrayList();
   private transient TapeMode mode = OkReplayConfig.DEFAULT_MODE;
   private transient MatchRule matchRule = OkReplayConfig.DEFAULT_MATCH_RULE;
   private final transient AtomicInteger orderedIndex = new AtomicInteger();
@@ -63,11 +63,11 @@ abstract class MemoryTape implements Tape {
     return interactions.size();
   }
 
-  public List<RecordedInteractionJavabean> getInteractions() {
+  public List<YamlRecordedInteraction> getInteractions() {
     return unmodifiableList(interactions);
   }
 
-  public void setInteractions(List<RecordedInteractionJavabean> interactions) {
+  public void setInteractions(List<YamlRecordedInteraction> interactions) {
     this.interactions = Lists.newArrayList(interactions);
   }
 
@@ -149,8 +149,8 @@ abstract class MemoryTape implements Tape {
   }
 
   private synchronized int findMatch(final Request request) {
-    return Iterables.indexOf(interactions, new Predicate<RecordedInteractionJavabean>() {
-      @Override public boolean apply(RecordedInteractionJavabean input) {
+    return Iterables.indexOf(interactions, new Predicate<YamlRecordedInteraction>() {
+      @Override public boolean apply(YamlRecordedInteraction input) {
         return matchRule.isMatch(request, input.toImmutable().request());
       }
     });

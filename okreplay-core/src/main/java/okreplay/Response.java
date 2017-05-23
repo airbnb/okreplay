@@ -10,5 +10,5 @@ public interface Response extends Message {
   RecordedResponse.Builder newBuilder();
   Protocol protocol();
 
-  RecordedResponseJavabean toJavaBean();
+  YamlRecordedResponse toJavaBean();
 }

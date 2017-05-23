@@ -6,16 +6,16 @@ import java.util.Map;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 
-public class RecordedResponseJavabean extends RecordedMessageJavabean {
+public class YamlRecordedResponse extends YamlRecordedMessage {
   private final int status;
 
-  RecordedResponseJavabean(Map<String, String> headers, Object body, int status) {
+  YamlRecordedResponse(Map<String, String> headers, Object body, int status) {
     super(headers, body);
     this.status = status;
   }
 
   /** For SnakeYAML */
-  @SuppressWarnings("unused") public RecordedResponseJavabean() {
+  @SuppressWarnings("unused") public YamlRecordedResponse() {
     this(Collections.<String, String>emptyMap(), null, 0);
   }
 

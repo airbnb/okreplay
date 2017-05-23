@@ -25,7 +25,9 @@ class WriteTapeToYamlSpec extends Specification {
   @Shared RecordedResponse successResponse
   @Shared RecordedResponse failureResponse
   @Shared RecordedResponse imageResponse
+  @Shared RecordedResponse jsonResponse
   @Shared File image
+  @Shared File json
 
   Yaml yamlReader
 
@@ -56,9 +58,14 @@ class WriteTapeToYamlSpec extends Specification {
         .build()
 
     image = new File(Class.getResource("/image.png").toURI())
+    json = new File(Class.getResource("/file.json").toURI())
     imageResponse = new RecordedResponse.Builder()
         .code(HTTP_OK)
         .body(ResponseBody.create(MediaType.parse("image/png"), image.bytes))
+        .build()
+    jsonResponse = new RecordedResponse.Builder()
+        .code(HTTP_OK)
+        .body(ResponseBody.create(MediaType.parse("application/json; charset=utf-8"), json.bytes))
         .build()
   }
 
@@ -203,4 +210,21 @@ class WriteTapeToYamlSpec extends Specification {
     writer.toString().contains("body: !!binary |-")
   }
 
+  void "json RecordedResponse body is written to file as plain text"() {
+    given:
+    def tape = loader.newTape("tape_loading_spec")
+    tape.mode = READ_WRITE
+    def writer = new StringWriter()
+
+    when:
+    tape.record(getRequest, jsonResponse)
+    loader.writeTo(tape, writer)
+
+    then:
+    // Gotcha: SnakeYAML will dump Strings as Base64 encoded if they contain any "non printable"
+    // characters. See StreamReader#NON_PRINTABLE for the full list.
+    writer.toString().contains("body: '[{\"id\":37146897,\"name\":\"6502Android\"," +
+        "\"full_name\":\"felipecsl/6502Android\",\"owner\":{\"login\":\"felipecsl\"," +
+        "\"id\":190648,\"avatar_url\"")
+  }
 }

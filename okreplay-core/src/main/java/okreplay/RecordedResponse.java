@@ -38,8 +38,8 @@ class RecordedResponse extends RecordedMessage implements Response {
     return protocol;
   }
 
-  @Override public RecordedResponseJavabean toJavaBean() {
-    return new RecordedResponseJavabean(headersAsMap(), maybeBodyAsString(), code);
+  @Override public YamlRecordedResponse toJavaBean() {
+    return new YamlRecordedResponse(headersAsMap(), maybeBodyAsString(), code);
   }
 
   static class Builder {
