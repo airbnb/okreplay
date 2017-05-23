@@ -39,26 +39,20 @@ class CustomMatchRuleSpec extends Specification {
 !tape
 name: custom match rule spec
 interactions:
-  - !!okreplay.RecordedInteraction [
-    '2013-10-31T07:44:59.023Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      '$url',
-      {
-        Accept: 'text/plain',
-        X-Whatever: 'some random value'
-      }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Content-Length: '12',
-        Content-Type: 'text/plain',
-        Date: 'Tue, 01 Oct 2013 21:53:58 GMT'
-      },
-      !!binary "SGVsbG8gV29ybGQh"
-    ]
-  ] 
+- recorded: 2013-10-31T07:44:59.023Z
+  request:
+    method: GET
+    uri: $url
+    headers:
+      Accept: text/plain
+      X-Whatever: some random value
+  response:
+    status: 200
+    headers:
+      Content-Length: '12'
+      Content-Type: text/plain
+      Date: Tue, 01 Oct 2013 21:53:58 GMT
+    body: Hello World!
 """
     }
   }

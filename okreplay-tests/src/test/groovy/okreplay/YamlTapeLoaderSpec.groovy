@@ -25,19 +25,15 @@ class YamlTapeLoaderSpec extends Specification {
 !tape
 name: $tapeName
 interactions:
-  - !!okreplay.RecordedInteraction [
-    '2011-08-23T22:41:40.000Z',
-    !!okreplay.RecordedRequest [
-      'GET',
-      'http://icanhascheezburger.com/',
-      {Accept-Language: 'en-GB,en', If-None-Match: 'b00b135'}
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {Content-Type: 'text/plain', Content-Language: 'en-GB'},
-      !!binary "TyBIQUkh"
-    ]
-  ]
+- recorded: 2011-08-23T22:41:40.000Z
+  request:
+    method: GET
+    uri: http://icanhascheezburger.com/
+    headers: {Accept-Language: 'en-GB,en', If-None-Match: b00b135}
+  response:
+    status: 200
+    headers: {Content-Type: text/plain, Content-Language: en-GB}
+    body: O HAI!
 """
 
     and:

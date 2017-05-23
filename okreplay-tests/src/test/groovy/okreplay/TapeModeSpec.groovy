@@ -14,7 +14,6 @@ abstract class TapeModeSpec extends Specification {
 
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared Recorder recorder = new Recorder(configuration)
-
   @Shared @AutoCleanup("stop") def endpoint = new MockWebServer()
 
   protected abstract OkReplayConfig getConfiguration()

@@ -1,8 +1,5 @@
 package okreplay
 
-import okreplay.MatchRule
-import okreplay.Request
-
 class PostingMatchRule implements MatchRule {
   @Override
   boolean isMatch(Request a, Request b) {

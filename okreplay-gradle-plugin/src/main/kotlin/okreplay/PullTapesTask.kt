@@ -1,5 +1,6 @@
 package okreplay
 
+import com.android.ddmlib.AdbCommandRejectedException
 import okreplay.OkReplayPlugin.Companion.LOCAL_TAPES_DIR
 import okreplay.OkReplayPlugin.Companion.REMOTE_TAPES_DIR
 import org.apache.commons.io.FileUtils
@@ -32,7 +33,11 @@ open class PullTapesTask
         throw TaskExecutionException(this,
             RuntimeException("Failed to retrieve the device external storage dir."))
       }
-      it.pullDirectory(localDir, "$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
+      try {
+        it.pullDirectory(localDir, "$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
+      } catch (e: AdbCommandRejectedException) {
+        project.logger.error("ADB Command failed: ${e.message}")
+      }
     }
   }
 

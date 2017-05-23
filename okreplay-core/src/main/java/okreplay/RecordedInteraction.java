@@ -2,29 +2,31 @@ package okreplay;
 
 import java.util.Date;
 
-import okreplay.Request;
-import okreplay.Response;
-
-public class RecordedInteraction {
+class RecordedInteraction {
   private final Date recorded;
   private final Request request;
   private final Response response;
 
-  public RecordedInteraction(Date recorded, Request request, Response response) {
+  RecordedInteraction(Date recorded, Request request, Response response) {
     this.recorded = recorded;
     this.request = request;
     this.response = response;
   }
 
-  public Date recorded() {
+  Date recorded() {
     return recorded;
   }
 
-  public Request request() {
+  Request request() {
     return request;
   }
 
-  public Response response() {
+  Response response() {
     return response;
+  }
+
+  YamlRecordedInteraction toYaml() {
+    return new YamlRecordedInteraction(recorded,
+        (YamlRecordedRequest) request.toYaml(), (YamlRecordedResponse) response.toYaml());
   }
 }

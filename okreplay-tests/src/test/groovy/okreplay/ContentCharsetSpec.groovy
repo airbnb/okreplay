@@ -19,7 +19,6 @@ package okreplay
 import com.google.common.io.Files
 import okhttp3.MediaType
 import okhttp3.ResponseBody
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
 import spock.lang.*
 
 import static com.google.common.base.Charsets.ISO_8859_1
@@ -31,7 +30,6 @@ import static okreplay.TapeMode.READ_WRITE
 @Issue("https://github.com/robfletcher/betamax/issues/21")
 @Unroll
 class ContentCharsetSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def loader = new YamlTapeLoader(tapeRoot)
 
@@ -58,7 +56,7 @@ class ContentCharsetSpec extends Specification {
 
     then:
     def yaml = writer.toString()
-    yaml.contains("!!binary \"${Base64Coder.encode((byte[]) "\u00a3".getBytes(charset))}\"")
+    yaml.contains("body: \u00a3")
 
     where:
     charset << [UTF_8, ISO_8859_1]
@@ -70,21 +68,16 @@ class ContentCharsetSpec extends Specification {
 !tape
 name: charsets
 interactions:
-  - !!okreplay.RecordedInteraction [
-    '2011-08-27T23:25:45.000Z',
-    !!okreplay.RecordedRequest [
-      'GET',
-      'http://freeside.co/betamax'
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Content-Type: 'text/plain;charset=$charset',
-        Content-Encoding: 'none'
-      },
-      !!binary "${Base64Coder.encode("\u00a3".getBytes(charset))}"
-    ]
-  ]
+- recorded: 2011-08-27T23:25:45.000Z
+  request:
+    method: GET
+    uri: http://freeside.co/betamax
+  response:
+    status: 200
+    headers:
+      Content-Type: text/plain;charset=$charset
+      Content-Encoding: none
+    body: \u00a3
 """
     def tape = loader.readFrom(new StringReader(yaml))
 
@@ -98,7 +91,7 @@ interactions:
 
     then:
     def expected = "\u00a3".getBytes(charset)
-    response.getBody() == expected
+    response.body() == expected
 
     where:
     charset << [UTF_8, ISO_8859_1]

@@ -18,7 +18,7 @@ import static java.util.Collections.unmodifiableList;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 abstract class MemoryTape implements Tape {
   private String name;
-  private List<RecordedInteraction> interactions = Lists.newArrayList();
+  private List<YamlRecordedInteraction> interactions = Lists.newArrayList();
   private transient TapeMode mode = OkReplayConfig.DEFAULT_MODE;
   private transient MatchRule matchRule = OkReplayConfig.DEFAULT_MATCH_RULE;
   private final transient AtomicInteger orderedIndex = new AtomicInteger();
@@ -63,11 +63,11 @@ abstract class MemoryTape implements Tape {
     return interactions.size();
   }
 
-  public List<RecordedInteraction> getInteractions() {
+  public List<YamlRecordedInteraction> getInteractions() {
     return unmodifiableList(interactions);
   }
 
-  public void setInteractions(List<RecordedInteraction> interactions) {
+  public void setInteractions(List<YamlRecordedInteraction> interactions) {
     this.interactions = Lists.newArrayList(interactions);
   }
 
@@ -77,7 +77,7 @@ abstract class MemoryTape implements Tape {
         // TODO: it's a complete waste of time using an AtomicInteger when this method is called
         // before play in a non-transactional way
         Integer index = orderedIndex.get();
-        RecordedInteraction interaction = interactions.get(index);
+        RecordedInteraction interaction = interactions.get(index).toImmutable();
         Request nextRequest = interaction == null ? null : interaction.request();
         return nextRequest != null && matchRule.isMatch(request, nextRequest);
       } catch (IndexOutOfBoundsException e) {
@@ -95,7 +95,7 @@ abstract class MemoryTape implements Tape {
 
     if (mode.isSequential()) {
       Integer nextIndex = orderedIndex.getAndIncrement();
-      final RecordedInteraction nextInteraction = interactions.get(nextIndex);
+      RecordedInteraction nextInteraction = interactions.get(nextIndex).toImmutable();
       if (nextInteraction == null) {
         throw new IllegalStateException(String.format("No recording found at position %s",
             nextIndex));
@@ -112,13 +112,13 @@ abstract class MemoryTape implements Tape {
       if (position < 0) {
         throw new IllegalStateException("no matching recording found");
       } else {
-        return interactions.get(position).response();
+        return interactions.get(position).toImmutable().response();
       }
     }
   }
 
   private String stringify(Request request) {
-    byte[] body = request.getBody() != null ? request.getBody() : new byte[0];
+    byte[] body = request.body() != null ? request.body() : new byte[0];
     String bodyLog = " (binary " + body.length + "-byte body omitted)";
     return "method: " + request.method() + ", " + "uri: " + request.url() + ", " + "headers: " +
         request.headers() + ", " + bodyLog;
@@ -133,13 +133,13 @@ abstract class MemoryTape implements Tape {
         recordResponse(response));
 
     if (mode.isSequential()) {
-      interactions.add(interaction);
+      interactions.add(interaction.toYaml());
     } else {
       int position = findMatch(request);
       if (position >= 0) {
-        interactions.set(position, interaction);
+        interactions.set(position, interaction.toYaml());
       } else {
-        interactions.add(interaction);
+        interactions.add(interaction.toYaml());
       }
     }
   }
@@ -149,23 +149,23 @@ abstract class MemoryTape implements Tape {
   }
 
   private synchronized int findMatch(final Request request) {
-    return Iterables.indexOf(interactions, new Predicate<RecordedInteraction>() {
-      @Override public boolean apply(RecordedInteraction input) {
-        return matchRule.isMatch(request, input.request());
+    return Iterables.indexOf(interactions, new Predicate<YamlRecordedInteraction>() {
+      @Override public boolean apply(YamlRecordedInteraction input) {
+        return matchRule.isMatch(request, input.toImmutable().request());
       }
     });
   }
 
   private Request recordRequest(Request request) {
-    return request.newBuilder() //
-        .removeHeader(VIA) //
+    return request.newBuilder()
+        .removeHeader(VIA)
         .build();
   }
 
   private Response recordResponse(Response response) {
-    return response.newBuilder() //
-        .removeHeader(VIA) //
-        .removeHeader(Headers.X_OKREPLAY) //
+    return response.newBuilder()
+        .removeHeader(VIA)
+        .removeHeader(Headers.X_OKREPLAY)
         .build();
   }
 }

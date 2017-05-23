@@ -1,212 +1,408 @@
 !tape
 interactions:
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:53:48.227Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org/robots.txt',
+- recorded: 2013-10-01T21:53:48.227Z
+  request:
+    method: GET
+    uri: http://httpbin.org/robots.txt
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '30'
+      Content-Type: text/plain
+      Date: Tue, 01 Oct 2013 21:53:47 GMT
+      Server: gunicorn/0.17.4
+    body: |
+      User-agent: *
+      Disallow: /deny
+- recorded: 2013-10-01T21:53:50.934Z
+  request:
+    method: GET
+    uri: http://httpbin.org/html
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '3741'
+      Content-Type: text/html; charset=utf-8
+      Date: Tue, 01 Oct 2013 21:53:49 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      <!DOCTYPE html>
+      <html>
+        <head>
+        </head>
+        <body>
+            <h1>Herman Melville - Moby-Dick</h1>
+            <div>
+              <p>
+                Availing himself of the mild, summer-cool weather that now reigned in these latitudes, and in preparation for the peculiarly active pursuits shortly to be anticipated, Perth, the begrimed, blistered old blacksmith, had not removed his portable forge to the hold again, after concluding his contributory work for Ahab's leg, but still retained it on deck, fast lashed to ringbolts by the foremast; being now almost incessantly invoked by the headsmen, and harpooneers, and bowsmen to do some little job for them; altering, or repairing, or new shaping their various weapons and boat furniture. Often he would be surrounded by an eager circle, all waiting to be served; holding boat-spades, pike-heads, harpoons, and lances, and jealously watching his every sooty movement, as he toiled. Nevertheless, this old man's was a patient hammer wielded by a patient arm. No murmur, no impatience, no petulance did come from him. Silent, slow, and solemn; bowing over still further his chronically broken back, he toiled away, as if toil were life itself, and the heavy beating of his hammer the heavy beating of his heart. And so it was.—Most miserable! A peculiar walk in this old man, a certain slight but painful appearing yawing in his gait, had at an early period of the voyage excited the curiosity of the mariners. And to the importunity of their persisted questionings he had finally given in; and so it came to pass that every one now knew the shameful story of his wretched fate. Belated, and not innocently, one bitter winter's midnight, on the road running between two country towns, the blacksmith half-stupidly felt the deadly numbness stealing over him, and sought refuge in a leaning, dilapidated barn. The issue was, the loss of the extremities of both feet. Out of this revelation, part by part, at last came out the four acts of the gladness, and the one long, and as yet uncatastrophied fifth act of the grief of his life's drama. He was an old man, who, at the age of nearly sixty, had postponedly encountered that thing in sorrow's technicals called ruin. He had been an artisan of famed excellence, and with plenty to do; owned a house and garden; embraced a youthful, daughter-like, loving wife, and three blithe, ruddy children; every Sunday went to a cheerful-looking church, planted in a grove. But one night, under cover of darkness, and further concealed in a most cunning disguisement, a desperate burglar slid into his happy home, and robbed them all of everything. And darker yet to tell, the blacksmith himself did ignorantly conduct this burglar into his family's heart. It was the Bottle Conjuror! Upon the opening of that fatal cork, forth flew the fiend, and shrivelled up his home. Now, for prudent, most wise, and economic reasons, the blacksmith's shop was in the basement of his dwelling, but with a separate entrance to it; so that always had the young and loving healthy wife listened with no unhappy nervousness, but with vigorous pleasure, to the stout ringing of her young-armed old husband's hammer; whose reverberations, muffled by passing through the floors and walls, came up to her, not unsweetly, in her nursery; and so, to stout Labor's iron lullaby, the blacksmith's infants were rocked to slumber. Oh, woe on woe! Oh, Death, why canst thou not sometimes be timely? Hadst thou taken this old blacksmith to thyself ere his full ruin came upon him, then had the young widow had a delicious grief, and her orphans a truly venerable, legendary sire to dream of in their after years; and all of them a care-killing competency.
+              </p>
+            </div>
+        </body>
+      </html>
+- recorded: 2013-10-01T21:53:59.023Z
+  request:
+    method: GET
+    uri: http://httpbin.org/get
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '279'
+      Content-Type: application/json
+      Date: Tue, 01 Oct 2013 21:53:58 GMT
+      Server: gunicorn/0.17.4
+    body: |-
       {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Accept-Encoding: 'gzip',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05',
+        "url": "http://httpbin.org/get",
+        "headers": {
+          "Host": "httpbin.org",
+          "User-Agent": "Java/1.7.0_05",
+          "Connection": "close",
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "Via": "Betamax"
+        },
+        "origin": "90.197.88.40",
+        "args": {}
       }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
+- recorded: 2013-10-01T21:53:56.133Z
+  request:
+    method: GET
+    uri: http://httpbin.org/gzip
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Accept-Encoding: gzip
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Encoding: gzip
+      Content-Length: '225'
+      Content-Type: application/json
+      Date: Tue, 01 Oct 2013 21:53:55 GMT
+      Server: gunicorn/0.17.4
+    body: |-
       {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '30',
-        Content-Type: 'text/plain',
-        Date: 'Tue, 01 Oct 2013 21:53:47 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "VXNlci1hZ2VudDogKg0KRGlzYWxsb3c6IC9kZW55"
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:53:50.934Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org/html',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Accept-Encoding: 'gzip',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05',
+        "gzipped": true,
+        "headers": {
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Host": "httpbin.org",
+          "Accept-Encoding": "gzip",
+          "User-Agent": "Java/1.7.0_05"
+        },
+        "origin": "90.197.88.40",
+        "method": "GET"
       }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
+- recorded: 2013-10-01T21:53:58.731Z
+  request:
+    method: GET
+    uri: http://httpbin.org/redirect/1
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 302
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '215'
+      Content-Type: text/html; charset=utf-8
+      Date: Tue, 01 Oct 2013 21:53:57 GMT
+      Location: /get
+      Server: gunicorn/0.17.4
+    body: |-
+      <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+      <title>Redirecting...</title>
+      <h1>Redirecting...</h1>
+      <p>You should be redirected automatically to target URL: <a href="/get">/get</a>.  If not click the link.
+- recorded: 2013-10-01T21:54:02.428Z
+  request:
+    method: GET
+    uri: https://httpbin.org/get
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Connection: keep-alive
+      Host: httpbin.org
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '279'
+      Content-Type: application/json
+      Date: Tue, 01 Oct 2013 21:54:01 GMT
+      Server: gunicorn/0.17.4
+    body: |-
       {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '3741',
-        Content-Type: 'text/html; charset=utf-8',
-        Date: 'Tue, 01 Oct 2013 21:53:49 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "PCFET0NUWVBFIGh0bWw+DQogICAgICAgIDxodG1sPg0KICAgICAgICAgIDxoZWFkPg0KICAgICAgICAgIDwvaGVhZD4NCiAgICAgICAgICA8Ym9keT4NCiAgICAgICAgICAgICAgPGgxPkhlcm1hbiBNZWx2aWxsZSAtIE1vYnktRGljazwvaDE+DQoNCiAgICAgICAgICAgICAgPGRpdj4NCiAgICAgICAgICAgICAgICA8cD4NCiAgICAgICAgICAgICAgICAgIEF2YWlsaW5nIGhpbXNlbGYgb2YgdGhlIG1pbGQsIHN1bW1lci1jb29sIHdlYXRoZXIgdGhhdCBub3cgcmVpZ25lZCBpbiB0aGVzZSBsYXRpdHVkZXMsIGFuZCBpbiBwcmVwYXJhdGlvbiBmb3IgdGhlIHBlY3VsaWFybHkgYWN0aXZlIHB1cnN1aXRzIHNob3J0bHkgdG8gYmUgYW50aWNpcGF0ZWQsIFBlcnRoLCB0aGUgYmVncmltZWQsIGJsaXN0ZXJlZCBvbGQgYmxhY2tzbWl0aCwgaGFkIG5vdCByZW1vdmVkIGhpcyBwb3J0YWJsZSBmb3JnZSB0byB0aGUgaG9sZCBhZ2FpbiwgYWZ0ZXIgY29uY2x1ZGluZyBoaXMgY29udHJpYnV0b3J5IHdvcmsgZm9yIEFoYWIncyBsZWcsIGJ1dCBzdGlsbCByZXRhaW5lZCBpdCBvbiBkZWNrLCBmYXN0IGxhc2hlZCB0byByaW5nYm9sdHMgYnkgdGhlIGZvcmVtYXN0OyBiZWluZyBub3cgYWxtb3N0IGluY2Vzc2FudGx5IGludm9rZWQgYnkgdGhlIGhlYWRzbWVuLCBhbmQgaGFycG9vbmVlcnMsIGFuZCBib3dzbWVuIHRvIGRvIHNvbWUgbGl0dGxlIGpvYiBmb3IgdGhlbTsgYWx0ZXJpbmcsIG9yIHJlcGFpcmluZywgb3IgbmV3IHNoYXBpbmcgdGhlaXIgdmFyaW91cyB3ZWFwb25zIGFuZCBib2F0IGZ1cm5pdHVyZS4gT2Z0ZW4gaGUgd291bGQgYmUgc3Vycm91bmRlZCBieSBhbiBlYWdlciBjaXJjbGUsIGFsbCB3YWl0aW5nIHRvIGJlIHNlcnZlZDsgaG9sZGluZyBib2F0LXNwYWRlcywgcGlrZS1oZWFkcywgaGFycG9vbnMsIGFuZCBsYW5jZXMsIGFuZCBqZWFsb3VzbHkgd2F0Y2hpbmcgaGlzIGV2ZXJ5IHNvb3R5IG1vdmVtZW50LCBhcyBoZSB0b2lsZWQuIE5ldmVydGhlbGVzcywgdGhpcyBvbGQgbWFuJ3Mgd2FzIGEgcGF0aWVudCBoYW1tZXIgd2llbGRlZCBieSBhIHBhdGllbnQgYXJtLiBObyBtdXJtdXIsIG5vIGltcGF0aWVuY2UsIG5vIHBldHVsYW5jZSBkaWQgY29tZSBmcm9tIGhpbS4gU2lsZW50LCBzbG93LCBhbmQgc29sZW1uOyBib3dpbmcgb3ZlciBzdGlsbCBmdXJ0aGVyIGhpcyBjaHJvbmljYWxseSBicm9rZW4gYmFjaywgaGUgdG9pbGVkIGF3YXksIGFzIGlmIHRvaWwgd2VyZSBsaWZlIGl0c2VsZiwgYW5kIHRoZSBoZWF2eSBiZWF0aW5nIG9mIGhpcyBoYW1tZXIgdGhlIGhlYXZ5IGJlYXRpbmcgb2YgaGlzIGhlYXJ0LiBBbmQgc28gaXQgd2FzLuKAlE1vc3QgbWlzZXJhYmxlISBBIHBlY3VsaWFyIHdhbGsgaW4gdGhpcyBvbGQgbWFuLCBhIGNlcnRhaW4gc2xpZ2h0IGJ1dCBwYWluZnVsIGFwcGVhcmluZyB5YXdpbmcgaW4gaGlzIGdhaXQsIGhhZCBhdCBhbiBlYXJseSBwZXJpb2Qgb2YgdGhlIHZveWFnZSBleGNpdGVkIHRoZSBjdXJpb3NpdHkgb2YgdGhlIG1hcmluZXJzLiBBbmQgdG8gdGhlIGltcG9ydHVuaXR5IG9mIHRoZWlyIHBlcnNpc3RlZCBxdWVzdGlvbmluZ3MgaGUgaGFkIGZpbmFsbHkgZ2l2ZW4gaW47IGFuZCBzbyBpdCBjYW1lIHRvIHBhc3MgdGhhdCBldmVyeSBvbmUgbm93IGtuZXcgdGhlIHNoYW1lZnVsIHN0b3J5IG9mIGhpcyB3cmV0Y2hlZCBmYXRlLiBCZWxhdGVkLCBhbmQgbm90IGlubm9jZW50bHksIG9uZSBiaXR0ZXIgd2ludGVyJ3MgbWlkbmlnaHQsIG9uIHRoZSByb2FkIHJ1bm5pbmcgYmV0d2VlbiB0d28gY291bnRyeSB0b3ducywgdGhlIGJsYWNrc21pdGggaGFsZi1zdHVwaWRseSBmZWx0IHRoZSBkZWFkbHkgbnVtYm5lc3Mgc3RlYWxpbmcgb3ZlciBoaW0sIGFuZCBzb3VnaHQgcmVmdWdlIGluIGEgbGVhbmluZywgZGlsYXBpZGF0ZWQgYmFybi4gVGhlIGlzc3VlIHdhcywgdGhlIGxvc3Mgb2YgdGhlIGV4dHJlbWl0aWVzIG9mIGJvdGggZmVldC4gT3V0IG9mIHRoaXMgcmV2ZWxhdGlvbiwgcGFydCBieSBwYXJ0LCBhdCBsYXN0IGNhbWUgb3V0IHRoZSBmb3VyIGFjdHMgb2YgdGhlIGdsYWRuZXNzLCBhbmQgdGhlIG9uZSBsb25nLCBhbmQgYXMgeWV0IHVuY2F0YXN0cm9waGllZCBmaWZ0aCBhY3Qgb2YgdGhlIGdyaWVmIG9mIGhpcyBsaWZlJ3MgZHJhbWEuIEhlIHdhcyBhbiBvbGQgbWFuLCB3aG8sIGF0IHRoZSBhZ2Ugb2YgbmVhcmx5IHNpeHR5LCBoYWQgcG9zdHBvbmVkbHkgZW5jb3VudGVyZWQgdGhhdCB0aGluZyBpbiBzb3Jyb3cncyB0ZWNobmljYWxzIGNhbGxlZCBydWluLiBIZSBoYWQgYmVlbiBhbiBhcnRpc2FuIG9mIGZhbWVkIGV4Y2VsbGVuY2UsIGFuZCB3aXRoIHBsZW50eSB0byBkbzsgb3duZWQgYSBob3VzZSBhbmQgZ2FyZGVuOyBlbWJyYWNlZCBhIHlvdXRoZnVsLCBkYXVnaHRlci1saWtlLCBsb3Zpbmcgd2lmZSwgYW5kIHRocmVlIGJsaXRoZSwgcnVkZHkgY2hpbGRyZW47IGV2ZXJ5IFN1bmRheSB3ZW50IHRvIGEgY2hlZXJmdWwtbG9va2luZyBjaHVyY2gsIHBsYW50ZWQgaW4gYSBncm92ZS4gQnV0IG9uZSBuaWdodCwgdW5kZXIgY292ZXIgb2YgZGFya25lc3MsIGFuZCBmdXJ0aGVyIGNvbmNlYWxlZCBpbiBhIG1vc3QgY3VubmluZyBkaXNndWlzZW1lbnQsIGEgZGVzcGVyYXRlIGJ1cmdsYXIgc2xpZCBpbnRvIGhpcyBoYXBweSBob21lLCBhbmQgcm9iYmVkIHRoZW0gYWxsIG9mIGV2ZXJ5dGhpbmcuIEFuZCBkYXJrZXIgeWV0IHRvIHRlbGwsIHRoZSBibGFja3NtaXRoIGhpbXNlbGYgZGlkIGlnbm9yYW50bHkgY29uZHVjdCB0aGlzIGJ1cmdsYXIgaW50byBoaXMgZmFtaWx5J3MgaGVhcnQuIEl0IHdhcyB0aGUgQm90dGxlIENvbmp1cm9yISBVcG9uIHRoZSBvcGVuaW5nIG9mIHRoYXQgZmF0YWwgY29yaywgZm9ydGggZmxldyB0aGUgZmllbmQsIGFuZCBzaHJpdmVsbGVkIHVwIGhpcyBob21lLiBOb3csIGZvciBwcnVkZW50LCBtb3N0IHdpc2UsIGFuZCBlY29ub21pYyByZWFzb25zLCB0aGUgYmxhY2tzbWl0aCdzIHNob3Agd2FzIGluIHRoZSBiYXNlbWVudCBvZiBoaXMgZHdlbGxpbmcsIGJ1dCB3aXRoIGEgc2VwYXJhdGUgZW50cmFuY2UgdG8gaXQ7IHNvIHRoYXQgYWx3YXlzIGhhZCB0aGUgeW91bmcgYW5kIGxvdmluZyBoZWFsdGh5IHdpZmUgbGlzdGVuZWQgd2l0aCBubyB1bmhhcHB5IG5lcnZvdXNuZXNzLCBidXQgd2l0aCB2aWdvcm91cyBwbGVhc3VyZSwgdG8gdGhlIHN0b3V0IHJpbmdpbmcgb2YgaGVyIHlvdW5nLWFybWVkIG9sZCBodXNiYW5kJ3MgaGFtbWVyOyB3aG9zZSByZXZlcmJlcmF0aW9ucywgbXVmZmxlZCBieSBwYXNzaW5nIHRocm91Z2ggdGhlIGZsb29ycyBhbmQgd2FsbHMsIGNhbWUgdXAgdG8gaGVyLCBub3QgdW5zd2VldGx5LCBpbiBoZXIgbnVyc2VyeTsgYW5kIHNvLCB0byBzdG91dCBMYWJvcidzIGlyb24gbHVsbGFieSwgdGhlIGJsYWNrc21pdGgncyBpbmZhbnRzIHdlcmUgcm9ja2VkIHRvIHNsdW1iZXIuIE9oLCB3b2Ugb24gd29lISBPaCwgRGVhdGgsIHdoeSBjYW5zdCB0aG91IG5vdCBzb21ldGltZXMgYmUgdGltZWx5PyBIYWRzdCB0aG91IHRha2VuIHRoaXMgb2xkIGJsYWNrc21pdGggdG8gdGh5c2VsZiBlcmUgaGlzIGZ1bGwgcnVpbiBjYW1lIHVwb24gaGltLCB0aGVuIGhhZCB0aGUgeW91bmcgd2lkb3cgaGFkIGEgZGVsaWNpb3VzIGdyaWVmLCBhbmQgaGVyIG9ycGhhbnMgYSB0cnVseSB2ZW5lcmFibGUsIGxlZ2VuZGFyeSBzaXJlIHRvIGRyZWFtIG9mIGluIHRoZWlyIGFmdGVyIHllYXJzOyBhbmQgYWxsIG9mIHRoZW0gYSBjYXJlLWtpbGxpbmcgY29tcGV0ZW5jeS4NCiAgICAgICAgICAgICAgICA8L3A+DQogICAgICAgICAgICAgIDwvZGl2Pg0KICAgICAgICAgIDwvYm9keT4NCiAgICAgICAgPC9odG1sPg=="
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:53:59.023Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org/get',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05'
+        "headers": {
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "User-Agent": "Java/1.7.0_05",
+          "Connection": "close",
+          "Via": "Betamax",
+          "Host": "httpbin.org"
+        },
+        "args": {},
+        "url": "http://httpbin.org/get",
+        "origin": "90.197.88.40"
       }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
+- recorded: 2013-10-01T21:54:05.424Z
+  request:
+    method: POST
+    uri: https://httpbin.org/post
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Connection: close
+      Content-Length: '13'
+      Content-type: application/x-www-form-urlencoded
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+    body: message=O HAI
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '450'
+      Content-Type: application/json
+      Date: Tue, 01 Oct 2013 21:54:04 GMT
+      Server: gunicorn/0.17.4
+    body: |-
       {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '279',
-        Content-Type: 'application/json',
-        Date: 'Tue, 01 Oct 2013 21:53:58 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "ew0KICAgICAgICAidXJsIjogImh0dHA6Ly9odHRwYmluLm9yZy9nZXQiLA0KICAgICAgICAiaGVhZGVycyI6IHsNCiAgICAgICAgICAiSG9zdCI6ICJodHRwYmluLm9yZyIsDQogICAgICAgICAgIlVzZXItQWdlbnQiOiAiSmF2YS8xLjcuMF8wNSIsDQogICAgICAgICAgIkNvbm5lY3Rpb24iOiAiY2xvc2UiLA0KICAgICAgICAgICJBY2NlcHQiOiAidGV4dC9odG1sLCBpbWFnZS9naWYsIGltYWdlL2pwZWcsICo7IHE9LjIsICovKjsgcT0uMiIsDQogICAgICAgICAgIlZpYSI6ICJCZXRhbWF4Ig0KICAgICAgICB9LA0KICAgICAgICAib3JpZ2luIjogIjkwLjE5Ny44OC40MCIsDQogICAgICAgICJhcmdzIjoge30NCiAgICAgIH0="
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:53:56.133Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org/gzip',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Accept-Encoding: 'gzip',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05'
+        "files": {},
+        "data": "",
+        "url": "http://httpbin.org/post",
+        "args": {},
+        "origin": "90.197.88.40",
+        "form": {
+          "message": "O HAI"
+        },
+        "headers": {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Connection": "close",
+          "Accept": "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
+          "Content-Length": "13",
+          "Via": "Betamax",
+          "Host": "httpbin.org",
+          "User-Agent": "Java/1.7.0_05"
+        },
+        "json": null
       }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Encoding: 'gzip',
-        Content-Length: '225',
-        Content-Type: 'application/json',
-        Date: 'Tue, 01 Oct 2013 21:53:55 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "ew0KICAgICAgICAiZ3ppcHBlZCI6IHRydWUsDQogICAgICAgICJoZWFkZXJzIjogew0KICAgICAgICAgICJBY2NlcHQiOiAidGV4dC9odG1sLCBpbWFnZS9naWYsIGltYWdlL2pwZWcsICo7IHE9LjIsICovKjsgcT0uMiIsDQogICAgICAgICAgIkNvbm5lY3Rpb24iOiAiY2xvc2UiLA0KICAgICAgICAgICJWaWEiOiAiQmV0YW1heCIsDQogICAgICAgICAgIkhvc3QiOiAiaHR0cGJpbi5vcmciLA0KICAgICAgICAgICJBY2NlcHQtRW5jb2RpbmciOiAiZ3ppcCIsDQogICAgICAgICAgIlVzZXItQWdlbnQiOiAiSmF2YS8xLjcuMF8wNSINCiAgICAgICAgfSwNCiAgICAgICAgIm9yaWdpbiI6ICI5MC4xOTcuODguNDAiLA0KICAgICAgICAibWV0aG9kIjogIkdFVCINCiAgICAgIH0="
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:53:58.731Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org/redirect/1',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05'
+- recorded: 2013-10-01T21:54:08.105Z
+  request:
+    method: GET
+    uri: http://httpbin.org
+    headers:
+      Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+      Host: httpbin.org
+      Proxy-Connection: keep-alive
+      User-Agent: Java/1.7.0_05
+  response:
+    status: 200
+    headers:
+      Access-Control-Allow-Origin: '*'
+      Connection: keep-alive
+      Content-Length: '7641'
+      Content-Type: text/html; charset=utf-8
+      Date: Tue, 01 Oct 2013 21:54:07 GMT
+      Server: gunicorn/0.17.4
+    body: |-
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta http-equiv='content-type' value='text/html;charset=utf8'>
+        <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+        <title>httpbin(1): HTTP Client Testing Service</title>
+        <style type='text/css' media='all'>
+        /* style: man */
+        body#manpage {margin:0}
+        .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+        .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+        .mp h2 {margin:10px 0 0 0}
+        .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+        .mp h3 {margin:0 0 0 4ex}
+        .mp dt {margin:0;clear:left}
+        .mp dt.flush {float:left;width:8ex}
+        .mp dd {margin:0 0 0 9ex}
+        .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+        .mp pre {margin-bottom:20px}
+        .mp pre+h2,.mp pre+h3 {margin-top:22px}
+        .mp h2+pre,.mp h3+pre {margin-top:5px}
+        .mp img {display:block;margin:auto}
+        .mp h1.man-title {display:none}
+        .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+        .mp h2 {font-size:16px;line-height:1.25}
+        .mp h1 {font-size:20px;line-height:2}
+        .mp {text-align:justify;background:#fff}
+        .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+        .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+        .mp u {text-decoration:underline}
+        .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+        .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+        .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+        .mp b.man-ref {font-weight:normal;color:#434241}
+        .mp pre {padding:0 4ex}
+        .mp pre code {font-weight:normal;color:#434241}
+        .mp h2+pre,h3+pre {padding-left:0}
+        ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+        ol.man-decor {width:100%}
+        ol.man-decor li.tl {text-align:left}
+        ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+        ol.man-decor li.tr {text-align:right;float:right}
+        </style>
+        <style type='text/css' media='all'>
+        /* style: 80c */
+        .mp {max-width:86ex}
+        ul {list-style: None; margin-left: 1em!important}
+        .man-navigation {left:101ex}
+        </style>
+      </head>
+
+      <body id='manpage'>
+      <a href="http://github.com/kennethreitz/httpbin"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+
+
+      <div class='mp'>
+      <h1>httpbin(1): HTTP Request &amp; Response Service</h1>
+      <p>Freely hosted in <a href="http://httpbin.org">HTTP</a>,
+      <a href="https://httpbin.org">HTTPS</a> &amp;
+      <a href="http://eu.httpbin.org">EU</a> flavors by <a href="https://www.runscope.com">Runscope</a>.</p>
+
+      <h2 id="ENDPOINTS">ENDPOINTS</h2>
+
+      <ul>
+      <li><a href="/" data-bare-link="true"><code>/</code></a> This page.</li>
+      <li><a href="/ip" data-bare-link="true"><code>/ip</code></a> Returns Origin IP.</li>
+      <li><a href="/user-agent" data-bare-link="true"><code>/user-agent</code></a> Returns user-agent.</li>
+      <li><a href="/headers" data-bare-link="true"><code>/headers</code></a> Returns header dict.</li>
+      <li><a href="/get" data-bare-link="true"><code>/get</code></a> Returns GET data.</li>
+      <li><code>/post</code> Returns POST data.</li>
+      <li><code>/put</code> Returns PUT data.</li>
+      <li><code>/patch</code> Returns PATCH data.</li>
+      <li><code>/delete</code> Returns DELETE data</li>
+      <li><a href="/gzip" data-bare-link="true"><code>/gzip</code></a> Returns gzip-encoded data.</li>
+      <li><a href="/status/418"><code>/status/:code</code></a> Returns given HTTP Status code.</li>
+      <li><a href="/response-headers?Content-Type=text/plain;%20charset=UTF-8&amp;Server=httpbin"><code>/response-headers?key=val</code></a> Returns given response headers.</li>
+      <li><a href="/redirect/6"><code>/redirect/:n</code></a> 302 Redirects <em>n</em> times.</li>
+      <li><a href="/redirect-to?url=http://example.com/"><code>/redirect-to?url=foo</code></a> 302 Redirects to the <em>foo</em> URL.</li>
+      <li><a href="/relative-redirect/6"><code>/relative-redirect/:n</code></a> 302 Relative redirects <em>n</em> times.</li>
+      <li><a href="/cookies" data-bare-link="true"><code>/cookies</code></a> Returns cookie data.</li>
+      <li><a href="/cookies/set?k1=v1&amp;k2=v2"><code>/cookies/set?name=value</code></a> Sets one or more simple cookies.</li>
+      <li><a href="/cookies/delete?k1&amp;k2"><code>/cookies/delete?name</code></a> Deletes one or more simple cookies.</li>
+      <li><a href="/basic-auth/user/passwd"><code>/basic-auth/:user/:passwd</code></a> Challenges HTTPBasic Auth.</li>
+      <li><a href="/hidden-basic-auth/user/passwd"><code>/hidden-basic-auth/:user/:passwd</code></a> 404'd BasicAuth.</li>
+      <li><a href="/digest-auth/auth/user/passwd"><code>/digest-auth/:qop/:user/:passwd</code></a> Challenges HTTP Digest Auth.</li>
+      <li><a href="/stream/20"><code>/stream/:n</code></a> Streams <em>n</em>–100 lines.</li>
+      <li><a href="/delay/3"><code>/delay/:n</code></a> Delays responding for <em>n</em>–10 seconds.</li>
+      <li><a href="/html" data-bare-link="true"><code>/html</code></a> Renders an HTML Page.</li>
+      <li><a href="/robots.txt" data-bare-link="true"><code>/robots.txt</code></a> Returns some robots.txt rules.</li>
+      <li><a href="/deny" data-bare-link="true"><code>/deny</code></a> Denied by robots.txt file.</li>
+      <li><a href="/cache" data-bare-link="true"><code>/cache</code></a> Returns 200 unless an If-Modified-Since header is provided, when it returns a 304 Not Modified.</li>
+      </ul>
+
+
+      <h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+      <p>Testing an HTTP Library can become difficult sometimes. <a href="http://postbin.org">Postbin</a> is fantastic
+      for testing POST requests, but not much else. This exists to cover all kinds of HTTP
+      scenarios. Additional endpoints are being considered (e.g. <code>/deflate</code>).</p>
+
+      <p>All endpoint responses are JSON-encoded.</p>
+
+      <h2 id="EXAMPLES">EXAMPLES</h2>
+
+      <h3 id="-curl-http-httpbin-org-ip">$ curl http://httpbin.org/ip</h3>
+
+      <pre><code>{"origin": "24.127.96.129"}
+      </code></pre>
+
+      <h3 id="-curl-http-httpbin-org-user-agent">$ curl http://httpbin.org/user-agent</h3>
+
+      <pre><code>{"user-agent": "curl/7.19.7 (universal-apple-darwin10.0) libcurl/7.19.7 OpenSSL/0.9.8l zlib/1.2.3"}
+      </code></pre>
+
+      <h3 id="-curl-http-httpbin-org-get">$ curl http://httpbin.org/get</h3>
+
+      <pre><code>{
+         "args": {},
+         "headers": {
+            "Accept": "*/*",
+            "Connection": "close",
+            "Content-Length": "",
+            "Content-Type": "",
+            "Host": "httpbin.org",
+            "User-Agent": "curl/7.19.7 (universal-apple-darwin10.0) libcurl/7.19.7 OpenSSL/0.9.8l zlib/1.2.3"
+         },
+         "origin": "24.127.96.129",
+         "url": "http://httpbin.org/get"
       }
-    ],
-    !!okreplay.RecordedResponse [
-      302,
-      {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '215',
-        Content-Type: 'text/html; charset=utf-8',
-        Date: 'Tue, 01 Oct 2013 21:53:57 GMT',
-        Location: '/get',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9XM0MvL0RURCBIVE1MIDMuMiBGaW5hbC8vRU4iPg0KICAgICAgICA8dGl0bGU+UmVkaXJlY3RpbmcuLi48L3RpdGxlPg0KICAgICAgICA8aDE+UmVkaXJlY3RpbmcuLi48L2gxPg0KICAgICAgICA8cD5Zb3Ugc2hvdWxkIGJlIHJlZGlyZWN0ZWQgYXV0b21hdGljYWxseSB0byB0YXJnZXQgPGEgaHJlZj0iL2dldCI+L2dldDwvYT4uICBJZiBub3QgY2xpY2sgdGhlIGxpbmsu"
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:54:02.428Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'https://httpbin.org/get',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Connection: 'keep-alive',
-        Host: 'httpbin.org',
-        User-Agent: 'Java/1.7.0_05',
-      }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '279',
-        Content-Type: 'application/json',
-        Date: 'Tue, 01 Oct 2013 21:54:01 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "ew0KICAgICAgICAiaGVhZGVycyI6IHsNCiAgICAgICAgICAiQWNjZXB0IjogInRleHQvaHRtbCwgaW1hZ2UvZ2lmLCBpbWFnZS9qcGVnLCAqOyBxPS4yLCAqLyo7IHE9LjIiLA0KICAgICAgICAgICJVc2VyLUFnZW50IjogIkphdmEvMS43LjBfMDUiLA0KICAgICAgICAgICJDb25uZWN0aW9uIjogImNsb3NlIiwNCiAgICAgICAgICAiVmlhIjogIkJldGFtYXgiLA0KICAgICAgICAgICJIb3N0IjogImh0dHBiaW4ub3JnIg0KICAgICAgICB9LA0KICAgICAgICAiYXJncyI6IHt9LA0KICAgICAgICAidXJsIjogImh0dHA6Ly9odHRwYmluLm9yZy9nZXQiLA0KICAgICAgICAib3JpZ2luIjogIjkwLjE5Ny44OC40MCINCiAgICAgIH0="
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:54:05.424Z',
-    !!okreplay.RecordedRequest [
-      POST,
-      'https://httpbin.org/post',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Connection: 'close',
-        Content-Length: '13',
-        Content-type: 'application/x-www-form-urlencoded',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05',
-      },
-      !!binary "TyBIQUk="
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '450',
-        Content-Type: 'application/json',
-        Date: 'Tue, 01 Oct 2013 21:54:04 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "ew0KICAgICAgICAiZmlsZXMiOiB7fSwNCiAgICAgICAgImRhdGEiOiAiIiwNCiAgICAgICAgInVybCI6ICJodHRwOi8vaHR0cGJpbi5vcmcvcG9zdCIsDQogICAgICAgICJhcmdzIjoge30sDQogICAgICAgICJvcmlnaW4iOiAiOTAuMTk3Ljg4LjQwIiwNCiAgICAgICAgImZvcm0iOiB7DQogICAgICAgICAgIm1lc3NhZ2UiOiAiTyBIQUkiDQogICAgICAgIH0sDQogICAgICAgICJoZWFkZXJzIjogew0KICAgICAgICAgICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24veC13d3ctZm9ybS11cmxlbmNvZGVkIiwNCiAgICAgICAgICAiQ29ubmVjdGlvbiI6ICJjbG9zZSIsDQogICAgICAgICAgIkFjY2VwdCI6ICJ0ZXh0L2h0bWwsIGltYWdlL2dpZiwgaW1hZ2UvanBlZywgKjsgcT0uMiwgKi8qOyBxPS4yIiwNCiAgICAgICAgICAiQ29udGVudC1MZW5ndGgiOiAiMTMiLA0KICAgICAgICAgICJWaWEiOiAiQmV0YW1heCIsDQogICAgICAgICAgIkhvc3QiOiAiaHR0cGJpbi5vcmciLA0KICAgICAgICAgICJVc2VyLUFnZW50IjogIkphdmEvMS43LjBfMDUiDQogICAgICAgIH0sDQogICAgICAgICJqc29uIjogbnVsbA0KICAgICAgfQ=="
-    ]
-  ]
-  - !!okreplay.RecordedInteraction [
-    '2013-10-01T21:54:08.105Z',
-    !!okreplay.RecordedRequest [
-      GET,
-      'http://httpbin.org',
-      {
-        Accept: 'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
-        Host: 'httpbin.org',
-        Proxy-Connection: 'keep-alive',
-        User-Agent: 'Java/1.7.0_05'
-      }
-    ],
-    !!okreplay.RecordedResponse [
-      200,
-      {
-        Access-Control-Allow-Origin: '*',
-        Connection: 'keep-alive',
-        Content-Length: '7641',
-        Content-Type: 'text/html; charset=utf-8',
-        Date: 'Tue, 01 Oct 2013 21:54:07 GMT',
-        Server: 'gunicorn/0.17.4'
-      },
-      !!binary "ICAgICAgICA8IURPQ1RZUEUgaHRtbD4NCiAgICAgICAgPGh0bWw+DQogICAgICAgIDxoZWFkPg0KICAgICAgICAgIDxtZXRhIGh0dHAtZXF1aXY9J2NvbnRlbnQtdHlwZScgdmFsdWU9J3RleHQvaHRtbDtjaGFyc2V0PXV0ZjgnPg0KICAgICAgICAgIDxtZXRhIG5hbWU9J2dlbmVyYXRvcicgdmFsdWU9J1Jvbm4vdjAuNy4zIChodHRwOi8vZ2l0aHViLmNvbS9ydG9tYXlrby9yb25uL3RyZWUvMC43LjMpJz4NCiAgICAgICAgICA8dGl0bGU+aHR0cGJpbigxKTogSFRUUCBDbGllbnQgVGVzdGluZyBTZXJ2aWNlPC90aXRsZT4NCiAgICAgICAgICA8c3R5bGUgdHlwZT0ndGV4dC9jc3MnIG1lZGlhPSdhbGwnPg0KICAgICAgICAgIC8qIHN0eWxlOiBtYW4gKi8NCiAgICAgICAgICBib2R5I21hbnBhZ2Uge21hcmdpbjowfQ0KICAgICAgICAgIC5tcCB7bWF4LXdpZHRoOjEwMGV4O3BhZGRpbmc6MCA5ZXggMWV4IDRleH0NCiAgICAgICAgICAubXAgcCwubXAgcHJlLC5tcCB1bCwubXAgb2wsLm1wIGRsIHttYXJnaW46MCAwIDIwcHggMH0NCiAgICAgICAgICAubXAgaDIge21hcmdpbjoxMHB4IDAgMCAwfQ0KICAgICAgICAgIC5tcCA+IHAsLm1wID4gcHJlLC5tcCA+IHVsLC5tcCA+IG9sLC5tcCA+IGRsIHttYXJnaW4tbGVmdDo4ZXh9DQogICAgICAgICAgLm1wIGgzIHttYXJnaW46MCAwIDAgNGV4fQ0KICAgICAgICAgIC5tcCBkdCB7bWFyZ2luOjA7Y2xlYXI6bGVmdH0NCiAgICAgICAgICAubXAgZHQuZmx1c2gge2Zsb2F0OmxlZnQ7d2lkdGg6OGV4fQ0KICAgICAgICAgIC5tcCBkZCB7bWFyZ2luOjAgMCAwIDlleH0NCiAgICAgICAgICAubXAgaDEsLm1wIGgyLC5tcCBoMywubXAgaDQge2NsZWFyOmxlZnR9DQogICAgICAgICAgLm1wIHByZSB7bWFyZ2luLWJvdHRvbToyMHB4fQ0KICAgICAgICAgIC5tcCBwcmUraDIsLm1wIHByZStoMyB7bWFyZ2luLXRvcDoyMnB4fQ0KICAgICAgICAgIC5tcCBoMitwcmUsLm1wIGgzK3ByZSB7bWFyZ2luLXRvcDo1cHh9DQogICAgICAgICAgLm1wIGltZyB7ZGlzcGxheTpibG9jazttYXJnaW46YXV0b30NCiAgICAgICAgICAubXAgaDEubWFuLXRpdGxlIHtkaXNwbGF5Om5vbmV9DQogICAgICAgICAgLm1wLC5tcCBjb2RlLC5tcCBwcmUsLm1wIHR0LC5tcCBrYmQsLm1wIHNhbXAsLm1wIGgzLC5tcCBoNCB7Zm9udC1mYW1pbHk6bW9ub3NwYWNlO2ZvbnQtc2l6ZToxNHB4O2xpbmUtaGVpZ2h0OjEuNDI4NTcxNDI4NTcxNDN9DQogICAgICAgICAgLm1wIGgyIHtmb250LXNpemU6MTZweDtsaW5lLWhlaWdodDoxLjI1fQ0KICAgICAgICAgIC5tcCBoMSB7Zm9udC1zaXplOjIwcHg7bGluZS1oZWlnaHQ6Mn0NCiAgICAgICAgICAubXAge3RleHQtYWxpZ246anVzdGlmeTtiYWNrZ3JvdW5kOiNmZmZ9DQogICAgICAgICAgLm1wLC5tcCBjb2RlLC5tcCBwcmUsLm1wIHByZSBjb2RlLC5tcCB0dCwubXAga2JkLC5tcCBzYW1wIHtjb2xvcjojMTMxMjExfQ0KICAgICAgICAgIC5tcCBoMSwubXAgaDIsLm1wIGgzLC5tcCBoNCB7Y29sb3I6IzAzMDIwMX0NCiAgICAgICAgICAubXAgdSB7dGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZX0NCiAgICAgICAgICAubXAgY29kZSwubXAgc3Ryb25nLC5tcCBiIHtmb250LXdlaWdodDpib2xkO2NvbG9yOiMxMzEyMTF9DQogICAgICAgICAgLm1wIGVtLC5tcCB2YXIge2ZvbnQtc3R5bGU6aXRhbGljO2NvbG9yOiMyMzIyMjE7dGV4dC1kZWNvcmF0aW9uOm5vbmV9DQogICAgICAgICAgLm1wIGEsLm1wIGE6bGluaywubXAgYTpob3ZlciwubXAgYSBjb2RlLC5tcCBhIHByZSwubXAgYSB0dCwubXAgYSBrYmQsLm1wIGEgc2FtcCB7Y29sb3I6IzAwMDBmZn0NCiAgICAgICAgICAubXAgYi5tYW4tcmVmIHtmb250LXdlaWdodDpub3JtYWw7Y29sb3I6IzQzNDI0MX0NCiAgICAgICAgICAubXAgcHJlIHtwYWRkaW5nOjAgNGV4fQ0KICAgICAgICAgIC5tcCBwcmUgY29kZSB7Zm9udC13ZWlnaHQ6bm9ybWFsO2NvbG9yOiM0MzQyNDF9DQogICAgICAgICAgLm1wIGgyK3ByZSxoMytwcmUge3BhZGRpbmctbGVmdDowfQ0KICAgICAgICAgIG9sLm1hbi1kZWNvcixvbC5tYW4tZGVjb3IgbGkge21hcmdpbjozcHggMCAxMHB4IDA7cGFkZGluZzowO2Zsb2F0OmxlZnQ7d2lkdGg6MzMlO2xpc3Qtc3R5bGUtdHlwZTpub25lO3RleHQtdHJhbnNmb3JtOnVwcGVyY2FzZTtjb2xvcjojOTk5O2xldHRlci1zcGFjaW5nOjFweH0NCiAgICAgICAgICBvbC5tYW4tZGVjb3Ige3dpZHRoOjEwMCV9DQogICAgICAgICAgb2wubWFuLWRlY29yIGxpLnRsIHt0ZXh0LWFsaWduOmxlZnR9DQogICAgICAgICAgb2wubWFuLWRlY29yIGxpLnRjIHt0ZXh0LWFsaWduOmNlbnRlcjtsZXR0ZXItc3BhY2luZzo0cHh9DQogICAgICAgICAgb2wubWFuLWRlY29yIGxpLnRyIHt0ZXh0LWFsaWduOnJpZ2h0O2Zsb2F0OnJpZ2h0fQ0KICAgICAgICAgIDwvc3R5bGU+DQogICAgICAgICAgPHN0eWxlIHR5cGU9J3RleHQvY3NzJyBtZWRpYT0nYWxsJz4NCiAgICAgICAgICAvKiBzdHlsZTogODBjICovDQogICAgICAgICAgLm1wIHttYXgtd2lkdGg6ODZleH0NCiAgICAgICAgICB1bCB7bGlzdC1zdHlsZTogTm9uZTsgbWFyZ2luLWxlZnQ6IDFlbSFpbXBvcnRhbnR9DQogICAgICAgICAgLm1hbi1uYXZpZ2F0aW9uIHtsZWZ0OjEwMWV4fQ0KICAgICAgICAgIDwvc3R5bGU+DQogICAgICAgIDwvaGVhZD4NCg0KICAgICAgICA8Ym9keSBpZD0nbWFucGFnZSc+DQogICAgICAgIDxhIGhyZWY9Imh0dHA6Ly9naXRodWIuY29tL2tlbm5ldGhyZWl0ei9odHRwYmluIj48aW1nIHN0eWxlPSJwb3NpdGlvbjogYWJzb2x1dGU7IHRvcDogMDsgcmlnaHQ6IDA7IGJvcmRlcjogMDsiIHNyYz0iaHR0cHM6Ly9zMy5hbWF6b25hd3MuY29tL2dpdGh1Yi9yaWJib25zL2ZvcmttZV9yaWdodF9kYXJrYmx1ZV8xMjE2MjEucG5nIiBhbHQ9IkZvcmsgbWUgb24gR2l0SHViIj48L2E+DQoNCg0KDQogICAgICAgIDxkaXYgY2xhc3M9J21wJz4NCiAgICAgICAgPGgxPmh0dHBiaW4oMSk6IEhUVFAgUmVxdWVzdCAmYW1wOyBSZXNwb25zZSBTZXJ2aWNlPC9oMT4NCiAgICAgICAgPHA+RnJlZWx5IGhvc3RlZCBpbiA8YSBocmVmPSJodHRwOi8vaHR0cGJpbi5vcmciPkhUVFA8L2E+LA0KICAgICAgICA8YSBocmVmPSJodHRwczovL2h0dHBiaW4ub3JnIj5IVFRQUzwvYT4gJmFtcDsNCiAgICAgICAgPGEgaHJlZj0iaHR0cDovL2V1Lmh0dHBiaW4ub3JnIj5FVTwvYT4gZmxhdm9ycyBieSA8YSBocmVmPSJodHRwczovL3d3dy5ydW5zY29wZS5jb20iPlJ1bnNjb3BlPC9hPi48L3A+DQoNCiAgICAgICAgPGgyIGlkPSJFTkRQT0lOVFMiPkVORFBPSU5UUzwvaDI+DQoNCiAgICAgICAgPHVsPg0KICAgICAgICA8bGk+PGEgaHJlZj0iLyIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi88L2NvZGU+PC9hPiBUaGlzIHBhZ2UuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9pcCIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi9pcDwvY29kZT48L2E+IFJldHVybnMgT3JpZ2luIElQLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvdXNlci1hZ2VudCIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi91c2VyLWFnZW50PC9jb2RlPjwvYT4gUmV0dXJucyB1c2VyLWFnZW50LjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvaGVhZGVycyIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi9oZWFkZXJzPC9jb2RlPjwvYT4gUmV0dXJucyBoZWFkZXIgZGljdC48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL2dldCIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi9nZXQ8L2NvZGU+PC9hPiBSZXR1cm5zIEdFVCBkYXRhLjwvbGk+DQogICAgICAgIDxsaT48Y29kZT4vcG9zdDwvY29kZT4gUmV0dXJucyBQT1NUIGRhdGEuPC9saT4NCiAgICAgICAgPGxpPjxjb2RlPi9wdXQ8L2NvZGU+IFJldHVybnMgUFVUIGRhdGEuPC9saT4NCiAgICAgICAgPGxpPjxjb2RlPi9wYXRjaDwvY29kZT4gUmV0dXJucyBQQVRDSCBkYXRhLjwvbGk+DQogICAgICAgIDxsaT48Y29kZT4vZGVsZXRlPC9jb2RlPiBSZXR1cm5zIERFTEVURSBkYXRhPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9nemlwIiBkYXRhLWJhcmUtbGluaz0idHJ1ZSI+PGNvZGU+L2d6aXA8L2NvZGU+PC9hPiBSZXR1cm5zIGd6aXAtZW5jb2RlZCBkYXRhLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvc3RhdHVzLzQxOCI+PGNvZGU+L3N0YXR1cy86Y29kZTwvY29kZT48L2E+IFJldHVybnMgZ2l2ZW4gSFRUUCBTdGF0dXMgY29kZS48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL3Jlc3BvbnNlLWhlYWRlcnM/Q29udGVudC1UeXBlPXRleHQvcGxhaW47JTIwY2hhcnNldD1VVEYtOCZhbXA7U2VydmVyPWh0dHBiaW4iPjxjb2RlPi9yZXNwb25zZS1oZWFkZXJzP2tleT12YWw8L2NvZGU+PC9hPiBSZXR1cm5zIGdpdmVuIHJlc3BvbnNlIGhlYWRlcnMuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9yZWRpcmVjdC82Ij48Y29kZT4vcmVkaXJlY3QvOm48L2NvZGU+PC9hPiAzMDIgUmVkaXJlY3RzIDxlbT5uPC9lbT4gdGltZXMuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9yZWRpcmVjdC10bz91cmw9aHR0cDovL2V4YW1wbGUuY29tLyI+PGNvZGU+L3JlZGlyZWN0LXRvP3VybD1mb288L2NvZGU+PC9hPiAzMDIgUmVkaXJlY3RzIHRvIHRoZSA8ZW0+Zm9vPC9lbT4gVVJMLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvcmVsYXRpdmUtcmVkaXJlY3QvNiI+PGNvZGU+L3JlbGF0aXZlLXJlZGlyZWN0LzpuPC9jb2RlPjwvYT4gMzAyIFJlbGF0aXZlIHJlZGlyZWN0cyA8ZW0+bjwvZW0+IHRpbWVzLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvY29va2llcyIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi9jb29raWVzPC9jb2RlPjwvYT4gUmV0dXJucyBjb29raWUgZGF0YS48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL2Nvb2tpZXMvc2V0P2sxPXYxJmFtcDtrMj12MiI+PGNvZGU+L2Nvb2tpZXMvc2V0P25hbWU9dmFsdWU8L2NvZGU+PC9hPiBTZXRzIG9uZSBvciBtb3JlIHNpbXBsZSBjb29raWVzLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvY29va2llcy9kZWxldGU/azEmYW1wO2syIj48Y29kZT4vY29va2llcy9kZWxldGU/bmFtZTwvY29kZT48L2E+IERlbGV0ZXMgb25lIG9yIG1vcmUgc2ltcGxlIGNvb2tpZXMuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9iYXNpYy1hdXRoL3VzZXIvcGFzc3dkIj48Y29kZT4vYmFzaWMtYXV0aC86dXNlci86cGFzc3dkPC9jb2RlPjwvYT4gQ2hhbGxlbmdlcyBIVFRQQmFzaWMgQXV0aC48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL2hpZGRlbi1iYXNpYy1hdXRoL3VzZXIvcGFzc3dkIj48Y29kZT4vaGlkZGVuLWJhc2ljLWF1dGgvOnVzZXIvOnBhc3N3ZDwvY29kZT48L2E+IDQwNCdkIEJhc2ljQXV0aC48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL2RpZ2VzdC1hdXRoL2F1dGgvdXNlci9wYXNzd2QiPjxjb2RlPi9kaWdlc3QtYXV0aC86cW9wLzp1c2VyLzpwYXNzd2Q8L2NvZGU+PC9hPiBDaGFsbGVuZ2VzIEhUVFAgRGlnZXN0IEF1dGguPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9zdHJlYW0vMjAiPjxjb2RlPi9zdHJlYW0vOm48L2NvZGU+PC9hPiBTdHJlYW1zIDxlbT5uPC9lbT7igJMxMDAgbGluZXMuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9kZWxheS8zIj48Y29kZT4vZGVsYXkvOm48L2NvZGU+PC9hPiBEZWxheXMgcmVzcG9uZGluZyBmb3IgPGVtPm48L2VtPuKAkzEwIHNlY29uZHMuPC9saT4NCiAgICAgICAgPGxpPjxhIGhyZWY9Ii9odG1sIiBkYXRhLWJhcmUtbGluaz0idHJ1ZSI+PGNvZGU+L2h0bWw8L2NvZGU+PC9hPiBSZW5kZXJzIGFuIEhUTUwgUGFnZS48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL3JvYm90cy50eHQiIGRhdGEtYmFyZS1saW5rPSJ0cnVlIj48Y29kZT4vcm9ib3RzLnR4dDwvY29kZT48L2E+IFJldHVybnMgc29tZSByb2JvdHMudHh0IHJ1bGVzLjwvbGk+DQogICAgICAgIDxsaT48YSBocmVmPSIvZGVueSIgZGF0YS1iYXJlLWxpbms9InRydWUiPjxjb2RlPi9kZW55PC9jb2RlPjwvYT4gRGVuaWVkIGJ5IHJvYm90cy50eHQgZmlsZS48L2xpPg0KICAgICAgICA8bGk+PGEgaHJlZj0iL2NhY2hlIiBkYXRhLWJhcmUtbGluaz0idHJ1ZSI+PGNvZGU+L2NhY2hlPC9jb2RlPjwvYT4gUmV0dXJucyAyMDAgdW5sZXNzIGFuIElmLU1vZGlmaWVkLVNpbmNlIGhlYWRlciBpcyBwcm92aWRlZCwgd2hlbiBpdCByZXR1cm5zIGEgMzA0IE5vdCBNb2RpZmllZC48L2xpPg0KICAgICAgICA8L3VsPg0KDQoNCiAgICAgICAgPGgyIGlkPSJERVNDUklQVElPTiI+REVTQ1JJUFRJT048L2gyPg0KDQogICAgICAgIDxwPlRlc3RpbmcgYW4gSFRUUCBMaWJyYXJ5IGNhbiBiZWNvbWUgZGlmZmljdWx0IHNvbWV0aW1lcy4gPGEgaHJlZj0iaHR0cDovL3Bvc3RiaW4ub3JnIj5Qb3N0YmluPC9hPiBpcyBmYW50YXN0aWMNCiAgICAgICAgZm9yIHRlc3RpbmcgUE9TVCByZXF1ZXN0cywgYnV0IG5vdCBtdWNoIGVsc2UuIFRoaXMgZXhpc3RzIHRvIGNvdmVyIGFsbCBraW5kcyBvZiBIVFRQDQogICAgICAgIHNjZW5hcmlvcy4gQWRkaXRpb25hbCBlbmRwb2ludHMgYXJlIGJlaW5nIGNvbnNpZGVyZWQgKGUuZy4gPGNvZGU+L2RlZmxhdGU8L2NvZGU+KS48L3A+DQoNCiAgICAgICAgPHA+QWxsIGVuZHBvaW50IHJlc3BvbnNlcyBhcmUgSlNPTi1lbmNvZGVkLjwvcD4NCg0KICAgICAgICA8aDIgaWQ9IkVYQU1QTEVTIj5FWEFNUExFUzwvaDI+DQoNCiAgICAgICAgPGgzIGlkPSItY3VybC1odHRwLWh0dHBiaW4tb3JnLWlwIj4kIGN1cmwgaHR0cDovL2h0dHBiaW4ub3JnL2lwPC9oMz4NCg0KICAgICAgICA8cHJlPjxjb2RlPnsib3JpZ2luIjogIjI0LjEyNy45Ni4xMjkifQ0KICAgICAgICA8L2NvZGU+PC9wcmU+DQoNCiAgICAgICAgPGgzIGlkPSItY3VybC1odHRwLWh0dHBiaW4tb3JnLXVzZXItYWdlbnQiPiQgY3VybCBodHRwOi8vaHR0cGJpbi5vcmcvdXNlci1hZ2VudDwvaDM+DQoNCiAgICAgICAgPHByZT48Y29kZT57InVzZXItYWdlbnQiOiAiY3VybC83LjE5LjcgKHVuaXZlcnNhbC1hcHBsZS1kYXJ3aW4xMC4wKSBsaWJjdXJsLzcuMTkuNyBPcGVuU1NMLzAuOS44bCB6bGliLzEuMi4zIn0NCiAgICAgICAgPC9jb2RlPjwvcHJlPg0KDQogICAgICAgIDxoMyBpZD0iLWN1cmwtaHR0cC1odHRwYmluLW9yZy1nZXQiPiQgY3VybCBodHRwOi8vaHR0cGJpbi5vcmcvZ2V0PC9oMz4NCg0KICAgICAgICA8cHJlPjxjb2RlPnsNCiAgICAgICAgICAgImFyZ3MiOiB7fSwNCiAgICAgICAgICAgImhlYWRlcnMiOiB7DQogICAgICAgICAgICAgICJBY2NlcHQiOiAiKi8qIiwNCiAgICAgICAgICAgICAgIkNvbm5lY3Rpb24iOiAiY2xvc2UiLA0KICAgICAgICAgICAgICAiQ29udGVudC1MZW5ndGgiOiAiIiwNCiAgICAgICAgICAgICAgIkNvbnRlbnQtVHlwZSI6ICIiLA0KICAgICAgICAgICAgICAiSG9zdCI6ICJodHRwYmluLm9yZyIsDQogICAgICAgICAgICAgICJVc2VyLUFnZW50IjogImN1cmwvNy4xOS43ICh1bml2ZXJzYWwtYXBwbGUtZGFyd2luMTAuMCkgbGliY3VybC83LjE5LjcgT3BlblNTTC8wLjkuOGwgemxpYi8xLjIuMyINCiAgICAgICAgICAgfSwNCiAgICAgICAgICAgIm9yaWdpbiI6ICIyNC4xMjcuOTYuMTI5IiwNCiAgICAgICAgICAgInVybCI6ICJodHRwOi8vaHR0cGJpbi5vcmcvZ2V0Ig0KICAgICAgICB9DQogICAgICAgIDwvY29kZT48L3ByZT4NCg0KICAgICAgICA8aDMgaWQ9Ii1jdXJsLUktaHR0cC1odHRwYmluLW9yZy1zdGF0dXMtNDE4Ij4kIGN1cmwgLUkgaHR0cDovL2h0dHBiaW4ub3JnL3N0YXR1cy80MTg8L2gzPg0KDQogICAgICAgIDxwcmU+PGNvZGU+SFRUUC8xLjEgNDE4IEknTSBBIFRFQVBPVA0KICAgICAgICBTZXJ2ZXI6IG5naW54LzAuNy42Nw0KICAgICAgICBEYXRlOiBNb24sIDEzIEp1biAyMDExIDA0OjI1OjM4IEdNVA0KICAgICAgICBDb25uZWN0aW9uOiBjbG9zZQ0KICAgICAgICB4LW1vcmUtaW5mbzogaHR0cDovL3Rvb2xzLmlldGYub3JnL2h0bWwvcmZjMjMyNA0KICAgICAgICBDb250ZW50LUxlbmd0aDogMTM1DQogICAgICAgIDwvY29kZT48L3ByZT4NCg0KICAgICAgICA8aDIgaWQ9IkFVVEhPUiI+QVVUSE9SPC9oMj4NCg0KICAgICAgICA8cD5BIDxhIGhyZWY9Imh0dHA6Ly9rZW5uZXRocmVpdHouY29tL3BhZ2VzL29wZW4tcHJvamVjdHMuaHRtbCI+S2VubmV0aCBSZWl0ejwvYT4NCiAgICAgICAgUHJvamVjdC48L3A+DQoNCiAgICAgICAgPGgyIGlkPSJTRUUtQUxTTyI+U0VFIEFMU088L2gyPg0KDQogICAgICAgIDxwPjxhIGhyZWY9Imh0dHA6Ly9weXRob24tcmVxdWVzdHMub3JnIiBkYXRhLWJhcmUtbGluaz0idHJ1ZSI+aHR0cDovL3B5dGhvbi1yZXF1ZXN0cy5vcmc8L2E+PC9wPg0KDQogICAgICAgIDwvZGl2Pg0KDQogICAgICAgIDxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ij4NCiAgICAgICAgICAoZnVuY3Rpb24oKSB7DQogICAgICAgICAgICB2YXIgdCAgID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnc2NyaXB0Jyk7DQogICAgICAgICAgICB0LnR5cGUgID0gJ3RleHQvamF2YXNjcmlwdCc7DQogICAgICAgICAgICB0LmFzeW5jID0gdHJ1ZTsNCiAgICAgICAgICAgIHQuaWQgICAgPSAnZ2F1Z2VzLXRyYWNrZXInOw0KICAgICAgICAgICAgdC5zZXRBdHRyaWJ1dGUoJ2RhdGEtc2l0ZS1pZCcsICc0ZGY1YTdkOTYxM2Y1ZDU3N2MwMDAwMDEnKTsNCiAgICAgICAgICAgIHQuc3JjID0gJy8vc2VjdXJlLmdhdWcuZXMvdHJhY2suanMnOw0KICAgICAgICAgICAgdmFyIHMgPSBkb2N1bWVudC5nZXRFbGVtZW50c0J5VGFnTmFtZSgnc2NyaXB0JylbMF07DQogICAgICAgICAgICBzLnBhcmVudE5vZGUuaW5zZXJ0QmVmb3JlKHQsIHMpOw0KICAgICAgICAgIH0pKCk7DQogICAgICAgIDwvc2NyaXB0Pg0KDQogICAgICAgIDwvYm9keT4NCiAgICAgICAgPC9odG1sPg=="
-    ]
-  ]
+      </code></pre>
+
+      <h3 id="-curl-I-http-httpbin-org-status-418">$ curl -I http://httpbin.org/status/418</h3>
+
+      <pre><code>HTTP/1.1 418 I'M A TEAPOT
+      Server: nginx/0.7.67
+      Date: Mon, 13 Jun 2011 04:25:38 GMT
+      Connection: close
+      x-more-info: http://tools.ietf.org/html/rfc2324
+      Content-Length: 135
+      </code></pre>
+
+      <h2 id="AUTHOR">AUTHOR</h2>
+
+      <p>A <a href="http://kennethreitz.com/pages/open-projects.html">Kenneth Reitz</a>
+      Project.</p>
+
+      <h2 id="SEE-ALSO">SEE ALSO</h2>
+
+      <p><a href="http://python-requests.org" data-bare-link="true">http://python-requests.org</a></p>
+
+      </div>
+
+      <script type="text/javascript">
+        (function() {
+          var t   = document.createElement('script');
+          t.type  = 'text/javascript';
+          t.async = true;
+          t.id    = 'gauges-tracker';
+          t.setAttribute('data-site-id', '4df5a7d9613f5d577c000001');
+          t.src = '//secure.gaug.es/track.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(t, s);
+        })();
+      </script>
+
+      </body>
+      </html>
 name: smoke spec

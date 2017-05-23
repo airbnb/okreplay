@@ -38,7 +38,7 @@ class SequentialTapeSpec extends Specification {
     }
 
     and: "each has different content"
-    responses.bodyAsText == (1..n).collect {
+    responses.collect { it.bodyAsText() } == (1..n).collect {
       "count: $it"
     }
 
@@ -83,7 +83,8 @@ class SequentialTapeSpec extends Specification {
         .url(url)
         .build()
     def postRequest = new RecordedRequest.Builder()
-        .method("POST", RequestBody.create(MediaType.parse(JSON_UTF_8.toString()), '{"name":"foo"}'))
+        .method("POST", RequestBody.create(MediaType.parse(JSON_UTF_8.toString()),
+        '{"name":"foo"}'))
         .url(url)
         .build()
 
@@ -97,7 +98,7 @@ class SequentialTapeSpec extends Specification {
     responses.code == [HTTP_NOT_FOUND, HTTP_CREATED, HTTP_OK]
 
     and: "the correct data is played back"
-    new JsonSlurper().parseText(responses[2].bodyAsText).name == "foo"
+    new JsonSlurper().parseText(responses[2].bodyAsText()).name == "foo"
 
     where:
     url = "http://freeside.co/thing/1"

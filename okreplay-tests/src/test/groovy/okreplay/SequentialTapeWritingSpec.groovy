@@ -16,7 +16,6 @@ import static okreplay.TapeMode.WRITE_SEQUENTIAL
     "https://github.com/robfletcher/betamax/pull/70"
 ])
 class SequentialTapeWritingSpec extends Specification {
-
   @Shared @AutoCleanup("deleteDir") def tapeRoot = Files.createTempDir()
   @Shared def tapeLoader = new YamlTapeLoader(tapeRoot)
   MemoryTape tape
@@ -41,7 +40,7 @@ class SequentialTapeWritingSpec extends Specification {
 
     and: "each has different content"
     with(tape.interactions) {
-      response.bodyAsText == (1..n).collect {
+      response.collect { it.body() } == (1..n).collect {
         "count: $it"
       }
     }
