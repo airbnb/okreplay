@@ -9,6 +9,4 @@ public interface Response extends Message {
   String getContentType();
   RecordedResponse.Builder newBuilder();
   Protocol protocol();
-
-  YamlRecordedResponse toJavaBean();
 }

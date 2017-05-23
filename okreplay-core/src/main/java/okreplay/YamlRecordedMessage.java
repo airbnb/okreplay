@@ -8,7 +8,7 @@ import java.util.Map;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static okreplay.AbstractMessage.DEFAULT_CONTENT_TYPE;
 
-public class YamlRecordedMessage {
+public abstract class YamlRecordedMessage {
   private final Map<String, String> headers;
   private final Object body;
 
@@ -37,4 +37,6 @@ public class YamlRecordedMessage {
   public Object body() {
     return body;
   }
+
+  abstract Message toImmutable();
 }

@@ -45,4 +45,7 @@ interface Message {
 
   /** @return the content encoding of the message, e.g. _gzip_, _deflate_ or _none_. */
   String getEncoding();
+
+  /** @return a copy of this Request object ready to be serialized to YAML */
+  YamlRecordedMessage toYaml();
 }

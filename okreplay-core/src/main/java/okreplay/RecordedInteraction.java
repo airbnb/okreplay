@@ -25,7 +25,8 @@ class RecordedInteraction {
     return response;
   }
 
-  YamlRecordedInteraction toJavaBean() {
-    return new YamlRecordedInteraction(recorded, request.toYaml(), response.toJavaBean());
+  YamlRecordedInteraction toYaml() {
+    return new YamlRecordedInteraction(recorded,
+        (YamlRecordedRequest) request.toYaml(), (YamlRecordedResponse) response.toYaml());
   }
 }

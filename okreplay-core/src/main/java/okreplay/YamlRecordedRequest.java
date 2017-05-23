@@ -32,7 +32,7 @@ public class YamlRecordedRequest extends YamlRecordedMessage {
     return uri;
   }
 
-  Request toImmutable() {
+  @Override Request toImmutable() {
     Object body = body();
     MediaType mediaType = MediaType.parse(contentType());
     RequestBody requestBody = null;

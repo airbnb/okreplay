@@ -133,13 +133,13 @@ abstract class MemoryTape implements Tape {
         recordResponse(response));
 
     if (mode.isSequential()) {
-      interactions.add(interaction.toJavaBean());
+      interactions.add(interaction.toYaml());
     } else {
       int position = findMatch(request);
       if (position >= 0) {
-        interactions.set(position, interaction.toJavaBean());
+        interactions.set(position, interaction.toYaml());
       } else {
-        interactions.add(interaction.toJavaBean());
+        interactions.add(interaction.toYaml());
       }
     }
   }

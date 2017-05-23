@@ -23,7 +23,7 @@ public class YamlRecordedResponse extends YamlRecordedMessage {
     return status;
   }
 
-  Response toImmutable() {
+  @Override Response toImmutable() {
     Object body = body();
     MediaType mediaType = MediaType.parse(contentType());
     ResponseBody responseBody = null;

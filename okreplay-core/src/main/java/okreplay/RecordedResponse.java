@@ -38,7 +38,7 @@ class RecordedResponse extends RecordedMessage implements Response {
     return protocol;
   }
 
-  @Override public YamlRecordedResponse toJavaBean() {
+  @Override public YamlRecordedResponse toYaml() {
     return new YamlRecordedResponse(headersAsMap(), maybeBodyAsString(), code);
   }
 
