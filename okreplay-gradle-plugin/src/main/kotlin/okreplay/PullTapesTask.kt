@@ -35,7 +35,7 @@ open class PullTapesTask
       }
       try {
         it.pullDirectory(localDir, "$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
-      } catch (e: AdbCommandRejectedException) {
+      } catch (e: RuntimeException) {
         project.logger.error("ADB Command failed: ${e.message}")
       }
     }

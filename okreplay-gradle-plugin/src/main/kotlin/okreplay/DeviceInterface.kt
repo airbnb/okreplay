@@ -10,8 +10,6 @@ import com.android.ddmlib.ShellCommandUnresponsiveException
 import com.android.ddmlib.AdbCommandRejectedException
 import com.android.ddmlib.NullOutputReceiver
 
-
-
 internal interface DeviceInterface {
   fun push(localFile: String, remotePath: String)
   fun pull(remotePath: String, localPath: String)

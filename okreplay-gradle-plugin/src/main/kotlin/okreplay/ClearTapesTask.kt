@@ -1,6 +1,5 @@
 package okreplay
 
-import com.android.ddmlib.AdbCommandRejectedException
 import okreplay.OkReplayPlugin.Companion.REMOTE_TAPES_DIR
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -22,7 +21,7 @@ open class ClearTapesTask
       val externalStorage = it.externalStorageDir()
       try {
         it.deleteDirectory("$externalStorage/$REMOTE_TAPES_DIR/$_packageName/")
-      } catch (e: AdbCommandRejectedException) {
+      } catch (e: RuntimeException) {
         project.logger.error("ADB Command failed: ${e.message}")
       }
     }
