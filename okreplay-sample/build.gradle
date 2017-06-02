@@ -29,9 +29,11 @@ android {
 }
 
 dependencies {
-  compile project(':okreplay-core')
+  debugCompile project(':okreplay-core')
+  releaseCompile project(':okreplay-noop')
   compile dep.appcompat
   compile dep.kotlinStdLib
+  compile dep.guava
   compile "com.android.support:design:${versions.appCompatVersion}"
   compile 'com.android.support:multidex:1.0.1'
   compile "com.android.support:support-vector-drawable:${versions.appCompatVersion}"
