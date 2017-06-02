@@ -8,7 +8,7 @@ class PluginTestHelper {
     setupAndroidProject(project)
     project.android {
       compileSdkVersion 25
-      buildToolsVersion "25.0.2"
+      buildToolsVersion "25.0.3"
     }
   }
 
@@ -16,7 +16,7 @@ class PluginTestHelper {
     setupAndroidProject(project)
     project.android {
       compileSdkVersion 25
-      buildToolsVersion "25.0.2"
+      buildToolsVersion "25.0.3"
       productFlavors {
         demo {
           applicationIdSuffix ".demo"
