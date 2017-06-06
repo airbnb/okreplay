@@ -2,7 +2,7 @@ ext.versions = [
     // TODO: This is duplicated because the plugin unit tests cannot read VERSION_NAME from the
     // gradle.properties file. Figure out a way to fix this.
     okreplayVersion: '1.2.0-SNAPSHOT',
-    kotlinVersion : '1.1.2-3',
+    kotlinVersion : '1.1.2-4',
     okhttpVersion : '3.4.2',
     appCompatVersion: '25.3.1'
 ]
@@ -12,7 +12,7 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin: 'com.android.tools.build:gradle:2.3.1',
+      androidPlugin: 'com.android.tools.build:gradle:2.3.2',
       groovyPlugin : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin  : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat    : "com.android.support:appcompat-v7:$versions.appCompatVersion",
