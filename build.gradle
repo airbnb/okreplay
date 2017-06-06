@@ -6,6 +6,7 @@ subprojects {
       jcenter()
       mavenLocal()
       maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+      maven { url 'https://maven.google.com' }
       if (System.getenv("INTERNAL_MAVEN_URL")) {
         maven { url INTERNAL_MAVEN_URL }
       }
@@ -22,6 +23,7 @@ subprojects {
   allprojects {
     repositories {
       jcenter()
+      maven { url 'https://maven.google.com' }
       if (System.getenv("INTERNAL_MAVEN_URL")) {
         maven { url INTERNAL_MAVEN_URL }
       }
