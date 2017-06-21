@@ -105,7 +105,7 @@ Download [the latest JAR][2] or grab via Maven:
 ```
 or Gradle:
 ```groovy
-debugCompile 'com.airbnb.okreplay:okreplay-core:1.2.0'
+debugCompile 'com.airbnb.okreplay:okreplay:1.2.0'
 releaseCompile 'com.airbnb.okreplay:okreplay-noop:1.2.0'
 androidTestCompile 'com.airbnb.okreplay:okreplay-espresso:1.2.0'
 ```
