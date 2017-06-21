@@ -1,4 +1,4 @@
-# OkReplay [![Build Status](https://travis-ci.org/felipecsl/okreplay.svg?branch=master)](https://travis-ci.org/felipecsl/okreplay)
+# OkReplay [![Build Status](https://travis-ci.org/airbnb/okreplay.svg?branch=master)](https://travis-ci.org/airbnb/okreplay)
 
 Automatically record and replay OkHttp network interaction through your Android application.
 This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
@@ -24,7 +24,7 @@ Tapes are stored to disk as YAML files and can be modified (or even created) by 
 to your project’s source control repository so they can be shared by other members of your team and
 used by your CI server. Different tests can use different tapes to simulate various response conditions.
 Each tape can hold multiple request/response interactions. An example tape file can be found
-[here](https://github.com/felipecsl/okreplay/blob/master/okreplay-tests/src/test/resources/okreplay/tapes/smoke_spec.yaml).
+[here](https://github.com/airbnb/okreplay/blob/master/okreplay-tests/src/test/resources/okreplay/tapes/smoke_spec.yaml).
 
 ## Usage
 
