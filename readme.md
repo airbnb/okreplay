@@ -99,15 +99,15 @@ Download [the latest JAR][2] or grab via Maven:
 ```xml
 <dependency>
   <groupId>com.airbnb.okreplay</groupId>
-  <artifactId>okreplay-core</artifactId>
+  <artifactId>okreplay</artifactId>
   <version>1.2.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
 debugCompile 'com.airbnb.okreplay:okreplay:1.2.0'
-releaseCompile 'com.airbnb.okreplay:okreplay-noop:1.2.0'
-androidTestCompile 'com.airbnb.okreplay:okreplay-espresso:1.2.0'
+releaseCompile 'com.airbnb.okreplay:noop:1.2.0'
+androidTestCompile 'com.airbnb.okreplay:espresso:1.2.0'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
