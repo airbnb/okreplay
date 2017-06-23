@@ -1,18 +1,14 @@
 package okreplay;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * The configuration used by okreplay.
@@ -38,7 +34,7 @@ public class OkReplayConfig {
 
   private final TapeRoot tapeRoot;
   private final TapeMode defaultMode;
-  private final ImmutableCollection<String> ignoreHosts;
+  private final Collection<String> ignoreHosts;
   private final boolean ignoreLocalhost;
   private final MatchRule defaultMatchRule;
   private final boolean sslEnabled;
@@ -124,7 +120,7 @@ public class OkReplayConfig {
     TapeRoot tapeRoot = new DefaultTapeRoot(new File(OkReplayConfig.DEFAULT_TAPE_ROOT));
     TapeMode defaultMode = OkReplayConfig.DEFAULT_MODE;
     MatchRule defaultMatchRule = OkReplayConfig.DEFAULT_MATCH_RULE;
-    ImmutableCollection<String> ignoreHosts = ImmutableList.of();
+    List<String> ignoreHosts = Collections.emptyList();
     boolean ignoreLocalhost;
     boolean sslEnabled;
     OkReplayInterceptor interceptor;
@@ -205,8 +201,8 @@ public class OkReplayConfig {
       return this;
     }
 
-    public Builder ignoreHosts(Iterable<String> ignoreHosts) {
-      this.ignoreHosts = ImmutableList.copyOf(ignoreHosts);
+    public Builder ignoreHosts(Collection<String> ignoreHosts) {
+      this.ignoreHosts = new ArrayList<>(ignoreHosts);
       return this;
     }
 

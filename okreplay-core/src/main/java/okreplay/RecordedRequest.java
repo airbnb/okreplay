@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.internal.http.HttpMethod;
 import okio.Buffer;
 
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import static okreplay.Util.CONTENT_TYPE;
 
 class RecordedRequest extends RecordedMessage implements Request {
   private final String method;

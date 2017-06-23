@@ -1,12 +1,13 @@
 package okreplay;
 
-import com.google.common.io.Files;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+
+import static okreplay.Util.newReader;
+import static okreplay.Util.newWriter;
 
 public class DefaultTapeRoot implements TapeRoot {
   private static final String FILE_CHARSET = "UTF-8";
@@ -19,7 +20,7 @@ public class DefaultTapeRoot implements TapeRoot {
   @Override public Reader readerFor(String tapeFileName) {
     File file = new File(root, tapeFileName);
     try {
-      return Files.newReader(file, Charset.forName(FILE_CHARSET));
+      return newReader(file, Charset.forName(FILE_CHARSET));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
@@ -30,7 +31,7 @@ public class DefaultTapeRoot implements TapeRoot {
     //noinspection ResultOfMethodCallIgnored
     file.getParentFile().mkdirs();
     try {
-      return Files.newWriter(file, Charset.forName(FILE_CHARSET));
+      return newWriter(file, Charset.forName(FILE_CHARSET));
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }

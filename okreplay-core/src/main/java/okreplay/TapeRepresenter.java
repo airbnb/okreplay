@@ -1,9 +1,5 @@
 package okreplay;
 
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
-import com.google.common.primitives.Ints;
-
 import org.yaml.snakeyaml.introspector.BeanAccess;
 import org.yaml.snakeyaml.introspector.Property;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
@@ -19,6 +15,7 @@ import java.beans.IntrospectionException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,7 +92,7 @@ class TapeRepresenter extends Representer {
     }
 
     private Set<Property> sort(Set<Property> properties, String... names) {
-      return Sets.newLinkedHashSet(Ordering.from(OrderedPropertyComparator.forNames(names))
+      return new LinkedHashSet<>(Ordering.from(OrderedPropertyComparator.forNames(names))
           .sortedCopy(properties));
     }
   }
@@ -112,7 +109,7 @@ class TapeRepresenter extends Representer {
     }
 
     public int compare(Property a, Property b) {
-      return Ints.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
+      return Util.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
     }
   }
 }

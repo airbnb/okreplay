@@ -1,8 +1,6 @@
 package okreplay;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -11,7 +9,7 @@ import java.util.Collection;
  */
 public class Recorder {
   private final OkReplayConfig configuration;
-  private final Collection<RecorderListener> listeners = Lists.newArrayList();
+  private final Collection<RecorderListener> listeners = new ArrayList<>();
   private Tape tape;
 
   public Recorder(OkReplayConfig configuration) {

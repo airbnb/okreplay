@@ -1,23 +1,23 @@
 package okreplay;
 
-import com.google.common.base.Strings;
-import com.google.common.net.MediaType;
-
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
-import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.net.HttpHeaders.CONTENT_ENCODING;
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
-import static com.google.common.net.MediaType.OCTET_STREAM;
+import okhttp3.MediaType;
+
+import static okreplay.Util.CONTENT_TYPE;
+import static okreplay.Util.isNullOrEmpty;
 
 abstract class AbstractMessage implements Message {
-  static final String DEFAULT_CONTENT_TYPE = OCTET_STREAM.toString();
+  private static final String CONTENT_ENCODING = "Content-Encoding";
+  private static final Charset UTF_8 = Charset.forName("UTF-8");
+  static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
   private static final String DEFAULT_CHARSET = UTF_8.toString();
   private static final String DEFAULT_ENCODING = "none";
 
   @Override public String getContentType() {
     String header = header(CONTENT_TYPE);
-    if (Strings.isNullOrEmpty(header)) {
+    if (isNullOrEmpty(header)) {
       return DEFAULT_CONTENT_TYPE;
     } else {
       return MediaType.parse(header).withoutParameters().toString();
@@ -26,7 +26,7 @@ abstract class AbstractMessage implements Message {
 
   @Override public String getCharset() {
     String header = header(CONTENT_TYPE);
-    if (Strings.isNullOrEmpty(header)) {
+    if (isNullOrEmpty(header)) {
       // TODO: this isn't valid for non-text data – this method should return Optional<String>
       return DEFAULT_CHARSET;
     } else {

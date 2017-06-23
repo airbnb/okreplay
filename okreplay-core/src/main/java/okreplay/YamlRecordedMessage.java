@@ -1,12 +1,12 @@
 package okreplay;
 
-import com.google.common.base.Strings;
-import com.google.common.net.MediaType;
-
 import java.util.Map;
 
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
+import okhttp3.MediaType;
+
 import static okreplay.AbstractMessage.DEFAULT_CONTENT_TYPE;
+import static okreplay.Util.CONTENT_TYPE;
+import static okreplay.Util.isNullOrEmpty;
 
 public abstract class YamlRecordedMessage {
   private final Map<String, String> headers;
@@ -19,7 +19,7 @@ public abstract class YamlRecordedMessage {
 
   String contentType() {
     String header = headers.get(CONTENT_TYPE);
-    if (Strings.isNullOrEmpty(header)) {
+    if (isNullOrEmpty(header)) {
       return DEFAULT_CONTENT_TYPE;
     } else {
       return MediaType.parse(header).toString();

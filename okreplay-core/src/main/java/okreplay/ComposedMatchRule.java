@@ -1,26 +1,29 @@
 package okreplay;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static okreplay.Util.all;
 
 public class ComposedMatchRule implements MatchRule {
   public static MatchRule of(MatchRule... rules) {
-    return new ComposedMatchRule(ImmutableSet.copyOf(rules));
+    return new ComposedMatchRule(new LinkedHashSet<>(Arrays.asList(rules)));
   }
 
-  public static MatchRule of(Iterable<MatchRule> rules) {
-    return new ComposedMatchRule(ImmutableSet.copyOf(rules));
+  public static MatchRule of(Collection<MatchRule> rules) {
+    return new ComposedMatchRule(new LinkedHashSet<>(rules));
   }
 
-  private final ImmutableSet<MatchRule> rules;
+  private final Set<MatchRule> rules;
 
-  private ComposedMatchRule(ImmutableSet<MatchRule> rules) {
+  private ComposedMatchRule(Set<MatchRule> rules) {
     this.rules = rules;
   }
 
   @Override public boolean isMatch(final Request a, final Request b) {
-    return Iterables.all(rules, new Predicate<MatchRule>() {
+    return all(rules.iterator(), new Predicate<MatchRule>() {
       @Override public boolean apply(MatchRule rule) {
         return rule.isMatch(a, b);
       }

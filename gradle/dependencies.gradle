@@ -21,6 +21,7 @@ ext {
       guava        : "com.google.guava:guava:20.0",
       ddmlib       : 'com.android.tools.ddms:ddmlib:25.3.0',
       junit        : "junit:junit:4.12",
+      jsr305       : "com.google.code.findbugs:jsr305:3.0.2",
       mockito      : 'org.mockito:mockito-core:2.7.13',
       okhttp       : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
       mockWebServer: "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",

@@ -1,12 +1,11 @@
 package okreplay;
 
-import com.google.common.net.MediaType;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 import okhttp3.Headers;
+import okhttp3.MediaType;
 
 abstract class RecordedMessage extends AbstractMessage implements Message {
   final Headers headers;
