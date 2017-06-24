@@ -13,7 +13,9 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import java.beans.IntrospectionException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -92,8 +94,9 @@ class TapeRepresenter extends Representer {
     }
 
     private Set<Property> sort(Set<Property> properties, String... names) {
-      return new LinkedHashSet<>(Ordering.from(OrderedPropertyComparator.forNames(names))
-          .sortedCopy(properties));
+      List<Property> list = new ArrayList<>(properties);
+      Collections.sort(list, OrderedPropertyComparator.forNames(names));
+      return new LinkedHashSet<>(list);
     }
   }
 
@@ -108,7 +111,7 @@ class TapeRepresenter extends Representer {
       this.propertyNames = Arrays.asList(propertyNames);
     }
 
-    public int compare(Property a, Property b) {
+    @Override public int compare(Property a, Property b) {
       return Util.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
     }
   }

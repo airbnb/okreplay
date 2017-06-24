@@ -4,17 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Function;
+import java.util.Set;
 
 /**
  * The configuration used by okreplay.
- *
+ * <p>
  * `OkReplayConfig` instances are created with a builder. For example:
- *
+ * <p>
  * [source,java]
  * ----
  * OkReplayConfig configuration = new OkReplayConfig.Builder()
@@ -74,10 +76,9 @@ public class OkReplayConfig {
    */
   public Collection<String> getIgnoreHosts() {
     if (isIgnoreLocalhost()) {
-      return new ImmutableSet.Builder<String>()
-          .addAll(ignoreHosts)
-          .addAll(Network.getLocalAddresses())
-          .build();
+      Set<String> set = new LinkedHashSet<>(ignoreHosts);
+      set.addAll(Network.getLocalAddresses());
+      return Collections.unmodifiableSet(set);
     } else {
       return ignoreHosts;
     }
@@ -85,7 +86,7 @@ public class OkReplayConfig {
 
   /**
    * If `true` then all connections to localhost addresses are ignored.
-   *
+   * <p>
    * This is equivalent to including the following in the collection returned by {@link
    * #getIgnoreHosts()}: * `"localhost"` * `"127.0.0.1"` * `InetAddress.getLocalHost()
    * .getHostName()`
@@ -109,7 +110,7 @@ public class OkReplayConfig {
 
   /**
    * Called by the `Recorder` instance so that the configuration can add listeners.
-   *
+   * <p>
    * You should **not** call this method yourself.
    */
   public void registerListeners(Collection<RecorderListener> listeners) {
@@ -148,17 +149,16 @@ public class OkReplayConfig {
       }
 
       if (properties.containsKey("okreplay.defaultMatchRules")) {
-        List<MatchRule> rules = Lists.transform(Splitter.on(",").splitToList(properties
-            .getProperty("okreplay.defaultMatchRules")), new Function<String, MatchRule>() {
-          @Override public MatchRule apply(String input) {
-            return MatchRules.valueOf(input);
-          }
-        });
+        String property = properties.getProperty("okreplay.defaultMatchRules");
+        List<MatchRule> rules = new ArrayList<>();
+        for (String s : Arrays.asList(property.split(","))) {
+          rules.add(MatchRules.valueOf(s));
+        }
         defaultMatchRule(ComposedMatchRule.of(rules));
       }
 
       if (properties.containsKey("okreplay.ignoreHosts")) {
-        ignoreHosts(Splitter.on(",").splitToList(properties.getProperty("okreplay.ignoreHosts")));
+        ignoreHosts(Arrays.asList(properties.getProperty("okreplay.ignoreHosts").split(",")));
       }
 
       if (properties.containsKey("okreplay.ignoreLocalhost")) {

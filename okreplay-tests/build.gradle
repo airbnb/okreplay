@@ -16,13 +16,14 @@ android {
 
 dependencies {
   compile project(":okreplay-core")
-  compile project(":okreplay-espresso")
+  compile project(":okreplay-junit")
 
   testCompile "org.codehaus.groovy:groovy:2.4.7:grooid"
   testCompile "org.codehaus.groovy:groovy-json:2.4.7"
   testCompile dep.cglib
   testCompile dep.spock
   testCompile dep.junit
+  testCompile dep.guava
   testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
   testCompile dep.mockWebServer
 }

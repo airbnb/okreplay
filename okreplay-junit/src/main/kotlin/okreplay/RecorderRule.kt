@@ -1,12 +1,11 @@
 package okreplay
 
-import com.google.common.base.CaseFormat.*
-import com.google.common.base.Optional
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.util.logging.Level
 import java.util.logging.Logger
+import okreplay.CaseFormat.*
 
 /**
  * This is an extension of [Recorder] that can be used as a

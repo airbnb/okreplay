@@ -20,7 +20,7 @@ abstract class AbstractMessage implements Message {
     if (isNullOrEmpty(header)) {
       return DEFAULT_CONTENT_TYPE;
     } else {
-      return MediaType.parse(header).withoutParameters().toString();
+      return MediaType.parse(header).toString();
     }
   }
 
@@ -30,7 +30,7 @@ abstract class AbstractMessage implements Message {
       // TODO: this isn't valid for non-text data – this method should return Optional<String>
       return DEFAULT_CHARSET;
     } else {
-      return MediaType.parse(header).charset().or(UTF_8).toString();
+      return Optional.fromNullable(MediaType.parse(header).charset()).or(UTF_8).toString();
     }
   }
 

@@ -3,7 +3,7 @@ ext.versions = [
     // gradle.properties file. Figure out a way to fix this.
     okreplayVersion: '1.2.0-SNAPSHOT',
     kotlinVersion : '1.1.2-4',
-    okhttpVersion : '3.4.2',
+    okhttpVersion : '3.8.1',
     appCompatVersion: '25.4.0'
 ]
 ext {

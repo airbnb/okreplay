@@ -12,6 +12,8 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import javax.annotation.Nullable;
 
+import static java.lang.String.format;
+
 final class Util {
   static final String VIA = "Via";
   static final String CONTENT_TYPE = "Content-Type";
@@ -29,6 +31,34 @@ final class Util {
       throw new NullPointerException(String.valueOf(errorMessage));
     }
     return reference;
+  }
+
+  static void checkArgument(boolean expression) {
+    if (!expression) {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  static int checkPositionIndex(int index, int size) {
+    return checkPositionIndex(index, size, "index");
+  }
+
+  static int checkPositionIndex(int index, int size, @Nullable String desc) {
+    // Carefully optimized for execution by hotspot (explanatory comment above)
+    if (index < 0 || index > size) {
+      throw new IndexOutOfBoundsException(badPositionIndex(index, size, desc));
+    }
+    return index;
+  }
+
+  static String badPositionIndex(int index, int size, String desc) {
+    if (index < 0) {
+      return format("%s (%s) must not be negative", desc, index);
+    } else if (size < 0) {
+      throw new IllegalArgumentException("negative size: " + size);
+    } else { // index > size
+      return format("%s (%s) must not be greater than size (%s)", desc, index, size);
+    }
   }
 
   static <T> T checkNotNull(T reference) {

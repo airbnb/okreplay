@@ -17,6 +17,7 @@ class OkHttpResponseAdapter {
         .code(recordedResponse.code())
         .protocol(recordedResponse.protocol())
         .request(okhttpRequest)
+        .message("")
         .build();
   }
 
