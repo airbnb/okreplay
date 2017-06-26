@@ -61,7 +61,7 @@ public class ExampleInstrumentedFooTest {
   @OkReplay
   public void foo() {
     assertEquals("okreplay.sample", getTargetContext().getPackageName());
-    onView(withId(R.id  .navigation_repositories)).perform(click());
+    onView(withId(R.id.navigation_repositories)).perform(click());
     onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));
   }
 }

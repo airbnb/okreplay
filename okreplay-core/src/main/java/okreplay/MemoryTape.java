@@ -1,15 +1,12 @@
 package okreplay;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.google.common.net.HttpHeaders.VIA;
 import static java.util.Collections.unmodifiableList;
+import static okreplay.Util.VIA;
 
 /**
  * Represents a set of recorded HTTP interactions that can be played back or
@@ -18,7 +15,7 @@ import static java.util.Collections.unmodifiableList;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 abstract class MemoryTape implements Tape {
   private String name;
-  private List<YamlRecordedInteraction> interactions = Lists.newArrayList();
+  private List<YamlRecordedInteraction> interactions = new ArrayList<>();
   private transient TapeMode mode = OkReplayConfig.DEFAULT_MODE;
   private transient MatchRule matchRule = OkReplayConfig.DEFAULT_MATCH_RULE;
   private final transient AtomicInteger orderedIndex = new AtomicInteger();
@@ -68,7 +65,7 @@ abstract class MemoryTape implements Tape {
   }
 
   public void setInteractions(List<YamlRecordedInteraction> interactions) {
-    this.interactions = Lists.newArrayList(interactions);
+    this.interactions = new ArrayList<>(interactions);
   }
 
   @Override public boolean seek(Request request) {
@@ -149,7 +146,7 @@ abstract class MemoryTape implements Tape {
   }
 
   private synchronized int findMatch(final Request request) {
-    return Iterables.indexOf(interactions, new Predicate<YamlRecordedInteraction>() {
+    return Util.indexOf(interactions.iterator(), new Predicate<YamlRecordedInteraction>() {
       @Override public boolean apply(YamlRecordedInteraction input) {
         return matchRule.isMatch(request, input.toImmutable().request());
       }

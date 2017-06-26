@@ -7,9 +7,9 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-  compile dep.guava
   compile dep.snakeYaml
   compile dep.okhttp
+  compile dep.jsr305
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

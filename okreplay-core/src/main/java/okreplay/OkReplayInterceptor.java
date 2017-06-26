@@ -1,7 +1,5 @@
 package okreplay;
 
-import com.google.common.base.Optional;
-
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -10,7 +8,7 @@ import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 
-import static com.google.common.net.HttpHeaders.VIA;
+import static okreplay.Util.VIA;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class OkReplayInterceptor implements Interceptor {

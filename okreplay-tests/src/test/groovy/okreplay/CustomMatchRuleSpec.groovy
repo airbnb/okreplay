@@ -1,6 +1,5 @@
 package okreplay
 
-import com.google.common.base.Optional
 import com.google.common.io.Files
 import okhttp3.MediaType
 import okhttp3.OkHttpClient

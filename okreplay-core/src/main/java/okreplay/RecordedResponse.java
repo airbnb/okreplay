@@ -8,8 +8,6 @@ import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 
-import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
-
 class RecordedResponse extends RecordedMessage implements Response {
   private final int code;
   private final Protocol protocol;
@@ -105,8 +103,8 @@ class RecordedResponse extends RecordedMessage implements Response {
         throw new RuntimeException(e);
       }
       MediaType contentType = body.contentType();
-      if (contentType != null && headers.get(CONTENT_TYPE) == null) {
-        addHeader(CONTENT_TYPE, contentType.toString());
+      if (contentType != null && headers.get(Util.CONTENT_TYPE) == null) {
+        addHeader(Util.CONTENT_TYPE, contentType.toString());
       }
       return this;
     }

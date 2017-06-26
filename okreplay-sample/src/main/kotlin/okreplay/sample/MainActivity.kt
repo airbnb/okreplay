@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
           textMessage!!.text =
               "${getString(R.string.title_repositories)}: \n${reposToString(it.body())}"
         }, {
-          Log.e(TAG, "Request failed: ${it.message}")
+          Log.e(TAG, "Request failed: ${it.message}", it)
         })
     return true
   }
