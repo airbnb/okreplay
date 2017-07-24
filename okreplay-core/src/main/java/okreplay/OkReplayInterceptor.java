@@ -24,6 +24,7 @@ public class OkReplayInterceptor implements Interceptor {
         return new okhttp3.Response.Builder() //
             .protocol(Protocol.HTTP_1_1)  //
             .code(403) //
+            .message("") //
             .body(ResponseBody.create(MediaType.parse("text/plain"), "No tape")) //
             .request(request) //
             .build();
