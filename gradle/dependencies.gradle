@@ -4,7 +4,7 @@ ext.versions = [
     okreplayVersion: '1.2.0-SNAPSHOT',
     kotlinVersion : '1.1.3-2',
     okhttpVersion : '3.8.1',
-    appCompatVersion: '25.4.0'
+    appCompatVersion: '26.0.0'
 ]
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
@@ -41,9 +41,9 @@ ext {
   ]
 
   androidConfig = [
-      compileSdkVersion: 25,
-      buildToolsVersion: '25.0.3',
-      minSdkVersion    : 9,
-      targetSdkVersion : 25
+      compileSdkVersion: 26,
+      buildToolsVersion: '26.0.1',
+      minSdkVersion    : 14,
+      targetSdkVersion : 26
   ]
 }

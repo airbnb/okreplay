@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
           textMessage!!.text =
-              "${getString(R.string.title_repositories)}: \n${reposToString(it.body())}"
+              "${getString(R.string.title_repositories)}: \n${it.body()?.let { it1 -> reposToString(it1) }}"
         }, {
           Log.e(TAG, "Request failed: ${it.message}", it)
         })
@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    textMessage = findViewById(R.id.message) as TextView
-    val navigation = findViewById(R.id.navigation) as BottomNavigationView
+    textMessage = findViewById<TextView>(R.id.message)
+    val navigation = findViewById<BottomNavigationView>(R.id.navigation)
     navigation.setOnNavigationItemSelectedListener(itemSelectedListener)
   }
 
