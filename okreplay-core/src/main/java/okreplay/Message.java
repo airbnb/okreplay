@@ -1,5 +1,7 @@
 package okreplay;
 
+import java.nio.charset.Charset;
+
 import okhttp3.Headers;
 
 /**
@@ -41,7 +43,7 @@ interface Message {
   String getContentType();
 
   /** @return the charset of the message if it is text. */
-  String getCharset();
+  Charset getCharset();
 
   /** @return the content encoding of the message, e.g. _gzip_, _deflate_ or _none_. */
   String getEncoding();
