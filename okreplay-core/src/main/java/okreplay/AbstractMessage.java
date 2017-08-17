@@ -1,6 +1,5 @@
 package okreplay;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import okhttp3.MediaType;
@@ -12,7 +11,6 @@ abstract class AbstractMessage implements Message {
   private static final String CONTENT_ENCODING = "Content-Encoding";
   private static final Charset UTF_8 = Charset.forName("UTF-8");
   static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
-  private static final String DEFAULT_CHARSET = UTF_8.toString();
   private static final String DEFAULT_ENCODING = "none";
 
   @Override public String getContentType() {
@@ -24,13 +22,13 @@ abstract class AbstractMessage implements Message {
     }
   }
 
-  @Override public String getCharset() {
+  @Override public Charset getCharset() {
     String header = header(CONTENT_TYPE);
     if (isNullOrEmpty(header)) {
       // TODO: this isn't valid for non-text data – this method should return Optional<String>
-      return DEFAULT_CHARSET;
+      return UTF_8;
     } else {
-      return Optional.fromNullable(MediaType.parse(header).charset()).or(UTF_8).toString();
+      return Optional.fromNullable(MediaType.parse(header).charset()).or(UTF_8);
     }
   }
 
@@ -44,10 +42,6 @@ abstract class AbstractMessage implements Message {
   }
 
   @Override public final String bodyAsText() {
-    try {
-      return new String(body(), getCharset());
-    } catch (UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+    return new String(body(), getCharset());
   }
 }
