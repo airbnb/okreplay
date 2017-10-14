@@ -33,7 +33,7 @@ ext {
         exclude module: "groovy-all"
         exclude module: "junit"
       }),
-      espresso      : dependencies.create('com.android.support.test.espresso:espresso-core:2.2.2', {
+      espresso      : dependencies.create('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
       })
   ]

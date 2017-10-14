@@ -10,7 +10,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 internal class DependencyGraph private constructor() {
-  private val API_BASE_URL = "https://api.github.com"
   val okReplayInterceptor = OkReplayInterceptor()
   private val moshi = Moshi.Builder()
       .add(OkReplayAdapterFactory.create())
@@ -34,6 +33,7 @@ internal class DependencyGraph private constructor() {
   val service: GithubService = retrofit.create(GithubService::class.java)
 
   companion object {
+    private const val API_BASE_URL = "https://api.github.com"
     private var instance: DependencyGraph? = null
 
     fun instance(): DependencyGraph {
