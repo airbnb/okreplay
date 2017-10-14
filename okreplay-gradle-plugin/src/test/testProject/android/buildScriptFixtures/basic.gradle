@@ -1,4 +1,5 @@
 buildscript {
+  ext.VERSION_NAME='1.4.0-SNAPSHOT'
   apply from: "../../../../gradle/dependencies.gradle"
   repositories {
     jcenter()
@@ -33,5 +34,5 @@ repositories {
 }
 
 dependencies {
-  compile dep.appcompat
+  implementation dep.appcompat
 }

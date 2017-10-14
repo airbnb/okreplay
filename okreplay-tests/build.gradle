@@ -15,17 +15,17 @@ android {
 }
 
 dependencies {
-  compile project(":okreplay-core")
-  compile project(":okreplay-junit")
+  implementation project(":okreplay-core")
+  implementation project(":okreplay-junit")
 
-  testCompile "org.codehaus.groovy:groovy:2.4.7:grooid"
-  testCompile "org.codehaus.groovy:groovy-json:2.4.7"
-  testCompile dep.cglib
-  testCompile dep.spock
-  testCompile dep.junit
-  testCompile dep.guava
-  testCompile "com.github.groovy-wslite:groovy-wslite:0.8.0"
-  testCompile dep.mockWebServer
+  testImplementation "org.codehaus.groovy:groovy:2.4.7:grooid"
+  testImplementation "org.codehaus.groovy:groovy-json:2.4.7"
+  testImplementation dep.cglib
+  testImplementation dep.spock
+  testImplementation dep.junit
+  testImplementation dep.guava
+  testImplementation "com.github.groovy-wslite:groovy-wslite:0.8.0"
+  testImplementation dep.mockWebServer
 }
 
 apply from: "$rootDir/gradle/checkstyle.gradle"

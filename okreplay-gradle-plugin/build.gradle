@@ -9,14 +9,14 @@ sourceSets.main.groovy.srcDirs = ["src/main/groovy"]
 
 dependencies {
   compileOnly gradleApi()
-  compile localGroovy()
-  compile dep.androidPlugin
-  compile dep.kotlinStdLib
-  compile dep.ddmlib
-  testCompile gradleTestKit()
-  testCompile dep.junit
-  testCompile dep.truth
-  testCompile dep.mockito
+  implementation localGroovy()
+  implementation dep.androidPlugin
+  implementation dep.kotlinStdLib
+  implementation dep.ddmlib
+  testImplementation gradleTestKit()
+  testImplementation dep.junit
+  testImplementation dep.truth
+  testImplementation dep.mockito
 }
 
 test {

@@ -18,8 +18,8 @@ internal constructor() {
     val pullTask = result.task(":${PullTapesTask.NAME}")
     assertThat(clearTask).isNotNull()
     assertThat(pullTask).isNotNull()
-    assertThat(clearTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
-    assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    assertThat(clearTask!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    assertThat(pullTask!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
     assertThat(File(testProjectDir, "src/androidTest/assets/tapes/testTape.yml").isFile).isTrue()
   }
 
@@ -28,7 +28,7 @@ internal constructor() {
     val result = runGradleForProjectDir(testProjectDir, PullTapesTask.NAME)
     val pullTask = result!!.task(":${PullTapesTask.NAME}")
     assertThat(pullTask).isNotNull()
-    assertThat(pullTask.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    assertThat(pullTask!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
     assertThat(File(testProjectDir, "src/androidTest/assets/tapes").isDirectory).isTrue()
   }
 
