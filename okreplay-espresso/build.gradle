@@ -24,12 +24,12 @@ android {
 }
 
 dependencies {
-  compile project(':okreplay-junit')
-  compile dep.appcompat
-  compile dep.espresso
-  testCompile dep.robolectric
-  testCompile dep.truth
-  testCompile dep.mockito
+  api project(':okreplay-junit')
+  implementation dep.appcompat
+  implementation dep.espresso
+  testImplementation dep.robolectric
+  testImplementation dep.truth
+  testImplementation dep.mockito
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
