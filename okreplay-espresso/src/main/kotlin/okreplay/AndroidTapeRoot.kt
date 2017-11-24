@@ -9,7 +9,7 @@ import java.io.File
 import java.lang.RuntimeException
 
 /** Provides a directory for OkReplay to store its tapes in. */
-class AndroidTapeRoot(private val assetManager: AssetManager, testName: String) :
+open class AndroidTapeRoot(private val assetManager: AssetManager, testName: String) :
     DefaultTapeRoot(getSdcardDir(assetManager.context, testName)) {
   constructor(context: Context, klass: Class<*>) : this(AssetManager(context), klass.simpleName)
 
