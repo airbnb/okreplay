@@ -92,7 +92,11 @@ class OkReplayPlugin
   private fun testApplicationId(): String {
     val androidConfig = androidConfig()
     if (androidConfig is AppExtension || androidConfig is LibraryExtension) {
-      return (androidConfig as TestedExtension).testVariants.first().applicationId
+      if (!(androidConfig as TestedExtension).testVariants.isEmpty()) {
+        return (androidConfig as TestedExtension).testVariants.first().applicationId
+      } else {
+        return ""
+      }
     } else {
       throw IllegalStateException("Invalid project type")
     }
