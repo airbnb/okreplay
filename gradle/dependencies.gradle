@@ -1,6 +1,6 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.1.51',
+    kotlinVersion   : '1.2.0',
     okhttpVersion   : '3.8.1',
     appCompatVersion: '26.1.0'
 ]
@@ -25,7 +25,7 @@ ext {
       mockWebServer : "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
       snakeYaml     : "org.yaml:snakeyaml:1.16",
       kotlinStdLib  : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
-      okreplayPlugin: "com.airbnb.okreplay:gradle-plugin:$versions.okreplayVersion",
+      okreplayPlugin: "com.airbnb.okreplay:gradle-plugin:latest.release",
       kotlinPlugin  : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
       truth         : 'com.google.truth:truth:0.30',
       robolectric   : "org.robolectric:robolectric:3.3.2",
