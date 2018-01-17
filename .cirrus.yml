@@ -1,0 +1,8 @@
+container:
+  image: cirrusci/android-sdk:26
+
+test_task:
+  android_cache:
+    folder: ~/.android/build-cache
+  test_script:
+    - ./gradlew --stacktrace connectedCheck -x okreplay-gradle-plugin:test -x okreplay-sample:connectedAndroidTest
