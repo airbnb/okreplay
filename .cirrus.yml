@@ -1,7 +1,5 @@
 container:
   image: cirrusci/android-sdk:26
-  cpu: 4
-  memory: 10G
 
 test_task:
   android_cache:
