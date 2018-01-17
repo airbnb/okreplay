@@ -1,6 +1,6 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.2.0',
+    kotlinVersion   : '1.2.20',
     okhttpVersion   : '3.8.1',
     appCompatVersion: '26.1.0'
 ]
