@@ -6,10 +6,5 @@ container:
 test_task:
   android_cache:
     folder: ~/.android/build-cache
-  gradle_cache:
-    folder: ~/.gradle/caches
   test_script:
     - ./gradlew --stacktrace connectedCheck -x okreplay-gradle-plugin:test -x okreplay-sample:connectedAndroidTest
-  cleanup_before_cache_script:
-    - rm -rf ~/.gradle/caches/4.4.1/
-    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
