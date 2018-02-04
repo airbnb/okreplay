@@ -43,6 +43,17 @@ public class OkReplayInterceptor implements Interceptor {
         } else {
           LOG.warning(String.format("no matching request found on tape '%s' for request %s %s",
               tape.getName(), request.method(), request.url().toString()));
+          if (tape.getMode() == TapeMode.READ_ONLY_QUIET) {
+            return new okhttp3.Response.Builder()
+                .protocol(Protocol.HTTP_1_1)
+                .code(404)
+                .message("")
+                .body(ResponseBody.create(MediaType.parse("text/plain"), "No matching response"))
+                .request(chain.request())
+                .build();
+          }
+
+          // Continue the request and attempt to write the response to the tape.
           okhttp3.Response okhttpResponse = chain.proceed(request);
           okhttpResponse = setOkReplayHeader(okhttpResponse, "REC");
           okhttpResponse = setViaHeader(okhttpResponse);
