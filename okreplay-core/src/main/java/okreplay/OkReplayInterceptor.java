@@ -53,23 +53,26 @@ public class OkReplayInterceptor implements Interceptor {
                 .build();
           }
 
+          // If the tape isn't writeable, abandon this request. This prevents us from
+          // talking to the server for non-mutable tapes.
+          if (!tape.isWritable()) {
+            throwTapeNotWritable(request.method() + " " + request.url().toString());
+            return;
+          }
+
           // Continue the request and attempt to write the response to the tape.
           okhttp3.Response okhttpResponse = chain.proceed(request);
           okhttpResponse = setOkReplayHeader(okhttpResponse, "REC");
           okhttpResponse = setViaHeader(okhttpResponse);
-          if (tape.isWritable()) {
-            LOG.info(String.format("Recording request %s %s to tape '%s'",
-                request.method(), request.url().toString(), tape.getName()));
-            ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
-            Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
-            tape.record(recordedRequest, recordedResponse);
-            okhttpResponse = okhttpResponse.newBuilder()
-                .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
-                .build();
-            okhttpResponse.body().close();
-          } else {
-            throwTapeNotWritable(request.method() + " " + request.url().toString());
-          }
+          LOG.info(String.format("Recording request %s %s to tape '%s'",
+              request.method(), request.url().toString(), tape.getName()));
+          ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
+          Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
+          tape.record(recordedRequest, recordedResponse);
+          okhttpResponse = okhttpResponse.newBuilder()
+              .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
+              .build();
+          okhttpResponse.body().close();
           return okhttpResponse;
         }
       }
