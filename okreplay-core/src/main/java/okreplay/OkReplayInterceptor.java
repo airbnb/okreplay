@@ -57,7 +57,6 @@ public class OkReplayInterceptor implements Interceptor {
           // talking to the server for non-mutable tapes.
           if (!tape.isWritable()) {
             throwTapeNotWritable(request.method() + " " + request.url().toString());
-            return;
           }
 
           // Continue the request and attempt to write the response to the tape.
