@@ -17,6 +17,7 @@ android {
 dependencies {
   implementation project(":okreplay-core")
   implementation project(":okreplay-junit")
+  implementation dep.kotlinStdLib
 
   testImplementation "org.codehaus.groovy:groovy:2.4.7:grooid"
   testImplementation "org.codehaus.groovy:groovy-json:2.4.7"
