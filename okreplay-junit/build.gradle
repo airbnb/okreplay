@@ -1,9 +1,11 @@
+apply plugin: 'java-library'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
-  compile project(":okreplay-core")
-  compile dep.junit
-  compile dep.kotlinStdLib
+  api project(":okreplay-core")
+  implementation dep.kotlinStdLib
+  implementation dep.junit
+  implementation dep.kotlinStdLib
 }
 
 sourceCompatibility = "1.7"

@@ -9,8 +9,7 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 
-class BasicAndroidTest @Throws(IOException::class)
-internal constructor() {
+class BasicAndroidTest {
   @Test fun buildsAndPullsTapeFiles() {
     val testProjectDir = setupBasicAndroidProject("basic")
     val result = runGradleForProjectDir(testProjectDir, "connectedAndroidTest")

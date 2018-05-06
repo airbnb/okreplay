@@ -24,6 +24,7 @@ dependencies {
   testImplementation dep.spock
   testImplementation dep.junit
   testImplementation dep.guava
+  testImplementation dep.snakeYaml
   testImplementation "com.github.groovy-wslite:groovy-wslite:0.8.0"
   testImplementation dep.mockWebServer
 }
