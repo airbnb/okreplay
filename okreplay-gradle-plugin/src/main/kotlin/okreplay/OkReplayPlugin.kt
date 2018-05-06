@@ -114,9 +114,9 @@ class OkReplayPlugin
 
   // TODO: Make this configurable from the plugin extension script
   companion object {
-    val LOCAL_TAPES_DIR = "src/androidTest/assets/tapes"
+    const val LOCAL_TAPES_DIR = "src/androidTest/assets/tapes"
     // This is also hardcoded in AndroidTapeRoot#getSdcardDir()
     // Need to use the same value in both places
-    val REMOTE_TAPES_DIR = "okreplay/tapes"
+    const val REMOTE_TAPES_DIR = "okreplay/tapes"
   }
 }

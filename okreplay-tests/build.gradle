@@ -17,6 +17,7 @@ android {
 dependencies {
   implementation project(":okreplay-core")
   implementation project(":okreplay-junit")
+  implementation dep.kotlinStdLib
 
   testImplementation "org.codehaus.groovy:groovy:2.4.7:grooid"
   testImplementation "org.codehaus.groovy:groovy-json:2.4.7"
@@ -24,6 +25,7 @@ dependencies {
   testImplementation dep.spock
   testImplementation dep.junit
   testImplementation dep.guava
+  testImplementation dep.snakeYaml
   testImplementation "com.github.groovy-wslite:groovy-wslite:0.8.0"
   testImplementation dep.mockWebServer
 }

@@ -1,8 +1,8 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.2.20',
-    okhttpVersion   : '3.8.1',
-    appCompatVersion: '26.1.0'
+    kotlinVersion   : '1.2.40',
+    okhttpVersion   : '3.10.0',
+    appCompatVersion: '27.1.1'
 ]
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
@@ -10,13 +10,13 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin : 'com.android.tools.build:gradle:3.0.1',
+      androidPlugin : 'com.android.tools.build:gradle:3.1.2',
       groovyPlugin  : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin   : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat     : "com.android.support:appcompat-v7:$versions.appCompatVersion",
       cglib         : "cglib:cglib-nodep:2.2.2",
       groovy        : "org.codehaus.groovy:groovy-all:2.4.5:indy",
-      guava         : "com.google.guava:guava:20.0",
+      guava         : "com.google.guava:guava:24.1.1-android",
       ddmlib        : 'com.android.tools.ddms:ddmlib:25.3.0',
       junit         : "junit:junit:4.12",
       jsr305        : "com.google.code.findbugs:jsr305:3.0.2",
@@ -27,7 +27,7 @@ ext {
       kotlinStdLib  : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
       okreplayPlugin: "com.airbnb.okreplay:gradle-plugin:latest.release",
       kotlinPlugin  : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
-      truth         : 'com.google.truth:truth:0.30',
+      truth         : 'com.google.truth:truth:0.40',
       robolectric   : "org.robolectric:robolectric:3.3.2",
       spock         : dependencies.create("org.spockframework:spock-core:1.0-groovy-2.4", {
         exclude module: "groovy-all"
@@ -39,9 +39,9 @@ ext {
   ]
 
   androidConfig = [
-      compileSdkVersion: 26,
-      buildToolsVersion: '26.0.2',
+      compileSdkVersion: 27,
+      buildToolsVersion: '27.0.3',
       minSdkVersion    : 14,
-      targetSdkVersion : 26
+      targetSdkVersion : 27
   ]
 }
