@@ -7,8 +7,8 @@ class PluginTestHelper {
   static def setupDefaultAndroidProject(Project project) {
     setupAndroidProject(project)
     project.android {
-      compileSdkVersion 25
-      buildToolsVersion "25.0.3"
+      compileSdkVersion 27
+      buildToolsVersion "27.0.3"
     }
   }
 
@@ -25,8 +25,8 @@ class PluginTestHelper {
     if (envVar) {
       return envVar
     }
-    File localPropFile = new File(new File(System.getProperty("user.dir")).parentFile, "local" +
-        ".properties")
+    File localPropFile = new File(new File(System.getProperty("user.dir")).parentFile,
+        "local.properties")
     if (localPropFile.isFile()) {
       Properties props = new Properties()
       props.load(new FileInputStream(localPropFile))

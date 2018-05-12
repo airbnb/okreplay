@@ -21,7 +21,7 @@ class RecorderRule(configuration: OkReplayConfig) : Recorder(configuration), Tes
         @Throws(Throwable::class)
         override fun evaluate() {
           try {
-            val tapeName = if (annotation.tape.isNullOrEmpty()) {
+            val tapeName = if (annotation.tape.isEmpty()) {
               description.defaultTapeName()
             } else {
               annotation.tape

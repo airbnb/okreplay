@@ -30,7 +30,7 @@ notifications:
   email: false
 
 script:
-  - ./gradlew connectedCheck --stacktrace --max-workers=2 -x okreplay-gradle-plugin:test -x okreplay-sample:connectedAndroidTest
+  - ./gradlew connectedCheck --stacktrace --max-workers=2 -x okreplay-sample:connectedAndroidTest
 
 sudo: false
 

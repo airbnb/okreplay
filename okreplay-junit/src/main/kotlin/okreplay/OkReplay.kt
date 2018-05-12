@@ -13,4 +13,4 @@ package okreplay
 annotation class OkReplay(
     val tape: String = "",
     val mode: TapeMode = TapeMode.UNDEFINED,
-    val match: Array<MatchRules> = arrayOf())
+    val match: Array<MatchRules> = [])

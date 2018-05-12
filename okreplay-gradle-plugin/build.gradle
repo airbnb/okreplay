@@ -2,8 +2,8 @@ apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'groovy'
 apply plugin: 'java-gradle-plugin'
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 sourceSets.main.groovy.srcDirs = ["src/main/groovy"]
 
@@ -17,6 +17,7 @@ dependencies {
   testImplementation dep.junit
   testImplementation dep.truth
   testImplementation dep.mockito
+  testImplementation dep.guava_jre
 }
 
 test {
