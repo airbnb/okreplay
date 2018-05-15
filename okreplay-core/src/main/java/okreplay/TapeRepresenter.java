@@ -112,7 +112,7 @@ class TapeRepresenter extends Representer {
     }
 
     @Override public int compare(Property a, Property b) {
-      return Util.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
+      return Integer.compare(propertyNames.indexOf(a.getName()), propertyNames.indexOf(b.getName()));
     }
   }
 }

@@ -21,63 +21,68 @@ public class OkReplayInterceptor implements Interceptor {
     okhttp3.Request request = chain.request();
     if (isRunning && !isHostIgnored(request)) {
       if (!tape.isPresent()) {
-        return new okhttp3.Response.Builder() //
-            .protocol(Protocol.HTTP_1_1)  //
-            .code(403) //
-            .message("") //
-            .body(ResponseBody.create(MediaType.parse("text/plain"), "No tape")) //
-            .request(request) //
-            .build();
+        return buildResponse(request, 403, "No tape");
       } else {
         //noinspection ConstantConditions
         Tape tape = this.tape.get();
         Request recordedRequest = OkHttpRequestAdapter.adapt(request);
         if (tape.isReadable() && tape.seek(recordedRequest)) {
-          LOG.info(String.format("Playing back request %s %s from tape '%s'",
-              recordedRequest.method(), recordedRequest.url().toString(), tape.getName()));
-          Response recordedResponse = tape.play(recordedRequest);
-          okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
-          okhttpResponse = setOkReplayHeader(okhttpResponse, "PLAY");
-          okhttpResponse = setViaHeader(okhttpResponse);
-          return okhttpResponse;
+          return replayResponse(request, tape, recordedRequest);
         } else {
           LOG.warning(String.format("no matching request found on tape '%s' for request %s %s",
               tape.getName(), request.method(), request.url().toString()));
           if (tape.getMode() == TapeMode.READ_ONLY_QUIET) {
-            return new okhttp3.Response.Builder()
-                .protocol(Protocol.HTTP_1_1)
-                .code(404)
-                .message("")
-                .body(ResponseBody.create(MediaType.parse("text/plain"), "No matching response"))
-                .request(chain.request())
-                .build();
+            return buildResponse(request, 404, "No matching response");
           }
-
           // If the tape isn't writeable, abandon this request. This prevents us from
           // talking to the server for non-mutable tapes.
           if (!tape.isWritable()) {
             throwTapeNotWritable(request.method() + " " + request.url().toString());
           }
-
           // Continue the request and attempt to write the response to the tape.
-          okhttp3.Response okhttpResponse = chain.proceed(request);
-          okhttpResponse = setOkReplayHeader(okhttpResponse, "REC");
-          okhttpResponse = setViaHeader(okhttpResponse);
-          LOG.info(String.format("Recording request %s %s to tape '%s'",
-              request.method(), request.url().toString(), tape.getName()));
-          ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
-          Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
-          tape.record(recordedRequest, recordedResponse);
-          okhttpResponse = okhttpResponse.newBuilder()
-              .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
-              .build();
-          okhttpResponse.body().close();
-          return okhttpResponse;
+          return recordResponse(request, tape, recordedRequest, chain.proceed(request));
         }
       }
     } else {
       return chain.proceed(request);
     }
+  }
+
+  private okhttp3.Response replayResponse(okhttp3.Request request, Tape tape, Request
+      recordedRequest) {
+    LOG.info(String.format("Playing back request %s %s from tape '%s'",
+        recordedRequest.method(), recordedRequest.url().toString(), tape.getName()));
+    Response recordedResponse = tape.play(recordedRequest);
+    okhttp3.Response okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse);
+    okhttpResponse = setOkReplayHeader(okhttpResponse, "PLAY");
+    okhttpResponse = setViaHeader(okhttpResponse);
+    return okhttpResponse;
+  }
+
+  private okhttp3.Response recordResponse(okhttp3.Request request, Tape tape,
+      Request recordedRequest, okhttp3.Response okhttpResponse) {
+    okhttpResponse = setOkReplayHeader(okhttpResponse, "REC");
+    okhttpResponse = setViaHeader(okhttpResponse);
+    LOG.info(String.format("Recording request %s %s to tape '%s'",
+        request.method(), request.url().toString(), tape.getName()));
+    ResponseBody bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body());
+    Response recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone);
+    tape.record(recordedRequest, recordedResponse);
+    okhttpResponse = okhttpResponse.newBuilder()
+        .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()))
+        .build();
+    okhttpResponse.body().close();
+    return okhttpResponse;
+  }
+
+  private okhttp3.Response buildResponse(okhttp3.Request request, int code, String message) {
+    return new okhttp3.Response.Builder() //
+        .protocol(Protocol.HTTP_1_1)  //
+        .code(code) //
+        .message("") //
+        .body(ResponseBody.create(MediaType.parse("text/plain"), message)) //
+        .request(request) //
+        .build();
   }
 
   private void throwTapeNotWritable(String request) {

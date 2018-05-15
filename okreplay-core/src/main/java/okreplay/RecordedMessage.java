@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 
-abstract class RecordedMessage extends AbstractMessage implements Message {
+abstract class RecordedMessage extends AbstractMessage {
   final Headers headers;
   final byte[] body;
 

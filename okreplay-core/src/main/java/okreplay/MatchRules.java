@@ -29,9 +29,7 @@ public enum MatchRules implements MatchRule {
       return a.url().url().getQuery().equals(b.url().url().getQuery());
     }
   }, queryParams {
-    /**
-     * Compare query parameters instead of query string representation.
-     */
+    /** Compare query parameters instead of query string representation. */
     @Override public boolean isMatch(Request a, Request b) {
       if ((a.url().url().getQuery() != null) && (b.url().url().getQuery() != null)) {
         // both request have a query, split query params and compare

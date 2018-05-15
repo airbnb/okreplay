@@ -22,10 +22,6 @@ final class Util {
     return str == null || str.trim().isEmpty();
   }
 
-  static int compare(int a, int b) {
-    return (a < b) ? -1 : ((a > b) ? 1 : 0);
-  }
-
   static <T> T checkNotNull(T reference, @Nullable Object errorMessage) {
     if (reference == null) {
       throw new NullPointerException(String.valueOf(errorMessage));
