@@ -9,6 +9,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
+import org.mockito.BDDMockito.given
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 
@@ -27,7 +28,7 @@ class OkReplayPluginTest {
 
   @Test fun pullFailsIfNoExternalStorageDir() {
     val project = prepareProject()
-    val pullTask: DefaultTask = project.tasks.getByName(PullTapesTask.NAME) as DefaultTask
+    val pullTask: DefaultTask = project.tasks.getByName("pullDebugOkReplayTapes") as DefaultTask
     try {
       pullTask.execute()
       fail()
@@ -36,9 +37,9 @@ class OkReplayPluginTest {
   }
 
   @Test fun pull() {
-    `when`(device.externalStorageDir()).thenReturn("/foo")
+    given(device.externalStorageDir()).willReturn("/foo")
     val project = prepareProject()
-    val pullTask: DefaultTask = project.tasks.getByName(PullTapesTask.NAME) as DefaultTask
+    val pullTask: DefaultTask = project.tasks.getByName("pullDebugOkReplayTapes") as DefaultTask
     pullTask.execute()
     verify(device).pullDirectory(
         "${project.projectDir.absolutePath}/src/androidTest/assets/tapes",
