@@ -1,8 +1,9 @@
 package okreplay
 
 import org.gradle.api.Task
+import org.gradle.api.tasks.Input
 
 interface TapeTask : Task {
-  fun setDeviceBridge(deviceBridge: DeviceBridge)
-  fun setPackageName(packageName: String)
+  @get:Input var packageName: String?
+  @get:Input var deviceBridge: DeviceBridge?
 }

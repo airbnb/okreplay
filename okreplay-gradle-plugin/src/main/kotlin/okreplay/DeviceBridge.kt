@@ -4,7 +4,6 @@ import com.android.build.gradle.internal.LoggerWrapper
 import com.android.builder.testing.ConnectedDeviceProvider
 import com.android.builder.testing.api.DeviceException
 import org.gradle.api.logging.Logger
-import okreplay.DeviceInterface
 import java.io.File
 
 open class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
@@ -20,6 +19,6 @@ open class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Lo
 
   internal fun devices(): List<Device> =
       deviceProvider.devices.map {
-        Device(DeviceInterface.Factory.newInstance(it), logger)
+        Device(DeviceInterface.newInstance(it), logger)
       }
 }

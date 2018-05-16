@@ -53,24 +53,23 @@ class OkReplayPlugin
   }
 
   private fun applyPlugin() {
-    // TODO: Create different tasks per variant
-    val pullTapesTask: TapeTask =
-        project.tasks.create(PullTapesTask.NAME, PullTapesTask::class.java)
-    val clearTapesTask: TapeTask =
-        project.tasks.create(ClearTapesTask.NAME, ClearTapesTask::class.java)
     project.afterEvaluate {
-      getVariants().all {
+      it.getVariants().all {
         val flavorNameCapitalized = it.flavorName.capitalize()
         val buildNameCapitalized = it.buildType.name.capitalize()
         val targetName = "$flavorNameCapitalized$buildNameCapitalized"
+        val pullTapesTask: TapeTask =
+            project.tasks.create("pull${targetName}OkReplayTapes", PullTapesTask::class.java)
+        val clearTapesTask: TapeTask =
+            project.tasks.create("clear${targetName}OkReplayTapes", ClearTapesTask::class.java)
         val globalScope = it.globalScope()
         val adbPath = globalScope.androidBuilder.sdkInfo.adb
         val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
-        val testApplicationId = testApplicationId()
+        val testApplicationId = project.testApplicationId()
         val deviceBridge = DeviceBridgeProvider.get(adbPath, adbTimeoutMs, project)
         listOf(pullTapesTask, clearTapesTask).forEach {
-          it.setDeviceBridge(deviceBridge)
-          it.setPackageName(testApplicationId)
+          it.deviceBridge = deviceBridge
+          it.packageName = testApplicationId
         }
         clearTapesTask.runBefore("connected${targetName}AndroidTest")
         pullTapesTask.runAfter("connected${targetName}AndroidTest")
@@ -85,38 +84,38 @@ class OkReplayPlugin
     return variantData.scope.globalScope
   }
 
-  private fun androidConfig(): AndroidConfig {
-    return project.extensions.getByName("android") as BaseExtension
-  }
-
-  private fun testApplicationId(): String {
-    val androidConfig = androidConfig()
-    if (androidConfig is AppExtension || androidConfig is LibraryExtension) {
-      if (!(androidConfig as TestedExtension).testVariants.isEmpty()) {
-        return (androidConfig as TestedExtension).testVariants.first().applicationId
-      } else {
-        return ""
-      }
-    } else {
-      throw IllegalStateException("Invalid project type")
-    }
-  }
-
-  private fun getVariants(): DefaultDomainObjectSet<out BaseVariant> {
-    val androidConfig = androidConfig()
-    when (androidConfig) {
-      is AppExtension -> @Suppress("UNCHECKED_CAST")
-      return androidConfig.applicationVariants as DefaultDomainObjectSet<BaseVariant>
-      is LibraryExtension -> return androidConfig.libraryVariants
-      else -> throw IllegalStateException("Invalid project type")
-    }
-  }
-
   // TODO: Make this configurable from the plugin extension script
   companion object {
     const val LOCAL_TAPES_DIR = "src/androidTest/assets/tapes"
     // This is also hardcoded in AndroidTapeRoot#getSdcardDir()
     // Need to use the same value in both places
     const val REMOTE_TAPES_DIR = "okreplay/tapes"
+
+    private fun Project.androidConfig(): AndroidConfig {
+      return extensions.getByName("android") as BaseExtension
+    }
+
+    private fun Project.testApplicationId(): String {
+      val androidConfig = androidConfig()
+      return if (androidConfig is AppExtension || androidConfig is LibraryExtension) {
+        if (!(androidConfig as TestedExtension).testVariants.isEmpty()) {
+          androidConfig.testVariants.first().applicationId
+        } else {
+          ""
+        }
+      } else {
+        throw IllegalStateException("Invalid project type")
+      }
+    }
+
+    private fun Project.getVariants(): DefaultDomainObjectSet<out BaseVariant> {
+      val androidConfig = androidConfig()
+      when (androidConfig) {
+        is AppExtension -> @Suppress("UNCHECKED_CAST")
+        return androidConfig.applicationVariants as DefaultDomainObjectSet<BaseVariant>
+        is LibraryExtension -> return androidConfig.libraryVariants
+        else -> throw IllegalStateException("Invalid project type")
+      }
+    }
   }
 }

@@ -11,16 +11,17 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import okreplay.espresso.BuildConfig
+import org.mockito.BDDMockito.given
 import java.io.Reader
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
 class AndroidTapeRootTest {
-  var assetManager = mock(AssetManager::class.java)
+  var assetManager: AssetManager = mock(AssetManager::class.java)
   lateinit var tapeRoot: AndroidTapeRoot
 
   @Before fun setUp() {
-    `when`(assetManager.context).thenReturn(RuntimeEnvironment.application)
+    given(assetManager.context).willReturn(RuntimeEnvironment.application)
     tapeRoot = AndroidTapeRoot(assetManager, "testName")
   }
 
@@ -38,14 +39,14 @@ class AndroidTapeRootTest {
   }
 
   @Test fun tapeExists() {
-    `when`(assetManager.exists("tapes/testName", "child.txt")).thenReturn(true)
+    given(assetManager.exists("tapes/testName", "child.txt")).willReturn(true)
     assertThat(tapeRoot.tapeExists("child.txt")).isTrue()
     verify(assetManager).exists("tapes/testName", "child.txt")
   }
 
   @Test fun read() {
     val reader = mock(Reader::class.java)
-    `when`(assetManager.open("tapes/testName/foo.txt")).thenReturn(reader)
+    given(assetManager.open("tapes/testName/foo.txt")).willReturn(reader)
     assertThat(tapeRoot.readerFor("foo.txt")).isEqualTo(reader)
   }
 }
