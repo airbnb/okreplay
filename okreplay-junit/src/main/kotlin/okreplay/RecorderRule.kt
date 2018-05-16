@@ -19,7 +19,6 @@ class RecorderRule(configuration: OkReplayConfig) : Recorder(configuration), Tes
     if (annotation != null) {
       LOG.info(String.format("found @OkReplay annotation on '%s'", description.displayName))
       return object : Statement() {
-        @Throws(Throwable::class)
         override fun evaluate() {
           try {
             val tapeName = if (annotation.tape.isEmpty()) {
