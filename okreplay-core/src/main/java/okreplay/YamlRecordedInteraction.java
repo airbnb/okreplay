@@ -6,6 +6,7 @@ public class YamlRecordedInteraction {
   private final Date recorded;
   private final YamlRecordedRequest request;
   private final YamlRecordedResponse response;
+  private transient RecordedInteraction immutableInteraction;
 
   YamlRecordedInteraction(Date recorded, YamlRecordedRequest request,
       YamlRecordedResponse response) {
@@ -20,6 +21,13 @@ public class YamlRecordedInteraction {
   }
 
   RecordedInteraction toImmutable() {
-    return new RecordedInteraction(recorded, request.toImmutable(), response.toImmutable());
+    if (immutableInteraction == null) {
+      immutableInteraction = createImmutable();
+    }
+    return immutableInteraction;
+  }
+
+  private RecordedInteraction createImmutable() {
+      return new RecordedInteraction(recorded, request.toImmutable(), response.toImmutable());
   }
 }
