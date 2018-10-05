@@ -1,8 +1,8 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.2.40',
-    okhttpVersion   : '3.10.0',
-    appCompatVersion: '27.1.1'
+    kotlinVersion   : '1.2.71',
+    okhttpVersion   : '3.11.0',
+    appCompatVersion: '28.0.0'
 ]
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
@@ -10,7 +10,7 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin : 'com.android.tools.build:gradle:3.1.2',
+      androidPlugin : 'com.android.tools.build:gradle:3.2.0',
       groovyPlugin  : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin   : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat     : "com.android.support:appcompat-v7:$versions.appCompatVersion",
@@ -34,15 +34,16 @@ ext {
         exclude module: "groovy-all"
         exclude module: "junit"
       }),
-      espresso      : dependencies.create('com.android.support.test.espresso:espresso-core:3.0.1', {
+      espresso      : dependencies.create('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
-      })
+      }),
+      espressoRules : 'com.android.support.test:rules:1.0.2'
   ]
 
   androidConfig = [
-      compileSdkVersion: 27,
-      buildToolsVersion: '27.0.3',
+      compileSdkVersion: 28,
+      buildToolsVersion: '28.0.2',
       minSdkVersion    : 14,
-      targetSdkVersion : 27
+      targetSdkVersion : 28
   ]
 }
