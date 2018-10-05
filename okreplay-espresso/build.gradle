@@ -26,8 +26,8 @@ android {
 dependencies {
   api project(':okreplay-junit')
   api dep.espresso
+  api dep.espressoRules
   implementation dep.kotlinStdLib
-  implementation dep.appcompat
   testImplementation dep.robolectric
   testImplementation dep.truth
   testImplementation dep.mockito

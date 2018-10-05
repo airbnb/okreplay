@@ -7,8 +7,8 @@ class PluginTestHelper {
   static def setupDefaultAndroidProject(Project project) {
     setupAndroidProject(project)
     project.android {
-      compileSdkVersion 27
-      buildToolsVersion "27.0.3"
+      compileSdkVersion 28
+      buildToolsVersion "28.0.2"
     }
   }
 
