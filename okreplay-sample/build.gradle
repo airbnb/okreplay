@@ -5,7 +5,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
 
   sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
