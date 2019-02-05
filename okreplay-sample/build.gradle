@@ -35,7 +35,6 @@ dependencies {
   implementation dep.androidXAnnotations
   implementation dep.kotlinStdLib
   implementation dep.guava
-  implementation dep.androidXAnnotations
   implementation "com.google.android.material:material:1.0.0"
   implementation 'androidx.multidex:multidex:2.0.1'
   implementation "androidx.vectordrawable:vectordrawable:1.0.1"
