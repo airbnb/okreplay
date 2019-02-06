@@ -3,7 +3,6 @@ apply plugin: 'groovyx.android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
 
   lintOptions {
     disable 'InvalidPackage'

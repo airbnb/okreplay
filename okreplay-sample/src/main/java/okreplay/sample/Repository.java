@@ -1,6 +1,6 @@
 package okreplay.sample;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;

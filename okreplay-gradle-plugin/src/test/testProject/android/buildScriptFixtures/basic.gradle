@@ -18,7 +18,6 @@ plugins {
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
-  buildToolsVersion androidConfig.buildToolsVersion
 
   defaultConfig {
     applicationId "okreplay.testProject.basic"
