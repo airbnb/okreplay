@@ -14,7 +14,7 @@ internal interface DeviceInterface {
   fun push(localFile: String, remotePath: String)
   fun pull(remotePath: String, localPath: String)
   fun delete(remotePath: String)
-  fun externalStorageDir(): String
+  fun externalStorageDir(): String?
 
   companion object Factory {
     internal fun newInstance(deviceConn: DeviceConnector): DeviceInterface = Impl(deviceConn)
@@ -46,10 +46,10 @@ internal interface DeviceInterface {
           SyncService.getNullProgressMonitor())
     }
 
-    override fun externalStorageDir(): String =
+    override fun externalStorageDir(): String? =
         deviceConn.runCmd("echo \$EXTERNAL_STORAGE")
 
-    private fun DeviceConnector.runCmd(cmd: String): String {
+    private fun DeviceConnector.runCmd(cmd: String): String? {
       val latch = CountDownLatch(1)
       val receiver = CollectingOutputReceiver(latch)
       try {

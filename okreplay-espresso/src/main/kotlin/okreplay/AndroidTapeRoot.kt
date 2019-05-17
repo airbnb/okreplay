@@ -20,8 +20,8 @@ open class AndroidTapeRoot(private val assetManager: AssetManager, testName: Str
       // directory instead.
       assetManager.open("$assetsDirPrefix/$tapeFileName")
 
-  override fun tapeExists(tapeFileName: String) =
-      assetManager.exists(assetsDirPrefix, tapeFileName)
+  override fun tapeExists(tapeFileName: String): Boolean =
+      assetManager.exists(assetsDirPrefix, tapeFileName) == true
 
   internal fun grantPermissionsIfNeeded() {
     val res = assetManager.context.checkCallingOrSelfPermission(WRITE_EXTERNAL_STORAGE)

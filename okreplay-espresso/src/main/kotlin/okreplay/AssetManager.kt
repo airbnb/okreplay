@@ -8,5 +8,5 @@ open class AssetManager(internal val context: Context) {
       context.assets.open(file).bufferedReader()
 
   fun exists(path: String, fileName: String) =
-      context.assets.list(path).contains(fileName)
+      context.assets.list(path)?.contains(fileName)
 }

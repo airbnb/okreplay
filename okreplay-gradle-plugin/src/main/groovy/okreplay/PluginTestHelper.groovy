@@ -70,8 +70,10 @@ class PluginTestHelper {
       throw new IllegalArgumentException("Couldn't find test project")
     }
 
-    File requestedBuildScript = new File
-        ("$projectTypeRoot/buildScriptFixtures/${testBuildScriptName}.gradle")
+    File requestedBuildScript = new File(
+        "$projectTypeRoot/buildScriptFixtures/${testBuildScriptName}.gradle")
+    File requestedSettingsFile = new File(
+        "$projectTypeRoot/buildScriptFixtures/settings.gradle")
     if (!requestedBuildScript.isFile()) {
       throw new IllegalArgumentException("Couldn't find the test build script")
     }
@@ -79,6 +81,7 @@ class PluginTestHelper {
     prepareLocalProperties(destDir)
     FileUtils.copyDirectory(projectUnderTest, destDir)
     FileUtils.copyFile(requestedBuildScript, new File("$destDir/build.gradle"))
+    FileUtils.copyFile(requestedSettingsFile, new File("$destDir/settings.gradle"))
   }
 
   static def prepareLocalProperties(File destDir) {
