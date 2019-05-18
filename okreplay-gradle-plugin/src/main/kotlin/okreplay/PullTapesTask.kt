@@ -29,7 +29,7 @@ open class PullTapesTask : DefaultTask(), TapeTask {
     FileUtils.forceMkdir(outputDir)
     deviceBridge!!.devices().forEach {
       val externalStorage = it.externalStorageDir()
-      if (externalStorage.isEmpty()) {
+      if (externalStorage.isNullOrBlank()) {
         throw TaskExecutionException(this,
             RuntimeException("Failed to retrieve the device external storage dir."))
       }

@@ -2,7 +2,6 @@ package okreplay
 
 import com.google.common.truth.Truth.assertThat
 import okreplay.PluginTestHelper.*
-import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
@@ -10,11 +9,10 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 
 class OkReplayPluginTest {
-  private val deviceBridge = Mockito.mock(DeviceBridge::class.java)
+  private val deviceBridge = mock(DeviceBridge::class.java)
   private val device = mock(Device::class.java)
 
   @Before fun setUp() {
@@ -28,9 +26,9 @@ class OkReplayPluginTest {
 
   @Test fun pullFailsIfNoExternalStorageDir() {
     val project = prepareProject()
-    val pullTask: DefaultTask = project.tasks.getByName("pullDebugOkReplayTapes") as DefaultTask
+    val pullTask = project.tasks.getByName("pullDebugOkReplayTapes") as PullTapesTask
     try {
-      pullTask.execute()
+      pullTask.pullTapes()
       fail()
     } catch (ignored: TaskExecutionException) {
     }
@@ -39,8 +37,8 @@ class OkReplayPluginTest {
   @Test fun pull() {
     given(device.externalStorageDir()).willReturn("/foo")
     val project = prepareProject()
-    val pullTask: DefaultTask = project.tasks.getByName("pullDebugOkReplayTapes") as DefaultTask
-    pullTask.execute()
+    val pullTask = project.tasks.getByName("pullDebugOkReplayTapes") as PullTapesTask
+    pullTask.pullTapes()
     verify(device).pullDirectory(
         "${project.projectDir.absolutePath}/src/androidTest/assets/tapes",
         "/foo/okreplay/tapes/com.example.okreplay.test/")
