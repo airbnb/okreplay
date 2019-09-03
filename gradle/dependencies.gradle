@@ -1,6 +1,6 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.3.30',
+    kotlinVersion   : '1.3.40',
     okhttpVersion   : '3.11.0',
     appCompatVersion: '1.0.2'
 ]
@@ -10,7 +10,7 @@ ext {
   isCi = "true" == System.getenv('CI')
 
   dep = [
-      androidPlugin       : 'com.android.tools.build:gradle:3.4.1',
+      androidPlugin       : 'com.android.tools.build:gradle:3.5.0',
       groovyPlugin        : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
       nexusPlugin         : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat           : "androidx.appcompat:appcompat:$versions.appCompatVersion",
@@ -27,7 +27,7 @@ ext {
       mockWebServer       : "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
       snakeYaml           : "org.yaml:snakeyaml:1.16",
       kotlinStdLib        : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
-      okreplayPlugin      : "com.airbnb.okreplay:gradle-plugin:latest.release",
+      okreplayPlugin      : "com.airbnb.okreplay:gradle-plugin:$VERSION_NAME",
       kotlinPlugin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
       truth               : 'com.google.truth:truth:0.40',
       robolectric         : "org.robolectric:robolectric:3.3.2",

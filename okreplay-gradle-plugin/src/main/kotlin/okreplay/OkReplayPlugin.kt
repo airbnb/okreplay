@@ -62,9 +62,9 @@ class OkReplayPlugin
             project.tasks.create("pull${targetName}OkReplayTapes", PullTapesTask::class.java)
         val clearTapesTask: TapeTask =
             project.tasks.create("clear${targetName}OkReplayTapes", ClearTapesTask::class.java)
-        val globalScope = it.globalScope()
-        val adbPath = globalScope.androidBuilder.sdkInfo.adb
-        val adbTimeoutMs = globalScope.extension.adbOptions.timeOutInMs
+        val extension = project.extensions.getByType(BaseExtension::class.java)
+        val adbPath = extension.adbExecutable
+        val adbTimeoutMs = extension.adbOptions.timeOutInMs
         val testApplicationId = project.testApplicationId()
         val deviceBridge = DeviceBridgeProvider.get(adbPath, adbTimeoutMs, project)
         listOf(pullTapesTask, clearTapesTask).forEach {
