@@ -85,14 +85,6 @@ internal abstract class CharMatcher : Predicate<Char> {
     return matches(character!!)
   }
 
-  /**
-   * Returns a string representation of this `CharMatcher`, such as
-   * `CharMatcher.or(WHITESPACE, JAVA_DIGIT)`.
-   */
-  override fun toString(): String {
-    return super.toString()
-  }
-
   // Fast matchers
 
   /** A matcher for which precomputation will not yield any significant benefit.  */

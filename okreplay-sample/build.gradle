@@ -26,6 +26,10 @@ android {
   lintOptions {
     disable 'InvalidPackage'
   }
+
+  useLibrary 'android.test.runner'
+  useLibrary 'android.test.base'
+  useLibrary 'android.test.mock'
 }
 
 dependencies {
@@ -43,19 +47,21 @@ dependencies {
   implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
   compileOnly 'com.google.auto.value:auto-value:1.5.2'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-  implementation 'com.squareup.okio:okio:1.14.0'
+  implementation dep.okio
   implementation dep.okhttp
   implementation dep.jsr305
   kapt 'com.ryanharter.auto.value:auto-value-moshi:0.4.3'
   compileOnly 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
   testImplementation dep.junit
   annotationProcessor 'com.google.auto.value:auto-value:1.5.2'
+  kapt 'com.google.auto.value:auto-value:1.5.2'
   androidTestAnnotationProcessor 'com.google.auto.value:auto-value:1.5.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
   androidTestImplementation project(':okreplay-espresso')
   androidTestImplementation dep.androidXAnnotations
-  androidTestImplementation 'androidx.test:runner:1.1.1'
+  androidTestImplementation dep.androidXTestRunner
   androidTestImplementation dep.androidXTestRules
-  androidTestImplementation 'com.squareup.okio:okio:1.14.0'
+  androidTestImplementation dep.okio
   androidTestImplementation dep.okhttp
   androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 }

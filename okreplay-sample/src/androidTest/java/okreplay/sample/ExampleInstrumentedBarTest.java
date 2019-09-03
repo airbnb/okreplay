@@ -1,9 +1,10 @@
 package okreplay.sample;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import com.jakewharton.espresso.OkHttp3IdlingResource;
 
@@ -21,7 +22,6 @@ import okreplay.OkReplayConfig;
 import okreplay.OkReplayRuleChain;
 import okreplay.TapeMode;
 
-import static androidx.test.InstrumentationRegistry.getContext;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -35,7 +35,7 @@ public class ExampleInstrumentedBarTest {
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()
-      .tapeRoot(new AndroidTapeRoot(getContext(), getClass()))
+      .tapeRoot(new AndroidTapeRoot(ApplicationProvider.getApplicationContext(), getClass()))
       .defaultMode(TapeMode.READ_WRITE)
       .sslEnabled(true)
       .interceptor(graph.getOkReplayInterceptor())
