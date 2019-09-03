@@ -26,6 +26,10 @@ android {
   lintOptions {
     disable 'InvalidPackage'
   }
+
+  useLibrary 'android.test.runner'
+  useLibrary 'android.test.base'
+  useLibrary 'android.test.mock'
 }
 
 dependencies {
@@ -49,11 +53,13 @@ dependencies {
   kapt 'com.ryanharter.auto.value:auto-value-moshi:0.4.3'
   compileOnly 'com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3'
   testImplementation dep.junit
+  annotationProcessor 'com.google.auto.value:auto-value:1.5.2'
   kapt 'com.google.auto.value:auto-value:1.5.2'
   androidTestAnnotationProcessor 'com.google.auto.value:auto-value:1.5.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
   androidTestImplementation project(':okreplay-espresso')
   androidTestImplementation dep.androidXAnnotations
-  androidTestImplementation 'androidx.test:runner:1.1.1'
+  androidTestImplementation 'androidx.test:runner:1.2.0'
   androidTestImplementation dep.androidXTestRules
   androidTestImplementation 'com.squareup.okio:okio:1.14.0'
   androidTestImplementation dep.okhttp
