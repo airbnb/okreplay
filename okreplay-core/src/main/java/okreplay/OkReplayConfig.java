@@ -151,7 +151,7 @@ public class OkReplayConfig {
       if (properties.containsKey("okreplay.defaultMatchRules")) {
         String property = properties.getProperty("okreplay.defaultMatchRules");
         List<MatchRule> rules = new ArrayList<>();
-        for (String s : Arrays.asList(property.split(","))) {
+        for (String s : property.split(",")) {
           rules.add(MatchRules.valueOf(s));
         }
         defaultMatchRule(ComposedMatchRule.of(rules));
