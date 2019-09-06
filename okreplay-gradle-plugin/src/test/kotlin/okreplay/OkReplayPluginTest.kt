@@ -1,7 +1,6 @@
 package okreplay
 
 import com.google.common.truth.Truth.assertThat
-import okreplay.PluginTestHelper.*
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
 import org.gradle.testfixtures.ProjectBuilder
@@ -45,11 +44,10 @@ class OkReplayPluginTest {
   }
 
   private fun prepareProject(): Project {
-    ProjectBuilder.builder().build().let {
-      setupDefaultAndroidProject(it)
-      applyOkReplay(it)
-      evaluate(it)
-      return it
+    return ProjectBuilder.builder().build().also { project ->
+      project.setupDefaultAndroidProject()
+      project.applyOkReplay()
+      project.evaluate()
     }
   }
 }

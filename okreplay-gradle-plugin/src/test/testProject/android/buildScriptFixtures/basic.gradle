@@ -8,13 +8,12 @@ buildscript {
 
   dependencies {
     classpath dep.androidPlugin
+    classpath files($PLUGIN_CLASSPATH)
   }
 }
 
-plugins {
-  id 'com.android.application'
-  id 'okreplay'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'okreplay'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
