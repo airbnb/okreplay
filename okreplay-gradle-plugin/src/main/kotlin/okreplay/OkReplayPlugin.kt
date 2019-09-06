@@ -2,8 +2,6 @@ package okreplay
 
 import com.android.build.gradle.*
 import com.android.build.gradle.api.BaseVariant
-import com.android.build.gradle.internal.scope.GlobalScope
-import com.android.build.gradle.internal.variant.BaseVariantData
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -75,13 +73,6 @@ class OkReplayPlugin
         pullTapesTask.runAfter("connected${targetName}AndroidTest")
       }
     }
-  }
-
-  private fun BaseVariant.globalScope(): GlobalScope {
-    val getVariantData = this.javaClass.getDeclaredMethod("getVariantData")
-    getVariantData.isAccessible = true
-    val variantData = getVariantData.invoke(this) as BaseVariantData
-    return variantData.scope.globalScope
   }
 
   // TODO: Make this configurable from the plugin extension script
