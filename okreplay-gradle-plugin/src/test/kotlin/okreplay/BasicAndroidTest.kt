@@ -12,7 +12,7 @@ class BasicAndroidTest {
   @Test fun buildsAndPullsTapeFiles() {
     val testProjectDir = setupBasicAndroidProject("basic")
     val result = runGradleForProjectDir(testProjectDir, "connectedAndroidTest")
-    val clearTask = result!!.task(":clearDebugOkReplayTapes")
+    val clearTask = result.task(":clearDebugOkReplayTapes")
     val pullTask = result.task(":pullDebugOkReplayTapes")
     assertThat(clearTask).isNotNull()
     assertThat(pullTask).isNotNull()
@@ -24,16 +24,15 @@ class BasicAndroidTest {
   @Test fun createsLocalTapesDirectoryIfNotExists() {
     val testProjectDir = setupBasicAndroidProject("notapes")
     val result = runGradleForProjectDir(testProjectDir, "pullDebugOkReplayTapes")
-    val pullTask = result!!.task(":pullDebugOkReplayTapes")
+    val pullTask = result.task(":pullDebugOkReplayTapes")
     assertThat(pullTask).isNotNull()
     assertThat(pullTask!!.outcome).isEqualTo(TaskOutcome.SUCCESS)
     assertThat(File(testProjectDir, "src/androidTest/assets/tapes").isDirectory).isTrue()
   }
 
-  private fun runGradleForProjectDir(projectDir: File, taskName: String): BuildResult? {
+  private fun runGradleForProjectDir(projectDir: File, taskName: String): BuildResult {
     return GradleRunner.create()
         .withProjectDir(projectDir)
-        .withPluginClasspath()
         .withArguments(taskName, "--stacktrace")
         .forwardStdError(OutputStreamWriter(System.err))
         .forwardStdOutput(OutputStreamWriter(System.out))

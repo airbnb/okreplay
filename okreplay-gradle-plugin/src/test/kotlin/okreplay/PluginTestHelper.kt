@@ -5,6 +5,7 @@ import com.android.build.gradle.BaseExtension
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
 import org.gradle.api.internal.project.ProjectInternal
+import org.gradle.testkit.runner.internal.PluginUnderTestMetadataReading
 import java.io.File
 import java.util.Properties
 
@@ -49,8 +50,11 @@ fun prepareProjectTestDir(destDir: File, testProjectName: String, testBuildScrip
 
   prepareLocalProperties(destDir)
   projectUnderTest.copyRecursively(destDir)
-  requestedBuildScript.copyTo(File(destDir, "build.gradle"))
   requestedSettingsFile.copyTo(File(destDir, "settings.gradle"))
+
+  val buildScript = requestedBuildScript.readText()
+      .replace("\$PLUGIN_CLASSPATH", getPluginClasspath())
+  File(destDir, "build.gradle").writeText(buildScript)
 }
 
 private fun prepareLocalProperties(destDir: File) {
@@ -74,6 +78,13 @@ private fun androidHome(): String {
   }
   throw IllegalStateException("SDK location not found. Define location with sdk.dir in the " +
       "local.properties file or with an ANDROID_HOME environment variable.")
+}
+
+private fun getPluginClasspath(): String {
+  return PluginUnderTestMetadataReading.readImplementationClasspath()
+      .asSequence()
+      .map { it.absolutePath.replace("\\", "\\\\") } // escape backslashes on Windows
+      .joinToString(", ") { "'$it'" }
 }
 
 private val workingDir: File

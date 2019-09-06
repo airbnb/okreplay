@@ -6,10 +6,12 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
   compileOnly gradleApi()
-  implementation dep.androidPlugin
+  compileOnly dep.androidPlugin
+  compileOnly dep.ddmlib
   implementation dep.kotlinStdLib
-  implementation dep.ddmlib
   testImplementation gradleTestKit()
+  testImplementation dep.androidPlugin
+  testImplementation dep.ddmlib
   testImplementation dep.junit
   testImplementation dep.truth
   testImplementation dep.mockito
