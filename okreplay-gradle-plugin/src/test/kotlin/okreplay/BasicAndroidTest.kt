@@ -6,7 +6,6 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Test
 import java.io.File
-import java.io.IOException
 import java.io.OutputStreamWriter
 
 class BasicAndroidTest {
@@ -41,10 +40,9 @@ class BasicAndroidTest {
         .build()
   }
 
-  @Throws(IOException::class)
   private fun setupBasicAndroidProject(dirName: String, buildScriptName: String = "basic"): File {
-    val destDir = PluginTestHelper.createTempTestDirectory(dirName)
-    PluginTestHelper.prepareProjectTestDir(destDir, dirName, buildScriptName)
+    val destDir = createTempTestDirectory(dirName)
+    prepareProjectTestDir(destDir, dirName, buildScriptName)
     return destDir
   }
 }

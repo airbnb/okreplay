@@ -1,15 +1,11 @@
 apply plugin: 'org.jetbrains.kotlin.jvm'
-apply plugin: 'groovy'
 apply plugin: 'java-gradle-plugin'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-sourceSets.main.groovy.srcDirs = ["src/main/groovy"]
-
 dependencies {
   compileOnly gradleApi()
-  implementation localGroovy()
   implementation dep.androidPlugin
   implementation dep.kotlinStdLib
   implementation dep.ddmlib
