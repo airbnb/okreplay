@@ -12,7 +12,6 @@ import static okreplay.Util.VIA;
  * Represents a set of recorded HTTP interactions that can be played back or
  * appended to.
  */
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 abstract class MemoryTape implements Tape {
   private String name;
   private List<YamlRecordedInteraction> interactions = new ArrayList<>();
