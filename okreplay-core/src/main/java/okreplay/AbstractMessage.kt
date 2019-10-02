@@ -19,10 +19,10 @@ internal abstract class AbstractMessage : Message {
   override fun getCharset(): Charset {
     val header = header(CONTENT_TYPE)
     return if (isNullOrEmpty(header)) {
-      // TODO: this isn't valid for non-text data – this method should return Optional<String>
+      // TODO: this isn't valid for non-text data – this method should return String?
       UTF_8
     } else {
-      Optional.fromNullable(MediaType.parse(header!!)!!.charset()).or(UTF_8)
+      MediaType.parse(header!!)!!.charset() ?: UTF_8
     }
   }
 

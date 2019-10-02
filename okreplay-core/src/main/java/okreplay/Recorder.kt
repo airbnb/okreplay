@@ -33,11 +33,11 @@ open class Recorder(private val configuration: OkReplayConfig) {
    * used.
    * @throws IllegalStateException if the Recorder is already started.
    */
-  fun start(tapeName: String, mode: Optional<TapeMode>, matchRule: Optional<MatchRule>) {
+  fun start(tapeName: String, mode: TapeMode?, matchRule: MatchRule?) {
     check(tape == null) { "start called when Recorder is already started" }
     tape = tapeLoader.loadTape(tapeName)
-    tape!!.mode = mode.or(configuration.defaultMode)
-    tape!!.matchRule = matchRule.or(configuration.defaultMatchRule)
+    tape!!.mode = mode ?: configuration.defaultMode
+    tape!!.matchRule = matchRule ?: configuration.defaultMatchRule
     configuration.interceptor().start(configuration, tape!!)
 
     for (listener in listeners) {
@@ -46,11 +46,11 @@ open class Recorder(private val configuration: OkReplayConfig) {
   }
 
   fun start(tapeName: String, mode: TapeMode) {
-    start(tapeName, mode.toOptional(), Optional.absent())
+    start(tapeName, mode.toNullable(), null)
   }
 
   fun start(tapeName: String) {
-    start(tapeName, Optional.absent(), Optional.absent())
+    start(tapeName, null, null)
   }
 
   /**

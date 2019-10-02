@@ -12,16 +12,16 @@ import okreplay.Util.VIA
 
 class OkReplayInterceptor : Interceptor {
   private var configuration: OkReplayConfig? = null
-  private var tape = Optional.absent<Tape>()
+  private var tape: Tape? = null
   private var isRunning: Boolean = false
 
   @Throws(IOException::class) override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
     val request = chain.request()
     if (isRunning && !isHostIgnored(request)) {
-      if (!tape.isPresent) {
+      if (tape == null) {
         return buildResponse(request, 403, "No tape")
       } else {
-        val tape = this.tape.get()
+        val tape = this.tape!!
         val recordedRequest = OkHttpRequestAdapter.adapt(request)
         if (tape.isReadable && tape.seek(recordedRequest)) {
           return replayResponse(request, tape, recordedRequest)
@@ -130,7 +130,7 @@ class OkReplayInterceptor : Interceptor {
 
   fun start(configuration: OkReplayConfig, tape: Tape?) {
     this.configuration = configuration
-    this.tape = Optional.fromNullable(tape)
+    this.tape = tape
     isRunning = true
   }
 

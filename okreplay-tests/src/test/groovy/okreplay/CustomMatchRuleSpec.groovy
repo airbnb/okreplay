@@ -62,8 +62,7 @@ interactions:
 
   void "#verb request with Accept header #acceptHeader #description using #rules"() {
     given:
-    recorder.start("custom match rule spec", Optional.absent(),
-        Optional.of(ComposedMatchRule.of(rules)))
+    recorder.start("custom match rule spec", null, ComposedMatchRule.of(rules))
 
     and:
     def body = RequestBody.create(MediaType.parse("text/plain"), "foo")

@@ -12,11 +12,7 @@ enum class TapeMode(val isReadable: Boolean, val isWritable: Boolean, val isSequ
     return isReadable || isWritable
   }
 
-  fun toOptional(): Optional<TapeMode> {
-    return if (this == UNDEFINED) {
-      Optional.absent()
-    } else {
-      Optional.of(this)
-    }
+  fun toNullable(): TapeMode? {
+    return if (this == UNDEFINED) null else this
   }
 }
