@@ -29,11 +29,11 @@ class RecorderRule(configuration: OkReplayConfig) : Recorder(configuration), Tes
             val tapeMode = annotation.mode
             val matchRules = annotation.match
             val matchRule = if (matchRules.isNotEmpty()) {
-              Optional.of(ComposedMatchRule.of(*matchRules))
+              ComposedMatchRule.of(*matchRules)
             } else {
-              Optional.absent<MatchRule>()
+              null
             }
-            start(tapeName, tapeMode.toOptional(), matchRule)
+            start(tapeName, tapeMode.toNullable(), matchRule)
             statement.evaluate()
           } catch (e: Exception) {
             LOG.log(Level.SEVERE, "Caught exception starting OkReplay", e)
