@@ -1,5 +1,7 @@
 package okreplay
 
+import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.TestedExtension
 import com.google.common.truth.Truth.assertThat
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskExecutionException
@@ -20,7 +22,59 @@ class OkReplayPluginTest {
   }
 
   @Test fun appliesPlugin() {
-    assertThat(prepareProject().plugins.hasPlugin(OkReplayPlugin::class.java)).isTrue()
+    val project = prepareProject()
+    assertThat(project.plugins.hasPlugin(OkReplayPlugin::class.java)).isTrue()
+    assertThat(project.tasks.findByName("clearDebugOkReplayTapes")).isNotNull()
+    assertThat(project.tasks.findByName("pullDebugOkReplayTapes")).isNotNull()
+  }
+
+  @Test fun respectsTestBuildType() {
+    val project = ProjectBuilder.builder().build()
+    project.setupDefaultAndroidProject()
+    project.applyOkReplay()
+    project.extensions.getByType(TestedExtension::class.java).testBuildType = "release"
+    project.evaluate()
+
+    assertThat(project.tasks.findByName("clearDebugOkReplayTapes")).isNull()
+    assertThat(project.tasks.findByName("pullDebugOkReplayTapes")).isNull()
+    assertThat(project.tasks.findByName("clearReleaseOkReplayTapes")).isNotNull()
+    assertThat(project.tasks.findByName("pullReleaseOkReplayTapes")).isNotNull()
+  }
+
+  @Test fun multipleFlavors() {
+    val project = ProjectBuilder.builder().build()
+    project.setupDefaultAndroidProject()
+    project.applyOkReplay()
+
+    val androidConfig = project.extensions.getByType(BaseExtension::class.java)
+    androidConfig.flavorDimensions(FLAVOR_DIMENSION)
+    androidConfig.productFlavors.run {
+      create("foo") {
+        it.dimension = FLAVOR_DIMENSION
+        it.testApplicationId = "com.foo.test"
+      }
+      create("bar") {
+        it.dimension = FLAVOR_DIMENSION
+        it.testApplicationId = "com.bar.test"
+      }
+    }
+    project.evaluate()
+
+    val clearFooTask = project.tasks.findByName("clearFooDebugOkReplayTapes") as ClearTapesTask?
+    assertThat(clearFooTask).isNotNull()
+    assertThat(clearFooTask?.packageName?.orNull).isEqualTo("com.foo.test")
+
+    val pullFooTask = project.tasks.findByName("pullFooDebugOkReplayTapes") as PullTapesTask?
+    assertThat(pullFooTask).isNotNull()
+    assertThat(pullFooTask?.packageName?.orNull).isEqualTo("com.foo.test")
+
+    val clearBarTask = project.tasks.findByName("clearBarDebugOkReplayTapes") as ClearTapesTask?
+    assertThat(clearBarTask).isNotNull()
+    assertThat(clearBarTask?.packageName?.orNull).isEqualTo("com.bar.test")
+
+    val pullBarTask = project.tasks.findByName("pullBarDebugOkReplayTapes") as PullTapesTask?
+    assertThat(pullBarTask).isNotNull()
+    assertThat(pullBarTask?.packageName?.orNull).isEqualTo("com.bar.test")
   }
 
   @Test fun pullFailsIfNoExternalStorageDir() {
@@ -31,6 +85,14 @@ class OkReplayPluginTest {
       fail()
     } catch (ignored: TaskExecutionException) {
     }
+  }
+
+  @Test fun clear() {
+    given(device.externalStorageDir()).willReturn("/foo")
+    val project = prepareProject()
+    val clearTask = project.tasks.getByName("clearDebugOkReplayTapes") as ClearTapesTask
+    clearTask.clearTapes()
+    verify(device).deleteDirectory("/foo/okreplay/tapes/com.example.okreplay.test/")
   }
 
   @Test fun pull() {
@@ -49,5 +111,9 @@ class OkReplayPluginTest {
       project.applyOkReplay()
       project.evaluate()
     }
+  }
+
+  companion object {
+    private const val FLAVOR_DIMENSION = "test"
   }
 }

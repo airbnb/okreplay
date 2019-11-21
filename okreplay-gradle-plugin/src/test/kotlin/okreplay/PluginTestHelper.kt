@@ -48,6 +48,9 @@ fun prepareProjectTestDir(destDir: File, testProjectName: String, testBuildScrip
       "$projectTypeRoot/buildScriptFixtures/settings.gradle")
   check(requestedBuildScript.isFile) { "Couldn't find the test build script" }
 
+  File("$projectTypeRoot/buildScriptFixtures/gradle.properties")
+      .copyTo(File(destDir, "gradle.properties"))
+
   prepareLocalProperties(destDir)
   projectUnderTest.copyRecursively(destDir)
   requestedSettingsFile.copyTo(File(destDir, "settings.gradle"))

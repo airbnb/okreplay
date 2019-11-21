@@ -22,4 +22,8 @@ test {
   testLogging.showStandardStreams = isCi
 }
 
+validateTaskProperties {
+  failOnWarning = true
+}
+
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
