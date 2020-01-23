@@ -28,8 +28,7 @@ class OkReplayPlugin : Plugin<Project> {
 
   private fun Project.registerTasks() {
     getVariants().all { variant ->
-      // Only one build type per variant can have a test variant.
-      // This is controlled by android.testBuildType property.
+      // Only variants with build type matching android.testBuildType will have a test variant
       val testVariant = (variant as TestedVariant).testVariant ?: return@all
 
       val androidConfig = androidConfig()
