@@ -1,8 +1,11 @@
 package okreplay
 
 import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.DynamicFeaturePlugin
 import com.android.build.gradle.LibraryExtension
+import com.android.build.gradle.LibraryPlugin
 import com.android.build.gradle.api.BaseVariant
 import com.android.build.gradle.internal.api.TestedVariant
 import org.gradle.api.DomainObjectSet
@@ -12,13 +15,13 @@ import org.gradle.api.Project
 class OkReplayPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
-    project.plugins.withId("com.android.application") {
+    project.plugins.withType(AppPlugin::class.java) {
       project.registerTasks()
     }
-    project.plugins.withId("com.android.library") {
+    project.plugins.withType(LibraryPlugin::class.java) {
       project.registerTasks()
     }
-    project.plugins.withId("com.android.dynamic-feature") {
+    project.plugins.withType(DynamicFeaturePlugin::class.java) {
       project.registerTasks()
     }
   }
