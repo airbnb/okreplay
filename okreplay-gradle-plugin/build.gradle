@@ -1,5 +1,6 @@
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'java-gradle-plugin'
+apply plugin: 'com.vanniktech.maven.publish'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -25,5 +26,3 @@ test {
 validateTaskProperties {
   failOnWarning = true
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.vanniktech.maven.publish'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -31,5 +32,3 @@ dependencies {
   testImplementation dep.truth
   testImplementation dep.mockito
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
