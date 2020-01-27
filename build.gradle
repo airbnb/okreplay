@@ -17,6 +17,7 @@ subprojects {
       classpath dep.groovyPlugin
       classpath dep.kotlinPlugin
       classpath dep.okreplayPlugin
+      classpath dep.gradleMavenPublishPlugin
     }
   }
 

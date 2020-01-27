@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'com.vanniktech.maven.publish'
 
 project.group = GROUP
 project.version = VERSION_NAME
@@ -9,5 +10,3 @@ targetCompatibility = "1.7"
 dependencies {
   implementation dep.okhttp
 }
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

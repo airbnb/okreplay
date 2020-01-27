@@ -1,5 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'com.vanniktech.maven.publish'
 
 dependencies {
   api project(":okreplay-core")
@@ -10,5 +11,3 @@ dependencies {
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
-
-apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
