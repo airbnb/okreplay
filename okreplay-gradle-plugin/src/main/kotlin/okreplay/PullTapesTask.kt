@@ -26,16 +26,18 @@ abstract class PullTapesTask : DefaultTask(), TapeTask {
     FileUtils.forceMkdir(localDir)
 
     val deviceBridge = DeviceBridgeProvider.get(adbPath.get(), adbTimeout.get(), logger)
-    deviceBridge.devices().forEach { device ->
-      val externalStorage = device.externalStorageDir()
-      if (externalStorage.isNullOrBlank()) {
-        throw TaskExecutionException(this,
-            RuntimeException("Failed to retrieve the device external storage dir."))
-      }
-      try {
-        device.pullDirectory(localDir.absolutePath, "$externalStorage/$REMOTE_TAPES_DIR/${packageName.get()}/")
-      } catch (e: RuntimeException) {
-        logger.error("ADB Command failed: ${e.message}")
+    deviceBridge.use {
+      devices().forEach { device ->
+        val externalStorage = device.externalStorageDir()
+        if (externalStorage.isNullOrBlank()) {
+          throw TaskExecutionException(this@PullTapesTask,
+              RuntimeException("Failed to retrieve the device external storage dir."))
+        }
+        try {
+          device.pullDirectory(localDir.absolutePath, "$externalStorage/$REMOTE_TAPES_DIR/${packageName.get()}/")
+        } catch (e: RuntimeException) {
+          logger.error("ADB Command failed: ${e.message}")
+        }
       }
     }
   }
