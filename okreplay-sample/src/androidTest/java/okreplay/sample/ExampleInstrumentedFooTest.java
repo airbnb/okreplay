@@ -37,7 +37,7 @@ public class ExampleInstrumentedFooTest {
   private final ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);
   private final AssetManager assetManager =
-      new AssetManager(ApplicationProvider.getApplicationContext());
+      new AssetManager(InstrumentationRegistry.getContext());
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()
       .tapeRoot(new AndroidTapeRoot(assetManager, getClass().getSimpleName()))
       .defaultMode(TapeMode.READ_WRITE)
