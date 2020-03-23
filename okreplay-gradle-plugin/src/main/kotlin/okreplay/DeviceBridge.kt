@@ -5,19 +5,34 @@ import com.android.builder.testing.ConnectedDeviceProvider
 import com.android.builder.testing.api.DeviceException
 import org.gradle.api.logging.Logger
 import java.io.File
+import java.util.concurrent.ExecutionException
 
-open class DeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) {
+internal interface DeviceBridge {
+  /**
+   * Uses the [DeviceBridge] to run the given action. [devices] should only be accessed within [block].
+   */
+  fun use(block: DeviceBridge.() -> Unit)
+
+  /**
+   * Returns the [Device]s accessible from this [DeviceBridge].
+   */
+  fun devices(): List<Device>
+}
+
+internal class RealDeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) : DeviceBridge {
   private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
 
-  init {
+  override fun use(block: DeviceBridge.() -> Unit) {
     try {
-      deviceProvider.init()
+      deviceProvider.use { this.block() }
     } catch (e: DeviceException) {
+      logger.warn(e.message)
+    } catch (e: ExecutionException) {
       logger.warn(e.message)
     }
   }
 
-  internal fun devices(): List<Device> =
+  override fun devices(): List<Device> =
       deviceProvider.devices.map {
         Device(DeviceInterface.newInstance(it), logger)
       }

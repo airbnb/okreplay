@@ -9,11 +9,7 @@ internal class DeviceBridgeProvider {
     private var instance: DeviceBridge? = null
 
     internal fun get(adbPath: File, adbTimeoutMs: Int, logger: Logger): DeviceBridge =
-        if (instance != null) {
-          instance as DeviceBridge
-        } else {
-          DeviceBridge(adbPath, adbTimeoutMs, logger)
-        }
+        instance ?: RealDeviceBridge(adbPath, adbTimeoutMs, logger)
 
     @VisibleForTesting internal fun setInstance(deviceBridge: DeviceBridge) {
       instance = deviceBridge

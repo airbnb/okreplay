@@ -15,8 +15,8 @@ ext {
       // Need to use snapshot version and explicitly include javadoc/sources tasks until
       // https://github.com/vanniktech/gradle-maven-publish-plugin/issues/54 is fixed.
       gradleMavenPublishPlugin : 'com.vanniktech:gradle-maven-publish-plugin:0.9.0-SNAPSHOT',
-      androidPlugin            : 'com.android.tools.build:gradle:3.5.0',
-      groovyPlugin             : 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0',
+      androidPlugin            : 'com.android.tools.build:gradle:3.6.0',
+      groovyPlugin             : 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.1',
       nexusPlugin              : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
       appcompat                : "androidx.appcompat:appcompat:$versions.appCompatVersion",
       androidXAnnotations      : "androidx.annotation:annotation:1.0.1",

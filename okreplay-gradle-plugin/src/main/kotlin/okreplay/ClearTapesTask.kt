@@ -14,12 +14,14 @@ abstract class ClearTapesTask : DefaultTask(), TapeTask {
   @TaskAction
   internal fun clearTapes() {
     val deviceBridge = DeviceBridgeProvider.get(adbPath.get(), adbTimeout.get(), logger)
-    deviceBridge.devices().forEach { device ->
-      val externalStorage = device.externalStorageDir()
-      try {
-        device.deleteDirectory("$externalStorage/$REMOTE_TAPES_DIR/${packageName.get()}/")
-      } catch (e: RuntimeException) {
-        logger.error("ADB Command failed: ${e.message}")
+    deviceBridge.use {
+      devices().forEach { device ->
+        val externalStorage = device.externalStorageDir()
+        try {
+          device.deleteDirectory("$externalStorage/$REMOTE_TAPES_DIR/${packageName.get()}/")
+        } catch (e: RuntimeException) {
+          logger.error("ADB Command failed: ${e.message}")
+        }
       }
     }
   }
