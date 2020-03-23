@@ -13,12 +13,11 @@ import org.mockito.BDDMockito.given
 import org.mockito.Mockito.*
 
 class OkReplayPluginTest {
-  private val deviceBridge = mock(DeviceBridge::class.java)
   private val device = mock(Device::class.java)
+  private val deviceBridge = FakeDeviceBridge(listOf(device))
 
   @Before fun setUp() {
     DeviceBridgeProvider.setInstance(deviceBridge)
-    `when`(deviceBridge.devices()).thenReturn(listOf(device))
   }
 
   @Test fun appliesPlugin() {
