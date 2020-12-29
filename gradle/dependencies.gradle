@@ -41,7 +41,7 @@ ext {
         exclude module: "groovy-all"
         exclude module: "junit"
       }),
-      espresso                 : 'androidx.test.espresso:espresso-core:3.1.0',
+      espresso                 : 'androidx.test.espresso:espresso-core:3.3.0',
       androidXTestRunner       : 'androidx.test:runner:1.2.0',
       androidXTestRules        : 'androidx.test:rules:1.1.1'
   ]
