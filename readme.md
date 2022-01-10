@@ -1,4 +1,4 @@
-# OkReplay [![Build Status](https://travis-ci.org/airbnb/okreplay.svg?branch=master)](https://travis-ci.org/airbnb/okreplay)
+# OkReplay
 
 Automatically record and replay OkHttp network interaction through your Android application.
 This project was based on the great [Betamax](https://github.com/betamaxteam/betamax) library - which was inspired by Ruby's awesome [VCR](https://relishapp.com/vcr/vcr/docs) gem.
