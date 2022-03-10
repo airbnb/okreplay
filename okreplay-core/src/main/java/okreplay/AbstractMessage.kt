@@ -1,6 +1,6 @@
 package okreplay
 
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okreplay.Util.CONTENT_TYPE
 import okreplay.Util.isNullOrEmpty
 import java.nio.charset.Charset
@@ -12,7 +12,7 @@ internal abstract class AbstractMessage : Message {
     return if (isNullOrEmpty(header)) {
       DEFAULT_CONTENT_TYPE
     } else {
-      MediaType.parse(header!!)!!.toString()
+      header!!.toMediaTypeOrNull()!!.toString()
     }
   }
 
@@ -22,7 +22,7 @@ internal abstract class AbstractMessage : Message {
       // TODO: this isn't valid for non-text data – this method should return String?
       UTF_8
     } else {
-      MediaType.parse(header!!)!!.charset() ?: UTF_8
+      header!!.toMediaTypeOrNull()!!.charset() ?: UTF_8
     }
   }
 

@@ -1,7 +1,7 @@
 package okreplay
 
 import com.android.build.gradle.internal.LoggerWrapper
-import com.android.builder.testing.ConnectedDeviceProvider
+import com.android.build.gradle.internal.testing.ConnectedDeviceProvider
 import com.android.builder.testing.api.DeviceException
 import org.gradle.api.logging.Logger
 import java.io.File

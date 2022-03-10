@@ -1,5 +1,7 @@
 package okreplay;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -8,7 +10,8 @@ import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.ResponseBody;
 
-class RecordedResponse extends RecordedMessage implements Response {
+@VisibleForTesting
+public class RecordedResponse extends RecordedMessage implements Response {
   private final int code;
   private final Protocol protocol;
 

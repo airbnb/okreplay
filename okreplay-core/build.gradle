@@ -5,12 +5,14 @@ apply plugin: 'com.vanniktech.maven.publish'
 project.group = GROUP
 project.version = VERSION_NAME
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
   implementation dep.kotlinStdLib
   implementation dep.snakeYaml
+  implementation(platform(dep.okhttp_bom))
   implementation dep.okhttp
   implementation dep.jsr305
+  implementation dep.guava_jre
 }

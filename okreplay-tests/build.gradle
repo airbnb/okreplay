@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'groovyx.android'
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -11,17 +11,28 @@ android {
   defaultConfig {
     minSdkVersion androidConfig.minSdkVersion
   }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  kotlinOptions {
+    jvmTarget = '1.8'
+  }
 }
 
 dependencies {
   implementation project(":okreplay-core")
+  testImplementation project(":okreplay-core")
   implementation project(":okreplay-junit")
   implementation dep.kotlinStdLib
 
+  testImplementation dep.kotlinStdLib
+  testImplementation dep.kotlinCoroutines
   testImplementation "org.codehaus.groovy:groovy:2.4.7:grooid"
-  testImplementation "org.codehaus.groovy:groovy-json:2.4.7"
+  testImplementation "org.codehaus.groovy:groovy-json:3.0.9"
   testImplementation dep.cglib
-  testImplementation dep.spock
   testImplementation dep.junit
   testImplementation dep.guava
   testImplementation dep.snakeYaml

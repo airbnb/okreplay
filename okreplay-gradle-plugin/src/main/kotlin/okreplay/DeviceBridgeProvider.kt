@@ -1,6 +1,6 @@
 package okreplay
 
-import com.android.annotations.VisibleForTesting
+import com.google.common.annotations.VisibleForTesting
 import org.gradle.api.logging.Logger
 import java.io.File
 

@@ -23,6 +23,8 @@ test {
   testLogging.showStandardStreams = isCi
 }
 
+/*
 validateTaskProperties {
   failOnWarning = true
 }
+ */
