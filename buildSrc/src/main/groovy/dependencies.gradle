@@ -1,8 +1,8 @@
 ext.versions = [
     okreplayVersion : VERSION_NAME,
-    kotlinVersion   : '1.3.50',
-    okhttpVersion   : '3.12.2',
-    appCompatVersion: '1.0.2'
+    kotlinVersion   : '1.5.32',
+    okhttpVersion   : '4.9.3',
+    appCompatVersion: '1.4.1'
 ]
 ext {
   isSnapshot = version.endsWith("-SNAPSHOT")
@@ -12,24 +12,25 @@ ext {
   dep = [
       // Build and upload with:
       // ./gradlew clean assemble sourcesJar androidSourcesJar javadocsJar androidJavadocsJar uploadArchives --no-daemon --no-parallel
-      gradleMavenPublishPlugin : 'com.vanniktech:gradle-maven-publish-plugin:0.11.1',
-      androidPlugin            : 'com.android.tools.build:gradle:3.6.0',
-      groovyPlugin             : 'org.codehaus.groovy:groovy-android-gradle-plugin:2.0.1',
+      gradleMavenPublishPlugin : 'com.vanniktech:gradle-maven-publish-plugin:0.18.0',
+      androidPlugin            : 'com.android.tools.build:gradle:4.2.0',
       nexusPlugin              : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
-      appcompat                : "androidx.appcompat:appcompat:$versions.appCompatVersion",
-      androidXAnnotations      : "androidx.annotation:annotation:1.0.1",
-      groovy                   : "org.codehaus.groovy:groovy-all:2.4.5:indy",
-      guava                    : "com.google.guava:guava:25.0-android",
-      guava_jre                : "com.google.guava:guava:25.0-jre",
+      appcompat                : "androidx.appcompat:appcompat:1.4.1",
+      androidXAnnotations      : "androidx.annotation:annotation:1.3.0",
+      guava                    : "com.google.guava:guava:31.0.1-android",
+      guava_jre                : "com.google.guava:guava:31.0.1-jre",
       ddmlib                   : 'com.android.tools.ddms:ddmlib:25.3.0',
-      junit                    : "junit:junit:4.12",
+      junit                    : "junit:junit:4.13.2",
       cglib                    : "cglib:cglib-nodep:2.2.2",
       jsr305                   : "com.google.code.findbugs:jsr305:3.0.2",
       mockito                  : 'org.mockito:mockito-core:2.7.13',
       okio                     : 'com.squareup.okio:okio:1.17.2',
-      okhttp                   : "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
+      okhttp_bom               : "com.squareup.okhttp3:okhttp-bom:$versions.okhttpVersion",
+      okhttp                   : "com.squareup.okhttp3:okhttp",
+      loggingInterceptor       : "com.squareup.okhttp3:logging-interceptor",
       mockWebServer            : "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion",
       snakeYaml                : "org.yaml:snakeyaml:1.16",
+      kotlinCoroutines         :"org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0",
       kotlinStdLib             : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlinVersion",
       okreplayPlugin           : "com.airbnb.okreplay:gradle-plugin:latest.release",
       kotlinPlugin             : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
@@ -45,8 +46,8 @@ ext {
   ]
 
   androidConfig = [
-      compileSdkVersion: 28,
+      compileSdkVersion: 31,
       minSdkVersion    : 14,
-      targetSdkVersion : 28
+      targetSdkVersion : 31
   ]
 }

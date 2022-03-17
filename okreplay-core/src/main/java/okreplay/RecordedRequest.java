@@ -15,7 +15,10 @@ import okio.Buffer;
 
 import static okreplay.Util.CONTENT_TYPE;
 
-class RecordedRequest extends RecordedMessage implements Request {
+import com.google.common.annotations.VisibleForTesting;
+
+@VisibleForTesting
+public class RecordedRequest extends RecordedMessage implements Request {
   private final String method;
   private final HttpUrl url;
 

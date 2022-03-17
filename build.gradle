@@ -1,33 +1,34 @@
 subprojects {
-  apply from: "../gradle/dependencies.gradle"
+  apply plugin: 'dependencies'
 
   buildscript {
     repositories {
-      jcenter()
       mavenLocal()
-      maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-      maven { url 'https://maven.google.com' }
       if (System.getenv("INTERNAL_MAVEN_URL")) {
         maven { url INTERNAL_MAVEN_URL }
       }
+      google()
+      gradlePluginPortal()
+      mavenCentral()
+      maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {
       classpath dep.nexusPlugin
       classpath dep.androidPlugin
-      classpath dep.groovyPlugin
       classpath dep.kotlinPlugin
-      classpath dep.okreplayPlugin
       classpath dep.gradleMavenPublishPlugin
     }
   }
 
   allprojects {
     repositories {
-      jcenter()
-      maven { url 'https://maven.google.com' }
+      mavenLocal()
       if (System.getenv("INTERNAL_MAVEN_URL")) {
         maven { url INTERNAL_MAVEN_URL }
       }
+      google()
+      gradlePluginPortal()
+      mavenCentral()
     }
   }
 }

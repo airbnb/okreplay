@@ -1,10 +1,10 @@
 package okreplay.sample
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.common.base.Joiner
 import com.google.common.collect.FluentIterable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,12 +29,12 @@ class MainActivity : AppCompatActivity() {
   private fun goToRepositories(): Boolean {
     textMessage!!.setText(R.string.title_repositories)
     val application = application as SampleApplication
-    application.graph.service.repos(USERNAME)
+    application.graph.service.repo(USERNAME, REPO)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({
           textMessage!!.text =
-              "${getString(R.string.title_repositories)}: \n${it.body()?.let { it1 -> reposToString(it1) }}"
+              "${getString(R.string.title_repositories)}: \n${it.body()?.let { it1 -> it1.name() + ": " + it1.description() }}"
         }, {
           Log.e(TAG, "Request failed: ${it.message}", it)
         })
@@ -63,5 +63,6 @@ class MainActivity : AppCompatActivity() {
   companion object {
     private const val TAG = "MainActivity"
     private const val USERNAME = "felipecsl"
+    private const val REPO = "6502Android"
   }
 }

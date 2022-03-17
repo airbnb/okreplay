@@ -1,5 +1,6 @@
 package okreplay
 
+import com.google.common.annotations.VisibleForTesting
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.Rule
@@ -13,7 +14,8 @@ import okreplay.CaseFormat.*
  * JUnit [Rule] allowing tests annotated with [OkReplay] to automatically
  * activate OkReplay recording.
  */
-class RecorderRule(configuration: OkReplayConfig) : Recorder(configuration), TestRule {
+@VisibleForTesting
+public class RecorderRule(configuration: OkReplayConfig) : Recorder(configuration), TestRule {
   override fun apply(statement: Statement, description: Description): Statement {
     val annotation = description.getAnnotation(OkReplay::class.java)
     if (annotation != null) {

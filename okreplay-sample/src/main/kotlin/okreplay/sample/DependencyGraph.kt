@@ -4,10 +4,13 @@ import com.squareup.moshi.Moshi
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import okreplay.OkReplayInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 internal class DependencyGraph private constructor() {
   val okReplayInterceptor = OkReplayInterceptor()
@@ -20,9 +23,15 @@ internal class DependencyGraph private constructor() {
         .addHeader("Accept", "application/vnd.github.v3+json")
         .build())
   }
+  private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+      setLevel(HttpLoggingInterceptor.Level.BODY)
+  }
   val okHttpClient: OkHttpClient = OkHttpClient.Builder()
       .addInterceptor(acceptHeaderInterceptor)
       .addInterceptor(okReplayInterceptor)
+      .addInterceptor(httpLoggingInterceptor)
+      .callTimeout(0, TimeUnit.SECONDS)
+      .connectTimeout(0, TimeUnit.SECONDS)
       .build()
   private val retrofit = Retrofit.Builder()
       .baseUrl(API_BASE_URL)

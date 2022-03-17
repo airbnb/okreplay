@@ -1,14 +1,14 @@
 package okreplay
 
+import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.Protocol
+import okhttp3.ResponseBody.Companion.toResponseBody
+import okreplay.Headers.XHeader.HEADER_PLAY
+import okreplay.Headers.XHeader.HEADER_REC
+import okreplay.Util.VIA
 import java.io.IOException
 import java.util.logging.Logger
-
-import okhttp3.Interceptor
-import okhttp3.MediaType
-import okhttp3.Protocol
-import okhttp3.ResponseBody
-
-import okreplay.Util.VIA
 
 class OkReplayInterceptor : Interceptor {
   private var configuration: OkReplayConfig? = null
@@ -27,14 +27,14 @@ class OkReplayInterceptor : Interceptor {
           return replayResponse(request, tape, recordedRequest)
         } else {
           LOG.warning("no matching request found on tape '${tape.name}' for " +
-              "request ${request.method()} ${request.url()}")
+              "request ${request.method} ${request.url}")
           if (tape.mode == TapeMode.READ_ONLY_QUIET) {
             return buildResponse(request, 404, "No matching response")
           }
           // If the tape isn't writeable, abandon this request. This prevents us from
           // talking to the server for non-mutable tapes.
           if (!tape.isWritable) {
-            throwTapeNotWritable(request.method() + " " + request.url().toString())
+            throwTapeNotWritable(request.method + " " + request.url.toString())
           }
           // Continue the request and attempt to write the response to the tape.
           return recordResponse(request, tape, recordedRequest, chain.proceed(request))
@@ -54,7 +54,7 @@ class OkReplayInterceptor : Interceptor {
         recordedRequest.method(), recordedRequest.url().toString(), tape.name))
     val recordedResponse = tape.play(recordedRequest)
     var okhttpResponse = OkHttpResponseAdapter.adapt(request, recordedResponse)
-    okhttpResponse = setOkReplayHeader(okhttpResponse, "PLAY")
+    okhttpResponse = setOkReplayHeader(okhttpResponse, HEADER_PLAY.headerName)
     okhttpResponse = setViaHeader(okhttpResponse)
     return okhttpResponse
   }
@@ -66,16 +66,16 @@ class OkReplayInterceptor : Interceptor {
       okhttpResponse: okhttp3.Response
   ): okhttp3.Response {
     var okhttpResponse = okhttpResponse
-    okhttpResponse = setOkReplayHeader(okhttpResponse, "REC")
+    okhttpResponse = setOkReplayHeader(okhttpResponse, HEADER_REC.headerName)
     okhttpResponse = setViaHeader(okhttpResponse)
-    LOG.info("Recording request ${request.method()} ${request.url()} to tape '${tape.name}'")
-    val bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()!!)
+    LOG.info("Recording request ${request.method} ${request.url} to tape '${tape.name}'")
+    val bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body!!)
     val recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone)
     tape.record(recordedRequest, recordedResponse)
     okhttpResponse = okhttpResponse.newBuilder()
-        .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()!!))
+        .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body!!))
         .build()
-    okhttpResponse.body()!!.close()
+    okhttpResponse.body!!.close()
     return okhttpResponse
   }
 
@@ -88,7 +88,7 @@ class OkReplayInterceptor : Interceptor {
         .protocol(Protocol.HTTP_1_1)  //
         .code(code) //
         .message("") //
-        .body(ResponseBody.create(MediaType.parse("text/plain"), message)) //
+        .body(message.toResponseBody("text/plain".toMediaTypeOrNull())) //
         .request(request) //
         .build()
   }
@@ -113,7 +113,7 @@ class OkReplayInterceptor : Interceptor {
   }
 
   private fun isHostIgnored(request: okhttp3.Request): Boolean {
-    return configuration!!.ignoreHosts.contains(request.url().host())
+    return configuration!!.ignoreHosts.contains(request.url.host)
   }
 
   private fun setViaHeader(response: okhttp3.Response): okhttp3.Response {
