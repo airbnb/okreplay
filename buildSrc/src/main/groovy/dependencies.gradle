@@ -11,7 +11,7 @@ ext {
 
   dep = [
       // Build and upload with:
-      // ./gradlew clean assemble sourcesJar androidSourcesJar javadocsJar androidJavadocsJar uploadArchives --no-daemon --no-parallel
+      // ./gradlew clean assemble publish --no-daemon --no-parallel
       gradleMavenPublishPlugin : 'com.vanniktech:gradle-maven-publish-plugin:0.18.0',
       androidPlugin            : 'com.android.tools.build:gradle:4.2.0',
       nexusPlugin              : 'com.bmuschko:gradle-nexus-plugin:2.3.1',
