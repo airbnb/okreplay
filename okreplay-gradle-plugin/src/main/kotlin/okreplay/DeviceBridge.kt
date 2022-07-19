@@ -20,7 +20,7 @@ internal interface DeviceBridge {
 }
 
 internal class RealDeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) : DeviceBridge {
-  private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
+  private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger), null)
 
   override fun use(block: DeviceBridge.() -> Unit) {
     try {

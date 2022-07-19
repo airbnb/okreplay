@@ -1,6 +1,6 @@
 buildscript {
   ext.VERSION_NAME='1.5.0-SNAPSHOT'
-  apply from: "../../../../gradle/dependencies.gradle"
+  apply from: "../../../../buildSrc/src/main/groovy/dependencies.gradle"
   repositories {
     jcenter()
     google()
