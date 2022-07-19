@@ -25,9 +25,7 @@ import org.junit.Test;
 
 import java.io.File;
 
-import spock.lang.Issue;
-
-@Issue("https://github.com/robfletcher/betamax/issues/36")
+// https://github.com/robfletcher/betamax/issues/36
 @OkReplay
 public class ClassAnnotatedTapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();

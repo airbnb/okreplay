@@ -34,7 +34,7 @@ public class ExampleInstrumentedBarTest {
 	private final ActivityTestRule<MainActivity> activityTestRule =
 		new ActivityTestRule<>(MainActivity.class);
 	private final OkReplayConfig configuration = new OkReplayConfig.Builder()
-		.tapeRoot(new AndroidTapeRoot(InstrumentationRegistry.getInstrumentation().getTargetContext(), getClass()))
+		.tapeRoot(new AndroidTapeRoot(InstrumentationRegistry.getInstrumentation().getContext(), getClass()))
 		.defaultMode(TapeMode.READ_WRITE)
 		.sslEnabled(true)
 		.interceptor(graph.getOkReplayInterceptor())
@@ -60,6 +60,6 @@ public class ExampleInstrumentedBarTest {
 	@OkReplay
 	public void bar() {
 		onView(withId(R.id.navigation_repositories)).perform(click());
-		onView(withId(R.id.message)).check(matches(withText(containsString("AbsListViewHelper"))));
+		onView(withId(R.id.message)).check(matches(withText(containsString("6502Android"))));
 	}
 }

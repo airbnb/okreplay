@@ -2,14 +2,14 @@ apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'com.vanniktech.maven.publish'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
 dependencies {
   compileOnly gradleApi()
   compileOnly dep.androidPlugin
   compileOnly dep.ddmlib
   implementation dep.kotlinStdLib
+  implementation dep.builderTestApi
+  implementation dep.toolsCommon
+  implementation dep.commonsIo
   testImplementation gradleTestKit()
   testImplementation dep.androidPlugin
   testImplementation dep.ddmlib
@@ -23,6 +23,6 @@ test {
   testLogging.showStandardStreams = isCi
 }
 
-validateTaskProperties {
+validatePlugins {
   failOnWarning = true
 }

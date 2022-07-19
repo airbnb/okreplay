@@ -1,11 +1,15 @@
 package okreplay;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.Date;
 
 public class YamlRecordedInteraction {
-  private final Date recorded;
-  private final YamlRecordedRequest request;
-  private final YamlRecordedResponse response;
+  @VisibleForTesting
+  public final Date recorded;
+  final YamlRecordedRequest request;
+  @VisibleForTesting
+  public final YamlRecordedResponse response;
   private transient RecordedInteraction immutableInteraction;
 
   YamlRecordedInteraction(Date recorded, YamlRecordedRequest request,

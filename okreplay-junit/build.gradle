@@ -6,8 +6,8 @@ dependencies {
   api project(":okreplay-core")
   implementation dep.kotlinStdLib
   implementation dep.junit
-  implementation dep.kotlinStdLib
+  implementation dep.guava_jre
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

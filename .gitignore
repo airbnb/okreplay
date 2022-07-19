@@ -1,5 +1,5 @@
 /.idea
-/.gradle
+.gradle
 build/
 /out
 /_site

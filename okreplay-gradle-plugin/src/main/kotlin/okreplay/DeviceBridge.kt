@@ -1,7 +1,7 @@
 package okreplay
 
 import com.android.build.gradle.internal.LoggerWrapper
-import com.android.builder.testing.ConnectedDeviceProvider
+import com.android.build.gradle.internal.testing.ConnectedDeviceProvider
 import com.android.builder.testing.api.DeviceException
 import org.gradle.api.logging.Logger
 import java.io.File
@@ -20,7 +20,7 @@ internal interface DeviceBridge {
 }
 
 internal class RealDeviceBridge(adbPath: File, adbTimeoutMs: Int, private val logger: Logger) : DeviceBridge {
-  private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger))
+  private val deviceProvider = ConnectedDeviceProvider(adbPath, adbTimeoutMs, LoggerWrapper(logger), null)
 
   override fun use(block: DeviceBridge.() -> Unit) {
     try {

@@ -9,12 +9,10 @@ import org.junit.Test;
 
 import java.io.File;
 
-import spock.lang.Issue;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Issue("https://github.com/robfletcher/betamax/issues/36")
+// https://github.com/robfletcher/betamax/issues/36
 public class TapeNameTest {
   private static final File TAPE_ROOT = Files.createTempDir();
   private final OkReplayConfig configuration = new OkReplayConfig.Builder()

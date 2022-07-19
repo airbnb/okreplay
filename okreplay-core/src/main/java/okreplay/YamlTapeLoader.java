@@ -17,7 +17,10 @@ import java.util.logging.Logger;
 
 import static org.yaml.snakeyaml.DumperOptions.FlowStyle.BLOCK;
 
-class YamlTapeLoader implements TapeLoader<YamlTape> {
+import com.google.common.annotations.VisibleForTesting;
+
+@VisibleForTesting
+public class YamlTapeLoader implements TapeLoader<YamlTape> {
   private static final Logger LOG = Logger.getLogger(YamlTapeLoader.class.getSimpleName());
   private final TapeRoot tapeRoot;
 
