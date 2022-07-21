@@ -10,7 +10,7 @@ import okhttp3.ResponseBody
 
 import okreplay.Util.VIA
 
-class OkReplayInterceptor : Interceptor {
+open class OkReplayInterceptor : Interceptor {
   private var configuration: OkReplayConfig? = null
   private var tape: Tape? = null
   private var isRunning: Boolean = false
@@ -128,13 +128,13 @@ class OkReplayInterceptor : Interceptor {
         .build()
   }
 
-  fun start(configuration: OkReplayConfig, tape: Tape?) {
+  open fun start(configuration: OkReplayConfig, tape: Tape?) {
     this.configuration = configuration
     this.tape = tape
     isRunning = true
   }
 
-  fun stop() {
+  open fun stop() {
     isRunning = false
   }
 
