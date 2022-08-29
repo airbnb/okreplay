@@ -69,13 +69,9 @@ class OkReplayInterceptor : Interceptor {
     okhttpResponse = setOkReplayHeader(okhttpResponse, "REC")
     okhttpResponse = setViaHeader(okhttpResponse)
     LOG.info("Recording request ${request.method()} ${request.url()} to tape '${tape.name}'")
-    val bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()!!)
+    val bodyClone = OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.peekBody(Long.MAX_VALUE))
     val recordedResponse = OkHttpResponseAdapter.adapt(okhttpResponse, bodyClone)
     tape.record(recordedRequest, recordedResponse)
-    okhttpResponse = okhttpResponse.newBuilder()
-        .body(OkHttpResponseAdapter.cloneResponseBody(okhttpResponse.body()!!))
-        .build()
-    okhttpResponse.body()!!.close()
     return okhttpResponse
   }
 
