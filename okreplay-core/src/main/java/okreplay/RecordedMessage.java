@@ -36,20 +36,4 @@ abstract class RecordedMessage extends AbstractMessage {
     }
     return new LinkedHashMap<>(result);
   }
-
-  Object maybeBodyAsString() {
-    if (body == null) {
-      return null;
-    } else {
-      // Try to determine if the body content type is text
-      String mediaType = MediaType.parse(getContentType()).type();
-      // For text or application media types, assume it's readable text and return the body
-      // as a String
-      if (mediaType.equals("text") || mediaType.equals("application")) {
-        return bodyAsText();
-      } else {
-        return body;
-      }
-    }
-  }
 }
