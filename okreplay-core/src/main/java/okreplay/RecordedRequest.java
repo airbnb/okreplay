@@ -52,7 +52,7 @@ class RecordedRequest extends RecordedMessage implements Request {
   }
 
   @Override public YamlRecordedRequest toYaml() {
-    return new YamlRecordedRequest(headersAsMap(), maybeBodyAsString(), method, url.uri());
+    return new YamlRecordedRequest(headersAsMap(), body, method, url.uri());
   }
 
   static class Builder {

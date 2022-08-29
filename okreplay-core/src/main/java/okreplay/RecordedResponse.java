@@ -37,7 +37,7 @@ class RecordedResponse extends RecordedMessage implements Response {
   }
 
   @Override public YamlRecordedResponse toYaml() {
-    return new YamlRecordedResponse(headersAsMap(), maybeBodyAsString(), code);
+    return new YamlRecordedResponse(headersAsMap(), body, code);
   }
 
   static class Builder {
